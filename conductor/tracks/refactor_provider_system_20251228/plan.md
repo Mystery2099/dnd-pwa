@@ -7,7 +7,7 @@
 - [x] Task: Refactor `Open5eProvider` to extend `BaseProvider` <!-- id: 1, commit: 93780d5 -->
     - Update `src/lib/server/providers/open5e.ts` to extend `BaseProvider` and remove duplicated logic.
     - Verify existing tests pass.
-- [ ] Task: Refactor `FiveEBitsProvider` to extend `BaseProvider`
+- [x] Task: Refactor `FiveEBitsProvider` to extend `BaseProvider` <!-- id: 2, commit: 9d1b045 -->
     - Update `src/lib/server/providers/5ebits.ts` to extend `BaseProvider`.
     - Verify existing tests pass.
 - [ ] Task: Refactor `SrdProvider` to extend `BaseProvider`
