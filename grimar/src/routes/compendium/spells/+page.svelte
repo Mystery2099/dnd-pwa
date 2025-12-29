@@ -125,9 +125,6 @@
 
 	// URL sync effect - sync overlay state with URL changes
 	$effect(() => {
-		// Don't re-open if we're in the process of closing
-		if (isClosing) return;
-
 		const pathname = page.url.pathname;
 		const parts = pathname.split('/');
 		const state = page.state as { selectedSpell?: Spell };
@@ -153,8 +150,8 @@
 					selectedSpell = spell;
 				}
 			}
-		} else if (pathname === '/compendium/spells' && selectedSpell) {
-			// Back to list, close overlay
+		} else {
+			// If not a detail route, ensure overlay is closed
 			selectedSpell = null;
 		}
 	});
@@ -253,17 +250,10 @@
 	}
 
 	function closeOverlay() {
-		isClosing = true;
-		selectedSpell = null;
 		if (page.url.pathname !== '/compendium/spells') {
 			pushState('/compendium/spells', {});
-
-			// Reset closing flag after navigation completes
-			setTimeout(() => {
-				isClosing = false;
-			}, 100);
 		} else {
-			isClosing = false;
+			selectedSpell = null;
 		}
 	}
 </script>
