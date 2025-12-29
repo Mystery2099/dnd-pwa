@@ -8,7 +8,7 @@
     - Define proposed directory structure (e.g., Feature-based vs. Layer-based).
     - Select design patterns (Service Layer, Repository, Atomic Design components).
     - Create a `docs/refactor-proposal.md` for review.
-- [~] Task: Conductor - User Manual Verification 'Phase 1: Analysis & Architecture Proposal' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Analysis & Architecture Proposal' (Protocol in workflow.md) [checkpoint: 36610bf]
 
 ## Phase 2: Structural Reorganization
 - [ ] Task: Implement New Directory Structure
