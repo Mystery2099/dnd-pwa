@@ -41,10 +41,10 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 4: Frontend Component Decomposition' (Protocol in workflow.md) [checkpoint: d0aa75a]
 
 ## Phase 5: Verification & Cleanup
-- [~] Task: Run Full Regression Test
+- [x] Task: Run Full Regression Test [a235eca]
     - Manually verify key flows (Login, Browse Compendium, Create Character).
     - Run automated tests (if any).
-- [ ] Task: Final Polish
+- [x] Task: Final Polish [a235eca]
     - Remove unused files and dead code.
     - Ensure linting and formatting rules are applied project-wide.
-- [ ] Task: Conductor - User Manual Verification 'Phase 5: Verification & Cleanup' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 5: Verification & Cleanup' (Protocol in workflow.md) [checkpoint: a235eca]
