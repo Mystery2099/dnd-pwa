@@ -51,6 +51,17 @@ export interface CompendiumItem {
 	challengeRating: string | null;
 	monsterSize: string | null;
 	monsterType: string | null;
+	// Feat-specific columns
+	featPrerequisites?: string | null;
+	featBenefits?: string[] | null;
+	// Background-specific columns
+	backgroundFeature?: string | null;
+	backgroundSkillProficiencies?: string | null;
+	// Race-specific columns
+	raceSize?: string | null;
+	raceSpeed?: number | null;
+	// Class-specific columns
+	classHitDie?: number | null;
 	createdBy: string | null;
 }
 
