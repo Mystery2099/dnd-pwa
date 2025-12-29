@@ -37,7 +37,7 @@
     - Write tests.
 - [ ] Task: Conductor - User Manual Verification 'Add Zod Validation' (Protocol in workflow.md)
 
-## Phase 4: Database Schema Optimization
+## Phase 4: Database Schema Optimization [checkpoint: 896e7b2]
 - [x] Task: Create Data Loader Utility <!-- id: 9, commit: d63db7e -->
     - Create `src/lib/server/data-loader.ts` with `loadDetails` and `loadAllDetails` functions to read from `data/` JSON files.
     - Write unit tests for file reading and parsing.
