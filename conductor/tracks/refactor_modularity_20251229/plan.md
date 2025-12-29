@@ -21,14 +21,14 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Structural Reorganization' (Protocol in workflow.md) [checkpoint: 5b4839e]
 
 ## Phase 3: Backend Layer Refactoring
-- [ ] Task: Extract Service Layer
+- [x] Task: Extract Service Layer [83f85f8]
     - Identify logic in `+page.server.ts` / `+server.ts` files.
     - Move logic to `src/lib/server/services/`.
     - Create distinct services (e.g., `CharacterService`, `CompendiumService`, `AuthService`).
-- [ ] Task: Centralize Type Definitions
+- [x] Task: Centralize Type Definitions [f8b77a0]
     - Audit `src/types` or `app.d.ts`.
     - Consolidate scattered interfaces into a cohesive Type domain.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Backend Layer Refactoring' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Phase 3: Backend Layer Refactoring' (Protocol in workflow.md)
 
 ## Phase 4: Frontend Component Decomposition
 - [ ] Task: Audit & Refactor Major Components
