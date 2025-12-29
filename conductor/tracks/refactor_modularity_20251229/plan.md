@@ -4,11 +4,11 @@
 - [x] Task: Conduct Codebase Audit [1da38b0]
     - Analyze current `src/lib` structure and component dependencies.
     - Identify largest files and most coupled modules.
-- [~] Task: Draft Architecture Proposal
+- [x] Task: Draft Architecture Proposal [4a79e4a]
     - Define proposed directory structure (e.g., Feature-based vs. Layer-based).
     - Select design patterns (Service Layer, Repository, Atomic Design components).
     - Create a `docs/refactor-proposal.md` for review.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Analysis & Architecture Proposal' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Phase 1: Analysis & Architecture Proposal' (Protocol in workflow.md)
 
 ## Phase 2: Structural Reorganization
 - [ ] Task: Implement New Directory Structure
