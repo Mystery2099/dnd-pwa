@@ -1,8 +1,8 @@
 import { getDb } from '$lib/server/db';
 import { compendiumItems } from '$lib/server/db/schema';
 import { eq, sql, desc, like, or, and, inArray } from 'drizzle-orm';
-import { MemoryCache, CacheKeys, getCacheTTL } from '$lib/server/cache';
-import { measureDb } from '$lib/server/monitoring';
+import { MemoryCache, CacheKeys, getCacheTTL } from '$lib/server/utils/cache';
+import { measureDb } from '$lib/server/utils/monitoring';
 import { CompendiumQueryParser, type QueryOptions } from './CompendiumQueryParser';
 
 export interface PaginationOptions {

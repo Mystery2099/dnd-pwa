@@ -3,7 +3,7 @@ import {
 	getPaginatedCompendiumItems,
 	parsePaginationQuery
 } from '$lib/server/repositories/compendium';
-import { measureAsync, logPagePerformance } from '$lib/server/monitoring';
+import { measureAsync, logPagePerformance } from '$lib/server/utils/monitoring';
 import { getCompendiumConfig, getTypeFromPath } from '$lib/core/constants/compendium';
 import { error } from '@sveltejs/kit';
 

@@ -2,7 +2,7 @@ import { json } from '@sveltejs/kit';
 import { getDb } from '$lib/server/db';
 import { compendiumItems } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
-import { MemoryCache, CacheKeys } from '$lib/server/cache';
+import { MemoryCache, CacheKeys } from '$lib/server/utils/cache';
 
 export const GET = async ({ params }: { params: { slug: string } }) => {
 	const { slug } = params;

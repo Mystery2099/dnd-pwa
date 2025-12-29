@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { CacheKeys } from '$lib/server/cache/cache-keys';
-import { getCacheTTL } from '$lib/server/cache/cache-ttl';
-import type { CacheOptions } from '$lib/server/cache/cache-types';
+import { CacheKeys } from '$lib/server/utils/cache/cache-keys';
+import { getCacheTTL } from '$lib/server/utils/cache/cache-ttl';
+import type { CacheOptions } from '$lib/server/utils/cache/cache-types';
 
 describe('CacheKeys', () => {
 	describe('compendiumList', () => {

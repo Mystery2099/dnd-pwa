@@ -4,7 +4,7 @@ import {
 	measureAsync,
 	measureDb,
 	logPagePerformance
-} from '$lib/server/monitoring';
+} from '$lib/server/utils/monitoring';
 
 describe('PerformanceMonitor', () => {
 	let monitor: PerformanceMonitor;
