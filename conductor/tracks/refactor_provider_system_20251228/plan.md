@@ -1,6 +1,6 @@
 # Plan: Refactor Provider System & Extend Compendium Types
 
-## Phase 1: Abstract Base Provider Class
+## Phase 1: Abstract Base Provider Class [checkpoint: 6bd803f]
 - [x] Task: Create `BaseProvider` abstract class <!-- id: 0, commit: d54d3b6 -->
     - Create `src/lib/server/providers/base-provider.ts` defining the abstract class and common methods (`healthCheck`, `toTitleCase`, `fetchAllPagesPaginated`).
     - Write unit tests for `BaseProvider` concrete implementation to verify common logic.
