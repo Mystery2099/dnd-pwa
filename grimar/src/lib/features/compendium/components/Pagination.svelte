@@ -101,7 +101,7 @@
 
 <SurfaceCard class="flex items-center justify-between p-4">
 	<div class="flex items-center gap-4">
-		<span class="text-sm text-gray-400">
+		<span class="text-sm text-[var(--color-text-muted)]">
 			Showing {pagination.offset + 1}-
 			{Math.min(pagination.offset + pagination.limit, pagination.total)} of {pagination.total} items
 		</span>
@@ -112,7 +112,7 @@
 				value={pagination.limit}
 				options={limitOptions}
 				onchange={handleLimitChange}
-				class="h-8 py-0 px-3 text-xs"
+				class="h-8 px-3 py-0 text-xs"
 			/>
 		</div>
 	</div>
@@ -133,7 +133,7 @@
 			Previous
 		</Button>
 
-		<span class="mx-2 text-sm text-gray-400">
+		<span class="mx-2 text-sm text-[var(--color-text-muted)]">
 			Page {pagination.currentPage} of {pagination.totalPages || 1}
 		</span>
 

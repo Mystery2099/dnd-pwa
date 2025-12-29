@@ -3,9 +3,13 @@
 </script>
 
 <div class="flex min-h-[80vh] items-center justify-center p-4">
-	<SurfaceCard class="max-w-md bg-linear-to-br from-white/8 to-white/2 p-8 text-center">
-		<h1 class="text-holo mb-4 text-4xl font-black tracking-tighter text-white">Grimar</h1>
-		<p class="mb-8 leading-relaxed text-gray-300">
+	<SurfaceCard class="max-w-md bg-[var(--color-bg-card)] p-8 text-center">
+		<h1
+			class="text-holo mb-4 text-4xl font-black tracking-tighter text-[var(--color-text-primary)]"
+		>
+			Grimar
+		</h1>
+		<p class="mb-8 leading-relaxed text-[var(--color-text-secondary)]">
 			Welcome to the Digital Grimoire. Inscribe your heroes, study the arcane, and manage your
 			adventures in a self-hosted, offline-capable environment.
 		</p>

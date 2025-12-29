@@ -83,7 +83,9 @@
 			<ItemDetailContent item={item.details} />
 		{:else}
 			<div class="space-y-4">
-				<div class="rounded-lg border border-white/10 bg-black/20 p-4 font-mono text-xs">
+				<div
+					class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-overlay)] p-4 font-mono text-xs"
+				>
 					<pre>{JSON.stringify(item.details, null, 2)}</pre>
 				</div>
 			</div>
@@ -91,7 +93,7 @@
 	</CompendiumDetail>
 
 	<!-- Keyboard shortcuts hint -->
-	<div class="mt-6 text-center text-xs text-gray-600">
+	<div class="mt-6 text-center text-xs text-[var(--color-text-muted)]">
 		<span class="mr-4">← → Navigate {config.ui.displayNamePlural.toLowerCase()}</span>
 		<span>Esc Close</span>
 	</div>

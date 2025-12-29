@@ -81,7 +81,7 @@
 				{/if}
 
 				<div>
-					<h4 class="text-sm font-medium text-white">
+					<h4 class="text-sm font-medium text-[var(--color-text-primary)]">
 						{#if reason.includes('budget enforcement')}
 							Cache Cleanup Required
 						{:else if reason.includes('routine cleanup')}
@@ -90,7 +90,7 @@
 							Cache Activity
 						{/if}
 					</h4>
-					<p class="mt-1 text-xs text-gray-400">
+					<p class="mt-1 text-xs text-[var(--color-text-muted)]">
 						{reason}
 					</p>
 				</div>
@@ -98,7 +98,7 @@
 
 			<button
 				onclick={dismiss}
-				class="text-gray-400 transition-colors hover:text-white"
+				class="text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)]"
 				aria-label="Dismiss notification"
 			>
 				<X class="h-4 w-4" />
@@ -110,14 +110,14 @@
 			<div class="mt-3 space-y-2">
 				{#if details.itemsRemoved !== undefined}
 					<div class="flex items-center justify-between text-sm">
-						<span class="text-gray-400">Items removed:</span>
-						<span class="font-medium text-white">{details.itemsRemoved}</span>
+						<span class="text-[var(--color-text-muted)]">Items removed:</span>
+						<span class="font-medium text-[var(--color-text-primary)]">{details.itemsRemoved}</span>
 					</div>
 				{/if}
 
 				{#if details.spaceFreed}
 					<div class="flex items-center justify-between text-sm">
-						<span class="text-gray-400">Space freed:</span>
+						<span class="text-[var(--color-text-muted)]">Space freed:</span>
 						<span class="font-medium text-green-400">{details.spaceFreed}</span>
 					</div>
 				{/if}
@@ -125,11 +125,13 @@
 				{#if details.cacheUsage !== undefined}
 					<div class="mt-2">
 						<div class="mb-1 flex items-center justify-between text-sm">
-							<span class="text-gray-400">Cache usage:</span>
-							<span class="font-medium text-white">{details.cacheUsage.toFixed(1)}%</span>
+							<span class="text-[var(--color-text-muted)]">Cache usage:</span>
+							<span class="font-medium text-[var(--color-text-primary)]"
+								>{details.cacheUsage.toFixed(1)}%</span
+							>
 						</div>
 						<!-- Progress bar -->
-						<div class="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+						<div class="h-1.5 w-full overflow-hidden rounded-full bg-[var(--color-bg-card)]">
 							<div
 								class="h-full transition-all duration-500 ease-out"
 								class:bg-red-500={details.cacheUsage > 90}
@@ -144,10 +146,10 @@
 				{#if reason.includes('budget enforcement')}
 					<div class="mt-3">
 						<div class="mb-1 flex items-center justify-between text-sm">
-							<span class="text-gray-400">Cleanup progress:</span>
-							<span class="font-medium text-yellow-400">{progress.toFixed(0)}%</span>
+							<span class="text-[var(--color-text-muted)]">Cleanup progress:</span>
+							<span class="font-medium text-[var(--color-accent)]">{progress.toFixed(0)}%</span>
 						</div>
-						<div class="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+						<div class="h-1.5 w-full overflow-hidden rounded-full bg-[var(--color-bg-card)]">
 							<div
 								class="h-full bg-yellow-500 transition-all duration-200 ease-out"
 								style="width: {progress}%"
@@ -163,7 +165,7 @@
 			<div class="mt-3 flex gap-2">
 				<button
 					onclick={dismiss}
-					class="flex-1 rounded-md bg-white/10 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-white/20"
+					class="flex-1 rounded-md bg-[var(--color-bg-card)] px-3 py-1.5 text-xs font-medium text-[var(--color-text-primary)] transition-colors hover:bg-[var(--color-bg-overlay)]"
 				>
 					Dismiss
 				</button>
@@ -172,7 +174,7 @@
 			<div class="mt-3 flex gap-2">
 				<button
 					onclick={dismiss}
-					class="flex-1 rounded-md bg-blue-500/20 px-3 py-1.5 text-xs font-medium text-blue-400 transition-colors hover:bg-blue-500/30"
+					class="flex-1 rounded-md bg-[var(--color-accent)]/20 px-3 py-1.5 text-xs font-medium text-[var(--color-accent)] transition-colors hover:bg-[var(--color-accent)]/30"
 				>
 					OK
 				</button>

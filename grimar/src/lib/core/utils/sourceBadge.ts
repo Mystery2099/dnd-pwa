@@ -7,13 +7,13 @@
 export function getSourceBadgeClass(source: string): string {
 	switch (source) {
 		case 'open5e':
-			return 'bg-blue-500/20 text-blue-300 border-blue-500/30';
+			return 'bg-[var(--color-gem-sapphire)]/20 text-[var(--color-gem-sapphire)] border-[var(--color-gem-sapphire)]/30';
 		case 'srd':
-			return 'bg-amber-500/20 text-amber-300 border-amber-500/30';
+			return 'bg-[var(--color-gem-topaz)]/20 text-[var(--color-gem-topaz)] border-[var(--color-gem-topaz)]/30';
 		case 'homebrew':
-			return 'bg-purple-500/20 text-purple-300 border-purple-500/30';
+			return 'bg-[var(--color-accent)]/20 text-[var(--color-accent)] border-[var(--color-accent)]/30';
 		default:
-			return 'bg-gray-500/20 text-gray-300 border-gray-500/30';
+			return 'bg-[var(--color-text-muted)]/20 text-[var(--color-text-secondary)] border-[var(--color-text-muted)]/30';
 	}
 }
 

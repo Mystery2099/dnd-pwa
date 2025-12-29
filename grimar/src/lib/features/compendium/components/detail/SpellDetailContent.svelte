@@ -27,19 +27,19 @@
 
 <!-- Spell Details Table -->
 <div
-	class="mb-8 grid grid-cols-2 gap-4 rounded-xl border border-white/10 bg-white/5 p-4 md:grid-cols-4"
+	class="mb-8 grid grid-cols-2 gap-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4 md:grid-cols-4"
 >
 	<div>
-		<div class="mb-1 text-xs font-bold text-gray-500 uppercase">Casting Time</div>
-		<div class="text-sm text-gray-200">{spell.casting_time}</div>
+		<div class="mb-1 text-xs font-bold text-[var(--color-text-muted)] uppercase">Casting Time</div>
+		<div class="text-sm text-[var(--color-text-primary)]">{spell.casting_time}</div>
 	</div>
 	<div>
-		<div class="mb-1 text-xs font-bold text-gray-500 uppercase">Range</div>
-		<div class="text-sm text-gray-200">{spell.range}</div>
+		<div class="mb-1 text-xs font-bold text-[var(--color-text-muted)] uppercase">Range</div>
+		<div class="text-sm text-[var(--color-text-primary)]">{spell.range}</div>
 	</div>
 	<div>
-		<div class="mb-1 text-xs font-bold text-gray-500 uppercase">Components</div>
-		<div class="text-sm text-gray-200">
+		<div class="mb-1 text-xs font-bold text-[var(--color-text-muted)] uppercase">Components</div>
+		<div class="text-sm text-[var(--color-text-primary)]">
 			{#if Array.isArray(spell.components)}
 				{spell.components.join(', ')}
 			{:else}
@@ -48,27 +48,27 @@
 		</div>
 	</div>
 	<div>
-		<div class="mb-1 text-xs font-bold text-gray-500 uppercase">Duration</div>
-		<div class="text-sm text-gray-200">{spell.duration}</div>
+		<div class="mb-1 text-xs font-bold text-[var(--color-text-muted)] uppercase">Duration</div>
+		<div class="text-sm text-[var(--color-text-primary)]">{spell.duration}</div>
 	</div>
 </div>
 
 <!-- Description (Markdown rendered) -->
 {#if descriptionMd && SvelteMarkdown}
-	<div class="prose prose-sm max-w-none text-gray-300 prose-invert">
+	<div class="prose prose-sm max-w-none text-[var(--color-text-secondary)] prose-invert">
 		<SvelteMarkdown source={descriptionMd} />
 	</div>
 {/if}
 
 {#if higherLevelMd && SvelteMarkdown}
-	<div class="mt-6 border-t border-white/10 pt-6">
-		<h4 class="mb-2 font-bold text-white">At Higher Levels</h4>
-		<div class="prose prose-sm max-w-none text-gray-300 prose-invert">
+	<div class="mt-6 border-t border-[var(--color-border)] pt-6">
+		<h4 class="mb-2 font-bold text-[var(--color-text-primary)]">At Higher Levels</h4>
+		<div class="prose prose-sm max-w-none text-[var(--color-text-secondary)] prose-invert">
 			<SvelteMarkdown source={higherLevelMd} />
 		</div>
 	</div>
 {/if}
 
-<div class="mt-8 font-mono text-xs text-gray-600">
+<div class="mt-8 font-mono text-xs text-[var(--color-text-muted)]">
 	ID: {spell.externalId ?? spell.id ?? spell.index}
 </div>

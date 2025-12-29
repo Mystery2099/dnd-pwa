@@ -10,10 +10,12 @@
 <div class="px-4 py-2">
 	<button
 		onclick={onToggle}
-		class="group flex w-full items-center justify-between rounded-md border border-white/10 bg-linear-to-br from-white/10 to-white/5 px-3 py-2 text-xs font-bold tracking-wider text-gray-400 uppercase transition-all hover:from-white/15 hover:to-white/8"
+		class="group flex w-full items-center justify-between rounded-md border border-[var(--color-border)] bg-[var(--color-bg-card)] px-3 py-2 text-xs font-bold tracking-wider text-[var(--color-text-muted)] uppercase transition-all hover:from-[color-mix(in_srgb,var(--color-text-primary)_15%,transparent)] hover:to-[color-mix(in_srgb,var(--color-text-primary)_8%,transparent)]"
 	>
-		<span class="transition-colors group-hover:text-gray-300">Filter Logic</span>
-		<span class={logic === 'and' ? 'text-purple-400' : 'text-blue-400'}>
+		<span class="transition-colors group-hover:text-[var(--color-text-secondary)]"
+			>Filter Logic</span
+		>
+		<span class={logic === 'and' ? 'text-[var(--color-accent)]' : 'text-cyan-400'}>
 			{logic.toUpperCase()}
 		</span>
 	</button>

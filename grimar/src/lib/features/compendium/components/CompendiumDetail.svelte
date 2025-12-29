@@ -38,15 +38,19 @@
 	// - Roundness & 3D: rounded-2xl, card-crystal (shadows/borders)
 	// - Transparency: bg-gray-900/60, backdrop-blur-xl
 	let containerClass = $derived(
-		`${animate ? 'animate-enter' : ''} h-full flex flex-col relative bg-gray-900/60 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl transition-all duration-300`
+		`${animate ? 'animate-enter' : ''} h-full flex flex-col relative bg-[var(--color-bg-overlay)] backdrop-blur-xl rounded-2xl border border-[var(--color-border)] shadow-2xl transition-all duration-300`
 	);
 </script>
 
 <SurfaceCard class={containerClass}>
 	<!-- Header -->
-	<div class="flex shrink-0 items-start justify-between border-b border-white/10 bg-white/5 p-6">
+	<div
+		class="flex shrink-0 items-start justify-between border-b border-[var(--color-border)] bg-[var(--color-bg-card)] p-6"
+	>
 		<div>
-			<h2 id={titleId} class="text-2xl font-bold tracking-tight text-white">{title}</h2>
+			<h2 id={titleId} class="text-2xl font-bold tracking-tight text-[var(--color-text-primary)]">
+				{title}
+			</h2>
 			<div class="mt-2 flex flex-wrap items-center gap-2">
 				<Badge color={accentColor} variant="outline">{type}</Badge>
 				{#if tags.length > 0}
@@ -67,8 +71,8 @@
 				<button
 					onclick={onBookmark}
 					class="rounded-full p-2 transition-colors {bookmarked
-						? 'bg-white/10 text-yellow-400'
-						: 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'}"
+						? 'bg-[var(--color-bg-card)] text-[var(--color-accent)]'
+						: 'bg-[var(--color-bg-card)] text-[var(--color-text-muted)] hover:bg-[var(--color-bg-overlay)] hover:text-[var(--color-text-primary)]'}"
 					aria-label="Bookmark"
 				>
 					<Bookmark class="h-5 w-5" />
@@ -77,7 +81,7 @@
 			<button
 				data-testid="close-detail"
 				onclick={onClose}
-				class="rounded-full bg-white/5 p-2 text-gray-400 transition-colors hover:bg-white/10 hover:text-white"
+				class="rounded-full bg-[var(--color-bg-card)] p-2 text-[var(--color-text-muted)] transition-colors hover:bg-[var(--color-bg-overlay)] hover:text-[var(--color-text-primary)]"
 				aria-label="Close"
 			>
 				<X class="h-5 w-5" />
@@ -88,7 +92,7 @@
 	<!-- Scrollable Content -->
 	<div class="glass-scroll flex-1 overflow-y-auto p-6">
 		<div
-			class="prose max-w-none prose-invert prose-headings:text-white prose-p:text-gray-300 prose-a:text-purple-400 prose-a:no-underline hover:prose-a:underline prose-strong:text-white"
+			class="prose max-w-none prose-invert prose-headings:text-[var(--color-text-primary)] prose-p:text-[var(--color-text-secondary)] prose-a:text-[var(--color-accent)] prose-a:no-underline hover:prose-a:underline prose-strong:text-[var(--color-text-primary)]"
 		>
 			{@render children()}
 		</div>

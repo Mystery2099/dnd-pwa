@@ -25,23 +25,23 @@
 </script>
 
 {#if prerequisites && prerequisites.length > 0}
-	<div class="mb-6 rounded-xl border border-white/10 bg-white/5 p-4">
-		<div class="text-xs font-bold text-gray-500 uppercase">Prerequisites</div>
-		<div class="mt-1 text-sm text-gray-200">{prerequisites.join(', ')}</div>
+	<div class="mb-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4">
+		<div class="text-xs font-bold text-[var(--color-text-muted)] uppercase">Prerequisites</div>
+		<div class="mt-1 text-sm text-[var(--color-text-primary)]">{prerequisites.join(', ')}</div>
 	</div>
 {/if}
 
 <!-- Description (Markdown rendered) -->
 {#if descriptionMd && SvelteMarkdown}
-	<div class="prose prose-sm max-w-none text-gray-300 prose-invert">
+	<div class="prose prose-sm max-w-none text-[var(--color-text-secondary)] prose-invert">
 		<SvelteMarkdown source={descriptionMd} />
 	</div>
 {:else if descriptionMd}
-	<div class="text-sm whitespace-pre-wrap text-gray-300">
+	<div class="text-sm whitespace-pre-wrap text-[var(--color-text-secondary)]">
 		{descriptionMd}
 	</div>
 {/if}
 
-<div class="mt-8 font-mono text-xs text-gray-600">
+<div class="mt-8 font-mono text-xs text-[var(--color-text-muted)]">
 	ID: {feat.externalId ?? feat.id ?? feat.index}
 </div>

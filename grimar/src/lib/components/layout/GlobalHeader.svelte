@@ -20,7 +20,7 @@
 		<MobileNavDrawer bind:open={mobileNavOpen} />
 		<!-- Aero Title -->
 		<a
-			class="truncate bg-linear-to-b from-white via-white to-purple-200 bg-clip-text text-2xl font-black tracking-tighter text-transparent drop-shadow-[0_0_10px_rgba(168,85,247,0.5)] transition duration-300 hover:drop-shadow-[0_0_15px_rgba(168,85,247,0.8)]"
+			class="truncate bg-linear-to-b from-[var(--color-text-primary)] via-[var(--color-text-primary)] to-[color-mix(in_srgb,var(--color-text-primary)_50%,var(--color-accent))] bg-clip-text text-2xl font-black tracking-tighter text-transparent drop-shadow-[0_0_10px_var(--color-accent-glow)] transition duration-300 hover:drop-shadow-[0_0_15px_var(--color-accent-glow)]"
 			href={homeHref}
 			onclick={(e) => {
 				// Handle navigation with proper SvelteKit routing

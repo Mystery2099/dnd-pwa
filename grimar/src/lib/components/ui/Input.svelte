@@ -28,7 +28,8 @@
 		...rest
 	}: Props = $props();
 
-	const baseClasses = 'input-crystal w-full px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all';
+	const baseClasses =
+		'input-crystal w-full px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all';
 </script>
 
 <input

@@ -227,7 +227,6 @@ export class CompendiumFilterStore {
 
 		// Navigate
 		if (url.pathname + url.search !== page.url.pathname + page.url.search) {
-			 
 			void goto(url.pathname + url.search, {
 				replaceState: true,
 				noScroll: true,

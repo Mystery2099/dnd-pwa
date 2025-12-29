@@ -19,13 +19,15 @@
 	}: Props = $props();
 </script>
 
-<nav class="hidden items-center gap-2 text-sm font-medium text-gray-300 md:flex">
+<nav
+	class="hidden items-center gap-2 text-sm font-medium text-[var(--color-text-secondary)] md:flex"
+>
 	{#each items as item (item.href)}
 		<a
 			class={'rounded-full border px-4 py-1.5 transition-all duration-200 ' +
 				(item.href === page.url.pathname
-					? 'border-purple-400/50 bg-purple-500/20 text-white shadow-[0_0_12px_rgba(168,85,247,0.4)]'
-					: 'border-transparent hover:border-white/20 hover:bg-white/10 hover:text-white')}
+					? 'border-[var(--color-accent)]/50 bg-[var(--color-accent)]/20 text-[var(--color-text-primary)] shadow-[var(--color-accent-glow)]'
+					: 'border-transparent hover:border-[var(--color-border)] hover:bg-[var(--color-bg-card)] hover:text-[var(--color-text-primary)]')}
 			href={item.href}
 			onclick={(e) => {
 				// Handle navigation with proper SvelteKit routing

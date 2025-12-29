@@ -11,14 +11,14 @@
 
 <div class="flex h-full items-center justify-center p-8">
 	<SurfaceCard
-		class="max-w-md border-red-500/20 bg-gray-800/60 p-6 text-center shadow-[0_0_20px_rgba(239,68,68,0.15)]"
+		class="max-w-md border-[var(--color-gem-ruby)]/20 bg-[var(--color-bg-card)] p-6 text-center shadow-[0_0_20px_color-mix(in_srgb,var(--color-gem-ruby)_15%,transparent)]"
 	>
 		<div class="mb-3 flex justify-center">
 			<div
-				class="flex h-12 w-12 items-center justify-center rounded-full bg-red-500/10 ring-1 ring-red-500/30"
+				class="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-gem-ruby)]/10 ring-1 ring-[var(--color-gem-ruby)]/30"
 			>
 				<svg
-					class="size-6 text-red-400"
+					class="size-6 text-[var(--color-gem-ruby)]"
 					fill="none"
 					stroke="currentColor"
 					viewBox="0 0 24 24"
@@ -33,7 +33,7 @@
 				</svg>
 			</div>
 		</div>
-		<p class="mb-2 font-bold text-red-400">{title}</p>
-		<p class="text-sm text-gray-400">{message}</p>
+		<p class="mb-2 font-bold text-[var(--color-gem-ruby)]">{title}</p>
+		<p class="text-sm text-[var(--color-text-secondary)]">{message}</p>
 	</SurfaceCard>
 </div>

@@ -43,7 +43,7 @@
 <div class="md:hidden">
 	<button
 		type="button"
-		class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-gray-200 shadow-[0_2px_8px_rgba(0,0,0,0.3)] backdrop-blur-sm transition-all duration-200 ease-out hover:border-white/20 hover:bg-white/10"
+		class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-bg-card)] text-[var(--color-text-primary)] shadow-[0_2px_8px_color-mix(in_srgb,black_30%,transparent)] backdrop-blur-sm transition-all duration-200 ease-out hover:border-[var(--color-accent)]/20 hover:bg-[var(--color-bg-card)]"
 		aria-label="Open navigation"
 		onclick={() => (open = true)}
 	>
@@ -55,7 +55,7 @@
 			<!-- Backdrop -->
 			<button
 				type="button"
-				class="absolute inset-0 bg-black/60 backdrop-blur-sm"
+				class="absolute inset-0 bg-[color-mix(in_srgb,black_60%,transparent)] backdrop-blur-sm"
 				aria-label="Close navigation"
 				onclick={close}
 				transition:fade={{ duration: 150 }}
@@ -63,25 +63,25 @@
 
 			<!-- Drawer (Obsidian) -->
 			<div
-				class="absolute top-0 left-0 h-dvh w-[min(85vw,320px)] border-r border-white/10 bg-[#0f172a] shadow-[0_0_80px_rgba(0,0,0,0.8)] backdrop-blur-2xl"
+				class="absolute top-0 left-0 h-dvh w-[min(85vw,320px)] border-r border-[var(--color-border)] bg-[var(--color-bg-primary)] shadow-[0_0_80px_color-mix(in_srgb,black_80%,transparent)] backdrop-blur-2xl"
 				transition:fly={{ x: -16, duration: 180 }}
 			>
 				<!-- Static Glossy Overlay -->
 				<div
-					class="pointer-events-none absolute inset-x-0 top-0 h-48 bg-linear-to-br from-white/12 to-transparent opacity-50"
+					class="pointer-events-none absolute inset-x-0 top-0 h-48 bg-linear-to-br from-[color-mix(in_srgb,var(--color-text-primary)_12%,transparent)] to-transparent opacity-50"
 				></div>
 
 				<div
-					class="mt-safe-top relative flex items-center justify-between border-b border-white/10 p-4"
+					class="mt-safe-top relative flex items-center justify-between border-b border-[var(--color-border)] p-4"
 				>
 					<div
-						class="text-lg font-bold tracking-tight text-white drop-shadow-[0_0_10px_rgba(139,92,246,0.6)]"
+						class="text-lg font-bold tracking-tight text-[var(--color-text-primary)] drop-shadow-[0_0_10px_var(--color-accent-glow)]"
 					>
 						Grimar
 					</div>
 					<button
 						type="button"
-						class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-gray-200 transition-all duration-200 ease-out hover:border-white/20 hover:bg-white/10 active:scale-95"
+						class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-bg-card)] text-[var(--color-text-primary)] transition-all duration-200 ease-out hover:border-[var(--color-accent)]/20 hover:bg-[var(--color-bg-card)] active:scale-95"
 						aria-label="Close navigation"
 						onclick={close}
 					>
@@ -93,7 +93,7 @@
 					<div class="flex flex-col gap-2 text-sm font-medium">
 						{#each items as item (item.href)}
 							<a
-								class="rounded-xl border border-white/5 bg-white/5 px-4 py-3 text-gray-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition-all duration-200 ease-out hover:border-white/10 hover:bg-white/10"
+								class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] px-4 py-3 text-[var(--color-text-primary)] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_5%,transparent)] transition-all duration-200 ease-out hover:border-[var(--color-accent)]/20 hover:bg-[var(--color-bg-card)]"
 								href={item.href}
 								onclick={(e) => {
 									// Handle navigation with proper SvelteKit routing

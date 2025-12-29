@@ -29,31 +29,31 @@
 
 <div class="mb-8 flex flex-wrap gap-4">
 	{#if type}
-		<div class="rounded-lg border border-white/10 bg-white/5 px-4 py-2">
-			<div class="text-[10px] font-bold text-gray-500 uppercase">Type</div>
-			<div class="text-sm text-gray-200">{type}</div>
+		<div class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] px-4 py-2">
+			<div class="text-[10px] font-bold text-[var(--color-text-muted)] uppercase">Type</div>
+			<div class="text-sm text-[var(--color-text-primary)]">{type}</div>
 		</div>
 	{/if}
 
 	{#if rarity}
-		<div class="rounded-lg border border-white/10 bg-white/5 px-4 py-2">
-			<div class="text-[10px] font-bold text-gray-500 uppercase">Rarity</div>
-			<div class="text-sm font-medium text-sky-300">{rarity}</div>
+		<div class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] px-4 py-2">
+			<div class="text-[10px] font-bold text-[var(--color-text-muted)] uppercase">Rarity</div>
+			<div class="text-sm font-medium text-[var(--color-gem-sapphire)]">{rarity}</div>
 		</div>
 	{/if}
 </div>
 
 <!-- Description (Markdown rendered) -->
 {#if descriptionMd && SvelteMarkdown}
-	<div class="prose prose-sm max-w-none text-gray-300 prose-invert">
+	<div class="prose prose-sm max-w-none text-[var(--color-text-secondary)] prose-invert">
 		<SvelteMarkdown source={descriptionMd} />
 	</div>
 {:else if descriptionMd}
-	<div class="text-sm whitespace-pre-wrap text-gray-300">
+	<div class="text-sm whitespace-pre-wrap text-[var(--color-text-secondary)]">
 		{descriptionMd}
 	</div>
 {/if}
 
-<div class="mt-8 font-mono text-xs text-gray-600">
+<div class="mt-8 font-mono text-xs text-[var(--color-text-muted)]">
 	ID: {item.externalId ?? item.id ?? item.slug}
 </div>

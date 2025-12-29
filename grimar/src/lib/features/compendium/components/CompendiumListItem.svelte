@@ -19,7 +19,7 @@
 		source,
 		active,
 		icon: Icon,
-		accentClass = 'hover:border-purple-500/50',
+		accentClass = 'hover:border-[var(--color-accent)]/50',
 		onclick
 	}: Props = $props();
 
@@ -36,8 +36,8 @@
         group mb-2 flex w-full items-center justify-between rounded-xl border p-3 text-left transition-all duration-200
         ${
 					active
-						? 'border-purple-500/50 bg-purple-500/20 shadow-[0_0_15px_rgba(168,85,247,0.3)]'
-						: 'border-white/5 bg-gray-800/40 hover:scale-[1.01] hover:bg-gray-800/80 hover:shadow-[0_0_20px_rgba(139,92,246,0.3)] ' +
+						? 'border-[var(--color-accent)]/50 bg-[var(--color-accent)]/20 shadow-[var(--color-accent-glow)]'
+						: 'border-[var(--color-border)] bg-[var(--color-bg-card)] hover:scale-[1.01] hover:bg-[var(--color-bg-card)]/80 hover:shadow-[var(--color-accent-glow)] ' +
 							accentClass
 				}
     `}
@@ -46,7 +46,7 @@
 	<div class="flex items-center gap-3">
 		{#if Icon}
 			<div
-				class={`rounded-lg bg-black/20 p-1.5 ${active ? 'text-white' : 'text-gray-400 transition-colors group-hover:text-white'}`}
+				class={`rounded-lg bg-[color-mix(in_srgb,black_20%,transparent)] p-1.5 ${active ? 'text-[var(--color-text-primary)]' : 'text-[var(--color-text-secondary)] transition-colors group-hover:text-[var(--color-text-primary)]'}`}
 			>
 				<Icon class="size-4" />
 			</div>
@@ -54,7 +54,7 @@
 		<div class="min-w-0 flex-1">
 			<div class="flex items-center gap-2">
 				<span
-					class={`truncate text-sm font-bold ${active ? 'text-white' : 'text-gray-200 group-hover:text-white'}`}
+					class={`truncate text-sm font-bold ${active ? 'text-[var(--color-text-primary)]' : 'text-[var(--color-text-primary)] group-hover:text-[var(--color-text-primary)]'}`}
 				>
 					{title}
 				</span>
@@ -65,7 +65,11 @@
 				{/if}
 			</div>
 			{#if subtitle}
-				<div class="text-xs text-gray-500 group-hover:text-gray-400">{subtitle}</div>
+				<div
+					class="text-xs text-[var(--color-text-muted)] group-hover:text-[var(--color-text-secondary)]"
+				>
+					{subtitle}
+				</div>
 			{/if}
 		</div>
 	</div>

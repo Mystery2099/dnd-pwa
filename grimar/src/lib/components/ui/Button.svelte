@@ -26,13 +26,15 @@
 		...rest
 	}: Props = $props();
 
-	const baseClasses = 'inline-flex items-center justify-center gap-2 font-medium transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100';
-	
+	const baseClasses =
+		'inline-flex items-center justify-center gap-2 font-medium transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100';
+
 	const variantClasses = {
 		gem: 'btn-gem',
-		ghost: 'hover:bg-white/10 text-gray-300',
-		outline: 'border border-white/10 hover:bg-white/5 text-gray-300',
-		danger: 'bg-red-500/20 border border-red-500/50 text-red-400 hover:bg-red-500/30'
+		ghost: 'hover:bg-[var(--color-bg-card)] text-[var(--color-text-secondary)]',
+		outline: 'btn-3d hover:bg-[var(--color-bg-card)] text-[var(--color-text-secondary)]',
+		danger: 'bg-red-500/20 border border-red-500/50 text-red-400 hover:bg-red-500/30',
+		panel: 'btn-3d'
 	};
 
 	const sizeClasses = {
@@ -41,7 +43,9 @@
 		lg: 'px-6 py-3 text-base rounded-2xl'
 	};
 
-	const combinedClasses = $derived(`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`.trim());
+	const combinedClasses = $derived(
+		`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`.trim()
+	);
 </script>
 
 {#if href}

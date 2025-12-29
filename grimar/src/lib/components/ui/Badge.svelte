@@ -8,22 +8,21 @@
 		children?: Snippet;
 	};
 
-	let {
-		variant = 'glass',
-		color = '',
-		class: className = '',
-		children
-	}: Props = $props();
+	let { variant = 'glass', color = '', class: className = '', children }: Props = $props();
 
-	const baseClasses = 'inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase transition-all';
-	
+	const baseClasses =
+		'inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase transition-all';
+
 	const variantClasses = {
-		glass: 'bg-white/10 text-white border border-white/10 backdrop-blur-sm',
-		solid: 'bg-white/20 text-white font-bold shadow-sm',
-		outline: 'border border-white/20 text-gray-300'
+		glass:
+			'bg-[var(--color-bg-card)] text-[var(--color-text-primary)] border border-[var(--color-border)] backdrop-blur-sm',
+		solid: 'bg-[var(--color-bg-card)] text-[var(--color-text-primary)] font-bold shadow-sm',
+		outline: 'border border-[var(--color-border)] text-[var(--color-text-secondary)]'
 	};
 
-	const combinedClasses = $derived(`${baseClasses} ${variantClasses[variant]} ${color} ${className}`.trim());
+	const combinedClasses = $derived(
+		`${baseClasses} ${variantClasses[variant]} ${color} ${className}`.trim()
+	);
 </script>
 
 <span class={combinedClasses}>

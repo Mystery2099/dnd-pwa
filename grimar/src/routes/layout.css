@@ -7,11 +7,24 @@
 		'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
 		Arial, sans-serif;
 
-	--color-gem-ruby: #f43f5e;
-	--color-gem-sapphire: #0ea5e9;
-	--color-gem-emerald: #10b981;
-	--color-gem-amethyst: #a855f7;
-	--color-gem-topaz: #f59e0b;
+	/* Gem Colors (Spell School Colors) */
+	--color-gem-ruby: var(--theme-gem-ruby);
+	--color-gem-sapphire: var(--theme-gem-sapphire);
+	--color-gem-emerald: var(--theme-gem-emerald);
+	--color-gem-amethyst: var(--theme-gem-amethyst);
+	--color-gem-topaz: var(--theme-gem-topaz);
+
+	/* Semantic theme colors - these are what components use */
+	--color-bg-canvas: var(--theme-bg-canvas);
+	--color-bg-card: var(--theme-bg-card);
+	--color-bg-overlay: var(--theme-bg-overlay);
+	--color-accent: var(--theme-accent);
+	--color-accent-glow: var(--theme-accent-glow);
+	--color-text-primary: var(--theme-text-primary);
+	--color-text-secondary: var(--theme-text-secondary);
+	--color-text-muted: var(--theme-text-muted);
+	--color-border: var(--theme-border);
+	--color-border-hover: var(--theme-border-hover);
 
 	--animate-shimmer: shimmer 3s linear infinite;
 	--animate-float: float 6s ease-in-out infinite;
@@ -52,27 +65,170 @@
 		0%,
 		100% {
 			opacity: 1;
-			box-shadow: 0 0 12px rgba(139, 92, 246, 0.5);
+			box-shadow: 0 0 12px var(--color-accent-glow);
 		}
 		50% {
 			opacity: 0.8;
-			box-shadow: 0 0 20px rgba(139, 92, 246, 0.8);
+			box-shadow: 0 0 20px var(--color-accent-glow);
 		}
 	}
 }
 
+/* ========================
+   THEME DEFINITIONS
+   ======================== */
+
+/* Amethyst - Deep mystical purple (default) */
+:root,
+[data-theme='amethyst'] {
+	--theme-bg-canvas: #0f172a;
+	--theme-bg-card: rgba(30, 27, 75, 0.6);
+	--theme-bg-overlay: rgba(49, 46, 129, 0.8);
+	--theme-accent: #a855f7;
+	--theme-accent-glow: rgba(168, 85, 247, 0.5);
+	--theme-gem-ruby: #f472b6;
+	--theme-gem-sapphire: #38bdf8;
+	--theme-gem-emerald: #4ade80;
+	--theme-gem-amethyst: #c084fc;
+	--theme-gem-topaz: #fbbf24;
+	--theme-text-primary: #f8fafc;
+	--theme-text-secondary: #94a3b8;
+	--theme-text-muted: #64748b;
+	--theme-border: rgba(255, 255, 255, 0.1);
+	--theme-border-hover: rgba(255, 255, 255, 0.2);
+	--theme-effect-url: '';
+}
+
+/* Arcane - Golden Weave radiance (warm divine magic) */
+[data-theme='arcane'] {
+	--theme-bg-canvas: #451a03;
+	--theme-bg-card: rgba(120, 53, 15, 0.7);
+	--theme-bg-overlay: rgba(146, 64, 14, 0.8);
+	--theme-accent: #f59e0b;
+	--theme-accent-glow: rgba(245, 158, 11, 0.6);
+	--theme-gem-ruby: #dc2626;
+	--theme-gem-sapphire: #eab308;
+	--theme-gem-emerald: #d97706;
+	--theme-gem-amethyst: #fef3c7;
+	--theme-gem-topaz: #fde047;
+	--theme-text-primary: #fef3c7;
+	--theme-text-secondary: #fcd34d;
+	--theme-text-muted: #d97706;
+	--theme-border: rgba(245, 158, 11, 0.2);
+	--theme-border-hover: rgba(245, 158, 11, 0.35);
+}
+
+/* Nature - Verdant forest (druidic magic) */
+[data-theme='nature'] {
+	--theme-bg-canvas: #052e16;
+	--theme-bg-card: rgba(19, 78, 74, 0.7);
+	--theme-bg-overlay: rgba(17, 94, 89, 0.8);
+	--theme-accent: #10b981;
+	--theme-accent-glow: rgba(16, 185, 129, 0.5);
+	--theme-gem-ruby: #fb7185;
+	--theme-gem-sapphire: #2dd4bf;
+	--theme-gem-emerald: #4ade80;
+	--theme-gem-amethyst: #6ee7b7;
+	--theme-gem-topaz: #fbbf24;
+	--theme-text-primary: #f0fdf4;
+	--theme-text-secondary: #86efac;
+	--theme-text-muted: #6ee7b7;
+	--theme-border: rgba(16, 185, 129, 0.15);
+	--theme-border-hover: rgba(16, 185, 129, 0.25);
+}
+
+/* Fire - Blazing inferno (dragonfire rage) */
+[data-theme='fire'] {
+	--theme-bg-canvas: #450a0a;
+	--theme-bg-card: rgba(127, 29, 29, 0.7);
+	--theme-bg-overlay: rgba(153, 27, 27, 0.8);
+	--theme-accent: #f97316;
+	--theme-accent-glow: rgba(249, 115, 22, 0.6);
+	--theme-gem-ruby: #ef4444;
+	--theme-gem-sapphire: #f97316;
+	--theme-gem-emerald: #facc15;
+	--theme-gem-amethyst: #fde047;
+	--theme-gem-topaz: #fef3c7;
+	--theme-text-primary: #fef2f2;
+	--theme-text-secondary: #fca5a5;
+	--theme-text-muted: #f87171;
+	--theme-border: rgba(249, 115, 22, 0.2);
+	--theme-border-hover: rgba(249, 115, 22, 0.35);
+}
+
+/* Ice - Crystalline frost (clarity, precision) */
+[data-theme='ice'] {
+	--theme-bg-canvas: #0c4a6e;
+	--theme-bg-card: rgba(14, 116, 144, 0.7);
+	--theme-bg-overlay: rgba(21, 94, 117, 0.8);
+	--theme-accent: #06b6d4;
+	--theme-accent-glow: rgba(6, 182, 212, 0.5);
+	--theme-gem-ruby: #f9a8d4;
+	--theme-gem-sapphire: #7dd3fc;
+	--theme-gem-emerald: #22d3ee;
+	--theme-gem-amethyst: #e0f2fe;
+	--theme-gem-topaz: #cbd5e1;
+	--theme-text-primary: #ecfeff;
+	--theme-text-secondary: #7dd3fc;
+	--theme-text-muted: #38bdf8;
+	--theme-border: rgba(6, 182, 212, 0.15);
+	--theme-border-hover: rgba(6, 182, 212, 0.25);
+}
+
+/* Void - Cosmic darkness (eldritch, forbidden knowledge) */
+[data-theme='void'] {
+	--theme-bg-canvas: #000000;
+	--theme-bg-card: rgba(20, 20, 30, 0.8);
+	--theme-bg-overlay: rgba(30, 25, 45, 0.85);
+	--theme-accent: #a855f7;
+	--theme-accent-glow: rgba(168, 85, 247, 0.6);
+	--theme-gem-ruby: #7f1d1d;
+	--theme-gem-sapphire: #4c1d95;
+	--theme-gem-emerald: #111827;
+	--theme-gem-amethyst: #8b5cf6;
+	--theme-gem-topaz: #f0f9ff;
+	--theme-text-primary: #f5f5f5;
+	--theme-text-secondary: #c4b5fd;
+	--theme-text-muted: #8b5cf6;
+	--theme-border: rgba(139, 92, 246, 0.15);
+	--theme-border-hover: rgba(139, 92, 246, 0.25);
+}
+
+/* Ocean - Abyssal depths (kraken-pact, bioluminescence) */
+[data-theme='ocean'] {
+	--theme-bg-canvas: #042f2e;
+	--theme-bg-card: rgba(13, 148, 136, 0.6);
+	--theme-bg-overlay: rgba(17, 94, 89, 0.8);
+	--theme-accent: #14b8a6;
+	--theme-accent-glow: rgba(20, 184, 166, 0.5);
+	--theme-gem-ruby: #fb7185;
+	--theme-gem-sapphire: #1e3a8a;
+	--theme-gem-emerald: #0d9488;
+	--theme-gem-amethyst: #5eead4;
+	--theme-gem-topaz: #e0f2f1;
+	--theme-text-primary: #f0fdfa;
+	--theme-text-secondary: #5eead4;
+	--theme-text-muted: #2dd4bf;
+	--theme-border: rgba(20, 184, 166, 0.15);
+	--theme-border-hover: rgba(20, 184, 166, 0.25);
+}
+
+/* ========================
+   BASE STYLES
+   ======================== */
+
 @layer base {
 	body {
-		background: radial-gradient(circle at 50% 0%, #2e1065, #0f172a);
-		background-attachment: fixed; /* Keep the spotlight fixed */
+		background: radial-gradient(circle at 50% 0%, var(--theme-bg-card), var(--theme-bg-canvas));
+		background-attachment: fixed;
 		min-height: 100vh;
-		color: white;
+		color: var(--color-text-primary);
 		font-family: var(--font-sans);
 		-webkit-font-smoothing: antialiased;
 		position: relative;
 	}
 
-	/* Noise Texture Overlay (Style Guide 7.2) */
+	/* Noise Texture Overlay */
 	body::before {
 		content: '';
 		position: fixed;
@@ -93,62 +249,185 @@
 	h4,
 	h5,
 	h6 {
-		@apply font-bold tracking-tight text-white;
+		@apply font-bold tracking-tight text-[var(--color-text-primary)];
 	}
 }
 
+/* ========================
+   COMPONENT STYLES
+   ======================== */
+
 @layer components {
-	/* 6.1 The "Aero" Shine */
+	/* The "Aero" Shine */
 	.aero-shine {
 		background: linear-gradient(
 			to right,
-			rgba(255, 255, 255, 0) 0%,
-			rgba(255, 255, 255, 0.1) 50%,
-			rgba(255, 255, 255, 0) 100%
+			color-mix(in srgb, var(--color-text-primary) 0%, transparent) 0%,
+			color-mix(in srgb, var(--color-text-primary) 10%, transparent) 50%,
+			color-mix(in srgb, var(--color-text-primary) 0%, transparent) 100%
 		);
 		background-size: 200% 100%;
 		animation: var(--animate-shimmer);
 	}
 
-	/* 6.2 The Crystal Card */
+	/* The Crystal Card */
 	.card-crystal {
-		background-color: rgba(30, 27, 75, 0.6); /* Indigo-950 @ 60% */
+		background-color: var(--color-bg-card);
 		backdrop-filter: blur(12px);
+		/* 3D effect: top highlight edge + deep shadow */
 		box-shadow:
-			inset 0 1px 0 rgba(255, 255, 255, 0.2),
-			inset 1px 0 0 rgba(255, 255, 255, 0.05),
-			inset -1px 0 0 rgba(255, 255, 255, 0.05),
-			0 4px 20px rgba(0, 0, 0, 0.5); /* Drop Shadow */
-		border-bottom: 1px solid rgba(0, 0, 0, 0.6);
-		border-radius: 1rem; /* 16px */
+			/* Top highlight edge - light coming from above */
+			inset 0 1px 0 color-mix(in srgb, var(--color-text-primary) 20%, transparent),
+			/* Subtle side highlights */ inset 1px 0 0
+				color-mix(in srgb, var(--color-text-primary) 8%, transparent),
+			inset -1px 0 0 color-mix(in srgb, var(--color-text-primary) 8%, transparent),
+			/* Deep drop shadow for floating effect */ 0 8px 32px
+				color-mix(in srgb, black 60%, transparent),
+			/* Thin border for definition */ 0 0 0 1px var(--color-border);
+		border-bottom: 1px solid var(--color-border);
+		border-radius: 1rem;
 		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 	}
 
 	.card-crystal:hover {
+		/* Enhanced shadow on hover - appears to lift */
 		box-shadow:
-			inset 0 1px 0 rgba(255, 255, 255, 0.3),
-			0 10px 30px rgba(0, 0, 0, 0.6);
+			inset 0 1px 0 color-mix(in srgb, var(--color-text-primary) 30%, transparent),
+			inset 1px 0 0 color-mix(in srgb, var(--color-text-primary) 12%, transparent),
+			inset -1px 0 0 color-mix(in srgb, var(--color-text-primary) 12%, transparent),
+			0 12px 48px color-mix(in srgb, black 70%, transparent),
+			0 0 0 1px var(--color-border-hover);
 		transform: translateY(-2px);
 	}
 
-	/* 6.3 The "Gem" Button */
+	.card-crystal:active {
+		transform: translateY(0);
+		box-shadow:
+			inset 0 1px 0 color-mix(in srgb, var(--color-text-primary) 18%, transparent),
+			0 4px 16px color-mix(in srgb, black 50%, transparent),
+			0 0 0 1px var(--color-border);
+	}
+
+	/* 3D Card - Compendium spell/item cards with stronger floating effect */
+	.card-3d {
+		background-color: var(--color-bg-card);
+		backdrop-filter: blur(8px);
+		/* Strong top highlight + floating shadow */
+		box-shadow:
+			/* Top edge highlight - key 3D element */
+			inset 0 1px 0 color-mix(in srgb, var(--color-text-primary) 25%, transparent),
+			/* Side subtle highlights */ inset 1px 0 0
+				color-mix(in srgb, var(--color-text-primary) 6%, transparent),
+			inset -1px 0 0 color-mix(in srgb, var(--color-text-primary) 6%, transparent),
+			/* Soft shadow for depth */ 0 4px 16px color-mix(in srgb, black 50%, transparent),
+			0 0 0 1px var(--color-border);
+		border-radius: 0.75rem;
+		transition: all 0.2s ease;
+	}
+
+	.card-3d:hover {
+		box-shadow:
+			inset 0 1px 0 color-mix(in srgb, var(--color-text-primary) 35%, transparent),
+			inset 1px 0 0 color-mix(in srgb, var(--color-text-primary) 10%, transparent),
+			inset -1px 0 0 color-mix(in srgb, var(--color-text-primary) 10%, transparent),
+			0 8px 24px color-mix(in srgb, black 60%, transparent),
+			0 0 0 1px var(--color-border-hover);
+		transform: translateY(-3px);
+	}
+
+	/* 3D Button - Strong convex appearance */
+	.btn-3d {
+		background: linear-gradient(
+			180deg,
+			color-mix(in srgb, var(--color-text-primary) 12%, var(--color-bg-card)) 0%,
+			color-mix(in srgb, var(--color-text-primary) 5%, var(--color-bg-card)) 100%
+		);
+		box-shadow:
+			/* Inner light edge */
+			inset 0 1px 0 color-mix(in srgb, var(--color-text-primary) 25%, transparent),
+			/* Drop shadow */ 0 3px 6px rgba(0, 0, 0, 0.4),
+			/* Border */ 0 0 0 1px var(--color-border);
+		border-radius: 0.5rem;
+		font-weight: 600;
+		transition: all 0.15s ease;
+	}
+
+	.btn-3d:hover {
+		background: linear-gradient(
+			180deg,
+			color-mix(in srgb, var(--color-text-primary) 18%, var(--color-bg-card)) 0%,
+			color-mix(in srgb, var(--color-text-primary) 8%, var(--color-bg-card)) 100%
+		);
+		box-shadow:
+			inset 0 1px 0 color-mix(in srgb, var(--color-text-primary) 35%, transparent),
+			0 5px 12px color-mix(in srgb, black 50%, transparent),
+			0 0 0 1px var(--color-border-hover);
+		transform: translateY(-1px);
+	}
+
+	.btn-3d:active {
+		background: linear-gradient(
+			180deg,
+			color-mix(in srgb, var(--color-text-primary) 6%, var(--color-bg-card)) 0%,
+			color-mix(in srgb, var(--color-text-primary) 2%, var(--color-bg-card)) 100%
+		);
+		box-shadow:
+			inset 0 2px 4px color-mix(in srgb, black 30%, transparent),
+			0 1px 3px color-mix(in srgb, black 40%, transparent),
+			0 0 0 1px var(--color-border);
+		transform: translateY(1px);
+	}
+
+	/* Recessed Input - Looks like a slot/well */
+	.input-recessed {
+		background-color: color-mix(in srgb, black 30%, transparent);
+		box-shadow:
+			/* Inner shadow creates recessed effect */
+			inset 0 2px 4px color-mix(in srgb, black 50%, transparent),
+			inset 0 1px 0 color-mix(in srgb, var(--color-text-primary) 5%, transparent),
+			/* Subtle border */ 0 0 0 1px var(--color-border);
+		border-radius: 0.5rem;
+		transition: all 0.2s ease;
+	}
+
+	.input-recessed:focus {
+		box-shadow:
+			inset 0 2px 4px color-mix(in srgb, black 50%, transparent),
+			inset 0 0 0 2px var(--color-accent),
+			0 0 0 1px var(--color-border);
+		outline: none;
+	}
+
+	/* 3D Panel - Floating panel with strong shadow */
+	.panel-3d {
+		background-color: var(--color-bg-card);
+		backdrop-filter: blur(16px);
+		box-shadow:
+			/* Top highlight */
+			inset 0 1px 0 color-mix(in srgb, var(--color-text-primary) 20%, transparent),
+			/* Deep shadow for floating effect */ 0 8px 40px color-mix(in srgb, black 60%, transparent),
+			0 0 0 1px var(--color-border);
+		border-radius: 0.75rem;
+	}
+
+	/* The "Gem" Button */
 	.btn-gem {
 		position: relative;
 		overflow: hidden;
 		border: none;
-		border-radius: 9999px; /* Pill */
+		border-radius: 9999px;
 		background: linear-gradient(
 			180deg,
-			#8b5cf6 0%,
-			/* Light Purple */ #6d28d9 100% /* Dark Purple */
+			var(--color-accent) 0%,
+			color-mix(in srgb, var(--color-accent) 70%, black) 100%
 		);
 		box-shadow:
-			inset 0 1px 0 rgba(255, 255, 255, 0.4),
-			/* Top Highlight */ 0 2px 4px rgba(0, 0, 0, 0.3),
-			/* Drop Shadow */ 0 0 12px rgba(139, 92, 246, 0.5); /* Outer Glow */
+			inset 0 1px 0 color-mix(in srgb, white 40%, transparent),
+			0 2px 4px color-mix(in srgb, black 30%, transparent),
+			0 0 12px var(--color-accent-glow);
 		color: white;
 		font-weight: 700;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5); /* Engraved Text */
+		text-shadow: 0 -1px 0 color-mix(in srgb, black 50%, transparent);
 		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 		@apply inline-flex cursor-pointer items-center justify-center px-4 py-2;
 	}
@@ -157,43 +436,59 @@
 		filter: brightness(1.1);
 		transform: translateY(-1px);
 		box-shadow:
-			inset 0 1px 0 rgba(255, 255, 255, 0.6),
-			0 4px 12px rgba(0, 0, 0, 0.4),
-			0 0 20px rgba(139, 92, 246, 0.8);
+			inset 0 1px 0 color-mix(in srgb, white 60%, transparent),
+			0 4px 12px color-mix(in srgb, black 40%, transparent),
+			0 0 20px var(--color-accent-glow);
 	}
 
 	.btn-gem:active {
 		transform: translateY(1px);
-		background: linear-gradient(180deg, #5b21b6 0%, #4c1d95 100%);
+		background: linear-gradient(
+			180deg,
+			color-mix(in srgb, var(--color-accent) 60%, black) 0%,
+			color-mix(in srgb, var(--color-accent) 50%, black) 100%
+		);
 		box-shadow:
-			inset 0 2px 4px rgba(0, 0, 0, 0.3),
-			0 0 8px rgba(139, 92, 246, 0.4);
+			inset 0 2px 4px color-mix(in srgb, black 30%, transparent),
+			0 0 8px var(--color-accent-glow);
 	}
 
-	/* 6.4 The "Engraved" Panel */
+	/* The "Engraved" Panel */
 	.panel-inset {
-		background: rgba(0, 0, 0, 0.2);
-		border-radius: 0.75rem; /* 12px */
-		box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
-		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+		background: color-mix(in srgb, black 20%, transparent);
+		border-radius: 0.75rem;
+		box-shadow: inset 0 2px 4px color-mix(in srgb, black 40%, transparent);
+		border-bottom: 1px solid var(--color-border);
 	}
 
 	/* Text Effects */
 	.text-holo {
 		text-shadow:
-			0 0 12px rgba(139, 92, 246, 0.6),
-			0 2px 4px rgba(0, 0, 0, 0.8);
+			0 0 12px var(--color-accent-glow),
+			0 2px 4px color-mix(in srgb, black 80%, transparent);
 	}
 
-	/* Input/Textarea Crystal Inset (Style Guide 5.2) */
+	/* Input/Textarea Crystal Inset */
 	.input-crystal {
-		@apply rounded-xl border-t border-b border-black/60 bg-black/40 text-sm text-gray-100 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] transition-all placeholder:text-gray-500 focus:ring-1 focus:ring-purple-500 focus:outline-none;
+		@apply rounded-xl border border-[var(--color-border)] bg-[color-mix(in_srgb,black_40%,transparent)] text-sm text-[var(--color-text-primary)] transition-all placeholder:text-[var(--color-text-muted)];
+		/* Recessed effect with inner shadows */
+		box-shadow:
+			inset 0 2px 4px color-mix(in srgb, black 50%, transparent),
+			inset 0 1px 0 color-mix(in srgb, var(--color-text-primary) 5%, transparent);
+	}
+
+	.input-crystal:focus {
+		@apply ring-1 ring-[var(--color-accent)] outline-none;
+		box-shadow:
+			inset 0 2px 4px color-mix(in srgb, black 50%, transparent),
+			inset 0 0 0 2px var(--color-accent),
+			0 0 0 1px var(--color-border);
 	}
 
 	/* Smooth scrolling for filter panels */
 	.glass-scroll {
 		scrollbar-width: thin;
-		scrollbar-color: rgba(168, 85, 247, 0.3) transparent;
+		scrollbar-color: color-mix(in srgb, var(--color-accent) 30%, transparent) transparent;
 	}
 
 	.glass-scroll::-webkit-scrollbar {
@@ -205,11 +500,65 @@
 	}
 
 	.glass-scroll::-webkit-scrollbar-thumb {
-		background: rgba(168, 85, 247, 0.3);
+		background: color-mix(in srgb, var(--color-accent) 30%, transparent);
 		border-radius: 3px;
 	}
 
 	.glass-scroll::-webkit-scrollbar-thumb:hover {
-		background: rgba(168, 85, 247, 0.5);
+		background: color-mix(in srgb, var(--color-accent) 50%, transparent);
+	}
+}
+
+/* ========================
+   UTILITY CLASSES
+   ======================== */
+
+@layer utilities {
+	/* Theme-aware text colors */
+	.text-theme-primary {
+		color: var(--color-text-primary);
+	}
+
+	.text-theme-secondary {
+		color: var(--color-text-secondary);
+	}
+
+	.text-theme-muted {
+		color: var(--color-text-muted);
+	}
+
+	/* Theme-aware background colors */
+	.bg-theme-canvas {
+		background-color: var(--color-bg-canvas);
+	}
+
+	.bg-theme-card {
+		background-color: var(--color-bg-card);
+	}
+
+	.bg-theme-overlay {
+		background-color: var(--color-bg-overlay);
+	}
+
+	/* Theme-aware border */
+	.border-theme {
+		border-color: var(--color-border);
+	}
+
+	.border-theme-hover:hover {
+		border-color: var(--color-border-hover);
+	}
+
+	/* Theme accent colors */
+	.text-accent {
+		color: var(--color-accent);
+	}
+
+	.bg-accent {
+		background-color: var(--color-accent);
+	}
+
+	.ring-accent {
+		--tw-ring-color: var(--color-accent);
 	}
 }

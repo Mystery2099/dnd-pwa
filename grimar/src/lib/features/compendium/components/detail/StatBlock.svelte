@@ -19,21 +19,23 @@
 	);
 </script>
 
-<div class="mb-6 grid grid-cols-3 gap-4 rounded-xl border border-white/10 bg-white/5 p-4">
+<div
+	class="mb-6 grid grid-cols-3 gap-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4"
+>
 	<div class="text-center">
-		<div class="text-xs font-bold text-gray-500 uppercase">AC</div>
-		<div class="text-xl font-bold text-white">{acValue}</div>
-		<div class="text-xs text-gray-500">{acType}</div>
+		<div class="text-xs font-bold text-[var(--color-text-muted)] uppercase">AC</div>
+		<div class="text-xl font-bold text-[var(--color-text-primary)]">{acValue}</div>
+		<div class="text-xs text-[var(--color-text-muted)]">{acType}</div>
 	</div>
-	<div class="border-l border-white/10 text-center">
-		<div class="text-xs font-bold text-gray-500 uppercase">HP</div>
-		<div class="text-xl font-bold text-emerald-400">{hitPoints}</div>
+	<div class="border-l border-[var(--color-border)] text-center">
+		<div class="text-xs font-bold text-[var(--color-text-muted)] uppercase">HP</div>
+		<div class="text-xl font-bold text-[var(--color-accent)]">{hitPoints}</div>
 		{#if hitDice}
-			<div class="text-xs text-gray-500">{hitDice}</div>
+			<div class="text-xs text-[var(--color-text-muted)]">{hitDice}</div>
 		{/if}
 	</div>
-	<div class="border-l border-white/10 text-center">
-		<div class="text-xs font-bold text-gray-500 uppercase">Speed</div>
-		<div class="mt-1 text-sm font-medium text-white">{speedText}</div>
+	<div class="border-l border-[var(--color-border)] text-center">
+		<div class="text-xs font-bold text-[var(--color-text-muted)] uppercase">Speed</div>
+		<div class="mt-1 text-sm font-medium text-[var(--color-text-primary)]">{speedText}</div>
 	</div>
 </div>

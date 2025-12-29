@@ -18,9 +18,9 @@
 </script>
 
 <div class="flex h-[calc(100vh-6rem)] flex-col overflow-hidden lg:flex-row">
-	<!-- Sidebar: Obsidian Surface -->
+	<!-- Sidebar: 3D Panel with floating effect -->
 	<aside
-		class="z-10 flex w-full shrink-0 flex-col overflow-hidden border-b border-white/10 bg-indigo-950/40 backdrop-blur-md lg:w-[350px] lg:border-r lg:border-b-0"
+		class="panel-3d z-10 flex w-full shrink-0 flex-col overflow-hidden border-r border-[var(--color-border)] bg-[var(--color-bg-card)] backdrop-blur-md lg:w-[320px]"
 	>
 		{@render sidebar()}
 	</aside>

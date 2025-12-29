@@ -189,9 +189,9 @@
 						class={`group rounded-md border px-2 py-1 text-xs transition-all ${
 							isSelected
 								? `${
-										option.color?.base || 'border-purple-400 text-purple-300'
-									} border-current bg-current/10 text-current shadow-[0_0_12px_rgba(255,255,255,0.1)]`
-								: 'border-white/10 bg-white/5 text-gray-400 hover:bg-white/10'
+										option.color?.base || 'border-[var(--color-accent)] text-[var(--color-accent)]'
+									} border-current bg-current/10 text-current shadow-[0_0_12px_color-mix(in_srgb,var(--color-text-primary)_10%,transparent)]`
+								: 'border-[var(--color-border)] bg-[var(--color-bg-card)] text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-card)]'
 						}`}
 						onclick={() => toggleFilter(group.key, String(option.value))}
 					>
@@ -234,17 +234,17 @@
 							<div class="mb-6 text-6xl">
 								<config.ui.icon class="mx-auto size-16" />
 							</div>
-							<h3 class="mb-4 text-xl font-bold text-white">
+							<h3 class="mb-4 text-xl font-bold text-[var(--color-text-primary)]">
 								{config.ui.databaseEmptyState.title}
 							</h3>
-							<p class="mb-6 text-gray-400">
+							<p class="mb-6 text-[var(--color-text-muted)]">
 								{config.ui.databaseEmptyState.description}
 							</p>
 
 							<!-- Sync Button -->
 							<div class="mb-6 flex justify-center">
 								<button
-									class="relative flex items-center gap-2 rounded-lg border border-white/10 bg-linear-to-r from-white/10 to-white/5 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-white/15 disabled:cursor-not-allowed disabled:opacity-50"
+									class="relative flex items-center gap-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] px-4 py-2 text-sm font-medium text-[var(--color-text-primary)] transition-all hover:bg-[var(--color-bg-overlay)] disabled:cursor-not-allowed disabled:opacity-50"
 									onclick={syncItems}
 									disabled={isSyncing}
 								>
@@ -259,14 +259,18 @@
 							</div>
 
 							{#if syncMessage}
-								<div class="mb-4 rounded-md border border-green-500/30 bg-green-500/10 p-3">
-									<p class="text-sm text-green-400">{syncMessage}</p>
+								<div
+									class="mb-4 rounded-md border border-[var(--color-gem-emerald)]/30 bg-[var(--color-gem-emerald)]/10 p-3"
+								>
+									<p class="text-sm text-[var(--color-gem-emerald)]">{syncMessage}</p>
 								</div>
 							{/if}
 
 							{#if syncError}
-								<div class="mb-4 rounded-md border border-red-500/30 bg-red-500/10 p-3">
-									<p class="text-sm text-red-400">{syncError}</p>
+								<div
+									class="mb-4 rounded-md border border-[var(--color-gem-ruby)]/30 bg-[var(--color-gem-ruby)]/10 p-3"
+								>
+									<p class="text-sm text-[var(--color-gem-ruby)]">{syncError}</p>
 								</div>
 							{/if}
 						</div>
@@ -286,7 +290,7 @@
 					</div>
 
 					{#if resolved.items.length === 0}
-						<div class="py-12 text-center text-gray-500">
+						<div class="py-12 text-center text-[var(--color-text-muted)]">
 							{config.ui.emptyState.title}. {config.ui.emptyState.description}
 						</div>
 					{/if}
@@ -330,7 +334,9 @@
 						<ItemDetailContent item={selectedItem.details} />
 					{:else}
 						<div class="space-y-4">
-							<div class="rounded-lg border border-white/10 bg-black/20 p-4 font-mono text-xs">
+							<div
+								class="rounded-lg border border-[var(--color-border)] bg-black/20 p-4 font-mono text-xs"
+							>
 								<pre>{JSON.stringify(selectedItem.details, null, 2)}</pre>
 							</div>
 						</div>

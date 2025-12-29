@@ -30,14 +30,9 @@
 
 <div class="relative w-full">
 	<!-- Inset Input: Concave glass effect -->
-	<Input
-		ref={inputEl}
-		type="search"
-		{placeholder}
-		class="h-10 pr-12 rounded-full"
-	/>
+	<Input ref={inputEl} type="search" {placeholder} class="h-10 rounded-full pr-12" />
 	<div
-		class="pointer-events-none absolute top-1/2 right-3 hidden -translate-y-1/2 items-center gap-1 rounded border border-white/5 bg-white/5 px-1.5 py-0.5 text-[10px] font-bold text-gray-500 lg:flex"
+		class="pointer-events-none absolute top-1/2 right-3 hidden -translate-y-1/2 items-center gap-1 rounded border border-[var(--color-border)] bg-[var(--color-bg-card)] px-1.5 py-0.5 text-[10px] font-bold text-[var(--color-text-muted)] lg:flex"
 	>
 		<span>⌘</span>
 		<span>K</span>

@@ -63,7 +63,7 @@
 {#if showDetails}
 	<!-- Detailed offline status panel -->
 	<div
-		class="flex flex-col gap-3 rounded-lg border border-white/10 bg-white/5 p-4 backdrop-blur-sm"
+		class="flex flex-col gap-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4 backdrop-blur-sm"
 	>
 		<div class="flex items-center justify-between">
 			<div class="flex items-center gap-2">
@@ -84,7 +84,7 @@
 			{:else if available}
 				<button
 					onclick={handleSync}
-					class="flex items-center gap-1 text-xs text-blue-400 hover:text-blue-300"
+					class="flex items-center gap-1 text-xs text-[var(--color-accent)] hover:text-[var(--color-accent)]"
 				>
 					<RefreshCw class="h-3 w-3" />
 					Sync Now
@@ -93,8 +93,8 @@
 		</div>
 
 		<!-- Offline data availability -->
-		<div class="flex items-center gap-2 text-sm text-gray-300">
-			<Database class="h-4 w-4 text-gray-400" />
+		<div class="flex items-center gap-2 text-sm text-[var(--color-text-secondary)]">
+			<Database class="h-4 w-4 text-[var(--color-text-muted)]" />
 			<span>
 				{#if available}
 					{stats.spells} spells,
@@ -108,7 +108,7 @@
 
 		<!-- Last sync time -->
 		{#if lastSync}
-			<div class="flex items-center gap-2 text-sm text-gray-400">
+			<div class="flex items-center gap-2 text-sm text-[var(--color-text-muted)]">
 				<Clock class="h-4 w-4" />
 				<span>Last sync: {formatLastSync(lastSync)}</span>
 			</div>
@@ -117,14 +117,14 @@
 		<!-- Storage usage -->
 		{#if storage}
 			<div class="flex items-center gap-2 text-sm">
-				<span class="text-gray-300">
+				<span class="text-[var(--color-text-secondary)]">
 					{formatBytes(storage.usage)} / {formatBytes(storage.quota)}
 				</span>
-				<span class="text-gray-400">({storage.percent.toFixed(1)}%)</span>
+				<span class="text-[var(--color-text-muted)]">({storage.percent.toFixed(1)}%)</span>
 			</div>
 
 			<!-- Storage usage bar -->
-			<div class="mt-2 h-2 w-full overflow-hidden rounded-full bg-white/10">
+			<div class="mt-2 h-2 w-full overflow-hidden rounded-full bg-[var(--color-bg-card)]">
 				<div
 					class="h-full transition-all duration-300 ease-out"
 					class:bg-blue-500={storage.percent < 70}
@@ -138,7 +138,7 @@
 {:else}
 	<!-- Compact offline indicator -->
 	<div
-		class="flex items-center gap-2 rounded-md border border-white/10 bg-white/5 px-2 py-1 backdrop-blur-sm"
+		class="flex items-center gap-2 rounded-md border border-[var(--color-border)] bg-[var(--color-bg-card)] px-2 py-1 backdrop-blur-sm"
 	>
 		{#if isOnline}
 			<Wifi class="h-3 w-3 text-green-400" />
@@ -147,11 +147,11 @@
 		{/if}
 
 		{#if available}
-			<span class="text-xs text-gray-400">
+			<span class="text-xs text-[var(--color-text-muted)]">
 				{stats.spells + stats.monsters + stats.items} items
 			</span>
 		{:else}
-			<span class="text-xs text-gray-500">No offline</span>
+			<span class="text-xs text-[var(--color-text-muted)]">No offline</span>
 		{/if}
 
 		{#if isSyncingLocal || seeding}

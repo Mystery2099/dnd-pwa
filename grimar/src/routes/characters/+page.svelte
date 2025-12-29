@@ -9,8 +9,10 @@
 	<!-- Header Area -->
 	<div class="mb-8">
 		<div>
-			<h1 class="text-holo mb-1 text-3xl font-bold text-white">My Characters</h1>
-			<p class="text-sm text-gray-400">Manage your heroes and adventurers.</p>
+			<h1 class="text-holo mb-1 text-3xl font-bold text-[var(--color-text-primary)]">
+				My Characters
+			</h1>
+			<p class="text-sm text-[var(--color-text-muted)]">Manage your heroes and adventurers.</p>
 		</div>
 	</div>
 
