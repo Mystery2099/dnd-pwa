@@ -69,5 +69,20 @@ describe('FiveEBitsProvider', () => {
 			expect(result.spellLevel).toBe(3);
 			expect(result.spellSchool).toBe('Evocation');
 		});
+
+		it('should transform feat correctly', () => {
+			const validFeat = {
+				index: 'alert',
+				name: 'Alert',
+				prerequisites: [],
+				description: ['Always on the lookout...'],
+				ability_score_increases: []
+			};
+
+			const result = provider.transformItem(validFeat, 'feat');
+			expect(result.externalId).toBe('alert');
+			expect(result.name).toBe('Alert');
+			expect(result.featBenefits).toEqual(['Always on the lookout...']);
+		});
 	});
 });
