@@ -11,14 +11,14 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Analysis & Architecture Proposal' (Protocol in workflow.md) [checkpoint: 36610bf]
 
 ## Phase 2: Structural Reorganization
-- [ ] Task: Implement New Directory Structure
+- [x] Task: Implement New Directory Structure [f8b77a0]
     - Create new folders in `src/lib` based on the approved proposal.
     - Move files to new locations (using git mv to preserve history).
     - Update import paths throughout the application.
-- [ ] Task: Update Configuration & Documentation
+- [x] Task: Update Configuration & Documentation [101b8dd]
     - Update `tsconfig.json` paths if necessary.
     - Update `architecture-doc.md` to reflect the new structure.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Structural Reorganization' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Phase 2: Structural Reorganization' (Protocol in workflow.md)
 
 ## Phase 3: Backend Layer Refactoring
 - [ ] Task: Extract Service Layer
