@@ -18,7 +18,7 @@
 - [x] Task: Update Configuration & Documentation [101b8dd]
     - Update `tsconfig.json` paths if necessary.
     - Update `architecture-doc.md` to reflect the new structure.
-- [~] Task: Conductor - User Manual Verification 'Phase 2: Structural Reorganization' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Structural Reorganization' (Protocol in workflow.md) [checkpoint: 5b4839e]
 
 ## Phase 3: Backend Layer Refactoring
 - [ ] Task: Extract Service Layer
