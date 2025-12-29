@@ -1,0 +1,8 @@
+{
+  "track_id": "refactor_provider_system_20251228",
+  "type": "refactor",
+  "status": "new",
+  "created_at": "2025-12-28T12:00:00Z",
+  "updated_at": "2025-12-28T12:00:00Z",
+  "description": "Refactor provider system with abstract base class, add support for all compendium types (feat, background, race, class), use Zod validation, and optimize database storage."
+}
