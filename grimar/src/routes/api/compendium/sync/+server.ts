@@ -1,7 +1,7 @@
 import { json } from '@sveltejs/kit';
 import { getDb } from '$lib/server/db';
 import { syncAllProviders } from '$lib/server/services/sync/orchestrator';
-import { invalidateAllCompendiumCache } from '$lib/server/db/repositories/compendium';
+import { invalidateAllCompendiumCache } from '$lib/server/repositories/compendium';
 
 export const POST = async () => {
 	const db = await getDb();
@@ -13,7 +13,7 @@ export const POST = async () => {
 		invalidateAllCompendiumCache();
 
 		// Also clear the repository's in-memory cache
-		const { compendiumRepository } = await import('$lib/server/db/repositories/compendium');
+		const { compendiumRepository } = await import('$lib/server/repositories/compendium');
 		compendiumRepository.invalidateAllCache();
 
 		// Aggregate results for response

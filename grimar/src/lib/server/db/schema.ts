@@ -59,8 +59,12 @@ export const compendiumItems = sqliteTable(
 		// New type-specific indexes
 		classHitDieIdx: index('compendium_items_class_hit_die_idx').on(table.classHitDie),
 		raceSizeIdx: index('compendium_items_race_size_idx').on(table.raceSize),
-		backgroundFeatureIdx: index('compendium_items_background_feature_idx').on(table.backgroundFeature),
-		featPrerequisitesIdx: index('compendium_items_feat_prerequisites_idx').on(table.featPrerequisites)
+		backgroundFeatureIdx: index('compendium_items_background_feature_idx').on(
+			table.backgroundFeature
+		),
+		featPrerequisitesIdx: index('compendium_items_feat_prerequisites_idx').on(
+			table.featPrerequisites
+		)
 	})
 );
 

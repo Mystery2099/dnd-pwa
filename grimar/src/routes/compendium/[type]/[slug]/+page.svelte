@@ -1,26 +1,27 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { createKeyboardNav } from '$lib/utils/keyboardNav';
-	import CompendiumDetail from '$lib/components/compendium/CompendiumDetail.svelte';
-	import DetailNavigation from '$lib/components/compendium/DetailNavigation.svelte';
+	import { createKeyboardNav } from '$lib/core/utils/keyboardNav';
+	import CompendiumDetail from '$lib/features/compendium/CompendiumDetail.svelte';
+	import DetailNavigation from '$lib/features/compendium/DetailNavigation.svelte';
+	import { getCompendiumConfig } from '$lib/core/constants/compendium';
 	import type { PageData } from './$types';
 
 	// Detail Content Components
-	import SpellDetailContent from '$lib/components/compendium/detail/SpellDetailContent.svelte';
-	import MonsterDetailContent from '$lib/components/compendium/detail/MonsterDetailContent.svelte';
-	import FeatDetailContent from '$lib/components/compendium/detail/FeatDetailContent.svelte';
-	import BackgroundDetailContent from '$lib/components/compendium/detail/BackgroundDetailContent.svelte';
-	import RaceDetailContent from '$lib/components/compendium/detail/RaceDetailContent.svelte';
-	import ClassDetailContent from '$lib/components/compendium/detail/ClassDetailContent.svelte';
-	import ItemDetailContent from '$lib/components/compendium/detail/ItemDetailContent.svelte';
+	import SpellDetailContent from '$lib/features/compendium/detail/SpellDetailContent.svelte';
+	import MonsterDetailContent from '$lib/features/compendium/detail/MonsterDetailContent.svelte';
+	import FeatDetailContent from '$lib/features/compendium/detail/FeatDetailContent.svelte';
+	import BackgroundDetailContent from '$lib/features/compendium/detail/BackgroundDetailContent.svelte';
+	import RaceDetailContent from '$lib/features/compendium/detail/RaceDetailContent.svelte';
+	import ClassDetailContent from '$lib/features/compendium/detail/ClassDetailContent.svelte';
+	import ItemDetailContent from '$lib/features/compendium/detail/ItemDetailContent.svelte';
 
 	let { data }: { data: PageData } = $props();
 
 	const item = $derived(data.item);
 	const nav = $derived(data.navigation);
-	const config = $derived(data.config);
 	const dbType = $derived(data.dbType);
 	const pathType = $derived(data.pathType);
+	const config = $derived(getCompendiumConfig(pathType));
 
 	// Get accent color from config
 	const accentColor = $derived(config.display.detailAccent(item));
@@ -67,23 +68,23 @@
 		{accentColor}
 	>
 		{#if dbType === 'spell'}
-			<SpellDetailContent spell={item} />
+			<SpellDetailContent spell={item.details} />
 		{:else if dbType === 'monster'}
-			<MonsterDetailContent monster={item} />
+			<MonsterDetailContent monster={item.details} />
 		{:else if dbType === 'feat'}
-			<FeatDetailContent feat={item} />
+			<FeatDetailContent feat={item.details} />
 		{:else if dbType === 'background'}
-			<BackgroundDetailContent background={item} />
+			<BackgroundDetailContent background={item.details} />
 		{:else if dbType === 'race'}
-			<RaceDetailContent race={item} />
+			<RaceDetailContent race={item.details} />
 		{:else if dbType === 'class'}
-			<ClassDetailContent classData={item} />
+			<ClassDetailContent classData={item.details} />
 		{:else if dbType === 'item'}
-			<ItemDetailContent item={item} />
+			<ItemDetailContent item={item.details} />
 		{:else}
 			<div class="space-y-4">
 				<div class="rounded-lg border border-white/10 bg-black/20 p-4 font-mono text-xs">
-					<pre>{JSON.stringify(item, null, 2)}</pre>
+					<pre>{JSON.stringify(item.details, null, 2)}</pre>
 				</div>
 			</div>
 		{/if}

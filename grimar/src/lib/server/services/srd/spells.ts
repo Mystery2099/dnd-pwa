@@ -6,7 +6,7 @@
  */
 
 import { GRAPHQL_URL, BASE_URL, createGraphQLRequest } from './client';
-import { SrdSpellSchema, validateData } from '$lib/types/compendium/schemas';
+import { SrdSpellSchema, validateData } from '$lib/core/types/compendium/schemas';
 import { z } from 'zod';
 
 export type SrdSpell = z.infer<typeof SrdSpellSchema>;

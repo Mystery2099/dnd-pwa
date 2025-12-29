@@ -5,7 +5,7 @@
  */
 
 import { getDb } from '$lib/server/db';
-import { ensureUser } from '$lib/server/db/repositories/users';
+import { ensureUser } from '$lib/server/repositories/users';
 import type { AuthResult, AuthUser } from './auth-types';
 import type { RequestEvent } from '@sveltejs/kit';
 

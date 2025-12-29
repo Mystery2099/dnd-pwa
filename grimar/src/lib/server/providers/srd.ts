@@ -15,8 +15,12 @@ import {
 	type SrdMonsterSummary
 } from '$lib/server/services/srd';
 import type { FetchOptions, ProviderListResponse, TransformResult } from './types';
-import type { CompendiumTypeName } from '$lib/types/compendium';
-import { SrdSpellSchema, SrdMonsterSummarySchema, validateData } from '$lib/types/compendium/schemas';
+import type { CompendiumTypeName } from '$lib/core/types/compendium';
+import {
+	SrdSpellSchema,
+	SrdMonsterSummarySchema,
+	validateData
+} from '$lib/core/types/compendium/schemas';
 
 /**
  * SRD Provider Implementation

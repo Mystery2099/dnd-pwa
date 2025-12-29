@@ -15,7 +15,7 @@ import type {
 	ProviderListResponse,
 	TransformResult
 } from './types';
-import type { CompendiumTypeName } from '$lib/types/compendium';
+import type { CompendiumTypeName } from '$lib/core/types/compendium';
 
 /**
  * Abstract base class for all compendium providers.
@@ -109,7 +109,10 @@ export abstract class BaseProvider implements CompendiumProvider {
 	 * Abstract method - subclasses must implement
 	 * Fetch a list of items (lightweight data for list views)
 	 */
-	abstract fetchList(type: CompendiumTypeName, options?: FetchOptions): Promise<ProviderListResponse>;
+	abstract fetchList(
+		type: CompendiumTypeName,
+		options?: FetchOptions
+	): Promise<ProviderListResponse>;
 
 	/**
 	 * Optional - fetch complete details for a single item

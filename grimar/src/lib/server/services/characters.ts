@@ -1,5 +1,5 @@
 import { getDb } from '$lib/server/db';
-import { createCharacter, getCharacter, listByOwner } from '$lib/server/db/repositories/characters';
+import { createCharacter, getCharacter, listByOwner } from '$lib/server/repositories/characters';
 
 export async function listUserCharacters(owner: string) {
 	const db = await getDb();

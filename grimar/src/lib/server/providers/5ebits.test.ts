@@ -15,7 +15,10 @@ describe('FiveEBitsProvider', () => {
 
 	describe('fetchAllPages', () => {
 		it('should fetch all pages using pagination', async () => {
-			const page1 = { results: [{ index: 'item1', name: 'Item 1' }], next: 'https://api.5e-bits.com/next' };
+			const page1 = {
+				results: [{ index: 'item1', name: 'Item 1' }],
+				next: 'https://api.5e-bits.com/next'
+			};
 			const page2 = { results: [{ index: 'item2', name: 'Item 2' }], next: null };
 
 			(global.fetch as any)
@@ -41,7 +44,9 @@ describe('FiveEBitsProvider', () => {
 		it('should throw error when data fails validation', () => {
 			const invalidSpell = { index: 'invalid', name: 123 }; // name should be string
 
-			expect(() => provider.transformItem(invalidSpell, 'spell')).toThrow('Invalid spell data from 5e-bits API');
+			expect(() => provider.transformItem(invalidSpell, 'spell')).toThrow(
+				'Invalid spell data from 5e-bits API'
+			);
 		});
 
 		it('should transform valid spell correctly', () => {

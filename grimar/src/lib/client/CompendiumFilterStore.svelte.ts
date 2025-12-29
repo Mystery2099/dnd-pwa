@@ -3,7 +3,7 @@ import { browser } from '$app/environment';
 import { page } from '$app/state';
 import { SvelteSet, SvelteURL } from 'svelte/reactivity';
 
-import type { CompendiumFilterConfig } from '$lib/types/compendium/filter';
+import type { CompendiumFilterConfig } from '$lib/core/types/compendium/filter';
 
 export class CompendiumFilterStore {
 	// State using Svelte 5 runes

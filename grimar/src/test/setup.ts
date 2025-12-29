@@ -19,7 +19,7 @@ vi.mock('$app/state', () => ({
 	page: mockPageState
 }));
 
-vi.mock('$lib/types/compendium/filter', () => ({
+vi.mock('$lib/core/types/compendium/filter', () => ({
 	CompendiumFilterConfig: {}
 }));
 

@@ -2,7 +2,7 @@ import { error, json } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 import { getDb } from '$lib/server/db';
 import { syncAllProviders } from '$lib/server/services/multiProviderSync';
-import { invalidateAllCompendiumCache } from '$lib/server/db/repositories/compendium';
+import { invalidateAllCompendiumCache } from '$lib/server/repositories/compendium';
 
 function assertAuthorized(request: Request) {
 	const token = env.ADMIN_SYNC_TOKEN;

@@ -3,37 +3,75 @@
 	import { pushState } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
-	import CompendiumShell from '$lib/components/compendium/layout/CompendiumShell.svelte';
-	import CompendiumSidebar from '$lib/components/compendium/layout/CompendiumSidebar.svelte';
-	import FilterGroup from '$lib/components/compendium/layout/FilterGroup.svelte';
-	import CompendiumListItem from '$lib/components/compendium/CompendiumListItem.svelte';
-	import CompendiumDetail from '$lib/components/compendium/CompendiumDetail.svelte';
-	import Pagination from '$lib/components/compendium/Pagination.svelte';
+	import CompendiumShell from '$lib/features/compendium/layout/CompendiumShell.svelte';
+	import CompendiumSidebar from '$lib/features/compendium/layout/CompendiumSidebar.svelte';
+	import FilterGroup from '$lib/features/compendium/layout/FilterGroup.svelte';
+	import CompendiumListItem from '$lib/features/compendium/CompendiumListItem.svelte';
+	import CompendiumDetail from '$lib/features/compendium/CompendiumDetail.svelte';
+	import Pagination from '$lib/features/compendium/Pagination.svelte';
 	import { Download, RefreshCw } from 'lucide-svelte';
 	import { CompendiumFilterStore } from '$lib/client/CompendiumFilterStore.svelte';
-	import CompendiumLoading from '$lib/components/compendium/ui/CompendiumLoading.svelte';
-	import FilterLogicToggle from '$lib/components/compendium/ui/FilterLogicToggle.svelte';
-	import CompendiumError from '$lib/components/compendium/ui/CompendiumError.svelte';
+	import type { CompendiumItem } from '$lib/core/types/compendium';
+	import { getCompendiumConfig } from '$lib/core/constants/compendium';
+	import CompendiumLoading from '$lib/features/compendium/ui/CompendiumLoading.svelte';
+	import FilterLogicToggle from '$lib/features/compendium/ui/FilterLogicToggle.svelte';
+	import CompendiumError from '$lib/features/compendium/ui/CompendiumError.svelte';
 
 	// Detail Content Components
-	import SpellDetailContent from '$lib/components/compendium/detail/SpellDetailContent.svelte';
-	import MonsterDetailContent from '$lib/components/compendium/detail/MonsterDetailContent.svelte';
-	import FeatDetailContent from '$lib/components/compendium/detail/FeatDetailContent.svelte';
-	import BackgroundDetailContent from '$lib/components/compendium/detail/BackgroundDetailContent.svelte';
-	import RaceDetailContent from '$lib/components/compendium/detail/RaceDetailContent.svelte';
-	import ClassDetailContent from '$lib/components/compendium/detail/ClassDetailContent.svelte';
-	import ItemDetailContent from '$lib/components/compendium/detail/ItemDetailContent.svelte';
+	import SpellDetailContent from '$lib/features/compendium/detail/SpellDetailContent.svelte';
+	import MonsterDetailContent from '$lib/features/compendium/detail/MonsterDetailContent.svelte';
+	import FeatDetailContent from '$lib/features/compendium/detail/FeatDetailContent.svelte';
+	import BackgroundDetailContent from '$lib/features/compendium/detail/BackgroundDetailContent.svelte';
+	import RaceDetailContent from '$lib/features/compendium/detail/RaceDetailContent.svelte';
+	import ClassDetailContent from '$lib/features/compendium/detail/ClassDetailContent.svelte';
+	import ItemDetailContent from '$lib/features/compendium/detail/ItemDetailContent.svelte';
 
 	let { data } = $props();
 
 	// -- Config & Derived --
-	const config = $derived(data.config);
-	const dbType = $derived(data.dbType);
 	const pathType = $derived(data.pathType);
+	const dbType = $derived(data.dbType);
+	const config = $derived(getCompendiumConfig(pathType));
+
+	// Map CompendiumTypeConfig to CompendiumFilterConfig expected by the store
+	const filterConfig = $derived({
+		setParams: config.filters.reduce(
+			(acc: Record<string, string>, f: any) => ({ ...acc, [f.urlParam]: f.key }),
+			{}
+		),
+		validSortBy: config.sorting.options.map((o: any) => o.column),
+		defaults: {
+			sortBy: config.sorting.default.column,
+			sortOrder: config.sorting.default.direction
+		}
+	});
 
 	// Initialize filter store using config
-	// Note: We recreate this when pathType changes
-	let filters = $derived.by(() => new CompendiumFilterStore(config));
+	let filters: CompendiumFilterStore = $derived.by(() => new CompendiumFilterStore(filterConfig));
+
+	// -- State --
+	let selectedItem = $state<CompendiumItem | null>(null);
+	let loadedItems = $state<CompendiumItem[]>([]);
+	let listContainer = $state<HTMLElement>();
+
+	// Navigation helper - finds adjacent items in the current list
+	let itemNav = $derived(() => {
+		const items = loadedItems;
+		if (!selectedItem || items.length === 0) return null;
+		const idx = items.findIndex(
+			(i) => i.externalId === selectedItem?.externalId || i.name === selectedItem?.name
+		);
+		if (idx === -1) return null;
+		return {
+			prev: items[idx - 1] ?? null,
+			next: items[idx + 1] ?? null
+		};
+	});
+
+	// Select an item for detail view
+	function selectItem(item: CompendiumItem) {
+		selectedItem = item;
+	}
 
 	// Sync filters with URL state
 	$effect(() => {
@@ -54,8 +92,10 @@
 				console.warn('Failed to restore filter state:', e);
 			}
 		}
+	});
 
-		// Keyboard navigation
+	// Keyboard navigation using $effect to avoid stale closures
+	$effect(() => {
 		const handleKeydown = (e: KeyboardEvent) => {
 			if (e.key === 'Escape' && selectedItem) {
 				closeOverlay();
@@ -70,125 +110,38 @@
 		return () => window.removeEventListener('keydown', handleKeydown);
 	});
 
-	// -- State --
-	let selectedItem = $state<any | null>(null);
-	let loadedItems = $state<any[]>([]);
-	let listContainer = $state<HTMLElement>();
-
-	// Populate loadedItems when streamed data resolves
-	$effect(() => {
-		const resolved = data.streamed.items;
-		if (resolved && typeof resolved.then === 'function') {
-			resolved.then((result: any) => {
-				if (result?.items) {
-					loadedItems = result.items;
-				}
-			});
-		} else if (resolved && (resolved as any)?.items) {
-			loadedItems = (resolved as any).items;
-		}
-	});
-
-	// Navigation state for overlay
-	const itemNav = $derived(() => {
-		if (!selectedItem) return null;
-		if (!loadedItems || loadedItems.length === 0) return null;
-
-		const externalId = selectedItem.externalId;
-		if (!externalId) return null;
-
-		const idx = loadedItems.findIndex((i: any) => i.externalId === externalId);
-		if (idx === -1) return null;
-
-		return {
-			prev: idx > 0 ? loadedItems[idx - 1] : null,
-			next: idx < loadedItems.length - 1 ? loadedItems[idx + 1] : null
-		};
-	});
-
-	// Reset scroll on URL changes
-	let prevUrl = $state(page.url.href);
-	$effect(() => {
-		const currentUrl = page.url.href;
-		const currentPathname = page.url.pathname;
-		const prevPathname = prevUrl ? new URL(prevUrl).pathname : '';
-
-		const isOverlayNav =
-			currentPathname.startsWith(`/compendium/${pathType}/`) &&
-			prevPathname.startsWith(`/compendium/${pathType}/`);
-
-		if (listContainer && !isOverlayNav) {
-			listContainer.scrollTop = 0;
-		}
-		prevUrl = currentUrl;
-	});
-
-	// URL sync effect for overlay state
-	$effect(() => {
-		const pathname = page.url.pathname;
-		const parts = pathname.split('/');
-		const state = page.state as { selectedItem?: any };
-
-		// Check if on detail route: /compendium/[type]/[slug]
-		const isDetailRoute = parts.length === 4 && parts[2] === pathType && parts[3];
-
-		if (state.selectedItem) {
-			if (!selectedItem || selectedItem.externalId !== state.selectedItem.externalId) {
-				selectedItem = state.selectedItem;
+	function closeOverlay() {
+		// If we arrived here via pushState, going back is cleaner
+		if (page.url.pathname !== `/compendium/${pathType}`) {
+			if (window.history.length > 1) {
+				window.history.back();
+			} else {
+				pushState(`/compendium/${pathType}`, {});
 			}
-			return;
 		}
-
-		if (isDetailRoute && parts[3]) {
-			const slug = parts[3];
-			if (loadedItems && loadedItems.length > 0) {
-				const item = loadedItems.find((i: any) => i.externalId === slug);
-				if (item && (!selectedItem || selectedItem.externalId !== slug)) {
-					selectedItem = item;
-				}
-			}
-		} else {
-			selectedItem = null;
-		}
-	});
-
-	// -- Actions --
-	function handleSearch(term: string) {
-		filters.setSearchTerm(term);
+		selectedItem = null;
 	}
 
-	function handleSort(value: string) {
-		const [sortBy, sortOrder] = value.split('-');
-		filters.setSort(sortBy, sortOrder as 'asc' | 'desc');
-	}
-
+	// -- Filter Handlers --
 	function toggleLogic() {
 		filters.toggleLogic();
+	}
+
+	function toggleFilter(groupKey: string, value: string) {
+		filters.toggle(groupKey, String(value));
+	}
+
+	function handleSearch(query: string) {
+		filters.setSearchTerm(query);
 	}
 
 	function clearFilters() {
 		filters.clearFilters();
 	}
 
-	function toggleFilter(key: string, value: string | number) {
-		filters.toggle(key, String(value));
-	}
-
-	async function selectItem(item: any) {
-		sessionStorage.setItem(config.routes.storageKeyFilters, JSON.stringify(filters.serialize()));
-		sessionStorage.setItem(config.routes.storageKeyListUrl, window.location.href);
-
-		pushState(`/compendium/${pathType}/${item.externalId}`, {
-			selectedItem: item
-		});
-	}
-
-	function closeOverlay() {
-		if (page.url.pathname !== `/compendium/${pathType}`) {
-			pushState(`/compendium/${pathType}`, {});
-		} else {
-			selectedItem = null;
-		}
+	function handleSort(value: string) {
+		const [sortBy, sortOrder] = value.split('-');
+		filters.setSort(sortBy, (sortOrder as 'asc' | 'desc') || 'asc');
 	}
 
 	// -- Sync --
@@ -224,44 +177,45 @@
 	}
 </script>
 
-<CompendiumShell>
-	{#snippet sidebar()}
-		<CompendiumSidebar
-			onSearch={handleSearch}
-			onClear={clearFilters}
-			onSort={handleSort}
-			sortOptions={config.sorting.options}
-			initialSort={`${filters.sortBy}-${filters.sortOrder}`}
-			hasActiveFilters={filters.hasActiveFilters}
-		>
-			{#snippet filters()}
-				<FilterLogicToggle logic={filters.filterLogic} onToggle={toggleLogic} />
+{#snippet filtersSnippet()}
+	<FilterLogicToggle logic={filters.filterLogic} onToggle={toggleLogic} />
 
-				{#each config.filters as group (group.key)}
-					<FilterGroup title={group.title} open={group.openByDefault}>
-						<div class="flex flex-wrap gap-2">
-							{#each group.values as option (option.value)}
-								{@const isSelected = filters.getSet(group.key).has(String(option.value))}
-								<button
-									class={`group rounded-md border px-2 py-1 text-xs transition-all ${
-										isSelected
-											? `${
-													option.color?.base || 'border-purple-400 text-purple-300'
-												} border-current bg-current/10 text-current shadow-[0_0_12px_rgba(255,255,255,0.1)]`
-											: 'border-white/10 bg-white/5 text-gray-400 hover:bg-white/10'
-									}`}
-									onclick={() => toggleFilter(group.key, option.value)}
-								>
-									{option.label}
-								</button>
-							{/each}
-						</div>
-					</FilterGroup>
+	{#each config.filters as group (group.key)}
+		<FilterGroup title={group.title} open={group.openByDefault}>
+			<div class="flex flex-wrap gap-2">
+				{#each group.values as option (option.value)}
+					{@const isSelected = filters.getSet(group.key).has(String(option.value))}
+					<button
+						class={`group rounded-md border px-2 py-1 text-xs transition-all ${
+							isSelected
+								? `${
+										option.color?.base || 'border-purple-400 text-purple-300'
+									} border-current bg-current/10 text-current shadow-[0_0_12px_rgba(255,255,255,0.1)]`
+								: 'border-white/10 bg-white/5 text-gray-400 hover:bg-white/10'
+						}`}
+						onclick={() => toggleFilter(group.key, String(option.value))}
+					>
+						{option.label}
+					</button>
 				{/each}
-			{/snippet}
-		</CompendiumSidebar>
-	{/snippet}
+			</div>
+		</FilterGroup>
+	{/each}
+{/snippet}
 
+{#snippet sidebarSnippet()}
+	<CompendiumSidebar
+		onSearch={handleSearch}
+		onClear={clearFilters}
+		onSort={handleSort}
+		sortOptions={config.sorting.options}
+		initialSort={`${filters.sortBy}-${filters.sortOrder}`}
+		hasActiveFilters={filters.hasActiveFilters}
+		filters={filtersSnippet}
+	/>
+{/snippet}
+
+<CompendiumShell sidebar={sidebarSnippet}>
 	<div class="relative h-full">
 		<div
 			bind:this={listContainer}
@@ -361,23 +315,23 @@
 					animate={false}
 				>
 					{#if dbType === 'spell'}
-						<SpellDetailContent spell={selectedItem} />
+						<SpellDetailContent spell={selectedItem.details} />
 					{:else if dbType === 'monster'}
-						<MonsterDetailContent monster={selectedItem} />
+						<MonsterDetailContent monster={selectedItem.details} />
 					{:else if dbType === 'feat'}
-						<FeatDetailContent feat={selectedItem} />
+						<FeatDetailContent feat={selectedItem.details} />
 					{:else if dbType === 'background'}
-						<BackgroundDetailContent background={selectedItem} />
+						<BackgroundDetailContent background={selectedItem.details} />
 					{:else if dbType === 'race'}
-						<RaceDetailContent race={selectedItem} />
+						<RaceDetailContent race={selectedItem.details} />
 					{:else if dbType === 'class'}
-						<ClassDetailContent classData={selectedItem} />
+						<ClassDetailContent classData={selectedItem.details} />
 					{:else if dbType === 'item'}
-						<ItemDetailContent item={selectedItem} />
+						<ItemDetailContent item={selectedItem.details} />
 					{:else}
 						<div class="space-y-4">
 							<div class="rounded-lg border border-white/10 bg-black/20 p-4 font-mono text-xs">
-								<pre>{JSON.stringify(selectedItem, null, 2)}</pre>
+								<pre>{JSON.stringify(selectedItem.details, null, 2)}</pre>
 							</div>
 						</div>
 					{/if}

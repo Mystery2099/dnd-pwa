@@ -6,7 +6,7 @@
  */
 
 import { GRAPHQL_URL, BASE_URL, createGraphQLRequest } from './client';
-import { SrdMonsterSummarySchema, validateData } from '$lib/types/compendium/schemas';
+import { SrdMonsterSummarySchema, validateData } from '$lib/core/types/compendium/schemas';
 import { z } from 'zod';
 
 export type SrdMonsterSummary = z.infer<typeof SrdMonsterSummarySchema>;

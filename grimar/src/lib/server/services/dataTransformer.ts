@@ -5,14 +5,14 @@ export type {
 	Open5eMonster,
 	SpellItem,
 	MonsterItem
-} from '$lib/types/compendium/transformers';
+} from '$lib/core/types/compendium/transformers';
 
 import type {
 	Open5eSpell,
 	Open5eMonster,
 	SpellItem,
 	MonsterItem
-} from '$lib/types/compendium/transformers';
+} from '$lib/core/types/compendium/transformers';
 
 export class DataTransformer {
 	/**

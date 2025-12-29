@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { BaseProvider } from './base-provider';
-import type { CompendiumTypeName } from '$lib/types/compendium';
+import type { CompendiumTypeName } from '$lib/core/types/compendium';
 import type { TransformResult, ProviderListResponse, FetchOptions } from './types';
 
 // Concrete implementation for testing
@@ -69,7 +69,10 @@ describe('BaseProvider', () => {
 
 			const result = await provider.healthCheck();
 			expect(result).toBe(true);
-			expect(global.fetch).toHaveBeenCalledWith('https://api.test.com', expect.objectContaining({ method: 'HEAD' }));
+			expect(global.fetch).toHaveBeenCalledWith(
+				'https://api.test.com',
+				expect.objectContaining({ method: 'HEAD' })
+			);
 		});
 
 		it('should return false when API returns error status', async () => {

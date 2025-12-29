@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Wifi, WifiOff, RefreshCw, Database, Clock } from 'lucide-svelte';
-	import { onMount, onDestroy } from 'svelte';
+	import { onMount } from 'svelte';
 	import { offlineStore, formatBytes } from '$lib/client/offline-store-ui';
 
 	interface Props {

@@ -1,6 +1,6 @@
 import type { PageServerLoad } from './$types';
 import { loadCompendiumItem } from '$lib/server/services/compendium/loader';
-import { getCompendiumConfig, getTypeFromPath } from '$lib/constants/compendium';
+import { getCompendiumConfig, getTypeFromPath } from '$lib/core/constants/compendium';
 import { error } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ params }) => {
@@ -19,7 +19,6 @@ export const load: PageServerLoad = async ({ params }) => {
 		return {
 			item: result.item,
 			navigation: result.navigation,
-			config,
 			dbType,
 			pathType
 		};

@@ -10,7 +10,7 @@ import { join } from 'path';
 import { nanoid } from 'nanoid';
 import { BaseProvider } from './base-provider';
 import type { ProviderListResponse, TransformResult } from './types';
-import type { CompendiumTypeName } from '$lib/types/compendium';
+import type { CompendiumTypeName } from '$lib/core/types/compendium';
 
 /**
  * Homebrew item structure (follows Open5e format for compatibility)

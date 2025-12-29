@@ -4,7 +4,7 @@
  * Core interfaces for the multi-provider compendium sync system.
  */
 
-import type { CompendiumTypeName } from '$lib/types/compendium';
+import type { CompendiumTypeName } from '$lib/core/types/compendium';
 
 /**
  * Lightweight list response from a provider

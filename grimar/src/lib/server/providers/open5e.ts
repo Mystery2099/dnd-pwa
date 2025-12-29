@@ -6,13 +6,13 @@
 
 import { BaseProvider } from './base-provider';
 import type { FetchOptions, ProviderListResponse, TransformResult } from './types';
-import type { CompendiumTypeName } from '$lib/types/compendium';
+import type { CompendiumTypeName } from '$lib/core/types/compendium';
 import { z } from 'zod';
 import {
 	Open5eListResponseSchema,
 	Open5eSpellSchema,
 	Open5eMonsterSchema
-} from '$lib/types/compendium/schemas';
+} from '$lib/core/types/compendium/schemas';
 import { logRawSample, logSpellFields } from '$lib/server/services/sync/debug-sync';
 
 // Type inferences from Zod schemas

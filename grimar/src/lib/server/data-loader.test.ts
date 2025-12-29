@@ -43,7 +43,9 @@ describe('DataLoader', () => {
 		it('should throw error if file not found', async () => {
 			mocks.existsSync.mockReturnValue(false);
 
-			await expect(loadDetails('nonexistent.json')).rejects.toThrow('Compendium data file not found');
+			await expect(loadDetails('nonexistent.json')).rejects.toThrow(
+				'Compendium data file not found'
+			);
 		});
 
 		it('should throw error on invalid JSON', async () => {
@@ -58,7 +60,7 @@ describe('DataLoader', () => {
 		it('should load all json files in type directory', async () => {
 			mocks.existsSync.mockReturnValue(true);
 			mocks.readdirSync.mockReturnValue(['item1.json', 'item2.json', 'other.txt']);
-			
+
 			mocks.readFileSync
 				.mockReturnValueOnce(JSON.stringify({ id: 1 }))
 				.mockReturnValueOnce(JSON.stringify({ id: 2 }));

@@ -15,7 +15,9 @@ describe('SrdProvider', () => {
 
 	describe('fetchAllPages', () => {
 		it('should fetch all spells via srd service', async () => {
-			const mockSpells = [{ index: 'fireball', name: 'Fireball', level: 3, school: { name: 'Evocation' } }];
+			const mockSpells = [
+				{ index: 'fireball', name: 'Fireball', level: 3, school: { name: 'Evocation' } }
+			];
 			vi.spyOn(srdService, 'getSpells').mockResolvedValue(mockSpells as any);
 
 			const results = await provider.fetchAllPages('spell');

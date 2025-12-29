@@ -66,10 +66,7 @@ export async function removeItemFromFts(id: number): Promise<void> {
  * @param limit Max results
  * @returns Array of rowids matching the search
  */
-export async function searchFts(
-	query: string,
-	limit: number = 50
-): Promise<number[]> {
+export async function searchFts(query: string, limit: number = 50): Promise<number[]> {
 	const db = await getDb();
 
 	// FTS5 query syntax: terms separated by space = AND matching

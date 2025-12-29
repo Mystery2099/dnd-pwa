@@ -8,7 +8,7 @@
 import { providerRegistry } from '$lib/server/providers';
 import { compendiumCache, compendiumItems } from '$lib/server/db/schema';
 import type { Db } from '$lib/server/db';
-import type { CompendiumTypeName } from '$lib/types/compendium';
+import type { CompendiumTypeName } from '$lib/core/types/compendium';
 import type {
 	CompendiumProvider,
 	ProviderSyncResult,

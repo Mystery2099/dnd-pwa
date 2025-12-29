@@ -1,5 +1,5 @@
-import type { PaginatedResult, PaginationOptions } from '$lib/server/db/repositories/compendium';
-import { getPaginatedCompendiumItems } from '$lib/server/db/repositories/compendium';
+import type { PaginatedResult, PaginationOptions } from '$lib/server/repositories/compendium';
+import { getPaginatedCompendiumItems } from '$lib/server/repositories/compendium';
 import type { SrdSpell } from '$lib/server/services/srd';
 
 export interface SpellSearchParams {

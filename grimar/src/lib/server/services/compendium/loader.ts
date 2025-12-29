@@ -8,7 +8,8 @@ import { getDb } from '$lib/server/db';
 import { compendiumItems } from '$lib/server/db/schema';
 import { eq, and, sql, desc, asc } from 'drizzle-orm';
 import { error } from '@sveltejs/kit';
-import type { LoaderOptions, NavigationResult } from '$lib/types/compendium/loader';
+import type { CompendiumItem } from '$lib/core/types/compendium';
+import type { LoaderOptions, NavigationResult } from '$lib/core/types/compendium/loader';
 
 export async function loadCompendiumItem(options: LoaderOptions): Promise<NavigationResult> {
 	const { slug, type, typeLabel } = options;
@@ -55,7 +56,7 @@ export async function loadCompendiumItem(options: LoaderOptions): Promise<Naviga
 		.orderBy(desc(compendiumItems.name))
 		.limit(1);
 
-	const prevItem = prevItems[0] ?? null;
+	const prevItem = (prevItems[0] as CompendiumItem) ?? null;
 
 	// Get next item
 	const nextItems = await db
@@ -65,7 +66,7 @@ export async function loadCompendiumItem(options: LoaderOptions): Promise<Naviga
 		.orderBy(asc(compendiumItems.name))
 		.limit(1);
 
-	const nextItem = nextItems[0] ?? null;
+	const nextItem = (nextItems[0] as CompendiumItem) ?? null;
 
 	// Get total count
 	const totalCount = await db.$count(compendiumItems, eq(compendiumItems.type, type));
@@ -78,23 +79,13 @@ export async function loadCompendiumItem(options: LoaderOptions): Promise<Naviga
 	const currentIndex = itemsBefore + 1;
 
 	// Transform helper
-	const transformItem = (i: typeof prevItem) => {
+	const transformItem = (i: CompendiumItem | null): CompendiumItem | null => {
 		if (!i) return null;
-		return {
-			...(i.details as any),
-			externalId: i.externalId,
-			__rowId: i.id,
-			source: i.source
-		};
+		return i; // Already a CompendiumItem from DB
 	};
 
 	return {
-		item: {
-			...(item!.details as any),
-			externalId: item!.externalId,
-			__rowId: item!.id,
-			source: item!.source
-		},
+		item: item! as CompendiumItem,
 		navigation: {
 			prev: transformItem(prevItem),
 			next: transformItem(nextItem),

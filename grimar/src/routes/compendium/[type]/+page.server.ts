@@ -2,9 +2,9 @@ import type { PageServerLoad } from './$types';
 import {
 	getPaginatedCompendiumItems,
 	parsePaginationQuery
-} from '$lib/server/db/repositories/compendium';
+} from '$lib/server/repositories/compendium';
 import { measureAsync, logPagePerformance } from '$lib/server/monitoring';
-import { getCompendiumConfig, getTypeFromPath } from '$lib/constants/compendium';
+import { getCompendiumConfig, getTypeFromPath } from '$lib/core/constants/compendium';
 import { error } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ params, url }) => {
@@ -33,23 +33,7 @@ export const load: PageServerLoad = async ({ params, url }) => {
 
 			// Map items for the UI
 			const items = result.items.map((row: any) => {
-				return {
-					...(row.details as any),
-					name: row.name,
-					externalId: row.externalId,
-					__rowId: row.id,
-					source: row.source,
-					// Include filterable columns
-					spellLevel: row.spellLevel,
-					spellSchool: row.spellSchool,
-					challengeRating: row.challengeRating,
-					monsterSize: row.monsterSize,
-					monsterType: row.monsterType,
-					classHitDie: row.classHitDie,
-					raceSize: row.raceSize,
-					backgroundFeature: row.backgroundFeature,
-					featPrerequisites: row.featPrerequisites
-				};
+				return row; // Return the full DB row (matches CompendiumItem interface)
 			});
 
 			const loadTime = performance.now() - startTime;
@@ -70,7 +54,6 @@ export const load: PageServerLoad = async ({ params, url }) => {
 		};
 
 		return {
-			config,
 			dbType,
 			pathType,
 			streamed: {

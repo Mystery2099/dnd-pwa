@@ -7,7 +7,7 @@
 
 import { BaseProvider } from './base-provider';
 import type { FetchOptions, ProviderListResponse, TransformResult } from './types';
-import type { CompendiumTypeName } from '$lib/types/compendium';
+import type { CompendiumTypeName } from '$lib/core/types/compendium';
 import { z } from 'zod';
 import {
 	FiveEBitsSpellSchema,

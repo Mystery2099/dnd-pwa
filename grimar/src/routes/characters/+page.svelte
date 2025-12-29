@@ -1,6 +1,6 @@
 <script lang="ts">
-	import CharacterGrid from '$lib/components/dashboard/CharacterGrid.svelte';
-	import DashboardActions from '$lib/components/dashboard/DashboardActions.svelte';
+	import CharacterGrid from '$lib/features/dashboard/CharacterGrid.svelte';
+	import DashboardActions from '$lib/features/dashboard/DashboardActions.svelte';
 
 	let { data } = $props();
 </script>

@@ -7,7 +7,7 @@
 
 import { readFileSync, existsSync, readdirSync } from 'fs';
 import { join } from 'path';
-import type { CompendiumTypeName } from '$lib/types/compendium';
+import type { CompendiumTypeName } from '$lib/core/types/compendium';
 
 // Default data directory relative to project root
 const DEFAULT_DATA_ROOT = 'data/compendium';

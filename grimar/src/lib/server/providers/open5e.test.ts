@@ -15,7 +15,10 @@ describe('Open5eProvider', () => {
 
 	describe('fetchAllPages', () => {
 		it('should fetch all pages using pagination', async () => {
-			const page1 = { results: [{ slug: 'item1', name: 'Item 1' }], next: 'https://api.open5e.com/next' };
+			const page1 = {
+				results: [{ slug: 'item1', name: 'Item 1' }],
+				next: 'https://api.open5e.com/next'
+			};
 			const page2 = { results: [{ slug: 'item2', name: 'Item 2' }], next: null };
 
 			(global.fetch as any)
