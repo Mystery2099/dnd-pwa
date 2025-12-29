@@ -48,7 +48,7 @@
     - Since this is a refactor, ensure we have a plan to migrate existing row data to JSON files if needed (or just re-sync). *Self-note: Re-sync is likely the strategy.*
 - [ ] Task: Conductor - User Manual Verification 'Database Schema Optimization' (Protocol in workflow.md)
 
-## Phase 5: Enable All Compendium Types
+## Phase 5: Enable All Compendium Types [checkpoint: 580e140]
 - [x] Task: Update 5e-bits Provider Capabilities <!-- id: 12, commit: e5f6492 -->
     - Update `src/lib/server/providers/5ebits.ts` to support fetching `feat`, `background`, `race`, and `class`.
     - Update `supportedTypes` property.
@@ -59,7 +59,7 @@
     - Update `providers.json` to reflect new supported types for `5e-bits`.
 - [x] Task: Update Sync Orchestrator <!-- id: 15, commit: c4864b3 -->
     - Update `src/lib/server/services/sync/orchestrator.ts` to iterate over new types and handle them in the sync loop.
-- [ ] Task: Conductor - User Manual Verification 'Enable All Compendium Types' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Enable All Compendium Types' (Protocol in workflow.md) <!-- id: 16, commit: 580e140 -->
 
 ## Phase 6: Update ProviderSyncResult & Verification
 - [ ] Task: Update Sync Result Interface
