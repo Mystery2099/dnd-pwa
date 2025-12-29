@@ -16,6 +16,8 @@ import type {
 } from '$lib/server/providers/types';
 import { withRetry } from './retry';
 import { createSyncMetrics, recordItemProcessed, recordError, getSyncSummary } from './metrics';
+import { writeFileSync, mkdirSync, existsSync } from 'fs';
+import { join } from 'path';
 import {
 	logSync,
 	logSyncStart,
@@ -251,15 +253,34 @@ async function syncTypeFromProvider(
 	}
 
 	// Process in batches
+	const DATA_ROOT = 'data/compendium';
+	const typeDir = join(process.cwd(), DATA_ROOT, type);
+	if (!existsSync(typeDir)) {
+		mkdirSync(typeDir, { recursive: true });
+	}
+
 	for (let batchIndex = 0; batchIndex < transformedItems.length; batchIndex += BATCH_SIZE) {
 		const batch = transformedItems.slice(batchIndex, batchIndex + BATCH_SIZE);
 
 		try {
-			await db.transaction((tx) => {
+			await db.transaction(async (tx) => {
 				for (const { transformed } of batch) {
+					// Save to external JSON file
+					const fileName = `${transformed.externalId}.json`;
+					const relativePath = join(DATA_ROOT, type, fileName);
+					const fullPath = join(process.cwd(), relativePath);
+
+					try {
+						writeFileSync(fullPath, JSON.stringify(transformed.details, null, 2));
+					} catch (fsError) {
+						console.error(`[sync-orchestrator] Failed to write file: ${fullPath}`, fsError);
+						// We continue with DB insert anyway, but jsonPath might be broken
+					}
+
 					// Store raw cache data
 					const cacheId = `${providerId}:${type}:${transformed.externalId}`;
-					tx.insert(compendiumCache)
+					await tx
+						.insert(compendiumCache)
 						.values({
 							id: cacheId,
 							type,
@@ -272,7 +293,8 @@ async function syncTypeFromProvider(
 						.execute();
 
 					// Store processed item
-					tx.insert(compendiumItems)
+					await tx
+						.insert(compendiumItems)
 						.values({
 							source: providerId,
 							type,
@@ -280,6 +302,7 @@ async function syncTypeFromProvider(
 							name: transformed.name,
 							summary: transformed.summary,
 							details: transformed.details,
+							jsonPath: relativePath,
 							spellLevel: transformed.spellLevel,
 							spellSchool: transformed.spellSchool,
 							challengeRating: transformed.challengeRating,
@@ -298,6 +321,7 @@ async function syncTypeFromProvider(
 								name: transformed.name,
 								summary: transformed.summary,
 								details: transformed.details,
+								jsonPath: relativePath,
 								spellLevel: transformed.spellLevel,
 								spellSchool: transformed.spellSchool,
 								challengeRating: transformed.challengeRating,
