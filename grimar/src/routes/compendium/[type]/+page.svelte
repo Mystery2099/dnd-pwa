@@ -10,7 +10,7 @@
 	import CompendiumDetail from '$lib/features/compendium/CompendiumDetail.svelte';
 	import Pagination from '$lib/features/compendium/Pagination.svelte';
 	import { Download, RefreshCw } from 'lucide-svelte';
-	import { CompendiumFilterStore } from '$lib/client/CompendiumFilterStore.svelte';
+	import { CompendiumFilterStore } from '$lib/features/compendium/stores/filter.svelte';
 	import type { CompendiumItem } from '$lib/core/types/compendium';
 	import { getCompendiumConfig } from '$lib/core/constants/compendium';
 	import CompendiumLoading from '$lib/features/compendium/ui/CompendiumLoading.svelte';

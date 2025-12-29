@@ -13,7 +13,7 @@ import {
 	getMonsterDetail,
 	type SrdSpell,
 	type SrdMonsterSummary
-} from '$lib/server/services/srd';
+} from '$lib/server/services/compendium/srd';
 import type { FetchOptions, ProviderListResponse, TransformResult } from './types';
 import type { CompendiumTypeName } from '$lib/core/types/compendium';
 import {

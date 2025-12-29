@@ -8,8 +8,8 @@
  * - srd/monsters.ts - Monster API
  */
 
-export * from './srd/client';
-export * from './srd/spells';
-export * from './srd/monsters';
-export type { SrdSpell } from './srd/spells';
-export type { SrdMonsterSummary } from './srd/monsters';
+export * from '../srd/client';
+export * from '../srd/spells';
+export * from '../srd/monsters';
+export type { SrdSpell } from '../srd/spells';
+export type { SrdMonsterSummary } from '../srd/monsters';

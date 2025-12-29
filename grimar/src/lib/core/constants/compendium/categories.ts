@@ -16,7 +16,11 @@ import {
 
 export const CATEGORIES: CompendiumCategory[] = [
 	{ id: 'primary', title: 'Primary Archives', gridCols: 'grid-cols-1 md:grid-cols-3' },
-	{ id: 'character', title: 'Character Options', gridCols: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4' },
+	{
+		id: 'character',
+		title: 'Character Options',
+		gridCols: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
+	},
 	{ id: 'armory', title: 'The Armory', gridCols: 'grid-cols-1 sm:grid-cols-2' },
 	{ id: 'rules', title: 'Rules & Reference', gridCols: 'grid-cols-1 sm:grid-cols-3' }
 ];

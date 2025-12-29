@@ -6,7 +6,11 @@
 
 import { Skull } from 'lucide-svelte';
 import type { CompendiumTypeConfig } from '$lib/core/types/compendium';
-import { colorMap, MONSTER_TYPE_COLORS, MONSTER_TYPE_TEXT_COLORS } from '$lib/core/constants/colors';
+import {
+	colorMap,
+	MONSTER_TYPE_COLORS,
+	MONSTER_TYPE_TEXT_COLORS
+} from '$lib/core/constants/colors';
 
 // Monster size options
 const MONSTER_SIZES = [

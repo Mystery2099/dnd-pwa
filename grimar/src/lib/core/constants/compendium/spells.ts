@@ -7,7 +7,11 @@
 
 import { Flame } from 'lucide-svelte';
 import type { CompendiumTypeConfig } from '$lib/core/types/compendium';
-import { colorMap, SPELL_SCHOOL_COLORS, SPELL_SCHOOL_TEXT_COLORS } from '$lib/core/constants/colors';
+import {
+	colorMap,
+	SPELL_SCHOOL_COLORS,
+	SPELL_SCHOOL_TEXT_COLORS
+} from '$lib/core/constants/colors';
 import { getSpellSchool, getSpellLevelText } from '$lib/core/types/compendium/helpers';
 
 // Spell level options

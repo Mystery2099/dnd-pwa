@@ -7,8 +7,8 @@
 	import GlobalHeader from '$lib/components/layout/GlobalHeader.svelte';
 	import OfflineIndicator from '$lib/components/ui/OfflineIndicator.svelte';
 	import CleanupNotification from '$lib/components/ui/CleanupNotification.svelte';
-	import { clientCache } from '$lib/client/cache';
-	import { initializeOfflineExperience } from '$lib/client/offline-init';
+	import { clientCache } from '$lib/core/client/cache';
+	import { initializeOfflineExperience } from '$lib/core/client/offline-init';
 	import { page } from '$app/state';
 
 	let { children } = $props();

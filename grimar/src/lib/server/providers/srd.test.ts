@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { SrdProvider } from './srd';
-import * as srdService from '$lib/server/services/srd';
+import * as srdService from '$lib/server/services/compendium/srd';
 
 describe('SrdProvider', () => {
 	let provider: SrdProvider;
