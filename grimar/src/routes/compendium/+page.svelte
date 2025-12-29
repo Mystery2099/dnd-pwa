@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Search } from 'lucide-svelte';
-	import CategoryCard from '$lib/features/compendium/CategoryCard.svelte';
+	import CategoryCard from '$lib/features/compendium/components/CategoryCard.svelte';
 	import { CATEGORIES, getCardsByCategory } from '$lib/core/constants/compendium/categories';
 </script>
 

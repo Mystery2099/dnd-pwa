@@ -3,28 +3,28 @@
 	import { pushState } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
-	import CompendiumShell from '$lib/features/compendium/layout/CompendiumShell.svelte';
-	import CompendiumSidebar from '$lib/features/compendium/layout/CompendiumSidebar.svelte';
-	import FilterGroup from '$lib/features/compendium/layout/FilterGroup.svelte';
-	import CompendiumListItem from '$lib/features/compendium/CompendiumListItem.svelte';
-	import CompendiumDetail from '$lib/features/compendium/CompendiumDetail.svelte';
-	import Pagination from '$lib/features/compendium/Pagination.svelte';
+	import CompendiumShell from '$lib/features/compendium/components/layout/CompendiumShell.svelte';
+	import CompendiumSidebar from '$lib/features/compendium/components/layout/CompendiumSidebar.svelte';
+	import FilterGroup from '$lib/features/compendium/components/layout/FilterGroup.svelte';
+	import CompendiumListItem from '$lib/features/compendium/components/CompendiumListItem.svelte';
+	import CompendiumDetail from '$lib/features/compendium/components/CompendiumDetail.svelte';
+	import Pagination from '$lib/features/compendium/components/Pagination.svelte';
 	import { Download, RefreshCw } from 'lucide-svelte';
 	import { CompendiumFilterStore } from '$lib/features/compendium/stores/filter.svelte';
 	import type { CompendiumItem } from '$lib/core/types/compendium';
 	import { getCompendiumConfig } from '$lib/core/constants/compendium';
-	import CompendiumLoading from '$lib/features/compendium/ui/CompendiumLoading.svelte';
-	import FilterLogicToggle from '$lib/features/compendium/ui/FilterLogicToggle.svelte';
-	import CompendiumError from '$lib/features/compendium/ui/CompendiumError.svelte';
+	import CompendiumLoading from '$lib/features/compendium/components/ui/CompendiumLoading.svelte';
+	import FilterLogicToggle from '$lib/features/compendium/components/ui/FilterLogicToggle.svelte';
+	import CompendiumError from '$lib/features/compendium/components/ui/CompendiumError.svelte';
 
 	// Detail Content Components
-	import SpellDetailContent from '$lib/features/compendium/detail/SpellDetailContent.svelte';
-	import MonsterDetailContent from '$lib/features/compendium/detail/MonsterDetailContent.svelte';
-	import FeatDetailContent from '$lib/features/compendium/detail/FeatDetailContent.svelte';
-	import BackgroundDetailContent from '$lib/features/compendium/detail/BackgroundDetailContent.svelte';
-	import RaceDetailContent from '$lib/features/compendium/detail/RaceDetailContent.svelte';
-	import ClassDetailContent from '$lib/features/compendium/detail/ClassDetailContent.svelte';
-	import ItemDetailContent from '$lib/features/compendium/detail/ItemDetailContent.svelte';
+	import SpellDetailContent from '$lib/features/compendium/components/detail/SpellDetailContent.svelte';
+	import MonsterDetailContent from '$lib/features/compendium/components/detail/MonsterDetailContent.svelte';
+	import FeatDetailContent from '$lib/features/compendium/components/detail/FeatDetailContent.svelte';
+	import BackgroundDetailContent from '$lib/features/compendium/components/detail/BackgroundDetailContent.svelte';
+	import RaceDetailContent from '$lib/features/compendium/components/detail/RaceDetailContent.svelte';
+	import ClassDetailContent from '$lib/features/compendium/components/detail/ClassDetailContent.svelte';
+	import ItemDetailContent from '$lib/features/compendium/components/detail/ItemDetailContent.svelte';
 
 	let { data } = $props();
 

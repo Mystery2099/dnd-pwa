@@ -227,7 +227,7 @@ export class CompendiumFilterStore {
 
 		// Navigate
 		if (url.pathname + url.search !== page.url.pathname + page.url.search) {
-			// eslint-disable-next-line svelte/no-navigation-without-resolve
+			 
 			void goto(url.pathname + url.search, {
 				replaceState: true,
 				noScroll: true,

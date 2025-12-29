@@ -1,19 +1,19 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { createKeyboardNav } from '$lib/core/utils/keyboardNav';
-	import CompendiumDetail from '$lib/features/compendium/CompendiumDetail.svelte';
-	import DetailNavigation from '$lib/features/compendium/DetailNavigation.svelte';
+	import CompendiumDetail from '$lib/features/compendium/components/CompendiumDetail.svelte';
+	import DetailNavigation from '$lib/features/compendium/components/DetailNavigation.svelte';
 	import { getCompendiumConfig } from '$lib/core/constants/compendium';
 	import type { PageData } from './$types';
 
 	// Detail Content Components
-	import SpellDetailContent from '$lib/features/compendium/detail/SpellDetailContent.svelte';
-	import MonsterDetailContent from '$lib/features/compendium/detail/MonsterDetailContent.svelte';
-	import FeatDetailContent from '$lib/features/compendium/detail/FeatDetailContent.svelte';
-	import BackgroundDetailContent from '$lib/features/compendium/detail/BackgroundDetailContent.svelte';
-	import RaceDetailContent from '$lib/features/compendium/detail/RaceDetailContent.svelte';
-	import ClassDetailContent from '$lib/features/compendium/detail/ClassDetailContent.svelte';
-	import ItemDetailContent from '$lib/features/compendium/detail/ItemDetailContent.svelte';
+	import SpellDetailContent from '$lib/features/compendium/components/detail/SpellDetailContent.svelte';
+	import MonsterDetailContent from '$lib/features/compendium/components/detail/MonsterDetailContent.svelte';
+	import FeatDetailContent from '$lib/features/compendium/components/detail/FeatDetailContent.svelte';
+	import BackgroundDetailContent from '$lib/features/compendium/components/detail/BackgroundDetailContent.svelte';
+	import RaceDetailContent from '$lib/features/compendium/components/detail/RaceDetailContent.svelte';
+	import ClassDetailContent from '$lib/features/compendium/components/detail/ClassDetailContent.svelte';
+	import ItemDetailContent from '$lib/features/compendium/components/detail/ItemDetailContent.svelte';
 
 	let { data }: { data: PageData } = $props();
 
