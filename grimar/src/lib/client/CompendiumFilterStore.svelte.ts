@@ -1,0 +1,238 @@
+import { goto } from '$app/navigation';
+import { browser } from '$app/environment';
+import { page } from '$app/state';
+import { SvelteSet, SvelteURL } from 'svelte/reactivity';
+
+import type { CompendiumFilterConfig } from '$lib/types/compendium/filter';
+
+export class CompendiumFilterStore {
+	// State using Svelte 5 runes
+	state = $state({
+		searchTerm: '',
+		filterLogic: 'and' as 'and' | 'or',
+		sortBy: 'name',
+		sortOrder: 'asc' as 'asc' | 'desc',
+		// dynamic sets keyed by the internal names defined in config
+		sets: {} as Record<string, Set<string>>
+	});
+
+	private config: CompendiumFilterConfig;
+
+	constructor(config: CompendiumFilterConfig) {
+		this.config = config;
+
+		// Initialize empty sets for all configured keys
+		Object.values(config.setParams).forEach((key) => {
+			this.state.sets[key] = new SvelteSet();
+		});
+
+		// Apply defaults if provided
+		if (config.defaults?.sortBy) {
+			this.state.sortBy = config.defaults.sortBy;
+		}
+		if (config.defaults?.sortOrder) {
+			this.state.sortOrder = config.defaults.sortOrder;
+		}
+
+		if (browser) {
+			const url = new SvelteURL(window.location.href);
+			this.syncWithUrl(url);
+		}
+	}
+
+	// -- Getters --
+
+	get searchTerm(): string {
+		return this.state.searchTerm;
+	}
+
+	get filterLogic(): 'and' | 'or' {
+		return this.state.filterLogic;
+	}
+
+	get sortBy(): string {
+		return this.state.sortBy;
+	}
+
+	get sortOrder(): 'asc' | 'desc' {
+		return this.state.sortOrder;
+	}
+
+	get hasActiveFilters(): boolean {
+		const hasSets = Object.values(this.state.sets).some((set) => set.size > 0);
+		return hasSets || this.state.searchTerm !== '';
+	}
+
+	// Get a specific set by its internal key (e.g. 'level')
+	getSet(key: string): SvelteSet<string> {
+		return new SvelteSet(this.state.sets[key]);
+	}
+
+	// -- Actions --
+
+	setSearchTerm(term: string) {
+		this.state.searchTerm = term;
+		this.updateUrl();
+	}
+
+	setSort(sortBy: string, sortOrder: 'asc' | 'desc') {
+		// Validate sortBy if validSortBy is configured
+		if (this.config.validSortBy && !this.config.validSortBy.includes(sortBy)) {
+			console.error(
+				'[CompendiumFilterStore] Invalid sortBy:',
+				sortBy,
+				'Valid options:',
+				this.config.validSortBy
+			);
+			return;
+		}
+
+		// Validate sortOrder
+		if (!['asc', 'desc'].includes(sortOrder)) {
+			console.error('[CompendiumFilterStore] Invalid sortOrder:', sortOrder);
+			return;
+		}
+
+		this.state.sortBy = sortBy;
+		this.state.sortOrder = sortOrder;
+		this.updateUrl();
+	}
+
+	toggleLogic() {
+		this.state.filterLogic = this.state.filterLogic === 'and' ? 'or' : 'and';
+		this.updateUrl();
+	}
+
+	toggle(key: string, value: string) {
+		if (!this.state.sets[key]) {
+			console.warn(`[CompendiumFilterStore] Unknown filter key: ${key}`);
+			return;
+		}
+
+		const next = new SvelteSet(this.state.sets[key]);
+		if (next.has(value)) {
+			next.delete(value);
+		} else {
+			next.add(value);
+		}
+		this.state.sets[key] = next;
+		this.updateUrl();
+	}
+
+	clearFilters() {
+		this.state.searchTerm = '';
+		this.state.filterLogic = 'and';
+		Object.keys(this.state.sets).forEach((key) => {
+			this.state.sets[key] = new SvelteSet();
+		});
+		this.updateUrl();
+	}
+
+	// -- Sync Logic --
+
+	public syncWithUrl(url: URL | SvelteURL) {
+		this.state.searchTerm = url.searchParams.get('search') || '';
+		this.state.filterLogic = (url.searchParams.get('logic') || 'and') as 'and' | 'or';
+		this.state.sortBy = url.searchParams.get('sortBy') || this.config.defaults?.sortBy || 'name';
+		this.state.sortOrder = (url.searchParams.get('sortOrder') ||
+			this.config.defaults?.sortOrder ||
+			'asc') as 'asc' | 'desc';
+
+		for (const [param, key] of Object.entries(this.config.setParams)) {
+			const val = url.searchParams.get(param);
+			if (val) {
+				this.state.sets[key] = new SvelteSet(val.split(',').filter(Boolean));
+			} else {
+				this.state.sets[key] = new SvelteSet();
+			}
+		}
+	}
+
+	// Serialize current state for sessionStorage
+	serialize(): {
+		searchTerm: string;
+		filterLogic: 'and' | 'or';
+		sortBy: string;
+		sortOrder: 'asc' | 'desc';
+		sets: Record<string, string[]>;
+	} {
+		return {
+			searchTerm: this.state.searchTerm,
+			filterLogic: this.state.filterLogic,
+			sortBy: this.state.sortBy,
+			sortOrder: this.state.sortOrder,
+			sets: Object.fromEntries(Object.entries(this.state.sets).map(([k, v]) => [k, Array.from(v)]))
+		};
+	}
+
+	// Restore state from serialized object
+	deserialize(data: ReturnType<this['serialize']>) {
+		this.state.searchTerm = data.searchTerm;
+		this.state.filterLogic = data.filterLogic;
+		this.state.sortBy = data.sortBy;
+		this.state.sortOrder = data.sortOrder;
+
+		for (const [key, values] of Object.entries(data.sets)) {
+			this.state.sets[key] = new SvelteSet(values);
+		}
+	}
+
+	private updateUrl() {
+		if (!browser) return;
+
+		const url = new SvelteURL(page.url);
+
+		// Search
+		if (this.state.searchTerm) {
+			url.searchParams.set('search', this.state.searchTerm);
+		} else {
+			url.searchParams.delete('search');
+		}
+
+		// Logic
+		if (this.state.filterLogic !== 'and') {
+			url.searchParams.set('logic', this.state.filterLogic);
+		} else {
+			url.searchParams.delete('logic');
+		}
+
+		// Sort (only write if not default)
+		const defaultSortBy = this.config.defaults?.sortBy || 'name';
+		const defaultSortOrder = this.config.defaults?.sortOrder || 'asc';
+
+		if (this.state.sortBy !== defaultSortBy) {
+			url.searchParams.set('sortBy', this.state.sortBy);
+		} else {
+			url.searchParams.delete('sortBy');
+		}
+
+		if (this.state.sortOrder !== defaultSortOrder) {
+			url.searchParams.set('sortOrder', this.state.sortOrder);
+		} else {
+			url.searchParams.delete('sortOrder');
+		}
+
+		// Sets
+		for (const [param, key] of Object.entries(this.config.setParams)) {
+			const set = this.state.sets[key];
+			if (set && set.size > 0) {
+				url.searchParams.set(param, Array.from(set).join(','));
+			} else {
+				url.searchParams.delete(param);
+			}
+		}
+
+		// Reset pagination
+		url.searchParams.delete('offset');
+
+		// Navigate
+		if (url.pathname + url.search !== page.url.pathname + page.url.search) {
+			// eslint-disable-next-line svelte/no-navigation-without-resolve
+			void goto(url.pathname + url.search, {
+				replaceState: true,
+				noScroll: true,
+				invalidateAll: true
+			});
+		}
+	}
+}

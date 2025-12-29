@@ -1,3 +1,215 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
+
+@theme {
+	--font-sans:
+		'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+		Arial, sans-serif;
+
+	--color-gem-ruby: #f43f5e;
+	--color-gem-sapphire: #0ea5e9;
+	--color-gem-emerald: #10b981;
+	--color-gem-amethyst: #a855f7;
+	--color-gem-topaz: #f59e0b;
+
+	--animate-shimmer: shimmer 3s linear infinite;
+	--animate-float: float 6s ease-in-out infinite;
+	--animate-enter: slide-up-fade 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+	--animate-pulse-slow: pulse-glow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+	@keyframes shimmer {
+		0% {
+			background-position: 200% 0;
+		}
+		100% {
+			background-position: -200% 0;
+		}
+	}
+
+	@keyframes float {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(-6px);
+		}
+	}
+
+	@keyframes slide-up-fade {
+		0% {
+			opacity: 0;
+			transform: translateY(12px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes pulse-glow {
+		0%,
+		100% {
+			opacity: 1;
+			box-shadow: 0 0 12px rgba(139, 92, 246, 0.5);
+		}
+		50% {
+			opacity: 0.8;
+			box-shadow: 0 0 20px rgba(139, 92, 246, 0.8);
+		}
+	}
+}
+
+@layer base {
+	body {
+		background: radial-gradient(circle at 50% 0%, #2e1065, #0f172a);
+		background-attachment: fixed; /* Keep the spotlight fixed */
+		min-height: 100vh;
+		color: white;
+		font-family: var(--font-sans);
+		-webkit-font-smoothing: antialiased;
+		position: relative;
+	}
+
+	/* Noise Texture Overlay (Style Guide 7.2) */
+	body::before {
+		content: '';
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+		opacity: 0.03;
+		background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+		z-index: 9999;
+	}
+
+	/* Typography Defaults */
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		@apply font-bold tracking-tight text-white;
+	}
+}
+
+@layer components {
+	/* 6.1 The "Aero" Shine */
+	.aero-shine {
+		background: linear-gradient(
+			to right,
+			rgba(255, 255, 255, 0) 0%,
+			rgba(255, 255, 255, 0.1) 50%,
+			rgba(255, 255, 255, 0) 100%
+		);
+		background-size: 200% 100%;
+		animation: var(--animate-shimmer);
+	}
+
+	/* 6.2 The Crystal Card */
+	.card-crystal {
+		background-color: rgba(30, 27, 75, 0.6); /* Indigo-950 @ 60% */
+		backdrop-filter: blur(12px);
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.2),
+			inset 1px 0 0 rgba(255, 255, 255, 0.05),
+			inset -1px 0 0 rgba(255, 255, 255, 0.05),
+			0 4px 20px rgba(0, 0, 0, 0.5); /* Drop Shadow */
+		border-bottom: 1px solid rgba(0, 0, 0, 0.6);
+		border-radius: 1rem; /* 16px */
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	.card-crystal:hover {
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.3),
+			0 10px 30px rgba(0, 0, 0, 0.6);
+		transform: translateY(-2px);
+	}
+
+	/* 6.3 The "Gem" Button */
+	.btn-gem {
+		position: relative;
+		overflow: hidden;
+		border: none;
+		border-radius: 9999px; /* Pill */
+		background: linear-gradient(
+			180deg,
+			#8b5cf6 0%,
+			/* Light Purple */ #6d28d9 100% /* Dark Purple */
+		);
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.4),
+			/* Top Highlight */ 0 2px 4px rgba(0, 0, 0, 0.3),
+			/* Drop Shadow */ 0 0 12px rgba(139, 92, 246, 0.5); /* Outer Glow */
+		color: white;
+		font-weight: 700;
+		text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5); /* Engraved Text */
+		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+		@apply inline-flex cursor-pointer items-center justify-center px-4 py-2;
+	}
+
+	.btn-gem:hover {
+		filter: brightness(1.1);
+		transform: translateY(-1px);
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.6),
+			0 4px 12px rgba(0, 0, 0, 0.4),
+			0 0 20px rgba(139, 92, 246, 0.8);
+	}
+
+	.btn-gem:active {
+		transform: translateY(1px);
+		background: linear-gradient(180deg, #5b21b6 0%, #4c1d95 100%);
+		box-shadow:
+			inset 0 2px 4px rgba(0, 0, 0, 0.3),
+			0 0 8px rgba(139, 92, 246, 0.4);
+	}
+
+	/* 6.4 The "Engraved" Panel */
+	.panel-inset {
+		background: rgba(0, 0, 0, 0.2);
+		border-radius: 0.75rem; /* 12px */
+		box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	/* Text Effects */
+	.text-holo {
+		text-shadow:
+			0 0 12px rgba(139, 92, 246, 0.6),
+			0 2px 4px rgba(0, 0, 0, 0.8);
+	}
+
+	/* Input/Textarea Crystal Inset (Style Guide 5.2) */
+	.input-crystal {
+		@apply rounded-xl border-t border-b border-black/60 bg-black/40 text-sm text-gray-100 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] transition-all placeholder:text-gray-500 focus:ring-1 focus:ring-purple-500 focus:outline-none;
+	}
+
+	/* Smooth scrolling for filter panels */
+	.glass-scroll {
+		scrollbar-width: thin;
+		scrollbar-color: rgba(168, 85, 247, 0.3) transparent;
+	}
+
+	.glass-scroll::-webkit-scrollbar {
+		width: 6px;
+	}
+
+	.glass-scroll::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	.glass-scroll::-webkit-scrollbar-thumb {
+		background: rgba(168, 85, 247, 0.3);
+		border-radius: 3px;
+	}
+
+	.glass-scroll::-webkit-scrollbar-thumb:hover {
+		background: rgba(168, 85, 247, 0.5);
+	}
+}

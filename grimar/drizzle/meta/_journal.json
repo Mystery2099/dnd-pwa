@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1765851390412,
+      "tag": "0000_gifted_paibok",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1766871367843,
+      "tag": "0001_add_type_specific_columns",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1766945000000,
+      "tag": "0002_add_performance_indexes",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1766945801310,
+      "tag": "0003_sync_metadata",
+      "breakpoints": true
+    }
+  ]
+}

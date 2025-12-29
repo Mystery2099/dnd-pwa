@@ -5,9 +5,14 @@
 
 ## 1\. Executive Summary
 
-**The Grimar Hermetica** is a self-hosted, offline-capable Progressive Web App (PWA) designed for D\&D 5e management. It features a unified "Monolith" architecture using SvelteKit and Bun, designed to run on a low-power home server (Mini PC).
+**The Grimar Hermetica** is a self-hosted, offline-capable Progressive Web App
+(PWA) designed for D\&D 5e management. It features a unified "Monolith"
+architecture using SvelteKit and Bun, designed to run on a low-power home server
+(Mini PC).
 
-It leverages an existing self-hosted infrastructure (Traefik + Authentik) to offload identity management, allowing the application to focus purely on game logic and UI.
+It leverages an existing self-hosted infrastructure (Traefik + Authentik) to
+offload identity management, allowing the application to focus purely on game
+logic and UI.
 
 -----
 
@@ -15,11 +20,13 @@ It leverages an existing self-hosted infrastructure (Traefik + Authentik) to off
 
 The system operates within a Docker container behind a reverse proxy.
 
-  * **User Device:** Mobile or Desktop running a browser (or installed PWA).
-  * **Gateway (Traefik):** Handles TLS termination and routing.
-  * **Identity Provider (Authentik):** Intercepts unauthenticated requests. Upon success, forwards requests to the App with identity headers.
-  * **The App (SvelteKit Container):** A single container running the frontend, backend API, and database engine.
-  * **Storage:** A Docker Volume mapping the SQLite database file to the host disk.
+* **User Device:** Mobile or Desktop running a browser (or installed PWA).
+* **Gateway (Traefik):** Handles TLS termination and routing.
+* **Identity Provider (Authentik):** Intercepts unauthenticated requests. Upon
+success, forwards requests to the App with identity headers.
+* **The App (SvelteKit Container):** A single container running the frontend
+, backend API, and database engine.
+* **Storage:** A Docker Volume mapping the SQLite database file to the host disk.
 
 -----
 
@@ -41,7 +48,8 @@ The system operates within a Docker container behind a reverse proxy.
 
 ### 4.1 Directory Structure
 
-We follow standard SvelteKit conventions with a Separation of Concerns between UI and Data.
+We follow standard SvelteKit conventions with a Separation of Concerns between
+UI and Data.
 
 ```text
 src/
@@ -63,18 +71,22 @@ src/
 
 We utilize a **Trust-on-First-Use** model via the reverse proxy.
 
-1.  **Request:** Incoming request hits `hooks.server.ts`.
-2.  **Extraction:** logic checks `event.request.headers.get('X-Authentik-Username')`.
-3.  **Session:**
-      * If Header exists: `event.locals.user` is populated.
-      * If Header missing: Request is rejected (401) or treated as Guest.
-4.  **Trust Boundary:** We rely on Traefik middleware to strip this header from external spoofing attempts.
+1. **Request:** Incoming request hits `hooks.server.ts`.
+2. **Extraction:** logic checks `event.request.headers.get('X-Authentik-Username')`.
+3. **Session:**
+
+* If Header exists: `event.locals.user` is populated.
+* If Header missing: Request is rejected (401) or treated as Guest.
+  
+4.**Trust Boundary:** We rely on Traefik middleware to strip this header from
+external spoofing attempts.
 
 ### 4.3 Data Access Pattern
 
-  * **Server-Side:** Route handlers (`+page.server.ts`) access `db.select()` directly.
-  * **Client-Side:** The PWA hydrates from the server data.
-  * **Writes:** Form Actions (`actions`) are used for mutations (Creating Characters, Casting Spells) to ensure they work even if JS is unstable.
+* **Server-Side:** Route handlers (`+page.server.ts`) access `db.select()` directly.
+* **Client-Side:** The PWA hydrates from the server data.
+* **Writes:** Form Actions (`actions`) are used for mutations (Creating
+Characters, Casting Spells) to ensure they work even if JS is unstable.
 
 -----
 
@@ -84,23 +96,26 @@ We use a localized schema where the "User" is just a string reference.
 
 **Table: `users` (Virtual)**
 
-  * *Note: We do not store passwords. We only store settings.*
-  * `username` (PK, Text) - From Authentik header.
-  * `settings` (JSON) - Theme preference, dice colors.
+* *Note: We do not store passwords. We only store settings.*
+* `username` (PK, Text) - From Authentik header.
+* `settings` (JSON) - Theme preference, dice colors.
 
 **Table: `characters`**
 
-  * `id` (PK, Int)
-  * `owner` (Text, FK -\> users.username)
-  * `name` (Text)
-  * `stats` (JSON) - Str, Dex, HP, etc.
-  * `spells_known` (JSON) - Array of Spell IDs.
+* `id` (PK, Int)
+* `owner` (Text, FK -\> users.username)
+* `name` (Text)
+* `stats` (JSON) - Str, Dex, HP, etc.
+* `spells` (JSON) - Array of prepared spell IDs.
 
-**Table: `spells` (Static Data)**
+**Table: `compendium_items` (Static + Homebrew Data)**
 
-  * *Populated from Open5e API or SRD JSON during build.*
-  * `slug` (PK, Text)
-  * `name`, `level`, `school`, `description` (Text)
+* *Populated from Open5e API (SRD) and user-created Homebrew.*
+* `id` (PK)
+* `source` (Enum: "SRD", "Homebrew")
+* `type` (Enum: "Spell", "Weapon", "Item", "Monster")
+* `data` (JSON) - Full definition object
+* `created_by` (Text, FK -> users.username, Nullable)
 
 -----
 
@@ -110,17 +125,17 @@ We use a localized schema where the "User" is just a string reference.
 
 Using `@vite-pwa/sveltekit`:
 
-  * **Mode:** `generateSW` (simplest setup).
-  * **Caching:**
-      * Cache generic assets (Fonts, CSS, JS).
-      * Cache static spell data API responses (`/api/spells`).
-  * **Exclusion:** Do **not** cache `/api/me` or `/api/campaign` (dynamic user data).
+* **Mode:** `generateSW` (simplest setup).
+* **Caching:**
+  * Cache generic assets (Fonts, CSS, JS).
+  * Cache static spell data API responses (`/api/spells`).
+* **Exclusion:** Do **not** cache `/api/me` or `/api/campaign` (dynamic user data).
 
 ### 6.2 Mobile Install
 
-  * **Android:** Generates WebAPK via Chrome.
-  * **Windows:** Installed via Edge/Chrome "Install App".
-  * **iOS:** Saved to Home Screen (basic Safari wrapper).
+* **Android:** Generates WebAPK via Chrome.
+* **Windows:** Installed via Edge/Chrome "Install App".
+* **iOS:** Saved to Home Screen (basic Safari wrapper).
 
 -----
 
@@ -128,14 +143,16 @@ Using `@vite-pwa/sveltekit`:
 
 ### 7.1 Real-Time Dice Rolling
 
-To support multiplayer features without a complex WebSocket server, we will use **Server-Sent Events (SSE)**.
+To support multiplayer features without a complex WebSocket server, we will use
+**Server-Sent Events (SSE)**.
 
-  * **Endpoint:** `/api/events`
-  * **Logic:**
-    1.  User A rolls dice (POST `/api/roll`).
-    2.  Server pushes event to all clients connected to `/api/events`.
-    3.  User B's UI catches event and renders particle confetti.
-  * **Why SSE?** It works natively over HTTP/2, requires no extra ports, and is natively supported by SvelteKit custom endpoints.
+* **Endpoint:** `/api/events`
+* **Logic:**
+  1. User A rolls dice (POST `/api/roll`).
+  2. Server pushes event to all clients connected to `/api/events`.
+  3. User B's UI catches event and renders particle confetti.
+* **Why SSE?** It works natively over HTTP/2, requires no extra ports, and is
+natively supported by SvelteKit custom endpoints.
 
 -----
 
@@ -163,8 +180,8 @@ COPY --from=build /app/package.json ./
 VOLUME /app/data
 
 # Environment
-ENV DATABASE_URL="file:/app/data/dnd.sqlite"
-ENV ORIGIN="https://dnd.yoursite.com"
+ENV DATABASE_URL="file:/app/data/grimar.sqlite"
+ENV ORIGIN="https://grimar.yoursite.com"
 
 EXPOSE 3000
 CMD ["bun", "./index.js"]
@@ -173,20 +190,20 @@ CMD ["bun", "./index.js"]
 ### 8.2 Docker Compose (Snippet)
 
 ```yaml
-  dnd-app:
+  grimar:
     build: .
     volumes:
-      - ./dnd-data:/app/data
+      - ./grimar-data:/app/data
     labels:
-      - "traefik.http.routers.dnd.middlewares=authentik@docker"
+      - "traefik.http.routers.grimar.middlewares=authentik@docker"
 ```
 
 -----
 
 ## 9\. Next Steps (Development Order)
 
-1.  **Scaffold:** Run `bun create svelte@latest`.
-2.  **Design:** Install Tailwind + Copy "Arcane Aero" CSS tokens.
-3.  **Auth:** Implement `hooks.server.ts` to log Authentik headers.
-4.  **Data:** Set up Drizzle + SQLite and seed the Spell list.
-5.  **UI:** Build the "Spell List" page using the Glass components.
+1. **Scaffold:** Run `bun create svelte@latest`.
+2. **Design:** Install Tailwind + Copy "Arcane Aero" CSS tokens.
+3. **Auth:** Implement `hooks.server.ts` to log Authentik headers.
+4. **Data:** Set up Drizzle + SQLite and seed the Spell list.
+5. **UI:** Build the "Spell List" page using the Glass components.
