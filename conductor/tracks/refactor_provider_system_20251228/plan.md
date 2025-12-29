@@ -13,7 +13,7 @@
 - [x] Task: Refactor `SrdProvider` to extend `BaseProvider` <!-- id: 3, commit: 47cf614 -->
     - Update `src/lib/server/providers/srd.ts` to extend `BaseProvider`.
     - Verify existing tests pass.
-- [ ] Task: Refactor `HomebrewProvider` to extend `BaseProvider`
+- [x] Task: Refactor `HomebrewProvider` to extend `BaseProvider` <!-- id: 4, commit: 3fdc271 -->
     - Update `src/lib/server/providers/homebrew.ts` to extend `BaseProvider`.
     - Verify existing tests pass.
 - [ ] Task: Conductor - User Manual Verification 'Abstract Base Provider Class' (Protocol in workflow.md)
