@@ -44,7 +44,7 @@
 - [x] Task: Update Database Schema <!-- id: 10, commit: b609c00 -->
     - Update `src/lib/server/db/schema.ts` to add `jsonPath` and new type-specific columns (`class_hit_die`, `race_size`, etc.).
     - Generate migration using `drizzle-kit`.
-- [ ] Task: Create Migration Script for Existing Data (If applicable)
+- [x] Task: Create Migration Script for Existing Data (If applicable) <!-- id: 11, commit: 7d9201c -->
     - Since this is a refactor, ensure we have a plan to migrate existing row data to JSON files if needed (or just re-sync). *Self-note: Re-sync is likely the strategy.*
 - [ ] Task: Conductor - User Manual Verification 'Database Schema Optimization' (Protocol in workflow.md)
 
