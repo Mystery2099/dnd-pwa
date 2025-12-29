@@ -7,7 +7,7 @@
 			"enabled": true,
 			"type": "5e-bits",
 			"baseUrl": "https://api.5e-bits.com",
-			"supportedTypes": ["spell", "monster"]
+			"supportedTypes": ["spell", "monster", "feat", "background", "race", "class"]
 		},
 		{
 			"id": "open5e",
@@ -15,7 +15,7 @@
 			"enabled": false,
 			"type": "open5e",
 			"baseUrl": "https://api.open5e.com",
-			"supportedTypes": ["spell", "monster", "item"]
+			"supportedTypes": ["spell", "monster", "item", "feat", "background", "race", "class"]
 		},
 		{
 			"id": "srd",
@@ -31,7 +31,7 @@
 			"enabled": false,
 			"type": "homebrew",
 			"baseUrl": "",
-			"supportedTypes": ["spell", "monster"],
+			"supportedTypes": ["spell", "monster", "item", "feat", "background", "race", "class"],
 			"options": {
 				"dataPath": "data/homebrew"
 			}
