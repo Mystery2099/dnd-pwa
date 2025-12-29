@@ -18,6 +18,11 @@
 	// Detail Content Components
 	import SpellDetailContent from '$lib/components/compendium/detail/SpellDetailContent.svelte';
 	import MonsterDetailContent from '$lib/components/compendium/detail/MonsterDetailContent.svelte';
+	import FeatDetailContent from '$lib/components/compendium/detail/FeatDetailContent.svelte';
+	import BackgroundDetailContent from '$lib/components/compendium/detail/BackgroundDetailContent.svelte';
+	import RaceDetailContent from '$lib/components/compendium/detail/RaceDetailContent.svelte';
+	import ClassDetailContent from '$lib/components/compendium/detail/ClassDetailContent.svelte';
+	import ItemDetailContent from '$lib/components/compendium/detail/ItemDetailContent.svelte';
 
 	let { data } = $props();
 
@@ -359,6 +364,16 @@
 						<SpellDetailContent spell={selectedItem} />
 					{:else if dbType === 'monster'}
 						<MonsterDetailContent monster={selectedItem} />
+					{:else if dbType === 'feat'}
+						<FeatDetailContent feat={selectedItem} />
+					{:else if dbType === 'background'}
+						<BackgroundDetailContent background={selectedItem} />
+					{:else if dbType === 'race'}
+						<RaceDetailContent race={selectedItem} />
+					{:else if dbType === 'class'}
+						<ClassDetailContent classData={selectedItem} />
+					{:else if dbType === 'item'}
+						<ItemDetailContent item={selectedItem} />
 					{:else}
 						<div class="space-y-4">
 							<div class="rounded-lg border border-white/10 bg-black/20 p-4 font-mono text-xs">

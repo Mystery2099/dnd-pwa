@@ -16,6 +16,7 @@ import type {
 } from '$lib/server/providers/types';
 import { withRetry } from './retry';
 import { createSyncMetrics, recordItemProcessed, recordError, getSyncSummary } from './metrics';
+import { cleanupDisabledSources } from './cleanup';
 import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import { join } from 'path';
 import {
@@ -49,6 +50,28 @@ const DEFAULT_RETRY_DELAY_MS = 1000;
 // Batch size for transaction processing
 const BATCH_SIZE = 100;
 
+// Type canonicalization mapping (handles singular/plural variations from different APIs)
+const TYPE_CANONICAL: Record<string, CompendiumTypeName> = {
+	spell: 'spell',
+	spells: 'spell',
+	monster: 'monster',
+	monsters: 'monster',
+	item: 'item',
+	items: 'item',
+	feat: 'feat',
+	feats: 'feat',
+	background: 'background',
+	backgrounds: 'background',
+	race: 'race',
+	races: 'race',
+	class: 'class',
+	classes: 'class'
+};
+
+function normalizeType(type: string): CompendiumTypeName | null {
+	return TYPE_CANONICAL[type.toLowerCase()] || null;
+}
+
 /**
  * Sync compendium data from all enabled providers
  *
@@ -64,15 +87,21 @@ export async function syncAllProviders(
 
 	const registry = providerRegistry;
 	const enabledProviders = registry.getEnabledProviders();
-	const typesToSync = options?.types || [
-		'spell',
-		'monster',
-		'item',
-		'feat',
-		'background',
-		'race',
-		'class'
-	];
+
+	// Build set of types to sync based on enabled providers' supportedTypes
+	const allProviderTypes = new Set<CompendiumTypeName>();
+	for (const provider of enabledProviders) {
+		for (const t of provider.supportedTypes) {
+			const normalized = normalizeType(t);
+			if (normalized) allProviderTypes.add(normalized);
+		}
+	}
+
+	// Use only types that at least one provider supports
+	const typesToSync = options?.types?.length
+		? options.types.filter((t) => allProviderTypes.has(t))
+		: Array.from(allProviderTypes);
+
 	const providerIds = options?.providerIds;
 	const maxRetries = options?.maxRetries ?? DEFAULT_MAX_RETRIES;
 	const retryDelayMs = options?.retryDelayMs ?? DEFAULT_RETRY_DELAY_MS;
@@ -106,6 +135,15 @@ export async function syncAllProviders(
 	// Log final metrics
 	const summary = getSyncSummary(metrics);
 	console.info(`[sync-orchestrator] Sync completed in ${summary.duration}ms`, summary);
+
+	// Cleanup disabled sources
+	console.info('[sync-orchestrator] Running cleanup for disabled sources...');
+	const cleanupResult = await cleanupDisabledSources(db);
+	if (cleanupResult.disabledSources.length > 0) {
+		console.info(
+			`[sync-orchestrator] Cleanup: Removed ${cleanupResult.itemsRemoved} items and ${cleanupResult.cacheRemoved} cache entries from ${cleanupResult.disabledSources.length} disabled source(s)`
+		);
+	}
 
 	return results;
 }
