@@ -28,7 +28,7 @@
 ## Phase 3: Add Zod Validation
 - [x] Task: Create Zod Schemas for 5e-bits <!-- id: 6, commit: 3dd2826 -->
     - Create `src/lib/server/providers/schemas/5ebits-schemas.ts` with schemas for Spells, Monsters, Classes, Races, Backgrounds, and Feats.
-- [ ] Task: Integrate Zod into 5e-bits Provider
+- [x] Task: Integrate Zod into 5e-bits Provider <!-- id: 7, commit: 5c9151c -->
     - Update `src/lib/server/providers/5ebits.ts` to use `validateData` with the new schemas.
     - Write tests for validation failure cases.
 - [ ] Task: Add Zod Validation to SRD Provider
