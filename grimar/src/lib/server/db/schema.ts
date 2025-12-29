@@ -21,6 +21,8 @@ export const compendiumItems = sqliteTable(
 		summary: text('summary'),
 		// Render-ready payload for list/detail views
 		details: text('details', { mode: 'json' }).notNull(),
+		// External JSON path (Option B: file-per-item)
+		jsonPath: text('json_path'),
 		// Spell sorting columns
 		spellLevel: integer('spell_level'),
 		spellSchool: text('spell_school'),
@@ -28,6 +30,13 @@ export const compendiumItems = sqliteTable(
 		challengeRating: text('challenge_rating'),
 		monsterSize: text('monster_size'),
 		monsterType: text('monster_type'),
+		// New type-specific columns for filtering/sorting
+		classHitDie: integer('class_hit_die'),
+		raceSize: text('race_size'),
+		raceSpeed: integer('race_speed'),
+		backgroundFeature: text('background_feature'),
+		backgroundSkillProficiencies: text('background_skill_proficiencies'),
+		featPrerequisites: text('feat_prerequisites'),
 		createdBy: text('created_by').references(() => users.username)
 	},
 	(table) => ({
@@ -46,7 +55,12 @@ export const compendiumItems = sqliteTable(
 		// Monster sorting indexes
 		challengeRatingIdx: index('compendium_items_challenge_rating_idx').on(table.challengeRating),
 		monsterSizeIdx: index('compendium_items_monster_size_idx').on(table.monsterSize),
-		monsterTypeIdx: index('compendium_items_monster_type_idx').on(table.monsterType)
+		monsterTypeIdx: index('compendium_items_monster_type_idx').on(table.monsterType),
+		// New type-specific indexes
+		classHitDieIdx: index('compendium_items_class_hit_die_idx').on(table.classHitDie),
+		raceSizeIdx: index('compendium_items_race_size_idx').on(table.raceSize),
+		backgroundFeatureIdx: index('compendium_items_background_feature_idx').on(table.backgroundFeature),
+		featPrerequisitesIdx: index('compendium_items_feat_prerequisites_idx').on(table.featPrerequisites)
 	})
 );
 
