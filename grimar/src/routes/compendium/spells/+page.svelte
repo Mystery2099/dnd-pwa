@@ -126,7 +126,7 @@
 	// URL sync effect - sync overlay state with URL changes
 	$effect(() => {
 		// Don't re-open if we're in the process of closing
-		if (isClosing || !selectedSpell) return;
+		if (isClosing) return;
 
 		const pathname = page.url.pathname;
 		const parts = pathname.split('/');
@@ -137,7 +137,7 @@
 
 		// 1. Priority: State object from pushState/shallow routing
 		if (state.selectedSpell) {
-			if (selectedSpell.externalId !== state.selectedSpell.externalId) {
+			if (!selectedSpell || selectedSpell.externalId !== state.selectedSpell.externalId) {
 				selectedSpell = state.selectedSpell;
 			}
 			return;
@@ -149,7 +149,7 @@
 			// Find spell in loaded list
 			if (loadedSpells && loadedSpells.length > 0) {
 				const spell = loadedSpells.find((s: Spell) => s.externalId === slug);
-				if (spell && selectedSpell.externalId !== slug) {
+				if (spell && (!selectedSpell || selectedSpell.externalId !== slug)) {
 					selectedSpell = spell;
 				}
 			}
