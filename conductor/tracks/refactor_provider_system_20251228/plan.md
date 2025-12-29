@@ -62,9 +62,9 @@
 - [x] Task: Conductor - User Manual Verification 'Enable All Compendium Types' (Protocol in workflow.md) <!-- id: 16, commit: 580e140 -->
 
 ## Phase 6: Update ProviderSyncResult & Verification
-- [ ] Task: Update Sync Result Interface
-    - Update `ProviderSyncResult` in `src/lib/server/services/sync/types.ts` (or wherever defined) to include counts for feats, backgrounds, races, and classes.
+- [x] Task: Update Sync Result Interface <!-- id: 17, commit: c4864b3 -->
+    - Update `ProviderSyncResult` in `src/lib/server/providers/types.ts` (or wherever defined) to include counts for feats, backgrounds, races, and classes.
     - Update the orchestrator to populate these fields.
-- [ ] Task: Final Integration Test
+- [x] Task: Final Integration Test <!-- id: 18, commit: 9939bf1 -->
     - Write an integration test that runs a full sync (mocked) and verifies all types are processed and stored correctly (jsonPath set, lightweight columns populated).
-- [ ] Task: Conductor - User Manual Verification 'Update ProviderSyncResult & Verification' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Update ProviderSyncResult & Verification' (Protocol in workflow.md) <!-- id: 19, commit: 9939bf1 -->
