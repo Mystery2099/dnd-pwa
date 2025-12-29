@@ -4,7 +4,7 @@
 - [x] Task: Move Theme Store [4097975]
     - Move `grimar/src/lib/client/themeStore.svelte.ts` to `grimar/src/lib/core/client/themeStore.svelte.ts`.
     - Update imports in `grimar/src/routes/+layout.svelte`.
-- [ ] Task: Create ThemeSwitcher Component
+- [x] Task: Create ThemeSwitcher Component [3579d79]
     - Create `grimar/src/lib/components/ui/ThemeSwitcher.svelte`.
     - Implement a grid or list of theme options with visual previews.
     - Connect to `themeStore`.
