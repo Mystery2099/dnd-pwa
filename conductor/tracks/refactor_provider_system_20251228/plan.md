@@ -18,7 +18,7 @@
     - Verify existing tests pass.
 - [ ] Task: Conductor - User Manual Verification 'Abstract Base Provider Class' (Protocol in workflow.md)
 
-## Phase 2: Extend Compendium Types
+## Phase 2: Extend Compendium Types [checkpoint: 110a3ea]
 - [x] Task: Update Type Definitions <!-- id: 5, commit: 3a4ee2a -->
     - Update `src/lib/types/compendium/index.ts` to include new fields for feats, backgrounds, races, and classes in `TransformResult`.
     - Update `src/lib/server/providers/types.ts` to add `5e-bits` to the provider union.
