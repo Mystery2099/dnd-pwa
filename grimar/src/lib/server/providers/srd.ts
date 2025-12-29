@@ -16,6 +16,7 @@ import {
 } from '$lib/server/services/srd';
 import type { FetchOptions, ProviderListResponse, TransformResult } from './types';
 import type { CompendiumTypeName } from '$lib/types/compendium';
+import { SrdSpellSchema, SrdMonsterSummarySchema, validateData } from '$lib/types/compendium/schemas';
 
 /**
  * SRD Provider Implementation
@@ -84,10 +85,12 @@ export class SrdProvider extends BaseProvider {
 
 	transformItem(rawItem: unknown, type: CompendiumTypeName): TransformResult {
 		if (type === 'spell') {
-			return this.transformSpell(rawItem as SrdSpell);
+			const spell = validateData(SrdSpellSchema, rawItem, 'SRD spell');
+			return this.transformSpell(spell);
 		}
 		if (type === 'monster') {
-			return this.transformMonster(rawItem as SrdMonsterSummary);
+			const monster = validateData(SrdMonsterSummarySchema, rawItem, 'SRD monster');
+			return this.transformMonster(monster);
 		}
 		throw new Error(`SRD does not support type: ${type}`);
 	}
