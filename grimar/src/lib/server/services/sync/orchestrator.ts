@@ -62,7 +62,15 @@ export async function syncAllProviders(
 
 	const registry = providerRegistry;
 	const enabledProviders = registry.getEnabledProviders();
-	const typesToSync = options?.types || ['spell', 'monster', 'item'];
+	const typesToSync = options?.types || [
+		'spell',
+		'monster',
+		'item',
+		'feat',
+		'background',
+		'race',
+		'class'
+	];
 	const providerIds = options?.providerIds;
 	const maxRetries = options?.maxRetries ?? DEFAULT_MAX_RETRIES;
 	const retryDelayMs = options?.retryDelayMs ?? DEFAULT_RETRY_DELAY_MS;
@@ -171,6 +179,18 @@ async function syncSingleProvider(
 				case 'item':
 					result.items = itemCount;
 					break;
+				case 'feat':
+					result.feats = itemCount;
+					break;
+				case 'background':
+					result.backgrounds = itemCount;
+					break;
+				case 'race':
+					result.races = itemCount;
+					break;
+				case 'class':
+					result.classes = itemCount;
+					break;
 			}
 		} catch (error) {
 			const errorMessage = error instanceof Error ? error.message : String(error);
@@ -264,7 +284,13 @@ async function syncTypeFromProvider(
 							spellSchool: transformed.spellSchool,
 							challengeRating: transformed.challengeRating,
 							monsterSize: transformed.monsterSize,
-							monsterType: transformed.monsterType
+							monsterType: transformed.monsterType,
+							classHitDie: transformed.classHitDie,
+							raceSize: transformed.raceSize,
+							raceSpeed: transformed.raceSpeed,
+							backgroundFeature: transformed.backgroundFeature,
+							backgroundSkillProficiencies: transformed.backgroundSkillProficiencies,
+							featPrerequisites: transformed.featPrerequisites
 						})
 						.onConflictDoUpdate({
 							target: [compendiumItems.type, compendiumItems.externalId],
@@ -276,7 +302,13 @@ async function syncTypeFromProvider(
 								spellSchool: transformed.spellSchool,
 								challengeRating: transformed.challengeRating,
 								monsterSize: transformed.monsterSize,
-								monsterType: transformed.monsterType
+								monsterType: transformed.monsterType,
+								classHitDie: transformed.classHitDie,
+								raceSize: transformed.raceSize,
+								raceSpeed: transformed.raceSpeed,
+								backgroundFeature: transformed.backgroundFeature,
+								backgroundSkillProficiencies: transformed.backgroundSkillProficiencies,
+								featPrerequisites: transformed.featPrerequisites
 							}
 						})
 						.execute();
@@ -329,7 +361,15 @@ export async function syncProviderById(
 	providerId: string,
 	options?: SyncOptions
 ): Promise<ProviderSyncResult> {
-	const types = options?.types || ['spell', 'monster', 'item'];
+	const types = options?.types || [
+		'spell',
+		'monster',
+		'item',
+		'feat',
+		'background',
+		'race',
+		'class'
+	];
 	const metrics = createSyncMetrics();
 
 	return syncSingleProvider(db, providerId, types, metrics);
