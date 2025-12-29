@@ -10,7 +10,7 @@
 - [x] Task: Refactor `FiveEBitsProvider` to extend `BaseProvider` <!-- id: 2, commit: 9d1b045 -->
     - Update `src/lib/server/providers/5ebits.ts` to extend `BaseProvider`.
     - Verify existing tests pass.
-- [ ] Task: Refactor `SrdProvider` to extend `BaseProvider`
+- [x] Task: Refactor `SrdProvider` to extend `BaseProvider` <!-- id: 3, commit: 47cf614 -->
     - Update `src/lib/server/providers/srd.ts` to extend `BaseProvider`.
     - Verify existing tests pass.
 - [ ] Task: Refactor `HomebrewProvider` to extend `BaseProvider`
