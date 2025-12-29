@@ -49,14 +49,15 @@
 - [ ] Task: Conductor - User Manual Verification 'Database Schema Optimization' (Protocol in workflow.md)
 
 ## Phase 5: Enable All Compendium Types
-- [ ] Task: Update 5e-bits Provider Capabilities
+- [x] Task: Update 5e-bits Provider Capabilities <!-- id: 12, commit: e5f6492 -->
     - Update `src/lib/server/providers/5ebits.ts` to support fetching `feat`, `background`, `race`, and `class`.
     - Update `supportedTypes` property.
-- [ ] Task: Update Open5e Provider Capabilities
+- [x] Task: Update Open5e Provider Capabilities <!-- id: 13, commit: 3991bd6 -->
     - Update `src/lib/server/providers/open5e.ts` to support new types if available.
-- [ ] Task: Update Provider Registry Configuration
+    - Update `supportedTypes` property.
+- [x] Task: Update Provider Registry Configuration <!-- id: 14, commit: 567bce7 -->
     - Update `providers.json` to reflect new supported types for `5e-bits`.
-- [ ] Task: Update Sync Orchestrator
+- [x] Task: Update Sync Orchestrator <!-- id: 15, commit: c4864b3 -->
     - Update `src/lib/server/services/sync/orchestrator.ts` to iterate over new types and handle them in the sync loop.
 - [ ] Task: Conductor - User Manual Verification 'Enable All Compendium Types' (Protocol in workflow.md)
 

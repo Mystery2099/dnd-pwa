@@ -108301,3 +108301,13 @@
   "totalItems": 2,
   "firstItem": "{\n  \"slug\": \"item1\",\n  \"name\": \"Item 1\"\n}"
 }
+[2025-12-29T13:27:21.280Z] RAW_SAMPLE {
+  "type": "spell",
+  "totalItems": 2,
+  "firstItem": "{\n  \"slug\": \"item1\",\n  \"name\": \"Item 1\"\n}"
+}
+[2025-12-29T13:29:16.353Z] RAW_SAMPLE {
+  "type": "spell",
+  "totalItems": 2,
+  "firstItem": "{\n  \"slug\": \"item1\",\n  \"name\": \"Item 1\"\n}"
+}
