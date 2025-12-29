@@ -4,7 +4,7 @@
 - [x] Task: Create `BaseProvider` abstract class <!-- id: 0, commit: d54d3b6 -->
     - Create `src/lib/server/providers/base-provider.ts` defining the abstract class and common methods (`healthCheck`, `toTitleCase`, `fetchAllPagesPaginated`).
     - Write unit tests for `BaseProvider` concrete implementation to verify common logic.
-- [ ] Task: Refactor `Open5eProvider` to extend `BaseProvider`
+- [x] Task: Refactor `Open5eProvider` to extend `BaseProvider` <!-- id: 1, commit: 93780d5 -->
     - Update `src/lib/server/providers/open5e.ts` to extend `BaseProvider` and remove duplicated logic.
     - Verify existing tests pass.
 - [ ] Task: Refactor `FiveEBitsProvider` to extend `BaseProvider`
