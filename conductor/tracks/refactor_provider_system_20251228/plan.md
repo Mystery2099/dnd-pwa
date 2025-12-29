@@ -41,7 +41,7 @@
 - [x] Task: Create Data Loader Utility <!-- id: 9, commit: d63db7e -->
     - Create `src/lib/server/data-loader.ts` with `loadDetails` and `loadAllDetails` functions to read from `data/` JSON files.
     - Write unit tests for file reading and parsing.
-- [ ] Task: Update Database Schema
+- [x] Task: Update Database Schema <!-- id: 10, commit: b609c00 -->
     - Update `src/lib/server/db/schema.ts` to add `jsonPath` and new type-specific columns (`class_hit_die`, `race_size`, etc.).
     - Generate migration using `drizzle-kit`.
 - [ ] Task: Create Migration Script for Existing Data (If applicable)
