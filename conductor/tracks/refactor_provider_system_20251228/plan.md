@@ -31,7 +31,7 @@
 - [x] Task: Integrate Zod into 5e-bits Provider <!-- id: 7, commit: 5c9151c -->
     - Update `src/lib/server/providers/5ebits.ts` to use `validateData` with the new schemas.
     - Write tests for validation failure cases.
-- [ ] Task: Add Zod Validation to SRD Provider
+- [x] Task: Add Zod Validation to SRD Provider <!-- id: 8, commit: d72b4df -->
     - Create/Update schemas for SRD content.
     - Update `src/lib/server/providers/srd.ts` to use validation.
     - Write tests.
