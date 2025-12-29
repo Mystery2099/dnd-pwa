@@ -41,4 +41,21 @@ describe('Open5eProvider', () => {
 			expect(global.fetch).toHaveBeenCalledTimes(2);
 		});
 	});
+
+	describe('transformItem', () => {
+		it('should transform feat correctly', () => {
+			const validFeat = {
+				slug: 'alert',
+				name: 'Alert',
+				prerequisites: ['Level 4'],
+				description: ['Always on the lookout...']
+			};
+
+			const result = provider.transformItem(validFeat, 'feat');
+			expect(result.externalId).toBe('alert');
+			expect(result.name).toBe('Alert');
+			expect(result.featBenefits).toEqual(['Always on the lookout...']);
+			expect(result.featPrerequisites).toBe('Level 4');
+		});
+	});
 });
