@@ -6,46 +6,37 @@ describe('sourceBadge utilities', () => {
 		it('should return blue styling for open5e source', () => {
 			const result = getSourceBadgeClass('open5e');
 
-			expect(result).toContain('bg-blue-500/20');
-			expect(result).toContain('text-blue-300');
-			expect(result).toContain('border-blue-500/30');
+			expect(result).toContain('--color-gem-sapphire');
 		});
 
 		it('should return amber styling for srd source', () => {
 			const result = getSourceBadgeClass('srd');
 
-			expect(result).toContain('bg-amber-500/20');
-			expect(result).toContain('text-amber-300');
-			expect(result).toContain('border-amber-500/30');
+			expect(result).toContain('--color-gem-topaz');
 		});
 
 		it('should return purple styling for homebrew source', () => {
 			const result = getSourceBadgeClass('homebrew');
 
-			expect(result).toContain('bg-purple-500/20');
-			expect(result).toContain('text-purple-300');
-			expect(result).toContain('border-purple-500/30');
+			expect(result).toContain('--color-accent');
 		});
 
 		it('should return gray styling for unknown source', () => {
 			const result = getSourceBadgeClass('custom');
 
-			expect(result).toContain('bg-gray-500/20');
-			expect(result).toContain('text-gray-300');
-			expect(result).toContain('border-gray-500/30');
+			expect(result).toContain('--color-text-muted');
 		});
 
 		it('should return gray styling for empty source', () => {
 			const result = getSourceBadgeClass('');
 
-			expect(result).toContain('bg-gray-500/20');
-			expect(result).toContain('text-gray-300');
+			expect(result).toContain('--color-text-muted');
 		});
 
 		it('should handle case variations', () => {
 			const result = getSourceBadgeClass('HOME BREW');
 
-			expect(result).toContain('bg-gray-500/20');
+			expect(result).toContain('--color-text-muted');
 		});
 	});
 
