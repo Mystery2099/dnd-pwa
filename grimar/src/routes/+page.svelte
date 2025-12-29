@@ -1,14 +1,31 @@
-<div class="flex min-h-dvh items-center justify-center p-4">
-	<div class="card-crystal max-w-md bg-linear-to-br from-white/8 to-white/2 p-8 text-center">
-		<div class="mb-6">
-			<h1 class="text-holo mb-4 text-5xl font-extrabold text-white md:text-6xl">Grimar</h1>
-			<div
-				class="mx-auto h-1 w-32 bg-linear-to-r from-purple-500 via-violet-500 to-indigo-500"
-			></div>
-		</div>
+<script lang="ts">
+	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
+</script>
 
-		<p class="text-lg text-gray-300">
-			You are not authenticated. Please log in via your reverse proxy.
+<div class="flex min-h-[80vh] items-center justify-center p-4">
+	<SurfaceCard class="max-w-md bg-linear-to-br from-white/8 to-white/2 p-8 text-center">
+		<h1 class="text-holo mb-4 text-4xl font-black tracking-tighter text-white">Grimar</h1>
+		<p class="mb-8 leading-relaxed text-gray-300">
+			Welcome to the Digital Grimoire. Inscribe your heroes, study the arcane, and manage your
+			adventures in a self-hosted, offline-capable environment.
 		</p>
-	</div>
+
+		<a
+			href="/dashboard"
+			class="btn-gem px-8 py-3 text-lg"
+			onclick={(e) => {
+				// Handle navigation with proper SvelteKit routing
+				const target = e.currentTarget as HTMLAnchorElement;
+				const url = new URL(target.href, window.location.origin);
+				if (window.location.pathname !== url.pathname) {
+					import('$app/navigation').then(({ goto }) => {
+						goto(url.pathname).catch(() => {});
+					});
+				}
+				e.preventDefault();
+			}}
+		>
+			Enter the Archives
+		</a>
+	</SurfaceCard>
 </div>

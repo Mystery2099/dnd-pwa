@@ -104,6 +104,10 @@ Finally, add a `CategoryCard` for your new type in `src/routes/compendium/+page.
 
 ## Key Concepts
 
-- **Generic Routing:** The routes `[type]` and `[type]/[slug]` handle data fetching, filtering, and state management automatically using the registry.
-- **Shallow Routing:** Clicking a list item uses `pushState` to open an overlay without a full page reload, while maintaining a shareable URL.
-- **External Storage:** Detailed JSON payloads are stored in `data/compendium/[type]/[id].json` to keep the SQLite database fast and small. Only metadata needed for filtering/sorting is kept in DB columns.
+- **Generic Routing:** The routes `[type]` and `[type]/[slug]` handle data
+fetching, filtering, and state management automatically using the registry.
+- **Shallow Routing:** Clicking a list item uses `pushState` to open an overlay
+without a full page reload, while maintaining a shareable URL.
+- **External Storage:** Detailed JSON payloads are stored in
+`data/compendium/[type]/[id].json` to keep the SQLite database fast and small.
+Only metadata needed for filtering/sorting is kept in DB columns.

@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { Search, Bookmark, ArrowUpDown } from 'lucide-svelte';
 	import { type Snippet } from 'svelte';
+	import Input from '$lib/components/ui/Input.svelte';
+	import Select from '$lib/components/ui/Select.svelte';
 
 	interface Props {
 		onSearch: (term: string) => void;
@@ -42,8 +44,7 @@
 		onClear?.();
 	}
 
-	function handleSort(e: Event) {
-		const val = (e.target as HTMLSelectElement).value;
+	function handleSort(val: string) {
 		currentSort = val;
 		onSort?.(val);
 	}
@@ -66,13 +67,12 @@
 
 		<!-- Crystal Input -->
 		<div class="relative">
-			<Search class="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-gray-400" />
-			<input
-				type="text"
+			<Search class="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-gray-400 z-10" />
+			<Input
 				placeholder="Search..."
 				bind:value={searchTerm}
 				oninput={() => onSearch(searchTerm)}
-				class="input-crystal h-10 w-full pr-3 pl-9"
+				class="h-10 pr-3 pl-9"
 			/>
 		</div>
 
@@ -80,18 +80,14 @@
 		{#if sortOptions.length > 0}
 			<div class="relative">
 				<ArrowUpDown
-					class="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-gray-400"
+					class="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-gray-400 z-10"
 				/>
-				<select
+				<Select
 					value={currentSort}
 					onchange={handleSort}
-					class="input-crystal h-10 w-full cursor-pointer appearance-none pr-3 pl-9 text-gray-300 hover:bg-white/5"
-				>
-					{#each sortOptions as option (option.value)}
-						<option value={option.value}>{option.label}</option>
-					{/each}
-				</select>
-				<!-- Custom arrow for appearance-none if needed, but standard select is robust -->
+					options={sortOptions}
+					class="h-10 pr-10 pl-9"
+				/>
 			</div>
 		{/if}
 

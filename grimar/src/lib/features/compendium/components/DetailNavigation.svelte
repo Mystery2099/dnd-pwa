@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ChevronLeft, ChevronRight, List } from 'lucide-svelte';
+	import Button from '$lib/components/ui/Button.svelte';
 
 	interface Props {
 		prevUrl: string | null;
@@ -13,36 +14,39 @@
 <nav class="mb-4 flex items-center justify-between gap-2">
 	<div class="flex items-center gap-2">
 		{#if prevUrl}
-			<a
+			<Button
 				href={prevUrl}
-				class="btn-gem flex items-center gap-2 px-4 py-2 text-sm"
+				variant="gem"
+				size="sm"
 				title="Previous spell (Left Arrow)"
 			>
 				<ChevronLeft class="size-4" />
 				<span class="hidden sm:inline">Previous</span>
-			</a>
+			</Button>
 		{/if}
 	</div>
 
-	<a
+	<Button
 		href={listUrl}
-		class="btn-gem flex items-center gap-2 px-4 py-2 text-sm"
+		variant="gem"
+		size="sm"
 		title="Back to list (Escape)"
 	>
 		<List class="size-4" />
 		<span class="hidden sm:inline">All Spells</span>
-	</a>
+	</Button>
 
 	<div class="flex items-center gap-2">
 		{#if nextUrl}
-			<a
+			<Button
 				href={nextUrl}
-				class="btn-gem flex items-center gap-2 px-4 py-2 text-sm"
+				variant="gem"
+				size="sm"
 				title="Next spell (Right Arrow)"
 			>
 				<span class="hidden sm:inline">Next</span>
 				<ChevronRight class="size-4" />
-			</a>
+			</Button>
 		{/if}
 	</div>
 </nav>

@@ -2,6 +2,9 @@
 	import { Bookmark, X } from 'lucide-svelte';
 	import { type Snippet } from 'svelte';
 	import { getSourceBadgeClass } from '$lib/core/utils/sourceBadge';
+	import Badge from '$lib/components/ui/Badge.svelte';
+
+	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
 
 	interface Props {
 		title: string;
@@ -35,30 +38,26 @@
 	// - Roundness & 3D: rounded-2xl, card-crystal (shadows/borders)
 	// - Transparency: bg-gray-900/60, backdrop-blur-xl
 	let containerClass = $derived(
-		`card-crystal ${animate ? 'animate-enter' : ''} h-full flex flex-col relative overflow-hidden bg-gray-900/60 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl transition-all duration-300`
+		`${animate ? 'animate-enter' : ''} h-full flex flex-col relative bg-gray-900/60 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl transition-all duration-300`
 	);
 </script>
 
-<div class={containerClass}>
+<SurfaceCard class={containerClass}>
 	<!-- Header -->
 	<div class="flex shrink-0 items-start justify-between border-b border-white/10 bg-white/5 p-6">
 		<div>
 			<h2 id={titleId} class="text-2xl font-bold tracking-tight text-white">{title}</h2>
 			<div class="mt-2 flex flex-wrap items-center gap-2">
-				<span class={`text-xs font-bold tracking-wider uppercase ${accentColor}`}>{type}</span>
+				<Badge color={accentColor} variant="outline">{type}</Badge>
 				{#if tags.length > 0}
-					<span class="text-white/20">•</span>
 					{#each tags as tag (tag)}
-						<span class="text-xs font-medium text-gray-400">{tag}</span>
+						<Badge variant="outline">{tag}</Badge>
 					{/each}
 				{/if}
 				{#if source}
-					<span class="text-white/20">•</span>
-					<span
-						class={`rounded px-1.5 py-0.5 text-[10px] font-medium tracking-wide uppercase ${getSourceBadgeClass(source)}`}
-					>
+					<Badge color={getSourceBadgeClass(source)}>
 						{source.charAt(0).toUpperCase() + source.slice(1)}
-					</span>
+					</Badge>
 				{/if}
 			</div>
 		</div>
@@ -94,4 +93,4 @@
 			{@render children()}
 		</div>
 	</div>
-</div>
+</SurfaceCard>

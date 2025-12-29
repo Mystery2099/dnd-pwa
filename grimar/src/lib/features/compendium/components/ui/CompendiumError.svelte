@@ -1,4 +1,6 @@
 <script lang="ts">
+	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
+
 	interface Props {
 		title?: string;
 		message: string;
@@ -8,8 +10,8 @@
 </script>
 
 <div class="flex h-full items-center justify-center p-8">
-	<div
-		class="card-crystal max-w-md rounded-xl border border-red-500/20 bg-gray-800/60 p-6 text-center shadow-[0_0_20px_rgba(239,68,68,0.15)]"
+	<SurfaceCard
+		class="max-w-md border-red-500/20 bg-gray-800/60 p-6 text-center shadow-[0_0_20px_rgba(239,68,68,0.15)]"
 	>
 		<div class="mb-3 flex justify-center">
 			<div
@@ -33,5 +35,5 @@
 		</div>
 		<p class="mb-2 font-bold text-red-400">{title}</p>
 		<p class="text-sm text-gray-400">{message}</p>
-	</div>
+	</SurfaceCard>
 </div>

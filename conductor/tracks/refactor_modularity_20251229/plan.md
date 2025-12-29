@@ -31,7 +31,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Backend Layer Refactoring' (Protocol in workflow.md) [checkpoint: 7788d75]
 
 ## Phase 4: Frontend Component Decomposition
-- [ ] Task: Audit & Refactor Major Components
+- [~] Task: Audit & Refactor Major Components
     - Identify "Mega Components" (e.g., Compendium Views).
     - Break them down into smaller, focused components.
     - Ensure props and events are strictly typed.

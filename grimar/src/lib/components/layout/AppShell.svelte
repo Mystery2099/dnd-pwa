@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
 
 	type Props = {
 		header?: Snippet;
@@ -54,11 +55,11 @@
 		<div class="grid gap-6 lg:grid-cols-[260px_1fr]">
 			<!-- Sidebar (Obsidian Glass) -->
 			<aside class="hidden lg:block">
-				<div class="card-crystal sticky top-24 border border-white/5 bg-black/20 p-4">
+				<SurfaceCard class="sticky top-24 border border-white/5 bg-black/20 p-4">
 					{#if nav}
 						{@render nav()}
 					{/if}
-				</div>
+				</SurfaceCard>
 			</aside>
 
 			<!-- Page Content -->

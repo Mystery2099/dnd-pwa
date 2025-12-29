@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { ComponentType } from 'svelte';
 	import { getSourceBadgeClass } from '$lib/core/utils/sourceBadge';
+	import Badge from '$lib/components/ui/Badge.svelte';
 
 	interface Props {
 		title: string;
@@ -58,13 +59,9 @@
 					{title}
 				</span>
 				{#if source}
-					<span
-						class={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-medium tracking-wide uppercase ${getSourceBadgeClass(
-							source
-						)}`}
-					>
+					<Badge color={getSourceBadgeClass(source)} class="shrink-0">
 						{formatSourceName(source)}
-					</span>
+					</Badge>
 				{/if}
 			</div>
 			{#if subtitle}
