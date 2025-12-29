@@ -1,4 +1,4 @@
-import { test, expect, waitForElement } from './fixtures';
+import { test, expect, waitForElement } from '../fixtures';
 
 test.describe('API Sync', () => {
 	test.beforeEach(async ({ page }) => {

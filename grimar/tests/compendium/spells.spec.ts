@@ -1,4 +1,4 @@
-import { test, expect, waitForElement, clearStorage } from './fixtures';
+import { test, expect, waitForElement, clearStorage } from '../fixtures';
 
 test.describe('Compendium Spells', () => {
 	test.beforeEach(async ({ page }) => {
