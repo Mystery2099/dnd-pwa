@@ -128,7 +128,7 @@
 	// URL sync effect - sync overlay state with URL changes
 	$effect(() => {
 		// Don't re-open if we're in the process of closing
-		if (isClosing || !selectedMonster) return;
+		if (isClosing) return;
 
 		const pathname = page.url.pathname;
 		const parts = pathname.split('/');
@@ -139,7 +139,7 @@
 
 		// 1. Priority: State object from pushState/shallow routing
 		if (state.selectedMonster) {
-			if (selectedMonster.externalId !== state.selectedMonster.externalId) {
+			if (!selectedMonster || selectedMonster.externalId !== state.selectedMonster.externalId) {
 				selectedMonster = state.selectedMonster;
 			}
 			return;
@@ -151,7 +151,7 @@
 			// Find monster in loaded list
 			if (loadedMonsters && loadedMonsters.length > 0) {
 				const monster = loadedMonsters.find((m: Monster) => m.externalId === slug);
-				if (monster && selectedMonster.externalId !== slug) {
+				if (monster && (!selectedMonster || selectedMonster.externalId !== slug)) {
 					selectedMonster = monster;
 				}
 			}
