@@ -26,7 +26,7 @@
 - [ ] Task: Conductor - User Manual Verification 'Extend Compendium Types' (Protocol in workflow.md)
 
 ## Phase 3: Add Zod Validation
-- [ ] Task: Create Zod Schemas for 5e-bits
+- [x] Task: Create Zod Schemas for 5e-bits <!-- id: 6, commit: 3dd2826 -->
     - Create `src/lib/server/providers/schemas/5ebits-schemas.ts` with schemas for Spells, Monsters, Classes, Races, Backgrounds, and Feats.
 - [ ] Task: Integrate Zod into 5e-bits Provider
     - Update `src/lib/server/providers/5ebits.ts` to use `validateData` with the new schemas.
