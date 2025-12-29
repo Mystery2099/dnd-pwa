@@ -31,17 +31,17 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Backend Layer Refactoring' (Protocol in workflow.md) [checkpoint: 7788d75]
 
 ## Phase 4: Frontend Component Decomposition
-- [~] Task: Audit & Refactor Major Components
+- [x] Task: Audit & Refactor Major Components [b47a7dc]
     - Identify "Mega Components" (e.g., Compendium Views).
     - Break them down into smaller, focused components.
     - Ensure props and events are strictly typed.
-- [ ] Task: Standardize UI Primitives
+- [x] Task: Standardize UI Primitives [d0aa75a]
     - Ensure all core UI elements (Buttons, Inputs, Cards) are in `src/lib/components/ui`.
     - Enforce usage of these primitives over raw HTML/Tailwind classes.
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Frontend Component Decomposition' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Frontend Component Decomposition' (Protocol in workflow.md) [checkpoint: d0aa75a]
 
 ## Phase 5: Verification & Cleanup
-- [ ] Task: Run Full Regression Test
+- [~] Task: Run Full Regression Test
     - Manually verify key flows (Login, Browse Compendium, Create Character).
     - Run automated tests (if any).
 - [ ] Task: Final Polish
