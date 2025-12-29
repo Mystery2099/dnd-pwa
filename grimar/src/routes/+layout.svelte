@@ -10,6 +10,10 @@
 	import { clientCache } from '$lib/core/client/cache';
 	import { initializeOfflineExperience } from '$lib/core/client/offline-init';
 	import { page } from '$app/state';
+	import { initThemeSync, initTheme, logThemesToConsole } from '$lib/core/client/themeStore.svelte';
+
+	// Initialize theme synchronously before first render to prevent FOUC
+	initThemeSync();
 
 	let { children } = $props();
 	const webManifestLink =
@@ -38,6 +42,14 @@
 		// Initialize offline data for seamless offline experience
 		initializeOfflineExperience();
 
+		// Initialize theme from localStorage
+		initTheme();
+
+		// Dev-only: Log theme options to console
+		if (import.meta.env.DEV) {
+			logThemesToConsole();
+		}
+
 		// Register for cache cleanup notifications
 		clientCache.onCleanup((reason: string) => {
 			const usage = clientCache.getCacheStats();
@@ -58,13 +70,23 @@
 	// Simple active link helper
 	function isActive(href: string) {
 		return page.url.pathname.startsWith(href)
-			? 'text-white font-semibold drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]'
-			: 'text-gray-400 hover:text-white transition-colors';
+			? 'text-[var(--color-text-primary)] font-semibold drop-shadow-[0_0_8px_color-mix(in_srgb,var(--color-text-primary)_50%,transparent)]'
+			: 'text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors';
 	}
 </script>
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
+	<!-- Theme initialization script - runs before first paint to prevent FOUC -->
+	<script>
+		(function () {
+			var theme = localStorage.getItem('grimar-theme');
+			var validThemes = ['amethyst', 'arcane', 'nature', 'fire', 'ice', 'void', 'ocean'];
+			if (theme && validThemes.indexOf(theme) !== -1) {
+				document.documentElement.setAttribute('data-theme', theme);
+			}
+		})();
+	</script>
 	<!-- Preload Inter font (optional, but good for performance if using Google Fonts) -->
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
@@ -96,26 +118,36 @@
 
 {#snippet nav()}
 	<nav class="flex flex-col gap-1 text-sm font-medium">
-		<div class="mb-2 px-3 py-2 text-xs font-bold tracking-widest text-gray-500 uppercase">
+		<div
+			class="mb-2 px-3 py-2 text-xs font-bold tracking-widest text-[var(--color-text-muted)] uppercase"
+		>
 			Grimoire
 		</div>
-		<a class="rounded-lg px-3 py-2 hover:bg-white/5 {isActive('/dashboard')}" href="/dashboard"
-			>Dashboard</a
+		<a
+			class="rounded-lg px-3 py-2 hover:bg-[var(--color-bg-card)] {isActive('/dashboard')}"
+			href="/dashboard">Dashboard</a
 		>
-		<a class="rounded-lg px-3 py-2 hover:bg-white/5 {isActive('/compendium')}" href="/compendium"
-			>Compendium</a
+		<a
+			class="rounded-lg px-3 py-2 hover:bg-[var(--color-bg-card)] {isActive('/compendium')}"
+			href="/compendium">Compendium</a
 		>
-		<a class="rounded-lg px-3 py-2 hover:bg-white/5 {isActive('/characters')}" href="/characters"
-			>Characters</a
+		<a
+			class="rounded-lg px-3 py-2 hover:bg-[var(--color-bg-card)] {isActive('/characters')}"
+			href="/characters">Characters</a
 		>
-		<a class="rounded-lg px-3 py-2 hover:bg-white/5 {isActive('/forge')}" href="/forge">The Forge</a
+		<a
+			class="rounded-lg px-3 py-2 hover:bg-[var(--color-bg-card)] {isActive('/forge')}"
+			href="/forge">The Forge</a
 		>
 
-		<div class="mt-4 mb-2 px-3 py-2 text-xs font-bold tracking-widest text-gray-500 uppercase">
+		<div
+			class="mt-4 mb-2 px-3 py-2 text-xs font-bold tracking-widest text-[var(--color-text-muted)] uppercase"
+		>
 			System
 		</div>
-		<a class="rounded-lg px-3 py-2 hover:bg-white/5 {isActive('/settings')}" href="/settings"
-			>Settings</a
+		<a
+			class="rounded-lg px-3 py-2 hover:bg-[var(--color-bg-card)] {isActive('/settings')}"
+			href="/settings">Settings</a
 		>
 
 		<!-- Offline Status Indicator -->

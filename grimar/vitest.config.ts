@@ -7,7 +7,8 @@ export default defineConfig({
 	plugins: [tailwindcss(), svelte()],
 	resolve: {
 		alias: {
-			$lib: resolve(__dirname, './src/lib')
+			$lib: resolve(__dirname, './src/lib'),
+			'$app/environment': resolve(__dirname, './src/test/mocks/app-environment.ts')
 		}
 	},
 	test: {
