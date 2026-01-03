@@ -3,9 +3,9 @@
 ## Phase 1: Infrastructure & Virtualization
 This phase focuses on setting up the foundation for high-performance rendering. We will implement a reusable virtual list component and integrate it into the existing Compendium views.
 
-- [ ] Task: Research and select a Svelte 5 compatible virtualization strategy/library.
-    - [ ] Sub-task: Evaluate `@tanstack/svelte-virtual` and other lightweight alternatives.
-    - [ ] Sub-task: Create a proof-of-concept prototype to verify Svelte 5 compatibility.
+- [x] Task: Research and select a Svelte 5 compatible virtualization strategy/library. 178aa9d
+    - [x] Sub-task: Evaluate `@tanstack/svelte-virtual` and other lightweight alternatives.
+    - [x] Sub-task: Create a proof-of-concept prototype to verify Svelte 5 compatibility.
 - [ ] Task: Create a reusable `VirtualList` component.
     - [ ] Sub-task: Write unit tests for the component's interface.
     - [ ] Sub-task: Implement the component with support for variable item heights (if possible/needed) or fixed heights.
