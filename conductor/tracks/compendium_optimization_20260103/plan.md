@@ -6,9 +6,9 @@ This phase focuses on setting up the foundation for high-performance rendering. 
 - [x] Task: Research and select a Svelte 5 compatible virtualization strategy/library. 178aa9d
     - [x] Sub-task: Evaluate `@tanstack/svelte-virtual` and other lightweight alternatives.
     - [x] Sub-task: Create a proof-of-concept prototype to verify Svelte 5 compatibility.
-- [ ] Task: Create a reusable `VirtualList` component.
-    - [ ] Sub-task: Write unit tests for the component's interface.
-    - [ ] Sub-task: Implement the component with support for variable item heights (if possible/needed) or fixed heights.
+- [x] Task: Create a reusable `VirtualList` component. e2249de
+    - [x] Sub-task: Write unit tests for the component's interface.
+    - [x] Sub-task: Implement the component with support for variable item heights (if possible/needed) or fixed heights.
 - [ ] Task: Refactor the 'Spells' list to use `VirtualList`.
     - [ ] Sub-task: Update the data fetching hook to return the full dataset (or support infinite query if keeping pagination, but client-side filtering prefers full dataset). *Decision: Move to full dataset load + client-side filtering for offline speed.*
     - [ ] Sub-task: Implement the virtualized view.
