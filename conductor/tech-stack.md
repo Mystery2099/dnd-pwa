@@ -1,29 +1,25 @@
-# Tech Stack: Grimar
+# Tech Stack: The Grimar Hermetica
+
+## Runtime & Package Management
+- **Bun:** Used for high-performance execution and as the primary package manager.
 
 ## Core Frameworks
-- **Frontend:** [SvelteKit 5](https://svelte.dev/docs/kit/introduction) (using TypeScript)
-- **Runtime:** [Bun](https://bun.sh/) (for high performance and native SQLite support)
-- **Styling:** [Tailwind CSS 4](https://tailwindcss.com/) (implementing the "Arcane Aero" design system)
+- **Svelte 5 & SvelteKit:** The foundation for the reactive frontend and integrated backend API routes.
+- **TypeScript:** Ensuring type safety and better maintainability across the codebase.
 
 ## Data Management
-- **Database:** [SQLite](https://www.sqlite.org/index.html) (Local-first, zero-latency)
-- **Library:** `better-sqlite3`
-- **ORM:** [Drizzle ORM](https://orm.drizzle.team/) (Type-safe SQL with automated migrations)
-- **Persistence:** Docker Volumes for SQLite file and image uploads.
+- **SQLite:** Lightweight, server-side storage as the single source of truth.
+- **Drizzle ORM:** TypeScript-first ORM for type-safe database interactions and migrations.
+- **Better-SQLite3:** The high-performance driver for SQLite on the server.
+- **Zod:** Comprehensive data validation for both API boundaries and internal logic.
+- **TanStack Query (Svelte Query):** Handling asynchronous data fetching, state management, and read-only caching for offline access.
 
-## PWA & Offline
-- **PWA Plugin:** `@vite-pwa/sveltekit`
-- **Strategy:** Stale-While-Revalidate for compendium data; Network-only for user-sensitive writes.
-- **Client DB:** IndexedDB (via `idb`) for client-side caching of offline data.
+## Styling & UI
+- **Tailwind CSS (v4):** Utility-first styling with modern, built-in features for theming.
+- **Lucide Svelte:** Consistent and high-quality iconography.
+- **Vite PWA:** Powering the Progressive Web App capabilities and offline service worker.
 
-## Infrastructure & Security
-- **Reverse Proxy:** [Traefik](https://traefik.io/) (Handles TLS and request routing)
-- **Identity Provider:** [Authentik](https://goauthentik.io/) (External OIDC/LDAP management)
-- **Auth Strategy:** Header-based identity (`X-Authentik-Username`) via SvelteKit hooks.
-- **Containerization:** Docker (Single-container monolith).
-
-## Key Libraries
-- `lucide-svelte`: Iconography
-- `zod`: Schema validation
-- `nanoid`: Unique ID generation
-- `svelte-markdown`: Markdown rendering for notes and descriptions
+## Quality Assurance
+- **Vitest:** Unit and integration testing for business logic and components.
+- **Playwright:** End-to-end testing for critical user paths and PWA functionality.
+- **Prettier & ESLint:** Ensuring consistent code style and preventing common errors.

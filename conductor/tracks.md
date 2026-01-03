@@ -3,7 +3,6 @@
 This file tracks all major tracks for the project. Each track has its own detailed plan in its respective folder.
 
 ---
----
 
-## [x] Track: Improve codebase maintainability, scalability, and modularity
-*Link: [./conductor/tracks/refactor_modularity_20251229/](./conductor/tracks/refactor_modularity_20251229/)*
+## [ ] Track: Refactor and optimize the Compendium discovery experience
+*Link: [./conductor/tracks/compendium_optimization_20260103/](./conductor/tracks/compendium_optimization_20260103/)*

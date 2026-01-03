@@ -1,47 +1,22 @@
-# Product Guidelines: Grimar
+# Product Guidelines: The Grimar Hermetica
 
-## Visual Identity: "Arcane Aero"
-Grimar's visual language is "Modern Arcane Aero"—a fusion of 2000s glassmorphism (gloss, depth, bevels) and modern clarity (restraint, accessibility).
+## Prose & Tone
+- **Voice:** Balanced. The tone should be primarily professional and direct to ensure clarity and speed of use, but enriched with subtle thematic flourishes in headings, empty states, and major UI interactions to reinforce the "Digital Grimoire" atmosphere.
+- **Terminology:** Use standard D&D 5e terminology for mechanics (e.g., "Hit Points," "Armor Class") but use thematic framing for app functions (e.g., "Compendium" instead of "Database," "Inscription" instead of "Edit").
 
-### 1. The Hierarchy of Depth (Priority #1)
-The interface must establish a clear 3D hierarchy using the three-tier material system:
--   **Canvas (Level 1):** Large, stable regions (sidebars, background frame). Minimal blur, subtle noise.
--   **Card (Level 2):** Main content "shards" (character sheets, spell cards). Medium blur, "Aero shine," beveled edges.
--   **Overlay (Level 3):** Modals, tooltips, dropdowns. High blur, high contrast, strong shadow.
+## UX & Interaction Design
+- **Complexity Management:** Use **Progressive Disclosure** to keep initial views clean, revealing complex rules and details only when requested. Supplement this with rich **Tooltips & References** that link directly to the Compendium, explaining mechanics without cluttering the interface.
+- **Optimistic UI:** All interactions (e.g., updating a character sheet) should feel instantaneous to the user. Synchronization with the server happens in the background, providing a snappy, "magical" responsiveness.
+- **Tactile Feedback:** Employ subtle animations and transitions to give UI elements a sense of physical weight and presence, making the interface feel like an enchanted artifact.
 
-### 2. Light and Reflection (Priority #2)
-Surfaces should look like physical glass:
--   **Aero Shine:** A subtle, horizontal gloss line across the top 40% of cards and buttons.
--   **Bevels:** Top borders are highlights (white/transparent); bottom borders are shadows (black/transparent).
--   **Luminous Accents:** Use gemstone colors (Ruby, Amethyst, etc.) for borders and highlights to signal role and state.
+## Visual Identity: Arcane Aero
+- **Accessibility First (High Priority):** All magical aesthetic choices (glows, glassmorphism, transparencies) must strictly adhere to WCAG accessibility standards. High contrast and text readability are non-negotiable.
+- **Dynamic Theming (High Priority):** All components must be built to respond gracefully to theme changes. Gemstone colors, shadow depths, and accent hues must update dynamically, ensuring the application looks cohesive in any "magical alignment."
+- **Iconography:** Use consistent, high-quality icons (e.g., Lucide Svelte) styled to resemble magical runes or inscriptions, reinforcing the visual language.
 
-### 3. Color and Saturation (Priority #3)
--   **The Deep Weave:** Use radial gradients for backgrounds to create a "spotlight" effect.
--   **Gemstone Palette:** Highly saturated hues for specific semantic roles (e.g., Red for Evocation/Attack).
-
-## Tone and Voice: "The Helpful Familiar"
-Grimar is a clean, modern assistant with a touch of magical whimsy.
-
-### 1. Clarity First
--   Prioritize clear, technical language for game rules and system messages.
--   Avoid excessive high-fantasy jargon that obscures utility (e.g., use "Select a Class" instead of "Discern thy destiny").
-
-### 2. Enchanted Personality
--   Sprinkle magical flavor into non-critical UI areas (e.g., "Conjuring your character..." during loading, or "The spellbook is currently empty" in empty states).
--   Use light magical puns or whimsical phrasing sparingly to build character.
-
-### 3. Error Handling
--   Errors should be helpful and non-blocking.
--   Tone should be apologetic but magical (e.g., "A stray mana surge prevented the save. Let's try again.").
-
-## Motion and Interaction: "Tactile Magic"
-The UI must feel like a physical, enchanted artifact.
-
-### 1. Tactile Response
--   **Hover Lift:** Cards and buttons should lift (translateY) and increase in glow on hover.
--   **Press:** Active states should feel "pressed" into the surface (scale down, inset shadow).
--   **Material Physics:** Interaction should mimic physical objects (e.g., mana gems "break" when spent, tubes "fill" with liquid).
-
-### 2. Snappy Transitions
--   Motion should be fast and intentional (150ms–300ms).
--   Respect the `prefers-reduced-motion` system preference by simplifying or removing non-essential animations.
+## Data & Connectivity Strategy
+- **Server-Authoritative:** The server is the single source of truth for all data.
+- **Offline Capability:** The application implements robust read-only caching. If the user loses internet connection, they can still view their characters and browse the Compendium.
+- **Connectivity Feedback:**
+    - **Unobtrusive Indicators:** Use small, elegant icons (e.g., a glowing or fading rune) to communicate connection status without distracting the user.
+    - **Graceful Degradation:** Features requiring active server connection (e.g., saving changes) should be subtly dimmed or disabled with explanatory tooltips when offline.
