@@ -9,7 +9,8 @@ export default defineConfig({
 		alias: {
 			$lib: resolve(__dirname, './src/lib'),
 			'$app/environment': resolve(__dirname, './src/test/mocks/app-environment.ts')
-		}
+		},
+		conditions: ['browser']
 	},
 	test: {
 		environment: 'happy-dom',

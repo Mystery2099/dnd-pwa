@@ -64,8 +64,27 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 // Mock ResizeObserver
-global.ResizeObserver = vi.fn().mockImplementation(() => ({
-	observe: vi.fn(),
+global.ResizeObserver = vi.fn().mockImplementation((callback) => ({
+	observe: vi.fn((el) => {
+		// Immediately trigger callback with the element
+		callback([{
+			target: el,
+			contentRect: {
+				width: el.clientWidth || 0,
+				height: el.clientHeight || 0,
+				top: 0,
+				left: 0,
+				bottom: 0,
+				right: 0,
+				x: 0,
+				y: 0,
+				toJSON: () => {}
+			},
+			devicePixelContentBoxSize: [],
+			borderBoxSize: [],
+			contentBoxSize: []
+		}]);
+	}),
 	unobserve: vi.fn(),
 	disconnect: vi.fn()
 }));
