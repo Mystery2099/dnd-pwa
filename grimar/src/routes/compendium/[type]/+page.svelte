@@ -3,16 +3,18 @@
 	import { pushState } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
+	import { browser } from '$app/environment';
+	import { createCompendiumAllQuery } from '$lib/core/client/queries';
+	import { getCompendiumConfig } from '$lib/core/constants/compendium';
 	import CompendiumShell from '$lib/features/compendium/components/layout/CompendiumShell.svelte';
 	import CompendiumSidebar from '$lib/features/compendium/components/layout/CompendiumSidebar.svelte';
 	import FilterGroup from '$lib/features/compendium/components/layout/FilterGroup.svelte';
 	import CompendiumListItem from '$lib/features/compendium/components/CompendiumListItem.svelte';
 	import CompendiumDetail from '$lib/features/compendium/components/CompendiumDetail.svelte';
-	import Pagination from '$lib/features/compendium/components/Pagination.svelte';
+	import VirtualList from '$lib/components/ui/VirtualList.svelte';
 	import { Download, RefreshCw } from 'lucide-svelte';
 	import { CompendiumFilterStore } from '$lib/features/compendium/stores/filter.svelte';
 	import type { CompendiumItem } from '$lib/core/types/compendium';
-	import { getCompendiumConfig } from '$lib/core/constants/compendium';
 	import CompendiumLoading from '$lib/features/compendium/components/ui/CompendiumLoading.svelte';
 	import FilterLogicToggle from '$lib/features/compendium/components/ui/FilterLogicToggle.svelte';
 	import CompendiumError from '$lib/features/compendium/components/ui/CompendiumError.svelte';
@@ -31,7 +33,21 @@
 	// -- Config & Derived --
 	const pathType = $derived(data.pathType);
 	const dbType = $derived(data.dbType);
+	// Load config client-side to avoid SSR serialization issues with Svelte components
 	const config = $derived(getCompendiumConfig(pathType));
+
+	// Page title
+	const pageTitle = $derived(`${config.ui.displayNamePlural} - Grimar Compendium`);
+
+	// TanStack Query for compendium data - only available on client
+	let query = $state<ReturnType<typeof createCompendiumAllQuery> | null>(null);
+
+	// Initialize query on client only
+	$effect(() => {
+		if (browser && pathType) {
+			query = createCompendiumAllQuery(pathType);
+		}
+	});
 
 	// Map CompendiumTypeConfig to CompendiumFilterConfig expected by the store
 	const filterConfig = $derived({
@@ -51,12 +67,16 @@
 
 	// -- State --
 	let selectedItem = $state<CompendiumItem | null>(null);
-	let loadedItems = $state<CompendiumItem[]>([]);
-	let listContainer = $state<HTMLElement>();
+
+	// Derived filtered items
+	const filteredItems = $derived.by(() => {
+		if (!query?.data?.items) return [];
+		return filters.apply<CompendiumItem>(query.data.items);
+	});
 
 	// Navigation helper - finds adjacent items in the current list
 	let itemNav = $derived(() => {
-		const items = loadedItems;
+		const items = filteredItems;
 		if (!selectedItem || items.length === 0) return null;
 		const idx = items.findIndex(
 			(i) => i.externalId === selectedItem?.externalId || i.name === selectedItem?.name
@@ -71,6 +91,9 @@
 	// Select an item for detail view
 	function selectItem(item: CompendiumItem) {
 		selectedItem = item;
+		// Update URL to include item identifier for deep linking
+		const itemId = item.externalId || item.name?.toLowerCase().replace(/\s+/g, '-');
+		pushState(`/compendium/${pathType}/${itemId}`, {});
 	}
 
 	// Sync filters with URL state
@@ -215,19 +238,39 @@
 	/>
 {/snippet}
 
+<svelte:head>
+	<title>{pageTitle}</title>
+</svelte:head>
+
 <CompendiumShell sidebar={sidebarSnippet}>
-	<div class="relative h-full">
-		<div
-			bind:this={listContainer}
-			class="h-full overflow-y-auto {selectedItem ? 'hidden lg:block' : 'block'}"
-		>
-			{#await data.streamed.items}
+	<!-- Fixed header -->
+	<header class="mb-4 shrink-0 border-b border-[var(--color-border)] pb-4">
+		<h1 class="text-2xl font-bold text-[var(--color-text-primary)]">
+			{config.ui.displayNamePlural}
+		</h1>
+	</header>
+
+	<!-- Scrollable entries container -->
+	<div class="relative flex-1 {selectedItem ? 'hidden lg:block' : 'block'}">
+			{#if !query}
+				<!-- Loading state while query initializes on client -->
+				<CompendiumLoading
+					message={`Loading ${config.ui.displayNamePlural.toLowerCase()}...`}
+					subtext="Initializing"
+					accentColor={config.ui.categoryAccent.replace('text', 'border-t')}
+				/>
+			{:else if query.isPending}
 				<CompendiumLoading
 					message={`Loading ${config.ui.displayNamePlural.toLowerCase()}...`}
 					subtext="Fetching from archives"
 					accentColor={config.ui.categoryAccent.replace('text', 'border-t')}
 				/>
-			{:then resolved}
+			{:else if query.isError}
+				<CompendiumError
+					message={query.error instanceof Error ? query.error.message : 'Unknown error'}
+				/>
+			{:else}
+				{@const resolved = query.data}
 				{#if !resolved.hasAnyItems}
 					<div class="flex h-full items-center justify-center p-8">
 						<div class="max-w-md text-center">
@@ -276,34 +319,28 @@
 						</div>
 					</div>
 				{:else}
-					<div class="grid grid-cols-1 gap-3 p-1 md:grid-cols-2 xl:grid-cols-3">
-						{#each resolved.items as item (item.externalId ?? item.__rowId ?? item.name)}
-							<CompendiumListItem
-								title={item.name}
-								subtitle={config.display.subtitle(item)}
-								source={item.source}
-								icon={config.ui.icon}
-								accentClass={config.display.listItemAccent(item)}
-								onclick={() => selectItem(item)}
-							/>
-						{/each}
-					</div>
+					<VirtualList items={filteredItems} estimateSize={80} class="glass-scroll p-1">
+						{#snippet children(item)}
+							<div class="p-1">
+								<CompendiumListItem
+									title={item.name}
+									subtitle={config.display.subtitle(item)}
+									source={item.source}
+									icon={config.ui.icon}
+									accentClass={config.display.listItemAccent(item)}
+									onclick={() => selectItem(item)}
+								/>
+							</div>
+						{/snippet}
+					</VirtualList>
 
-					{#if resolved.items.length === 0}
+					{#if filteredItems.length === 0}
 						<div class="py-12 text-center text-[var(--color-text-muted)]">
 							{config.ui.emptyState.title}. {config.ui.emptyState.description}
 						</div>
 					{/if}
-
-					{#if !selectedItem && resolved.pagination && resolved.pagination.totalPages > 1}
-						<div class="mt-2">
-							<Pagination pagination={resolved.pagination} baseUrl={`/compendium/${pathType}`} />
-						</div>
-					{/if}
 				{/if}
-			{:catch error}
-				<CompendiumError message={error.message} />
-			{/await}
+			{/if}
 		</div>
 
 		<!-- Detail View Overlay -->
@@ -344,5 +381,4 @@
 				</CompendiumDetail>
 			</div>
 		{/if}
-	</div>
 </CompendiumShell>

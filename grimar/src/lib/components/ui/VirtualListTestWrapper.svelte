@@ -4,7 +4,7 @@
 </script>
 
 <VirtualList {items} estimateSize={40}>
-    {#snippet children(item, index)}
+    {#snippet children(item: any, index: number)}
         <div>Item {index}: {item.name}</div>
     {/snippet}
 </VirtualList>

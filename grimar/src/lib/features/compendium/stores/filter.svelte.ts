@@ -128,6 +128,63 @@ export class CompendiumFilterStore {
 		this.updateUrl();
 	}
 
+	/**
+	 * Apply current filters and sorting to a list of items.
+	 */
+	apply<T extends Record<string, any>>(items: T[]): T[] {
+		let filtered = items;
+
+		// 1. Search filter
+		if (this.state.searchTerm) {
+			const search = this.state.searchTerm.toLowerCase();
+			filtered = filtered.filter(
+				(item) =>
+					item.name.toLowerCase().includes(search) ||
+					(item.summary && item.summary.toLowerCase().includes(search))
+			);
+		}
+
+		// 2. Faceted filters
+		const activeFilters = Object.entries(this.state.sets).filter(([_, set]) => set.size > 0);
+
+		if (activeFilters.length > 0) {
+			filtered = filtered.filter((item) => {
+				const matches = activeFilters.map(([key, set]) => {
+					const val = item[key];
+					// Handle array values (if any) or simple equality
+					if (Array.isArray(val)) {
+						return val.some((v) => set.has(String(v)));
+					}
+					return set.has(String(val));
+				});
+
+				if (this.state.filterLogic === 'and') {
+					return matches.every((m) => m);
+				} else {
+					return matches.some((m) => m);
+				}
+			});
+		}
+
+		// 3. Sorting
+		const sortBy = this.state.sortBy;
+		const sortOrder = this.state.sortOrder;
+
+		filtered = [...filtered].sort((a, b) => {
+			const valA = a[sortBy];
+			const valB = b[sortBy];
+
+			if (valA == null) return 1;
+			if (valB == null) return -1;
+
+			if (valA < valB) return sortOrder === 'asc' ? -1 : 1;
+			if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
+			return 0;
+		});
+
+		return filtered;
+	}
+
 	// -- Sync Logic --
 
 	public syncWithUrl(url: URL | SvelteURL) {
