@@ -9,10 +9,10 @@ This phase focuses on setting up the foundation for high-performance rendering. 
 - [x] Task: Create a reusable `VirtualList` component. e2249de
     - [x] Sub-task: Write unit tests for the component's interface.
     - [x] Sub-task: Implement the component with support for variable item heights (if possible/needed) or fixed heights.
-- [ ] Task: Refactor the 'Spells' list to use `VirtualList`.
-    - [ ] Sub-task: Update the data fetching hook to return the full dataset (or support infinite query if keeping pagination, but client-side filtering prefers full dataset). *Decision: Move to full dataset load + client-side filtering for offline speed.*
-    - [ ] Sub-task: Implement the virtualized view.
-    - [ ] Sub-task: Verify performance with 500+ spells.
+- [x] Task: Refactor the 'Spells' list to use `VirtualList`. 0d3ff5c
+    - [x] Sub-task: Update the data fetching hook to return the full dataset (or support infinite query if keeping pagination, but client-side filtering prefers full dataset). *Decision: Move to full dataset load + client-side filtering for offline speed.*
+    - [x] Sub-task: Implement the virtualized view.
+    - [x] Sub-task: Verify performance with 500+ spells.
 - [ ] Task: Refactor 'Monsters' and 'Items' lists to use `VirtualList`.
     - [ ] Sub-task: Apply the same pattern to the other major compendium sections.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Virtualization' (Protocol in workflow.md)
