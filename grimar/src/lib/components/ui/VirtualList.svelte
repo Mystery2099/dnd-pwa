@@ -19,7 +19,9 @@
 	let containerEl: HTMLDivElement | undefined = $state();
 
 	const virtualizer = createVirtualizer({
-		count: items.length,
+		get count() {
+			return items.length;
+		},
 		getScrollElement: () => containerEl ?? null,
 		get estimateSize() {
 			return typeof estimateSize === 'number' ? () => estimateSize : estimateSize;

@@ -1,5 +1,5 @@
-import Fuse from 'fuse.js';
-import type { CompendiumItem } from '$lib/core/types/compendium/item';
+import Fuse, { type IFuseOptions } from 'fuse.js';
+import type { CompendiumItem } from '$lib/core/types/compendium';
 
 /**
  * SearchIndexer service for full-text search across compendium items.
@@ -12,7 +12,7 @@ export class SearchIndexer<T extends CompendiumItem> {
 	/**
 	 * Configuration for Fuse.js search
 	 */
-	private readonly fuseOptions: Fuse.IFuseOptions<T> = {
+	private readonly fuseOptions: IFuseOptions<T> = {
 		// Keys to search across
 		keys: [
 			{ name: 'name', weight: 2 }, // Name is most important

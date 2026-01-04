@@ -5,7 +5,7 @@ import { SvelteSet, SvelteURL } from 'svelte/reactivity';
 
 import type { CompendiumFilterConfig } from '$lib/core/types/compendium/filter';
 import { SearchIndexer } from '$lib/features/compendium/services/SearchIndexer';
-import type { CompendiumItem } from '$lib/core/types/compendium/item';
+import type { CompendiumItem } from '$lib/core/types/compendium';
 
 export class CompendiumFilterStore {
 	// State using Svelte 5 runes
