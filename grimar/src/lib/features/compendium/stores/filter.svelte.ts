@@ -4,6 +4,8 @@ import { page } from '$app/state';
 import { SvelteSet, SvelteURL } from 'svelte/reactivity';
 
 import type { CompendiumFilterConfig } from '$lib/core/types/compendium/filter';
+import { SearchIndexer } from '$lib/features/compendium/services/SearchIndexer';
+import type { CompendiumItem } from '$lib/core/types/compendium/item';
 
 export class CompendiumFilterStore {
 	// State using Svelte 5 runes
@@ -17,6 +19,8 @@ export class CompendiumFilterStore {
 	});
 
 	private config: CompendiumFilterConfig;
+	private searchIndexer = new SearchIndexer<CompendiumItem>();
+	private allItems: CompendiumItem[] = [];
 
 	constructor(config: CompendiumFilterConfig) {
 		this.config = config;
@@ -131,19 +135,30 @@ export class CompendiumFilterStore {
 	}
 
 	/**
+	 * Build search index from items.
+	 * Should be called when items are loaded or updated.
+	 */
+	buildSearchIndex(items: CompendiumItem[]) {
+		this.allItems = items;
+		this.searchIndexer.buildIndex(items);
+	}
+
+	/**
 	 * Apply current filters and sorting to a list of items.
 	 */
 	apply<T extends Record<string, any>>(items: T[]): T[] {
+		// Store items for search indexing if they're CompendiumItems
+		if (items.length > 0 && 'externalId' in items[0]) {
+			this.buildSearchIndex(items as unknown as CompendiumItem[]);
+		}
+
 		let filtered = items;
 
-		// 1. Search filter
-		if (this.state.searchTerm) {
-			const search = this.state.searchTerm.toLowerCase();
-			filtered = filtered.filter(
-				(item) =>
-					item.name.toLowerCase().includes(search) ||
-					(item.summary && item.summary.toLowerCase().includes(search))
-			);
+		// 1. Search filter with full-text search
+		if (this.state.searchTerm && this.searchIndexer.isIndexed()) {
+			const searchResults = this.searchIndexer.search(this.state.searchTerm);
+			const searchIds = new Set(searchResults.map((item) => item.id));
+			filtered = filtered.filter((item) => searchIds.has(item.id));
 		}
 
 		// 2. Faceted filters
