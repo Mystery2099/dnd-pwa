@@ -18,7 +18,7 @@
 	</aside>
 
 	<!-- Content: Fixed container, only entries list scrolls -->
-	<main class="relative min-w-0 flex-1 overflow-hidden p-4 lg:p-6">
+	<main class="relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden p-4 lg:p-6">
 		{@render children()}
 	</main>
 </div>

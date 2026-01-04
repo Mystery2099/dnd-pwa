@@ -258,7 +258,7 @@
 	</header>
 
 	<!-- Scrollable entries container -->
-	<div class="relative flex-1 {selectedItem ? 'hidden lg:block' : 'block'}">
+	<div class="relative flex min-h-0 flex-1 flex-col {selectedItem ? 'hidden lg:flex' : 'flex'}">
 		{#if !query}
 			<!-- Loading state while query initializes on client -->
 			<CompendiumLoading
@@ -326,24 +326,26 @@
 					</div>
 				</div>
 			{:else}
-				<VirtualList items={filteredItems} estimateSize={80} class="glass-scroll p-1">
-					{#snippet children(item)}
-						<div class="p-1">
-							<CompendiumListItem
-								title={item.name}
-								subtitle={config.display.subtitle(item)}
-								source={item.source}
-								icon={config.ui.icon}
-								accentClass={config.display.listItemAccent(item)}
-								onclick={() => selectItem(item)}
-							/>
-						</div>
-					{/snippet}
-				</VirtualList>
-
 				{#if filteredItems.length === 0}
-					<div class="py-12 text-center text-[var(--color-text-muted)]">
+					<div class="flex flex-1 items-center justify-center py-12 text-center text-[var(--color-text-muted)]">
 						{config.ui.emptyState.title}. {config.ui.emptyState.description}
+					</div>
+				{:else}
+					<div class="min-h-0 flex-1">
+						<VirtualList items={filteredItems} estimateSize={80} class="glass-scroll p-1">
+							{#snippet children(item, index)}
+								<div class="p-1">
+									<CompendiumListItem
+										title={item.name}
+										subtitle={config.display.subtitle(item)}
+										source={item.source}
+										icon={config.ui.icon}
+										accentClass={config.display.listItemAccent(item)}
+										onclick={() => selectItem(item)}
+									/>
+								</div>
+							{/snippet}
+						</VirtualList>
 					</div>
 				{/if}
 			{/if}
