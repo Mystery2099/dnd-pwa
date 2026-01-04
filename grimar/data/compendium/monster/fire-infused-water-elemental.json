@@ -1,0 +1,55 @@
+{
+  "slug": "fire-infused-water-elemental",
+  "name": "Fire-Infused Water Elemental",
+  "size": "Huge",
+  "type": "Elemental",
+  "subtype": "",
+  "group": null,
+  "alignment": "neutral",
+  "armor_class": 14,
+  "armor_desc": "natural armor",
+  "hit_points": 138,
+  "hit_dice": "12d12+60",
+  "speed": {
+    "swim": 90,
+    "walk": 30
+  },
+  "strength": 20,
+  "dexterity": 14,
+  "constitution": 20,
+  "intelligence": 5,
+  "wisdom": 10,
+  "charisma": 8,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "acid, cold, fire; bludgeoning, piercing, slashing from nonmagical attacks",
+  "damage_immunities": "poison",
+  "condition_immunities": "exhaustion, grappled, paralyzed, petrified, poisoned, prone, restrained, unconscious",
+  "senses": "darkvision 60 ft., passive Perception 10",
+  "languages": "Aquan",
+  "cr": 7,
+  "challenge_rating": "7",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The elemental makes two slam attacks."
+    },
+    {
+      "name": "Slam",
+      "desc": "Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 16 (2d10 + 5) bludgeoning damage plus 7 (2d6) fire damage.",
+      "attack_bonus": 8,
+      "damage_dice": "2d10+5"
+    },
+    {
+      "name": "Scald (Recharge 6)",
+      "desc": "A fire-infused water elemental sprays a 30-foot cone of superheated water. Each creature in the area must make a DC 12 Dexterity saving throw. On a failure, a creature takes 21 (6d6) fire damage and is knocked prone. On a success, a creature takes half as much damage and isn't knocked prone."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Water Form",
+      "desc": "The elemental can enter a hostile creature's space and stop there. It can move through a space as narrow as 1 inch wide without squeezing."
+    }
+  ],
+  "legendary_actions": null
+}

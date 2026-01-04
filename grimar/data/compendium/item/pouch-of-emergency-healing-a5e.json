@@ -1,0 +1,11 @@
+{
+  "slug": "pouch-of-emergency-healing-a5e",
+  "name": "Pouch of Emergency Healing",
+  "type": "Wondrous Item",
+  "desc": "Twice per day, you can use an action to open this blue silk pouch and receive or bestow the benefits of one of the following spells: _cure wounds , greater restoration , healing word , lesser restoration ._",
+  "rarity": "Rare",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

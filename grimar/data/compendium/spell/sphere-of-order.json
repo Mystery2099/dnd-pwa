@@ -1,0 +1,27 @@
+{
+  "slug": "sphere-of-order",
+  "name": "Sphere of Order",
+  "desc": "Deep Magic: clockwork You surround yourself with the perfect order of clockwork. Chaotic creatures that start their turn in the area or enter it on their turn take 5d8 psychic damage. The damage is 8d8 for Chaotic aberrations, celestials, elementals, and fiends. A successful Wisdom saving throw halves the damage, but Chaotic creatures (the only ones affected by the spell) make the saving throw with disadvantage.",
+  "higher_level": "",
+  "level": "6th-level",
+  "level_int": 6,
+  "school": "evocation",
+  "components": "V, S",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "1 Round",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "Self",
+  "target_range_sort": 0,
+  "spell_level": 6,
+  "dnd_class": "Cleric",
+  "spell_lists": [
+    "cleric"
+  ]
+}

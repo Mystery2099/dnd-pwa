@@ -1,0 +1,56 @@
+{
+  "slug": "gear-spider-a5e",
+  "name": "Gear Spider",
+  "size": "Tiny",
+  "type": "Construct",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 13,
+  "armor_desc": "",
+  "hit_points": 28,
+  "hit_dice": "8d4+8",
+  "speed": {
+    "walk": 30,
+    "climb": 20
+  },
+  "strength": 6,
+  "dexterity": 15,
+  "constitution": 12,
+  "intelligence": 2,
+  "wisdom": 6,
+  "charisma": 1,
+  "skills": {
+    "perception": 0,
+    "stealth": 4
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "poison, psychic",
+  "condition_immunities": "blinded, charmed, deafened, exhaustion, frightened, paralyzed, petrified, poisoned",
+  "senses": "blindsight 60 ft., passive Perception 10",
+  "languages": "",
+  "cr": 0.5,
+  "challenge_rating": "1/2",
+  "actions": [
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +0 to hit, reach 5 ft., one target. Hit: 1 slashing damage."
+    },
+    {
+      "name": "Needle",
+      "desc": "Ranged Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) piercing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Clockwork Nature",
+      "desc": "A clockwork doesnt require air, nourishment, or rest, and is immune to disease."
+    },
+    {
+      "name": "Immutable Form",
+      "desc": "The clockwork is immune to any effect that would alter its form."
+    }
+  ],
+  "legendary_actions": null
+}

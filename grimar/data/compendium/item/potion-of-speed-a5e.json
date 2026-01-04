@@ -1,0 +1,11 @@
+{
+  "slug": "potion-of-speed-a5e",
+  "name": "Potion of Speed",
+  "type": "Potion",
+  "desc": "An opaque gray liquid that occasionally flashes with sparks of electricity. After drinking this potion, for the next minute you gain the benefits of a _haste_  spell (without the need for _concentration_ ).",
+  "rarity": "Very Rare",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

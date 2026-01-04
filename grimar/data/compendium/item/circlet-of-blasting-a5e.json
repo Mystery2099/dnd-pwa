@@ -1,0 +1,11 @@
+{
+  "slug": "circlet-of-blasting-a5e",
+  "name": "Circlet of Blasting",
+  "type": "Wondrous Item",
+  "desc": "Once per dawn, while wearing this circlet you can use an action to cast _scorching ray_ . The attack bonus for the spell when cast this way is +5.",
+  "rarity": "Uncommon",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

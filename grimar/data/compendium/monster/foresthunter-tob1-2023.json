@@ -1,0 +1,72 @@
+{
+  "slug": "foresthunter-tob1-2023",
+  "name": "Forest Hunter",
+  "size": "Medium",
+  "type": "Humanoid",
+  "subtype": "",
+  "group": "null",
+  "alignment": "Lawful Evil",
+  "armor_class": 15,
+  "armor_desc": "chain shirt",
+  "hit_points": 104,
+  "hit_dice": "19d8 + 19",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 12,
+  "dexterity": 18,
+  "constitution": 12,
+  "intelligence": 11,
+  "wisdom": 12,
+  "charisma": 16,
+  "skills": {
+    "Perception": 4,
+    "Stealth": 10,
+    "Survival": 4
+  },
+  "damage_vulnerabilities": "False",
+  "damage_resistances": "False",
+  "damage_immunities": "False",
+  "condition_immunities": "False",
+  "senses": "darkvision 60 ft., passive Perception 14",
+  "languages": "Common, Elvish, Umbral",
+  "cr": 5,
+  "challenge_rating": "5",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The shadow fey makes two Dagger or Longbow attacks."
+    },
+    {
+      "name": "Dagger",
+      "desc": "Melee or Ranged Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 6 (1d4 + 4) piercing damage plus 10 (3d6) poison damage."
+    },
+    {
+      "name": "Longbow",
+      "desc": "Ranged Weapon Attack: +7 to hit, range 150/600 ft., one target. Hit: 8 (1d8 + 4) piercing damage plus 10 (3d6) poison damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Evasion",
+      "desc": "If the forest hunter is subjected to an effect that allows it to make a Dexterity saving throw to take only half the damage, the hunter instead takes no damage if it succeeds on the saving throw, and only half the damage if it fails."
+    },
+    {
+      "name": "Fey Ancestry",
+      "desc": "The shadow fey has advantage on saving throws against being charmed, and magic can't put it to sleep."
+    },
+    {
+      "name": "Forest and Urban Hunter",
+      "desc": "The forest hunter has advantage on Wisdom (Perception) and Wisdom (Survival) checks to find and track Beasts and Humanoids."
+    },
+    {
+      "name": "Charging Archer",
+      "desc": "If the forest hunter moves at least 10 feet straight toward a target after hitting the target with a Longbow attack, the forest hunter can make one Dagger attack against the target as a bonus action."
+    },
+    {
+      "name": "Sunlight Sensitivity",
+      "desc": "While in sunlight, the shadow fey has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight."
+    }
+  ],
+  "legendary_actions": []
+}

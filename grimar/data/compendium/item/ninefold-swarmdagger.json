@@ -1,0 +1,11 @@
+{
+  "slug": "ninefold-swarmdagger",
+  "name": "Ninefold Swarmdagger",
+  "type": "Weapon (dagger)",
+  "desc": "You gain a +1 bonus to attack and damage rolls made with this magic weapon.\n  When you hit a creature with this weapon, you can use a bonus action to launch ghostly duplicates of the dagger at nearby creatures. Ghostly duplicates of the dagger fly at up to three creatures you can see within 30 feet of the creature you hit. Make a ranged attack with this dagger at each target. On a hit, a target takes 1d4 force damage. Once you hit six creatures with these ghostly daggers, you can’t launch ghostly daggers from this weapon again until the next dawn.",
+  "rarity": "rare",
+  "requires_attunement": "",
+  "document__slug": "toh",
+  "document__title": "Tome of Heroes",
+  "document__url": "https://koboldpress.com/kpstore/product/tome-of-heroes-for-5th-edition/"
+}

@@ -1,0 +1,11 @@
+{
+  "slug": "potion-of-resistance-a5e",
+  "name": "Potion of Resistance",
+  "type": "Potion",
+  "desc": "After you drink this potion, for the next hour you gain resistance to a single type of damage (chosen by the Narrator or determined randomly).\n\n__**Table: Potion of Resistance**__\n| **d10** | **Damage Type** |\n| ------- | --------------- |\n| 1       | Thunder         |\n| 2       | Lightning       |\n| 3       | Cold            |\n| 4       | Poison          |\n| 5       | Fire            |\n| 6       | Psychic         |\n| 7       | Acid            |\n| 8       | Necrotic        |\n| 9       | Radiant         |\n| 10      | Force           |",
+  "rarity": "Uncommon",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

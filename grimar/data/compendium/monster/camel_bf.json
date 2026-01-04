@@ -1,0 +1,48 @@
+{
+  "slug": "camel_bf",
+  "name": "Camel",
+  "size": "large",
+  "type": "Beast",
+  "subtype": "",
+  "group": "Animals",
+  "alignment": "",
+  "armor_class": 10,
+  "armor_desc": null,
+  "hit_points": 10,
+  "hit_dice": "",
+  "speed": {
+    "walk": 50
+  },
+  "strength": 14,
+  "dexterity": 10,
+  "constitution": 14,
+  "intelligence": 2,
+  "wisdom": 8,
+  "charisma": 4,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "Camel Resilience",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "-",
+  "languages": "-",
+  "cr": 0.125,
+  "challenge_rating": "1/8",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "_Melee Weapon Attack:_ +4 to hit, reach 5 ft., one creature. _Hit:_ 4 (1d4+2) bludgeoning damage."
+    },
+    {
+      "name": "Bile Spit",
+      "desc": "_Ranged Weapon Attack:_ +2 to hit, range 20/60 ft., one creature. _Hit:_ 2 (1d4) acid damage, and the target must succeed on a DC 12 CON save or be smelly for 1 hour or until a creature spends 1 minute cleaning off the spit. A smelly creature has disadvantage on CHA checks."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Camel Resilience",
+      "desc": "The camel is resistant to exhaustion, and it requires only half the amount of water that a typical Beast of its size needs."
+    }
+  ],
+  "legendary_actions": []
+}

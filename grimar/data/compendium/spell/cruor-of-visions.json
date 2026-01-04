@@ -1,0 +1,29 @@
+{
+  "slug": "cruor-of-visions",
+  "name": "Cruor of Visions",
+  "desc": "You prick your finger with a bone needle as you cast this spell, taking 1 necrotic damage. This drop of blood must be caught in a container such as a platter or a bowl, where it grows into a pool 1 foot in diameter. This pool acts as a crystal ball for the purpose of scrying. If you place a drop (or dried flakes) of another creature's blood in the cruor of visions, the creature has disadvantage on any Wisdom saving throw to resist scrying. Additionally, you can treat the pool of blood as a crystal ball of telepathy (see the crystal ball description in the Fifth Edition rules). I When you cast this spell using a spell slot of 7th level or higher, the pool of blood acts as either a crystal ball of mind reading or a crystal ball of true seeing (your choice when the spell is cast).",
+  "higher_level": "",
+  "level": "5th-level",
+  "level_int": 5,
+  "school": "divination",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "5 Minutes",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 minute",
+  "range": "Self",
+  "target_range_sort": 0,
+  "spell_level": 5,
+  "dnd_class": "Sorceror, Warlock, Wizard, Cleric",
+  "spell_lists": [
+    "cleric",
+    "warlock",
+    "wizard"
+  ]
+}

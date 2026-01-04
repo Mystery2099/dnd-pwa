@@ -1,0 +1,11 @@
+{
+  "slug": "cloak-of-elvenkind-a5e",
+  "name": "Cloak of Elvenkind",
+  "type": "Wondrous Item",
+  "desc": "While you wear this cloak with its hood up, its color changes to camouflage you. While camouflaged, you gain _advantage_  on Dexterity (Stealth) checks made to hide and creatures have _disadvantage_  on Wisdom (Perception) checks made to see you. You can use an action to put the hood up or down.",
+  "rarity": "Uncommon",
+  "requires_attunement": "requires attunement",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

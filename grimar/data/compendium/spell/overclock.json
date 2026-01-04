@@ -1,0 +1,29 @@
+{
+  "slug": "overclock",
+  "name": "Overclock",
+  "desc": "Deep Magic: clockwork You cause a targeted piece of clockwork to speed up past the point of control for the duration of the spell. The targeted clockwork can't cast spells with verbal components or even communicate effectively (all its utterances sound like grinding gears). At the start of each of its turns, the target must make a Wisdom saving throw. If the saving throw fails, the clockwork moves at three times its normal speed in a random direction and its turn ends; it can't perform any other actions. If the saving throw succeeds, then until the end of its turn, the clockwork's speed is doubled and it gains an additional action, which must be Attack (one weapon attack only), Dash, Disengage, Hide, or Use an Object. When the spell ends, the clockwork takes 2d8 force damage. It also must be rewound or refueled and it needs to have its daily maintenance performed immediately, if it relies on any of those things.",
+  "higher_level": "",
+  "level": "3rd-level",
+  "level_int": 3,
+  "school": "transmutation",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "1 Minute",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "30 Feet",
+  "target_range_sort": 30,
+  "spell_level": 3,
+  "dnd_class": "Wizard, Cleric, Bard",
+  "spell_lists": [
+    "cleric",
+    "bard",
+    "wizard"
+  ]
+}

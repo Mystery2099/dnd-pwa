@@ -19,9 +19,10 @@ It prioritizes the **"Arcane Aero"** aesthetic (glassmorphism/3D depth) and util
 
 ### 2.1 The Compendium (Database)
 
-  * **Data Source:** Hybrid Model.
-      * **Seed Data:** Auto-fetched from the Open5e API (SRD content) into our local SQLite database.
-      * **Caching:** External API data is cached locally to prevent rate limits and enable offline viewing.
+  * **Data Source:** Multi-Provider System.
+      * **Providers:** Support for Open5e, 5e-bits, SRD, and Homebrew (File-based).
+      * **Sync:** Robust synchronization with retry logic and "jsonPath" optimization to keep the database lightweight.
+  * **Types:** Extensible support for Spells, Monsters, Items, Feats, Backgrounds, Races, and Classes.
   * **Homebrew:** Users can create custom Spells/Items.
       * **Visibility:** **Public by Default.** All users on the server can see all homebrew items (simplifies MVP schema).
   * **Global Search:** `Cmd+K` command palette to find "Fireball" or "Goblin" instantly from any view.
@@ -144,7 +145,7 @@ The Compendium should feel like a deep, organized library of magical knowledge. 
 ##### 1. Sidebar: The "Control Panel"
 * **Material:** **Obsidian** (`surface.canvas`), darker and less blurry than the main content area, providing visual separation.
 * **Elements:** Filter groups use small, inset inputs (Spec 5.2) and custom toggles (Spec 5.3) for a tactile feel.
-* **Key Filters:** Class, Spell Level (slider), School (checkboxes), Components (check-boxes), Homebrew/SRD toggle.
+* **Key Filters:** Class, Spell Level (slider), School (checkboxes), Components (check-boxes), Source Selector (Open5e, SRD, Homebrew).
 
 ##### 2. Main Content: The "Shards" Grid
 * **Layout:** Responsive Masonry/Grid of `SpellCard.svelte` or `ItemCard.svelte`.
@@ -328,9 +329,10 @@ The Dashboard is the landing space for ongoing play. It should be optimized for 
 **Table: `compendium_items`**
 
   * `id` (PK)
-  * `source` (Enum: "SRD", "Homebrew")
-  * `type` (Enum: "Spell", "Weapon", "Item", "Monster")
+  * `source` (Text) - Provider ID (e.g., "open5e", "homebrew")
+  * `type` (Text) - Entity type (Spell, Weapon, Item, Monster, Feat, etc.)
   * `data` (JSON) - *Full definition object*
+  * `jsonPath` (Text) - *Path to local JSON file for detailed data*
   * `created_by` (FK -\> users.username, Nullable)
 
 **Table: `characters`**

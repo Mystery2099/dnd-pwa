@@ -1,0 +1,44 @@
+{
+  "slug": "swarm-of-khalkos-spawn-a5e",
+  "name": "Swarm of Khalkos Spawn",
+  "size": "Medium",
+  "type": "Aberration",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 16,
+  "armor_desc": "",
+  "hit_points": 71,
+  "hit_dice": "11d8+22",
+  "speed": {
+    "walk": 30,
+    "fly": 30
+  },
+  "strength": 6,
+  "dexterity": 16,
+  "constitution": 14,
+  "intelligence": 18,
+  "wisdom": 14,
+  "charisma": 12,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "fire, psychic, radiant; bludgeoning, piercing, slashing",
+  "damage_immunities": "",
+  "condition_immunities": "charmed, frightened, grappled, paralyzed, petrified, prone, restrained, stunned",
+  "senses": "darkvision 60 ft., passive Perception 12",
+  "languages": "telepathy 120 ft.",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Sting",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one creature. Hit: 13 (4d4+3) piercing damage plus 14 (4d6) poison damage  or 8 (2d4+3) piercing damage plus 7 (2d6) poison damage if the swarm is bloodied."
+    },
+    {
+      "name": "Chaos Pheromones",
+      "desc": "The swarm emits a cloud of pheromones in the air in a 10-foot-radius. The cloud spreads around corners. Each non-khalkos creature in the area makes a DC 12 Intelligence saving throw. On a failure  the creature is confused for 1 minute. It repeats the saving throw at the end of each of its turns  ending the effect on itself on a success. If the creature makes its saving throw or the condition ends for it  it is immune to the chaos pheromones of khalkos spawn for the next 24 hours."
+    }
+  ],
+  "special_abilities": [],
+  "legendary_actions": null
+}

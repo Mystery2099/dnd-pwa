@@ -1,0 +1,28 @@
+{
+  "slug": "skull-road",
+  "name": "Skull Road",
+  "desc": "You conjure a portal linking an unoccupied space you can see within range to an imprecise location on the plane of Evermaw. The portal is a circular opening, which you can make 5-20 feet in diameter. You can orient the portal in any direction you choose. The portal lasts for the duration. If your casting is at 5th level, this opens a pathway to the River of Tears, to the Vitreous Mire, or to the Plains of Bone-travel to a settlement can take up to 7 days (1d6+1). If cast at 7th level, the skull road spell opens a portal to a small settlement of gnolls, ghouls, or shadows on the plane near the Eternal Palace of Mot or a similar settlement. Undead casters can use this spell in the reverse direction, opening a portal from Evermaw to the mortal world, though with similar restrictions. At 5th level, the portal opens in a dark forest, cavern, or ruins far from habitation. At 7th level, the skull road leads directly to a tomb, cemetery, or mass grave near a humanoid settlement of some kind.",
+  "higher_level": "",
+  "level": "5th-level",
+  "level_int": 5,
+  "school": "conjuration",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "1 Minute",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "60 Feet",
+  "target_range_sort": 60,
+  "spell_level": 5,
+  "dnd_class": "Wizard, Cleric",
+  "spell_lists": [
+    "cleric",
+    "wizard"
+  ]
+}

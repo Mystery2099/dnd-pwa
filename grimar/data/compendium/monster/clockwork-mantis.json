@@ -1,0 +1,75 @@
+{
+  "slug": "clockwork-mantis",
+  "name": "Clockwork Mantis",
+  "size": "Large",
+  "type": "Construct",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 15,
+  "armor_desc": "natural armor",
+  "hit_points": 68,
+  "hit_dice": "8d10+24",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 13,
+  "dexterity": 19,
+  "constitution": 16,
+  "intelligence": 3,
+  "wisdom": 15,
+  "charisma": 1,
+  "skills": {
+    "perception": 5,
+    "stealth": 7
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "poison, psychic; bludgeoning, piercing, and slashing from nonmagical attacks not made with adamantine weapons",
+  "condition_immunities": "charmed, exhaustion, frightened, paralyzed, petrified, poisoned",
+  "senses": "darkvision 60 ft., passive Perception 15",
+  "languages": "understands Common but can’t speak",
+  "cr": 6,
+  "challenge_rating": "6",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The clockwork mantis makes two serrated blade attacks. If both attacks hit the same target, the mantis can make a bite attack against another target within range as a bonus action."
+    },
+    {
+      "name": "Serrated Blade",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) slashing damage",
+      "attack_bonus": 7,
+      "damage_dice": "2d6+4"
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) piercing damage.",
+      "attack_bonus": 7,
+      "damage_dice": "2d8+4"
+    },
+    {
+      "name": "Invisibility",
+      "desc": "The clockwork mantis turns invisible until it attacks or until its concentration ends (as if concentrating on a spell). Any equipment the mantis wears or carries is invisible with it."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Hobbling Strike",
+      "desc": "When the clockwork mantis makes a successful opportunity attack, the target's speed is reduced to 0 until the start of its next turn."
+    },
+    {
+      "name": "Immutable Form",
+      "desc": "The clockwork mantis is immune to any spell or effect that would alter its form."
+    },
+    {
+      "name": "Magic Resistance",
+      "desc": "The clockwork mantis has advantage on saving throws against spells and other magical effects."
+    },
+    {
+      "name": "Standing Leap",
+      "desc": "The clockwork mantis's long jump is up to 20 feet and its high jump is up to 10 feet, with or without a running start."
+    }
+  ],
+  "legendary_actions": null
+}

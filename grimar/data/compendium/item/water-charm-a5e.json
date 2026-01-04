@@ -1,0 +1,11 @@
+{
+  "slug": "water-charm-a5e",
+  "name": "Water Charm",
+  "type": "Wondrous Item",
+  "desc": "While wearing this charm you gain a swim speed equal to your Speed, or you can break the charm to release its power, destroying it to activate one of the following effects.\n\n* **Breathe:** Cast _water breathing_ .\n* **Cure:** Cast __cure wounds_ at 3rd-level (+3 spellcasting ability modifier).\n* **Numb:** Cast _sleet storm_  (spell save DC 15).\n\n**_Curse_**. Releasing the charm’s power attracts the attention of a _marid_  or _water elemental_  who seeks you out to recruit you for a task.",
+  "rarity": "Uncommon",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

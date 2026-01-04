@@ -1,0 +1,52 @@
+{
+  "slug": "awakened_shrub_bf",
+  "name": "Awakened Shrub",
+  "size": "small",
+  "type": "Plant",
+  "subtype": "",
+  "group": "Animals",
+  "alignment": "",
+  "armor_class": 10,
+  "armor_desc": null,
+  "hit_points": 9,
+  "hit_dice": "",
+  "speed": {
+    "walk": 20
+  },
+  "strength": 2,
+  "dexterity": 10,
+  "constitution": 10,
+  "intelligence": 10,
+  "wisdom": 10,
+  "charisma": 6,
+  "skills": {},
+  "damage_vulnerabilities": "fire",
+  "damage_resistances": "piercing,Plant Resilience",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "-",
+  "languages": "one language known by its creator",
+  "cr": 0,
+  "challenge_rating": "0",
+  "actions": [
+    {
+      "name": "Rake",
+      "desc": "_Melee Weapon Attack:_ +2 to hit, reach 5 ft., one target. _Hit:_ 2 (1d4) slashing damage."
+    },
+    {
+      "name": "Thorn",
+      "desc": "_Ranged Weapon Attack:_ +2 to hit, range 15/30 ft., one target. _Hit:_ 2 (1d4) piercing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "False Appearance",
+      "desc": "While the shrub remains motionless, it is indistinguishable from a normal shrub."
+    },
+    {
+      "name": "Plant Resilience",
+      "desc": "The shrub is resistant to exhaustion and to the paralyzed, petrified, and unconscious conditions."
+    }
+  ],
+  "legendary_actions": []
+}

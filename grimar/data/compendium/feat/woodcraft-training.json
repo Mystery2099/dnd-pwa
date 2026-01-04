@@ -1,0 +1,13 @@
+{
+  "slug": "woodcraft-training",
+  "name": "Woodcraft Training",
+  "desc": "You have learned to survive in the wilds, a useful skill for almost any adventurer. You gain the following benefits:",
+  "prerequisite": null,
+  "effects_desc": [
+    "You gain proficiency with the herbalism kit, navigator's kit, a simple ranged weapon, or a martial ranged weapon.",
+    "You gain two exploration knacks of your choice from the ranger class."
+  ],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

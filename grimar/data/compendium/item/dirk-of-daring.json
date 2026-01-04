@@ -1,0 +1,11 @@
+{
+  "slug": "dirk-of-daring",
+  "name": "Dirk of Daring",
+  "type": "Weapon",
+  "desc": "You gain a +1 bonus to attack and damage rolls made with this magic weapon. While holding the dagger, you have advantage on saving throws against being frightened.",
+  "rarity": "uncommon",
+  "requires_attunement": "requires attunement",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

@@ -1,0 +1,11 @@
+{
+  "slug": "draught-of-the-black-owl",
+  "name": "Draught of the Black Owl",
+  "type": "Potion",
+  "desc": "When you drink this potion, you transform into a black-feathered owl for 1 hour. This effect works like the polymorph spell, except you can take only the form of an owl. While you are in the form of an owl, you retain your Intelligence, Wisdom, and Charisma scores. If you are a druid with the Wild Shape feature, you can transform into a giant owl instead. Drinking this potion doesn't expend a use of Wild Shape.",
+  "rarity": "common",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

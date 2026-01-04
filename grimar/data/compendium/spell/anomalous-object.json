@@ -1,0 +1,27 @@
+{
+  "slug": "anomalous-object",
+  "name": "Anomalous Object",
+  "desc": "Deep Magic: temporal By touching an object, you retrieve another version of the object from elsewhere in time. If the object is attended, you must succeed on a melee spell attack roll against the creature holding or controlling the object. Any effect that affects the original object also affects the duplicate (charges spent, damage taken, etc.) and any effect that affects the duplicate also affects the original object. If either object is destroyed, both are destroyed. This spell does not affect sentient items or unique artifacts.",
+  "higher_level": "",
+  "level": "7th-level",
+  "level_int": 7,
+  "school": "conjuration",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "1 Minute",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "Touch",
+  "target_range_sort": 1,
+  "spell_level": 7,
+  "dnd_class": "Wizard",
+  "spell_lists": [
+    "wizard"
+  ]
+}

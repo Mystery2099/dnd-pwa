@@ -1,0 +1,40 @@
+{
+  "slug": "giant-lizard-a5e",
+  "name": "Giant Lizard",
+  "size": "Large",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 12,
+  "armor_desc": "",
+  "hit_points": 19,
+  "hit_dice": "3d10+3",
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "strength": 14,
+  "dexterity": 12,
+  "constitution": 12,
+  "intelligence": 2,
+  "wisdom": 10,
+  "charisma": 4,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 30 ft., passive Perception 10",
+  "languages": "",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4+2) piercing damage."
+    }
+  ],
+  "special_abilities": null,
+  "legendary_actions": null
+}

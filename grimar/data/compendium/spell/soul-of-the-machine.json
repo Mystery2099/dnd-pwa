@@ -1,0 +1,28 @@
+{
+  "slug": "soul-of-the-machine",
+  "name": "Soul of the Machine",
+  "desc": "Deep Magic: clockwork One willing creature you touch becomes immune to mind-altering effects and psychic damage for the spell's duration.",
+  "higher_level": "",
+  "level": "3rd-level",
+  "level_int": 3,
+  "school": "abjuration",
+  "components": "V, S",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "1 Hour",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "Touch",
+  "target_range_sort": 1,
+  "spell_level": 3,
+  "dnd_class": "Paladin, Cleric, Bard",
+  "spell_lists": [
+    "cleric",
+    "bard"
+  ]
+}

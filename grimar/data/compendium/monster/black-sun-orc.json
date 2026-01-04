@@ -1,0 +1,73 @@
+{
+  "slug": "black-sun-orc",
+  "name": "Black Sun Orc",
+  "size": "Medium",
+  "type": "Humanoid",
+  "subtype": "orc",
+  "group": null,
+  "alignment": "chaotic evil",
+  "armor_class": 14,
+  "armor_desc": "hide armor",
+  "hit_points": 65,
+  "hit_dice": "10d8+20",
+  "speed": {
+    "climb": 20,
+    "walk": 30
+  },
+  "strength": 16,
+  "dexterity": 14,
+  "constitution": 14,
+  "intelligence": 9,
+  "wisdom": 12,
+  "charisma": 8,
+  "skills": {
+    "perception": 3,
+    "stealth": 4,
+    "survival": 3
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 13",
+  "languages": "Common, Orc",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The orc makes two attacks with its greatclub or with its sling."
+    },
+    {
+      "name": "Greatclub",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) bludgeoning damage.",
+      "attack_bonus": 5,
+      "damage_dice": "1d8+3"
+    },
+    {
+      "name": "Sling",
+      "desc": "Ranged Weapon Attack: +4 to hit, range 30/120 ft., one target. Hit: 4 (1d4 + 2) bludgeoning damage.",
+      "attack_bonus": 4,
+      "damage_dice": "1d4+2"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Aggressive",
+      "desc": "As a bonus action, the orc can move up to its speed toward a hostile creature that it can see."
+    },
+    {
+      "name": "Black Sun Sight",
+      "desc": "Magical darkness doesn't impede the Black Sun orc's darkvision."
+    },
+    {
+      "name": "Light Sensitivity",
+      "desc": "While in bright light, the orc has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight."
+    },
+    {
+      "name": "Stone Camouflage",
+      "desc": "The orc has advantage on Dexterity (Stealth) checks made to hide in rocky terrain."
+    }
+  ],
+  "legendary_actions": null
+}

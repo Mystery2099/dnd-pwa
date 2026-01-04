@@ -1,0 +1,54 @@
+{
+  "slug": "red-dragon-wyrmling-a5e",
+  "name": "Red Dragon Wyrmling",
+  "size": "Medium",
+  "type": "Dragon",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 17,
+  "armor_desc": "",
+  "hit_points": 75,
+  "hit_dice": "10d8+30",
+  "speed": {
+    "walk": 30,
+    "climb": 30,
+    "fly": 60
+  },
+  "strength": 18,
+  "dexterity": 12,
+  "constitution": 16,
+  "intelligence": 12,
+  "wisdom": 10,
+  "charisma": 14,
+  "skills": {
+    "intimidation": 4,
+    "perception": 2,
+    "stealth": 3
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "fire",
+  "condition_immunities": "",
+  "senses": "blindsight 10 ft., darkvision 60 ft., passive Perception 12",
+  "languages": "Draconic",
+  "cr": 4,
+  "challenge_rating": "4",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 20 (3d10 + 4) piercing damage."
+    },
+    {
+      "name": "Fire Breath (Recharge 5-6)",
+      "desc": "The dragon exhales a blast of fire in a 15-foot cone. Each creature in that area makes a DC 15 Dexterity saving throw  taking 24 (7d6) fire damage on a failed save or half damage on a success."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Volcanic Tyrant",
+      "desc": "The dragon is immune to the effects of poisonous gases caused by volcanic environments. It also ignores difficult terrain caused by lava."
+    }
+  ],
+  "legendary_actions": null
+}

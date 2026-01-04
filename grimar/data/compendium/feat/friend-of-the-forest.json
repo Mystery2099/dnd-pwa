@@ -1,0 +1,13 @@
+{
+  "slug": "friend-of-the-forest",
+  "name": "Friend of the Forest",
+  "desc": "After spending some time in forests, you have attuned yourself to the ways of the woods and the creatures in it.  ",
+  "prerequisite": "*N/A*",
+  "effects_desc": [
+    "* You learn the *treeheal* (see the Magic and Spells chapter) cantrip and two other druid cantrips of your choice.",
+    "* You also learn the *speak with animals* spell and can cast it once without expending a spell slot. Once you cast it, you must finish a short or long rest before you can cast it in this way again. Your spellcasting ability for these spells is Wisdom."
+  ],
+  "document__slug": "toh",
+  "document__title": "Tome of Heroes",
+  "document__url": "https://koboldpress.com/kpstore/product/tome-of-heroes-for-5th-edition/"
+}

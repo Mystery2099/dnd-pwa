@@ -1,0 +1,11 @@
+{
+  "slug": "vigilant-mug",
+  "name": "Vigilant Mug",
+  "type": "Wondrous item",
+  "desc": "An impish face sits carved into the side of this bronze mug, its eyes a pair of clear, blue crystals. The imp's eyes turn red when poison or poisonous material is placed or poured inside the mug.",
+  "rarity": "common",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

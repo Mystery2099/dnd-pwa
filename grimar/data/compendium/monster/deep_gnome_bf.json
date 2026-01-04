@@ -1,0 +1,52 @@
+{
+  "slug": "deep_gnome_bf",
+  "name": "Deep Gnome",
+  "size": "small",
+  "type": "Humanoid",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 15,
+  "armor_desc": "chain shirt",
+  "hit_points": 23,
+  "hit_dice": "",
+  "speed": {
+    "walk": 20
+  },
+  "strength": 14,
+  "dexterity": 14,
+  "constitution": 14,
+  "intelligence": 12,
+  "wisdom": 10,
+  "charisma": 8,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 120 ft.",
+  "languages": "Gnomish,Terran,Undercommon",
+  "cr": 0.5,
+  "challenge_rating": "1/2",
+  "actions": [
+    {
+      "name": "War Pick",
+      "desc": "_Melee Weapon Attack:_ +4 to hit, reach 5 ft., one target. _Hit:_ 6 (1d8+2) piercing damage."
+    },
+    {
+      "name": "Crystalline Dart",
+      "desc": "_Ranged Weapon Attack:_ +4 to hit, range 30/120 ft., one target. _Hit:_ 7 (2d4+2) piercing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Gnome Cunning",
+      "desc": "The deep gnome has advantage on INT, WIS, and CHA saves against magic."
+    },
+    {
+      "name": "Stone Camouflage",
+      "desc": "The deep gnome's Stealth is 17 while in rocky terrain."
+    }
+  ],
+  "legendary_actions": []
+}

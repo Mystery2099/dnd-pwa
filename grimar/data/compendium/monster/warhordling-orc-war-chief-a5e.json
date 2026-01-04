@@ -1,0 +1,49 @@
+{
+  "slug": "warhordling-orc-war-chief-a5e",
+  "name": "Warhordling Orc War Chief",
+  "size": "Medium",
+  "type": "Humanoid",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 16,
+  "armor_desc": "",
+  "hit_points": 90,
+  "hit_dice": "12d8+36",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 18,
+  "dexterity": 18,
+  "constitution": 16,
+  "intelligence": 10,
+  "wisdom": 12,
+  "charisma": 14,
+  "skills": {
+    "athletics": 7,
+    "intimidation": 5,
+    "perception": 4,
+    "stealth": 7,
+    "survival": 4
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 14",
+  "languages": "any one",
+  "cr": 5,
+  "challenge_rating": "5",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The warrior attacks twice."
+    },
+    {
+      "name": "Greataxe",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 10 (1d12 + 4) slashing damage. If the warrior has moved this turn  this attack is made with advantage."
+    }
+  ],
+  "special_abilities": null,
+  "legendary_actions": null
+}

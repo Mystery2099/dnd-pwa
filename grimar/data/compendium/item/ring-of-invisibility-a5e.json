@@ -1,0 +1,11 @@
+{
+  "slug": "ring-of-invisibility-a5e",
+  "name": "Ring of Invisibility",
+  "type": "Ring",
+  "desc": "While wearing this ring, you can use an action to turn _invisible_  along with anything you are carrying or wearing. You remain invisible until the ring is removed, you attack or cast a spell, or you use a bonus action to become visible.",
+  "rarity": "Legendary",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

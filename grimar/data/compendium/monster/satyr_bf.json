@@ -1,0 +1,52 @@
+{
+  "slug": "satyr_bf",
+  "name": "Satyr",
+  "size": "medium",
+  "type": "Fey",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 13,
+  "armor_desc": null,
+  "hit_points": 23,
+  "hit_dice": "",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 12,
+  "dexterity": 16,
+  "constitution": 10,
+  "intelligence": 12,
+  "wisdom": 10,
+  "charisma": 20,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "Fey Resilience",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "-",
+  "languages": "Common,Elvish,Sylvan",
+  "cr": 0.5,
+  "challenge_rating": "1/2",
+  "actions": [
+    {
+      "name": "Ram",
+      "desc": "_Melee Weapon Attack:_ +5 to hit, reach 5 ft., one target. _Hit:_ 8 (2d4+3) bludgeoning damage."
+    },
+    {
+      "name": "Intoxicating Bolt",
+      "desc": "_Ranged Spell Attack:_ +5 to hit, range 60 ft., one target. _Hit:_ 7 (1d8+3) poison damage, and the target must succeed on a DC 13 CON save or be incapacitated until the end of its next turn."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Fey Resilience",
+      "desc": "The satyr is resistant to the charmed and unconscious conditions."
+    },
+    {
+      "name": "Magic Resistance",
+      "desc": "The satyr has advantage on saves against spells and other magical effects."
+    }
+  ],
+  "legendary_actions": []
+}

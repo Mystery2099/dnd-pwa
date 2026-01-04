@@ -1,0 +1,11 @@
+{
+  "slug": "necklace-of-adaptation-a5e",
+  "name": "Necklace of Adaptation",
+  "type": "Wondrous Item",
+  "desc": "While wearing this finely-woven necklace, you can breathe normally in any environment and you have _advantage_  on _saving throws_  made against harmful gases, vapors, and other inhaled effects.",
+  "rarity": "Uncommon",
+  "requires_attunement": "requires attunement",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

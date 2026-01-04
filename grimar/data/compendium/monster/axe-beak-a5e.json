@@ -1,0 +1,39 @@
+{
+  "slug": "axe-beak-a5e",
+  "name": "Axe Beak",
+  "size": "Large",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 11,
+  "armor_desc": "",
+  "hit_points": 16,
+  "hit_dice": "3d10",
+  "speed": {
+    "walk": 50
+  },
+  "strength": 14,
+  "dexterity": 12,
+  "constitution": 10,
+  "intelligence": 2,
+  "wisdom": 10,
+  "charisma": 4,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 10",
+  "languages": "",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Beak",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6+2) slashing damage."
+    }
+  ],
+  "special_abilities": null,
+  "legendary_actions": null
+}

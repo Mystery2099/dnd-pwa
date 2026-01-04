@@ -1,0 +1,11 @@
+{
+  "slug": "spellguard-shield",
+  "name": "Spellguard Shield",
+  "type": "Armor (shield)",
+  "desc": "While holding this shield, you have advantage on saving throws against spells and other magical effects, and spell attacks have disadvantage against you.",
+  "rarity": "very rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "wotc-srd",
+  "document__title": "5e Core Rules",
+  "document__url": "http://dnd.wizards.com/articles/features/systems-reference-document-srd"
+}

@@ -1,0 +1,11 @@
+{
+  "slug": "undine-plate",
+  "name": "Undine Plate",
+  "type": "Armor",
+  "desc": "This bright green plate armor is embossed with images of various marine creatures, such as octopuses and rays. While wearing this armor, you have a swimming speed of 40 feet, and you don't have disadvantage on Dexterity (Stealth) checks while underwater.",
+  "rarity": "rare",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

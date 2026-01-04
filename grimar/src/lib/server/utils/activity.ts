@@ -1,5 +1,3 @@
-import { getDb } from '$lib/server/db';
-
 interface ActivityStats {
 	recentlyViewed: Array<{ itemType: string; itemId: string; timestamp: number }>;
 	frequentlyAccessed: Array<{ itemType: string; itemId: string; count: number }>;

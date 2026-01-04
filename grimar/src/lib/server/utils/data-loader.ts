@@ -5,7 +5,7 @@
  * Supports the "external storage" pattern to keep the database lightweight.
  */
 
-import { readFileSync, existsSync, readdirSync } from 'fs';
+import { readFileSync, existsSync, readdirSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import type { CompendiumTypeName } from '$lib/core/types/compendium';
 
@@ -27,7 +27,7 @@ export async function loadDetails(jsonPath: string): Promise<Record<string, unkn
 		const content = readFileSync(fullPath, 'utf-8');
 		return JSON.parse(content) as Record<string, unknown>;
 	} catch (error) {
-		console.error(`Failed to parse compendium data at ${jsonPath}:`, error);
+		console.error(`[data-loader] Failed to parse compendium data at ${jsonPath}:`, error);
 		throw new Error(`Invalid JSON in compendium data file: ${jsonPath}`);
 	}
 }
@@ -61,7 +61,7 @@ export async function loadAllDetails(
 			detailsMap.set(slug, data);
 		}
 	} catch (error) {
-		console.error(`Failed to load all details for type '${type}':`, error);
+		console.error(`[data-loader] Failed to load all details for type '${type}':`, error);
 	}
 
 	return detailsMap;
@@ -71,11 +71,10 @@ export async function loadAllDetails(
  * Helper to ensure the data directory structure exists
  */
 export function ensureDataDirectory(
-	type: CompendiumTypeName,
+	_type: CompendiumTypeName,
 	dataRoot: string = DEFAULT_DATA_ROOT
 ): string {
-	const { mkdirSync } = require('fs');
-	const targetDir = join(process.cwd(), dataRoot, type);
+	const targetDir = join(process.cwd(), dataRoot, _type);
 
 	if (!existsSync(targetDir)) {
 		mkdirSync(targetDir, { recursive: true });

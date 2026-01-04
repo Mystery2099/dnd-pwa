@@ -1,0 +1,49 @@
+{
+  "slug": "fennec-fox",
+  "name": "Fennec Fox",
+  "size": "Tiny",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 11,
+  "armor_desc": null,
+  "hit_points": 7,
+  "hit_dice": "2d4+2",
+  "speed": {
+    "burrow": 5,
+    "walk": 40
+  },
+  "strength": 6,
+  "dexterity": 12,
+  "constitution": 12,
+  "intelligence": 2,
+  "wisdom": 14,
+  "charisma": 10,
+  "skills": {
+    "stealth": 3
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 12",
+  "languages": "—",
+  "cr": 0.125,
+  "challenge_rating": "1/8",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) piercing damage.",
+      "attack_bonus": 3,
+      "damage_dice": "1d4+1"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Keen Hearing and Sight",
+      "desc": "The fennec fox has advantage on Wisdom (Perception) checks that rely on hearing or sight."
+    }
+  ],
+  "legendary_actions": null
+}

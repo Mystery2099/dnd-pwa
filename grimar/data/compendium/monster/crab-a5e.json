@@ -1,0 +1,45 @@
+{
+  "slug": "crab-a5e",
+  "name": "Crab",
+  "size": "Tiny",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 12,
+  "armor_desc": "",
+  "hit_points": 2,
+  "hit_dice": "1d4",
+  "speed": {
+    "walk": 20,
+    "swim": 20
+  },
+  "strength": 2,
+  "dexterity": 10,
+  "constitution": 10,
+  "intelligence": 1,
+  "wisdom": 8,
+  "charisma": 4,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "blindsight 30 ft., passive Perception 9",
+  "languages": "",
+  "cr": 0,
+  "challenge_rating": "0",
+  "actions": [
+    {
+      "name": "Claws",
+      "desc": "Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 1 bludgeoning damage. If this damage would reduce a Small or larger target to 0 hit points  the target takes no damage from this attack."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Amphibious",
+      "desc": "The crab can breathe air and water."
+    }
+  ],
+  "legendary_actions": null
+}

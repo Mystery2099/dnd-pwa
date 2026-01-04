@@ -1,0 +1,28 @@
+{
+  "slug": "ray-of-sickness",
+  "name": "Ray of Sickness",
+  "desc": "A ray of green light appears at your fingertip, arcing towards a target within range.\n\nMake a ranged spell attack against the target. On a hit, the target takes 2d8 poison damage and must make a Constitution saving throw. On a failed save, it is also poisoned until the end of your next turn.\n\n*(This Open5e spell replaces a like-named non-SRD spell from an official source.*",
+  "higher_level": "When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d8 for each slot level above 1st.",
+  "level": "1st-level",
+  "level_int": 1,
+  "school": "Necromancy",
+  "components": "V, S",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Instantaneous",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "60 feet",
+  "target_range_sort": 60,
+  "spell_level": 1,
+  "dnd_class": "Sorcerer, Wizard",
+  "spell_lists": [
+    "sorcerer",
+    "wizard"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "slug": "wind-fan-a5e",
+  "name": "Wind Fan",
+  "type": "Wondrous Item",
+  "desc": "You can use an action to wave this fan and cast _gust of wind_  (save DC 13). Each time the fan is used before the next dawn there is a cumulative 20% chance that it breaks, causing the spell to fail and for it to shred into nonmagical pieces.",
+  "rarity": "Uncommon",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

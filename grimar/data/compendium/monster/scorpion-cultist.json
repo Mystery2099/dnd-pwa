@@ -1,0 +1,60 @@
+{
+  "slug": "scorpion-cultist",
+  "name": "Scorpion Cultist",
+  "size": "Medium",
+  "type": "Humanoid",
+  "subtype": "any race",
+  "group": null,
+  "alignment": "neutral",
+  "armor_class": 13,
+  "armor_desc": "leather armor",
+  "hit_points": 19,
+  "hit_dice": "3d8+6",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 11,
+  "dexterity": 14,
+  "constitution": 15,
+  "intelligence": 10,
+  "wisdom": 13,
+  "charisma": 10,
+  "skills": {
+    "deception": 2,
+    "perception": 3,
+    "stealth": 4
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "poison",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 13",
+  "languages": "Common",
+  "cr": 0.5,
+  "challenge_rating": "1/2",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The scorpion cultist makes two melee attacks or two ranged attacks."
+    },
+    {
+      "name": "Scimitar",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) slashing damage plus 3 (1d6) poison damage.",
+      "attack_bonus": 4,
+      "damage_dice": "1d6"
+    },
+    {
+      "name": "Sling",
+      "desc": "Melee Weapon Attack: +4 to hit, range 30/120 ft., one target. Hit: 4 (1d4 + 2) bludgeoning damage.",
+      "attack_bonus": 4,
+      "damage_dice": "1d4"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Keen Senses",
+      "desc": "The scorpion cultist has advantage on Wisdom (Perception) checks."
+    }
+  ],
+  "legendary_actions": null
+}

@@ -1,0 +1,11 @@
+{
+  "slug": "manual-of-exercise",
+  "name": "Manual of Exercise",
+  "type": "Wondrous item",
+  "desc": "This book contains exercises and techniques to better perform a specific physical task, and its words are charged with magic. If you spend 24 hours over a period of 3 days or fewer studying the tome and practicing its instructions, you gain proficiency in the Strength or Dexterity-based skill (such as Athletics or Stealth) associated with the book. The manual then loses its magic, but regains it in ten years.",
+  "rarity": "rare",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

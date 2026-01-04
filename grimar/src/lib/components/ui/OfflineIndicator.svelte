@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { Wifi, WifiOff, RefreshCw, Database, Clock } from 'lucide-svelte';
-	import { onMount } from 'svelte';
-	import { offlineStore, formatBytes } from '$lib/core/client/offline-store-ui';
+	import { Wifi, WifiOff, Database, RefreshCw } from 'lucide-svelte';
+	import { browser } from '$app/environment';
+	import { offlineStore, formatLastOnline } from '$lib/core/client/offline-store';
+	import { queryClient } from '$lib/core/client/query-client';
 
 	interface Props {
 		showDetails?: boolean;
@@ -9,54 +10,35 @@
 
 	let { showDetails = false }: Props = $props();
 
-	// Reactive state from store
+	// State for offline indicator
 	let isOnline = $state(true);
-	let available = $state(false);
-	let seeding = $state(false);
-	let lastSync = $state<number | null>(null);
-	let stats = $state({ spells: 0, monsters: 0, items: 0 });
-	let storage = $state<{ usage: number; quota: number; percent: number } | null>(null);
+	let lastOnline = $state<number | null>(null);
+	let pendingSync = $state(0);
 
-	let isSyncingLocal = $state(false);
+	// Initialize from store
+	$effect(() => {
+		if (!browser) return;
 
-	onMount(() => {
-		// Subscribe to store manually
 		const unsubscribe = offlineStore.subscribe((state) => {
-			isOnline = state.online;
-			available = state.available;
-			seeding = state.seeding;
-			lastSync = state.lastSync;
-			stats = state.stats;
-			storage = state.storage;
+			isOnline = state.isOnline;
+			lastOnline = state.lastOnline;
+			pendingSync = state.pendingSync;
 		});
 
-		return () => {
-			unsubscribe();
-			offlineStore.destroy();
-		};
+		return unsubscribe;
 	});
 
+	/**
+	 * Trigger a manual sync when online.
+	 */
 	async function handleSync() {
-		isSyncingLocal = true;
+		if (!browser || !isOnline || !queryClient) return;
+
 		try {
-			await offlineStore.seed(true);
-		} finally {
-			isSyncingLocal = false;
+			await queryClient.invalidateQueries();
+		} catch (error) {
+			console.error('[OfflineIndicator] Sync failed:', error);
 		}
-	}
-
-	function formatLastSync(timestamp: number | null): string {
-		if (!timestamp) return 'Never';
-
-		const date = new Date(timestamp);
-		const now = new Date();
-		const diff = now.getTime() - date.getTime();
-		const hours = Math.floor(diff / (1000 * 60 * 60));
-		const days = Math.floor(hours / 24);
-
-		if (days > 0) return `${days}d ago`;
-		if (hours > 0) return `${hours}h ago`;
-		return 'Just now';
 	}
 </script>
 
@@ -76,64 +58,38 @@
 				{/if}
 			</div>
 
-			{#if isSyncingLocal || seeding}
-				<div class="flex items-center gap-2">
-					<RefreshCw class="h-4 w-4 animate-spin text-blue-400" />
-					<span class="text-sm text-blue-400">Syncing...</span>
-				</div>
-			{:else if available}
+			{#if isOnline && queryClient}
 				<button
+					class="flex items-center gap-1 text-xs text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)]"
 					onclick={handleSync}
-					class="flex items-center gap-1 text-xs text-[var(--color-accent)] hover:text-[var(--color-accent)]"
 				>
 					<RefreshCw class="h-3 w-3" />
-					Sync Now
+					Sync
 				</button>
 			{/if}
 		</div>
 
-		<!-- Offline data availability -->
-		<div class="flex items-center gap-2 text-sm text-[var(--color-text-secondary)]">
-			<Database class="h-4 w-4 text-[var(--color-text-muted)]" />
-			<span>
-				{#if available}
-					{stats.spells} spells,
-					{stats.monsters} monsters,
-					{stats.items} items
-				{:else}
-					No offline data
+		<div class="space-y-1 text-xs text-[var(--color-text-secondary)]">
+			{#if isOnline}
+				<p>Connected to server. All features available.</p>
+				{#if lastOnline}
+					<p class="text-[var(--color-text-muted)]">
+						Last online: {formatLastOnline(lastOnline)}
+					</p>
 				{/if}
-			</span>
+			{:else}
+				<p>Offline mode active.</p>
+				<div class="mt-2 flex items-center gap-1 text-[var(--color-text-muted)]">
+					<Database class="h-3 w-3" />
+					<span>Viewing cached data</span>
+				</div>
+				{#if pendingSync > 0}
+					<p class="mt-1 text-amber-400">
+						{pendingSync} pending sync operation{pendingSync > 1 ? 's' : ''}
+					</p>
+				{/if}
+			{/if}
 		</div>
-
-		<!-- Last sync time -->
-		{#if lastSync}
-			<div class="flex items-center gap-2 text-sm text-[var(--color-text-muted)]">
-				<Clock class="h-4 w-4" />
-				<span>Last sync: {formatLastSync(lastSync)}</span>
-			</div>
-		{/if}
-
-		<!-- Storage usage -->
-		{#if storage}
-			<div class="flex items-center gap-2 text-sm">
-				<span class="text-[var(--color-text-secondary)]">
-					{formatBytes(storage.usage)} / {formatBytes(storage.quota)}
-				</span>
-				<span class="text-[var(--color-text-muted)]">({storage.percent.toFixed(1)}%)</span>
-			</div>
-
-			<!-- Storage usage bar -->
-			<div class="mt-2 h-2 w-full overflow-hidden rounded-full bg-[var(--color-bg-card)]">
-				<div
-					class="h-full transition-all duration-300 ease-out"
-					class:bg-blue-500={storage.percent < 70}
-					class:bg-yellow-500={storage.percent >= 70 && storage.percent < 90}
-					class:bg-red-500={storage.percent >= 90}
-					style="width: {storage.percent}%"
-				></div>
-			</div>
-		{/if}
 	</div>
 {:else}
 	<!-- Compact offline indicator -->
@@ -146,16 +102,14 @@
 			<WifiOff class="h-3 w-3 text-red-400" />
 		{/if}
 
-		{#if available}
-			<span class="text-xs text-[var(--color-text-muted)]">
-				{stats.spells + stats.monsters + stats.items} items
-			</span>
-		{:else}
-			<span class="text-xs text-[var(--color-text-muted)]">No offline</span>
-		{/if}
+		<span class="text-xs text-[var(--color-text-muted)]">
+			{isOnline ? 'Online' : 'Offline'}
+		</span>
 
-		{#if isSyncingLocal || seeding}
-			<RefreshCw class="h-3 w-3 animate-spin text-blue-400" />
+		{#if !isOnline && pendingSync > 0}
+			<span class="text-xs text-amber-400">
+				({pendingSync})
+			</span>
 		{/if}
 	</div>
 {/if}

@@ -1,0 +1,15 @@
+{
+  "slug": "monster-hunter",
+  "name": "Monster Hunter",
+  "desc": "You are a peerless slayer of beasts most foul. You gain the following benefits:",
+  "prerequisite": "Prerequisite: Proficiency with Survival, 8th level or higher",
+  "effects_desc": [
+    "You gain an expertise die on checks made to learn information about the Legends and Lore of a creature you can see.",
+    "You learn the altered strike cantrip.",
+    "You gain proficiency with the Douse maneuver and do not have to spend exertion to activate it.",
+    "You gain the tracking skill specialty in Survival."
+  ],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

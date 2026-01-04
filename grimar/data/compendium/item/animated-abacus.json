@@ -1,0 +1,11 @@
+{
+  "slug": "animated-abacus",
+  "name": "Animated Abacus",
+  "type": "Wondrous item",
+  "desc": "If you speak a mathematical equation within 5 feet of this abacus, it calculates the equation and displays the solution. If you are touching the abacus, it calculates only the equations you speak, ignoring all other spoken equations.",
+  "rarity": "common",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

@@ -1,0 +1,62 @@
+{
+  "slug": "ogre-alleybasher",
+  "name": "Ogre, Alleybasher",
+  "size": "Large",
+  "type": "Giant",
+  "subtype": "",
+  "group": null,
+  "alignment": "chaotic evil",
+  "armor_class": 13,
+  "armor_desc": "studded leather",
+  "hit_points": 85,
+  "hit_dice": "10d10+30",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 19,
+  "dexterity": 12,
+  "constitution": 16,
+  "intelligence": 8,
+  "wisdom": 7,
+  "charisma": 7,
+  "skills": {
+    "perception": -2
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60', passive Perception 8",
+  "languages": "Common, Giant",
+  "cr": 4,
+  "challenge_rating": "4",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "Two Fists or three Throw Brics. If it hits one Med or smaller creature with both Fist attacks target knocked prone (DC 13 Str negates prone)."
+    },
+    {
+      "name": "Fist",
+      "desc": "Melee Weapon Attack: +6 to hit, 5 ft., one target, 14 (2d8+4) bludgeoning damage."
+    },
+    {
+      "name": "Throw Brick",
+      "desc": "Ranged Weapon Attack: +6 to hit 20/60' one target 9 (2d4+4) bludgeoning damage."
+    },
+    {
+      "name": "Handful of Sandy Rocks (Recharge 6)",
+      "desc": "Scatters rocks and blinding sand in a 15 ft. cone. Each creature in that area: 14 (4d6) bludgeoning damage and is blinded until the end of its next turn (DC 13 Dex half damage and isn't blinded)."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Imposing Figure",
+      "desc": "Uses its Str modifier instead of its Cha when making Intimidation checks (included above)."
+    },
+    {
+      "name": "I Work for the Boss (3/Day)",
+      "desc": "If subjected to an effect that would force it to make an Int Wis or Cha save while it is within 30' of its superior can use the superior's Int Wis or Cha modifier for the save instead of its own."
+    }
+  ],
+  "legendary_actions": null
+}

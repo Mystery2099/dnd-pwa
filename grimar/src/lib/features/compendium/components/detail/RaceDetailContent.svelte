@@ -42,7 +42,7 @@
 				>Speed: {race.speed || 30}ft</span
 			>
 			{#if traits}
-				{#each traits as trait}
+				{#each traits as trait (trait)}
 					<span
 						class="rounded bg-[var(--color-accent)]/20 px-2 py-1 text-xs text-[var(--color-text-secondary)]"
 						>{trait}</span
@@ -58,7 +58,7 @@
 				Ability Score Increases
 			</div>
 			<div class="flex flex-wrap gap-2 pt-2">
-				{#each abilityBonuses as bonus}
+				{#each abilityBonuses as bonus (bonus.ability_score.name)}
 					<span
 						class="rounded bg-[var(--color-gem-emerald)]/20 px-2 py-1 text-xs font-bold text-[var(--color-gem-emerald)]"
 					>

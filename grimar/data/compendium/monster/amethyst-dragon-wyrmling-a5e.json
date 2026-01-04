@@ -1,0 +1,55 @@
+{
+  "slug": "amethyst-dragon-wyrmling-a5e",
+  "name": "Amethyst Dragon Wyrmling",
+  "size": "Medium",
+  "type": "Dragon",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 16,
+  "armor_desc": "",
+  "hit_points": 45,
+  "hit_dice": "7d8+14",
+  "speed": {
+    "walk": 30,
+    "burrow": 15,
+    "fly": 50
+  },
+  "strength": 14,
+  "dexterity": 14,
+  "constitution": 14,
+  "intelligence": 16,
+  "wisdom": 10,
+  "charisma": 14,
+  "skills": {
+    "deception": 4,
+    "insight": 2,
+    "perception": 2,
+    "persuasion": 4
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "force, psychic",
+  "damage_immunities": "",
+  "condition_immunities": "fatigue",
+  "senses": "darkvision 120 ft., passive Perception 12",
+  "languages": "Deep Speech, Draconic, Undercommon, telepathy 120 ft.",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 13 (2d10 + 2) piercing damage."
+    },
+    {
+      "name": "Concussive Breath (Recharge 5-6)",
+      "desc": "The dragon psionically unleashes telekinetic energy in a 15-foot cone. Each creature in that area makes a DC 12 Constitution saving throw  taking 16 (3d10) force damage on a failed save or half damage on a success."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Far Thoughts",
+      "desc": "The dragon is aware of any creature that uses a psionic ability or communicates telepathically within 100 miles of it. As an action, the dragon can psionically observe a creature, object, or location it is familiar with within 100 miles. While observing a subject in this way, the dragon can see, hear, and communicate telepathically, but it is blind and deaf in regard to its physical senses and does not require food or water. The dragon can psionically observe a subject indefinitely and can end this effect and return to its own senses as an action."
+    }
+  ],
+  "legendary_actions": null
+}

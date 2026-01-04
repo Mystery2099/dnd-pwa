@@ -1,0 +1,11 @@
+{
+  "slug": "blade-of-the-dervish",
+  "name": "Blade of the Dervish",
+  "type": "Weapon",
+  "desc": "This magic scimitar is empowered by your movements. For every 10 feet you move before making an attack, you gain a +1 bonus to the attack and damage rolls of that attack, and the scimitar deals an extra 1d6 slashing damage if the attack hits (maximum of +3 and 3d6). In addition, if you use the Dash action and move within 5 feet of a creature, you can attack that creature as a bonus action. On a hit, the target takes an extra 2d6 slashing damage.",
+  "rarity": "rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

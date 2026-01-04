@@ -1,0 +1,45 @@
+{
+  "slug": "crab_giant_bf",
+  "name": "Crab, Giant",
+  "size": "medium",
+  "type": "Beast",
+  "subtype": "",
+  "group": "Animals",
+  "alignment": "",
+  "armor_class": 15,
+  "armor_desc": "natural armor",
+  "hit_points": 13,
+  "hit_dice": "",
+  "speed": {
+    "walk": 30,
+    "swim": 30
+  },
+  "strength": 14,
+  "dexterity": 14,
+  "constitution": 10,
+  "intelligence": 1,
+  "wisdom": 8,
+  "charisma": 2,
+  "skills": {},
+  "damage_vulnerabilities": "bludgeoning",
+  "damage_resistances": "slashing",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "keensense 30 ft.",
+  "languages": "-",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Pincer",
+      "desc": "_Melee Weapon Attack:_ +4 to hit, reach 5 ft., one creature. _Hit:_ 5 (1d6+2) bludgeoning damage, and the target is grappled (escape DC 12). The crab has two pincers, each of which can grapple only one target."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Amphibious",
+      "desc": "The crab can breathe air and water."
+    }
+  ],
+  "legendary_actions": []
+}

@@ -1,0 +1,11 @@
+{
+  "slug": "horseshoes-of-a-zephyr-a5e",
+  "name": "Horseshoes of a Zephyr",
+  "type": "Wondrous Item",
+  "desc": "These iron horseshoes come in a set of four. While all four shoes are affixed to the hooves of a horse or similar creature, they allow the creature to perform the following feats:\n\n* Move normally while floating 4 inches above the ground, allowing it to cross or stand above nonsolid or unstable surfaces (such as lava or water).\n* Leave no tracks and ignore _difficult terrain_ .\n* Move its Speed for up to 12 hours a day without suffering _fatigue_  from a forced march.",
+  "rarity": "Very Rare",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

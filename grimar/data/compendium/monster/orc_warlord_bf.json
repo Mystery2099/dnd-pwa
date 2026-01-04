@@ -1,0 +1,60 @@
+{
+  "slug": "orc_warlord_bf",
+  "name": "Orc Warlord",
+  "size": "medium",
+  "type": "Humanoid",
+  "subtype": "",
+  "group": "Orcs",
+  "alignment": "",
+  "armor_class": 17,
+  "armor_desc": "half plate",
+  "hit_points": 90,
+  "hit_dice": "",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 18,
+  "dexterity": 14,
+  "constitution": 18,
+  "intelligence": 8,
+  "wisdom": 12,
+  "charisma": 12,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "exhaustion",
+  "damage_immunities": "frightened",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft.",
+  "languages": "Common,Orc",
+  "cr": 4,
+  "challenge_rating": "4",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The orc warlord makes two Longsword attacks and one Skull Club attack, or it makes three Longbow attacks."
+    },
+    {
+      "name": "Longsword",
+      "desc": "_Melee Weapon Attack:_ +6 to hit, reach 5 ft., one target. _Hit:_ 13 (2d8+4) slashing damage."
+    },
+    {
+      "name": "Skull Club",
+      "desc": "_Melee Weapon Attack:_ +6 to hit, reach 5 ft., one target. _Hit:_ 9 (2d4+4) piercing damage."
+    },
+    {
+      "name": "Longbow",
+      "desc": "_Ranged Weapon Attack:_ +4 to hit, range 150/600 ft., one target. _Hit:_ 11 (2d8+2) piercing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Martial Adept",
+      "desc": "A melee or ranged weapon deals one extra die of its damage when the orc warlord hits with it (included in the attack)."
+    },
+    {
+      "name": "Stalwart",
+      "desc": "As the **orc**."
+    }
+  ],
+  "legendary_actions": []
+}

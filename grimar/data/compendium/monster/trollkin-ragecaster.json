@@ -1,0 +1,70 @@
+{
+  "slug": "trollkin-ragecaster",
+  "name": "Trollkin Ragecaster",
+  "size": "Medium",
+  "type": "Humanoid",
+  "subtype": "",
+  "group": null,
+  "alignment": "chaotic neutral",
+  "armor_class": 15,
+  "armor_desc": "leather armor",
+  "hit_points": 112,
+  "hit_dice": "15d8+45",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 14,
+  "dexterity": 17,
+  "constitution": 16,
+  "intelligence": 9,
+  "wisdom": 14,
+  "charisma": 18,
+  "skills": {
+    "perception": 2
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60', passive Perception 15",
+  "languages": "Common, Trollkin",
+  "cr": 5,
+  "challenge_rating": "5",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "Two Claws or two Elemental Blast attacks."
+    },
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +6 to hit, 5 ft., one target, 16 (3d8+3) slashing damage when not ragecasting or 12 (2d8+3) slashing damage while ragecasting."
+    },
+    {
+      "name": "Elemental Blast (Ragecasting Only)",
+      "desc": "Ranged Spell Attack: +7 to hit, 120 ft., one target, 14 (3d6+4) cold fire lightning or thunder (trollkin's choice)."
+    },
+    {
+      "name": "Spellcasting (Ragecasting Only)",
+      "desc": "Cha (DC 15) no material components: At will: thunderwave3/day ea: call lightning firebal1/day: fire shield"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Brutal Claws",
+      "desc": "Its claw deals one extra die of its damage when trollkin isn't ragecasting (included in the attack)."
+    },
+    {
+      "name": "Magic Resistance",
+      "desc": "Advantage: spell/magic effect saves."
+    },
+    {
+      "name": "Regeneration",
+      "desc": "Regains 10 hp at the start of its turn. If it takes acid or fire this trait doesn't function at start of its next turn. Dies only if it starts turn with 0 hp and doesn't regenerate."
+    },
+    {
+      "name": "Thick Hide",
+      "desc": "Its skin is thick and tough granting it a +1 bonus to Armor Class (already factored into its AC)."
+    }
+  ],
+  "legendary_actions": null
+}

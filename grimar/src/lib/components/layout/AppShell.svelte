@@ -53,8 +53,8 @@
 	</div>
 
 	<!-- Main Content Area -->
-	<div class="mx-auto max-w-375 px-3 py-4 pb-16 sm:px-4 sm:py-6 lg:px-8">
-		<div class="grid gap-6 lg:grid-cols-[260px_1fr]">
+	<div class="mx-auto h-full min-h-0 max-w-375 px-3 py-4 pb-16 sm:px-4 sm:py-6 lg:px-8">
+		<div class="grid h-full min-h-0 gap-6 lg:grid-cols-[260px_1fr]">
 			<!-- Sidebar (Obsidian Glass) -->
 			<aside class="hidden lg:block">
 				<SurfaceCard
@@ -67,7 +67,7 @@
 			</aside>
 
 			<!-- Page Content -->
-			<main class="min-w-0">
+			<main class="h-full min-w-0">
 				{@render children()}
 			</main>
 		</div>

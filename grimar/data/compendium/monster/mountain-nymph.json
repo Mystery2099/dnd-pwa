@@ -1,0 +1,67 @@
+{
+  "slug": "mountain-nymph",
+  "name": "Mountain Nymph",
+  "size": "Medium",
+  "type": "Fey",
+  "subtype": "",
+  "group": null,
+  "alignment": "chaotic neutral",
+  "armor_class": 15,
+  "armor_desc": "leather armor",
+  "hit_points": 112,
+  "hit_dice": "15d8+45",
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "strength": 12,
+  "dexterity": 18,
+  "constitution": 16,
+  "intelligence": 10,
+  "wisdom": 18,
+  "charisma": 14,
+  "skills": {
+    "perception": 7,
+    "stealth": 7,
+    "survival": 7
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 90 ft., passive Perception 17",
+  "languages": "Common, Elvish, Sylvan",
+  "cr": 6,
+  "challenge_rating": "6",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The mountain nymph makes three longbow attacks."
+    },
+    {
+      "name": "Longbow",
+      "desc": "Ranged Weapon Attack: +7 to hit, range 150/600 ft., one target. Hit: 8 (1d8 + 4) piercing damage.",
+      "attack_bonus": 7,
+      "damage_dice": "1d8+4"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Hunter's Foresight",
+      "desc": "The mountain nymph can see the immediate future of a creature affected by her hunter's mark spell. While hunter's mark is active on a creature, the mountain nymph has advantage on attack rolls against the creature and on saving throws against the creature's spells and special abilities."
+    },
+    {
+      "name": "Mountain Walk",
+      "desc": "The mountain nymph can move across and climb rocky surfaces without needing to make an ability check. Additionally, difficult terrain composed of rocks or rocky debris doesn't cost her extra movement."
+    },
+    {
+      "name": "Point Blank Hunter",
+      "desc": "When the mountain nymph makes a ranged attack with a bow, she doesn't have disadvantage on the attack roll from being within 5 feet of a hostile creature, though she may still have disadvantage from other sources."
+    },
+    {
+      "name": "Innate Spellcasting",
+      "desc": "The mountain nymph's innate spellcasting ability is Wisdom (spell save DC 15). It can innately cast the following spells, requiring no material components:\nAt will: hunter's mark\n3/day each: misty step, spike growth\n1/day: pass without trace"
+    }
+  ],
+  "legendary_actions": null
+}

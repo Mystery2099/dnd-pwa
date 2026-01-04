@@ -1,0 +1,11 @@
+{
+  "slug": "ring-of-powerful-summons",
+  "name": "Ring of Powerful Summons",
+  "type": "Ring",
+  "desc": "When you summon a creature with a conjuration spell while wearing this ring, the creature gains a +1 bonus to attack and damage rolls and 1d4 + 4 temporary hit points.",
+  "rarity": "rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

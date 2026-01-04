@@ -1,0 +1,73 @@
+{
+  "slug": "hebi-doku",
+  "name": "Hebi-Doku",
+  "size": "Medium",
+  "type": "Fey",
+  "subtype": "kami",
+  "group": null,
+  "alignment": "chaotic evil",
+  "armor_class": 15,
+  "armor_desc": null,
+  "hit_points": 123,
+  "hit_dice": "13d8+65",
+  "speed": {
+    "climb": 40,
+    "walk": 40
+  },
+  "strength": 17,
+  "dexterity": 21,
+  "constitution": 21,
+  "intelligence": 15,
+  "wisdom": 13,
+  "charisma": 17,
+  "skills": {
+    "perception": 4
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "poison",
+  "condition_immunities": "poisoned",
+  "senses": "passive Perception 14",
+  "languages": "Common, Sylvan",
+  "cr": 8,
+  "challenge_rating": "8",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The hebi-doku can use its Transfixing Rattle. It then makes two attacks: one with its bite and one with its disabling sting, or two with its toxic spittle."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 14 (2d8 + 5) piercing plus 14 (4d6) poison damage.",
+      "attack_bonus": 8,
+      "damage_dice": "2d8+5"
+    },
+    {
+      "name": "Disabling Sting",
+      "desc": "Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 12 (3d4 + 5) piercing damage, and the target must succeed on a DC 16 Constitution saving throw or be unable to use bonus actions and reactions until the end of its next turn.",
+      "attack_bonus": 8,
+      "damage_dice": "3d4+5"
+    },
+    {
+      "name": "Toxic Spittle",
+      "desc": "Ranged Weapon Attack: +8 to hit, range 30/90 ft., one target. Hit: 10 (3d6) poison damage, and the target must make a DC 16 Constitution saving throw. On a failure, the target is paralyzed for 1 minute. On a success, the target is poisoned for 1 minute. The creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.",
+      "attack_bonus": 8,
+      "damage_dice": "3d6"
+    },
+    {
+      "name": "Transfixing Rattle",
+      "desc": "The hebi-doku rattles its tail at one creature it can see within 30 feet of it. The target must make a DC 14 Wisdom saving throw or be incapacitated and have its speed reduced to 0 until the end of its next turn."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Keen Smell",
+      "desc": "The hebi-doku has advantage on Wisdom (Perception) checks that rely on smell."
+    },
+    {
+      "name": "Serpentine Mind",
+      "desc": "The hebi-doku can magically command any snake within 120 feet of it, using a limited form of telepathy."
+    }
+  ],
+  "legendary_actions": null
+}

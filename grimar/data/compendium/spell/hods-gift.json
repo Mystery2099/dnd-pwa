@@ -1,0 +1,28 @@
+{
+  "slug": "hods-gift",
+  "name": "Hod's Gift",
+  "desc": "The target gains blindsight to a range of 60 feet.",
+  "higher_level": "When you cast this spell using a spell slot of 6th level or higher, the duration is increased by 1 hour for every slot above 5th level.",
+  "level": "5th-level",
+  "level_int": 5,
+  "school": "transmutation",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "1 Hour",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "Touch",
+  "target_range_sort": 1,
+  "spell_level": 5,
+  "dnd_class": "Wizard, Sorceror, Cleric",
+  "spell_lists": [
+    "cleric",
+    "wizard"
+  ]
+}

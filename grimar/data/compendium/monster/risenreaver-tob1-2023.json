@@ -1,0 +1,54 @@
+{
+  "slug": "risenreaver-tob1-2023",
+  "name": "Risen Reaver",
+  "size": "Large",
+  "type": "Undead",
+  "subtype": "",
+  "group": "null",
+  "alignment": "Chaotic Evil",
+  "armor_class": 15,
+  "armor_desc": "studded leather",
+  "hit_points": 168,
+  "hit_dice": "16d10 + 80",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 19,
+  "dexterity": 16,
+  "constitution": 20,
+  "intelligence": 9,
+  "wisdom": 7,
+  "charisma": 6,
+  "skills": {
+    "Perception": 1
+  },
+  "damage_vulnerabilities": "False",
+  "damage_resistances": "False",
+  "damage_immunities": "False",
+  "condition_immunities": "False",
+  "senses": "darkvision 120 ft., passive perception 11",
+  "languages": "the languages it knew in life",
+  "cr": 7,
+  "challenge_rating": "7",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The risen reaver makes three Bladed Fist attacks."
+    },
+    {
+      "name": "Bladed Fist",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 15 (2d10 + 4) slashing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Blood Sense",
+      "desc": "The risen reaver can pinpoint the location of creatures that aren't Constructs or Undead within 60 feet of it and can sense the general direction of such creatures within 1 mile of it."
+    },
+    {
+      "name": "Undead Nature",
+      "desc": "The risen reaver doesn't require air, food, drink, or sleep."
+    }
+  ],
+  "legendary_actions": []
+}

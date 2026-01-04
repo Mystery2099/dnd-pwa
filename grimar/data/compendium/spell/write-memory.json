@@ -1,0 +1,29 @@
+{
+  "slug": "write-memory",
+  "name": "Write Memory",
+  "desc": "Deep Magic: clockwork You copy your memories, or those learned from the spell read memory, onto an empty memory gear.",
+  "higher_level": "",
+  "level": "4th-level",
+  "level_int": 4,
+  "school": "transmutation",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Instantaneous",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 hour",
+  "range": "Touch",
+  "target_range_sort": 1,
+  "spell_level": 4,
+  "dnd_class": "Wizard, Cleric, Bard",
+  "spell_lists": [
+    "cleric",
+    "bard",
+    "wizard"
+  ]
+}

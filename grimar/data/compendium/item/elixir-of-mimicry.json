@@ -1,0 +1,11 @@
+{
+  "slug": "elixir-of-mimicry",
+  "name": "Elixir of Mimicry",
+  "type": "Potion",
+  "desc": "When you drink this sweet, oily, black liquid, you can imitate the voice of a single creature that you have heard speak within the past 24 hours. The effects last for 3 minutes.",
+  "rarity": "common",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

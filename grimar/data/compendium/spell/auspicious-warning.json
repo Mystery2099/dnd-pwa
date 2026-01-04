@@ -1,0 +1,29 @@
+{
+  "slug": "auspicious-warning",
+  "name": "Auspicious Warning",
+  "desc": "Just in time, you call out a fortunate warning to a creature within range. The target rolls a d4 and adds the number rolled to an attack roll, ability check, or saving throw that it has just made and uses the new result for determining success or failure.",
+  "higher_level": "",
+  "level": "1st-level",
+  "level_int": 1,
+  "school": "enchantment",
+  "components": "V",
+  "requires_verbal_components": true,
+  "requires_somatic_components": false,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Instantaneous",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 reaction, which you take when an ally makes an attack roll, ability check, or saving throw",
+  "range": "30 feet",
+  "target_range_sort": 30,
+  "spell_level": 1,
+  "dnd_class": "Bard, Sorcerer, Wizard",
+  "spell_lists": [
+    "bard",
+    "sorcerer",
+    "wizard"
+  ]
+}

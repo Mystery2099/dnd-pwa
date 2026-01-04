@@ -1,0 +1,56 @@
+{
+  "slug": "giant-wolf-spider-a5e",
+  "name": "Giant Wolf Spider",
+  "size": "Medium",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 13,
+  "armor_desc": "",
+  "hit_points": 13,
+  "hit_dice": "3d8",
+  "speed": {
+    "walk": 40,
+    "climb": 40
+  },
+  "strength": 12,
+  "dexterity": 16,
+  "constitution": 10,
+  "intelligence": 2,
+  "wisdom": 12,
+  "charisma": 4,
+  "skills": {
+    "perception": 3,
+    "stealth": 5
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "blindsight 10 ft., darkvision 60 ft., passive Perception 13",
+  "languages": "",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4+1) piercing damage and the target makes a DC 11 Constitution saving throw  taking 5 (2d4) poison damage on a failure or half damage on a success. If the poison damage reduces the target to 0 hit points  the target is made stable but poisoned for 1 hour  even if it regains hit points  and it is paralyzed while poisoned in this way."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Spider Climb",
+      "desc": "The spider can climb even on difficult surfaces and upside down on ceilings."
+    },
+    {
+      "name": "Web Sense",
+      "desc": "While touching a web, the spider knows the location of other creatures touching that web."
+    },
+    {
+      "name": "Web Walker",
+      "desc": "The spider ignores movement restrictions imposed by webs."
+    }
+  ],
+  "legendary_actions": null
+}

@@ -1,0 +1,71 @@
+{
+  "slug": "trollkin-raider",
+  "name": "Trollkin Raider",
+  "size": "Medium",
+  "type": "Humanoid",
+  "subtype": "trollkin",
+  "group": null,
+  "alignment": "neutral",
+  "armor_class": 14,
+  "armor_desc": "hide armor",
+  "hit_points": 32,
+  "hit_dice": "5d8+10",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 12,
+  "dexterity": 12,
+  "constitution": 14,
+  "intelligence": 9,
+  "wisdom": 12,
+  "charisma": 10,
+  "skills": {
+    "insight": 3,
+    "nature": 1,
+    "perception": 3,
+    "survival": 3
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 13",
+  "languages": "Common, Trollkin",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The trollkin makes two spear attacks or one bite attack and two claw attacks."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) piercing damage.",
+      "attack_bonus": 3,
+      "damage_dice": "1d4+1"
+    },
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) slashing damage.",
+      "attack_bonus": 3,
+      "damage_dice": "1d4+1"
+    },
+    {
+      "name": "Spear",
+      "desc": "Melee or Ranged Weapon Attack: +3 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 4 (1d6 + 1) piercing damage, or 5 (1d8 + 1) piercing damage if used with two hands to make a melee attack.",
+      "attack_bonus": 3,
+      "damage_dice": "1d6+1"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Regeneration",
+      "desc": "The trollkin regains 1 hp at the start of its turn. If the trollkin takes acid or fire damage, this trait doesn't function at the start of the trollkin's next turn. The trollkin dies only if it starts its turn with 0 hp and doesn't regenerate."
+    },
+    {
+      "name": "Thick Hide",
+      "desc": "The trollkin's skin is thick and tough, granting it a +1 bonus to Armor Class. This bonus is included in the trollkin's AC."
+    }
+  ],
+  "legendary_actions": null
+}

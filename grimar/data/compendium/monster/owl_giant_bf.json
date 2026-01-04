@@ -1,0 +1,53 @@
+{
+  "slug": "owl_giant_bf",
+  "name": "Owl, Giant",
+  "size": "large",
+  "type": "Beast",
+  "subtype": "",
+  "group": "Animals",
+  "alignment": "",
+  "armor_class": 12,
+  "armor_desc": null,
+  "hit_points": 15,
+  "hit_dice": "",
+  "speed": {
+    "walk": 5,
+    "fly": 60
+  },
+  "strength": 12,
+  "dexterity": 14,
+  "constitution": 12,
+  "intelligence": 8,
+  "wisdom": 12,
+  "charisma": 10,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 120 ft.",
+  "languages": "Giant Owl,understands Common,Elvish,and Sylvan but can't speak them",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Talons",
+      "desc": "_Melee Weapon Attack:_ +4 to hit, reach 5 ft., one target. _Hit:_ 6 (1d8+2) slashing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Flyby",
+      "desc": "The owl doesn't provoke opportunity attacks when it flies out of an enemy's reach."
+    },
+    {
+      "name": "Heightened Hearing and Sight",
+      "desc": "The owl's Perception is 20 when perceiving by hearing or sight."
+    },
+    {
+      "name": "Quiet Wings",
+      "desc": "The owl's Stealth is 19 while flying."
+    }
+  ],
+  "legendary_actions": []
+}

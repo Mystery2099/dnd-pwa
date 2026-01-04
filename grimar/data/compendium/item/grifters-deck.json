@@ -1,0 +1,11 @@
+{
+  "slug": "grifters-deck",
+  "name": "Grifter's Deck",
+  "type": "Wondrous item",
+  "desc": "When you deal a card from this slightly greasy, well-used deck, you can choose any specific card to be on top of the deck, assuming it hasn't already been dealt. Alternatively, you can choose a general card of a specific value or suit that hasn't already been dealt.",
+  "rarity": "common",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

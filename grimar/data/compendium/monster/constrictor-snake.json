@@ -1,0 +1,7 @@
+{
+  "index": "constrictor-snake",
+  "name": "Constrictor Snake",
+  "type": "beast",
+  "size": "Large",
+  "challenge_rating": 0.25
+}

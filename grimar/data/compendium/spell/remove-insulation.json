@@ -1,0 +1,27 @@
+{
+  "slug": "remove-insulation",
+  "name": "Remove Insulation",
+  "desc": "You target a creature within range, and that creature must succeed on a Fortitude saving throw or become less resistant to lightning damage. A creature with immunity to lightning damage has advantage on this saving throw. On a failure, a creature with immunity to lightning damage instead has resistance to lightning damage for the spell's duration, and a creature with resistance to lightning damage loses its resistance for the duration. A creature without resistance to lightning damage that fails its saving throw takes double damage from lightning for the spell's duration. Remove curse or similar magic ends this spell.",
+  "higher_level": "If you cast this spell using a spell slot of 6th level or higher, the duration is 24 hours. If you use a spell slot of 8th level or higher, a creature with immunity to lightning damage no longer has advantage on its saving throw. If you use a spell slot of 9th level or higher, the spell lasts until it is dispelled.",
+  "level": "4th-level",
+  "level_int": 4,
+  "school": "necromancy",
+  "components": "V, S",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "8 Hours",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "30 Feet",
+  "target_range_sort": 30,
+  "spell_level": 4,
+  "dnd_class": "Warlock",
+  "spell_lists": [
+    "warlock"
+  ]
+}

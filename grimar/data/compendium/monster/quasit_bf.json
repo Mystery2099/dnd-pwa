@@ -1,0 +1,56 @@
+{
+  "slug": "quasit_bf",
+  "name": "Quasit",
+  "size": "tiny",
+  "type": "Fiend",
+  "subtype": "Demon",
+  "group": "Demons",
+  "alignment": "",
+  "armor_class": 13,
+  "armor_desc": null,
+  "hit_points": 35,
+  "hit_dice": "",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 4,
+  "dexterity": 20,
+  "constitution": 10,
+  "intelligence": 6,
+  "wisdom": 10,
+  "charisma": 10,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "Demonic Resilience",
+  "damage_immunities": "Demonic Resilience",
+  "condition_immunities": "",
+  "senses": "darkvision 120 ft.",
+  "languages": "Abyssal,Common",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Claws (True Form Only)",
+      "desc": "_Melee Weapon Attack:_ +5 to hit, reach 5 ft., one target. _Hit:_ 5 (1d4+3) piercing damage, and the target must succeed on a DC 13 Constitution saving throw or take 5 (2d4) poison damage and be poisoned for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success."
+    },
+    {
+      "name": "Slam (Beast Form Only)",
+      "desc": "_Melee Weapon Attack:_ +5 to hit, reach 5 ft., one target. _Hit:_ 10 (2d6+3) bludgeoning, piercing, or slashing damage (based on the type of damage dealt by the Beast form's primary attack, such as Bite)."
+    },
+    {
+      "name": "Invisibility (True Form Only)",
+      "desc": "The quasit magically turns invisible until it attacks, uses Scare, or uses Change Shape, or until its concentration ends (as if concentrating on a spell). Any equipment the quasit wears or carries is invisible with it."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Demonic Resilience",
+      "desc": "The quasit is resistant to cold, fire, and lightning damage. In addition, it is immune to poison damage and to the poisoned condition."
+    },
+    {
+      "name": "Magic Resistance",
+      "desc": "The quasit has advantage on saving throws against spells and other magical effects."
+    }
+  ],
+  "legendary_actions": []
+}

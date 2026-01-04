@@ -1,0 +1,56 @@
+{
+  "slug": "triceratops_bf",
+  "name": "Triceratops",
+  "size": "huge",
+  "type": "Beast",
+  "subtype": "",
+  "group": "Dinosaurs",
+  "alignment": "",
+  "armor_class": 13,
+  "armor_desc": "natural armor",
+  "hit_points": 126,
+  "hit_dice": "",
+  "speed": {
+    "walk": 50
+  },
+  "strength": 22,
+  "dexterity": 8,
+  "constitution": 16,
+  "intelligence": 2,
+  "wisdom": 10,
+  "charisma": 4,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "-",
+  "languages": "-",
+  "cr": 5,
+  "challenge_rating": "5",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The triceratops makes two Gore attacks."
+    },
+    {
+      "name": "Gore",
+      "desc": "_Melee Weapon Attack:_ +9 to hit, reach 5 ft., one target. _Hit:_ 19 (3d8+6) piercing damage."
+    },
+    {
+      "name": "Stomp",
+      "desc": "_Melee Weapon Attack:_ +9 to hit, reach 5 ft., one prone creature. _Hit:_ 17 (2d10+6) bludgeoning damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Hardy",
+      "desc": "Any critical hit against the dinosaur becomes a normal hit."
+    },
+    {
+      "name": "Trampling Charge",
+      "desc": "If the triceratops moves at least 20 feet straight toward a creature and then hits it with a Gore attack on the same turn, that target must succeed on a DC 14 STR save or be knocked prone. If the target is prone, the triceratops can make one Stomp attack against it as a bonus action."
+    }
+  ],
+  "legendary_actions": []
+}

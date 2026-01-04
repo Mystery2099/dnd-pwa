@@ -1,0 +1,74 @@
+{
+  "slug": "haugbui-tob1-2023",
+  "name": "Haugbui",
+  "size": "Medium",
+  "type": "Undead",
+  "subtype": "",
+  "group": "null",
+  "alignment": "Lawful Neutral",
+  "armor_class": 15,
+  "armor_desc": "",
+  "hit_points": 153,
+  "hit_dice": "18d8 + 72",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 18,
+  "dexterity": 20,
+  "constitution": 18,
+  "intelligence": 15,
+  "wisdom": 20,
+  "charisma": 16,
+  "skills": {
+    "Arcana": 7,
+    "History": 7,
+    "Intimidation": 8,
+    "Perception": 10,
+    "Religion": 12
+  },
+  "damage_vulnerabilities": "False",
+  "damage_resistances": "acid, cold, fire, lightning, necrotic, thunder",
+  "damage_immunities": "poison; bludgeoning, piercing, and slashing from nonmagical attacks",
+  "condition_immunities": "charmed, exhaustion, frightened, grappled, paralyzed, petrified, poisoned, restrained",
+  "senses": "truesight 60 ft., passive Perception 20",
+  "languages": "the languages it knew in life, telepathy 120 ft.",
+  "cr": 13,
+  "challenge_rating": "13",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The haugbui makes three Psychic Blast attacks. It can replace one attack with a use of Spellcasting."
+    },
+    {
+      "name": "Psychic Blast",
+      "desc": "Melee or Ranged Spell Attack: +10 to hit, range 120 ft., one target. Hit: 27 (5d8 + 5) psychic damage."
+    },
+    {
+      "name": "Invisibility",
+      "desc": "The haugbui magically turns invisible until it attacks or casts a spell, or until its concentration ends (as if concentrating on a spell). Any equipment the haugbui wears or carries is invisible with it."
+    },
+    {
+      "name": "Spellcasting",
+      "desc": "The haugbui casts one of the following spells, requiring no components and using Wisdom as the spellcasting ability (spell save DC 18):\nAt will: dancing lights, mending, purify food and drink, spare the dying\n3/day each: gust of wind, telekinesis\n1/day each: dispel magic, remove curse"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Incorporeal Movement",
+      "desc": "The haugbui can move through other creatures and objects as if they were difficult terrain. It takes 5 (1d10) force damage if it ends its turn inside an object."
+    },
+    {
+      "name": "Sunlight Sensitivity",
+      "desc": "While in sunlight, the haugbui has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight."
+    },
+    {
+      "name": "Turn Resistance",
+      "desc": "The haugbui has advantage on saving throws against any effect that turns undead."
+    },
+    {
+      "name": "Undead Nature",
+      "desc": "The hangbui doesn't require air, food, drink, or sleep."
+    }
+  ],
+  "legendary_actions": []
+}

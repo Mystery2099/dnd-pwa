@@ -1,0 +1,11 @@
+{
+  "slug": "belt-of-giant-strength-a5e",
+  "name": "Belt of Giant Strength",
+  "type": "Wondrous Item",
+  "desc": "Braided rope made of hair from the same kind of giant as the belt to be made\n\nWearing this belt increases your Strength score to the score granted by the belt. It has no effect if your Strength is equal to or greater than the belt’s score.\n\nEach variety of belt corresponds with a different kind of giant.\n\n__**Table: Belts of Giant Strength**__\n| **Type**                  | **Strength** | **Rarity** | **Cost**   |\n| ------------------------- | ------------ | ---------- | ---------- |\n| _Hill giant_              | 20           | Rare       | 4,000 gp   |\n| _Frost_  or _stone giant_ | 23           | Very rare  | 9,000 gp   |\n| _Fire giant_              | 25           | Very rare  | 20,000 gp  |\n| _Cloud giant_             | 27           | Legendary  | 55,000 gp  |\n| _Storm giant_             | 29           | Legendary  | 150,000 gp |",
+  "rarity": "Rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

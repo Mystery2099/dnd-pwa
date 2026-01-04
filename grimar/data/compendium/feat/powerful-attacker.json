@@ -1,0 +1,13 @@
+{
+  "slug": "powerful-attacker",
+  "name": "Powerful Attacker",
+  "desc": "You reap a bloody harvest with a two-handed weapon.",
+  "prerequisite": null,
+  "effects_desc": [
+    "You gain proficiency with the Cleaving Swing maneuver and do not have to spend exertion to activate it",
+    "Before you make an attack with a heavy weapon you are proficient with, you can choose to make the attack roll with disadvantage. If the attack hits, you deal 10 extra damage."
+  ],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

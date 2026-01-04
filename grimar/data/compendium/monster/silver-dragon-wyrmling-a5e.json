@@ -1,0 +1,60 @@
+{
+  "slug": "silver-dragon-wyrmling-a5e",
+  "name": "Silver Dragon Wyrmling",
+  "size": "Medium",
+  "type": "Dragon",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 17,
+  "armor_desc": "",
+  "hit_points": 60,
+  "hit_dice": "8d8+24",
+  "speed": {
+    "walk": 30,
+    "fly": 60
+  },
+  "strength": 18,
+  "dexterity": 14,
+  "constitution": 16,
+  "intelligence": 12,
+  "wisdom": 10,
+  "charisma": 14,
+  "skills": {
+    "perception": 2,
+    "stealth": 4
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "cold",
+  "condition_immunities": "",
+  "senses": "blindsight 10 ft., darkvision 60 ft., passive Perception 12",
+  "languages": "Draconic",
+  "cr": 3,
+  "challenge_rating": "3",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 20 (3d10 + 4) piercing damage."
+    },
+    {
+      "name": "Breath Weapons (Recharge 5-6)",
+      "desc": "The dragon uses one of the following breath weapons:"
+    },
+    {
+      "name": "Frost Breath",
+      "desc": "The dragon exhales freezing wind in a 15-foot cone. Each creature in the area makes a DC 13 Constitution saving throw  taking 17 (5d6) cold damage on a failed save or half damage on a success."
+    },
+    {
+      "name": "Paralyzing Breath",
+      "desc": "The dragon exhales paralytic gas in a 15-foot cone. Each creature in the area must succeed on a DC 13 Constitution saving throw or be paralyzed until the end of its next turn."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Cloud Strider",
+      "desc": "The dragon suffers no harmful effects from high altitude."
+    }
+  ],
+  "legendary_actions": null
+}

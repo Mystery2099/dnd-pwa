@@ -1,0 +1,62 @@
+{
+  "slug": "glacier-behemoth",
+  "name": "Glacier Behemoth",
+  "size": "Huge",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 18,
+  "armor_desc": "natural armor",
+  "hit_points": 172,
+  "hit_dice": "15d12+75",
+  "speed": {
+    "burrow": 20,
+    "walk": 20
+  },
+  "strength": 24,
+  "dexterity": 3,
+  "constitution": 21,
+  "intelligence": 4,
+  "wisdom": 14,
+  "charisma": 7,
+  "skills": {
+    "athletics": 11,
+    "perception": 6
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "bludgeoning, piercing, and slashing from nonmagical attacks",
+  "damage_immunities": "cold",
+  "condition_immunities": "grappled, prone, restrained",
+  "senses": "darkvision 60 ft., tremorsense 60 ft., passive Perception 16",
+  "languages": "—",
+  "cr": 12,
+  "challenge_rating": "12",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The glacier behemoth makes two bite attacks."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +11 to hit, reach 5 ft., one creature. Hit: 33 (4d12 + 7) piercing damage.",
+      "attack_bonus": 11,
+      "damage_dice": "4d12+7"
+    },
+    {
+      "name": "Inexorable Charge",
+      "desc": "If the glacier behemoth moves at least 10 feet, it can then use this action to continue moving in a 40-foot line that is 15 feet wide. Each creature in this line must make a DC 17 Dexterity saving throw. On a failure, a creature takes 35 (10d6) bludgeoning damage and is knocked prone. On a success, a creature takes half the damage and isn't knocked prone. The glacier behemoth's movement along this line doesn't provoke opportunity attacks."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Ground Disruptor",
+      "desc": "When the glacier behemoth moves, it can choose to make the area it moves through difficult terrain. When it uses Inexorable Charge, it automatically makes the ground difficult terrain."
+    },
+    {
+      "name": "Unstoppable",
+      "desc": "Difficult terrain composed of ice, rocks, sand, or natural vegetation, living or dead, doesn't cost the glacier behemoth extra movement. Its speed can't be reduced by any effect."
+    }
+  ],
+  "legendary_actions": null
+}

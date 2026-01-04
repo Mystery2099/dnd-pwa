@@ -1,0 +1,61 @@
+{
+  "slug": "bone_devil_bf",
+  "name": "Bone Devil",
+  "size": "large",
+  "type": "Fiend",
+  "subtype": "Devil",
+  "group": "Devils",
+  "alignment": "",
+  "armor_class": 18,
+  "armor_desc": "natural armor",
+  "hit_points": 144,
+  "hit_dice": "",
+  "speed": {
+    "walk": 40,
+    "fly": 40
+  },
+  "strength": 18,
+  "dexterity": 16,
+  "constitution": 18,
+  "intelligence": 20,
+  "wisdom": 22,
+  "charisma": 24,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "Devilish Resilience",
+  "damage_immunities": "Devilish Resilience",
+  "condition_immunities": "",
+  "senses": "darkvision 120 ft.",
+  "languages": "Infernal,telepathy 120 ft.",
+  "cr": 9,
+  "challenge_rating": "9",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The devil makes two Claw attacks and one Sting attack."
+    },
+    {
+      "name": "Claw",
+      "desc": "_Melee Weapon Attack:_ +8 to hit, reach 5 ft., one target. _Hit:_ 17 (3d8+4) slashing damage."
+    },
+    {
+      "name": "Sting",
+      "desc": "_Melee Weapon Attack:_ +8 to hit, reach 10 ft., one target. _Hit:_ 15 (2d10+4) piercing damage plus 14 (4d6) poison damage, and the target must succeed on a DC 15 CON save or be poisoned for 1 minute. The target can repeat the save at the end of each of its turns, ending the effect on itself on a success."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Devil's Sight",
+      "desc": "Magical darkness doesn't impede the devil's darkvision."
+    },
+    {
+      "name": "Devilish Resilience",
+      "desc": "The devil is resistant to cold damage and to bludgeoning, piercing, and slashing damage from nonmagical attacks. In addition, it is immune to fire damage and poison damage and to the poisoned condition."
+    },
+    {
+      "name": "Magic Resistance",
+      "desc": "The devil has advantage on saves against spells and other magical effects."
+    }
+  ],
+  "legendary_actions": []
+}

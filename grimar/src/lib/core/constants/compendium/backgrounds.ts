@@ -4,7 +4,6 @@
 
 import { Scroll } from 'lucide-svelte';
 import type { CompendiumTypeConfig } from '$lib/core/types/compendium';
-import { colorMap } from '$lib/core/constants/colors';
 
 export const BACKGROUNDS_CONFIG: CompendiumTypeConfig = {
 	routes: {

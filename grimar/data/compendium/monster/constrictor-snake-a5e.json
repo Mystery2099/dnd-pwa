@@ -1,0 +1,45 @@
+{
+  "slug": "constrictor-snake-a5e",
+  "name": "Constrictor Snake",
+  "size": "Large",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 11,
+  "armor_desc": "",
+  "hit_points": 13,
+  "hit_dice": "2d10+2",
+  "speed": {
+    "walk": 30,
+    "climb": 30,
+    "swim": 30
+  },
+  "strength": 14,
+  "dexterity": 12,
+  "constitution": 12,
+  "intelligence": 2,
+  "wisdom": 10,
+  "charisma": 3,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "blindsight 10 ft., passive Perception 10",
+  "languages": "",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8+2) piercing damage."
+    },
+    {
+      "name": "Constrict",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6+2) bludgeoning damage and the target is grappled (escape DC 14). Until this grapple ends  the target is restrained and the snake can't constrict a different target."
+    }
+  ],
+  "special_abilities": null,
+  "legendary_actions": null
+}

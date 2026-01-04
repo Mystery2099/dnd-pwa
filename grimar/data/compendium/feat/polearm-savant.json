@@ -1,0 +1,13 @@
+{
+  "slug": "polearm-savant",
+  "name": "Polearm Savant",
+  "desc": "You've honed fighting with hafted weapons, including glaives, halberds, pikes, quarterstaffs, or any other similar weapons.",
+  "prerequisite": null,
+  "effects_desc": [
+    "Creatures entering your threatened area provoke attacks of opportunity while you are wielding a hafted weapon.",
+    "You may expend your bonus action to make a haft attack after taking the attack action with a hafted weapon. This attack uses the same attribute modifier as the primary attack and inflicts a d4 bludgeoning damage."
+  ],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

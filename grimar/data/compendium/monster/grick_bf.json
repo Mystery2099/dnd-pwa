@@ -1,0 +1,61 @@
+{
+  "slug": "grick_bf",
+  "name": "Grick",
+  "size": "medium",
+  "type": "Monstrosity",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 14,
+  "armor_desc": "natural armor",
+  "hit_points": 57,
+  "hit_dice": "",
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "strength": 14,
+  "dexterity": 14,
+  "constitution": 10,
+  "intelligence": 2,
+  "wisdom": 14,
+  "charisma": 4,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "bludgeoning,Monstrosity Resilience",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft.",
+  "languages": "-",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The grick makes one Beak attack and one Tentacles attack."
+    },
+    {
+      "name": "Beak",
+      "desc": "_Melee Weapon Attack:_ +4 to hit, reach 5 ft., one target. _Hit:_ 9 (2d6+2) piercing damage."
+    },
+    {
+      "name": "Tentacles",
+      "desc": "_Melee Weapon Attack:_ +4 to hit, reach 5 ft., one target. _Hit:_ 12 (4d4+2) piercing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Monstrosity Resilience",
+      "desc": "The grick is resistant to exhaustion and to the frightened condition."
+    },
+    {
+      "name": "Spider Climb",
+      "desc": "The grick can climb difficult surfaces, including upside ceilings, without needing to make an ability check."
+    },
+    {
+      "name": "Stone Camouflage",
+      "desc": "The grick's Stealth is 17 in rocky terrain."
+    }
+  ],
+  "legendary_actions": []
+}

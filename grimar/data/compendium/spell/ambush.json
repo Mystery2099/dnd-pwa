@@ -1,0 +1,29 @@
+{
+  "slug": "ambush",
+  "name": "Ambush",
+  "desc": "The forest floor swirls and shifts around you to welcome you into its embrace. While in a forest, you have advantage on Dexterity (Stealth) checks to Hide. While hidden in a forest, you have advantage on your next Initiative check. The spell ends if you attack or cast a spell.",
+  "higher_level": "When you cast this spell using a spell slot of 2nd level or higher, you can affect one additional creature for each slot level above 1st. The spell ends if you or any target of this spell attacks or casts a spell.",
+  "level": "1st-level",
+  "level_int": 1,
+  "school": "illusion",
+  "components": "S, M",
+  "requires_verbal_components": false,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Up to 1 hour",
+  "concentration": "yes",
+  "requires_concentration": true,
+  "casting_time": "1 action",
+  "range": "Self",
+  "target_range_sort": 0,
+  "spell_level": 1,
+  "dnd_class": "Druid, Ranger, Sorceror, Wizard",
+  "spell_lists": [
+    "druid",
+    "ranger",
+    "wizard"
+  ]
+}

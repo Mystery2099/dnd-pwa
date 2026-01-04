@@ -1,0 +1,80 @@
+{
+  "slug": "chimera-a5e",
+  "name": "Chimera",
+  "size": "Large",
+  "type": "Monstrosity",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 13,
+  "armor_desc": "",
+  "hit_points": 114,
+  "hit_dice": "12d10+48",
+  "speed": {
+    "walk": 30,
+    "fly": 60
+  },
+  "strength": 18,
+  "dexterity": 10,
+  "constitution": 18,
+  "intelligence": 3,
+  "wisdom": 16,
+  "charisma": 10,
+  "skills": {
+    "perception": 6
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 21",
+  "languages": "",
+  "cr": 7,
+  "challenge_rating": "7",
+  "actions": [
+    {
+      "name": "Headbutt",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) bludgeoning damage. The target must succeed on a DC 15 Strength saving throw or fall prone."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) piercing damage."
+    },
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 9 (2d4 + 4) slashing damage  or 14 (4d4 + 4) slashing damage against a prone target."
+    },
+    {
+      "name": "Breath Weapon (Recharge 5-6)",
+      "desc": "The dragon head breathes fire in a 15-foot cone. Creatures in the area make a DC 15 Dexterity saving throw  taking 21 (6d6) fire damage on a failed save or half damage on a success."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Reactive Heads",
+      "desc": "The chimera can take three reactions per round, but not more than one per turn."
+    },
+    {
+      "name": "Three Heads",
+      "desc": "The chimera has advantage on Perception checks and on saving throws against being blinded, charmed, deafened, frightened, stunned, and knocked unconscious, and it can't be flanked."
+    },
+    {
+      "name": "Wakeful",
+      "desc": "When one of the chimeras heads is asleep, the others are awake."
+    }
+  ],
+  "legendary_actions": [
+    {
+      "name": "The chimera can take 2 legendary actions",
+      "desc": "Only one legendary action can be used at a time and only at the end of another creatures turn. It regains spent legendary actions at the start of its turn."
+    },
+    {
+      "name": "Bite",
+      "desc": "The chimera uses its Bite attack."
+    },
+    {
+      "name": "Claw",
+      "desc": "The chimera uses its Claw attack."
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "slug": "howling-rod",
+  "name": "Howling Rod",
+  "type": "Rod",
+  "desc": "This sturdy, iron rod is topped with the head of a howling wolf with red carnelians for eyes. The rod has 5 charges for the following properties, and it regains 1d4 + 1 expended charges daily at dawn.",
+  "rarity": "rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

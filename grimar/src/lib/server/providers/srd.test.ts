@@ -29,13 +29,14 @@ describe('SrdProvider', () => {
 
 		it('should fetch all monsters via srd service', async () => {
 			const mockMonsters = [{ index: 'goblin', name: 'Goblin' }];
-			vi.spyOn(srdService, 'getMonsters').mockResolvedValue(mockMonsters as any);
+			// Mock the new getMonstersWithDetails function
+			vi.spyOn(srdService, 'getMonstersWithDetails').mockResolvedValue(mockMonsters as any);
 
 			const results = await provider.fetchAllPages('monster');
 
 			expect(results).toHaveLength(1);
 			expect(results[0]).toBe(mockMonsters[0]);
-			expect(srdService.getMonsters).toHaveBeenCalledWith(500);
+			expect(srdService.getMonstersWithDetails).toHaveBeenCalledWith(500);
 		});
 	});
 

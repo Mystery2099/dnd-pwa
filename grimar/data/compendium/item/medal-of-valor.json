@@ -1,0 +1,11 @@
+{
+  "slug": "medal-of-valor",
+  "name": "Medal of Valor",
+  "type": "Wondrous item",
+  "desc": "You are immune to the frightened condition while you wear this medal. If you are already frightened, the effect ends immediately when you put on the medal.",
+  "rarity": "uncommon",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

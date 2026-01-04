@@ -1,0 +1,30 @@
+{
+  "name": "Erina",
+  "slug": "erina",
+  "desc": "## Erina Traits\nYour erina character has traits which complement its curiosity, sociability, and fierce nature.",
+  "asi_desc": "***Ability Score Increase.*** Your Dexterity score increases by 2, and you can choose to increase either your Wisdom or Charisma score by 1.",
+  "asi": [
+    {
+      "attributes": [
+        "Dexterity"
+      ],
+      "value": 2
+    }
+  ],
+  "age": "***Age.*** Erina reach maturity around 15 years and can live up to 60 years, though some erina burrow elders have memories of events which suggest erina can live much longer.",
+  "alignment": "***Alignment.*** Erina are good-hearted and extremely social creatures who have a difficult time adapting to the laws of other species.",
+  "size": "***Size.*** Erina average about 3 feet tall and weigh about 50 pounds. Your size is Small.",
+  "size_raw": "Medium",
+  "speed": {
+    "walk": 25
+  },
+  "speed_desc": "***Speed.*** Your base walking speed is 25 feet.",
+  "languages": "***Languages.*** You can speak Erina and either Common or Sylvan.",
+  "vision": "***Darkvision.*** Accustomed to life in the dark burrows of your people, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+  "traits": "***Hardy.*** The erina diet of snakes and venomous insects has made them hardy. You have advantage on saving throws against poison, and you have resistance against poison damage.\n\n***Spines.*** Erina grow needle-sharp spines in small clusters atop their heads and along their backs. While you are grappling a creature or while a creature is grappling you, the creature takes 1d4 piercing damage at the start of your turn.\n\n***Keen Senses.*** You have proficiency in the Perception skill.\n\n***Digger.*** You have a burrowing speed of 20 feet, but you can use it to move through only earth and sand, not mud, ice, or rock.",
+  "subraces": [],
+  "document__slug": "toh",
+  "document__title": "Tome of Heroes",
+  "document__license_url": "http://open5e.com/legal",
+  "document__url": "https://koboldpress.com/kpstore/product/tome-of-heroes-for-5th-edition/"
+}

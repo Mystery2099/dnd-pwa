@@ -1,0 +1,11 @@
+{
+  "slug": "mail-of-the-sword-master",
+  "name": "Mail of the Sword Master",
+  "type": "Armor",
+  "desc": "While wearing this armor, the maximum Dexterity modifier you can add to determine your Armor Class is 4, instead of 2. While wearing this armor, if you are wielding a sword and no other weapons, you gain a +2 bonus to damage rolls with that sword.",
+  "rarity": "uncommon",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

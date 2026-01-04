@@ -1,0 +1,11 @@
+{
+  "slug": "anthology-of-enhanced-radiance-a5e",
+  "name": "Anthology of Enhanced Radiance",
+  "type": "Wondrous Item",
+  "desc": "This slightly enchanted book holds lessons for how to look healthier. When you spend 1 hour reading and memorizing the book’s lessons, after your next _long rest_  for the following 24 hours you appear as if you’ve slept and eaten well for months. At the end of the duration, the effect ends and you are unable to benefit from this book until 28 days have passed.",
+  "rarity": "Common",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

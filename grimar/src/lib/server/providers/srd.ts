@@ -11,6 +11,7 @@ import {
 	getSpellDetail,
 	getMonsters as getMonstersApi,
 	getMonsterDetail,
+	getMonstersWithDetails,
 	type SrdSpell,
 	type SrdMonsterSummary
 } from '$lib/server/services/compendium/srd';
@@ -18,8 +19,9 @@ import type { FetchOptions, ProviderListResponse, TransformResult } from './type
 import type { CompendiumTypeName } from '$lib/core/types/compendium';
 import {
 	SrdSpellSchema,
-	SrdMonsterSummarySchema,
-	validateData
+	SrdMonsterDetailSchema,
+	validateData,
+	tryValidate
 } from '$lib/core/types/compendium/schemas';
 
 /**
@@ -63,8 +65,9 @@ export class SrdProvider extends BaseProvider {
 			return spells;
 		}
 		if (type === 'monster') {
-			const monsters = await getMonstersApi(500);
-			console.info(`[srd] Received ${monsters.length} monsters`);
+			// Fetch full details for each monster (not just summary)
+			const monsters = await getMonstersWithDetails(500);
+			console.info(`[srd] Received ${monsters.length} monsters with full details`);
 			return monsters;
 		}
 		return [];
@@ -93,8 +96,9 @@ export class SrdProvider extends BaseProvider {
 			return this.transformSpell(spell);
 		}
 		if (type === 'monster') {
-			const monster = validateData(SrdMonsterSummarySchema, rawItem, 'SRD monster');
-			return this.transformMonster(monster);
+			// Use tryValidate to accept raw data if validation fails
+			const monster = tryValidate(SrdMonsterDetailSchema, rawItem, 'SRD monster detail') || rawItem;
+			return this.transformMonster(monster as SrdMonsterSummary);
 		}
 		throw new Error(`SRD does not support type: ${type}`);
 	}

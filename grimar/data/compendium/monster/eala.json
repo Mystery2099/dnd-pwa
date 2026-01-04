@@ -1,0 +1,50 @@
+{
+  "slug": "eala",
+  "name": "Eala",
+  "size": "Small",
+  "type": "Monstrosity",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 15,
+  "armor_desc": "natural",
+  "hit_points": 40,
+  "hit_dice": "9d6+9",
+  "speed": {
+    "walk": 10,
+    "fly": 60
+  },
+  "strength": 10,
+  "dexterity": 16,
+  "constitution": 12,
+  "intelligence": 2,
+  "wisdom": 12,
+  "charisma": 16,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "fire",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 11",
+  "languages": "-",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The eala makes two attacks with its wing blades."
+    },
+    {
+      "name": "Wing Blades",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) slashing damage.",
+      "attack_bonus": 5,
+      "damage_dice": "1d8"
+    },
+    {
+      "name": "Fire Breath (recharge 5-6)",
+      "desc": "The eala breathes fire in a 20-foot cone. Every creature in the area must make a DC 11 Dexterity saving throw, taking 10 (3d6) fire damage on a failed save or half as much on a successful one. The eala's fire breath ignites flammable objects and melts soft metals in the area that aren't being worn or carried."
+    }
+  ],
+  "special_abilities": null,
+  "legendary_actions": null
+}

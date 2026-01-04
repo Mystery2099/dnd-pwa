@@ -1,0 +1,11 @@
+{
+  "slug": "letter-lift-paper-a5e",
+  "name": "Letter-Lift Paper",
+  "type": "Wondrous Item",
+  "desc": "This pad of light tissue paper contains 4d6 sheets and is enchanted with a subtle magic. When a sheet of paper is pressed to a written page, such as a book or letter, and left there for six seconds, it transfers a perfect copy of the text onto the thin paper. The copy would never pass for the original, but preserves details such as handwriting.",
+  "rarity": "Common",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

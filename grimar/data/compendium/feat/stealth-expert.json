@@ -1,0 +1,14 @@
+{
+  "slug": "stealth-expert",
+  "name": "Stealth Expert",
+  "desc": "The shadows embrace you as if you were born to them.",
+  "prerequisite": "Requires Dexterity 13 or higher",
+  "effects_desc": [
+    "When lightly obscured, you may attempt the hide action.",
+    "You remain hidden after missing a ranged attack.",
+    "Your Wisdom (Perception) checks are not adversely affected by dim light."
+  ],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

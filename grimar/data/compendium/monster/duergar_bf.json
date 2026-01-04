@@ -1,0 +1,60 @@
+{
+  "slug": "duergar_bf",
+  "name": "Duergar",
+  "size": "medium",
+  "type": "Humanoid",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 16,
+  "armor_desc": "scale mail, shield",
+  "hit_points": 32,
+  "hit_dice": "",
+  "speed": {
+    "walk": 25
+  },
+  "strength": 14,
+  "dexterity": 10,
+  "constitution": 14,
+  "intelligence": 10,
+  "wisdom": 10,
+  "charisma": 8,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "poison,poisoned,Duergar Resilience",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 120 ft.",
+  "languages": "Dwarvish,Undercommon",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "War Pick",
+      "desc": "_Melee Weapon Attack:_ +4 to hit, reach 5 ft., one target. _Hit:_ 6 (1d8+2) piercing damage, or 11 (2d8+2) piercing damage while enlarged."
+    },
+    {
+      "name": "Javelin",
+      "desc": "_Melee or Ranged Weapon Attack:_ +4 to hit, reach 5 ft. or range 30/120 ft., one target. _Hit:_ 5 (1d6+2) piercing damage, or 9 (2d6+2) piercing damage while enlarged."
+    },
+    {
+      "name": "Invisibility",
+      "desc": "The duergar magically turns invisible until it attacks or uses Enlarge, or until its concentration ends (as if concentrating on a spell). Any equipment the duergar wears or carries is invisible with it."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Duergar Resilience",
+      "desc": "The duergar is resistant to the charmed and paralyzed conditions, and it has advantage on saves against spells and illusions."
+    },
+    {
+      "name": "Reduce",
+      "desc": "If the duergar starts its turn enlarged, it can choose to end the effect and return to its normal size (no action required)."
+    },
+    {
+      "name": "Sunlight Sensitivity",
+      "desc": "While in sunlight, the duergar has disadvantage on attack rolls, and its Perception is 5 when perceiving by sight."
+    }
+  ],
+  "legendary_actions": []
+}

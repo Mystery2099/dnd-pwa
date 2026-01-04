@@ -1,0 +1,11 @@
+{
+  "slug": "ring-of-small-mercies",
+  "name": "Ring of Small Mercies",
+  "type": "Ring",
+  "desc": "While wearing this plain, beaten pewter ring, you can use an action to cast the spare the dying spell from it at will.",
+  "rarity": "common",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

@@ -1,0 +1,49 @@
+{
+  "slug": "rat_bf",
+  "name": "Rat",
+  "size": "tiny",
+  "type": "Beast",
+  "subtype": "",
+  "group": "Animals",
+  "alignment": "",
+  "armor_class": 10,
+  "armor_desc": null,
+  "hit_points": 9,
+  "hit_dice": "",
+  "speed": {
+    "walk": 20,
+    "swim": 20
+  },
+  "strength": 2,
+  "dexterity": 10,
+  "constitution": 8,
+  "intelligence": 2,
+  "wisdom": 10,
+  "charisma": 4,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 30 ft.",
+  "languages": "-",
+  "cr": 0,
+  "challenge_rating": "0",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "_Melee Weapon Attack:_ +2 to hit, reach 5 ft., one target. _Hit:_ 2 (1d4) piercing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Accustomed to Filth",
+      "desc": "The rat has advantage on saves against contracting diseases."
+    },
+    {
+      "name": "Heightened Smell",
+      "desc": "The rat's Perception is 15 while perceiving by smell."
+    }
+  ],
+  "legendary_actions": []
+}

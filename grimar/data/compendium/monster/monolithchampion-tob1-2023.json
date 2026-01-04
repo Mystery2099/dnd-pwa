@@ -1,0 +1,56 @@
+{
+  "slug": "monolithchampion-tob1-2023",
+  "name": "Monolith Champion",
+  "size": "Large",
+  "type": "Construct",
+  "subtype": "",
+  "group": "null",
+  "alignment": "Neutral",
+  "armor_class": 17,
+  "armor_desc": "natural armor",
+  "hit_points": 102,
+  "hit_dice": "12d10 + 36",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 19,
+  "dexterity": 12,
+  "constitution": 16,
+  "intelligence": 10,
+  "wisdom": 10,
+  "charisma": 10,
+  "skills": {},
+  "damage_vulnerabilities": "False",
+  "damage_resistances": "False",
+  "damage_immunities": "poison, psychic; bludgeoning, piercing, and slashing from nonmagical attacks not made with adamantine weapons",
+  "condition_immunities": "charmed, exhaustion, frightened, paralyzed, petrified, poisoned",
+  "senses": "darkvision 60 ft., passive Perception 10",
+  "languages": "Elvish, Umbral",
+  "cr": 8,
+  "challenge_rating": "8",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The monolith champion makes one Greatsword attack and one Slam attack."
+    },
+    {
+      "name": "Greatsword",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 18 (4d6 + 4) slashing damage plus 13 (3d8) cold damage or fire damage (the champion's choice). If the target is within a fey court or castle, the target must succeed on a DC 14 Charisma saving throw or become invisible, silent, and paralyzed for 1 minute, while an illusory version of the target under the champion's control remains visible and audible. The illusion shouts to the target's allies for a retreat or similar action. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself and destroying the illusory double on a success."
+    },
+    {
+      "name": "Slam",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) bludgeoning damage plus 13 (3d8) cold damage or fire damage (the champion's choice)."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Coldfire Weapons",
+      "desc": "The monolith champion's weapon attacks are imbued with blue fey fire and magical. When the champion hits with any weapon, the weapon deals an extra 3d8 cold damage or fire damage (included in the attack), the champion's choice."
+    },
+    {
+      "name": "Construct Nature",
+      "desc": "The monolith champion doesn't require air, food, drink, or sleep."
+    }
+  ],
+  "legendary_actions": []
+}

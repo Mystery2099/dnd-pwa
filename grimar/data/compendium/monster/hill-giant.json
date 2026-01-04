@@ -1,0 +1,7 @@
+{
+  "index": "hill-giant",
+  "name": "Hill Giant",
+  "type": "giant",
+  "size": "Huge",
+  "challenge_rating": 5
+}

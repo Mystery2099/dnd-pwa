@@ -1,0 +1,56 @@
+{
+  "slug": "vine-troll-skeleton",
+  "name": "Vine Troll Skeleton",
+  "size": "Large",
+  "type": "Plant",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 16,
+  "armor_desc": "natural armor",
+  "hit_points": 119,
+  "hit_dice": "14d10+42",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 20,
+  "dexterity": 12,
+  "constitution": 16,
+  "intelligence": 6,
+  "wisdom": 8,
+  "charisma": 5,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "bludgeoning,",
+  "damage_immunities": "poison",
+  "condition_immunities": "deafened, exhaustion, poisoned",
+  "senses": "darkvision 60 ft., passive Perception 12",
+  "languages": "-",
+  "cr": 9,
+  "challenge_rating": "9",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The skeleton makes one bite attack and two claw attacks."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 21 (3d10 + 5) piercing damage.",
+      "attack_bonus": 8,
+      "damage_dice": "3d10"
+    },
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 18 (3d8 + 5) slashing damage.",
+      "attack_bonus": 8,
+      "damage_dice": "3d8"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Regeneration",
+      "desc": "The vine troll skeleton regains 5 hit points at the start of its turn if it is within 10 feet of the duskthorn dryad's vines and it hasn't taken acid or fire damage since its previous turn. The skeleton dies only if it starts its turn with 0 hit points and doesn't regenerate, or if the duskthorn dryad who created it dies, or if the troll's heart inside the dryad's or treant's tree is destroyed."
+    }
+  ],
+  "legendary_actions": null
+}

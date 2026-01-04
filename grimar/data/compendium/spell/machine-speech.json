@@ -1,0 +1,29 @@
+{
+  "slug": "machine-speech",
+  "name": "Machine Speech",
+  "desc": "Deep Magic: clockwork Your voice, and to a lesser extent your mind, changes to communicate only in the whirring clicks of machine speech. Until the end of your next turn, all clockwork spells you cast have advantage on their attack rolls or the targets have disadvantage on their saving throws.",
+  "higher_level": "",
+  "level": "1st-level",
+  "level_int": 1,
+  "school": "transmutation",
+  "components": "V, S",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "1 Round",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 bonus action",
+  "range": "Self",
+  "target_range_sort": 0,
+  "spell_level": 1,
+  "dnd_class": "Wizard, Sorceror, Cleric, Bard",
+  "spell_lists": [
+    "cleric",
+    "bard",
+    "wizard"
+  ]
+}

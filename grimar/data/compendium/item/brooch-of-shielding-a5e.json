@@ -1,0 +1,11 @@
+{
+  "slug": "brooch-of-shielding-a5e",
+  "name": "Brooch of Shielding",
+  "type": "Wondrous Item",
+  "desc": "While wearing this brooch, you gain resistance to force damage and immunity to the _magic missile_  spell.",
+  "rarity": "Uncommon",
+  "requires_attunement": "requires attunement",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

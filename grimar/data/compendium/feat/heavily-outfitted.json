@@ -1,0 +1,13 @@
+{
+  "slug": "heavily-outfitted",
+  "name": "Heavily Outfitted",
+  "desc": "You have learned to fight in heavy armor",
+  "prerequisite": "Requires proficiency with medium armor",
+  "effects_desc": [
+    "Raise your Strength attribute by 1, up to the attribute cap of 20.",
+    "Learn the heavy armor proficiency."
+  ],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

@@ -1,0 +1,27 @@
+{
+  "slug": "inconspicuous-facade",
+  "name": "Inconspicuous Facade",
+  "desc": "By means of this spell, you make a target building seem much less important or ostentatious than it is. You can give the target an unremarkable appearance or one that blends in with nearby buildings. By its nature, this spell does not allow you to specify features that would make the building stand out. You also cannot make a building look more opulent to match surrounding buildings. You can make the building appear smaller or larger that its actual size to better fit into its environs. However, these size changes are noticeable with cursory physical inspection as an object will pass through extra illusory space or bump into a seemingly smaller section of the building. A creature can use its action to inspect the building and make an Intelligence (Investigation) check against your spell save DC. If it succeeds, it becomes aware the building has been disguised. In addition to you dispelling inconspicuous facade, the spell ends if the target building is destroyed.",
+  "higher_level": "",
+  "level": "4th-level",
+  "level_int": 4,
+  "school": "illusion",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Until dispelled",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 minute",
+  "range": "100 Feet",
+  "target_range_sort": 100,
+  "spell_level": 4,
+  "dnd_class": "Wizard, Sorceror",
+  "spell_lists": [
+    "wizard"
+  ]
+}

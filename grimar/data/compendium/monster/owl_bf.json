@@ -1,0 +1,53 @@
+{
+  "slug": "owl_bf",
+  "name": "Owl",
+  "size": "tiny",
+  "type": "Beast",
+  "subtype": "",
+  "group": "Animals",
+  "alignment": "",
+  "armor_class": 11,
+  "armor_desc": null,
+  "hit_points": 8,
+  "hit_dice": "",
+  "speed": {
+    "walk": 5,
+    "fly": 60
+  },
+  "strength": 2,
+  "dexterity": 12,
+  "constitution": 8,
+  "intelligence": 2,
+  "wisdom": 12,
+  "charisma": 6,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 120 ft.",
+  "languages": "-",
+  "cr": 0,
+  "challenge_rating": "0",
+  "actions": [
+    {
+      "name": "Talons",
+      "desc": "_Melee Weapon Attack:_ +3 to hit, reach 5 ft., one creature. _Hit:_ 3 (1d4+1) slashing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Flyby",
+      "desc": "The owl doesn't provoke opportunity attacks when it flies out of an enemy's reach."
+    },
+    {
+      "name": "Heightened Hearing and Sight",
+      "desc": "The owl's Perception is 18 when perceiving by hearing or sight."
+    },
+    {
+      "name": "Quiet Wings",
+      "desc": "The owl's Stealth is 18 while flying."
+    }
+  ],
+  "legendary_actions": []
+}

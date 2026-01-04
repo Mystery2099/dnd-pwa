@@ -1,0 +1,12 @@
+{
+  "slug": "stunning-sniper",
+  "name": "Stunning Sniper",
+  "desc": "You have mastered the use of ranged weapons to cripple your target from a distance.",
+  "prerequisite": "*Proficiency with a ranged weapon*",
+  "effects_desc": [
+    "* When you score a critical hit on a ranged attack roll, you can stun the target until the start of your next turn instead of doubling the damage."
+  ],
+  "document__slug": "toh",
+  "document__title": "Tome of Heroes",
+  "document__url": "https://koboldpress.com/kpstore/product/tome-of-heroes-for-5th-edition/"
+}

@@ -1,0 +1,11 @@
+{
+  "slug": "stormheart-bow",
+  "name": "Stormheart Bow",
+  "type": "Weapon (shortbow or longbow)",
+  "desc": "This bow is made from dragon bone and fey heartstring. When you hit with an attack using this magic bow, the target takes an extra 1d6 lightning damage. The bow has 5 charges for the following other properties. It regains 1d4 + 1 expended charges daily at dawn.\n  ***Iceshard Arrow.*** You can expend 3 charges when you hit with an attack using this magic bow to cause the arrow to turn to ice and shatter in mid-air. Choose up to three targets within 30 feet of your original target. Your original target takes damage as normal, and each chosen target takes 1d6 cold damage.\n  ***Thunder Arrow.*** You can expend 2 charges when you hit with an attack using this magic bow to cause the attack to release a peal of thunder. The target takes damage as normal, and each creature within 15 feet of the target must make a DC 15 Constitution saving throw, taking 2d6 thunder damage on a failed save, or half as much damage on a successful one.",
+  "rarity": "rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "toh",
+  "document__title": "Tome of Heroes",
+  "document__url": "https://koboldpress.com/kpstore/product/tome-of-heroes-for-5th-edition/"
+}

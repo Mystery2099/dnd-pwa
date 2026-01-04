@@ -1,0 +1,59 @@
+{
+  "slug": "giant-mole-lizard",
+  "name": "Giant Mole Lizard",
+  "size": "Large",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 14,
+  "armor_desc": "natural armor",
+  "hit_points": 75,
+  "hit_dice": "10d10+20",
+  "speed": {
+    "walk": 15,
+    "burrow": 20
+  },
+  "strength": 19,
+  "dexterity": 5,
+  "constitution": 14,
+  "intelligence": 1,
+  "wisdom": 8,
+  "charisma": 5,
+  "skills": {
+    "perception": -1
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "acid",
+  "damage_immunities": "",
+  "condition_immunities": "prone",
+  "senses": "blindsight 10', tremorsense 60', passive Perception 9",
+  "languages": "—",
+  "cr": 3,
+  "challenge_rating": "3",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "Two Claw attacks. It can replace one attack with use of Constricting Tail."
+    },
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +6 to hit, 5 ft., one target, 11 (2d6+4) slashing damage."
+    },
+    {
+      "name": "Constricting Tail",
+      "desc": "A Large or smaller creature within 5 ft. of the lizard must make DC 12 Dex save or be grappled (escape DC 14). Until this grapple ends the target is restrained can't breathe and begins to suffocate and the giant mole lizard can't use Constricting Tail on another target."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Beast of Burden",
+      "desc": "Is considered to be a Huge Beast for the purpose of determining its carrying capacity."
+    },
+    {
+      "name": "Sunlight Sensitivity",
+      "desc": "In sunlight disadvantage on attacks and Wis (Perception) checks that use sight."
+    }
+  ],
+  "legendary_actions": null
+}

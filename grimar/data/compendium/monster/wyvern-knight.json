@@ -1,0 +1,68 @@
+{
+  "slug": "wyvern-knight",
+  "name": "Wyvern Knight",
+  "size": "Medium",
+  "type": "Humanoid",
+  "subtype": "any race",
+  "group": null,
+  "alignment": "lawful evil",
+  "armor_class": 20,
+  "armor_desc": "plate, shield",
+  "hit_points": 102,
+  "hit_dice": "12d8+48",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 16,
+  "dexterity": 10,
+  "constitution": 18,
+  "intelligence": 10,
+  "wisdom": 12,
+  "charisma": 15,
+  "skills": {
+    "perception": 4
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "poison",
+  "damage_immunities": "poisoned",
+  "condition_immunities": "",
+  "senses": "passive Perception 14",
+  "languages": "Common, Draconic",
+  "cr": 5,
+  "challenge_rating": "5",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The wyvern knight makes two lance attacks. If the wyvern knight is riding a war wyvern, its mount can then make one bite, claw, or stinger attack."
+    },
+    {
+      "name": "Lance",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 10 ft., one target. Hit: 9 (1d12 + 3) piercing damage plus 10 (3d6) poison damage. The wyvern knight has disadvantage on attacks with this weapon against creatures within 5 feet of it and can wield this weapon in one hand instead of two while mounted.",
+      "attack_bonus": 6,
+      "damage_dice": "1d12+3"
+    },
+    {
+      "name": "Heavy Crossbow",
+      "desc": "Ranged Weapon Attack: +3 to hit, range 100/400 ft., one target. Hit: 5 (1d10) piercing damage plus 10 (3d6) poison damage.",
+      "attack_bonus": 3,
+      "damage_dice": "1d10"
+    },
+    {
+      "name": "Dagger",
+      "desc": "Melee or Ranged Weapon Attack: +6 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 5 (1d4 + 3) piercing damage plus 10 (3d6) poison damage.",
+      "attack_bonus": 6,
+      "damage_dice": "1d4+3"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Brave",
+      "desc": "The wyvern knight has advantage on saving throws against being frightened."
+    },
+    {
+      "name": "Ring of Feather Falling",
+      "desc": "When the wyvern knight falls while wearing this ring, it descends 60 feet per round and takes no damage from falling."
+    }
+  ],
+  "legendary_actions": null
+}

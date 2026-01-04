@@ -1,0 +1,68 @@
+{
+  "slug": "dark-servant",
+  "name": "Dark Servant",
+  "size": "Medium",
+  "type": "Humanoid",
+  "subtype": "dark folk",
+  "group": null,
+  "alignment": "neutral evil",
+  "armor_class": 12,
+  "armor_desc": "leather armor",
+  "hit_points": 55,
+  "hit_dice": "10d8+10",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 16,
+  "dexterity": 12,
+  "constitution": 13,
+  "intelligence": 10,
+  "wisdom": 10,
+  "charisma": 10,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 10",
+  "languages": "Common, Umbral",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The dark servant makes two attacks with its sickle."
+    },
+    {
+      "name": "Sickle",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 5 (1d4 + 3) slashing damage.",
+      "attack_bonus": 5,
+      "damage_dice": "1d4+3"
+    },
+    {
+      "name": "Light Crossbow",
+      "desc": "Ranged Weapon Attack: +3 to hit, range 80/320 ft., one target. Hit: 5 (1d8 + 1) piercing damage.",
+      "attack_bonus": 3,
+      "damage_dice": "1d8+1"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Dark Devotion",
+      "desc": "The dark servant has advantage on saving throws\nagainst being charmed or frightened."
+    },
+    {
+      "name": "Darksight",
+      "desc": "Magical darkness doesn't impede the dark folk's darkvision."
+    },
+    {
+      "name": "Pack Tactics",
+      "desc": "The dark servant has advantage on attack rolls against a creature if at least one of the dark servant's allies is within 5 feet of the creature and the ally isn't incapacitated."
+    },
+    {
+      "name": "Sunlight Sensitivity",
+      "desc": "While in sunlight, the dark servant has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight."
+    }
+  ],
+  "legendary_actions": null
+}

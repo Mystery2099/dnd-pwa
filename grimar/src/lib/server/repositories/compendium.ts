@@ -207,7 +207,7 @@ export class CompendiumRepository {
 
 		try {
 			// Try FTS search first (much faster than LIKE)
-			const { searchFts } = await import('$lib/server/db/fts');
+			const { searchFts } = await import('$lib/server/db/db-fts');
 			const ftsIds = await searchFts(query, 50);
 
 			if (ftsIds.length > 0) {

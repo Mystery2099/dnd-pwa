@@ -1,0 +1,68 @@
+{
+  "slug": "shadow-goblin",
+  "name": "Shadow Goblin",
+  "size": "Small",
+  "type": "Humanoid",
+  "subtype": "goblinoid",
+  "group": null,
+  "alignment": "neutral evil",
+  "armor_class": 13,
+  "armor_desc": null,
+  "hit_points": 13,
+  "hit_dice": "3d6+3",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 10,
+  "dexterity": 16,
+  "constitution": 12,
+  "intelligence": 13,
+  "wisdom": 12,
+  "charisma": 8,
+  "skills": {
+    "stealth": 5
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 11",
+  "languages": "Common, Elvish, Goblin, Umbral",
+  "cr": 0.5,
+  "challenge_rating": "1/2",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The shadow goblin can make two attacks with its kitchen knife. The second attack has disadvantage."
+    },
+    {
+      "name": "Kitchen Knife",
+      "desc": "Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 5 (1d4 + 3) piercing damage.",
+      "attack_bonus": 5,
+      "damage_dice": "1d4+3"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Nimble Escape",
+      "desc": "The shadow goblin can take the Disengage or Hide action as a bonus action on each of its turns."
+    },
+    {
+      "name": "Shadow Camouflage",
+      "desc": "The shadow goblin has advantage on Dexterity (Stealth) checks made to hide in dim light or darkness."
+    },
+    {
+      "name": "Sunlight Sensitivity",
+      "desc": "While in sunlight, the shadow goblin has disadvantage on attack rolls and on Wisdom (Perception) checks that rely on sight."
+    },
+    {
+      "name": "Traveler in Darkness",
+      "desc": "The shadow goblin has advantage on Intelligence (Arcana) checks made to know about shadow roads and shadow magic spells or items."
+    },
+    {
+      "name": "Unseelie Blessing",
+      "desc": "The shadow goblin has advantage on saving throws against being charmed, and magic can't put it to sleep."
+    }
+  ],
+  "legendary_actions": null
+}

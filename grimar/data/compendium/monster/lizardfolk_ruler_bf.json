@@ -1,0 +1,70 @@
+{
+  "slug": "lizardfolk_ruler_bf",
+  "name": "Lizardfolk Ruler",
+  "size": "medium",
+  "type": "Humanoid",
+  "subtype": "",
+  "group": "Lizardfolk",
+  "alignment": "",
+  "armor_class": 15,
+  "armor_desc": "scale mail",
+  "hit_points": 100,
+  "hit_dice": "",
+  "speed": {
+    "walk": 30,
+    "climb": 15,
+    "swim": 30
+  },
+  "strength": 16,
+  "dexterity": 12,
+  "constitution": 14,
+  "intelligence": 10,
+  "wisdom": 14,
+  "charisma": 14,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "charmed,frightened",
+  "condition_immunities": "",
+  "senses": "-",
+  "languages": "Common,Draconic",
+  "cr": 4,
+  "challenge_rating": "4",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The lizardfolk ruler makes two Bite attacks and one Greataxe attack, or it makes three Javelin attacks."
+    },
+    {
+      "name": "Bite",
+      "desc": "_Melee Weapon Attack:_ +5 to hit, reach 5 ft., one target. _Hit:_ 10 (2d6+3) piercing damage."
+    },
+    {
+      "name": "Greataxe",
+      "desc": "_Melee Weapon Attack:_ +5 to hit, reach 5 ft., one target. _Hit:_ 16 (2d12+3) slashing damage."
+    },
+    {
+      "name": "Javelin",
+      "desc": "_Melee or Ranged Weapon Attack:_ +5 to hit, reach 5 ft. or range 30/120 ft., one target. _Hit:_ 10 (2d6+3) piercing damage in melee or 6 (1d6+3) piercing damage at range."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Brutal",
+      "desc": "A melee weapon deals one extra die of its damage when the lizardfolk ruler hits with it (included in the attack)."
+    },
+    {
+      "name": "Heightened Smell and Taste",
+      "desc": "The lizardfolk's Perception is 17 when perceiving by smell or taste."
+    },
+    {
+      "name": "Hold Breath",
+      "desc": "The lizardfolk ruler can hold its breath for 15 minutes."
+    },
+    {
+      "name": "Unshakable Command",
+      "desc": "Each friendly creature within 30 feet of the lizardfolk ruler can't be charmed or frightened while the ruler isn't incapacitated."
+    }
+  ],
+  "legendary_actions": []
+}

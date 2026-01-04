@@ -1,0 +1,39 @@
+{
+  "index": "lesser-restoration",
+  "name": "Lesser Restoration",
+  "level": 2,
+  "school": {
+    "name": "Abjuration"
+  },
+  "classes": [
+    {
+      "name": "Bard"
+    },
+    {
+      "name": "Cleric"
+    },
+    {
+      "name": "Druid"
+    },
+    {
+      "name": "Paladin"
+    },
+    {
+      "name": "Ranger"
+    }
+  ],
+  "desc": [
+    "You touch a creature and can end either one disease or one condition afflicting it. The condition can be blinded, deafened, paralyzed, or poisoned."
+  ],
+  "higher_level": null,
+  "range": "Touch",
+  "components": [
+    "V",
+    "S"
+  ],
+  "material": null,
+  "ritual": false,
+  "duration": "Instantaneous",
+  "concentration": false,
+  "casting_time": "1 action"
+}

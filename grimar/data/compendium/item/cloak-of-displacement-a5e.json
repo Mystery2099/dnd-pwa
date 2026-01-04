@@ -1,0 +1,11 @@
+{
+  "slug": "cloak-of-displacement-a5e",
+  "name": "Cloak of Displacement",
+  "type": "Wondrous Item",
+  "desc": "This cloak creates a visual illusion that distorts your position. _Attack rolls_  against you have _disadvantage_  unless the attacker does not rely on sight. When you take damage, this property stops until the start of your next turn, and it is otherwise negated if you are _incapacitated_ , _restrained_ , or unable to move.",
+  "rarity": "Rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

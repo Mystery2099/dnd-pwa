@@ -1,0 +1,44 @@
+{
+  "slug": "weasel_bf",
+  "name": "Weasel",
+  "size": "tiny",
+  "type": "Beast",
+  "subtype": "",
+  "group": "Animals",
+  "alignment": "",
+  "armor_class": 11,
+  "armor_desc": null,
+  "hit_points": 8,
+  "hit_dice": "",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 2,
+  "dexterity": 12,
+  "constitution": 8,
+  "intelligence": 2,
+  "wisdom": 12,
+  "charisma": 2,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "-",
+  "languages": "-",
+  "cr": 0,
+  "challenge_rating": "0",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "_Melee Weapon Attack:_ +3 to hit, reach 5 ft., one creature. _Hit:_ 3 (1d4+1) piercing damage. Instead of dealing damage, the weasel can steal one item the target is wearing or carrying, provided the item weighs no more than 5 pounds, can fit in one hand, isn't a weapon, and isn't wrapped around or firmly attached to the target. For example, a weasel could steal a hat or belt pouch but not a creature's shirt or armor."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Heightened Hearing and Smell",
+      "desc": "The weasel's Perception is 18 when perceiving by hearing or smell."
+    }
+  ],
+  "legendary_actions": []
+}

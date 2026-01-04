@@ -1,0 +1,11 @@
+{
+  "slug": "lucky-charm-of-the-monkey-king",
+  "name": "Lucky Charm of the Monkey King",
+  "type": "Wondrous item",
+  "desc": "This tiny stone statue of a grinning monkey holds a leather loop in its paws, allowing the charm to hang from a belt or pouch. While attuned to this charm, you can use a bonus action to gain a +1 bonus on your next ability check, attack roll, or saving throw. Once used, the charm can't be used again until the next dawn. You can be attuned to only one lucky charm at a time.",
+  "rarity": "common ",
+  "requires_attunement": "requires attunement",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

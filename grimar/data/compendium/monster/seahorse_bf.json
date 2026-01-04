@@ -1,0 +1,49 @@
+{
+  "slug": "seahorse_bf",
+  "name": "Seahorse",
+  "size": "tiny",
+  "type": "Beast",
+  "subtype": "",
+  "group": "Animals",
+  "alignment": "",
+  "armor_class": 11,
+  "armor_desc": "natural armor",
+  "hit_points": 9,
+  "hit_dice": "",
+  "speed": {
+    "walk": 0,
+    "swim": 20
+  },
+  "strength": 1,
+  "dexterity": 10,
+  "constitution": 8,
+  "intelligence": 1,
+  "wisdom": 10,
+  "charisma": 2,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "-",
+  "languages": "-",
+  "cr": 0,
+  "challenge_rating": "0",
+  "actions": [
+    {
+      "name": "Ram",
+      "desc": "_Melee Weapon Attack:_ +2 to hit, reach 5 ft., one target. _Hit:_ 2 (1d4) bludgeoning damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Underwater Camouflage",
+      "desc": "The seahorse's Stealth is 17 while underwater."
+    },
+    {
+      "name": "Water Breathing",
+      "desc": "The seahorse can breathe only underwater."
+    }
+  ],
+  "legendary_actions": []
+}

@@ -1,0 +1,11 @@
+{
+  "slug": "arrow-of-slaying-a5e",
+  "name": "Arrow of Slaying",
+  "type": "Weapon",
+  "desc": "A particular kind of creature is chosen when this magic arrow is created. When the _arrow of slaying_ damages a creature belonging to the chosen type, heritage, or group, the creature makes a DC 17 Constitution _saving throw_ , taking an extra 6d10 piercing damage on a failed save, or half as much extra damage on a successful one. Once the _arrow of slaying_ deals its extra damage to a creature, it loses its magical properties. \n\nOther types of magic ammunition of this kind exist, such as bolts meant for a crossbow, or bullets for a firearm or sling.",
+  "rarity": "Very Rare",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

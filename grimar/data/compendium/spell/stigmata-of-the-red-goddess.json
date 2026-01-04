@@ -1,0 +1,28 @@
+{
+  "slug": "stigmata-of-the-red-goddess",
+  "name": "Stigmata of the Red Goddess",
+  "desc": "You cut yourself and bleed as tribute to Marena, gaining power as long as the blood continues flowing. The stigmata typically appears as blood running from the eyes or ears, or from wounds manifesting on the neck or chest. You take 1 piercing damage at the beginning of each turn and gain a +2 bonus on damage rolls. Any healing received by you, magical or otherwise, ends the spell.",
+  "higher_level": "When you cast this spell using a spell slot of 3rd level or higher, the damage you take at the start of each of your turns and the bonus damage you do both increase by 1 for each slot level above 2nd, and the duration increases by 1 round for each slot level above 2nd.",
+  "level": "2nd-level",
+  "level_int": 2,
+  "school": "necromancy",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "3 Rounds",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "Self",
+  "target_range_sort": 0,
+  "spell_level": 2,
+  "dnd_class": "Wizard, Cleric",
+  "spell_lists": [
+    "cleric",
+    "wizard"
+  ]
+}

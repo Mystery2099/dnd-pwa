@@ -1,0 +1,52 @@
+{
+  "slug": "giant-owl-a5e",
+  "name": "Giant Owl",
+  "size": "Large",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 12,
+  "armor_desc": "",
+  "hit_points": 19,
+  "hit_dice": "3d10+3",
+  "speed": {
+    "walk": 5,
+    "fly": 60
+  },
+  "strength": 12,
+  "dexterity": 14,
+  "constitution": 12,
+  "intelligence": 8,
+  "wisdom": 14,
+  "charisma": 10,
+  "skills": {
+    "perception": 4,
+    "stealth": 4
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 120 ft., passive Perception 14",
+  "languages": "Giant Owl; understands but can't speak Common, Elvish, and Sylvan",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Talons",
+      "desc": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6+1) slashing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Flyby",
+      "desc": "The owl doesnt provoke opportunity attacks when it flies out of a creatures reach."
+    },
+    {
+      "name": "Keen Hearing and Sight",
+      "desc": "The owl has advantage on Perception checks that rely on hearing and sight."
+    }
+  ],
+  "legendary_actions": null
+}

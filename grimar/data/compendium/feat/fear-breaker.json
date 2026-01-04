@@ -1,0 +1,13 @@
+{
+  "slug": "fear-breaker",
+  "name": "Fear Breaker",
+  "desc": "You have a habit of snatching victory from the jaws of defeat. You gain the following benefits:",
+  "prerequisite": null,
+  "effects_desc": [
+    "You gain proficiency with the Victory Pose maneuver and do not have to spend exertion to activate it. In addition, you may use this maneuver with up to three different weapons you select instead of just one, and affect allies within 60 feet.",
+    "An ally affected by your Victory Pose gains an expertise die on their next saving throw against fear, and if they are rattled the condition ends for them."
+  ],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

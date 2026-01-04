@@ -1,0 +1,28 @@
+{
+  "slug": "bleed",
+  "name": "Bleed",
+  "desc": "Crackling energy coats the blade of one weapon you are carrying that deals slashing damage. Until the spell ends, when you hit a creature with the weapon, the weapon deals an extra 1d4 necrotic damage and the creature must make a Constitution saving throw. On a failed save, the creature suffers a bleeding wound. Each time you hit a creature with this weapon while it suffers from a bleeding wound, your weapon deals an extra 1 necrotic damage for each time you have previously hit the creature with this weapon (to a maximum of 10 necrotic damage).\n\nAny creature can take an action to stanch the bleeding wound by succeeding on a Wisdom (Medicine) check against your spell save DC. The wound also closes if the target receives magical healing. This spell has no effect on undead or constructs.",
+  "higher_level": "",
+  "level": "1st-level",
+  "level_int": 1,
+  "school": "necromancy",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "a drop of blood",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Up to 1 minute",
+  "concentration": "yes",
+  "requires_concentration": true,
+  "casting_time": "1 bonus action",
+  "range": "Self",
+  "target_range_sort": 0,
+  "spell_level": 1,
+  "dnd_class": "Ranger, Warlock",
+  "spell_lists": [
+    "ranger",
+    "warlock"
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "slug": "marilith-a5e",
+  "name": "Marilith",
+  "size": "Large",
+  "type": "Fiend",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 18,
+  "armor_desc": "",
+  "hit_points": 220,
+  "hit_dice": "21d10+105",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 20,
+  "dexterity": 22,
+  "constitution": 20,
+  "intelligence": 20,
+  "wisdom": 18,
+  "charisma": 20,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "cold, fire, lightning; damage from nonmagical weapons",
+  "damage_immunities": "poison",
+  "condition_immunities": "poisoned",
+  "senses": "truesight 120 ft., passive Perception 14",
+  "languages": "Abyssal, telepathy 120 ft.",
+  "cr": 16,
+  "challenge_rating": "16",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The marilith makes six attacks with its longswords."
+    },
+    {
+      "name": "Longsword",
+      "desc": "Melee Weapon Attack: +10 to hit, reach 5 ft., one target. Hit: 14 (2d8 + 5) slashing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Chaotic Evil",
+      "desc": "The marilith radiates a Chaotic and Evil aura."
+    },
+    {
+      "name": "Magic Resistance",
+      "desc": "The marilith has advantage on saving throws against spells and magical effects."
+    }
+  ],
+  "legendary_actions": null
+}

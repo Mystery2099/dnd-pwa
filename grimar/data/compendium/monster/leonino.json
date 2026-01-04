@@ -1,0 +1,59 @@
+{
+  "slug": "leonino",
+  "name": "Leonino",
+  "size": "Tiny",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 13,
+  "armor_desc": null,
+  "hit_points": 13,
+  "hit_dice": "3d4+6",
+  "speed": {
+    "fly": 40,
+    "walk": 30
+  },
+  "strength": 10,
+  "dexterity": 16,
+  "constitution": 14,
+  "intelligence": 8,
+  "wisdom": 8,
+  "charisma": 12,
+  "skills": {
+    "perception": 1,
+    "persuasion": 3,
+    "stealth": 5
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 30 ft., passive Perception 11",
+  "languages": "Elvish",
+  "cr": 0.125,
+  "challenge_rating": "1/8",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 5 (1d4 + 3) slashing damage. If this is the first time the leonino has hit the target within the past 24 hours, the target must succeed on a DC 10 Wisdom saving throw or be charmed by the leonino for 1 hour.",
+      "attack_bonus": 5,
+      "damage_dice": "1d4+3"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Flyby",
+      "desc": "The leonino doesn't provoke opportunity attacks when it flies out of an enemy's reach."
+    },
+    {
+      "name": "Evasion",
+      "desc": "If the leonino is subjected to an effect that allows it to make a Dexterity saving throw to take only half damage, the leonino instead takes no damage if it succeeds on the saving throw, and only half damage if it fails."
+    },
+    {
+      "name": "Silent Wings",
+      "desc": "The flight of a leonine is especially silent and difficult to notice in forests and urban settings. It has advantage on Dexterity (Stealth) checks made while flying in these areas."
+    }
+  ],
+  "legendary_actions": null
+}

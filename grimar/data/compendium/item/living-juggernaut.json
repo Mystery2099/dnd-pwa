@@ -1,0 +1,11 @@
+{
+  "slug": "living-juggernaut",
+  "name": "Living Juggernaut",
+  "type": "Armor",
+  "desc": "This broad, bulky suit of plate is adorned with large, blunt spikes and has curving bull horns affixed to its helm. While wearing this armor, you gain a +1 bonus to AC, and difficult terrain doesn't cost you extra movement.",
+  "rarity": "rare",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

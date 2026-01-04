@@ -1,0 +1,29 @@
+{
+  "slug": "hearth-charm",
+  "name": "Hearth Charm",
+  "desc": "This spell makes flammable material burn twice as long as normal.",
+  "higher_level": "",
+  "level": "1st-level",
+  "level_int": 1,
+  "school": "transmutation",
+  "components": "V, S",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "24 Hours",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "25 Feet",
+  "target_range_sort": 25,
+  "spell_level": 1,
+  "dnd_class": "Warlock, Ranger, Druid",
+  "spell_lists": [
+    "druid",
+    "ranger",
+    "warlock"
+  ]
+}

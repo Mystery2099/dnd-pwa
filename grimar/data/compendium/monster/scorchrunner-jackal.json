@@ -1,0 +1,54 @@
+{
+  "slug": "scorchrunner-jackal",
+  "name": "Scorchrunner Jackal",
+  "size": "Medium",
+  "type": "Monstrosity",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 13,
+  "armor_desc": "",
+  "hit_points": 38,
+  "hit_dice": "7d8+7",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 9,
+  "dexterity": 16,
+  "constitution": 12,
+  "intelligence": 4,
+  "wisdom": 14,
+  "charisma": 10,
+  "skills": {
+    "perception": 2
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "fire",
+  "condition_immunities": "",
+  "senses": "passive Perception 14",
+  "languages": "—",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "Two Bite or Flame Ray attacks."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +5 to hit, 5 ft., one target, 6 (1d6+3) piercing damage."
+    },
+    {
+      "name": "Flame Ray",
+      "desc": "Ranged Spell Attack: +4 to hit, 120 ft., one target, 6 (1d8+2) fire. If the jackal hits a creature with Flame Ray the jackal gains half-cover vs. all attacks that originate more than 30' away from it until the start of its next turn."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Day Hunter",
+      "desc": "When the scorchrunner jackal makes an attack roll while in sunlight it can roll a d4 and add the number rolled to the attack roll."
+    }
+  ],
+  "legendary_actions": null
+}

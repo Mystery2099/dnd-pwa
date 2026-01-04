@@ -1,0 +1,11 @@
+{
+  "slug": "weapon-3-a5e",
+  "name": "Weapon +3",
+  "type": "Weapon",
+  "desc": "This weapon grants a bonus to _attack and damage rolls_  made with it: +3 (very rare).",
+  "rarity": "Uncommon",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

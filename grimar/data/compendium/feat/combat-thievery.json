@@ -1,0 +1,13 @@
+{
+  "slug": "combat-thievery",
+  "name": "Combat Thievery",
+  "desc": "You know how to trade blows for more than inflicting harm.",
+  "prerequisite": null,
+  "effects_desc": [
+    "You gain proficiency with the Deceptive Stance and Painful Pickpocket maneuvers, and do not have to spend exertion to activate them.",
+    "You gain an expertise die on Sleight of Hand checks."
+  ],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

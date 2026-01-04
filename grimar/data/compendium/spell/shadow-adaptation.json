@@ -1,0 +1,28 @@
+{
+  "slug": "shadow-adaptation",
+  "name": "Shadow Adaptation",
+  "desc": "Your flesh and clothing pale and become faded as your body takes on a tiny fragment of the Shadow Realm. For the duration of this spell, you are immune to shadow corruption and have resistance to necrotic damage. In addition, you have advantage on saving throws against effects that reduce your Strength score or hit point maximum, such as a shadow's Strength Drain or the harm spell.",
+  "higher_level": "",
+  "level": "2nd-level",
+  "level_int": 2,
+  "school": "transmutation",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "8 Hours",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "Self",
+  "target_range_sort": 0,
+  "spell_level": 2,
+  "dnd_class": "Wizard, Warlock, Sorceror",
+  "spell_lists": [
+    "warlock",
+    "wizard"
+  ]
+}

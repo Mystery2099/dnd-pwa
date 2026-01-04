@@ -1,0 +1,11 @@
+{
+  "slug": "paramours-daisy-a5e",
+  "name": "Paramour’s Daisy",
+  "type": "Wondrous Item",
+  "desc": "This bright yellow daisy never wilts or fades. The daisy has exactly 20 petals when you first receive it. \n\nWhile the daisy has an even number of petals, both your personality and physical appearance become vibrant. You gain an expertise die on Persuasion checks, but you have _disadvantage_  on Stealth checks. \n\nWhile the daisy has an odd number of petals, your presence fades into the background. You gain an expertise die on Stealth checks, but you have _disadvantage_  on Persuasion checks.\n\nYou can use an action to pluck one petal from the daisy. The daisy loses its magic once you remove its final petal.",
+  "rarity": "Uncommon",
+  "requires_attunement": "requires attunement",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

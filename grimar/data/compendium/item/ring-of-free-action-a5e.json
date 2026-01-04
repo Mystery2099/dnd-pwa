@@ -1,0 +1,11 @@
+{
+  "slug": "ring-of-free-action-a5e",
+  "name": "Ring of Free Action",
+  "type": "Ring",
+  "desc": "While wearing this ring, you are not slowed by _difficult terrain_ , and magic cannot cause you to be _restrained_ , _paralyzed_ , or slow your movement.",
+  "rarity": "Rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

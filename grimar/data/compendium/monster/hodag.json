@@ -1,0 +1,83 @@
+{
+  "slug": "hodag",
+  "name": "Hodag",
+  "size": "Large",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 13,
+  "armor_desc": "natural armor",
+  "hit_points": 52,
+  "hit_dice": "7d10+14",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 19,
+  "dexterity": 12,
+  "constitution": 14,
+  "intelligence": 3,
+  "wisdom": 12,
+  "charisma": 7,
+  "skills": {
+    "perception": 3,
+    "stealth": 5
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "charmed",
+  "senses": "darkvision 60 ft., passive Perception 13",
+  "languages": "—",
+  "cr": 3,
+  "challenge_rating": "3",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The hodag makes three melee attacks, but can use its bite and horn attacks only once each."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 8 (1d8 + 4) piercing damage.",
+      "attack_bonus": 6,
+      "damage_dice": "1d8+4"
+    },
+    {
+      "name": "Claws",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) slashing damage.",
+      "attack_bonus": 6,
+      "damage_dice": "1d6+4"
+    },
+    {
+      "name": "Tail",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 10 ft., one target. Hit: 6 (1d4 + 4) piercing damage.",
+      "attack_bonus": 6,
+      "damage_dice": "1d4+4"
+    },
+    {
+      "name": "Horns",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 9 (2d4 + 4) piercing damage.",
+      "attack_bonus": 6,
+      "damage_dice": "2d4+4"
+    },
+    {
+      "name": "Territorial Display (Recharge 6)",
+      "desc": "The hodag rears and stomps on the ground then roars a territorial challenge. Each creature within 10 feet of the hodag must make a DC 14 Dexterity saving throw, taking 14 (4d6) thunder damage on a failed save, or half as much damage on a successful one. A creature that fails the saving throw by 5 or more is also knocked prone."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Charge",
+      "desc": "If the hodag moves at least 10 feet straight toward a target and then hits it with a horn attack on the same turn, the target takes an extra 5 (2d4) piercing damage. If the target is a creature, it must succeed on a DC 14 Strength saving throw or be knocked prone."
+    },
+    {
+      "name": "Improved Critical",
+      "desc": "The hodag's teeth, claws, horns, and tail spikes are extra sharp. These weapon attacks score a critical hit on a roll of 19 or 20."
+    },
+    {
+      "name": "Keen Hearing and Smell",
+      "desc": "The hodag has advantage on Wisdom (Perception) checks that rely on hearing or smell."
+    }
+  ],
+  "legendary_actions": null
+}

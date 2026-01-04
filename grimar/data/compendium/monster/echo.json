@@ -1,0 +1,58 @@
+{
+  "slug": "echo",
+  "name": "Echo",
+  "size": "Medium",
+  "type": "Fiend",
+  "subtype": "demon",
+  "group": null,
+  "alignment": "chaotic evil",
+  "armor_class": 15,
+  "armor_desc": null,
+  "hit_points": 102,
+  "hit_dice": "12d8+48",
+  "speed": {
+    "fly": 20,
+    "walk": 30
+  },
+  "strength": 20,
+  "dexterity": 20,
+  "constitution": 18,
+  "intelligence": 14,
+  "wisdom": 18,
+  "charisma": 16,
+  "skills": {
+    "persuasion": 6,
+    "stealth": 8
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "cold, fire, lightning",
+  "damage_immunities": "poison",
+  "condition_immunities": "poisoned",
+  "senses": "darkvision 60 ft., passive Perception 14",
+  "languages": "Abyssal, Celestial",
+  "cr": 6,
+  "challenge_rating": "6",
+  "actions": [
+    {
+      "name": "Iron Claws",
+      "desc": "Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 14 (2d8 + 5) slashing damage and if the creature is wearing metal armor, it must make a successful DC 15 Constitution saving throw or be deafened until the end of its next turn.",
+      "attack_bonus": 8,
+      "damage_dice": "2d8+5"
+    },
+    {
+      "name": "Everywhere at Once (Recharge 5-6)",
+      "desc": "The echo demon teleports up to 60 feet to an unoccupied space. Immediately after teleporting, it can make an iron claws attack with advantage as a bonus action."
+    },
+    {
+      "name": "Echoes of the Abyss (1/Day)",
+      "desc": "The echo demon summons horrible wails from the deep crevasses of the Abyss. Creatures within 60 feet who can hear the wails must succeed on a DC 15 Wisdom saving throw or be stunned until the start of the echo demon's next turn. An affected creature continues hearing the troubling echoes of these cries until it finishes a long rest, and it has disadvantage on Intelligence checks until then."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Aura of Cacophony",
+      "desc": "The demon's presence is extremely distracting. Each creature within 100 feet of the echo demon and that can hear it has disadvantage on concentration checks."
+    }
+  ],
+  "legendary_actions": null
+}

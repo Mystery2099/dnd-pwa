@@ -1,0 +1,11 @@
+{
+  "slug": "mock-box",
+  "name": "Mock Box",
+  "type": "Wondrous item",
+  "desc": "While you hold this small, square contraption, you can use an action to target a creature within 60 feet of you that can hear you. The target must succeed on a DC 13 Charisma saving throw or attack rolls against it have advantage until the start of its next turn.",
+  "rarity": "uncommon",
+  "requires_attunement": "requires attunement",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

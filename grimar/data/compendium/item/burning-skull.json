@@ -1,0 +1,11 @@
+{
+  "slug": "burning-skull",
+  "name": "Burning Skull",
+  "type": "Wondrous item",
+  "desc": "This appallingly misshapen skull—though alien and monstrous in aspect—is undeniably human, and it is large and hollow enough to be worn as a helm by any Medium humanoid. The skull helm radiates an unholy spectral aura, which sheds dim light in a 10-foot radius. According to legends, gazing upon a burning skull freezes the blood and withers the brain of one who understands not its mystery.",
+  "rarity": "very rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

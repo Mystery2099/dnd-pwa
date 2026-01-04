@@ -1,0 +1,29 @@
+{
+  "slug": "ley-whip",
+  "name": "Ley Whip",
+  "desc": "You channel the power of a ley line within 1 mile into a crackling tendril of multicolored ley energy. The tendril extends from your hand but doesn't interfere with your ability to hold or manipulate objects. When you cast the spell and as a bonus action on subsequent turns, you can direct the tendril to strike a target within 50 feet of you. Make a melee spell attack; on a hit, the tendril does 3d8 force damage and the target must make a Strength saving throw. If the saving throw fails, you can push the target away or pull it closer, up to 10 feet in either direction. Special. A geomancer with a bound ley line can cast this spell as long as he or she is on the same plane as the bound line.",
+  "higher_level": "",
+  "level": "6th-level",
+  "level_int": 6,
+  "school": "evocation",
+  "components": "V, S",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "1 Minute",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 bonus action",
+  "range": "Self",
+  "target_range_sort": 0,
+  "spell_level": 6,
+  "dnd_class": "Wizard, Warlock, Sorceror, Druid",
+  "spell_lists": [
+    "druid",
+    "warlock",
+    "wizard"
+  ]
+}

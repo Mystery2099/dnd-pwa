@@ -1,0 +1,29 @@
+{
+  "slug": "benediction",
+  "name": "Benediction",
+  "desc": "You call down a blessing in the name of an angel of protection. A creature you can see within range shimmers with a faint white light. The next time the creature takes damage, it rolls a d4 and reduces the damage by the result. The spell then ends.",
+  "higher_level": "",
+  "level": "Cantrip",
+  "level_int": 0,
+  "school": "Abjuration",
+  "components": "V, S",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Up to 1 minute",
+  "concentration": "yes",
+  "requires_concentration": true,
+  "casting_time": "1 action",
+  "range": "60 feet",
+  "target_range_sort": 60,
+  "spell_level": 0,
+  "dnd_class": "Cleric, Warlock, Wizard",
+  "spell_lists": [
+    "cleric",
+    "warlock",
+    "wizard"
+  ]
+}

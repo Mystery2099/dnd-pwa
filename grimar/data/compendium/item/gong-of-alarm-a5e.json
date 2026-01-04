@@ -1,0 +1,11 @@
+{
+  "slug": "gong-of-alarm-a5e",
+  "name": "Gong of Alarm",
+  "type": "Wondrous Item",
+  "desc": "As an action, you can cast the __alarm_  spell through this brass gong. When cast this way, the spell’s duration becomes 1 month. The gong can’t be used to cast _alarm_ again while the spell is active and for 24 hours thereafter.",
+  "rarity": "Uncommon",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

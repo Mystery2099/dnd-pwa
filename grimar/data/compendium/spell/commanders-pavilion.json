@@ -1,0 +1,27 @@
+{
+  "slug": "commanders-pavilion",
+  "name": "Commander's Pavilion",
+  "desc": "Creates a command tent 30 feet by 30 feet with a peak height of 20 feet. It is filled with items a military commander might require of a headquarters tent on a campaign, such as maps of the area, a spyglass, a sandglass, materials for correspondence, references for coding and decoding messages, books on history and strategy relevant to the area, banners, spare uniforms, and badges of rank. Such minor mundane items dissipate once the spell's effect ends. Recasting the spell on subsequent days maintains the existing tent for another 24 hours.",
+  "higher_level": "",
+  "level": "3rd-level",
+  "level_int": 3,
+  "school": "conjuration",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": true,
+  "ritual": "yes",
+  "duration": "24 Hours",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "Touch",
+  "target_range_sort": 1,
+  "spell_level": 3,
+  "dnd_class": "Wizard",
+  "spell_lists": [
+    "wizard"
+  ]
+}

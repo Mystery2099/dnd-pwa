@@ -1,0 +1,76 @@
+{
+  "slug": "hverhuldra",
+  "name": "Hverhuldra",
+  "size": "Small",
+  "type": "Fey",
+  "subtype": "",
+  "group": null,
+  "alignment": "neutral good",
+  "armor_class": 15,
+  "armor_desc": "natural armor",
+  "hit_points": 120,
+  "hit_dice": "16d6+64",
+  "speed": {
+    "swim": 30,
+    "walk": 30
+  },
+  "strength": 13,
+  "dexterity": 16,
+  "constitution": 18,
+  "intelligence": 11,
+  "wisdom": 15,
+  "charisma": 18,
+  "skills": {
+    "athletics": 4,
+    "intimidation": 7,
+    "nature": 3,
+    "survival": 5
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "cold",
+  "damage_immunities": "fire, poison",
+  "condition_immunities": "poisoned",
+  "senses": "darkvision 60 ft., passive Perception 12",
+  "languages": "Aquan, Common, Sylvan",
+  "cr": 6,
+  "challenge_rating": "6",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The hverhuldra makes two steaming fist attacks."
+    },
+    {
+      "name": "Steaming Fist",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 12 (2d8 + 3) bludgeoning damage plus 7 (2d6) fire damage.",
+      "attack_bonus": 6,
+      "damage_dice": "2d8+3"
+    },
+    {
+      "name": "Scalding Stream (Recharge 5-6)",
+      "desc": "The hverhuldra spits scalding water in a 30-foot line that is 5 feet wide. Each creature in that line must make a DC 15 Dexterity saving throw. On a failed save, the target takes 21 (6d6) fire damage and is blinded for 1 minute. On a successful save, the target takes half the damage and isn't blinded. A blinded creature can make a DC 15 Constitution saving throw at the end of each of its turns, ending the effect on itself on a success."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Amphibious",
+      "desc": "The hverhuldra can breathe air and water."
+    },
+    {
+      "name": "Purify Water",
+      "desc": "If the hverhuldra sits in a body of slow-flowing or standing water, such as a hot spring or a small creek, for at least 1 hour, the water becomes purified and rendered free of poison and disease. In slow-flowing water, this purification fades 1 hour after the hverhuldra leaves the water. In standing water, this purification lasts until a contaminant enters the water while the hverhuldra isn't in it."
+    },
+    {
+      "name": "Quick Rescue",
+      "desc": "As a bonus action, the hverhuldra gives one willing creature within 60 feet of it the ability to breathe water for 1 minute."
+    },
+    {
+      "name": "Water Protection",
+      "desc": "While the hverhuldra submerged in water, it has advantage on Dexterity (Stealth) checks, and it has resistance to bludgeoning, piercing, and slashing damage from nonmagical attacks. If it takes cold damage, this trait doesn't function until the end of its next turn."
+    },
+    {
+      "name": "Innate Spellcasting",
+      "desc": "The hverhuldra's innate spellcasting ability is Charisma (spell save DC 14). It can innately cast the following spells, requiring no components:\nAt will: create or destroy water, detect poison and disease, purify food and drink\n1/day each: blindness/deafness, protection from poison"
+    }
+  ],
+  "legendary_actions": null
+}

@@ -1,0 +1,11 @@
+{
+  "slug": "sturdy-scroll-tube",
+  "name": "Sturdy Scroll Tube",
+  "type": "Wondrous item",
+  "desc": "This ornate scroll case is etched with arcane symbology. Scrolls inside this case are immune to damage and are protected from the elements, as long as the scroll case remains closed and intact. The scroll case itself has immunity to all forms of damage, except force damage and thunder damage.",
+  "rarity": "common",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

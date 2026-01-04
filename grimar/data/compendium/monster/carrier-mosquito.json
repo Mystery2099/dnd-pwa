@@ -1,0 +1,51 @@
+{
+  "slug": "carrier-mosquito",
+  "name": "Carrier Mosquito",
+  "size": "Large",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 13,
+  "armor_desc": "natural armor",
+  "hit_points": 75,
+  "hit_dice": "10d10+20",
+  "speed": {
+    "walk": 20,
+    "fly": 40
+  },
+  "strength": 16,
+  "dexterity": 13,
+  "constitution": 15,
+  "intelligence": 2,
+  "wisdom": 8,
+  "charisma": 4,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "blindsight 60 ft., passive Perception 9",
+  "languages": "—",
+  "cr": 3,
+  "challenge_rating": "3",
+  "actions": [
+    {
+      "name": "Impaling Proboscis",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one creature. Hit: 14 (2d10 + 3) piercing damage. If the target is a Medium or smaller creature, it is grappled (escape DC 13). Until the grapple ends, the target is restrained, the mosquito can automatically hit the target with its impaling proboscis, and the mosquito can't make impaling proboscis attacks against other targets.",
+      "attack_bonus": 5,
+      "damage_dice": "2d10+3"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Charge",
+      "desc": "If the carrier mosquito moves at least 20 feet straight toward a target and then hits it with an impaling proboscis attack on the same turn, the target takes an extra 5 (1d10) piercing damage."
+    },
+    {
+      "name": "Disruptive Droning",
+      "desc": "While a carrier mosquito is in flight, it produces a constant, loud droning, forcing those nearby to shout in order to be heard. A spellcaster within 30 feet of the mosquito must succeed on a DC 10 spellcasting ability check to cast a spell with a verbal component. In addition, a creature that is concentrating on a spell and that starts its turn within 30 feet of the mosquito must succeed on a DC 10 Constitution saving throw or lose concentration on the spell."
+    }
+  ],
+  "legendary_actions": null
+}

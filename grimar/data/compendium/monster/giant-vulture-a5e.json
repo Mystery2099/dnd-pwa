@@ -1,0 +1,55 @@
+{
+  "slug": "giant-vulture-a5e",
+  "name": "Giant Vulture",
+  "size": "Large",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 12,
+  "armor_desc": "",
+  "hit_points": 22,
+  "hit_dice": "3d10+6",
+  "speed": {
+    "walk": 10,
+    "fly": 60
+  },
+  "strength": 14,
+  "dexterity": 14,
+  "constitution": 14,
+  "intelligence": 6,
+  "wisdom": 12,
+  "charisma": 6,
+  "skills": {
+    "perception": 3
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 13",
+  "languages": "",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The vulture attacks with its beak and its talons."
+    },
+    {
+      "name": "Beak",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8+2) piercing damage."
+    },
+    {
+      "name": "Talons",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8+2) slashing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Keen Sight and Smell",
+      "desc": "The vulture has advantage on Perception checks that rely on sight and smell."
+    }
+  ],
+  "legendary_actions": null
+}

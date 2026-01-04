@@ -1,0 +1,49 @@
+{
+  "slug": "siren-a5e",
+  "name": "Siren",
+  "size": "Medium",
+  "type": "Monstrosity",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 11,
+  "armor_desc": "",
+  "hit_points": 38,
+  "hit_dice": "7d8+7",
+  "speed": {
+    "walk": 20,
+    "swim": 40
+  },
+  "strength": 12,
+  "dexterity": 12,
+  "constitution": 12,
+  "intelligence": 10,
+  "wisdom": 10,
+  "charisma": 14,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 10",
+  "languages": "Common",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The harpy attacks twice with its claw."
+    },
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) slashing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Amphibious",
+      "desc": "The sirencan breathe and sing both in air and underwater."
+    }
+  ],
+  "legendary_actions": null
+}

@@ -1,0 +1,58 @@
+{
+  "slug": "ochre-jelly-a5e",
+  "name": "Ochre Jelly",
+  "size": "Large",
+  "type": "Ooze",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 8,
+  "armor_desc": "",
+  "hit_points": 45,
+  "hit_dice": "6d10+12",
+  "speed": {
+    "walk": 15,
+    "climb": 15,
+    "swim": 15
+  },
+  "strength": 14,
+  "dexterity": 6,
+  "constitution": 14,
+  "intelligence": 1,
+  "wisdom": 6,
+  "charisma": 1,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "acid, lightning, slashing",
+  "condition_immunities": "blinded, charmed, deafened, fatigue, frightened, prone",
+  "senses": "blindsight 60 ft. (blind beyond this radius), passive Perception 8",
+  "languages": "",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Pseudopod",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 9 (2d6 + 2) bludgeoning damage plus 3 (1d6) acid damage  and the target is grappled (escape DC 12). A grappled target takes 3 (1d6) acid damage at the start of each of the jellys turns."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Amorphous",
+      "desc": "The jelly can pass through an opening as narrow as 1 inch wide without squeezing."
+    },
+    {
+      "name": "Spider Climb",
+      "desc": "The jelly can use its climb speed even on difficult surfaces and upside down on ceilings."
+    },
+    {
+      "name": "Sunlight Sensitivity",
+      "desc": "While in sunlight, the jelly has disadvantage on attack rolls."
+    },
+    {
+      "name": "Ooze Nature",
+      "desc": "An ooze doesnt require air or sleep."
+    }
+  ],
+  "legendary_actions": null
+}

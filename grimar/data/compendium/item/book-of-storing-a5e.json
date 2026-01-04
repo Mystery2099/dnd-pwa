@@ -1,0 +1,11 @@
+{
+  "slug": "book-of-storing-a5e",
+  "name": "Book of Storing",
+  "type": "Wondrous Item",
+  "desc": "After you attune to this 1-foot square 6-inch thick book it hides its true nature to anybody else, appearing to be a mundane diary. When you open it however, the book reveals a Tiny storage compartment.\n\nThe storage space is the same size as the book, and because this item doesn’t function as a pocket dimension it can be safely used to store such items (such as a __portable hole_ ).",
+  "rarity": "Uncommon",
+  "requires_attunement": "requires attunement",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

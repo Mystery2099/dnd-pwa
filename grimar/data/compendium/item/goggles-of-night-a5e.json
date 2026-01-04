@@ -1,0 +1,11 @@
+{
+  "slug": "goggles-of-night-a5e",
+  "name": "Goggles of Night",
+  "type": "Wondrous Item",
+  "desc": "While wearing these goggles, you gain darkvision to a range of 60 feet, or increase your existing darkvision by 60 feet.",
+  "rarity": "Uncommon",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

@@ -1,0 +1,11 @@
+{
+  "slug": "ring-of-telekinesis-a5e",
+  "name": "Ring of Telekinesis",
+  "type": "Ring",
+  "desc": "While wearing this ring, you can cast __telekinesis_ , but you are only able to target unattended objects.",
+  "rarity": "Very Rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

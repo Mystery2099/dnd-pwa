@@ -1,0 +1,11 @@
+{
+  "slug": "pocket-spark",
+  "name": "Pocket Spark",
+  "type": "Wondrous item",
+  "desc": "What looks like a simple snuff box contains a magical, glowing ember. Though warm to the touch, the ember can be handled without damage. It can be used to ignite flammable materials quickly. Using it to light a torch, lantern, or anything else with abundant, exposed fuel takes a bonus action. Lighting any other fire takes an action. The ember is consumed when used. If the ember is consumed, the box creates a new ember at dawn.",
+  "rarity": "common",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

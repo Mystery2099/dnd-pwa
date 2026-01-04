@@ -1,0 +1,68 @@
+{
+  "slug": "ravenfolk-scout",
+  "name": "Ravenfolk Scout",
+  "size": "Medium",
+  "type": "Humanoid",
+  "subtype": "kenku",
+  "group": null,
+  "alignment": "neutral",
+  "armor_class": 14,
+  "armor_desc": "studded leather armor",
+  "hit_points": 21,
+  "hit_dice": "6d8 - 6",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 10,
+  "dexterity": 14,
+  "constitution": 8,
+  "intelligence": 10,
+  "wisdom": 15,
+  "charisma": 12,
+  "skills": {
+    "deception": 3,
+    "perception": 6,
+    "stealth": 6
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 120 ft., passive Perception 16",
+  "languages": "Common, Feather Speech, Huginn",
+  "cr": 0.5,
+  "challenge_rating": "1/2",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The ravenfolk scout makes one peck attack and one other melee or ranged attack."
+    },
+    {
+      "name": "Ghost Wings",
+      "desc": "The ravenfolk scout furiously \"beats\"a set of phantasmal wings. Every creature within 5 feet of the ravenfolk must make a successful DC 12 Dexterity saving throw or be blinded until the start of the ravenfolk's next turn."
+    },
+    {
+      "name": "Longbow",
+      "desc": "Ranged Weapon Attack. +4 to hit, range 150/600 ft., one target. Hit: 6 (1d8 + 2) piercing damage."
+    },
+    {
+      "name": "Peck",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) piercing damage.",
+      "attack_bonus": 4,
+      "damage_dice": "1d4"
+    },
+    {
+      "name": "Rapier",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8 + 2) piercing damage.",
+      "attack_bonus": 4,
+      "damage_dice": "1d8"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Mimicry",
+      "desc": "Ravenfolk scouts can mimic the voices of others with uncanny accuracy. They have advantage on Charisma (Deception) checks involving audible mimicry."
+    }
+  ],
+  "legendary_actions": null
+}

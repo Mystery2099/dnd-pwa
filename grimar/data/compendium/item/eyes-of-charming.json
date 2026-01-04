@@ -1,0 +1,11 @@
+{
+  "slug": "eyes-of-charming",
+  "name": "Eyes of Charming",
+  "type": "Wondrous item",
+  "desc": "These crystal lenses fit over the eyes. They have 3 charges. While wearing them, you can expend 1 charge as an action to cast the _charm person_ spell (save DC 13) on a humanoid within 30 feet of you, provided that you and the target can see each other. The lenses regain all expended charges daily at dawn.",
+  "rarity": "uncommon",
+  "requires_attunement": "requires attunement",
+  "document__slug": "wotc-srd",
+  "document__title": "5e Core Rules",
+  "document__url": "http://dnd.wizards.com/articles/features/systems-reference-document-srd"
+}

@@ -1,0 +1,47 @@
+{
+  "slug": "wallflower-a5e",
+  "name": "Wallflower",
+  "size": "Medium",
+  "type": "Plant",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 14,
+  "armor_desc": "",
+  "hit_points": 33,
+  "hit_dice": "6d8+12",
+  "speed": {
+    "walk": 20,
+    "climb": 20
+  },
+  "strength": 14,
+  "dexterity": 14,
+  "constitution": 14,
+  "intelligence": 2,
+  "wisdom": 14,
+  "charisma": 5,
+  "skills": {
+    "stealth": 4
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "damage from nonmagical weapons",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 12",
+  "languages": "",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Tentacles",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 9 (2d6 + 2) bludgeoning damage  and the target is grappled (escape DC 12). Until this grapple ends  the grick can't attack a different target with its tentacles."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Luring Scent",
+      "desc": "When a beast, humanoid or fey creature begins its turn within 30 feet, the creature makes a DC 12 Constitution saving throw. On a failure, it moves as close as it can to the wallflower and ends its turn. Creatures immune to being charmed are immune to this effect. A creature that succeeds on the saving throw is immune to the Luring Scent of all wallflowers for 24 hours."
+    }
+  ],
+  "legendary_actions": null
+}

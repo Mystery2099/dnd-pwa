@@ -1,0 +1,106 @@
+{
+  "slug": "adult-light-dragon",
+  "name": "Adult Light Dragon",
+  "size": "Huge",
+  "type": "Dragon",
+  "subtype": "",
+  "group": null,
+  "alignment": "neutral good",
+  "armor_class": 17,
+  "armor_desc": "natural armor",
+  "hit_points": 212,
+  "hit_dice": "17d12+102",
+  "speed": {
+    "fly": 80,
+    "walk": 40
+  },
+  "strength": 22,
+  "dexterity": 10,
+  "constitution": 23,
+  "intelligence": 16,
+  "wisdom": 18,
+  "charisma": 17,
+  "skills": {
+    "arcana": 8,
+    "nature": 8,
+    "perception": 9,
+    "persuasion": 8,
+    "religion": 8
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "fire; bludgeoning, piercing, and slashing from nonmagical attacks",
+  "damage_immunities": "radiant",
+  "condition_immunities": "blinded",
+  "senses": "blindsight 60 ft., darkvision 120 ft., passive Perception 19",
+  "languages": "Celestial, Draconic",
+  "cr": 16,
+  "challenge_rating": "16",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The dragon can use its Frightful Presence. It then makes three attacks: one with its bite and two with its claws."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +11 to hit, reach 10 ft., one target. Hit: 17 (2d10 + 6) piercing damage.",
+      "attack_bonus": 11,
+      "damage_dice": "2d10+6"
+    },
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +11 to hit, reach 5 ft., one target. Hit: 13 (2d6 + 6) slashing damage.",
+      "attack_bonus": 11,
+      "damage_dice": "2d6+6"
+    },
+    {
+      "name": "Tail",
+      "desc": "Melee Weapon Attack: +11 to hit, reach 15 ft., one target. Hit: 15 (2d8 + 6) bludgeoning damage.",
+      "attack_bonus": 11,
+      "damage_dice": "2d8+6"
+    },
+    {
+      "name": "Frightful Presence",
+      "desc": "Each creature of the dragon's choice that is within 120 feet of the dragon and aware of it must succeed on a DC 19 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the dragon's Frightful Presence for the next 24 hours."
+    },
+    {
+      "name": "Breath Weapon (Recharge 5-6)",
+      "desc": "The dragon uses one of the following breath weapons:\nRadiant Breath. The dragon exhales radiant energy in a 60-foot cone. Each creature in that area must make a DC 19 Dexterity saving throw, taking 55 (10d10) radiant damage on a failed save, or half as much damage on a successful one.\nFlaring Breath. The dragon emits a flash of dazzling light from its maw in a 60-foot cone. Each creature in that area must make a DC 19 Constitution saving throw or be blinded. Undead within the area of effect must also make a DC 19 Wisdom saving throw or be turned for 1 minute. Undead of CR 2 or lower who fail the saving throw are instantly destroyed."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Ethereal Sight",
+      "desc": "The dragon can see 60 feet into the Ethereal Plane when it is on the Material Plane, and vice versa."
+    },
+    {
+      "name": "Illumination",
+      "desc": "The dragon sheds bright light in a 20-foot radius and dim light for an additional 20 feet."
+    },
+    {
+      "name": "Incorporeal Movement",
+      "desc": "The dragon can move through other creatures and objects as if they were difficult terrain. It takes 5 (1d10) force damage if it ends its turn inside an object."
+    },
+    {
+      "name": "Legendary Resistance (3/ Day)",
+      "desc": "If the dragon fails a saving throw, it can choose to succeed instead."
+    },
+    {
+      "name": "Void Traveler",
+      "desc": "The light dragon travels from star to star and does not require air, food, drink, or sleep. When flying between stars, the light dragon magically glides on solar winds, making the immense journey through the void in an impossibly short time."
+    }
+  ],
+  "legendary_actions": [
+    {
+      "name": "Detect",
+      "desc": "The dragon makes a Wisdom (Perception) check."
+    },
+    {
+      "name": "Tail Attack",
+      "desc": "The dragon makes a tail attack."
+    },
+    {
+      "name": "Wing Attack (Costs 2 Actions)",
+      "desc": "The dragon beats its wings. Each creature within 10 feet of the dragon must succeed on a DC 19 Dexterity saving throw or take 13 (2d6 + 6) bludgeoning damage and be knocked prone. The dragon can then fly up to half its flying speed."
+    }
+  ]
+}

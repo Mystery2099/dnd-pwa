@@ -1,0 +1,56 @@
+{
+  "slug": "satarre_bf",
+  "name": "Satarre",
+  "size": "medium",
+  "type": "Humanoid",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 12,
+  "armor_desc": "leather armor",
+  "hit_points": 40,
+  "hit_dice": "",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 14,
+  "dexterity": 12,
+  "constitution": 12,
+  "intelligence": 10,
+  "wisdom": 10,
+  "charisma": 12,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "necrotic,Void Strength",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft.",
+  "languages": "Common,Void Speech",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The satarre makes two Claw or Spear attacks."
+    },
+    {
+      "name": "Claw",
+      "desc": "_Melee Weapon Attack:_ +4 to hit, reach 5 ft., one target. _Hit:_ 5 (1d6+2) piercing damage plus 3 (1d6) necrotic damage."
+    },
+    {
+      "name": "Spear",
+      "desc": "_Melee or Ranged Weapon Attack:_ +4 to hit, reach 5 ft. or range 20/60 ft., one target. _Hit:_ 5 (1d6+2) piercing damage plus 3 (1d6) necrotic damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Void Strength",
+      "desc": "The satarre is resistant to the blinded, charmed, deafened, frightened, stunned, and unconscious conditions."
+    },
+    {
+      "name": "Void Weapons",
+      "desc": "The satarre's weapon attacks are magical. When the satarre hits with any weapon, the weapon deals an extra 1d6 necrotic damage (included in the attack)."
+    }
+  ],
+  "legendary_actions": []
+}

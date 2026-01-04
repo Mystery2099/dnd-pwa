@@ -1,0 +1,55 @@
+{
+  "slug": "shadowfey-tob1-2023",
+  "name": "Shadow Fey",
+  "size": "Medium",
+  "type": "Humanoid",
+  "subtype": "",
+  "group": "null",
+  "alignment": "Lawful Evil",
+  "armor_class": 15,
+  "armor_desc": "chain shirt",
+  "hit_points": 31,
+  "hit_dice": "7d8",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 10,
+  "dexterity": 14,
+  "constitution": 10,
+  "intelligence": 11,
+  "wisdom": 11,
+  "charisma": 13,
+  "skills": {
+    "Arcana": 2,
+    "Perception": 2
+  },
+  "damage_vulnerabilities": "False",
+  "damage_resistances": "False",
+  "damage_immunities": "False",
+  "condition_immunities": "False",
+  "senses": "darkvision 60 ft., passive Perception 12",
+  "languages": "Common, Elvish, Umbral",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Shortsword",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage."
+    },
+    {
+      "name": "Shortbow",
+      "desc": "Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 (1d6 + 2) piercing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Fey Ancestry",
+      "desc": "The shadow fey has advantage on saving throws against being charmed, and magic can't put it to sleep."
+    },
+    {
+      "name": "Sunlight Sensitivity",
+      "desc": "While in sunlight, the shadow fey has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight."
+    }
+  ],
+  "legendary_actions": []
+}

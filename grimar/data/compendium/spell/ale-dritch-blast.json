@@ -1,0 +1,29 @@
+{
+  "slug": "ale-dritch-blast",
+  "name": "Ale-dritch Blast",
+  "desc": "A stream of ice-cold ale blasts from your outstretched hands toward a creature or object within range. Make a ranged spell attack against the target. On a hit, it takes 1d8 cold damage and it must make a successful Constitution saving throw or be poisoned until the end of its next turn. A targeted creature has disadvantage on the saving throw if it has drunk any alcohol within the last hour.",
+  "higher_level": "The damage increases when you reach higher levels: 2d8 at 5th level, 3d8 at 11th level, and 4d8 at 17th level.",
+  "level": "Cantrip",
+  "level_int": 0,
+  "school": "Conjuration",
+  "components": "V, S",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Instantaneous",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "60 feet",
+  "target_range_sort": 60,
+  "spell_level": 0,
+  "dnd_class": "Bard, Druid, Wizard",
+  "spell_lists": [
+    "druid",
+    "bard",
+    "wizard"
+  ]
+}

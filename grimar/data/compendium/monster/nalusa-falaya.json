@@ -1,0 +1,66 @@
+{
+  "slug": "nalusa-falaya",
+  "name": "Nalusa Falaya",
+  "size": "Medium",
+  "type": "Aberration",
+  "subtype": "",
+  "group": null,
+  "alignment": "neutral evil",
+  "armor_class": 13,
+  "armor_desc": "natural armor",
+  "hit_points": 33,
+  "hit_dice": "6d8+6",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 12,
+  "dexterity": 15,
+  "constitution": 13,
+  "intelligence": 11,
+  "wisdom": 13,
+  "charisma": 9,
+  "skills": {
+    "stealth": 4
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 120 ft., passive Perception 11",
+  "languages": "Umbral, Void Speech",
+  "cr": 0.5,
+  "challenge_rating": "1/2",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage. If the target is a creature, it must succeed on a DC 12 Strength saving throw or be knocked prone.",
+      "attack_bonus": 4,
+      "damage_dice": "1d6+2"
+    },
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8 + 2) slashing damage.",
+      "attack_bonus": 4,
+      "damage_dice": "1d8+2"
+    },
+    {
+      "name": "Terrifying Glare",
+      "desc": "The nalusa falaya targets one creature it can see within 30 feet of it. If the target can see the nalusa falaya, the target must succeed on a DC 12 Wisdom saving throw or be frightened until the end of the nalusa falaya's next turn."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Shadow Stealth",
+      "desc": "While in dim light or darkness, the nalusa falaya can take the Hide action as a bonus action."
+    },
+    {
+      "name": "Shadow Step",
+      "desc": "As an action, the nalusa falaya can teleport itself to a shadow it can see within 30 feet."
+    },
+    {
+      "name": "Sunlight Weakness",
+      "desc": "While in sunlight, the nalusa falaya has disadvantage on ability checks, attack rolls, and saving throws."
+    }
+  ],
+  "legendary_actions": null
+}

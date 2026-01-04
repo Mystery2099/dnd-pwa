@@ -1,0 +1,61 @@
+{
+  "slug": "djinni_bf",
+  "name": "Djinni",
+  "size": "large",
+  "type": "Elemental",
+  "subtype": "Outsider",
+  "group": "Genies",
+  "alignment": "",
+  "armor_class": 17,
+  "armor_desc": "natural armor",
+  "hit_points": 216,
+  "hit_dice": "",
+  "speed": {
+    "walk": 30,
+    "fly": 90
+  },
+  "strength": 20,
+  "dexterity": 22,
+  "constitution": 22,
+  "intelligence": 14,
+  "wisdom": 24,
+  "charisma": 28,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "lightning,thunder",
+  "condition_immunities": "",
+  "senses": "darkvision 120 ft.",
+  "languages": "Auran,Common",
+  "cr": 11,
+  "challenge_rating": "11",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The djinni makes three Scimitar or Storm Bolt attacks."
+    },
+    {
+      "name": "Scimitar",
+      "desc": "_Melee Weapon Attack:_ +9 to hit, reach 5 ft., one target. _Hit:_ 12 (2d6+5) slashing damage plus 14 (4d6) lightning damage or thunder damage (the djinni's choice)."
+    },
+    {
+      "name": "Storm Bolt",
+      "desc": "_Ranged Spell Attack:_ +9 to hit, range 120 ft., one target. _Hit:_ 18 (3d8+5) lightning damage plus 7 (2d6) thunder damage."
+    },
+    {
+      "name": "Create Air Elemental (1/Day)",
+      "desc": "The djinni magically creates one air-based Elemental of CR 5 or lower in an unoccupied space the djinni can see within 30 feet of it. The elemental acts as an ally of the djinni, obeying its spoken commands. The elemental remains for 1 hour, until the djinni dies, or until the djinni dismisses it as a bonus action."
+    },
+    {
+      "name": "Travel the Planes (1/Day)",
+      "desc": "The djinni transports itself to a different plane of existence. This works like the plane shift spell, except it can affect only itself and can't use this action to banish an unwilling creature."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Nebulous (Cloud Form Only)",
+      "desc": "The djinni's Stealth is 21, it can hover while flying, can't manipulate objects or attack, and it can pass through any space air can pass through without squeezing. In addition, it can enter and hide in any Tiny or larger container, such as a pouch, lamp, backpack, or barrel."
+    }
+  ],
+  "legendary_actions": []
+}

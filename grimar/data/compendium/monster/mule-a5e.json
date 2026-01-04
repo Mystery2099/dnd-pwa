@@ -1,0 +1,44 @@
+{
+  "slug": "mule-a5e",
+  "name": "Mule",
+  "size": "Medium",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 10,
+  "armor_desc": "",
+  "hit_points": 11,
+  "hit_dice": "2d8+2",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 12,
+  "dexterity": 10,
+  "constitution": 12,
+  "intelligence": 2,
+  "wisdom": 10,
+  "charisma": 4,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 10",
+  "languages": "",
+  "cr": 0.125,
+  "challenge_rating": "1/8",
+  "actions": [
+    {
+      "name": "Hooves",
+      "desc": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4+1) bludgeoning damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Beast of Burden",
+      "desc": "The mule is considered Large when calculating its carrying capacity."
+    }
+  ],
+  "legendary_actions": null
+}

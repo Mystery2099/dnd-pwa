@@ -1,0 +1,52 @@
+{
+  "slug": "tyrannosaurus_rex_bf",
+  "name": "Tyrannosaurus Rex",
+  "size": "huge",
+  "type": "Beast",
+  "subtype": "",
+  "group": "Dinosaurs",
+  "alignment": "",
+  "armor_class": 13,
+  "armor_desc": "natural armor",
+  "hit_points": 184,
+  "hit_dice": "",
+  "speed": {
+    "walk": 50
+  },
+  "strength": 26,
+  "dexterity": 10,
+  "constitution": 18,
+  "intelligence": 2,
+  "wisdom": 12,
+  "charisma": 8,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "-",
+  "languages": "-",
+  "cr": 8,
+  "challenge_rating": "8",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The tyrannosaurus makes one Bite attack and one Tail attack. It can't make both attacks against the same target."
+    },
+    {
+      "name": "Bite",
+      "desc": "_Melee Weapon Attack:_ +8 to hit, reach 10 ft., one creature. _Hit:_ 31 (4d12+5) piercing damage. If the target is a Large or smaller creature, it is grappled (escape DC 16). Until this grapple ends, the target is restrained, and the tyrannosaurus can't Bite another target."
+    },
+    {
+      "name": "Tail",
+      "desc": "_Melee Weapon Attack:_ +8 to hit, reach 10 ft., one creature. _Hit:_ 23 (4d8+5) bludgeoning damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Hardy",
+      "desc": "Any critical hit against the dinosaur becomes a normal hit."
+    }
+  ],
+  "legendary_actions": []
+}

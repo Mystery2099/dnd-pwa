@@ -1,0 +1,11 @@
+{
+  "slug": "brooch-of-shielding",
+  "name": "Brooch of Shielding",
+  "type": "Wondrous item",
+  "desc": "While wearing this brooch, you have resistance to force damage, and you have immunity to damage from the _magic missile_ spell.",
+  "rarity": "uncommon",
+  "requires_attunement": "requires attunement",
+  "document__slug": "wotc-srd",
+  "document__title": "5e Core Rules",
+  "document__url": "http://dnd.wizards.com/articles/features/systems-reference-document-srd"
+}

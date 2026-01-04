@@ -1,0 +1,75 @@
+{
+  "slug": "malcubus-a5e",
+  "name": "Malcubus",
+  "size": "Medium",
+  "type": "Fiend",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 14,
+  "armor_desc": "",
+  "hit_points": 78,
+  "hit_dice": "12d8+24",
+  "speed": {
+    "walk": 30,
+    "fly": 60
+  },
+  "strength": 10,
+  "dexterity": 16,
+  "constitution": 14,
+  "intelligence": 14,
+  "wisdom": 16,
+  "charisma": 20,
+  "skills": {
+    "deception": 7,
+    "insight": 5,
+    "perception": 5,
+    "persuasion": 7,
+    "stealth": 5
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "cold, fire, lightning, poison; damage from nonmagical weapons",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 15",
+  "languages": "Abyssal, Common, Infernal, telepathy 60 ft.",
+  "cr": 4,
+  "challenge_rating": "4",
+  "actions": [
+    {
+      "name": "Claw (Malcubus Form Only)",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) slashing damage plus 7 (2d6) necrotic damage."
+    },
+    {
+      "name": "Charm",
+      "desc": "The malcubus targets one humanoid on the same plane of existence within 30 feet  forcing it to make a DC 15 Wisdom saving throw. On a failure  the target is magically charmed for 1 day or until the malcubus charms another creature. The charmed creature obeys the malcubuss commands. The creature repeats the saving throw whenever it takes damage or if it receives a suicidal command. If a creatures saving throw is successful or the effect ends for it  it is immune to any malcubuss Charm for 24 hours."
+    },
+    {
+      "name": "Draining Kiss",
+      "desc": "The malcubus kisses a willing or charmed creature. The target makes a DC 15 Constitution saving throw  taking 22 (4d10) psychic damage on a failed save or half damage on a success. The targets hit point maximum is reduced by the same amount until it finishes a long rest  and the malcubus regains hit points equal to the same amount. If the target is charmed by the malcubus  the charm ends."
+    },
+    {
+      "name": "Etherealness",
+      "desc": "The malcubus magically travels to the Ethereal Plane. While on the Ethereal Plane  the malcubus can see and hear into the Material Plane and can choose to make itself audible and hazily visible to creatures on the Material Plane. If a humanoid on the Material Plane invites the malcubus to do so  the malcubus can use an action to magically travel from the Ethereal Plane to the Material Plane."
+    },
+    {
+      "name": "Dream (1/Day)",
+      "desc": "While on the Ethereal Plane  the malcubus magically touches a sleeping humanoid that is not protected by a magic circle or protection from evil and good spell or similar magic. While the touch persists  the malcubus appears in the creatures dreams. The creature can end the dream at any time. If the dream lasts for 1 hour  the target gains no benefit from the rest  and the malcubus can use Charm on the creature even if its on a different plane of existence."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Cloaked Mind",
+      "desc": "When subjected to a divination effect that detects fiends or alignment, the malcubus makes a DC 15 Charisma saving throw. On a success, the malcubuss nature is not detected."
+    },
+    {
+      "name": "Evil",
+      "desc": "The malcubus radiates an Evil aura."
+    },
+    {
+      "name": "Telepathic Bond",
+      "desc": "The malcubus can communicate telepathically with a charmed creature over any distance, even on a different plane of existence."
+    }
+  ],
+  "legendary_actions": null
+}

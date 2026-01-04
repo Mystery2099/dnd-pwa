@@ -1,0 +1,47 @@
+{
+  "slug": "boomer",
+  "name": "Boomer",
+  "size": "Medium",
+  "type": "Plant",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 7,
+  "armor_desc": "natural armor",
+  "hit_points": 22,
+  "hit_dice": "4d8+4",
+  "speed": {
+    "walk": 0
+  },
+  "strength": 1,
+  "dexterity": 1,
+  "constitution": 12,
+  "intelligence": 1,
+  "wisdom": 3,
+  "charisma": 1,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "thunder",
+  "condition_immunities": "blinded, deafened, frightened",
+  "senses": "blindsight 30 ft. (blind beyond this radius), passive Perception 6",
+  "languages": "—",
+  "cr": 0.5,
+  "challenge_rating": "1/2",
+  "actions": null,
+  "special_abilities": [
+    {
+      "name": "Deafening Boom",
+      "desc": "When a creature hits the boomer with a melee attack, the boomer releases a blast of sound. Each creature within 10 feet of the boomer that can hear it must make a DC 12 Constitution saving throw. On a failure, a creature takes 5 (2d4) thunder damage and is incapacitated until the end of its next turn. On a success, a creature takes half the damage and isn't incapacitated."
+    },
+    {
+      "name": "Death Burst",
+      "desc": "When it dies, the boomer explodes in a cacophonous burst. Each creature within 30 feet of the boomer that can hear it must make a DC 12 Constitution saving throw. On a failure, a creature takes 7 (2d6) thunder damage and is deafened for 1 minute. On a success, a creature takes half the damage and isn't deafened."
+    },
+    {
+      "name": "False Appearance",
+      "desc": "While the boomer remains motionless, it is indistinguishable from an ordinary fungus."
+    }
+  ],
+  "legendary_actions": null
+}

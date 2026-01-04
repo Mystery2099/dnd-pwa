@@ -1,0 +1,29 @@
+{
+  "slug": "shadow-tree",
+  "name": "Shadow Tree",
+  "desc": "This spell temporarily draws a willow tree from the Shadow Realm to the location you designate within range. The tree is 5 feet in diameter and 20 feet tall.\n  When you cast the spell, you can specify individuals who can interact with the tree. All other creatures see the tree as a shadow version of itself and can't grasp or climb it, passing through its shadowy substance. A creature that can interact with the tree and that has Sunlight Sensitivity or Sunlight Hypersensitivity is protected from sunlight while within 20 feet of the tree. A creature that can interact with the tree can climb into its branches, giving the creature half cover.",
+  "higher_level": "",
+  "level": "2nd-level",
+  "level_int": 2,
+  "school": "conjuration",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "10 minutes",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "60 Feet",
+  "target_range_sort": 60,
+  "spell_level": 2,
+  "dnd_class": "Druid, Ranger, Sorceror, Wizard",
+  "spell_lists": [
+    "druid",
+    "ranger",
+    "wizard"
+  ]
+}

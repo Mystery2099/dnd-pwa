@@ -1,0 +1,11 @@
+{
+  "slug": "captains-goggles",
+  "name": "Captain's Goggles",
+  "type": "Wondrous item",
+  "desc": "These copper and glass goggles are prized by air and sea captains across the world. The goggles are designed to repel water and never fog. After attuning to the goggles, your name (or preferred moniker) appears on the side of the goggles. While wearing the goggles, you can't suffer from exhaustion.",
+  "rarity": "rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

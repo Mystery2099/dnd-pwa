@@ -18,22 +18,6 @@ import {
 	FiveEBitsClassSchema
 } from './schemas/5ebits-schemas';
 
-// 5e-bits API response types
-interface FiveEBitsListResponse<T> {
-	results: T[];
-	count: number;
-	next: string | null;
-	previous: string | null;
-}
-
-// Type inferences
-type FiveEBitsSpell = z.infer<typeof FiveEBitsSpellSchema>;
-type FiveEBitsMonster = z.infer<typeof FiveEBitsMonsterSchema>;
-type FiveEBitsFeat = z.infer<typeof FiveEBitsFeatSchema>;
-type FiveEBitsBackground = z.infer<typeof FiveEBitsBackgroundSchema>;
-type FiveEBitsRace = z.infer<typeof FiveEBitsRaceSchema>;
-type FiveEBitsClass = z.infer<typeof FiveEBitsClassSchema>;
-
 /**
  * Validate data with Zod schema
  */

@@ -1,0 +1,98 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - generic [ref=e11]:
+    - link "Grimar" [ref=e13] [cursor=pointer]:
+      - /url: /dashboard
+    - generic [ref=e15]:
+      - searchbox "Search spells, items, characters…" [ref=e16]
+      - generic:
+        - generic: ⌘
+        - generic: K
+    - navigation [ref=e18]:
+      - link "Dashboard" [ref=e19] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Compendium" [ref=e20] [cursor=pointer]:
+        - /url: /compendium
+      - link "Settings" [ref=e21] [cursor=pointer]:
+        - /url: /settings
+  - generic [ref=e23]:
+    - complementary [ref=e24]:
+      - navigation [ref=e26]:
+        - generic [ref=e27]: Grimoire
+        - link "Dashboard" [ref=e28] [cursor=pointer]:
+          - /url: /dashboard
+        - link "Compendium" [ref=e29] [cursor=pointer]:
+          - /url: /compendium
+        - link "Characters" [ref=e30] [cursor=pointer]:
+          - /url: /characters
+        - link "The Forge" [ref=e31] [cursor=pointer]:
+          - /url: /forge
+        - generic [ref=e32]: System
+        - link "Settings" [ref=e33] [cursor=pointer]:
+          - /url: /settings
+        - generic [ref=e35]:
+          - generic [ref=e36]:
+            - generic [ref=e37]:
+              - img [ref=e38]
+              - generic [ref=e43]: Online
+            - button "Sync" [ref=e44]:
+              - img [ref=e45]
+              - text: Sync
+          - generic [ref=e50]:
+            - paragraph [ref=e51]: Connected to server. All features available.
+            - paragraph [ref=e52]: "Last online: Just now"
+    - main [ref=e53]:
+      - generic [ref=e55]:
+        - complementary [ref=e56]:
+          - generic [ref=e57]:
+            - generic [ref=e58]:
+              - heading "Index Filter" [level=2] [ref=e60]
+              - generic [ref=e61]:
+                - img [ref=e62]
+                - textbox "Search..." [ref=e65]
+              - generic [ref=e66]:
+                - img
+                - generic [ref=e67]:
+                  - combobox [ref=e68] [cursor=pointer]:
+                    - option "Name (A-Z)" [selected]
+                    - option "Name (Z-A)"
+                    - option "Challenge Rating (Low to High)"
+                    - option "Challenge Rating (High to Low)"
+                  - generic:
+                    - img
+              - generic [ref=e69]:
+                - button "All Items" [ref=e70]
+                - button "Bookmarks" [ref=e71]:
+                  - img [ref=e72]
+                  - generic [ref=e74]: Bookmarks
+            - generic [ref=e75]:
+              - button "Filter Logic AND" [ref=e77]:
+                - generic [ref=e78]: Filter Logic
+                - generic [ref=e79]: AND
+              - button "Size" [ref=e81]:
+                - generic [ref=e82]: Size
+                - img [ref=e83]
+              - generic [ref=e85]:
+                - button "Type" [ref=e86]:
+                  - generic [ref=e87]: Type
+                  - img [ref=e88]
+                - generic [ref=e91]:
+                  - button "Aberration" [ref=e92]
+                  - button "Beast" [ref=e93]
+                  - button "Celestial" [ref=e94]
+                  - button "Construct" [ref=e95]
+                  - button "Dragon" [ref=e96]
+                  - button "Elemental" [ref=e97]
+                  - button "Fey" [ref=e98]
+                  - button "Fiend" [ref=e99]
+                  - button "Giant" [ref=e100]
+                  - button "Humanoid" [ref=e101]
+                  - button "Monstrosity" [ref=e102]
+                  - button "Ooze" [ref=e103]
+                  - button "Plant" [ref=e104]
+                  - button "Undead" [ref=e105]
+        - main [ref=e106]:
+          - heading "Monsters" [level=1] [ref=e108]
+```

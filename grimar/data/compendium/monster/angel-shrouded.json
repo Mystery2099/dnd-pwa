@@ -1,0 +1,75 @@
+{
+  "slug": "angel-shrouded",
+  "name": "Angel, Shrouded",
+  "size": "Medium",
+  "type": "Celestial",
+  "subtype": "",
+  "group": null,
+  "alignment": "chaotic good",
+  "armor_class": 18,
+  "armor_desc": "natural armor",
+  "hit_points": 161,
+  "hit_dice": "17d8+85",
+  "speed": {
+    "walk": 40,
+    "fly": 60
+  },
+  "strength": 18,
+  "dexterity": 20,
+  "constitution": 20,
+  "intelligence": 16,
+  "wisdom": 22,
+  "charisma": 10,
+  "skills": {
+    "perception": 6
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "poison, radiant; nonmagic B/P/S attacks",
+  "damage_immunities": "",
+  "condition_immunities": "charmed, exhaustion, frightened, poisoned",
+  "senses": "blindsight 30', darkvision 120', passive Perception 21",
+  "languages": "all, telepathy 120'",
+  "cr": 13,
+  "challenge_rating": "13",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "Three Justicar's Blade or Justicar's Blast attacks."
+    },
+    {
+      "name": "Justicar's Blade",
+      "desc": "Melee Weapon Attack: +10 to hit, 5 ft., one target, 13 (2d8+5) slashing damage + 14 (4d6) poison and target: DC 17 Con save or be poisoned. Poisoned condition lasts until it is removed by the lesser restoration spell or similar magic."
+    },
+    {
+      "name": "Justicar's Blast",
+      "desc": "Ranged Spell Attack: +11 to hit, 120 ft., one target, 24 (4d8+6) radiant."
+    },
+    {
+      "name": "Spellcasting",
+      "desc": "Wis (DC 19) no material components: At will: bane bless locate creature3/day ea: invisibility (self only) healing word (level 5) nondetection"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Angelic Poison",
+      "desc": "Its weapon attacks are magical and its weapons are coated with radiant poison. Creatures with resistance or immunity to poison or the poisoned condition can be affected by angel's poison. Such creatures have advantage on saves vs. the angel's poison."
+    },
+    {
+      "name": "Divine Awareness",
+      "desc": "Knows if it hears a lie."
+    },
+    {
+      "name": "Evasion",
+      "desc": "If subject to effect that allows Dex save for half damage takes no damage on success and only half if it fails."
+    },
+    {
+      "name": "Immortal Nature",
+      "desc": "Doesn't require food drink or sleep"
+    },
+    {
+      "name": "Magic Resistance",
+      "desc": "Advantage: spell/magic effect saves."
+    }
+  ],
+  "legendary_actions": null
+}

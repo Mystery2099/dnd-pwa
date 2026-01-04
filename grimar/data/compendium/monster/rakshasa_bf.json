@@ -1,0 +1,62 @@
+{
+  "slug": "rakshasa_bf",
+  "name": "Rakshasa",
+  "size": "medium",
+  "type": "Fiend",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 16,
+  "armor_desc": "natural armor",
+  "hit_points": 166,
+  "hit_dice": "",
+  "speed": {
+    "walk": 40,
+    "fly": 30,
+    "hover": true
+  },
+  "strength": 14,
+  "dexterity": 26,
+  "constitution": 18,
+  "intelligence": 12,
+  "wisdom": 26,
+  "charisma": 30,
+  "skills": {},
+  "damage_vulnerabilities": "piercing damage from magical attacks",
+  "damage_resistances": "",
+  "damage_immunities": "bludgeoning,piercing,and slashing damage from nonmagical attacks,prone",
+  "condition_immunities": "",
+  "senses": "truesight 60 ft.",
+  "languages": "Abyssal,Common,Infernal",
+  "cr": 13,
+  "challenge_rating": "13",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The rakshasa makes four Claw or Arcane Bolt attacks. It can replace one attack with a use of Spellcasting. If two Claw attacks hit one creature, the target is cursed. While cursed, the target gains no benefit from finishing a short or long rest. The curse lasts until removed by the remove curse spell or similar magic."
+    },
+    {
+      "name": "Claw",
+      "desc": "_Melee Weapon Attack:_ +8 to hit, reach 5 ft., one target. _Hit:_ 12 (2d8+3) slashing damage plus 10 (3d6) force damage."
+    },
+    {
+      "name": "Arcane Bolt",
+      "desc": "_Ranged Spell Attack:_ +10 to hit, range 60 ft., one target. _Hit:_ 22 (5d6+5) force damage."
+    },
+    {
+      "name": "Travel the Planes (1/Day)",
+      "desc": "The rakshasa magically transports itself to a different plane of existence. This works like the plane shift spell, except the rakshasa can affect only itself and can't use this action to banish an unwilling creature."
+    },
+    {
+      "name": "Spellcasting",
+      "desc": "The rakshasa casts one of the following spells, requiring no material components and using CHA as the spellcasting ability (spell save DC 18).<br>At will: _detect thoughts_, _mage hand_, _minor illusion_<br>3/day each: _major image_, _suggestion_<br>1/day: _dominate_"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Limited Magic Immunity",
+      "desc": "The rakshasa can't be affected or detected by spells of 6th level or lower unless it wishes to be. It has advantage on saves against all other spells and magical effects."
+    }
+  ],
+  "legendary_actions": []
+}

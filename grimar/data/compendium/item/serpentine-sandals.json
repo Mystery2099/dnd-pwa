@@ -1,0 +1,11 @@
+{
+  "slug": "serpentine-sandals",
+  "name": "Serpentine Sandals",
+  "type": "Wondrous item",
+  "desc": "While wearing these glistening, snake-skin sandals, you ignore difficult terrain created by marsh, swamps, or other shallow water, such as a rain-soaked rooftop. In addition, you have advantage on ability checks and saving throws made to escape a grapple or the restrained condition while wearing these sandals.",
+  "rarity": "rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "toh",
+  "document__title": "Tome of Heroes",
+  "document__url": "https://koboldpress.com/kpstore/product/tome-of-heroes-for-5th-edition/"
+}

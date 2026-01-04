@@ -1,0 +1,11 @@
+{
+  "slug": "tome-of-clear-thought-a5e",
+  "name": "Tome of Clear Thought",
+  "type": "Wondrous Item",
+  "desc": "This magical book dictates methodologies for more rational and logical thinking. Spending 48 hours over 6 days (or fewer) reading and following the book’s methodologies increases your Intelligence score and your maximum Intelligence score by 2\\. The tome then becomes a mundane item for a century before it regains its magic.",
+  "rarity": "Very Rare",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

@@ -1,0 +1,66 @@
+{
+  "slug": "young_gold_dragon_bf",
+  "name": "Young Gold Dragon",
+  "size": "large",
+  "type": "Dragon",
+  "subtype": "",
+  "group": "Dragons",
+  "alignment": "",
+  "armor_class": 18,
+  "armor_desc": "natural armor",
+  "hit_points": 193,
+  "hit_dice": "",
+  "speed": {
+    "walk": 40,
+    "fly": 80,
+    "swim": 40
+  },
+  "strength": 22,
+  "dexterity": 22,
+  "constitution": 28,
+  "intelligence": 16,
+  "wisdom": 26,
+  "charisma": 24,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "fire",
+  "condition_immunities": "",
+  "senses": "darkvision 120 ft., keensense 30 ft.",
+  "languages": "Common,Draconic",
+  "cr": 10,
+  "challenge_rating": "10",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The dragon makes one Bite attack and two Claw attacks. It can replace its Bite attack with a use of Weakening Breath, if available."
+    },
+    {
+      "name": "Bite",
+      "desc": "_Melee Weapon Attack:_ +10 to hit, reach 10 ft., one target. _Hit:_ 17 (2d10+6) piercing damage."
+    },
+    {
+      "name": "Claw",
+      "desc": "_Melee Weapon Attack:_ +10 to hit, reach 5 ft., one target. _Hit:_ 13 (2d6+6) slashing damage."
+    },
+    {
+      "name": "Fire Breath (Recharge 5-6)",
+      "desc": "The dragon exhales fire in a 30-foot cone. Each creature in that area must make a DC 17 DEX save, taking 66 (12d10) fire damage on a failed save, or half as much damage on a successful one."
+    },
+    {
+      "name": "Weakening Breath (Recharge 6)",
+      "desc": "As the **gold dragon wyrmling**, except it is a 30-foot cone, and the save DC is 17."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Amphibious",
+      "desc": "The dragon can breathe air and water."
+    },
+    {
+      "name": "Golden Splendor",
+      "desc": "When the gold dragon hasn't unleashed its Fire Breath, its scales gleam and sparkle like molten gold or a pile of gold coins. While the dragon's Fire Breath is available, each creature that starts its turn within 10 feet of the dragon must succeed on a DC 17 CHA save or be charmed until the start of its next turn."
+    }
+  ],
+  "legendary_actions": []
+}

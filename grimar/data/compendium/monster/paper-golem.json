@@ -1,0 +1,59 @@
+{
+  "slug": "paper-golem",
+  "name": "Paper Golem",
+  "size": "Tiny",
+  "type": "Construct",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 13,
+  "armor_desc": null,
+  "hit_points": 7,
+  "hit_dice": "2d4+2",
+  "speed": {
+    "fly": 30,
+    "walk": 20
+  },
+  "strength": 8,
+  "dexterity": 16,
+  "constitution": 12,
+  "intelligence": 3,
+  "wisdom": 7,
+  "charisma": 3,
+  "skills": {},
+  "damage_vulnerabilities": "fire",
+  "damage_resistances": "bludgeoning, piercing, and slashing from nonmagical attacks not made with adamantine",
+  "damage_immunities": "poison, psychic",
+  "condition_immunities": "charmed, exhaustion, frightened, paralyzed, petrified, poisoned",
+  "senses": "darkvision 30 ft., passive perception 8",
+  "languages": "understands the languages of its creator but can't speak",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Paper Cut",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) slashing damage.",
+      "attack_bonus": 5,
+      "damage_dice": "1d6+3"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "False Appearance",
+      "desc": "While the paper golem remains motionless, it is indistinguishable from an ordinary sheet of paper."
+    },
+    {
+      "name": "Immutable Form",
+      "desc": "The paper golem is immune to any spell or effect that would alter its form."
+    },
+    {
+      "name": "Ink Blot (Recharge 4-6)",
+      "desc": "As a bonus action, the paper golem applies ink to itself. The next time it hits a creature with a paper cut attack, the creature must make a DC 13 Constitution saving throw, taking 5 (2d4) poison damage on a failed save, or half as much damage on a successful one."
+    },
+    {
+      "name": "Magic Weapons",
+      "desc": "The paper golem's weapon attacks are magical."
+    }
+  ],
+  "legendary_actions": null
+}

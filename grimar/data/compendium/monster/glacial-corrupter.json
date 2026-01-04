@@ -1,0 +1,53 @@
+{
+  "slug": "glacial-corrupter",
+  "name": "Glacial Corrupter",
+  "size": "Medium",
+  "type": "Undead",
+  "subtype": "",
+  "group": null,
+  "alignment": "lawful evil",
+  "armor_class": 15,
+  "armor_desc": "natural armor",
+  "hit_points": 34,
+  "hit_dice": "4d8+16",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 14,
+  "dexterity": 13,
+  "constitution": 18,
+  "intelligence": 6,
+  "wisdom": 8,
+  "charisma": 5,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "cold, poison",
+  "condition_immunities": "exhaustion, poisoned, petrified",
+  "senses": "darkvision 60 ft., passive Perception 9",
+  "languages": "understands all languages it knew in life but can’t speak",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Longsword",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8 + 2) slashing damage, or 7 (1d10 + 2) slashing damage if used with two hands.",
+      "attack_bonus": 4,
+      "damage_dice": "1d8+2"
+    },
+    {
+      "name": "Longbow",
+      "desc": "Ranged Weapon Attack: +4 to hit, range 150/600 ft., one target. Hit: 6 (1d8 + 2) piercing damage.",
+      "attack_bonus": 4,
+      "damage_dice": "1d8+2"
+    },
+    {
+      "name": "Glacial Touch (Recharge 5-6)",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one creature. Hit: 9 (2d6 + 2) cold damage. The target must succeed on a DC 13 Constitution saving throw or take 2 (1d4) cold damage at the start of each of its turns, as a frozen shard lodges itself in the wound. Any creature can take an action to remove the shard with a successful DC 12 Wisdom (Medicine) check. The shard crumbles to snow if the target receives magical healing.\n\nA humanoid slain by this attack rises in 1 week as a glacial corrupter, unless the humanoid is restored to life or its body is destroyed.",
+      "attack_bonus": 4,
+      "damage_dice": "2d6+2"
+    }
+  ],
+  "special_abilities": null,
+  "legendary_actions": null
+}

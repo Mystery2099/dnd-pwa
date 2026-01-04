@@ -1,0 +1,11 @@
+{
+  "slug": "boots-of-speed-a5e",
+  "name": "Boots of Speed",
+  "type": "Wondrous Item",
+  "desc": "While wearing these boots, you can use a bonus action to click the heels together. You double your base Speed, and opportunity attacks made against you have _disadvantage_ . You can end the effect as a bonus action.\n\nOnce the boots have been used in this way for a total of 10 minutes (each use expends a minimum of 1 minute), they cease to function until you finish a _long rest_ .",
+  "rarity": "Rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

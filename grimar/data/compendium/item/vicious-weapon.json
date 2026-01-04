@@ -1,0 +1,11 @@
+{
+  "slug": "vicious-weapon",
+  "name": "Vicious Weapon",
+  "type": "Weapon (any)",
+  "desc": "When you roll a 20 on your attack roll with this magic weapon, your critical hit deals an extra 2d6 damage of the weapon's type.",
+  "rarity": "rare",
+  "requires_attunement": "",
+  "document__slug": "wotc-srd",
+  "document__title": "5e Core Rules",
+  "document__url": "http://dnd.wizards.com/articles/features/systems-reference-document-srd"
+}

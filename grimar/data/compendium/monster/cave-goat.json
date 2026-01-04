@@ -1,0 +1,52 @@
+{
+  "slug": "cave-goat",
+  "name": "Cave Goat",
+  "size": "Small",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 11,
+  "armor_desc": null,
+  "hit_points": 22,
+  "hit_dice": "4d6+8",
+  "speed": {
+    "walk": 50
+  },
+  "strength": 14,
+  "dexterity": 13,
+  "constitution": 15,
+  "intelligence": 2,
+  "wisdom": 10,
+  "charisma": 6,
+  "skills": {
+    "athletics": 4
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 10",
+  "languages": "—",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Ram",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) bludgeoning damage.",
+      "attack_bonus": 4,
+      "damage_dice": "1d4+2"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Keen Hearing",
+      "desc": "The cave goat has advantage on Wisdom (Perception) checks that rely on hearing."
+    },
+    {
+      "name": "Sturdy Climber",
+      "desc": "The cave goat has advantage on Strength (Athletics) checks to climb rocky surfaces."
+    }
+  ],
+  "legendary_actions": null
+}

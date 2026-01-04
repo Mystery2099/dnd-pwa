@@ -1,0 +1,11 @@
+{
+  "slug": "blackguards-blade",
+  "name": "Blackguard's Blade",
+  "type": "Weapon",
+  "desc": "You have advantage on attack rolls made with this weapon against a target if another enemy of the target is within 5 feet of it, and it has no allies within 5 feet of it.",
+  "rarity": "common",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

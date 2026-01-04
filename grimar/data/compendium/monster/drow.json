@@ -1,0 +1,7 @@
+{
+  "index": "drow",
+  "name": "Drow",
+  "type": "humanoid",
+  "size": "Medium",
+  "challenge_rating": 0.25
+}

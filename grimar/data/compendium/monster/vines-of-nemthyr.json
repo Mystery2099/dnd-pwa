@@ -1,0 +1,72 @@
+{
+  "slug": "vines-of-nemthyr",
+  "name": "Vines of Nemthyr",
+  "size": "Large",
+  "type": "Plant",
+  "subtype": "",
+  "group": null,
+  "alignment": "neutral evil",
+  "armor_class": 15,
+  "armor_desc": "natural armor",
+  "hit_points": 133,
+  "hit_dice": "14d10+56",
+  "speed": {
+    "burrow": 30,
+    "walk": 30
+  },
+  "strength": 19,
+  "dexterity": 12,
+  "constitution": 19,
+  "intelligence": 5,
+  "wisdom": 13,
+  "charisma": 5,
+  "skills": {
+    "perception": 4,
+    "survival": 4
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "cold, poison",
+  "damage_immunities": "",
+  "condition_immunities": "blinded, deafened, frightened, poisoned",
+  "senses": "blindsight 60 ft., passive Perception 14",
+  "languages": "-",
+  "cr": 8,
+  "challenge_rating": "8",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The vines of Nemthyr makes three attacks: two with its slam and one with its thorny lash."
+    },
+    {
+      "name": "Slam",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) bludgeoning damage.",
+      "attack_bonus": 7,
+      "damage_dice": "2d6+4"
+    },
+    {
+      "name": "Thorny Lash",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 15 ft., one target. Hit: 15 (2d10 + 4) slashing damage, and the target is grappled (escape DC 15). Until this grapple ends, the target is restrained. The vines of Nemthyr has two thorny lashes, each of which can grapple only one target.",
+      "attack_bonus": 7,
+      "damage_dice": "2d10+4"
+    },
+    {
+      "name": "Thorn Spray (Recharge 6)",
+      "desc": "The vines of Nemthyr shoots poisonous thorns in a 30-foot cone. Each creature in that area must make a DC 15 Constitution saving throw, taking 35 (10d6) poison damage on a failed save, or half as much damage on a successful one."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Dispersal",
+      "desc": "As a bonus action, the vines of Nemthyr can separate itself into a group of distinct vines. While separated in this way, the vines can move through spaces as narrow as 3 inches wide. The separated vines can't attack while in this state, but they can reform into the vines of Nemthyr as a bonus action."
+    },
+    {
+      "name": "False Appearance",
+      "desc": "While the vines of Nemthyr remains motionless, it is indistinguishable from a normal plant."
+    },
+    {
+      "name": "Magic Resistance",
+      "desc": "The vines of Nemthyr has advantage on saving throws against spells and other magical effects."
+    }
+  ],
+  "legendary_actions": null
+}

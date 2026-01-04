@@ -1,0 +1,57 @@
+{
+  "slug": "gargoyle_bf",
+  "name": "Gargoyle",
+  "size": "medium",
+  "type": "Elemental",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 15,
+  "armor_desc": "natural armor",
+  "hit_points": 52,
+  "hit_dice": "",
+  "speed": {
+    "walk": 30,
+    "fly": 60
+  },
+  "strength": 16,
+  "dexterity": 10,
+  "constitution": 20,
+  "intelligence": 6,
+  "wisdom": 10,
+  "charisma": 6,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "bludgeoning,piercing,and slashing from nonmagical attacks",
+  "damage_immunities": "poison,exhaustion,petrified,poisoned",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft.",
+  "languages": "Terran",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The gargoyle makes one Bite attack and one Claws attack."
+    },
+    {
+      "name": "Bite",
+      "desc": "_Melee Weapon Attack:_ +5 to hit, reach 5 ft., one target. _Hit:_ 10 (2d6+3) piercing damage."
+    },
+    {
+      "name": "Claws",
+      "desc": "_Melee Weapon Attack:_ +5 to hit, reach 5 ft., one target. _Hit:_ 8 (2d4+3) slashing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Diving Pounce",
+      "desc": "If the gargoyle is flying and moves at least 20 feet straight toward a creature and then hits it with a Claws attack on the same turn, that target must succeed on a DC 13 STR save or be knocked prone. If the target is prone, the gargoyle can make one Bite attack against it as a bonus action."
+    },
+    {
+      "name": "False Appearance",
+      "desc": "While the gargoyle remains motionless, it is indistinguishable from an inanimate statue."
+    }
+  ],
+  "legendary_actions": []
+}

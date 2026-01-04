@@ -1,0 +1,11 @@
+{
+  "slug": "giantstrike-cestus",
+  "name": "Giantstrike Cestus",
+  "type": "Wondrous item",
+  "desc": "These leather hand wraps are fitted with iron plates engraved with runes. When you make unarmed strikes while wearing these wraps, your Martial Arts die is one die higher.",
+  "rarity": "very rare",
+  "requires_attunement": "requires attunement by a monk",
+  "document__slug": "toh",
+  "document__title": "Tome of Heroes",
+  "document__url": "https://koboldpress.com/kpstore/product/tome-of-heroes-for-5th-edition/"
+}

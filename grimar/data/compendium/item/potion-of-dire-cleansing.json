@@ -1,0 +1,11 @@
+{
+  "slug": "potion-of-dire-cleansing",
+  "name": "Potion of Dire Cleansing",
+  "type": "Potion",
+  "desc": "For 1 hour after drinking this potion, you have resistance to poison damage, and you have advantage on saving throws against being blinded, deafened, paralyzed, and poisoned. In addition, if you are poisoned, this potion neutralizes the poison. Known for its powerful, somewhat burning smell, this potion is difficult to drink, requiring a successful DC 13 Constitution saving throw to drink it. On a failure, you are poisoned for 10 minutes and don't gain the benefits of the potion.",
+  "rarity": "uncommon",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

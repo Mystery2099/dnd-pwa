@@ -1,0 +1,11 @@
+{
+  "slug": "ring-of-djinni-summoning-a5e",
+  "name": "Ring of Djinni Summoning",
+  "type": "Ring",
+  "desc": "While you are wearing this ring, you can use an action to speak its command word and choose an unoccupied space within 120 feet. You summon a _djinni_  from the Elemental Plane of Air in that space. It is friendly to you and your companions, and obeys any command you give it, no matter what language you use. If you do not command it, the djinni takes no other actions but to defend itself.\n\nThe djinni remains for up to 1 hour as long as you _concentrate_  (as if concentrating on a spell), or until it is reduced to 0 hit points. It then returns to its home plane. After the djinni departs, it cannot be summoned again for 24 hours. The ring becomes nonmagical if the djinni dies.",
+  "rarity": "Legendary",
+  "requires_attunement": "requires attunement",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

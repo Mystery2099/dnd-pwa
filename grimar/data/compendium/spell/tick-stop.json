@@ -1,0 +1,27 @@
+{
+  "slug": "tick-stop",
+  "name": "Tick Stop",
+  "desc": "Deep Magic: clockwork You speak a word and the target construct can take one action or bonus action on its next turn, but not both. The construct is immune to further tick stops from the same caster for 24 hours.",
+  "higher_level": "",
+  "level": "Cantrip",
+  "level_int": 0,
+  "school": "transmutation",
+  "components": "V",
+  "requires_verbal_components": true,
+  "requires_somatic_components": false,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "1 Round",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "30 Feet",
+  "target_range_sort": 30,
+  "spell_level": 0,
+  "dnd_class": "Wizard, Sorceror",
+  "spell_lists": [
+    "wizard"
+  ]
+}

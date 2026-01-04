@@ -1,0 +1,11 @@
+{
+  "slug": "stalking-cat-a5e",
+  "name": "Stalking Cat",
+  "type": "Wondrous Item",
+  "desc": "This jade pendant takes the form of a cat ready to pounce. Once per day while attuned to this pendant you may immediately reroll a failed melee weapon attack or Stealth roll. If the reroll also fails the pendant loses its magic, becoming a mundane item worth 25 gold.",
+  "rarity": "Uncommon",
+  "requires_attunement": "requires attunement",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

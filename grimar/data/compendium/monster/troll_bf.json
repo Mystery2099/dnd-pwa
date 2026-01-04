@@ -1,0 +1,60 @@
+{
+  "slug": "troll_bf",
+  "name": "Troll",
+  "size": "large",
+  "type": "Giant",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 15,
+  "armor_desc": "natural armor",
+  "hit_points": 94,
+  "hit_dice": "",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 18,
+  "dexterity": 12,
+  "constitution": 20,
+  "intelligence": 6,
+  "wisdom": 8,
+  "charisma": 6,
+  "skills": {},
+  "damage_vulnerabilities": "Giant Attributes",
+  "damage_resistances": "Giant Attributes",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft.",
+  "languages": "Giant",
+  "cr": 5,
+  "challenge_rating": "5",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The troll makes one Bite attack and two Claw attacks."
+    },
+    {
+      "name": "Bite",
+      "desc": "_Melee Weapon Attack:_ +7 to hit, reach 5 ft., one target. _Hit:_ 13 (2d8+4) piercing damage."
+    },
+    {
+      "name": "Claw",
+      "desc": "_Melee Weapon Attack:_ +7 to hit, reach 10 ft., one target. _Hit:_ 11 (2d6+4) slashing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Giant Attributes",
+      "desc": "The troll is resistant to the stunned condition, and it is vulnerable to the prone condition."
+    },
+    {
+      "name": "Heightened Smell",
+      "desc": "The troll's Perception is 17 while perceiving by smell."
+    },
+    {
+      "name": "Regeneration",
+      "desc": "The troll regains 10 HP at the start of its turn. If the troll takes acid or fire damage, this trait doesn't function at the start of the troll's next turn. The troll dies only if it starts its turn with 0 HP and doesn't regenerate."
+    }
+  ],
+  "legendary_actions": []
+}

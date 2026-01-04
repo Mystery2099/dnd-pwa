@@ -1,5 +1,4 @@
 import { defineConfig, devices } from '@playwright/test';
-import { resolve } from 'path';
 
 export default defineConfig({
 	testDir: './tests',
@@ -32,7 +31,10 @@ export default defineConfig({
 		command: 'bun run dev',
 		url: 'http://localhost:5173',
 		reuseExistingServer: !process.env.CI,
-		timeout: 120000
+		timeout: 120000,
+		env: {
+			VITE_MOCK_USER: 'test-dm'
+		}
 	},
 	timeout: 60000,
 	expect: {

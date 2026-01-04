@@ -1,0 +1,52 @@
+{
+  "slug": "morphoi-tob1-2023",
+  "name": "Morphoi",
+  "size": "Medium",
+  "type": "Plant",
+  "subtype": "",
+  "group": "null",
+  "alignment": "Chaotic Evil",
+  "armor_class": 13,
+  "armor_desc": "",
+  "hit_points": 33,
+  "hit_dice": "6d8 + 6",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 14,
+  "dexterity": 16,
+  "constitution": 13,
+  "intelligence": 14,
+  "wisdom": 10,
+  "charisma": 15,
+  "skills": {},
+  "damage_vulnerabilities": "False",
+  "damage_resistances": "False",
+  "damage_immunities": "False",
+  "condition_immunities": "False",
+  "senses": "darkvision 60 ft., passive Perception 10",
+  "languages": "Common",
+  "cr": 0.5,
+  "challenge_rating": "1/2",
+  "actions": [
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) slashing damage."
+    },
+    {
+      "name": "Trident",
+      "desc": "Melee or Ranged Weapon Attack: +4 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 5 (1d6 + 2) piercing damage, or 6 (1d8 + 2) piercing damage if used with two hands to make a melee attack."
+    },
+    {
+      "name": "Shortbow",
+      "desc": "Ranged Weapon Attack: +5 to hit, range 80/320 ft., one target. Hit: 6 (1d6 + 3) piercing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Amphibious",
+      "desc": "The morphoi can breathe air and water."
+    }
+  ],
+  "legendary_actions": []
+}

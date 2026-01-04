@@ -1,0 +1,29 @@
+{
+  "slug": "bloom",
+  "name": "Bloom",
+  "desc": "You plant a silver acorn in solid ground and spend an hour chanting a litany of praises to the natural world, after which the land within 1 mile of the acorn becomes extremely fertile, regardless of its previous state. Any seeds planted in the area grow at twice the natural rate. Food harvested regrows within a week. After one year, the land slowly reverts to its normal fertility, unable to stave off the march of nature.\n\nChoose one of the following effects, which appears and grows immediately:\n* A field planted with vegetables of your choice, ready for harvest.\n* A thick forest of stout trees and ample undergrowth.\n* A grassland with wildflowers and fodder for grazing.\n* An orchard of fruit trees of your choice, growing in orderly rows and ready for harvest.\nLiving creatures that take a short rest within the area of a bloom spell receive the maximum hit points for Hit Dice expended. **Bloom** counters the effects of a [desolation](https://api.open5e.com/spells/desolation) spell.\n\n***Ritual Focus.*** If you expend your ritual focus, the duration becomes permanent.",
+  "higher_level": "",
+  "level": "8th-level",
+  "level_int": 8,
+  "school": "conjuration",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "a silver acorn worth 500 gp, which is consumed in the casting",
+  "can_be_cast_as_ritual": true,
+  "ritual": "yes",
+  "duration": "1 year",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 hour",
+  "range": "1 mile",
+  "target_range_sort": 5280,
+  "spell_level": 8,
+  "dnd_class": "Cleric, Druid, Wizard",
+  "spell_lists": [
+    "cleric",
+    "druid",
+    "wizard"
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "slug": "qiqirn",
+  "name": "Qiqirn",
+  "size": "Small",
+  "type": "Monstrosity",
+  "subtype": "",
+  "group": null,
+  "alignment": "neutral",
+  "armor_class": 14,
+  "armor_desc": null,
+  "hit_points": 38,
+  "hit_dice": "7d6+14",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 15,
+  "dexterity": 18,
+  "constitution": 14,
+  "intelligence": 5,
+  "wisdom": 12,
+  "charisma": 13,
+  "skills": {
+    "perception": 3,
+    "stealth": 6
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "necrotic",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 13",
+  "languages": "understands Common but can’t speak",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) piercing damage plus 4 (1d8) necrotic damage. If the target is a creature, it must succeed on a DC 12 Strength saving throw or be knocked prone.",
+      "attack_bonus": 6,
+      "damage_dice": "1d6+4"
+    },
+    {
+      "name": "Spirit-infused Yip",
+      "desc": "The qiqirn releases a spirt-infused yip at one creature it can see within 30 feet of it. If the target can hear the qiqirn, it must make a DC 12 Wisdom saving throw, taking 9 (2d8) necrotic damage on a failed save, or half as much damage on a successful one."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Keen Smell",
+      "desc": "The qiqirn has advantage on Wisdom (Perception) checks that rely on smell."
+    },
+    {
+      "name": "Self-loathing",
+      "desc": "A creature the qiqirn can hear can use its action to say “qiqirn” and make a Charisma (Intimidation) check. If it does so, the qiqirn must succeed on a Wisdom saving throw with a DC equal to the creature's Charisma (Intimidation) check or be frightened of that creature until the end of its next turn. If the qiqirn succeeds on the saving throw, it can't be frightened by that creature for the next 24 hours."
+    }
+  ],
+  "legendary_actions": null
+}

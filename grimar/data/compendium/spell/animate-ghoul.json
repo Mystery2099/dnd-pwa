@@ -1,0 +1,29 @@
+{
+  "slug": "animate-ghoul",
+  "name": "Animate Ghoul",
+  "desc": "You raise one Medium or Small humanoid corpse as a ghoul under your control. Any class levels or abilities the creature had in life are gone, replaced by the standard ghoul stat block.\n",
+  "higher_level": "When you cast this spell using a 3rd-level spell slot, it can be used on the corpse of a Large humanoid to create a Large ghoul. When you cast this spell using a spell slot of 4th level or higher, this spell creates a ghast, but the material component changes to an onyx gemstone worth at least 200 gp.",
+  "level": "2nd-level",
+  "level_int": 2,
+  "school": "necromancy",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "piece of rotting flesh and an onyx gemstone worth 100 gp",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Instantaneous",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "Touch",
+  "target_range_sort": 1,
+  "spell_level": 2,
+  "dnd_class": "Cleric, Sorcerer, Wizard",
+  "spell_lists": [
+    "cleric",
+    "sorcerer",
+    "wizard"
+  ]
+}

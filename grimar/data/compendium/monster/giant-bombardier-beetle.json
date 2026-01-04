@@ -1,0 +1,47 @@
+{
+  "slug": "giant-bombardier-beetle",
+  "name": "Giant Bombardier Beetle",
+  "size": "Medium",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 14,
+  "armor_desc": "natural armor",
+  "hit_points": 13,
+  "hit_dice": "2d8+4",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 10,
+  "dexterity": 14,
+  "constitution": 15,
+  "intelligence": 3,
+  "wisdom": 10,
+  "charisma": 3,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "fire",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "blindsight 30 ft., passive Perception 10",
+  "languages": "—",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) slashing damage.",
+      "attack_bonus": 4,
+      "damage_dice": "1d6+2"
+    },
+    {
+      "name": "Spray",
+      "desc": "Ranged Weapon Attack: +4 to hit, range 15/30 ft., one target. Hit: 7 (2d4 + 2) fire damage.",
+      "attack_bonus": 4,
+      "damage_dice": "2d4+2"
+    }
+  ],
+  "special_abilities": null,
+  "legendary_actions": null
+}

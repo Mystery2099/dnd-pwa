@@ -1,0 +1,11 @@
+{
+  "slug": "long-fang-of-the-moon-a5e",
+  "name": "Long Fang of the Moon",
+  "type": "Weapon",
+  "desc": "You gain a +3 bonus to attack and damage rolls made with this silvered longsword. \n\nWeapon attacks using _long fang of the moon_ deal an extra 2d6 radiant damage against creatures. When you hit a shapeshifter with this weapon, it makes a DC 30 Constitution _saving throw_  or reverts to its original form. If it fails this saving throw, you may choose to prevent the shapeshifter from transforming for up to 10 minutes.",
+  "rarity": "Legendary",
+  "requires_attunement": "requires attunement",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

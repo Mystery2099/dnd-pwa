@@ -1,0 +1,11 @@
+{
+  "slug": "grasping-shield",
+  "name": "Grasping Shield",
+  "type": "Armor",
+  "desc": "The boss at the center of this shield is a hand fashioned of metal. While wielding this shield, you gain a +1 bonus to AC. This bonus is in addition to the shield's normal bonus to AC.",
+  "rarity": "uncommon",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

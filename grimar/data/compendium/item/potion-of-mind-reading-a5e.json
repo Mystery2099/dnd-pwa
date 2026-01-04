@@ -1,0 +1,11 @@
+{
+  "slug": "potion-of-mind-reading-a5e",
+  "name": "Potion of Mind Reading",
+  "type": "Potion",
+  "desc": "After drinking this fizzy deep green lime potion, for the next hour you are affected as if you had cast __detect thoughts_  (save DC 13).",
+  "rarity": "Rare",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

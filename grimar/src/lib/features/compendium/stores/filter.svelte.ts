@@ -105,7 +105,9 @@ export class CompendiumFilterStore {
 
 	toggle(key: string, value: string) {
 		if (!this.state.sets[key]) {
-			console.warn(`[CompendiumFilterStore] Unknown filter key: ${key}`);
+			console.warn(
+				`[CompendiumFilterStore] Unknown filter key: ${key}. Available: ${Object.keys(this.state.sets)}`
+			);
 			return;
 		}
 
@@ -145,13 +147,15 @@ export class CompendiumFilterStore {
 		}
 
 		// 2. Faceted filters
-		const activeFilters = Object.entries(this.state.sets).filter(([_, set]) => set.size > 0);
+		const activeFilterKeys = Object.values(this.config.setParams).filter(
+			(key) => this.state.sets[key] && this.state.sets[key].size > 0
+		);
 
-		if (activeFilters.length > 0) {
+		if (activeFilterKeys.length > 0) {
 			filtered = filtered.filter((item) => {
-				const matches = activeFilters.map(([key, set]) => {
+				const matches = activeFilterKeys.map((key) => {
+					const set = this.state.sets[key];
 					const val = item[key];
-					// Handle array values (if any) or simple equality
 					if (Array.isArray(val)) {
 						return val.some((v) => set.has(String(v)));
 					}

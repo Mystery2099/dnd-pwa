@@ -1,0 +1,28 @@
+{
+  "slug": "cloying-darkness",
+  "name": "Cloying Darkness",
+  "desc": "You reach out with a hand of decaying shadows. Make a ranged spell attack. If it hits, the target takes 2d8 necrotic damage and must make a Constitution saving throw. If it fails, its visual organs are enveloped in shadow until the start of your next turn, causing it to treat all lighting as if it's one step lower in intensity (it treats bright light as dim, dim light as darkness, and darkness as magical darkness).",
+  "higher_level": "When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d8 for each slot level above 1st.",
+  "level": "1st-level",
+  "level_int": 1,
+  "school": "necromancy",
+  "components": "V, S",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "1 Round",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "30 Feet",
+  "target_range_sort": 30,
+  "spell_level": 1,
+  "dnd_class": "Sorceror, Warlock, Wizard",
+  "spell_lists": [
+    "warlock",
+    "wizard"
+  ]
+}

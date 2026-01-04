@@ -1,0 +1,11 @@
+{
+  "slug": "potion-of-transparency",
+  "name": "Potion of Transparency",
+  "type": "Potion",
+  "desc": "The liquid in this vial is clear like water, and it gives off a slight iridescent sheen when shaken or swirled. When you drink this potion, you and everything you are wearing and carrying turn transparent, but not completely invisible, for 10 minutes. During this time, you have advantage on Dexterity (Stealth) checks, and ranged attacks against you have disadvantage.",
+  "rarity": "common",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

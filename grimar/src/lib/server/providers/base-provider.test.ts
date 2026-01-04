@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { BaseProvider } from './base-provider';
 import type { CompendiumTypeName } from '$lib/core/types/compendium';
 import type { TransformResult, ProviderListResponse, FetchOptions } from './types';
@@ -10,7 +10,7 @@ class TestProvider extends BaseProvider {
 	readonly baseUrl = 'https://api.test.com';
 	readonly supportedTypes = ['spell'] as const;
 
-	protected getEndpoint(type: CompendiumTypeName): string {
+	protected getEndpoint(_type: CompendiumTypeName): string {
 		return '/test-endpoint';
 	}
 
@@ -23,7 +23,10 @@ class TestProvider extends BaseProvider {
 		};
 	}
 
-	async fetchList(type: CompendiumTypeName, options?: FetchOptions): Promise<ProviderListResponse> {
+	async fetchList(
+		__type: CompendiumTypeName,
+		__options?: FetchOptions
+	): Promise<ProviderListResponse> {
 		return { items: [], total: 0 };
 	}
 

@@ -1,0 +1,60 @@
+{
+  "slug": "stone-guardian-a5e",
+  "name": "Stone Guardian",
+  "size": "Large",
+  "type": "Construct",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 17,
+  "armor_desc": "",
+  "hit_points": 178,
+  "hit_dice": "17d10+85",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 22,
+  "dexterity": 10,
+  "constitution": 20,
+  "intelligence": 3,
+  "wisdom": 12,
+  "charisma": 1,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "poison, psychic; damage from nonmagical, non-adamantine weapons",
+  "condition_immunities": "charmed, fatigue, frightened, paralyzed, petrified, poisoned",
+  "senses": "darkvision 120 ft., passive Perception 11",
+  "languages": "understands the languages of its creator but can't speak",
+  "cr": 10,
+  "challenge_rating": "10",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The guardian attacks twice with its slam."
+    },
+    {
+      "name": "Slam",
+      "desc": "Melee Weapon Attack: +10 to hit, reach 5 ft., one target. Hit: 19 (3d8 + 6) bludgeoning damage."
+    },
+    {
+      "name": "Rock",
+      "desc": "Ranged Weapon Attack: +10 to hit, range 60/240 ft., one target. Hit: 30 (7d6 + 6) bludgeoning damage. The target makes a DC 18 Strength saving throw  falling prone on a failure."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Immutable Form",
+      "desc": "The guardian is immune to any effect that would alter its form."
+    },
+    {
+      "name": "Magic Resistance",
+      "desc": "The guardian has advantage on saving throws against spells and magical effects."
+    },
+    {
+      "name": "Constructed Nature",
+      "desc": "Guardians dont require air, sustenance, or sleep."
+    }
+  ],
+  "legendary_actions": null
+}

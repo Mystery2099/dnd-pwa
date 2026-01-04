@@ -1,0 +1,74 @@
+{
+  "slug": "roachling-scout",
+  "name": "Roachling Scout",
+  "size": "Small",
+  "type": "Humanoid",
+  "subtype": "roachling",
+  "group": null,
+  "alignment": "chaotic neutral",
+  "armor_class": 14,
+  "armor_desc": null,
+  "hit_points": 63,
+  "hit_dice": "14d6+14",
+  "speed": {
+    "climb": 15,
+    "walk": 25
+  },
+  "strength": 10,
+  "dexterity": 18,
+  "constitution": 13,
+  "intelligence": 10,
+  "wisdom": 14,
+  "charisma": 8,
+  "skills": {
+    "acrobatics": 6,
+    "perception": 6,
+    "stealth": 6,
+    "survival": 6
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., tremorsense 10 ft., passive Perception 16",
+  "languages": "Common",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The roachling scout makes two begrimed shortsword attacks or two begrimed dart attacks."
+    },
+    {
+      "name": "Begrimed Shortsword",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) piercing damage plus 7 (2d6) poison damage.",
+      "attack_bonus": 6,
+      "damage_dice": "1d6+4"
+    },
+    {
+      "name": "Begrimed Dart",
+      "desc": "Ranged Weapon Attack: +6 to hit, range 20/60 ft., one target. Hit: 6 (1d4 + 4) piercing damage plus 7 (2d6) poison damage.",
+      "attack_bonus": 6,
+      "damage_dice": "1d4+4"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Keen Smell",
+      "desc": "The roachling scout has advantage on Wisdom (Perception) checks that rely on smell."
+    },
+    {
+      "name": "Resistant",
+      "desc": "The roachling scout has advantage on Constitution saving throws."
+    },
+    {
+      "name": "Stealthy Traveler",
+      "desc": "The roachling scout can move stealthily while traveling at a normal pace."
+    },
+    {
+      "name": "Unlovely",
+      "desc": "The roachling scout has disadvantage on Charisma (Performance) and Charisma (Persuasion) checks in interactions with non-roachlings."
+    }
+  ],
+  "legendary_actions": null
+}

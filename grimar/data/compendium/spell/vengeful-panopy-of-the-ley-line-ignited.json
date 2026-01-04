@@ -1,0 +1,28 @@
+{
+  "slug": "vengeful-panopy-of-the-ley-line-ignited",
+  "name": "Vengeful Panopy of the Ley Line Ignited",
+  "desc": "Deep Magic: ley line While bound to a ley line, you draw directly from its power, becoming cloaked in a magical heliotropic fire that sheds dim light in a 10-foot radius. Additionally, each round, including the round it is cast, you may make a ranged spell attack as an action. On a hit, the target takes 6d6 force damage. Every 3 minutes the effect is active, your bond with the ley line is reduced by one step; a bond to a Titanic ley line becomes effectively a Strong, then a Weak, and after 10 minutes, the bond is broken. The strength of the bond is only restored after a long rest; if the bond was broken, it can only be restored at the next weakest level for a week. A bond broken from a Weak ley line cannot be restored for two weeks. Some believe this spell damages ley lines, and there is some evidence to support this claim. Additionally, whenever a creature within 5 feet hits you with a melee attack, the cloak erupts with a heliotropic flare. The attacker takes 3d6 force damage.",
+  "higher_level": "When casting this spell using a spell slot of 6th level, the damage from all effects of the spell increase by 1d6 for each slot level above 6th.",
+  "level": "6th-level",
+  "level_int": 6,
+  "school": "evocation",
+  "components": "V, S",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "10 Minutes",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "Self",
+  "target_range_sort": 0,
+  "spell_level": 6,
+  "dnd_class": "Wizard, Warlock, Sorceror",
+  "spell_lists": [
+    "warlock",
+    "wizard"
+  ]
+}

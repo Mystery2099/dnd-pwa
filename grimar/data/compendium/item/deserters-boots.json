@@ -1,0 +1,11 @@
+{
+  "slug": "deserters-boots",
+  "name": "Deserter's Boots",
+  "type": "Wondrous item",
+  "desc": "While you wear these boots, your walking speed increases by 10 feet, and you gain a +1 bonus to Dexterity saving throws.",
+  "rarity": "rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

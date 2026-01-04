@@ -1,0 +1,14 @@
+{
+  "slug": "well-heeled",
+  "name": "Well-Heeled",
+  "desc": "You can maneuver effortlessly through the corridors of power and prestige. You gain the following benefits:",
+  "prerequisite": "Prerequisite: Prestige rating of 2 or higher",
+  "effects_desc": [
+    "You are treated as royalty (or as closely as possible) by most commoners and traders, and as an equal when meeting other authority figures (who make time in their schedule to see you when requested to do so).",
+    "You have passive investments and income that allow you to maintain a high quality of living. You have a rich lifestyle and do not need to pay for it.",
+    "You gain a second Prestige Center. This must be an area where you have spent at least a week of time."
+  ],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

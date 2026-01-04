@@ -6,13 +6,13 @@
 			"name": "5e-bits",
 			"enabled": true,
 			"type": "5e-bits",
-			"baseUrl": "https://api.5e-bits.com",
+			"baseUrl": "https://www.dnd5eapi.co/api/2014",
 			"supportedTypes": ["spell", "monster", "feat", "background", "race", "class"]
 		},
 		{
 			"id": "open5e",
 			"name": "Open5e",
-			"enabled": false,
+			"enabled": true,
 			"type": "open5e",
 			"baseUrl": "https://api.open5e.com",
 			"supportedTypes": ["spell", "monster", "item", "feat", "background", "race", "class"]
@@ -20,10 +20,10 @@
 		{
 			"id": "srd",
 			"name": "D&D 5e SRD",
-			"enabled": false,
+			"enabled": true,
 			"type": "srd",
-			"baseUrl": "https://www.dnd5eapi.co/api",
-			"supportedTypes": ["spell", "monster"]
+			"baseUrl": "https://www.dnd5eapi.co/api/2014",
+			"supportedTypes": ["spells", "monsters"]
 		},
 		{
 			"id": "homebrew",
@@ -31,7 +31,7 @@
 			"enabled": false,
 			"type": "homebrew",
 			"baseUrl": "",
-			"supportedTypes": ["spell", "monster", "item", "feat", "background", "race", "class"],
+			"supportedTypes": ["spell", "monsters", "item", "feat", "background", "race", "class"],
 			"options": {
 				"dataPath": "data/homebrew"
 			}

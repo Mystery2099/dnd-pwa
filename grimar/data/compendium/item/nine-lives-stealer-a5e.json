@@ -1,0 +1,11 @@
+{
+  "slug": "nine-lives-stealer-a5e",
+  "name": "Nine Lives Stealer",
+  "type": "Weapon",
+  "desc": "You gain a +2 bonus to attack and damage rolls made with this magic sword.\n\nThe sword has 1d8+1 charges. When you use the sword to score a critical hit against a creature that is not a construct or undead, if it has less than 100 hit points it makes a DC 15 Constitution _saving throw_  or it instantly dies as the sword rips the life force out of it. Each time a creature is killed in this manner the sword expends a charge. When all its charges are gone, the sword loses this property. ",
+  "rarity": "Very Rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

@@ -1,0 +1,56 @@
+{
+  "slug": "owlbear-a5e",
+  "name": "Owlbear",
+  "size": "Large",
+  "type": "Monstrosity",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 13,
+  "armor_desc": "",
+  "hit_points": 59,
+  "hit_dice": "7d10+21",
+  "speed": {
+    "walk": 40,
+    "climb": 20
+  },
+  "strength": 18,
+  "dexterity": 12,
+  "constitution": 16,
+  "intelligence": 3,
+  "wisdom": 12,
+  "charisma": 5,
+  "skills": {
+    "perception": 3,
+    "stealth": 3
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 13",
+  "languages": "",
+  "cr": 3,
+  "challenge_rating": "3",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The owlbear attacks with its beak and claws."
+    },
+    {
+      "name": "Beak",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 9 (1d10 + 4) piercing damage."
+    },
+    {
+      "name": "Claws",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) slashing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Keen Sight and Smell",
+      "desc": "The owlbear has advantage on Perception checks that rely on sight or smell."
+    }
+  ],
+  "legendary_actions": null
+}

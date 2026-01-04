@@ -5,9 +5,12 @@
  */
 
 import { getDb } from './db-connection';
-import { DB_CONFIG } from './db-config';
 
-export { DB_CONFIG } from './db-config';
+/** Retry configuration */
+export const DB_CONFIG = {
+	maxRetries: 3,
+	retryDelayMs: 100
+} as const;
 
 /**
  * Get database connection with retry logic

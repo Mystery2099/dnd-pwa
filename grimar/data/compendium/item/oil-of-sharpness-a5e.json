@@ -1,0 +1,11 @@
+{
+  "slug": "oil-of-sharpness-a5e",
+  "name": "Oil of Sharpness",
+  "type": "Potion",
+  "desc": "It takes 1 minute to use this glittering oil to cover a weapon that deals slashing or piercing damage, or 5 pieces of ammunition that deals slashing or piercing damage. For 1 hour the weapon or ammunition is magical, and when using it you gain a +3 bonus to attack and damage rolls.",
+  "rarity": "Very Rare",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

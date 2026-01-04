@@ -1,0 +1,59 @@
+{
+  "slug": "sahuagin-a5e",
+  "name": "Sahuagin",
+  "size": "Medium",
+  "type": "Humanoid",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 12,
+  "armor_desc": "",
+  "hit_points": 22,
+  "hit_dice": "4d8+4",
+  "speed": {
+    "walk": 30,
+    "swim": 40
+  },
+  "strength": 12,
+  "dexterity": 10,
+  "constitution": 12,
+  "intelligence": 10,
+  "wisdom": 12,
+  "charisma": 10,
+  "skills": {
+    "perception": 3
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 120 ft., passive Perception 13",
+  "languages": "Sahuagin",
+  "cr": 0.5,
+  "challenge_rating": "1/2",
+  "actions": [
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 5 (1d8 + 1) slashing damage."
+    },
+    {
+      "name": "Trident",
+      "desc": "Melee or Ranged Weapon Attack: +3 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 4 (1d6 + 1) piercing damage  or 5 (1d8 + 1) if wielded in two hands in melee."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Blood Frenzy",
+      "desc": "The sahuagin has advantage on melee attack rolls against bloodied creatures."
+    },
+    {
+      "name": "Limited Amphibiousness",
+      "desc": "The sahuagin can breathe air and water. When breathing air, it must immerse itself in water once every 4 hours or begin to suffocate."
+    },
+    {
+      "name": "Shark Telepathy",
+      "desc": "The sahuagin can command any shark within 120 feet of it using magical telepathy."
+    }
+  ],
+  "legendary_actions": null
+}

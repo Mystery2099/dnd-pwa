@@ -1,0 +1,55 @@
+{
+  "slug": "crab-samurai",
+  "name": "Crab, Samurai",
+  "size": "Medium",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "lawful neutral",
+  "armor_class": 16,
+  "armor_desc": "natural armor",
+  "hit_points": 105,
+  "hit_dice": "14d8+42",
+  "speed": {
+    "walk": 30,
+    "swim": 30
+  },
+  "strength": 18,
+  "dexterity": 10,
+  "constitution": 16,
+  "intelligence": 6,
+  "wisdom": 14,
+  "charisma": 10,
+  "skills": {
+    "perception": 2
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "nonmagic B/P/S attacks",
+  "damage_immunities": "",
+  "condition_immunities": "charmed, frightened",
+  "senses": "blindsight 30', passive Perception 15",
+  "languages": "understands Common but can't speak",
+  "cr": 6,
+  "challenge_rating": "6",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "Three melee attacks. If grappling two creatures it can't make Crustaceous Sword attacks."
+    },
+    {
+      "name": "Crustaceous Sword",
+      "desc": "Melee Weapon Attack: +7 to hit, 5 ft., one target, 13 (2d8+4) slashing damage."
+    },
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +7 to hit, 5 ft., one target, 11 (2d6+4) bludgeoning damage. If the target is Med or smaller it is grappled (escape DC 15) and the crab can't use this claw to attack another target. The crab has two claws each of which can grapple only one target."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Amphibious",
+      "desc": "Can breathe air and water."
+    }
+  ],
+  "legendary_actions": null
+}

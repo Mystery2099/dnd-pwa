@@ -1,0 +1,11 @@
+{
+  "slug": "crook-of-the-flock",
+  "name": "Crook of the Flock",
+  "type": "Rod",
+  "desc": "This plain crook is made of smooth, worn lotus wood and is warm to the touch.",
+  "rarity": "very rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

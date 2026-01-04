@@ -1,0 +1,28 @@
+{
+  "slug": "robe-of-shards",
+  "name": "Robe of Shards",
+  "desc": "Deep Magic: clockwork You create a robe of metal shards, gears, and cogs that provides a base AC of 14 + your Dexterity modifier. As a bonus action while protected by a robe of shards, you can command bits of metal from a fallen foe to be absorbed by your robe; each infusion of metal increases your AC by 1, to a maximum of 18 + Dexterity modifier. You can also use a bonus action to dispel the robe, causing it to explode into a shower of flying metal that does 8d6 slashing damage, +1d6 per point of basic (non-Dexterity) AC above 14, to all creatures within 30 feet of you.",
+  "higher_level": "",
+  "level": "6th-level",
+  "level_int": 6,
+  "school": "abjuration",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "1 Minute",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "Self",
+  "target_range_sort": 0,
+  "spell_level": 6,
+  "dnd_class": "Wizard, Warlock, Sorceror",
+  "spell_lists": [
+    "warlock",
+    "wizard"
+  ]
+}

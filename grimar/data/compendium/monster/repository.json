@@ -1,0 +1,66 @@
+{
+  "slug": "repository",
+  "name": "Repository",
+  "size": "Medium",
+  "type": "Construct",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 15,
+  "armor_desc": "natural armor",
+  "hit_points": 110,
+  "hit_dice": "13d8+52",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 19,
+  "dexterity": 10,
+  "constitution": 18,
+  "intelligence": 16,
+  "wisdom": 12,
+  "charisma": 6,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "bludgeoning, piercing, and slashing from nonmagical attacks not made with adamantine weapons",
+  "damage_immunities": "poison, psychic",
+  "condition_immunities": "charmed, exhaustion, frightened, paralyzed, petrified, poisoned",
+  "senses": "darkvision 120 ft., passive Perception 11",
+  "languages": "all",
+  "cr": 7,
+  "challenge_rating": "7",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The repository makes two slash attacks."
+    },
+    {
+      "name": "Slash",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) bludgeoning damage.",
+      "attack_bonus": 7,
+      "damage_dice": "2d8+4"
+    },
+    {
+      "name": "Language Lash (Recharge 5-6)",
+      "desc": "The repository utters words of power, unleashing psychic energy in a 30-foot cone. Each creature in that area must make a DC 15 Intelligence saving throw. On a failure, a creature takes 14 (4d6) psychic damage and is incapacitated for 1 minute. On a success, a creature takes half the damage and isn't stunned. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Immutable Form",
+      "desc": "The repository is immune to any spell or effect that would alter its form."
+    },
+    {
+      "name": "Magic Resistance",
+      "desc": "The repository has advantage on saving throws against spells and other magical effects."
+    },
+    {
+      "name": "Magic Weapons",
+      "desc": "The repository's weapon attacks are magical."
+    },
+    {
+      "name": "Self-Destruct",
+      "desc": "If a repository is reduced to 0 hp, it explodes, leaving behind its small, pyramidal chest cavity. Each creature within 20 feet of the repository when it explodes must make a DC 15 Dexterity saving throw, taking 14 (4d6) bludgeoning damage on a failed save, or half as much damage on a successful one."
+    }
+  ],
+  "legendary_actions": null
+}

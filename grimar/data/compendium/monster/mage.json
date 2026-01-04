@@ -1,0 +1,7 @@
+{
+  "index": "mage",
+  "name": "Mage",
+  "type": "humanoid",
+  "size": "Medium",
+  "challenge_rating": 6
+}

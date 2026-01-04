@@ -1,0 +1,28 @@
+{
+  "slug": "grinding-gears",
+  "name": "Grinding Gears",
+  "desc": "Deep Magic: clockwork You designate a spot within range, and massive gears emerge from the ground at that spot, creating difficult terrain in a 20-foot radius. Creatures that move in the area must make successful Dexterity saving throws after every 10 feet of movement or when they stand up. Failure indicates that the creature falls prone and takes 1d8 points of bludgeoning damage.",
+  "higher_level": "",
+  "level": "4th-level",
+  "level_int": 4,
+  "school": "evocation",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "1 Minute",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "120 Feet",
+  "target_range_sort": 120,
+  "spell_level": 4,
+  "dnd_class": "Wizard, Warlock, Sorceror",
+  "spell_lists": [
+    "warlock",
+    "wizard"
+  ]
+}

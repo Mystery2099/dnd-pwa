@@ -1,0 +1,44 @@
+{
+  "slug": "boar-a5e",
+  "name": "Boar",
+  "size": "Medium",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 11,
+  "armor_desc": "",
+  "hit_points": 11,
+  "hit_dice": "2d8+2",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 12,
+  "dexterity": 10,
+  "constitution": 12,
+  "intelligence": 2,
+  "wisdom": 10,
+  "charisma": 4,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 10",
+  "languages": "",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Tusk",
+      "desc": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6+1) slashing damage. If the boar moves at least 20 feet straight towards the target before the attack  the attack deals an extra 3 (1d6) slashing damage and the target makes a DC 11 Strength saving throw  falling prone on a failure."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Relentless (1/Day)",
+      "desc": "If the boar takes 5 or less damage that would reduce it to 0 hit points, it is instead reduced to 1 hit point."
+    }
+  ],
+  "legendary_actions": null
+}

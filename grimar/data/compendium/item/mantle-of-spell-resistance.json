@@ -1,0 +1,11 @@
+{
+  "slug": "mantle-of-spell-resistance",
+  "name": "Mantle of Spell Resistance",
+  "type": "Wondrous item",
+  "desc": "You have advantage on saving throws against spells while you wear this cloak.",
+  "rarity": "rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "wotc-srd",
+  "document__title": "5e Core Rules",
+  "document__url": "http://dnd.wizards.com/articles/features/systems-reference-document-srd"
+}

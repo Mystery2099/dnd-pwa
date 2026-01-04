@@ -17,6 +17,7 @@
 import type { ComponentType } from 'svelte';
 
 export type { CompendiumFilterConfig } from './filter';
+export type { CompendiumCategory, CompendiumCard } from './categories';
 
 //#region Core Types
 

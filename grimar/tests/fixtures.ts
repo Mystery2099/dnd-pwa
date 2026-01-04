@@ -7,11 +7,26 @@ export { expect };
  */
 export const test = base.extend({
 	/**
-	 * Mock user for development - bypasses auth
+	 * Mock user for development - bypasses auth by adding X-Authentik-Username header
+	 * This header is what Authentik would normally set via reverse proxy
 	 */
 	authenticatedPage: async ({ page }, use) => {
+		// Intercept fetch requests to add auth header
 		await page.addInitScript(() => {
-			window.localStorage.setItem('VITE_MOCK_USER', 'test-dm');
+			// Override fetch to add auth header
+			const originalFetch = window.fetch;
+			window.fetch = function (...args) {
+				const _url = args[0];
+				const options = args[1] || {};
+
+				// Add header to outgoing requests
+				options.headers = {
+					...(options.headers || {}),
+					'X-Authentik-Username': 'test-dm'
+				};
+
+				return originalFetch(args[0], options);
+			};
 		});
 		await use(page);
 	},
@@ -22,7 +37,7 @@ export const test = base.extend({
 	loadPage: async ({ page }, use) => {
 		await use(async (url: string) => {
 			await page.goto(url);
-			await page.waitForLoadState('networkidle');
+			await page.waitForLoadState('domcontentloaded');
 			// Wait for any loading states to resolve
 			await page.waitForTimeout(500);
 		});
@@ -45,10 +60,19 @@ export async function waitForElement(
 
 /**
  * Clear all localStorage data
+ * Note: Must be called after page is loaded (localStorage not available before)
  */
 export async function clearStorage(page: Page): Promise<void> {
-	await page.evaluate(() => localStorage.clear());
-	await page.evaluate(() => sessionStorage.clear());
+	try {
+		await page.evaluate(() => localStorage.clear());
+	} catch {
+		// localStorage may not be available in some contexts
+	}
+	try {
+		await page.evaluate(() => sessionStorage.clear());
+	} catch {
+		// sessionStorage may not be available in some contexts
+	}
 }
 
 /**

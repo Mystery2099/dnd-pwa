@@ -1,0 +1,11 @@
+{
+  "slug": "ring-of-feather-falling",
+  "name": "Ring of Feather Falling",
+  "type": "Ring",
+  "desc": "When you fall while wearing this ring, you descend 60 feet per round and take no damage from falling.",
+  "rarity": "rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "wotc-srd",
+  "document__title": "5e Core Rules",
+  "document__url": "http://dnd.wizards.com/articles/features/systems-reference-document-srd"
+}

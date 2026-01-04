@@ -1,0 +1,11 @@
+{
+  "slug": "arrow-catching-shield-a5e",
+  "name": "Arrow-Catching Shield",
+  "type": "Armor",
+  "desc": "This shield grants you +2 to AC against ranged attacks, in addition to the shield’s normal bonus to AC. In addition, whenever a target within 5 feet of you is targeted by a ranged attack, you can use your reaction to become the target of the attack instead.",
+  "rarity": "Rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

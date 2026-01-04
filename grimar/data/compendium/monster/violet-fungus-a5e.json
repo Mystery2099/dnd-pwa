@@ -1,0 +1,48 @@
+{
+  "slug": "violet-fungus-a5e",
+  "name": "Violet Fungus",
+  "size": "Medium",
+  "type": "Plant",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 5,
+  "armor_desc": "",
+  "hit_points": 18,
+  "hit_dice": "4d8",
+  "speed": {
+    "walk": 5
+  },
+  "strength": 1,
+  "dexterity": 1,
+  "constitution": 10,
+  "intelligence": 1,
+  "wisdom": 2,
+  "charisma": 1,
+  "skills": {},
+  "damage_vulnerabilities": "fire",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "blinded, charmed, deafened, fatigue, frightened, prone, restrained, stunned",
+  "senses": "blindsight 30 ft. (blind beyond this radius), passive Perception 6",
+  "languages": "",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The fungus makes a rotting touch attack against two different creatures."
+    },
+    {
+      "name": "Rotting Touch",
+      "desc": "Melee Weapon Attack: +2 to hit, reach 15 ft., one target. Hit: 5 (1d10) necrotic damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "False Appearance",
+      "desc": "While motionless, the violet fungus is indistinguishable from a normal fungus."
+    }
+  ],
+  "legendary_actions": null
+}

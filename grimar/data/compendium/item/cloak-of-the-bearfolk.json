@@ -1,0 +1,11 @@
+{
+  "slug": "cloak-of-the-bearfolk",
+  "name": "Cloak of the Bearfolk",
+  "type": "Wondrous item",
+  "desc": "While wearing this cloak, your Constitution score is 15, and you have proficiency in the Athletics skill. The cloak has no effect if you already have proficiency in this skill or if your Constitution score is already 15 or higher.",
+  "rarity": "uncommon",
+  "requires_attunement": "requires attunement",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

@@ -1,0 +1,48 @@
+{
+  "slug": "wolf_dire_bf",
+  "name": "Wolf, Dire",
+  "size": "large",
+  "type": "Beast",
+  "subtype": "",
+  "group": "Animals",
+  "alignment": "",
+  "armor_class": 14,
+  "armor_desc": "natural armor",
+  "hit_points": 40,
+  "hit_dice": "",
+  "speed": {
+    "walk": 50
+  },
+  "strength": 16,
+  "dexterity": 14,
+  "constitution": 14,
+  "intelligence": 2,
+  "wisdom": 12,
+  "charisma": 6,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "frightened",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "-",
+  "languages": "-",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "_Melee Weapon Attack:_ +5 to hit, reach 5 ft., one target. _Hit:_ 12 (2d8+3) piercing damage. If the target is a creature, it must succeed on a DC 13 STR save or be knocked prone."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Heightened Hearing and Smell",
+      "desc": "The wolf's Perception is 18 when perceiving by hearing or smell."
+    },
+    {
+      "name": "Pack Tactics",
+      "desc": "The wolf has advantage on an attack roll against a creature if at least one of the wolf's allies is within 5 feet of the creature and the ally isn't incapacitated."
+    }
+  ],
+  "legendary_actions": []
+}

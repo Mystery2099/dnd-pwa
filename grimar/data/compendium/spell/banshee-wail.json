@@ -1,0 +1,28 @@
+{
+  "slug": "banshee-wail",
+  "name": "Banshee Wail",
+  "desc": "You emit a soul-shattering wail. Every creature within a 30-foot cone who hears the wail must make a Wisdom saving throw. Those that fail take 6d10 psychic damage and become frightened of you; a frightened creature repeats the saving throw at the end of its turn, ending the effect on itself on a success. Those that succeed take 3d10 psychic damage and aren't frightened. This spell has no effect on constructs and undead.",
+  "higher_level": "",
+  "level": "6th-level",
+  "level_int": 6,
+  "school": "necromancy",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Instantaneous",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "Self",
+  "target_range_sort": 0,
+  "spell_level": 6,
+  "dnd_class": "Wizard, Warlock, Sorceror",
+  "spell_lists": [
+    "warlock",
+    "wizard"
+  ]
+}

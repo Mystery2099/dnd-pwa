@@ -1,0 +1,14 @@
+{
+  "slug": "intuitive",
+  "name": "Intuitive",
+  "desc": "You've trained your powers of observation to nearly superhuman levels.",
+  "prerequisite": null,
+  "effects_desc": [
+    "Raise your Intelligence or Wisdom attribute by 1, up to the attribute cap of 20.",
+    "You can read lips. You understand what a creature is saying If you are able to see its vocal apparatus while it speaks in a language you know.",
+    "Increase your passive perception and investigation scores by +5."
+  ],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

@@ -7,12 +7,21 @@
 
 	let { spell }: Props = $props();
 
-	const description = $derived(spell.description as string[] | undefined);
-	const higherLevel = $derived(spell.higher_level as string[] | undefined);
+	// Normalize description - can be string or array of strings
+	const descriptionArray = $derived(
+		typeof spell.desc === 'string' ? [spell.desc] : (spell.desc as string[] | undefined) || []
+	);
+
+	// Normalize higher_level - can be string or array of strings
+	const higherLevelArray = $derived(
+		typeof spell.higher_level === 'string'
+			? [spell.higher_level]
+			: (spell.higher_level as string[] | undefined) || []
+	);
 
 	// Combine paragraphs into markdown format
-	const descriptionMd = $derived(description ? description.join('\n\n') : '');
-	const higherLevelMd = $derived(higherLevel ? higherLevel.join('\n\n') : '');
+	const descriptionMd = $derived(descriptionArray.join('\n\n'));
+	const higherLevelMd = $derived(higherLevelArray.join('\n\n'));
 
 	// Lazy load svelte-markdown only when needed
 	let SvelteMarkdown: any = $state(null);

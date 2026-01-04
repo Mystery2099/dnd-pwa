@@ -1,0 +1,11 @@
+{
+  "slug": "potion-of-growth-a5e",
+  "name": "Potion of Growth",
+  "type": "Potion",
+  "desc": "A golden acorn floating in this translucent liquid grows and retracts roots every few seconds. After drinking this potion, for the next 1d4 hours your size is doubled (as the __enlarge/reduce_  spell but without need for _concentration_ ).",
+  "rarity": "Uncommon",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

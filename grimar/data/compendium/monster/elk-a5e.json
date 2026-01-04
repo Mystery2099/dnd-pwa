@@ -1,0 +1,39 @@
+{
+  "slug": "elk-a5e",
+  "name": "Elk",
+  "size": "Large",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 10,
+  "armor_desc": "",
+  "hit_points": 15,
+  "hit_dice": "2d10+4",
+  "speed": {
+    "walk": 50
+  },
+  "strength": 14,
+  "dexterity": 10,
+  "constitution": 14,
+  "intelligence": 2,
+  "wisdom": 10,
+  "charisma": 4,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 10",
+  "languages": "",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Ram",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6+2) bludgeoning damage. If the target is a creature and the elk moves at least 20 feet straight towards the target before the attack  the target makes a DC 12 Strength saving throw  falling prone on a failure."
+    }
+  ],
+  "special_abilities": null,
+  "legendary_actions": null
+}

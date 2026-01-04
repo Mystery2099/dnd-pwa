@@ -1,0 +1,60 @@
+{
+  "slug": "archmage_bf",
+  "name": "Archmage",
+  "size": "medium",
+  "type": "Humanoid",
+  "subtype": "Any Lineage",
+  "group": "NPCs",
+  "alignment": "",
+  "armor_class": 17,
+  "armor_desc": "Magic Ward",
+  "hit_points": 212,
+  "hit_dice": "",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 10,
+  "dexterity": 14,
+  "constitution": 12,
+  "intelligence": 28,
+  "wisdom": 22,
+  "charisma": 16,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "Magic Ward",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "-",
+  "languages": "any six languages",
+  "cr": 12,
+  "challenge_rating": "12",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The archmage makes three Arcane Blast attacks. It can replace one attack with a use of Spellcasting."
+    },
+    {
+      "name": "Arcane Blast",
+      "desc": "_Melee or Ranged Spell Attack:_ +9 to hit, reach 5 ft. or range 60 ft., one target. _Hit:_ 27 (4d10+5) force damage, and the target must succeed on a DC 17 STR save or be pushed up to 10 feet away from the archmage and knocked prone."
+    },
+    {
+      "name": "Burst of Magic (Recharge 5-6)",
+      "desc": "The archmage releases a burst of swirling, multicolored, magical energy on a point it can see within 60 feet of it. Each creature within 20 feet of that point must make a DC 17 DEX save, taking 33 (6d10) force damage and 18 (4d8) acid, cold, fire, lightning, or thunder damage (the archmage's choice) on a failed save, or half as much damage on a successful one."
+    },
+    {
+      "name": "Spellcasting",
+      "desc": "The archmage casts one of the following spells, using INT as the spellcasting ability (spell save DC 17).<br>At will: _detect magic_, _disguise self_, _mage hand_, _prestidigitation_<br>3/day each: _charm_, _dispel magic_, _fly_, _invisibility_ (self only), _mirror image_<br>1/day each: _dimension door_, _greater hold_, _wall of force_"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Magic Resistance",
+      "desc": "The archmage has advantage on saves against spells and other magical effects."
+    },
+    {
+      "name": "Magic Ward",
+      "desc": "While the archmage is conscious, wearing no armor, and not inside of an antimagic effect, it adds its INT modifier to its AC (included above). In addition, it is resistant to force damage."
+    }
+  ],
+  "legendary_actions": []
+}

@@ -1,0 +1,29 @@
+{
+  "slug": "armored-heart",
+  "name": "Armored Heart",
+  "desc": "Deep Magic: clockwork The targeted creature gains resistance to bludgeoning, slashing, and piercing damage. This resistance can be overcome with adamantine or magical weapons.",
+  "higher_level": "",
+  "level": "1st-level",
+  "level_int": 1,
+  "school": "conjuration",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "1 Round",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 bonus action",
+  "range": "Touch",
+  "target_range_sort": 1,
+  "spell_level": 1,
+  "dnd_class": "Wizard, Warlock, Sorceror, Bard",
+  "spell_lists": [
+    "bard",
+    "warlock",
+    "wizard"
+  ]
+}

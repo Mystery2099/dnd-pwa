@@ -1,0 +1,72 @@
+{
+  "slug": "kirikari",
+  "name": "Kirikari",
+  "size": "Huge",
+  "type": "Monstrosity",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 16,
+  "armor_desc": "natural armor",
+  "hit_points": 142,
+  "hit_dice": "15d12+45",
+  "speed": {
+    "walk": 30,
+    "swim": 30
+  },
+  "strength": 21,
+  "dexterity": 17,
+  "constitution": 16,
+  "intelligence": 4,
+  "wisdom": 14,
+  "charisma": 4,
+  "skills": {
+    "perception": 6,
+    "stealth": 11
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "acid, poison",
+  "condition_immunities": "poisoned",
+  "senses": "tremorsense 60 ft., passive Perception 16",
+  "languages": "—",
+  "cr": 9,
+  "challenge_rating": "9",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The kirikari makes two slam attacks."
+    },
+    {
+      "name": "Slam",
+      "desc": "Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 16 (2d10 + 5) bludgeoning damage plus 9 (2d8) acid damage.",
+      "attack_bonus": 9,
+      "damage_dice": "2d10+5"
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +9 to hit, reach 10 ft., one target. Hit: 31 (4d12 + 5) piercing damage plus 10 (3d6) poison damage, and the target is grappled (escape DC 15). Until this grapple ends, the target is restrained, and the kirikari can't bite another target.",
+      "attack_bonus": 9,
+      "damage_dice": "4d12+5"
+    },
+    {
+      "name": "Blinding Veil (Recharge 5-6)",
+      "desc": "The kirikari expels a cloud of intensified mist, heavily obscuring everything within 30 feet of it. The mist thins back to lightly obscuring the area at the end of the kirikari's next turn."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Corrosive Mold",
+      "desc": "A creature that starts its turn grappled by the kirikari must succeed on a DC 15 Constitution saving throw or take 9 (2d8) acid damage."
+    },
+    {
+      "name": "Misty Veil",
+      "desc": "The kirikari emits a light fog within 30 feet of itself. The mist moves with the kirikari, lightly obscuring the area around it. If dispersed by a wind of moderate or greater speed (at least 10 miles per hour), the mist reappears at the start of the kirikari's next turn."
+    },
+    {
+      "name": "Unseen Attacker",
+      "desc": "On each of its turns, the kirikari can use a bonus action to take the Hide action. If the kirikari is hidden from a creature and hits it with an attack, the target takes an extra 7 (2d6) damage from the attack."
+    }
+  ],
+  "legendary_actions": null
+}

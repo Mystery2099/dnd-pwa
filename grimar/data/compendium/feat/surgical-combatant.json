@@ -1,0 +1,14 @@
+{
+  "slug": "surgical-combatant",
+  "name": "Surgical Combatant",
+  "desc": "Your knowledge of anatomy and physiology is a boon to your allies and a bane to your foes. You gain the following benefits:",
+  "prerequisite": null,
+  "effects_desc": [
+    "You gain proficiency with the Dangerous Strikes maneuver and do not have to spend exertion to activate it.",
+    "You gain proficiency in Medicine. If you are already proficient, you instead gain an expertise die.",
+    "You gain an expertise die on Medicine checks made to diagnose the cause of or treat wounds."
+  ],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

@@ -1,0 +1,28 @@
+{
+  "slug": "gear-shield",
+  "name": "Gear Shield",
+  "desc": "Deep Magic: clockwork You cause a handful of gears to orbit the target's body. These shield the spell's target from incoming attacks, granting a +2 bonus to AC and to Dexterity and Constitution saving throws for the duration, without hindering the subject's movement, vision, or outgoing attacks.",
+  "higher_level": "",
+  "level": "1st-level",
+  "level_int": 1,
+  "school": "abjuration",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "10 Minutes",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "60 Feet",
+  "target_range_sort": 60,
+  "spell_level": 1,
+  "dnd_class": "Wizard, Warlock, Sorceror",
+  "spell_lists": [
+    "warlock",
+    "wizard"
+  ]
+}

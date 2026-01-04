@@ -1,0 +1,52 @@
+{
+  "slug": "mad-piper",
+  "name": "Mad Piper",
+  "size": "Large",
+  "type": "Construct",
+  "subtype": "",
+  "group": null,
+  "alignment": "neutral",
+  "armor_class": 12,
+  "armor_desc": "padded armor",
+  "hit_points": 19,
+  "hit_dice": "3d8+6",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 16,
+  "dexterity": 8,
+  "constitution": 14,
+  "intelligence": 5,
+  "wisdom": 7,
+  "charisma": 16,
+  "skills": {
+    "performance": 5
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "poison",
+  "condition_immunities": "charmed, exhaustion, frightened, paralyzed, poisoned, prone",
+  "senses": "darkvision 60 ft., passive Perception 8",
+  "languages": "understands Common and Void Speech, but can’t speak",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Screaming Flail",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 10 (2d6 + 3) bludgeoning damage plus 2 (1d4) thunder damage.",
+      "attack_bonus": 5,
+      "damage_dice": "2d6+3"
+    },
+    {
+      "name": "Terrible Dirge",
+      "desc": "The mad piper plays a haunting dirge. Each creature of the mad piper's choice that is within 30 feet of the piper and can hear the dirge must succeed o a DC 13 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the mad piper's Terrible Dirge for the next 24 hours."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Inspire",
+      "desc": "As a bonus action, the mad piper can play a tune that inspires a friendly creature it can see within 30 feet of it. If the target can hear the mad piper, it has advantage on its next ability check, attack roll, or saving throw."
+    }
+  ],
+  "legendary_actions": null
+}

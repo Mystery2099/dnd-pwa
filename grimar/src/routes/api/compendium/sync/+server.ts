@@ -2,6 +2,7 @@ import { json } from '@sveltejs/kit';
 import { getDb } from '$lib/server/db';
 import { syncAllProviders } from '$lib/server/services/sync/orchestrator';
 import { invalidateAllCompendiumCache } from '$lib/server/repositories/compendium';
+import { setCacheVersion } from '$lib/server/cache-version';
 
 export const POST = async () => {
 	const db = await getDb();
@@ -15,6 +16,9 @@ export const POST = async () => {
 		// Also clear the repository's in-memory cache
 		const { compendiumRepository } = await import('$lib/server/repositories/compendium');
 		compendiumRepository.invalidateAllCache();
+
+		// Update cache version to trigger client invalidation
+		setCacheVersion(`sync-${Date.now()}`);
 
 		// Aggregate results for response
 		const totalSpells = results.reduce((sum, r) => sum + r.spells, 0);

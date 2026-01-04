@@ -1,0 +1,62 @@
+{
+  "slug": "diomedian-horse",
+  "name": "Diomedian Horse",
+  "size": "Large",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 14,
+  "armor_desc": "natural armor",
+  "hit_points": 57,
+  "hit_dice": "6d10+24",
+  "speed": {
+    "walk": 60
+  },
+  "strength": 20,
+  "dexterity": 14,
+  "constitution": 18,
+  "intelligence": 4,
+  "wisdom": 12,
+  "charisma": 10,
+  "skills": {
+    "perception": 1
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60', passive Perception 13",
+  "languages": "—",
+  "cr": 3,
+  "challenge_rating": "3",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "One Bite attack and one Claw attack."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +7 to hit, 5 ft., one creature,. 12 (2d6+5) piercing damage."
+    },
+    {
+      "name": "Claws",
+      "desc": "Melee Weapon Attack: +7 to hit, 5 ft., one creature,. 10 (2d4+5) slashing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Keen Smell",
+      "desc": "Advantage: smell Wis (Percept) checks."
+    },
+    {
+      "name": "Pack Tactics",
+      "desc": "Advantage on attacks vs. creature if 1+ unincapacitated attacker ally is within 5 ft. of target."
+    },
+    {
+      "name": "Pounce",
+      "desc": "If the diomedian horse moves at least 20' straight toward a creature and then hits with Claw attack on the same turn that target must make DC 14 Str save or be knocked prone. If the target is prone the diomedian horse can make one Bite attack vs. it as a bonus action."
+    }
+  ],
+  "legendary_actions": null
+}

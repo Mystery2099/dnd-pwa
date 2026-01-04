@@ -1,0 +1,11 @@
+{
+  "slug": "slippers-of-the-cat",
+  "name": "Slippers of the Cat",
+  "type": "Wondrous item",
+  "desc": "While you wear these fine, black cloth slippers, you have advantage on Dexterity (Acrobatics) checks to keep your balance. When you fall while wearing these slippers, you land on your feet, and if you succeed on a DC 13 Dexterity saving throw, you take only half the falling damage.",
+  "rarity": "uncommon",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

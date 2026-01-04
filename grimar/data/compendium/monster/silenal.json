@@ -1,0 +1,76 @@
+{
+  "slug": "silenal",
+  "name": "Silenal",
+  "size": "Small",
+  "type": "Fey",
+  "subtype": "",
+  "group": null,
+  "alignment": "chaotic neutral",
+  "armor_class": 14,
+  "armor_desc": null,
+  "hit_points": 117,
+  "hit_dice": "18d6+54",
+  "speed": {
+    "walk": 25
+  },
+  "strength": 10,
+  "dexterity": 18,
+  "constitution": 16,
+  "intelligence": 10,
+  "wisdom": 13,
+  "charisma": 19,
+  "skills": {
+    "perception": 4,
+    "persuasion": 7,
+    "stealth": 7
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "charmed, poisoned",
+  "senses": "passive Perception 14",
+  "languages": "Common",
+  "cr": 7,
+  "challenge_rating": "7",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The silenal makes three attacks."
+    },
+    {
+      "name": "Tankard",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) bludgeoning damage plus 7 (2d6) poison damage. The target must succeed on a DC 15 Constitution saving throw or be poisoned for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.",
+      "attack_bonus": 7,
+      "damage_dice": "1d6+4"
+    },
+    {
+      "name": "Darts",
+      "desc": "Ranged Weapon Attack: +7 to hit, range 20/40 ft., one target. Hit: 14 (4d4 + 4) piercing damage.",
+      "attack_bonus": 7,
+      "damage_dice": "4d4+4"
+    },
+    {
+      "name": "Cause Row (1/Day)",
+      "desc": "The silenal magically stirs humanoids it can see within 60 feet of it into a frenzy. The frenzied patrons use the statistics of 4d4 commoners or 1 bar brawl. The frenzied patrons don't attack the silenal. The patrons remain frenzied for 10 minutes, until the silenal dies, or until the silenal calms and disperses the mass as a bonus action."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Drinking Buddy",
+      "desc": "A creature that shares a drink with a silenal has advantage on saving throws against being charmed and poisoned for 1 hour. During this time, if the creature takes violent action against the silenal, the creature has disadvantage on these saving throws for the remainder of the duration."
+    },
+    {
+      "name": "Drunken Clarity",
+      "desc": "When the silenal is within 5 feet of an alcoholic beverage, it has truesight out to a range of 90 feet. In addition, it notices secret doors hidden by magic within 30 feet of it."
+    },
+    {
+      "name": "Hide in the Fray",
+      "desc": "The silenal can take the Hide action as a bonus action if it is within 10 feet of two other creatures engaged in combat with each other."
+    },
+    {
+      "name": "Liquid Courage (Recharge 4-6)",
+      "desc": "As a bonus action, the silenal imbibes nearby alcohol to gain access to a hidden reservoir of audacity and grit. The silenal gains 10 (3d6) temporary hp for 1 minute."
+    }
+  ],
+  "legendary_actions": null
+}

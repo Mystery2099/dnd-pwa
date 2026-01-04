@@ -1,0 +1,29 @@
+{
+  "slug": "animated-scroll",
+  "name": "Animated Scroll",
+  "desc": "The paper or parchment must be folded into the shape of an animal before casting the spell. It then becomes an animated paper animal of the kind the folded paper most closely resembles. The creature uses the stat block of any beast that has a challenge rating of 0. It is made of paper, not flesh and bone, but it can do anything the real creature can do: a paper owl can fly and attack with its talons, a paper frog can swim without disintegrating in water, and so forth. It follows your commands to the best of its ability, including carrying messages to a recipient whose location you know.",
+  "higher_level": "The duration increases by 24 hours at 5th level (48 hours), 11th level (72 hours), and 17th level (96 hours).",
+  "level": "Cantrip",
+  "level_int": 0,
+  "school": "Transmutation",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "intricately folded paper or parchment",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "24 hours",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "Touch",
+  "target_range_sort": 1,
+  "spell_level": 0,
+  "dnd_class": "Druid, Sorcerer, Wizard",
+  "spell_lists": [
+    "druid",
+    "sorcerer",
+    "wizard"
+  ]
+}

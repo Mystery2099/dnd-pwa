@@ -1,0 +1,11 @@
+{
+  "slug": "scarab-of-rebirth",
+  "name": "Scarab of Rebirth",
+  "type": "Wondrous item",
+  "desc": "This coin-sized figurine of a scarab is crafted from an unidentifiable blue-gray metal, but it appears mundane in all other respects. When you speak its command word, it whirs to life and burrows into your flesh. You can speak the command word again to remove the scarab. While the scarab is embedded in your flesh, you gain the following:\n- You no longer need to eat or drink.\n- You can magically sense the presence of undead and pinpoint the location of any undead within 30 feet of you.\n- Your hit point maximum is reduced by 10.\n- If you die, you return to life with half your maximum hit points at the start of your next turn. The scarab can't return you to life if you were beheaded, disintegrated, crushed, or similar full-body destruction. Afterwards, the scarab exits your body and goes dormant. It can't be used again until 14 days have passed.",
+  "rarity": "rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

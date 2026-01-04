@@ -1,0 +1,55 @@
+{
+  "slug": "giant-flea",
+  "name": "Giant Flea",
+  "size": "Small",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 14,
+  "armor_desc": "natural armor",
+  "hit_points": 27,
+  "hit_dice": "5d6 +10",
+  "speed": {
+    "walk": 30,
+    "climb": 20
+  },
+  "strength": 13,
+  "dexterity": 14,
+  "constitution": 14,
+  "intelligence": 2,
+  "wisdom": 10,
+  "charisma": 2,
+  "skills": {
+    "perception": 0
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "bludgeoning",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "blindsight 60', passive Perception 10",
+  "languages": "—",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +4 to hit, 5 ft., one creature,. 4 (1d4+2) piercing damage and the flea attaches to the target. While attached the flea doesn't attack. Instead at the start of each of the flea's turns the target loses 4 (1d4+2) hp due to blood loss. The flea can detach itself by spending 5 ft. of movement. It does so after draining 12 hp of blood from the target or the target dies. A creature including the target can take its action to detach the flea by succeeding on a DC 11 Str check."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Blood Sense",
+      "desc": "Can pinpoint by scent the location of creatures that have blood within 60' of it."
+    },
+    {
+      "name": "Keen Smell",
+      "desc": "Advantage: smell Wis (Percept) checks."
+    },
+    {
+      "name": "Standing Leap",
+      "desc": "Its long jump is up to 30' and its high jump is up to 15 feet with or with o a running start."
+    }
+  ],
+  "legendary_actions": null
+}

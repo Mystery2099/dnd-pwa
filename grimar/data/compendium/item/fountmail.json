@@ -1,0 +1,11 @@
+{
+  "slug": "fountmail",
+  "name": "Fountmail",
+  "type": "Armor",
+  "desc": "This armor is a dazzling white suit of chain mail with an alabaster-colored steel collar that covers part of the face. You gain a +3 bonus to AC while you wear this armor. In addition, you gain the following benefits: - You add your Strength and Wisdom modifiers in addition to your Constitution modifier on all rolls when spending Hit Die to recover hit points. - You can't be frightened. - You have resistance to necrotic damage.",
+  "rarity": "legendary",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

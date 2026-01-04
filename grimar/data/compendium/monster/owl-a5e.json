@@ -1,0 +1,52 @@
+{
+  "slug": "owl-a5e",
+  "name": "Owl",
+  "size": "Tiny",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 11,
+  "armor_desc": "",
+  "hit_points": 1,
+  "hit_dice": "1d4-1",
+  "speed": {
+    "walk": 5,
+    "fly": 60
+  },
+  "strength": 2,
+  "dexterity": 12,
+  "constitution": 8,
+  "intelligence": 2,
+  "wisdom": 12,
+  "charisma": 6,
+  "skills": {
+    "perception": 3,
+    "stealth": 3
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 120 ft., passive Perception 13",
+  "languages": "",
+  "cr": 0,
+  "challenge_rating": "0",
+  "actions": [
+    {
+      "name": "Talons",
+      "desc": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 1 slashing damage. If this damage would reduce a Small or larger target to 0 hit points  the target takes no damage from this attack."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Flyby",
+      "desc": "The owl doesnt provoke opportunity attacks when it flies out of a creatures reach."
+    },
+    {
+      "name": "Keen Hearing and Sight",
+      "desc": "The owl has advantage on Perception checks that rely on hearing and sight."
+    }
+  ],
+  "legendary_actions": null
+}

@@ -18,6 +18,11 @@ export function readAuthHeader(event: RequestEvent): string | null {
 
 /** Apply development bypass for testing */
 export function applyDevBypass(existingUsername: string | null): string | null {
+	// Don't bypass in test mode, even if MOCK_USER is set
+	if (import.meta.env.MODE === 'test') {
+		return existingUsername;
+	}
+
 	if (!existingUsername && import.meta.env.DEV && MOCK_USER) {
 		return MOCK_USER;
 	}

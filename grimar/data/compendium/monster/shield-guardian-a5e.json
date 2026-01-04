@@ -1,0 +1,68 @@
+{
+  "slug": "shield-guardian-a5e",
+  "name": "Shield Guardian",
+  "size": "Large",
+  "type": "Construct",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 17,
+  "armor_desc": "",
+  "hit_points": 133,
+  "hit_dice": "14d10+56",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 18,
+  "dexterity": 10,
+  "constitution": 18,
+  "intelligence": 6,
+  "wisdom": 10,
+  "charisma": 3,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "poison",
+  "condition_immunities": "charmed, fatigue, frightened, paralyzed, petrified, poisoned",
+  "senses": "darkvision 60 ft., passive Perception 10",
+  "languages": "understands all languages but can't speak",
+  "cr": 7,
+  "challenge_rating": "7",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The guardian attacks twice with its fist."
+    },
+    {
+      "name": "Fist",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) bludgeoning damage."
+    },
+    {
+      "name": "Self-Repair",
+      "desc": "The guardian regains 15 hit points."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Amulet",
+      "desc": "The guardian is magically bound to an amulet. It knows the distance and direction to the amulet while it is on the same plane of existence. Whoever wears the amulet becomes the guardians master and can magically command the guardian to travel to it."
+    },
+    {
+      "name": "Immutable Form",
+      "desc": "The guardian is immune to any effect that would alter its form."
+    },
+    {
+      "name": "Magic Resistance",
+      "desc": "The guardian has advantage on saving throws against spells and magical effects."
+    },
+    {
+      "name": "Spell Storing",
+      "desc": "A spellcaster wearing the guardians amulet can use the guardian to store a spell. The spellcaster casts a spell using a 4th-level or lower spell slot on the guardian, choosing any spell parameters. The spell has no effect when thus cast. The guardian can cast this spell once, using no components, when ordered to do so by its master or under other predefined circumstances. When a spell is stored in the guardian, any previously stored spell is lost."
+    },
+    {
+      "name": "Constructed Nature",
+      "desc": "Guardians dont require air, sustenance, or sleep."
+    }
+  ],
+  "legendary_actions": null
+}

@@ -1,0 +1,44 @@
+{
+  "slug": "hyena_giant_bf",
+  "name": "Hyena, Giant",
+  "size": "large",
+  "type": "Beast",
+  "subtype": "",
+  "group": "Animals",
+  "alignment": "",
+  "armor_class": 12,
+  "armor_desc": null,
+  "hit_points": 42,
+  "hit_dice": "",
+  "speed": {
+    "walk": 50
+  },
+  "strength": 16,
+  "dexterity": 14,
+  "constitution": 14,
+  "intelligence": 2,
+  "wisdom": 12,
+  "charisma": 6,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "-",
+  "languages": "-",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "_Melee Weapon Attack:_ +5 to hit, reach 5 ft., one creature. _Hit:_ 10 (2d6+3) piercing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Cackling Chorus",
+      "desc": "If three or more hyenas are all within 30 feet of each other, their cackling, grunts, whoops, and yips create a deafening chorus. A creature that starts its turn within 10 feet of such a hyena must succeed on a CON save or be deafened until the start of its next turn. The DC is equal to 8 plus the number of participating hyenas."
+    }
+  ],
+  "legendary_actions": []
+}

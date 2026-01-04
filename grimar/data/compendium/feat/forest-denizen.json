@@ -1,0 +1,15 @@
+{
+  "slug": "forest-denizen",
+  "name": "Forest Denizen",
+  "desc": "You are familiar with the ways of the forest. You gain the following benefits:",
+  "prerequisite": "*N/A*",
+  "effects_desc": [
+    "* Increase your Wisdom score by 1, to a maximum of 20.",
+    "* You can discern if a plant or fungal growth is safe to eat.",
+    "* You learn to speak, read, and write Sylvan.",
+    "* You have advantage on Strength (Athletics) and Dexterity (Acrobatics) checks you make to escape from being grappled or restrained as long as you are being grappled or restrained by nonmagical vegetation or a beast's action such as a giant frog's bite or a spider's web."
+  ],
+  "document__slug": "toh",
+  "document__title": "Tome of Heroes",
+  "document__url": "https://koboldpress.com/kpstore/product/tome-of-heroes-for-5th-edition/"
+}

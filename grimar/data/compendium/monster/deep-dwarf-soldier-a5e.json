@@ -1,0 +1,63 @@
+{
+  "slug": "deep-dwarf-soldier-a5e",
+  "name": "Deep Dwarf Soldier",
+  "size": "Medium",
+  "type": "Humanoid",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 16,
+  "armor_desc": "",
+  "hit_points": 19,
+  "hit_dice": "3d8+6",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 14,
+  "dexterity": 12,
+  "constitution": 14,
+  "intelligence": 10,
+  "wisdom": 10,
+  "charisma": 10,
+  "skills": {
+    "perception": 2,
+    "survival": 2
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 12, darkvision 120 ft.",
+  "languages": "any one",
+  "cr": 0.5,
+  "challenge_rating": "1/2",
+  "actions": [
+    {
+      "name": "War Pick",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8 + 2) piercing damage  or 11 (2d8 + 2) piercing damage if within 5 feet of an ally that is not incapacitated  plus 2 (1d4) damage when Enlarged."
+    },
+    {
+      "name": "Enlarge (2nd-Level; V, S, Concentration)",
+      "desc": "The soldier and their equipment grow to Large size for 1 minute. They have advantage on Strength checks and Strength saving throws  and their attacks deal an extra 2 (1d4) damage (included in their War Pick attack)."
+    },
+    {
+      "name": "Invisibility (2nd-Level; V, S, Concentration)",
+      "desc": "The soldier is invisible for 1 hour. The spell ends if the soldier attacks or casts a spell."
+    },
+    {
+      "name": "Heavy Crossbow",
+      "desc": "Ranged Weapon Attack: +3 to hit, range 100/400 ft., one target. Hit: 6 (1d10 + 1) piercing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Deep Dwarf Resistance",
+      "desc": "The soldier has advantage on saving throws against illusions and to resist being charmed or paralyzed."
+    },
+    {
+      "name": "Deep Dwarf Magic",
+      "desc": "The deep dwarf can innately cast enlarge/reduce (self only, enlarge only) and invisibility (self only) once per long rest without using material components, using Intelligence for their spellcasting ability."
+    }
+  ],
+  "legendary_actions": null
+}

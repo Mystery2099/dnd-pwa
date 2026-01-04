@@ -1,0 +1,46 @@
+{
+  "slug": "silver-dragon-wyrmling-skeleton",
+  "name": "Silver Dragon Wyrmling Skeleton",
+  "size": "Medium",
+  "type": "Undead",
+  "subtype": "",
+  "group": null,
+  "alignment": "lawful evil",
+  "armor_class": 17,
+  "armor_desc": "natural armor",
+  "hit_points": 45,
+  "hit_dice": "6d8+18",
+  "speed": {
+    "walk": 30,
+    "fly": 60
+  },
+  "strength": 19,
+  "dexterity": 10,
+  "constitution": 17,
+  "intelligence": 8,
+  "wisdom": 10,
+  "charisma": 8,
+  "skills": {},
+  "damage_vulnerabilities": "bludgeoning",
+  "damage_resistances": "",
+  "damage_immunities": "cold, poison",
+  "condition_immunities": "exhaustion, poisoned",
+  "senses": "blindsight 10 ft., darkvision 60 ft., passive Perception 10",
+  "languages": "understands all languages it knew in life but can’t speak",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 9 (1d10 + 4) piercing damage.",
+      "attack_bonus": 6,
+      "damage_dice": "1d10+4"
+    },
+    {
+      "name": "Breath Weapons (Recharge 5-6)",
+      "desc": "The dragon uses one of the following breath weapons: \n* Shard Breath. The skeleton exhales a 15-foot cone of bone shards. Each creature in that area must make a DC 13 Dexterity saving throw, taking 18 (4d8) piercing damage on a failed save, or half as much damage on a successful one. \n* Noxious Breath. The skeleton exhales a 15-foot cone of gas. Each creature in the area must succeed on a DC 13 Constitution saving throw or become poisoned for 1 minute. A creature poisoned in this way can repeat the saving throw at the end of each of its turns, ending the poisoned condition on itself on a success."
+    }
+  ],
+  "special_abilities": null,
+  "legendary_actions": null
+}

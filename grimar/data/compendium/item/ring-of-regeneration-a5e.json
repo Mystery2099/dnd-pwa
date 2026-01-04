@@ -1,0 +1,11 @@
+{
+  "slug": "ring-of-regeneration-a5e",
+  "name": "Ring of Regeneration",
+  "type": "Ring",
+  "desc": "While wearing this ring, as long as you have at least 1 hit point you regain 1d6 hit points every 10 minutes. As long as you have at least 1 hit point the entire time, when you lose a body part over the next 1d6 + 1 days it completely regrows and you regain full functionality.",
+  "rarity": "Very Rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

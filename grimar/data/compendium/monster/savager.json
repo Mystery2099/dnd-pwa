@@ -1,0 +1,63 @@
+{
+  "slug": "savager",
+  "name": "Savager",
+  "size": "Large",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "neutral evil",
+  "armor_class": 17,
+  "armor_desc": "natural armor",
+  "hit_points": 115,
+  "hit_dice": "1d10+60",
+  "speed": {
+    "walk": 40,
+    "climb": 20
+  },
+  "strength": 22,
+  "dexterity": 14,
+  "constitution": 22,
+  "intelligence": 2,
+  "wisdom": 10,
+  "charisma": 13,
+  "skills": {
+    "perception": 3
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "bludgeoning, piercing, and slashing from nonmagical attacks",
+  "damage_immunities": "",
+  "condition_immunities": "charmed, frightened",
+  "senses": "darkvision 60 ft., passive Perception 13",
+  "languages": "",
+  "cr": 8,
+  "challenge_rating": "8",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The savager makes one bite attack and one claw attack."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 19 (2d12 + 6) piercing damage.",
+      "attack_bonus": 9,
+      "damage_dice": "2d12"
+    },
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +9 to hit, reach 10 ft., one target. Hit: 38 (5d12 + 6) slashing damage.",
+      "attack_bonus": 9,
+      "damage_dice": "5d12"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Mighty Swing",
+      "desc": "When a savager attacks without moving during its turn, it makes its claw attack with advantage."
+    },
+    {
+      "name": "Quills",
+      "desc": "A creature takes 4 (1d8) piercing damage at the start of its turn while it is grappling a savager."
+    }
+  ],
+  "legendary_actions": null
+}

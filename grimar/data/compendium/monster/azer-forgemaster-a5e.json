@@ -1,0 +1,52 @@
+{
+  "slug": "azer-forgemaster-a5e",
+  "name": "Azer Forgemaster",
+  "size": "Medium",
+  "type": "Elemental",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 16,
+  "armor_desc": "",
+  "hit_points": 78,
+  "hit_dice": "12d8+24",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 18,
+  "dexterity": 14,
+  "constitution": 14,
+  "intelligence": 12,
+  "wisdom": 16,
+  "charisma": 16,
+  "skills": {},
+  "damage_vulnerabilities": "cold",
+  "damage_resistances": "",
+  "damage_immunities": "fire, poison",
+  "condition_immunities": "poisoned",
+  "senses": "passive Perception 13",
+  "languages": "Common, Ignan",
+  "cr": 4,
+  "challenge_rating": "4",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The azer attacks with its returning hammer and uses Bonfire if available."
+    },
+    {
+      "name": "Returning Hammer",
+      "desc": "Melee or Ranged Weapon Attack: +6 to hit, reach 5 ft. or range 20/60 feet  one target. Hit: 8 (1d8 + 4) bludgeoning damage plus 7 (2d6) fire damage. The azers hammer returns to its hand after its thrown."
+    },
+    {
+      "name": "Bonfire (3/Day)",
+      "desc": "A 5-foot-square space within 60 feet catches fire. A creature takes 10 (3d6) fire damage when it enters this area for the first time on a turn or starts its turn there. A creature can use an action to extinguish this fire."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Fiery Aura",
+      "desc": "A creature that ends its turn within 5 feet of one or more azers takes 5 (1d10) fire damage. The azer sheds bright light in a 10-foot radius and dim light for an additional 10 feet."
+    }
+  ],
+  "legendary_actions": null
+}

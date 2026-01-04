@@ -1,0 +1,56 @@
+{
+  "slug": "manticore-a5e",
+  "name": "Manticore",
+  "size": "Large",
+  "type": "Monstrosity",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 14,
+  "armor_desc": "",
+  "hit_points": 68,
+  "hit_dice": "8d10+24",
+  "speed": {
+    "walk": 30,
+    "fly": 50
+  },
+  "strength": 16,
+  "dexterity": 14,
+  "constitution": 16,
+  "intelligence": 8,
+  "wisdom": 12,
+  "charisma": 8,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 11",
+  "languages": "Common",
+  "cr": 3,
+  "challenge_rating": "3",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The manticore attacks with its bite and its claws."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) piercing damage."
+    },
+    {
+      "name": "Claws",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 8 (2d4 + 3) slashing damage. If the manticore moves at least 20 feet straight towards the target before the attack  the target makes a DC 13 Strength saving throw  falling prone on a failure."
+    },
+    {
+      "name": "Tail",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 10 ft., one target. Hit: 7 (1d8 + 3) piercing damage."
+    },
+    {
+      "name": "Tail Spike Volley (4/Day)",
+      "desc": "The manticore fires tail spikes in a 5-foot-wide  60-foot-long line. Each creature in the area makes a DC 12 Dexterity saving throw  taking 14 (4d6) piercing damage on a failure or half damage on a success."
+    }
+  ],
+  "special_abilities": null,
+  "legendary_actions": null
+}

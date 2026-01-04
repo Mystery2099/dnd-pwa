@@ -1,0 +1,59 @@
+{
+  "slug": "subek-tob1-2023",
+  "name": "Subek",
+  "size": "Large",
+  "type": "Humanoid",
+  "subtype": "",
+  "group": "null",
+  "alignment": "Lawful Neutral",
+  "armor_class": 15,
+  "armor_desc": "natural armor",
+  "hit_points": 114,
+  "hit_dice": "12d10 + 48",
+  "speed": {
+    "walk": 20
+  },
+  "strength": 19,
+  "dexterity": 10,
+  "constitution": 18,
+  "intelligence": 14,
+  "wisdom": 13,
+  "charisma": 13,
+  "skills": {
+    "History": 5,
+    "Investigation": 5
+  },
+  "damage_vulnerabilities": "False",
+  "damage_resistances": "False",
+  "damage_immunities": "False",
+  "condition_immunities": "False",
+  "senses": "darkvision 60 ft., passive Perception 11",
+  "languages": "Common",
+  "cr": 5,
+  "challenge_rating": "5",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The subek makes one Bite attack and two Claw attacks. If both Claw attacks hit one creature, the target must succeed on a DC 15 Strength saving throw or take 7 (2d6) slashing damage as the subek tears into the target."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) piercing damage."
+    },
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) slashing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Flood Fever",
+      "desc": "During flood season, the subek is overcome with bloodthirsty malice, becoming more aggressive and losing its proficiency in Intelligence (History) and Intelligence (Investigation) checks. If it hasn't fed within the past 8 hours, it enters a frenzy, spending each turn attacking the nearest creature it can see. If no creature is near enough to move to and attack, the subek attacks an object, with preference for an object smaller than itself. During the frenzy, it has advantage on melee attack rolls against any creature that doesn't have all its hp."
+    },
+    {
+      "name": "Hold Breath",
+      "desc": "The subek can hold its breath for 15 minutes."
+    }
+  ],
+  "legendary_actions": []
+}

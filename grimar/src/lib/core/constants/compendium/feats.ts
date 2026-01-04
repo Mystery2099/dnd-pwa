@@ -4,7 +4,6 @@
 
 import { Medal } from 'lucide-svelte';
 import type { CompendiumTypeConfig } from '$lib/core/types/compendium';
-import { colorMap } from '$lib/core/constants/colors';
 
 export const FEATS_CONFIG: CompendiumTypeConfig = {
 	routes: {

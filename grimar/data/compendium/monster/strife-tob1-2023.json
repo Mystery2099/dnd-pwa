@@ -1,0 +1,64 @@
+{
+  "slug": "strife-tob1-2023",
+  "name": "Strife",
+  "size": "Small",
+  "type": "Fey",
+  "subtype": "",
+  "group": "null",
+  "alignment": "Chaotic Evil",
+  "armor_class": 15,
+  "armor_desc": "",
+  "hit_points": 60,
+  "hit_dice": "11d6 + 22",
+  "speed": {
+    "walk": 40,
+    "fly": 40
+  },
+  "strength": 8,
+  "dexterity": 20,
+  "constitution": 14,
+  "intelligence": 13,
+  "wisdom": 14,
+  "charisma": 16,
+  "skills": {
+    "Deception": 7,
+    "Stealth": 9
+  },
+  "damage_vulnerabilities": "False",
+  "damage_resistances": "False",
+  "damage_immunities": "False",
+  "condition_immunities": "False",
+  "senses": "darkvision 60 ft., passive Perception 12",
+  "languages": "Common, Sylvan",
+  "cr": 3,
+  "challenge_rating": "3",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The strife can use its Sow Discord. It then makes two Claw attacks."
+    },
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 5 ft. one target. Hit: 8 (1d6 + 5) slashing damage."
+    },
+    {
+      "name": "Sow Discord",
+      "desc": "The strife attempts to sow discord in up to two creatures it can see within 30 feet of it. Each target must make a DC 13 Wisdom saving throw. On a failure, a creature takes 7 (2d6) psychic damage and distrusts its allies until the start of the strife's next turn. On a success, a creature takes half the damage and doesn't distrust its allies. A creature that distrusts its allies can't give or receive aid from its allies, including spells, class features like Sneak Attack, and the Help action."
+    },
+    {
+      "name": "Invisibility",
+      "desc": "The strife magically turns invisible until it attacks or until its concentration ends (as if concentrating on a spell). Any equipment the strife wears or carries is invisible with it."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Mimicry",
+      "desc": "The strife can mimic Humanoid voices. A creature that hears the sounds can tell they are imitations with a successful DC 17 Wisdom (Insight) check."
+    },
+    {
+      "name": "Delight",
+      "desc": "When a creature within 30 feet of the strife takes psychic damage, the strife gains 5 temporary hp or gains advantage on the next attack roll it makes before the end of its next turn (the strife's choice)."
+    }
+  ],
+  "legendary_actions": []
+}

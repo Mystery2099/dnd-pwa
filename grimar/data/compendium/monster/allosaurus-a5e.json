@@ -1,0 +1,39 @@
+{
+  "slug": "allosaurus-a5e",
+  "name": "Allosaurus",
+  "size": "Huge",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 15,
+  "armor_desc": "",
+  "hit_points": 57,
+  "hit_dice": "6d12+18",
+  "speed": {
+    "walk": 60
+  },
+  "strength": 18,
+  "dexterity": 18,
+  "constitution": 16,
+  "intelligence": 2,
+  "wisdom": 12,
+  "charisma": 5,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 11",
+  "languages": "",
+  "cr": 3,
+  "challenge_rating": "3",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 17 (3d8 + 4) slashing damage. If the allosaurus moves at least 10 feet towards its target before making this attack  it gains advantage on the attack."
+    }
+  ],
+  "special_abilities": null,
+  "legendary_actions": null
+}

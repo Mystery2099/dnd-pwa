@@ -1,0 +1,54 @@
+{
+  "slug": "shadow-a5e",
+  "name": "Shadow",
+  "size": "Medium",
+  "type": "Undead",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 12,
+  "armor_desc": "",
+  "hit_points": 18,
+  "hit_dice": "4d8",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 6,
+  "dexterity": 14,
+  "constitution": 10,
+  "intelligence": 8,
+  "wisdom": 10,
+  "charisma": 14,
+  "skills": {
+    "stealth": 4
+  },
+  "damage_vulnerabilities": "radiant",
+  "damage_resistances": "acid, cold, fire, lightning, thunder; damage from nonmagical weapons",
+  "damage_immunities": "necrotic, poison",
+  "condition_immunities": "charmed, fatigue, frightened, grappled, paralyzed, petrified, poisoned, prone, restrained",
+  "senses": "darkvision 120 ft., passive Perception 10",
+  "languages": "",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one creature. Hit: 9 (2d6 + 2) necrotic damage  and the target makes a DC 12 Constitution saving throw. On a failure  the target is cursed until it finishes a short or long rest or is the subject of remove curse or a similar spell. While cursed  the target makes attack rolls  Strength checks  and Strength saving throws with disadvantage. If the target dies while cursed  a new undead shadow rises from the corpse in 1d4 hours  the corpse no longer casts a natural shadow  and the target can't be raised from the dead until the new shadow is destroyed."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Amorphous",
+      "desc": "The shadow can pass through an opening as narrow as 1 inch wide without squeezing."
+    },
+    {
+      "name": "Sunlight Weakness",
+      "desc": "While in sunlight, the shadow has disadvantage on attack rolls, ability checks, and saving throws."
+    },
+    {
+      "name": "Undead Nature",
+      "desc": "A shadow doesnt require air, sustenance, or sleep."
+    }
+  ],
+  "legendary_actions": null
+}

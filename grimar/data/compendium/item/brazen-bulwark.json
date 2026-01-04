@@ -1,0 +1,11 @@
+{
+  "slug": "brazen-bulwark",
+  "name": "Brazen Bulwark",
+  "type": "Armor",
+  "desc": "This rectangular shield is plated with polished brass and resembles a crenelated tower. While wielding this shield, you gain a +1 bonus to AC. This bonus is in addition to the shield's normal bonus to AC.",
+  "rarity": "rare",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

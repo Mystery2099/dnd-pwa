@@ -1,0 +1,27 @@
+{
+  "slug": "mass-blade-ward",
+  "name": "Mass Blade Ward",
+  "desc": "You make a protective gesture toward your allies. Choose three creatures that you can see within range. Until the end of your next turn, the targets have resistance against bludgeoning, piercing, and slashing damage from weapon attacks. If a target moves farther than 30 feet from you, the effect ends for that creature.",
+  "higher_level": "",
+  "level": "2nd-level",
+  "level_int": 2,
+  "school": "abjuration",
+  "components": "V, S",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "1 Round",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "30 Feet",
+  "target_range_sort": 30,
+  "spell_level": 2,
+  "dnd_class": "Wizard, Paladin",
+  "spell_lists": [
+    "wizard"
+  ]
+}

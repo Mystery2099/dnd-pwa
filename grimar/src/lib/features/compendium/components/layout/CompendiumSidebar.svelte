@@ -111,8 +111,8 @@
 		</div>
 	</div>
 
-	<!-- Scrollable Filters -->
-	<div class="glass-scroll flex-1 overflow-y-auto">
+	<!-- Filters (no scroll, wrap naturally) -->
+	<div class="min-h-0 flex-1 overflow-y-auto">
 		{#if filters}
 			{@render filters()}
 		{/if}

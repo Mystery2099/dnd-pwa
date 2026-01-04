@@ -1,0 +1,11 @@
+{
+  "slug": "cloak-of-the-empire",
+  "name": "Cloak of the Empire",
+  "type": "Wondrous item",
+  "desc": "This voluminous grey cloak has bright red trim and the sigil from an unknown empire on its back. The cloak is stiff and doesn't fold as easily as normal cloth. Whenever you are struck by a ranged weapon attack, you can use a reaction to reduce the damage from that attack by your Charisma modifier (minimum of 1).",
+  "rarity": "uncommon",
+  "requires_attunement": "requires attunement",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

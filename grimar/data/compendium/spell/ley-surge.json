@@ -1,0 +1,29 @@
+{
+  "slug": "ley-surge",
+  "name": "Ley Surge",
+  "desc": "You unleash the power of a ley line within 5 miles, releasing a spark that flares into a 30-foot sphere centered around a point within 150 feet of you. Each creature in the sphere takes 14d6 force damage and is stunned for 1 minute; a successful Constitution saving throw halves the damage and negates the stun. A stunned creature repeats the saving throw at the end of its turn, ending the effect on itself on a success. Special. A geomancer with a bound ley line can cast this spell as long as he or she is on the same plane as the bound line.",
+  "higher_level": "",
+  "level": "9th-level",
+  "level_int": 9,
+  "school": "evocation",
+  "components": "V, S",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Instantaneous",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "150 Feet",
+  "target_range_sort": 150,
+  "spell_level": 9,
+  "dnd_class": "Wizard, Warlock, Sorceror, Druid",
+  "spell_lists": [
+    "druid",
+    "warlock",
+    "wizard"
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "slug": "sasori-fukurowashi",
+  "name": "Sasori Fukurowashi",
+  "size": "Medium",
+  "type": "Fey",
+  "subtype": "kami",
+  "group": null,
+  "alignment": "neutral good",
+  "armor_class": 17,
+  "armor_desc": "natural armor",
+  "hit_points": 123,
+  "hit_dice": "19d8+38",
+  "speed": {
+    "fly": 80,
+    "walk": 40,
+    "climb": 20
+  },
+  "strength": 17,
+  "dexterity": 19,
+  "constitution": 15,
+  "intelligence": 11,
+  "wisdom": 21,
+  "charisma": 19,
+  "skills": {
+    "perception": 9,
+    "stealth": 8
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "acid, cold, fire, lightning, thunder; bludgeoning, piercing, and slashing from nonmagical attacks",
+  "damage_immunities": "poison",
+  "condition_immunities": "exhaustion, poisoned",
+  "senses": "truesight 60 ft., passive Perception 19",
+  "languages": "Common, Sylvan",
+  "cr": 9,
+  "challenge_rating": "9",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The sasori fukurōwashi makes three attacks: one with its claw, one with its sting, and one with its talons."
+    },
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) bludgeoning damage, and the target is grappled (escape DC 14). The kami has two claws, each of which can grapple only one target.",
+      "attack_bonus": 8,
+      "damage_dice": "2d8+4"
+    },
+    {
+      "name": "Sting",
+      "desc": "Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 9 (1d10 + 4) piercing damage, and the target must make a DC 14 Constitution saving throw, taking 22 (4d10) poison damage on a failed save, or half as much damage on a successful one.",
+      "attack_bonus": 8,
+      "damage_dice": "1d10+4"
+    },
+    {
+      "name": "Talons",
+      "desc": "Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) slashing damage.",
+      "attack_bonus": 8,
+      "damage_dice": "1d6+4"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Ethereal Jaunt",
+      "desc": "As a bonus action, the kami can magically shift from the Material Plane to the Ethereal Plane, or vice versa."
+    },
+    {
+      "name": "Flyby",
+      "desc": "The kami doesn't provoke opportunity attacks when it flies out of an enemy's reach."
+    },
+    {
+      "name": "Magic Resistance",
+      "desc": "The kami has advantage on saving throws against spells and other magical effects"
+    },
+    {
+      "name": "Keen Hearing and Sight",
+      "desc": "The kami has advantage on Wisdom (Perception) checks that rely on hearing or sight."
+    }
+  ],
+  "legendary_actions": null
+}

@@ -1,0 +1,57 @@
+{
+  "slug": "werebear_bf",
+  "name": "Werebear",
+  "size": "medium",
+  "type": "Humanoid",
+  "subtype": "Lycanthrope",
+  "group": "Lycanthropes",
+  "alignment": "",
+  "armor_class": 10,
+  "armor_desc": "n humanoid form, 11 (natural armor) in bear and hybrid for",
+  "hit_points": 126,
+  "hit_dice": "",
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "strength": 20,
+  "dexterity": 10,
+  "constitution": 16,
+  "intelligence": 10,
+  "wisdom": 18,
+  "charisma": 12,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "bludgeoning,piercing,and slashing damage from nonmagical attacks",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "-",
+  "languages": "Common (can't speak in bear form)",
+  "cr": 5,
+  "challenge_rating": "5",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The werebear makes three Claw or Greataxe attacks. It can replace one attack with a Bite attack, provided it is in the appropriate form. If two Claw attacks hit one creature, the target is grappled (escape DC 15). The werebear can grapple only one creature at a time."
+    },
+    {
+      "name": "Bite (Bear or Hybrid Form Only)",
+      "desc": "_Melee Weapon Attack:_ +8 to hit, reach 5 ft., one target. _Hit:_ 16 (2d10+5) piercing damage. If the target is a Humanoid, it must succeed on a DC 14 CON save or be cursed with the werebear lycanthropy curse (see Curse of Lycanthropy sidebar)."
+    },
+    {
+      "name": "Claw (Bear or Hybrid Form Only)",
+      "desc": "_Melee Weapon Attack:_ +8 to hit, reach 5 ft., one target. _Hit:_ 14 (2d8+5) slashing damage."
+    },
+    {
+      "name": "Greataxe (Humanoid or Hybrid Form Only)",
+      "desc": "Melee Weapon Attack: +8 to hit, reach 5 ft., one target. _Hit:_ 11 (1d12+5) slashing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Heightened Smell",
+      "desc": "The werebear's Perception is 19 when perceiving by smell."
+    }
+  ],
+  "legendary_actions": []
+}

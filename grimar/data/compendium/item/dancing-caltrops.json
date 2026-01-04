@@ -1,0 +1,11 @@
+{
+  "slug": "dancing-caltrops",
+  "name": "Dancing Caltrops",
+  "type": "Wondrous item",
+  "desc": "After you pour these magic caltrops out of the bag into an area, you can use a bonus action to animate them and command them to move up to 10 feet to occupy a different square area that is 5 feet on a side.",
+  "rarity": "common",
+  "requires_attunement": "requires attunement",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

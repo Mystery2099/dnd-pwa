@@ -4,6 +4,7 @@ import { defineConfig } from 'vite';
 import { SvelteKitPWA } from '@vite-pwa/sveltekit';
 
 export default defineConfig({
+	envDir: '.',
 	plugins: [
 		tailwindcss(),
 		sveltekit(),
@@ -44,9 +45,9 @@ export default defineConfig({
 						}
 					},
 					{
-						// Cache compendium export for offline seeding
+						// Cache compendium export for offline compendium access
 						urlPattern: /\/api\/compendium\/export\?full=true/i,
-						handler: 'StaleWhileRevalidate',
+						handler: 'CacheFirst',
 						options: {
 							cacheName: 'compendium-export-cache',
 							expiration: {
@@ -59,6 +60,27 @@ export default defineConfig({
 						}
 					},
 					{
+						// SSE endpoint - never cache, always network
+						urlPattern: /\/api\/cache\/events/i,
+						handler: 'NetworkOnly',
+						options: {
+							cacheName: 'sse-cache'
+						}
+					},
+					{
+						// Cache version endpoint - short cache for invalidation checks
+						urlPattern: /\/api\/cache\/version/i,
+						handler: 'NetworkFirst',
+						options: {
+							cacheName: 'cache-version-cache',
+							expiration: {
+								maxEntries: 5,
+								maxAgeSeconds: 60 // 1 minute
+							}
+						}
+					},
+					{
+						// API routes - always prefer server (server-first architecture)
 						urlPattern: /^https?:\/\/.*\/api\/.*/i,
 						handler: 'NetworkFirst',
 						options: {

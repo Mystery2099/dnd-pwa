@@ -1,0 +1,13 @@
+{
+  "slug": "fortunate",
+  "name": "Fortunate",
+  "desc": "Be it the gods, fate, or dumb luck, something is looking out for you.\nYou may choose to invoke your luck to do the following:\nMultiple creatures with the Fortunate feat may invoke luck. If this occurs, the result is resolved as normal.\nYou may invoke your luck up to three times per long rest.",
+  "prerequisite": null,
+  "effects_desc": [
+    "Before determining the result of an attack roll, an ability check, or a saving throw, roll a second d20 and select which die to use. If you have disadvantage, you may instead spend a fate point to choose one of the d20 rolls and reroll it.",
+    "Before determining the result of an attack made against you, roll a second d20 and select which die to use."
+  ],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

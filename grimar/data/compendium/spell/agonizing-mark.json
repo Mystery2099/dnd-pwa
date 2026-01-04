@@ -1,0 +1,32 @@
+{
+  "slug": "agonizing-mark",
+  "name": "Agonizing Mark",
+  "desc": "You choose a creature you can see within range to mark as your prey, and a ray of black energy issues forth from you. Until the spell ends, each time you deal damage to the target it must make a Charisma saving throw. On a failed save, it falls prone as its body is filled with torturous agony.",
+  "higher_level": "",
+  "level": "1st-level",
+  "level_int": 1,
+  "school": "evocation",
+  "components": "S",
+  "requires_verbal_components": false,
+  "requires_somatic_components": true,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Up to 1 minute",
+  "concentration": "yes",
+  "requires_concentration": true,
+  "casting_time": "1 action",
+  "range": "90 feet",
+  "target_range_sort": 90,
+  "spell_level": 1,
+  "dnd_class": "Bard, Cleric, Druid, Ranger, Sorcerer, Wizard",
+  "spell_lists": [
+    "cleric",
+    "druid",
+    "ranger",
+    "bard",
+    "sorcerer",
+    "wizard"
+  ]
+}

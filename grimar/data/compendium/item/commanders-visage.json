@@ -1,0 +1,11 @@
+{
+  "slug": "commanders-visage",
+  "name": "Commander's Visage",
+  "type": "Wondrous item",
+  "desc": "This golden mask resembles a stern face, glowering at the world. While wearing this mask, you have advantage on saving throws against being frightened. The mask has 7 charges for the following properties, and it regains 1d6 + 1 expended charges daily at midnight.",
+  "rarity": "very rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

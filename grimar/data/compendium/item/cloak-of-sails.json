@@ -1,0 +1,11 @@
+{
+  "slug": "cloak-of-sails",
+  "name": "Cloak of Sails",
+  "type": "Wondrous item",
+  "desc": "The interior of this simple, black cloak looks like white sailcloth. While wearing this cloak, you gain a +1 bonus to AC and saving throws. You lose this bonus while using the cloak's Sailcloth property.",
+  "rarity": "uncommon",
+  "requires_attunement": "requires attunement",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

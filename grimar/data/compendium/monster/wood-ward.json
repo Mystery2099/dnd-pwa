@@ -1,0 +1,58 @@
+{
+  "slug": "wood-ward",
+  "name": "Wood Ward",
+  "size": "Medium",
+  "type": "Construct",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 13,
+  "armor_desc": "natural armor",
+  "hit_points": 19,
+  "hit_dice": "2d10+8",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 11,
+  "dexterity": 12,
+  "constitution": 18,
+  "intelligence": 3,
+  "wisdom": 12,
+  "charisma": 1,
+  "skills": {},
+  "damage_vulnerabilities": "fire",
+  "damage_resistances": "",
+  "damage_immunities": "poison, psychic, bludgeoning, piercing and slashing from nonmagical attacks not made with adamantine weapons",
+  "condition_immunities": "charmed, exhaustion, frightened, paralyzed, petrified, poisoned",
+  "senses": "darkvision 60 ft., passive Perception 11",
+  "languages": "understands the languages of its creator but can’t speak",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The wood ward makes two slam attacks."
+    },
+    {
+      "name": "Slam",
+      "desc": "Melee Weapon Attack: +3 to hit, reach 5 ft. one target. Hit: 3 (1d4 + 1) bludgeoning damage.",
+      "attack_bonus": 3,
+      "damage_dice": "1d4+1"
+    },
+    {
+      "name": "Horror Gaze (1/Day)",
+      "desc": "The wood ward's eye sockets release an eerie glow in a 30-foot cone. Each creature in the area must succeed on a DC 10 Charisma saving throw or be frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the wood ward's Horror Gaze for the next 24 hours."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Immutable Form",
+      "desc": "The wood ward is immune to any spell or effect that would alter its form."
+    },
+    {
+      "name": "Magic Resistance",
+      "desc": "The wood ward has advantage on saving throws against spells and other magical effects."
+    }
+  ],
+  "legendary_actions": null
+}

@@ -1,0 +1,13 @@
+{
+  "slug": "heraldic-training",
+  "name": "Heraldic Training",
+  "desc": "You have studied the specialized techniques used by the divine agents known as heralds. You gain the following benefits:",
+  "prerequisite": null,
+  "effects_desc": [
+    "You gain proficiency in your choice of one martial weapon, one rare weapon, or shields.",
+    "You gain two divine lessons of your choice from the herald class."
+  ],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

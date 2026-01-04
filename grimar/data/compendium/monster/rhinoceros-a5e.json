@@ -1,0 +1,39 @@
+{
+  "slug": "rhinoceros-a5e",
+  "name": "Rhinoceros",
+  "size": "Large",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 12,
+  "armor_desc": "",
+  "hit_points": 45,
+  "hit_dice": "6d10+12",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 20,
+  "dexterity": 8,
+  "constitution": 14,
+  "intelligence": 2,
+  "wisdom": 12,
+  "charisma": 4,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 11",
+  "languages": "",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Gore",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 14 (2d8+5) bludgeoning damage. If the rhinoceros moves at least 20 feet straight towards the target before the attack  the attack deals an extra 4 (1d8) bludgeoning damage and the target makes a DC 15 Strength saving throw  falling prone on a failure."
+    }
+  ],
+  "special_abilities": null,
+  "legendary_actions": null
+}

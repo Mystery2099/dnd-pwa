@@ -1,0 +1,11 @@
+{
+  "slug": "potion-of-diminution-a5e",
+  "name": "Potion of Diminution",
+  "type": "Potion",
+  "desc": "A golden acorn floats in the translucent liquid, dropping from the top of the vial and floating back up every few seconds. After drinking this potion, your size is reduced by half (as the __enlarge/reduce_  spell but without need for _concentration_ ) for 1d4 hours.",
+  "rarity": "Rare",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

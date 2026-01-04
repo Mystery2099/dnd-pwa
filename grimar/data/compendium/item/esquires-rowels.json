@@ -1,0 +1,11 @@
+{
+  "slug": "esquires-rowels",
+  "name": "Esquire's Rowels",
+  "type": "Wondrous item",
+  "desc": "While riding a mount and wearing these silver-chased spurs, you have a +1 bonus to initiative rolls, and your mount1s Armor Class increases by 2. In addition, while riding a mount and wearing these spurs, you and your mount have advantage on Constitution saving throws against exhaustion caused by traveling more than 8 hours in a day.",
+  "rarity": "rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "toh",
+  "document__title": "Tome of Heroes",
+  "document__url": "https://koboldpress.com/kpstore/product/tome-of-heroes-for-5th-edition/"
+}

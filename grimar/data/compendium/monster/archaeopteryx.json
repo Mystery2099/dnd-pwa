@@ -1,0 +1,57 @@
+{
+  "slug": "archaeopteryx",
+  "name": "Archaeopteryx",
+  "size": "Tiny",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 12,
+  "armor_desc": "natural armor",
+  "hit_points": 7,
+  "hit_dice": "3d4",
+  "speed": {
+    "fly": 50,
+    "walk": 5
+  },
+  "strength": 6,
+  "dexterity": 13,
+  "constitution": 10,
+  "intelligence": 2,
+  "wisdom": 14,
+  "charisma": 6,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 12",
+  "languages": "-",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The archaeopteryx makes two attacks: one with its beak and one with its talons."
+    },
+    {
+      "name": "Beak",
+      "desc": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) piercing damage.",
+      "attack_bonus": 3,
+      "damage_dice": "1d4+1"
+    },
+    {
+      "name": "Talons",
+      "desc": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) slashing damage.",
+      "attack_bonus": 3,
+      "damage_dice": "1d4+1"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Flyby",
+      "desc": "The archaeopteryx doesn't provoke opportunity attacks when it flies out of an enemy's reach."
+    }
+  ],
+  "legendary_actions": null
+}

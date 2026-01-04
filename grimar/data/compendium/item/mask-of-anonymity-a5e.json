@@ -1,0 +1,11 @@
+{
+  "slug": "mask-of-anonymity-a5e",
+  "name": "Mask of Anonymity",
+  "type": "Wondrous Item",
+  "desc": "This masquerade mask covers the top half of your face in an elegant fan of papier-mache and paint, rendering you anonymous. A creature may make an Insight check opposed by your Deception to determine your identity, but does so at _disadvantage_ , even through a magical_/_ sensor.",
+  "rarity": "Common",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

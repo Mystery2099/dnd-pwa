@@ -1,0 +1,28 @@
+{
+  "slug": "hellforging",
+  "name": "Hellforging",
+  "desc": "Deep Magic: clockwork You spend an hour calling forth a disembodied evil spirit. At the end of that time, the summoned spirit must make a Charisma saving throw. If the saving throw succeeds, you take 2d10 psychic damage plus 2d10 necrotic damage from waves of uncontrolled energy rippling out from the disembodied spirit. You can maintain the spell, forcing the subject to repeat the saving throw at the end of each of your turns, with the same consequence to you for each failure. If you choose not to maintain the spell or are unable to do so, the evil spirit returns to its place of torment and cannot be recalled. If the saving throw fails, the summoned spirit is transferred into the waiting soul gem and immediately animates the constructed body. The subject is now a hellforged; it loses all of its previous racial traits and gains gearforged traits except as follows: Vulnerability: Hellforged are vulnerable to radiant damage. Evil Mind: Hellforged have disadvantage on saving throws against spells and abilities of evil fiends or aberrations that effect the mind or behavior. Past Life: The hellforged retains only a vague sense of who it was in its former existence, but these memories are enough for it to gain proficiency in one skill. Languages: Hellforged speak Common, Machine Speech, and Infernal or Abyssal Up to four other spellcasters of at least 5th level can assist you in the ritual. Each assistant increases the DC of the Charisma saving throw by 1. In the event of a failed saving throw, the spellcaster and each assistant take damage. An assistant who drops out of the casting can't rejoin.",
+  "higher_level": "",
+  "level": "7th-level",
+  "level_int": 7,
+  "school": "necromancy",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": true,
+  "ritual": "yes",
+  "duration": "Instantaneous",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 hour",
+  "range": "Touch",
+  "target_range_sort": 1,
+  "spell_level": 7,
+  "dnd_class": "Wizard, Cleric",
+  "spell_lists": [
+    "cleric",
+    "wizard"
+  ]
+}

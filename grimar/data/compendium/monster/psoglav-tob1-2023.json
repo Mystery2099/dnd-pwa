@@ -1,0 +1,66 @@
+{
+  "slug": "psoglav-tob1-2023",
+  "name": "Psoglav",
+  "size": "Large",
+  "type": "Fiend",
+  "subtype": "",
+  "group": "null",
+  "alignment": "Chaotic Evil",
+  "armor_class": 17,
+  "armor_desc": "natural armor",
+  "hit_points": 115,
+  "hit_dice": "11d10 + 55",
+  "speed": {
+    "walk": 60,
+    "fly": 40
+  },
+  "strength": 21,
+  "dexterity": 23,
+  "constitution": 20,
+  "intelligence": 16,
+  "wisdom": 19,
+  "charisma": 18,
+  "skills": {
+    "Acrobatics": 9,
+    "Perception": 7,
+    "Intimidation": 7,
+    "Stealth": 9
+  },
+  "damage_vulnerabilities": "False",
+  "damage_resistances": "cold, fire, lightning",
+  "damage_immunities": "poison",
+  "condition_immunities": "poisoned",
+  "senses": "blindsight 30 ft., darkvision 60 ft., passive Perception 17",
+  "languages": "Abyssal, Common, telepathy 60 ft.",
+  "cr": 7,
+  "challenge_rating": "7",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The psoglav makes three Bite attacks."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 18 (2d12 + 5) piercing damage."
+    },
+    {
+      "name": "Invisibility",
+      "desc": "The psoglav magically turns invisible until it attacks or uses Shadow-Stealing Ray, or until its concentration ends (as if concentrating on a spell). Any equipment the psoglav wears or carries is invisible with it."
+    },
+    {
+      "name": "Shadow-Stealing Ray (Recharge 5-6)",
+      "desc": "The psoglav emits a beam from its single eye at one creature it can see within 60 feet of it. The target must make a DC 15 Constitution saving throw. On a failure, the target is pushed up to 20 feet away from the psoglav, and its shadow becomes a creature under the psoglav's control for 24 hours or until the shadow is reduced to 0 hp. On a success, the target is pushed up to 10 feet away from the psoglav and its shadow isn't stolen. Each controlled shadow uses the statistics of a shadow, except it can't create shadows from killing Humanoids. The psoglav can have no more than five shadows under its control at a time. The shadow becomes permanently under the psoglav's control if the shadow's original owner dies."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Magic Resistance",
+      "desc": "The psoglav has advantage on saving throws against spells and other magical effects."
+    },
+    {
+      "name": "Magic Weapons",
+      "desc": "The psoglav's weapon attacks are magical."
+    }
+  ],
+  "legendary_actions": []
+}

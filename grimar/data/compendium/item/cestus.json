@@ -1,0 +1,11 @@
+{
+  "slug": "cestus",
+  "name": "Cestus",
+  "type": "Wondrous item",
+  "desc": "These leather hand wraps are padded across the knuckles. You have a bonus to attack and damage rolls made with unarmed strikes while wearing these hand wraps. The bonus is determined by the item's rarity.",
+  "rarity": "uncommon (+1), rare (+2), or very rare (+3)",
+  "requires_attunement": "",
+  "document__slug": "toh",
+  "document__title": "Tome of Heroes",
+  "document__url": "https://koboldpress.com/kpstore/product/tome-of-heroes-for-5th-edition/"
+}

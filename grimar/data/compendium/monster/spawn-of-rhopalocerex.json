@@ -1,0 +1,62 @@
+{
+  "slug": "spawn-of-rhopalocerex",
+  "name": "Spawn of Rhopalocerex",
+  "size": "Large",
+  "type": "Fiend",
+  "subtype": "demon",
+  "group": null,
+  "alignment": "chaotic evil",
+  "armor_class": 17,
+  "armor_desc": "natural armor",
+  "hit_points": 112,
+  "hit_dice": "15d10+30",
+  "speed": {
+    "hover": true,
+    "walk": 30,
+    "fly": 30
+  },
+  "strength": 14,
+  "dexterity": 18,
+  "constitution": 15,
+  "intelligence": 10,
+  "wisdom": 13,
+  "charisma": 15,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "cold, fire, lightning",
+  "damage_immunities": "poison",
+  "condition_immunities": "poisoned, prone",
+  "senses": "darkvision 60 ft., passive Perception 11",
+  "languages": "Infernal, telepathy 60 ft.",
+  "cr": 6,
+  "challenge_rating": "6",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The spawn of Rhopalocerex makes one bite attack and two claw attacks."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 5 ft., one creature. Hit: 13 (2d8 + 4) piercing damage, and the target must make a DC 15 Constitution saving throw, taking 14 (4d6) poison damage on a failed save, or half as much damage on a successful one.",
+      "attack_bonus": 7,
+      "damage_dice": "2d8+4"
+    },
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 5 ft. or range 5 ft., one creature. Hit: 7 (1d6 + 4) slashing damage.",
+      "attack_bonus": 7,
+      "damage_dice": "1d6+4"
+    },
+    {
+      "name": "Enchanting Display (Recharge 5-6)",
+      "desc": "The spawn of Rhopalocerex flutters its wings, and its large eyes briefly shine. Each creature within 30 feet of the spawn and that can see it must make a DC 15 Charisma saving throw. On a failure, a creature is charmed for 1 minute. On a success, a creature takes 14 (4d6) psychic damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Magic Resistance",
+      "desc": "The spawn has advantage on saving throws against spells and other magical effects."
+    }
+  ],
+  "legendary_actions": null
+}

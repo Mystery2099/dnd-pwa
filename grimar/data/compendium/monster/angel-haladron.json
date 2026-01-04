@@ -1,0 +1,59 @@
+{
+  "slug": "angel-haladron",
+  "name": "Angel, Haladron",
+  "size": "Tiny",
+  "type": "Celestial",
+  "subtype": "",
+  "group": null,
+  "alignment": "lawful good",
+  "armor_class": 13,
+  "armor_desc": "natural armor",
+  "hit_points": 28,
+  "hit_dice": "8d4+8",
+  "speed": {
+    "walk": 0,
+    "fly": 60
+  },
+  "strength": 13,
+  "dexterity": 12,
+  "constitution": 12,
+  "intelligence": 15,
+  "wisdom": 15,
+  "charisma": 10,
+  "skills": {
+    "perception": 2
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "radiant",
+  "damage_immunities": "",
+  "condition_immunities": "exhaustion, poisoned, prone, unconscious",
+  "senses": "darkvision 60', passive Perception 12",
+  "languages": "Celestial, Common, telepathy 30'",
+  "cr": 0.5,
+  "challenge_rating": "1/2",
+  "actions": [
+    {
+      "name": "Bolt of Law",
+      "desc": "Ranged Spell Attack: +4 to hit, 60 ft., one target, 6 (1d8+2) radiant + 4 (1d8) thunder."
+    },
+    {
+      "name": "Stitch (3/Day)",
+      "desc": "The haladron repairs a single break or tear in an object it touches leaving no trace of the former damage. If the haladron uses this feature on a creature the creature regains 3 (1d6) hp."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Flyby",
+      "desc": "The haladron doesn't provoke opportunity attacks when it flies out of an enemy's reach."
+    },
+    {
+      "name": "Immortal Nature",
+      "desc": "Doesn't require food drink or sleep"
+    },
+    {
+      "name": "Immutable Form",
+      "desc": "Immune: form-altering spells/effects."
+    }
+  ],
+  "legendary_actions": null
+}

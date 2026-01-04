@@ -1,0 +1,56 @@
+{
+  "slug": "cikavak-tob1-2023",
+  "name": "Cikavak",
+  "size": "Tiny",
+  "type": "Fey",
+  "subtype": "",
+  "group": "null",
+  "alignment": "Neutral",
+  "armor_class": 12,
+  "armor_desc": "",
+  "hit_points": 17,
+  "hit_dice": "7d4",
+  "speed": {
+    "walk": 40,
+    "fly": 10
+  },
+  "strength": 4,
+  "dexterity": 15,
+  "constitution": 10,
+  "intelligence": 12,
+  "wisdom": 12,
+  "charisma": 4,
+  "skills": {
+    "Perception": 5,
+    "Stealth": 6
+  },
+  "damage_vulnerabilities": "False",
+  "damage_resistances": "acid, fire, poison",
+  "damage_immunities": "False",
+  "condition_immunities": "False",
+  "senses": "darkvision 60 ft., passive Perception 15",
+  "languages": "understands Common but can’t speak",
+  "cr": 0.125,
+  "challenge_rating": "1/8",
+  "actions": [
+    {
+      "name": "Beak",
+      "desc": "Melee Weapon Attack: +4 to hit, range 5 ft., one target. Hit: 4 (1d4 + 2) piercing damage."
+    },
+    {
+      "name": "Silencing Squawk (Recharge 6)",
+      "desc": "The cikavak lets out a magical squawk in a 30-foot cone. Each creature in that area must succeed on a DC 11 Constitution saving throw or be deafened and unable to speak for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Limited Telepathy",
+      "desc": "The cikavak can magically communicate simple ideas, emotions, and images telepathically with any creature that touches it and that can understand a language."
+    },
+    {
+      "name": "Speak with Beasts",
+      "desc": "The cikavak can communicate with Beasts as if they shared a language."
+    }
+  ],
+  "legendary_actions": []
+}

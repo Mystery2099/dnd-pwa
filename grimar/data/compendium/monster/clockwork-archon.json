@@ -1,0 +1,68 @@
+{
+  "slug": "clockwork-archon",
+  "name": "Clockwork Archon",
+  "size": "Gargantuan",
+  "type": "Construct",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 18,
+  "armor_desc": "natural armor",
+  "hit_points": 201,
+  "hit_dice": "13d20+65",
+  "speed": {
+    "walk": 30,
+    "hover": true,
+    "fly": 60
+  },
+  "strength": 24,
+  "dexterity": 9,
+  "constitution": 20,
+  "intelligence": 7,
+  "wisdom": 10,
+  "charisma": 10,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "poison, psychic",
+  "condition_immunities": "charmed, exhaustion, frightened, paralyzed, petrified, poisoned, prone",
+  "senses": "darkvision 60 ft., passive Perception 10",
+  "languages": "Common",
+  "cr": 13,
+  "challenge_rating": "13",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The clockwork archon makes two attacks with its transforming weapon."
+    },
+    {
+      "name": "Transforming Weapon",
+      "desc": "Melee Weapon Attack: +11 to hit, reach 10 ft., one target. Hit: 29 (4d10 + 7) bludgeoning or slashing damage. As a bonus action, the archon can change its weapon from a sword to a hammer or vice versa, allowing it to change its damage between bludgeoning and slashing.",
+      "attack_bonus": 11,
+      "damage_dice": "4d10+7"
+    },
+    {
+      "name": "Fire from Heaven (Recharge 5-6)",
+      "desc": "The clockwork archon unleashes a brilliant beam in a 90-foot line that is 10-feet wide. Each creature in that line must make a DC 17 Dexterity saving throw, taking 58 (13d8) radiant damage on a failed save, or half as much damage on a successful one."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Armored Transport",
+      "desc": "The clockwork archon can carry up to six Medium or eight Small creatures inside its torso. Creatures inside the archon have total cover against attacks and other effects outside the archon. The two escape hatches sit in the torso and can each be opened as a bonus action, allowing creatures in or out of the archon."
+    },
+    {
+      "name": "Immutable Form",
+      "desc": "The clockwork archon is immune to any spell or effect that would alter its form."
+    },
+    {
+      "name": "Magic Resistance",
+      "desc": "The clockwork archon has advantage on saving throws against spells and other magical effects."
+    },
+    {
+      "name": "Siege Monster",
+      "desc": "The clockwork archon deals double damage to objects and structures."
+    }
+  ],
+  "legendary_actions": null
+}

@@ -1,0 +1,11 @@
+{
+  "slug": "armor-of-resistance-a5e",
+  "name": "Armor of Resistance",
+  "type": "Armor",
+  "desc": "This armor grants you resistance to one type of damage. The type of damage is determined when the armor is created, from the following list: acid, cold, fire, force, lightning, necrotic, poison, psychic, radiant, thunder.\n\nA suit of light or medium _armor of resistance_ is rare, and a heavy suit is very rare.",
+  "rarity": "Rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

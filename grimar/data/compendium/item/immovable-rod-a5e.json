@@ -1,0 +1,11 @@
+{
+  "slug": "immovable-rod-a5e",
+  "name": "Immovable Rod",
+  "type": "Rod",
+  "desc": "You can use an action to press this metal rod’s single button, magically fixing it in place where it defies gravity. To move the rod, you or another creature must use an action to press the button again.\n\nThe rod can support up to 8,000 pounds of weight (if this is exceeded, the rod deactivates and falls). A creature that attempts to move the rod needs to make a DC 30 Strength check, moving the rod up to 10 feet on a success.",
+  "rarity": "Uncommon",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

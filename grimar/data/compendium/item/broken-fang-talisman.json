@@ -1,0 +1,11 @@
+{
+  "slug": "broken-fang-talisman",
+  "name": "Broken Fang Talisman",
+  "type": "Wondrous item",
+  "desc": "This talisman is a piece of burnished copper, shaped into a curved fang with a large crack through the middle. While wearing the talisman, you can use an action to cast the encrypt / decrypt (see Deep Magic for 5th Edition) spell. The talisman can't be used this way again until 1 hour has passed.",
+  "rarity": "common",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

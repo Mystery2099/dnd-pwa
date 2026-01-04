@@ -20,7 +20,7 @@ const mockDocument = {
 global.localStorage = mockLocalStorage as any;
 global.document = mockDocument as any;
 
-import { getTheme, setTheme, THEMES, initThemeSync } from './themeStore.svelte';
+import { getTheme, setTheme, initThemeSync } from './themeStore.svelte';
 
 describe('themeStore', () => {
 	beforeEach(() => {

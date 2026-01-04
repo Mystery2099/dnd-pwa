@@ -1,0 +1,59 @@
+{
+  "slug": "scarsupial",
+  "name": "Scarsupial",
+  "size": "Small",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 13,
+  "armor_desc": "natural armor",
+  "hit_points": 39,
+  "hit_dice": "6d6+18",
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "strength": 16,
+  "dexterity": 12,
+  "constitution": 16,
+  "intelligence": 2,
+  "wisdom": 13,
+  "charisma": 10,
+  "skills": {
+    "perception": 1
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 13",
+  "languages": "—",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "One Bite attack and one Claw attack."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +5 to hit, 5 ft., one creature,. 8 (2d4+3) piercing damage."
+    },
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +5 to hit, 5 ft., one creature,. 10 (2d6+3) slashing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Perfect Landing",
+      "desc": "A scarsupial doesn't take damage from falling and is never knocked prone from falling."
+    },
+    {
+      "name": "Vertical Pounce",
+      "desc": "If the scarsupial moves vertically such as by falling from a tree 10 ft. towards a creature and then hits with claw attack on the same turn the target must make DC 13 Str save or be knocked prone. If the target is knocked prone the scarsupial can make a bite attack as a bonus action."
+    }
+  ],
+  "legendary_actions": null
+}

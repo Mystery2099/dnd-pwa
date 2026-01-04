@@ -1,0 +1,58 @@
+{
+  "slug": "kalke",
+  "name": "Kalke",
+  "size": "Small",
+  "type": "Fiend",
+  "subtype": "",
+  "group": null,
+  "alignment": "neutral evil",
+  "armor_class": 14,
+  "armor_desc": "natural armor",
+  "hit_points": 9,
+  "hit_dice": "2d6+2",
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "strength": 8,
+  "dexterity": 17,
+  "constitution": 12,
+  "intelligence": 13,
+  "wisdom": 7,
+  "charisma": 13,
+  "skills": {
+    "perception": 0,
+    "stealth": 5
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 120 ft., passive Perception 10",
+  "languages": "Abyssal, Common, Infernal",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Dagger",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 5 (1d4 + 3) piercing damage.",
+      "attack_bonus": 5,
+      "damage_dice": "1d4"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Extinguish Flames",
+      "desc": "Kalkes can extinguish candles, lamps, lanterns and low-burning campfires within 120 feet as a bonus action."
+    },
+    {
+      "name": "Detect Spellcasting",
+      "desc": "Kalkes can sense spellcasting in a 5-mile radius, as long as the effect is not innate."
+    },
+    {
+      "name": "Magic Resistance",
+      "desc": "Kalkes have advantage on saving throws against spells and magical effects."
+    }
+  ],
+  "legendary_actions": null
+}

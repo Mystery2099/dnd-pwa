@@ -1,0 +1,29 @@
+{
+  "slug": "blade-of-wrath",
+  "name": "Blade of Wrath",
+  "desc": "You create a sword of pure white fire in your free hand. The blade is similar in size and shape to a longsword, and it lasts for the duration. The blade disappears if you let go of it, but you can call it forth again as a bonus action.\n\nYou can use your action to make a melee spell attack with the blade. On a hit, the target takes 2d8 fire damage and 2d8 radiant damage. An aberration, fey, fiend, or undead creature damaged by the blade must succeed on a Wisdom saving throw or be frightened until the start of your next turn.\n\nThe blade sheds bright light in a 20-foot radius and dim light for an additional 20 feet.\n",
+  "higher_level": "When you cast this spell using a spell slot of 4th level or higher, either the fire damage or the radiant damage (your choice) increases by 1d8 for each slot level above 3rd.",
+  "level": "3rd-level",
+  "level_int": 3,
+  "school": "evocation",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "a rebuke of evil, written in Celestial",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Up to 10 minutes",
+  "concentration": "yes",
+  "requires_concentration": true,
+  "casting_time": "1 bonus action",
+  "range": "Self",
+  "target_range_sort": 0,
+  "spell_level": 3,
+  "dnd_class": "Cleric, Paladin, Warlock, Wizard",
+  "spell_lists": [
+    "cleric",
+    "warlock",
+    "wizard"
+  ]
+}

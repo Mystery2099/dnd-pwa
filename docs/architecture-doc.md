@@ -48,37 +48,37 @@ success, forwards requests to the App with identity headers.
 
 ### 4.1 Directory Structure
 
-We follow standard SvelteKit conventions with a Separation of Concerns between
-UI and Data, enhanced with a Provider pattern for data synchronization.
-
 ```text
 src/
 ├── lib/
-│   ├── core/            # Project-wide foundations (stateless)
-│   │   ├── constants/   # Global constants (colors, types)
-│   │   ├── types/       # Global TypeScript interfaces/types
+│   ├── core/            # Project-wide foundations
+│   │   ├── client/      # Client utilities (theme store, query client)
+│   │   ├── constants/   # Global constants (spell levels, schools)
+│   │   ├── types/       # Global TypeScript interfaces
 │   │   └── utils/       # Pure utility functions
 │   ├── components/      # UI Components
-│   │   ├── ui/          # Atomic Primitives (Button, Input, Card, Badge)
+│   │   ├── ui/          # Atomic primitives (Button, Input, Card, Badge)
 │   │   ├── layout/      # Structural components (AppShell, GlobalHeader)
-│   │   └── shared/      # Reusable domain-agnostic components
-│   ├── features/        # Feature-specific logic & components
-│   │   ├── compendium/  # Compendium list, detail, filtering logic
-│   │   ├── characters/  # Character sheet, creator logic
-│   │   └── dashboard/
+│   │   └── features/    # Feature-specific components
+│   ├── features/        # Feature modules with colocated logic
+│   │   ├── compendium/  # Compendium browse, detail, filtering
+│   │   ├── dashboard/   # Dashboard and character grids
+│   │   └── ...
 │   ├── server/
 │   │   ├── db/          # Database configuration and schema
 │   │   ├── repositories/# Database access layer
-│   │   ├── providers/   # Data Providers (Open5e, 5e-bits, Homebrew)
-│   │   ├── services/    # Business logic (Sync Orchestrator)
-│   │   └── utils/       # Server-side utilities
-│   └── stores/          # Client-side state (User settings)
+│   │   ├── providers/   # Data Providers (Open5e, SRD, Homebrew, 5e-bits)
+│   │   └── services/    # Business logic (sync, auth, characters)
+│   └── assets/          # Static assets
 ├── routes/
-│   ├── +layout.svelte   # App Shell (Sidebar, Toasts)
-│   ├── api/             # Internal API for PWA sync
-│   └── compendium/      # Main UI routes
-├── hooks.server.ts      # Authentication Interceptor
-└── app.css              # Global Tailwind/Design System
+│   ├── +layout.svelte   # App Shell (GlobalHeader, OfflineIndicator)
+│   ├── api/             # Internal API endpoints
+│   ├── compendium/      # Compendium routes
+│   ├── characters/      # Character management
+│   ├── settings/        # Settings page
+│   └── ...
+├── hooks.server.ts      # Authentication interceptor
+└── app.css              # Global styles and Tailwind
 ```
 
 ### 4.2 Authentication Flow (Header-Based)
@@ -144,42 +144,48 @@ We use a localized schema where the "User" is just a string reference.
 
 -----
 
-## 6. PWA & Offline Strategy
+## 6. Caching & Offline
 
-### 6.1 Configuration
+### 6.1 Server-Side Caching
+
+- **In-memory repository cache:** `CompendiumRepository` maintains an in-memory cache of frequently accessed items
+- **Cache invalidation:** Triggered on sync completion via `/api/compendium/sync`
+
+### 6.2 Client-Side Caching
+
+- **TanStack Query:** Used for all server data with localStorage persistence
+- **Cache key:** `grimar-query-cache`
+- **Retention:** 7 days
+- **Hydration:** Automatic on page load
+- **Network mode:** Offline-first with background refetching
+
+### 6.3 Service Worker Caching
 
 Using `@vite-pwa/sveltekit`:
 
-* **Mode:** `generateSW` (simplest setup).
-* **Caching:**
-  * Cache generic assets (Fonts, CSS, JS).
-  * Cache static spell data API responses.
-* **Exclusion:** Do **not** cache `/api/me` or `/api/characters` (dynamic user data).
+| Cache | Strategy | Expiration | Entries |
+|-------|----------|------------|---------|
+| Open5e API | StaleWhileRevalidate | 24 hours | 1000 |
+| Compendium Export | StaleWhileRevalidate | 24 hours | 1 |
+| Local API | NetworkFirst | 10 minutes | 100 |
+| Images | CacheFirst | 7 days | 500 |
+| Static (JS/CSS) | StaleWhileRevalidate | 24 hours | 100 |
 
-### 6.2 Mobile Install
+### 6.4 Theme System
 
-* **Android:** Generates WebAPK via Chrome.
-* **Windows:** Installed via Edge/Chrome "Install App".
-* **iOS:** Saved to Home Screen (basic Safari wrapper).
+- **7 Themes:** Amethyst, Arcane, Nature, Fire, Ice, Void, Ocean
+- **Implementation:** CSS custom properties with `themeStore.svelte.ts`
+- **Persistence:** localStorage with `$state()` reactivity
 
------
+---
 
-## 7. Future-Proofing (The "Roll20" Features)
+## 7. Removed Features
 
-### 7.1 Real-Time Dice Rolling
+### Real-Time Dice Rolling
 
-To support multiplayer features without a complex WebSocket server, we will use
-**Server-Sent Events (SSE)**.
+The SSE-based dice roller was never implemented and has been removed from the roadmap.
 
-* **Endpoint:** `/api/events`
-* **Logic:**
-  1. User A rolls dice (POST `/api/roll`).
-  2. Server pushes event to all clients connected to `/api/events`.
-  3. User B's UI catches event and renders particle confetti.
-* **Why SSE?** It works natively over HTTP/2, requires no extra ports, and is
-natively supported by SvelteKit custom endpoints.
-
------
+---
 
 ## 8. Deployment Configuration
 

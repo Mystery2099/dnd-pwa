@@ -1,0 +1,59 @@
+{
+  "slug": "cyclops-myrmidon-a5e",
+  "name": "Cyclops Myrmidon",
+  "size": "Huge",
+  "type": "Giant",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 17,
+  "armor_desc": "",
+  "hit_points": 126,
+  "hit_dice": "11d12+55",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 20,
+  "dexterity": 10,
+  "constitution": 20,
+  "intelligence": 8,
+  "wisdom": 10,
+  "charisma": 10,
+  "skills": {
+    "animal": 0,
+    "survival": 3
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 10",
+  "languages": "Giant",
+  "cr": 10,
+  "challenge_rating": "10",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The cyclops makes two melee attacks."
+    },
+    {
+      "name": "Maul",
+      "desc": "Melee Weapon Attack: +8 to hit, reach 10 ft., one target. Hit: 26 (6d6 + 5) bludgeoning damage."
+    },
+    {
+      "name": "Rock",
+      "desc": "Ranged Weapon Attack: +8 to hit, range 120 ft. (see Poor Depth Perception)  one target. Hit: 32 (5d10 + 5) bludgeoning damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Panicked Rage",
+      "desc": "While a cyclops is frightened and the source of its fear is in sight, it makes attack rolls with advantage instead of disadvantage."
+    },
+    {
+      "name": "Poor Depth Perception",
+      "desc": "The cyclops makes all ranged attacks with disadvantage."
+    }
+  ],
+  "legendary_actions": null
+}

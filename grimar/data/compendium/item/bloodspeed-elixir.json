@@ -1,0 +1,11 @@
+{
+  "slug": "bloodspeed-elixir",
+  "name": "Bloodspeed Elixir",
+  "type": "Potion",
+  "desc": "When you drink this potion, your speed triples for 1 minute, but if you take the Dash action, you take 2d6 poison damage as your body is pushed beyond its normal limits. The murky, crimson liquid smells of ozone and has a thick, sludge-like consistency.",
+  "rarity": "rare",
+  "requires_attunement": "",
+  "document__slug": "toh",
+  "document__title": "Tome of Heroes",
+  "document__url": "https://koboldpress.com/kpstore/product/tome-of-heroes-for-5th-edition/"
+}

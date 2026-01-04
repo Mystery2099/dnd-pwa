@@ -1,0 +1,58 @@
+{
+  "slug": "dinosaur-razorfeather-raptor",
+  "name": "Dinosaur, Razorfeather Raptor",
+  "size": "Medium",
+  "type": "Monstrosity",
+  "subtype": "",
+  "group": null,
+  "alignment": "neutral evil",
+  "armor_class": 16,
+  "armor_desc": "natural armor",
+  "hit_points": 39,
+  "hit_dice": "6d8+12",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 15,
+  "dexterity": 17,
+  "constitution": 14,
+  "intelligence": 7,
+  "wisdom": 12,
+  "charisma": 6,
+  "skills": {
+    "perception": 1
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 13",
+  "languages": "understands Common but can't speak",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "One Bladed Feather attack and one Claw attack."
+    },
+    {
+      "name": "Bladed Feather",
+      "desc": "Melee or Ranged Weapon Attack: +5 to hit 5 ft. or range 30/90' one target 8 (1d10+3) slashing damage and the target's speed is reduced by 10 ft. until the end of its next turn."
+    },
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +5 to hit, 5 ft., one target, 7 (1d8+3) slashing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Pack Tactics",
+      "desc": "Advantage on attacks vs. creature if 1+ unincapacitated attacker ally is within 5 ft. of target."
+    },
+    {
+      "name": "Pounce",
+      "desc": "If the raptor moves at least 20' straight toward a creature and then hits it with Claw attack on the same turn that target must make DC 13 Str save or be knocked prone. If the target is prone the raptor can make one Bladed Feather attack vs. it as a bonus action."
+    }
+  ],
+  "legendary_actions": null
+}

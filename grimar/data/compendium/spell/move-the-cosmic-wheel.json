@@ -1,0 +1,28 @@
+{
+  "slug": "move-the-cosmic-wheel",
+  "name": "Move the Cosmic Wheel",
+  "desc": "Deep Magic: clockwork You wind your music box and call forth a piece of another plane of existence with which you are familiar, either through personal experience or intense study. The magic creates a bubble of space with a 30-foot radius within range of you and at a spot you designate. The portion of your plane that's inside the bubble swaps places with a corresponding portion of the plane your music box is attuned with. There is a 10% chance that the portion of the plane you summon arrives with native creatures on it. Inanimate objects and non-ambulatory life (like trees) are cut off at the edge of the bubble, while living creatures that don't fit inside the bubble are shunted outside of it before the swap occurs. Otherwise, creatures from both planes that are caught inside the bubble are sent along with their chunk of reality to the other plane for the duration of the spell unless they make a successful Charisma saving throw when the spell is cast; with a successful save, a creature can choose whether to shift planes with the bubble or leap outside of it a moment before the shift occurs. Any natural reaction between the two planes occurs normally (fire spreads, water flows, etc.) while energy (such as necrotic energy) leaks slowly across the edge of the sphere (no more than a foot or two per hour). Otherwise, creatures and effects can move freely across the boundary of the sphere; for the duration of the spell, it becomes a part of its new location to the fullest extent possible, given the natures of the two planes. The two displaced bubbles shift back to their original places automatically after 24 hours. Note that the amount of preparation involved (acquiring and attuning the music box) precludes this spell from being cast on the spur of the moment. Because of its unpredictable and potentially wide-ranging effect, it's also advisable to discuss your interest in this spell with your GM before adding it to your character's repertoire.",
+  "higher_level": "",
+  "level": "8th-level",
+  "level_int": 8,
+  "school": "conjuration",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "24 Hours",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "120 Feet",
+  "target_range_sort": 120,
+  "spell_level": 8,
+  "dnd_class": "Wizard, Cleric",
+  "spell_lists": [
+    "cleric",
+    "wizard"
+  ]
+}

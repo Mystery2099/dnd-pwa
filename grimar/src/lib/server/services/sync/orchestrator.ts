@@ -15,19 +15,21 @@ import type {
 	TransformResult
 } from '$lib/server/providers/types';
 import { withRetry } from './retry';
-import { createSyncMetrics, recordItemProcessed, recordError, getSyncSummary } from './metrics';
-import { cleanupDisabledSources } from './cleanup';
+import {
+	createSyncMetrics,
+	recordItemProcessed,
+	recordError,
+	getSyncSummary
+} from './sync-metrics';
+import { cleanupDisabledSources } from './sync-cleanup';
 import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import { join } from 'path';
 import {
-	logSync,
 	logSyncStart,
 	logSyncEnd,
 	logItemStart,
 	logTransformSuccess,
 	logTransformFailed,
-	logInserting,
-	logInsertSuccess,
 	logInsertFailed
 } from './debug-sync';
 
@@ -271,23 +273,38 @@ async function syncTypeFromProvider(
 	logSyncStart(type, providerId, rawItems.length);
 
 	let count = 0;
-	let failedCount = 0;
 
 	// Transform all items first (outside transaction)
 	const transformedItems: Array<{ raw: unknown; transformed: TransformResult }> = [];
+	const seenExternalIds = new Map<string, number>(); // externalId -> index (to keep first occurrence)
+
 	for (let index = 0; index < rawItems.length; index++) {
 		const rawItem = rawItems[index];
 		logItemStart(index, rawItems.length);
 
 		try {
 			const transformed = await provider.transformItem(rawItem, type);
+
+			// Deduplicate: keep only the first occurrence of each externalId
+			const key = `${type}:${transformed.externalId}`;
+			if (seenExternalIds.has(key)) {
+				logTransformFailed(type, transformed.externalId, 'Duplicate item skipped', { index });
+				continue;
+			}
+			seenExternalIds.set(key, index);
+
 			logTransformSuccess(type, transformed.externalId, transformed.name);
 			transformedItems.push({ raw: rawItem, transformed });
 		} catch (error) {
 			const errorMessage = error instanceof Error ? error.message : String(error);
 			logTransformFailed(type, 'unknown', errorMessage, { index });
-			failedCount++;
 		}
+	}
+
+	if (seenExternalIds.size < rawItems.length) {
+		console.info(
+			`[sync-orchestrator] Deduplication: ${rawItems.length - seenExternalIds.size} duplicate items removed`
+		);
 	}
 
 	// Process in batches
@@ -384,7 +401,6 @@ async function syncTypeFromProvider(
 			logInsertFailed(type, 'batch', errorMessage);
 			recordError(metrics, providerId, errorMessage);
 			// Continue with next batch
-			failedCount += batch.length;
 		}
 	}
 

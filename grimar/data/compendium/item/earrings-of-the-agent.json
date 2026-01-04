@@ -1,0 +1,11 @@
+{
+  "slug": "earrings-of-the-agent",
+  "name": "Earrings of the Agent",
+  "type": "Wondrous item",
+  "desc": "Aside from a minor difference in size, these simple golden hoops are identical to one another. Each hoop has 1 charge and provides a different magical effect. Each hoop regains its expended charge daily at dawn. You must be wearing both hoops to use the magic of either hoop.",
+  "rarity": "rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

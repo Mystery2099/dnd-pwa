@@ -1,0 +1,59 @@
+{
+  "slug": "light-drake",
+  "name": "Light Drake",
+  "size": "Tiny",
+  "type": "Dragon",
+  "subtype": "",
+  "group": null,
+  "alignment": "neutral good",
+  "armor_class": 13,
+  "armor_desc": null,
+  "hit_points": 24,
+  "hit_dice": "7d4+7",
+  "speed": {
+    "fly": 60,
+    "walk": 20,
+    "hover": true
+  },
+  "strength": 7,
+  "dexterity": 16,
+  "constitution": 13,
+  "intelligence": 8,
+  "wisdom": 12,
+  "charisma": 14,
+  "skills": {
+    "acrobatics": 5,
+    "perception": 3
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "radiant",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 13",
+  "languages": "Common, Draconic",
+  "cr": 0.5,
+  "challenge_rating": "1/2",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) piercing damage.",
+      "attack_bonus": 5,
+      "damage_dice": "1d6+3"
+    },
+    {
+      "name": "Breath Weapon (Recharge 6)",
+      "desc": "A light drake can breathe a 30-foot line of brilliant white light. Each creature in that line must make a DC 13 Dexterity saving throw. On a failure, a creature takes 5 (2d4) radiant damage and is blinded for 1 minute. On a success, a creature takes half the damage and isn't blinded. A blinded creature can make a DC 13 Constitution saving throw at the end of each of its turns, ending the effect on itself on a success."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Reflective Scales",
+      "desc": "When a light drake is within 5 feet of a source of light, that source of light sheds bright light and dim light for an additional 10 feet. While the light drake wears or carries an object that sheds light from the daylight spell, the light within 10 feet of the drake is sunlight."
+    },
+    {
+      "name": "Innate Spellcasting",
+      "desc": "The light drake's innate spellcasting ability is Charisma (spell save DC 12, +4 to hit with spell attacks). It can innately cast the following spells, requiring no material components:\nAt will: dancing lights, light, guiding star, starburst\n3/day each: color spray, faerie fire"
+    }
+  ],
+  "legendary_actions": null
+}

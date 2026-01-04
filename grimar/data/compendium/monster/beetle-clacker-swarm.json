@@ -1,0 +1,51 @@
+{
+  "slug": "beetle-clacker-swarm",
+  "name": "Beetle, Clacker Swarm",
+  "size": "Medium",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 14,
+  "armor_desc": "natural armor",
+  "hit_points": 36,
+  "hit_dice": "8d8",
+  "speed": {
+    "walk": 20,
+    "climb": 20
+  },
+  "strength": 3,
+  "dexterity": 13,
+  "constitution": 10,
+  "intelligence": 1,
+  "wisdom": 7,
+  "charisma": 1,
+  "skills": {
+    "perception": -2
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "charmed, frightened, paralyzed, petrified, prone, restrained, stunned",
+  "senses": "blindsight 30', passive Perception 8",
+  "languages": "—",
+  "cr": 3,
+  "challenge_rating": "3",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +3 to hit 0' 1 tgt in the swarm's space. 14 (4d6) piercing damage or 7 (2d6) piercing damage if the swarm has half of its hp or fewer."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Constant Clacking",
+      "desc": "A creature that starts its turn in the swarm's space takes 5 (1d10) thunder."
+    },
+    {
+      "name": "Swarm",
+      "desc": "Can occupy another creature's space and vice versa and swarm can move through any opening large enough for a Tiny creature. Swarm can't regain hp or gain temp hp."
+    }
+  ],
+  "legendary_actions": null
+}

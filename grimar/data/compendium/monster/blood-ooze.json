@@ -1,0 +1,55 @@
+{
+  "slug": "blood-ooze",
+  "name": "Blood Ooze",
+  "size": "Large",
+  "type": "Ooze",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 8,
+  "armor_desc": null,
+  "hit_points": 76,
+  "hit_dice": "8d10+32",
+  "speed": {
+    "climb": 20,
+    "walk": 20
+  },
+  "strength": 16,
+  "dexterity": 6,
+  "constitution": 18,
+  "intelligence": 1,
+  "wisdom": 8,
+  "charisma": 2,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "acid, fire, necrotic, slashing",
+  "condition_immunities": "blinded, charmed, deafened, exhaustion, frightened, prone",
+  "senses": "blindsight 60 ft. (blind beyond this radius), passive Perception 9",
+  "languages": "-",
+  "cr": 6,
+  "challenge_rating": "6",
+  "actions": [
+    {
+      "name": "Pseudopod",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) bludgeoning damage plus 16 (3d10) necrotic damage. The ooze gains temporary hp equal to the necrotic damage taken.",
+      "attack_bonus": 5,
+      "damage_dice": "1d6+3"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Amorphous",
+      "desc": "The ooze can move through a space as narrow as 1 inch wide without squeezing."
+    },
+    {
+      "name": "Blood Drain",
+      "desc": "A creature that touches the ooze or hits it with a melee attack while within 5 feet of it takes 5 (1d10) necrotic damage and the ooze gains temporary hp equal to that amount as it drains blood from the victim. It can add temporary hp gained from this trait to temporary hp gained from its pseudopod attack and Overflow reaction. Its temporary hp can't exceed half its maximum hp. If the ooze takes radiant damage, this trait doesn't function at the start of the ooze's next turn, although it retains any temporary hp it previously gained."
+    },
+    {
+      "name": "Spider Climb",
+      "desc": "The ooze can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check."
+    }
+  ],
+  "legendary_actions": null
+}

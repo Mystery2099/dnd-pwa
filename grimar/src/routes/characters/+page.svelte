@@ -1,8 +1,14 @@
 <script lang="ts">
 	import CharacterGrid from '$lib/features/dashboard/components/CharacterGrid.svelte';
 	import DashboardActions from '$lib/features/dashboard/components/DashboardActions.svelte';
+	import { createCharactersQuery } from '$lib/core/client/queries';
+	import CompendiumLoading from '$lib/features/compendium/components/ui/CompendiumLoading.svelte';
+	import CompendiumError from '$lib/features/compendium/components/ui/CompendiumError.svelte';
 
 	let { data } = $props();
+
+	// TanStack Query for characters (server-first, NetworkOnly)
+	const charactersQuery = $derived(createCharactersQuery());
 </script>
 
 <div class="relative min-h-[calc(100vh-6rem)]">
@@ -17,9 +23,17 @@
 	</div>
 
 	<!-- Content -->
-	{#if data.characters.length === 0}
+	{#if charactersQuery.isPending}
+		<CompendiumLoading message="Loading characters..." subtext="Fetching from server" />
+	{:else if charactersQuery.isError}
+		<CompendiumError
+			message={charactersQuery.error instanceof Error
+				? charactersQuery.error.message
+				: 'Unknown error'}
+		/>
+	{:else if charactersQuery.data.length === 0}
 		<DashboardActions />
 	{:else}
-		<CharacterGrid characters={data.characters} />
+		<CharacterGrid characters={charactersQuery.data} />
 	{/if}
 </div>

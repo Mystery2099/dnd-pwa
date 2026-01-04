@@ -1,0 +1,39 @@
+{
+  "slug": "insect_scorpion_bf",
+  "name": "Insect, Scorpion",
+  "size": "tiny",
+  "type": "Beast",
+  "subtype": "",
+  "group": "Animals",
+  "alignment": "",
+  "armor_class": 11,
+  "armor_desc": "natural armor",
+  "hit_points": 8,
+  "hit_dice": "",
+  "speed": {
+    "walk": 10
+  },
+  "strength": 2,
+  "dexterity": 10,
+  "constitution": 8,
+  "intelligence": 1,
+  "wisdom": 8,
+  "charisma": 2,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "poison,poisoned",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "keensense 10 ft.",
+  "languages": "-",
+  "cr": 0,
+  "challenge_rating": "0",
+  "actions": [
+    {
+      "name": "Sting",
+      "desc": "_Melee Weapon Attack:_ +2 to hit, reach 5 ft., one creature. _Hit:_ 2 (1d4) piercing damage, and the target must succeed on a DC 10 CON save or take 2 (1d4) poison damage."
+    }
+  ],
+  "special_abilities": [],
+  "legendary_actions": []
+}

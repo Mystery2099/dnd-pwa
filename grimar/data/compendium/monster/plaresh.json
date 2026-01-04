@@ -1,0 +1,60 @@
+{
+  "slug": "plaresh",
+  "name": "Plaresh",
+  "size": "Medium",
+  "type": "Fiend",
+  "subtype": "demon",
+  "group": null,
+  "alignment": "chaotic evil",
+  "armor_class": 15,
+  "armor_desc": "natural armor",
+  "hit_points": 30,
+  "hit_dice": "4d8+12",
+  "speed": {
+    "burrow": 30,
+    "swim": 30,
+    "walk": 30
+  },
+  "strength": 2,
+  "dexterity": 17,
+  "constitution": 16,
+  "intelligence": 6,
+  "wisdom": 12,
+  "charisma": 3,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "cold, fire, lightning; bludgeoning, slashing, and piercing",
+  "damage_immunities": "poison",
+  "condition_immunities": "charmed, frightened, grappled, paralyzed, petrified, poisoned, prone, restrained, stunned",
+  "senses": "blindsight 30 ft. (blind beyond this radius), tremorsense 60 ft., passive Perception 11",
+  "languages": "understands Abyssal but can't speak",
+  "cr": 3,
+  "challenge_rating": "3",
+  "actions": [
+    {
+      "name": "Bites",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 0 ft., one creature in the swarm's space. Hit: 14 (4d6) piercing damage, or 7 (2d6) piercing damage if the swarm has half of its hit points or fewer. The target must make a DC 13 Constitution saving throw, taking 7 (2d6) poison damage on a failed save, or half as much damage on a successful one. If the target is wearing nonmagical armor, the armor takes a permanent and cumulative -1 penalty to the AC it offers. Armor reduced to an AC of 10 is destroyed.",
+      "attack_bonus": 5,
+      "damage_dice": "4d6"
+    },
+    {
+      "name": "Infest Corpse (Recharges after a Long Rest)",
+      "desc": "The plaresh targets one dead humanoid in its space. The body is destroyed, and a new plaresh rises from the corpse. The newly created plaresh is free-willed but usually joins its creator."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Grinding Maws",
+      "desc": "The plaresh can burrow through harder substances such as wood, stone, or even metal. While doing so its burrow speed is reduced to half, and it creates a cluster of bore holes that leaves the material porous and weak. The material has -5 to its AC and half the usual hp."
+    },
+    {
+      "name": "Magic Resistance",
+      "desc": "The plaresh has advantage on saving throws against spells and other magical effects."
+    },
+    {
+      "name": "Swarm",
+      "desc": "The plaresh can occupy another creature's space and vice versa, and the plaresh can move through any opening large enough for a Tiny worm. The plaresh can't regain hp or gain temporary hp."
+    }
+  ],
+  "legendary_actions": null
+}

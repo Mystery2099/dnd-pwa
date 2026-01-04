@@ -1,0 +1,14 @@
+{
+  "slug": "dual-wielding-expert",
+  "name": "Dual-Wielding Expert",
+  "desc": "You are a whirlwind of steel.",
+  "prerequisite": null,
+  "effects_desc": [
+    "Wielding a weapon in each hand grants you a +1 bonus to AC.",
+    "You may dual-wield any two weapons without the two-handed quality.",
+    "You can sheathe or unsheathe two weapons as part of your movement action."
+  ],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

@@ -1,0 +1,57 @@
+{
+  "slug": "hippogriff_bf",
+  "name": "Hippogriff",
+  "size": "large",
+  "type": "Monstrosity",
+  "subtype": "Animal",
+  "group": null,
+  "alignment": "",
+  "armor_class": 11,
+  "armor_desc": null,
+  "hit_points": 44,
+  "hit_dice": "",
+  "speed": {
+    "walk": 40,
+    "fly": 60
+  },
+  "strength": 16,
+  "dexterity": 12,
+  "constitution": 12,
+  "intelligence": 2,
+  "wisdom": 16,
+  "charisma": 8,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "Monstrosity Resilience",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "-",
+  "languages": "-",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The hippogriff makes one Beak attack and one Claws attack."
+    },
+    {
+      "name": "Beak",
+      "desc": "_Melee Weapon Attack:_ +5 to hit, reach 5 ft., one target. _Hit:_ 8 (1d10+3) piercing damage."
+    },
+    {
+      "name": "Claws",
+      "desc": "_Melee Weapon Attack:_ +5 to hit, reach 5 ft., one target. _Hit:_ 10 (2d6+3) slashing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Heightened Sight",
+      "desc": "The hippogriff's Perception is 18 when perceiving by sight."
+    },
+    {
+      "name": "Monstrosity Resilience",
+      "desc": "The hippogriff is resistant to exhaustion and to the frightened condition."
+    }
+  ],
+  "legendary_actions": []
+}

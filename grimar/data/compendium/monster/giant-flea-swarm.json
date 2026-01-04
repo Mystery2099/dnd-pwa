@@ -1,0 +1,63 @@
+{
+  "slug": "giant-flea-swarm",
+  "name": "Giant Flea Swarm",
+  "size": "Medium",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 14,
+  "armor_desc": "natural armor",
+  "hit_points": 58,
+  "hit_dice": "9d8+18",
+  "speed": {
+    "walk": 30,
+    "climb": 20
+  },
+  "strength": 13,
+  "dexterity": 14,
+  "constitution": 14,
+  "intelligence": 2,
+  "wisdom": 10,
+  "charisma": 2,
+  "skills": {
+    "perception": 0
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "bludgeoning, piercing, slashing",
+  "damage_immunities": "",
+  "condition_immunities": "charmed, frightened, grappled, paralyzed, petrified, prone, restrained, stunned",
+  "senses": "blindsight 60', passive Perception 10",
+  "languages": "–",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +4 to hit, 0 ft., one creature, in the swarm's space. 14 (4d6) piercing damage or 7 (2d6) piercing damage if the swarm has half its hp or fewer."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Blood Sense",
+      "desc": "The giant flea can pinpoint by scent the location of creatures that have blood within 60' of it."
+    },
+    {
+      "name": "Keen Smell",
+      "desc": "Advantage: smell Wis (Percept) checks."
+    },
+    {
+      "name": "Ravenous",
+      "desc": "When a creature that doesn't have all of its hp starts its turn in the swarm's space that creature must make DC 12 Dex save or lose 5 (2d4) hp from blood loss."
+    },
+    {
+      "name": "Standing Leap",
+      "desc": "The swarm's long jump is up to 30' and its high jump is up to 15 feet with or with o a running start."
+    },
+    {
+      "name": "Swarm",
+      "desc": "The swarm can occupy another creature's space and vice versa and the swarm can move through any opening large enough for a Tiny flea. The swarm can't regain hp or gain temp hp."
+    }
+  ],
+  "legendary_actions": null
+}

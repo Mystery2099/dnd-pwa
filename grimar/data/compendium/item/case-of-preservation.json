@@ -1,0 +1,11 @@
+{
+  "slug": "case-of-preservation",
+  "name": "Case of Preservation",
+  "type": "Wondrous item",
+  "desc": "This item appears to be a standard map or scroll case fashioned of well-oiled leather. You can store up to ten rolled-up sheets of paper or five rolled-up sheets of parchment in this container. While ensconced in the case, the contents are protected from damage caused by fire, exposure to water, age, or vermin.",
+  "rarity": "common",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

@@ -1,0 +1,52 @@
+{
+  "slug": "lemure_bf",
+  "name": "Lemure",
+  "size": "medium",
+  "type": "Fiend",
+  "subtype": "Devil",
+  "group": "Devils",
+  "alignment": "",
+  "armor_class": 8,
+  "armor_desc": null,
+  "hit_points": 17,
+  "hit_dice": "",
+  "speed": {
+    "walk": 15
+  },
+  "strength": 14,
+  "dexterity": 6,
+  "constitution": 12,
+  "intelligence": 4,
+  "wisdom": 10,
+  "charisma": 2,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "Devilish Resilience",
+  "damage_immunities": "Devilish Resilience",
+  "condition_immunities": "",
+  "senses": "darkvision 120 ft.",
+  "languages": "Infernal",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Fist",
+      "desc": "_Melee Weapon Attack:_ +4 to hit, reach 5 ft., one target. _Hit:_ 4 (1d4+2) bludgeoning damage plus 2 (1d4) fire damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Devil's Sight",
+      "desc": "Magical darkness doesn't impede the lemure's darkvision."
+    },
+    {
+      "name": "Devilish Resilience",
+      "desc": "The devil is resistant to cold damage. In addition, it is immune to fire damage and poison damage and to the poisoned condition."
+    },
+    {
+      "name": "Hellish Rejuvenation",
+      "desc": "Unlike other outsiders, a lemure that dies in its home plane of the Hells is restored in a new body in 1d10 days, regaining all its HP and becoming active again. The new body appears in the Hells within 1 mile of where it was slain. Only sprinkling holy water on the lemure's remains can prevent this trait from functioning."
+    }
+  ],
+  "legendary_actions": []
+}

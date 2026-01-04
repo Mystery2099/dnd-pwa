@@ -1,0 +1,62 @@
+{
+  "slug": "ogre-void-blessed",
+  "name": "Ogre, Void Blessed",
+  "size": "Large",
+  "type": "Giant",
+  "subtype": "",
+  "group": null,
+  "alignment": "chaotic evil",
+  "armor_class": 15,
+  "armor_desc": "natural armor",
+  "hit_points": 133,
+  "hit_dice": "14d10+56",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 20,
+  "dexterity": 8,
+  "constitution": 19,
+  "intelligence": 5,
+  "wisdom": 16,
+  "charisma": 6,
+  "skills": {
+    "perception": 3
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "necrotic, poison",
+  "damage_immunities": "psychic",
+  "condition_immunities": "blinded, poisoned",
+  "senses": "blindsight 30' (blind beyond), tremorsense 120', passive Perception 16",
+  "languages": "Giant, Void Speech",
+  "cr": 6,
+  "challenge_rating": "6",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "One Tentacle Lash attack and one Void Bite attack or it makes three Void Spit attacks."
+    },
+    {
+      "name": "Tentacle Lash",
+      "desc": "Melee Weapon Attack: +8 to hit, 15 ft., one target, 12 (2d6+5) bludgeoning damage + 7 (2d6) psychic and target blinded until end of its next turn as jumbled visions and voices of the Void fill its mind (DC 15 Int not blind)."
+    },
+    {
+      "name": "Void Bite",
+      "desc": "Melee Weapon Attack: +8 to hit, 5 ft., one target, 10 (1d10+5) piercing damage + 9 (2d8) necrotic."
+    },
+    {
+      "name": "Void Spit",
+      "desc": "Ranged Spell Attack: +6 to hit, 60 ft., one target, 12 (2d8+3) necrotic."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Keen Hearing and Smell",
+      "desc": "Advantage on Wis (Perception) checks that rely on hearing or smell."
+    },
+    {
+      "name": "Tentacle Senses",
+      "desc": "Can't use its tremorsense while grappled or restrained."
+    }
+  ],
+  "legendary_actions": null
+}

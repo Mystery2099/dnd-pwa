@@ -1,0 +1,27 @@
+{
+  "slug": "cosmic-alignment",
+  "name": "Cosmic Alignment",
+  "desc": "Deep Magic: illumination You arrange the forces of the cosmos to your benefit. Choose a cosmic event from the Comprehension of the Starry Sky ability that affects spellcasting (conjunction, eclipse, or nova; listed after the spell). You cast spells as if under the effect of the cosmic event until the next sunrise or 24 hours have passed. When the ability requires you to expend your insight, you expend your ritual focus instead. This spell must be cast outdoors, and the casting of this spell is obvious to everyone within 100 miles of its casting when an appropriate symbol, such as a flaming comet, appears in the sky above your location while you are casting the spell. Conjunction: Planetary conjunctions destabilize minds and emotions. You can give one creature you can see disadvantage on a saving throw against one enchantment or illusion spell cast by you. Eclipse: Eclipses plunge the world into darkness and strengthen connections to the shadow plane. When you cast a spell of 5th level or lower that causes necrotic damage, you can reroll a number of damage dice up to your Intelligence modifier (minimum of one). You must use the new rolls. Nova: The nova is a powerful aid to divination spells. You can treat one divination spell you cast as though you had used a spell slot one level higher than the slot actually used.",
+  "higher_level": "",
+  "level": "9th-level",
+  "level_int": 9,
+  "school": "conjuration",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": true,
+  "ritual": "yes",
+  "duration": "24 Hours",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 hour",
+  "range": "Self",
+  "target_range_sort": 0,
+  "spell_level": 9,
+  "dnd_class": "Wizard",
+  "spell_lists": [
+    "wizard"
+  ]
+}

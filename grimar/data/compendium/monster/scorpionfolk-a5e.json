@@ -1,0 +1,47 @@
+{
+  "slug": "scorpionfolk-a5e",
+  "name": "Scorpionfolk",
+  "size": "Large",
+  "type": "Monstrosity",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 15,
+  "armor_desc": "",
+  "hit_points": 52,
+  "hit_dice": "7d10+14",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 14,
+  "dexterity": 12,
+  "constitution": 14,
+  "intelligence": 10,
+  "wisdom": 10,
+  "charisma": 10,
+  "skills": {
+    "perception": 2,
+    "stealth": 3,
+    "survival": 2
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 12",
+  "languages": "Common, Scorpionfolk",
+  "cr": 3,
+  "challenge_rating": "3",
+  "actions": [
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) bludgeoning damage  and the target is grappled (escape DC 12). Until this grapple ends  the scorpionfolk can't attack a different target with its claws."
+    },
+    {
+      "name": "Javelin",
+      "desc": "Melee or Ranged Weapon Attack: +4 to hit, reach 5 ft. or range 30/120 ft., one target. Hit: 5 (1d6 + 2) piercing damage."
+    }
+  ],
+  "special_abilities": null,
+  "legendary_actions": null
+}

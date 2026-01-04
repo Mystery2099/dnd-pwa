@@ -1,0 +1,45 @@
+{
+  "slug": "pteranodon-a5e",
+  "name": "Pteranodon",
+  "size": "Large",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 13,
+  "armor_desc": "",
+  "hit_points": 30,
+  "hit_dice": "4d10+8",
+  "speed": {
+    "walk": 10,
+    "fly": 60
+  },
+  "strength": 12,
+  "dexterity": 14,
+  "constitution": 14,
+  "intelligence": 2,
+  "wisdom": 11,
+  "charisma": 5,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 11",
+  "languages": "",
+  "cr": 0.5,
+  "challenge_rating": "1/2",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 5 (1d8 + 1) piercing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Flyby",
+      "desc": "The pteranodon doesnt provoke an opportunity attack when it flies out of a creatures reach."
+    }
+  ],
+  "legendary_actions": null
+}

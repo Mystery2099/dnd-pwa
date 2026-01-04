@@ -1,0 +1,11 @@
+{
+  "slug": "potion-of-clairvoyance-a5e",
+  "name": "Potion of Clairvoyance",
+  "type": "Potion",
+  "desc": "This dark liquid has a copper sheen. After drinking this potion, you are affected as if you had cast _clairvoyance_ .",
+  "rarity": "Rare",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

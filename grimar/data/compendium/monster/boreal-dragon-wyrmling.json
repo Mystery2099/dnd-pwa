@@ -1,0 +1,51 @@
+{
+  "slug": "boreal-dragon-wyrmling",
+  "name": "Boreal Dragon Wyrmling",
+  "size": "Medium",
+  "type": "Dragon",
+  "subtype": "",
+  "group": null,
+  "alignment": "chaotic neutral",
+  "armor_class": 17,
+  "armor_desc": "natural armor",
+  "hit_points": 39,
+  "hit_dice": "6d8+12",
+  "speed": {
+    "walk": 30,
+    "fly": 60,
+    "swim": 20
+  },
+  "strength": 17,
+  "dexterity": 10,
+  "constitution": 15,
+  "intelligence": 11,
+  "wisdom": 13,
+  "charisma": 12,
+  "skills": {
+    "athletics": 5,
+    "perception": 5,
+    "stealth": 2
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "cold",
+  "damage_immunities": "fire",
+  "condition_immunities": "",
+  "senses": "blindsight 10 ft., darkvision 60 ft., passive Perception 15",
+  "languages": "Draconic",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 8 (1d10 + 3) piercing damage.",
+      "attack_bonus": 5,
+      "damage_dice": "1d10+3"
+    },
+    {
+      "name": "Cinder Breath (Recharge 5-6)",
+      "desc": "The dragon exhales a 15-foot cone of superheated air filled with white-hot embers. Each creature in that area must make a DC 12 Dexterity saving throw, taking 22 (4d10) fire damage on a failed save, or half as much damage on a successful one."
+    }
+  ],
+  "special_abilities": null,
+  "legendary_actions": null
+}

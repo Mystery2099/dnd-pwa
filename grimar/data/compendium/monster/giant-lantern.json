@@ -1,0 +1,67 @@
+{
+  "slug": "giant-lantern",
+  "name": "Giant, Lantern",
+  "size": "Huge",
+  "type": "Giant",
+  "subtype": "",
+  "group": null,
+  "alignment": "neutral",
+  "armor_class": 16,
+  "armor_desc": "natural armor",
+  "hit_points": 225,
+  "hit_dice": "18d12+108",
+  "speed": {
+    "walk": 40,
+    "swim": 60
+  },
+  "strength": 26,
+  "dexterity": 12,
+  "constitution": 22,
+  "intelligence": 15,
+  "wisdom": 16,
+  "charisma": 17,
+  "skills": {
+    "perception": 3
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "cold",
+  "condition_immunities": "blinded",
+  "senses": "blindsight 120' (blind beyond), passive Perception 17",
+  "languages": "Common, Giant, Primordial",
+  "cr": 12,
+  "challenge_rating": "12",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "Three Tridents. Can replace one with Spellcasting."
+    },
+    {
+      "name": "Trident",
+      "desc": "Melee or Ranged Weapon Attack: +12 to hit 10 ft. or range 20/60' 1 target. 18 (3d6+8) piercing damage or 21 (3d8+8) piercing damage if used with two hands to make a melee attack."
+    },
+    {
+      "name": "Crush of the Deep (Recharge 5-6)",
+      "desc": "Summons pressure of ocean depths in 40' cube of water centered on point it can see within 120' of it. Each creature in cube: 44 (8d10) bludgeoning damage (DC 17 Con half)."
+    },
+    {
+      "name": "Spellcasting",
+      "desc": "Cha (DC 15) no material components:At will: detect magic identify (as an action)3/day ea: control water freedom of movement water breathing"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Limited Amphibiousness",
+      "desc": "Can breathe air and water but it needs to be submerged at least once every 4 hrs to avoid suffocating."
+    },
+    {
+      "name": "Hypnotic Luminescence",
+      "desc": "Tendril on giant's head sheds bright light in 60' radius and dim light extra 60'. When creature that can see the light starts its turn within 60' of giant creature charmed 24 hrs (DC 18 Cha negates) regarding giant as friendly acquaintance. If giant or one of its allies harms charmed creature this effect ends. If save succeeds/effect ends for it creature immune to giant's Hypnotic Luminescence for next 24 hrs. At start of its turn lantern giant chooses whether this light is active."
+    },
+    {
+      "name": "Speak with Aquatic Creatures",
+      "desc": "Communicate with Monstrosities and Beasts that have a swim speed as if they shared a language."
+    }
+  ],
+  "legendary_actions": null
+}

@@ -269,7 +269,7 @@ export class HomebrewProvider extends BaseProvider {
 		return nanoid(10);
 	}
 
-	protected getEndpoint(type: CompendiumTypeName): string {
+	protected getEndpoint(_type: CompendiumTypeName): string {
 		throw new Error('Homebrew provider does not use API endpoints');
 	}
 }

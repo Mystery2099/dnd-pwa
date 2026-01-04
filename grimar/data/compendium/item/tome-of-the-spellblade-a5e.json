@@ -1,0 +1,11 @@
+{
+  "slug": "tome-of-the-spellblade-a5e",
+  "name": "Tome of the Spellblade",
+  "type": "Wondrous Item",
+  "desc": "This soft-covered leather bound treatise contains writings describing, in the most basic terms possible, methods of magical fighting. Even so, the material is fairly dense and requires definition and reiteration of various terms and ideas. Fortunately, it also contains many detailed diagrams.\n\nSpending at least 24 hours over the course of 7 days reading and practicing the forms and phrases within the tome allows you to learn the  \n_Arcane Knight_ combat tradition at the end of the week, as long as you already have access to combat maneuvers. This combat tradition does not count against your limit of known combat traditions. At the time of reading, you can also choose one of the maneuvers you know and replace it with another maneuver of the same degree or lower from this tradition.\n\nOnce this tome has been read, it becomes a mundane item for a year and a day before it regains its magic.",
+  "rarity": "Uncommon",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

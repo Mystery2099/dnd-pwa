@@ -1,0 +1,39 @@
+{
+  "slug": "shrieker-a5e",
+  "name": "Shrieker",
+  "size": "Medium",
+  "type": "Plant",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 5,
+  "armor_desc": "",
+  "hit_points": 13,
+  "hit_dice": "3d8",
+  "speed": {
+    "walk": 0
+  },
+  "strength": 1,
+  "dexterity": 1,
+  "constitution": 10,
+  "intelligence": 1,
+  "wisdom": 2,
+  "charisma": 1,
+  "skills": {},
+  "damage_vulnerabilities": "fire",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "blinded, charmed, deafened, fatigue, frightened, prone, restrained, stunned",
+  "senses": "blindsight 30 ft. (blind beyond this radius), passive Perception 6",
+  "languages": "",
+  "cr": 0,
+  "challenge_rating": "0",
+  "actions": null,
+  "special_abilities": [
+    {
+      "name": "False Appearance",
+      "desc": "While motionless, the shrieker is indistinguishable from a normal fungus."
+    }
+  ],
+  "legendary_actions": null
+}

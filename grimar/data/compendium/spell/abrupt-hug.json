@@ -1,0 +1,27 @@
+{
+  "slug": "abrupt-hug",
+  "name": "Abrupt Hug",
+  "desc": "You or the creature taking the Attack action can immediately make an unarmed strike. In addition to dealing damage with the unarmed strike, the target can grapple the creature it hit with the unarmed strike.",
+  "higher_level": "",
+  "level": "1st-level",
+  "level_int": 1,
+  "school": "transmutation",
+  "components": "V",
+  "requires_verbal_components": true,
+  "requires_somatic_components": false,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Instantaneous",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 reaction, which you take when you or a creature within 30 feet of you takes an Attack action",
+  "range": "30 Feet",
+  "target_range_sort": 30,
+  "spell_level": 1,
+  "dnd_class": "Ranger",
+  "spell_lists": [
+    "ranger"
+  ]
+}

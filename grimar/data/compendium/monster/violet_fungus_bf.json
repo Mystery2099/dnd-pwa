@@ -1,0 +1,48 @@
+{
+  "slug": "violet_fungus_bf",
+  "name": "Violet Fungus",
+  "size": "medium",
+  "type": "Plant",
+  "subtype": "",
+  "group": "Fungi",
+  "alignment": "",
+  "armor_class": 10,
+  "armor_desc": null,
+  "hit_points": 14,
+  "hit_dice": "",
+  "speed": {
+    "walk": 15
+  },
+  "strength": 2,
+  "dexterity": 10,
+  "constitution": 10,
+  "intelligence": 1,
+  "wisdom": 2,
+  "charisma": 1,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "necrotic,Plant Resilience",
+  "damage_immunities": "blinded,deafened,frightened",
+  "condition_immunities": "",
+  "senses": "keensense 30 ft. (blind beyond this radius)",
+  "languages": "-",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Rotting Touch",
+      "desc": "_Melee Weapon Attack:_ +2 to hit, reach 10 ft., one creature. _Hit:_ 5 (2d4) necrotic damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "False Appearance",
+      "desc": "While the violet fungus remains motionless, it is indistinguishable from an ordinary fungus."
+    },
+    {
+      "name": "Plant Resilience",
+      "desc": "The violet fungus is resistant to exhaustion and to the paralyzed, petrified, and unconscious conditions."
+    }
+  ],
+  "legendary_actions": []
+}

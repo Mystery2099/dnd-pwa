@@ -64,20 +64,29 @@ system design
 
 ## 📊 Project Status
 
-**Current Implementation**: 85% Complete
+**Current Implementation**: ~90% Complete
 
 - **✅ Architecture**: Fully implemented and production-ready
-- **✅ Design System**: Beautifully realized "Arcane Aero" theme
-- **✅ Core Features**: Compendium, authentication, PWA working
-- **⚠️ Character Management**: Basic framework, needs D&D mechanics
-- **⚠️ Advanced Features**: Dice roller, export system pending
+- **✅ Design System**: Beautifully realized "Arcane Aero" theme with 7 themes
+- **✅ Core Features**: Compendium (spells, monsters, items), authentication, PWA
+- **✅ Theme System**: 7-theme system with localStorage persistence
+- **✅ Settings**: Theme selection, offline data management
+- **⚠️ Character Sheets**: Framework exists, full D&D mechanics in progress
+- **⚠️ Forge**: Character creator shell exists, features pending
 
 **Next Priorities**:
 
-1. Character sheet mechanics implementation
-2. Export functionality (JSON/PDF)
-3. Character creator with templates
-4. Dice roller with visual effects
+1. Character sheet mechanics (abilities, skills, inventory)
+2. Forge character creation wizard
+3. Homebrew content management
+
+---
+
+## 📝 Removed from Roadmap
+
+- **Dice Roller**: SSE-based multiplayer dice roller removed
+- **PDF Export**: Export functionality deprioritized
+- **Campaigns**: Campaign management module removed
 
 ---
 
@@ -110,7 +119,7 @@ docs/
 
 - Offline-capable PWA with smart caching
 - Self-hosted deployment for data privacy
-- Open5e SRD content cached locally
+- Multi-Provider content (Open5e, SRD) cached locally
 - Homebrew content shared server-wide
 
 ### **"Digital Grimoire" Approach**

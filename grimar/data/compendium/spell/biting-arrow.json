@@ -1,0 +1,29 @@
+{
+  "slug": "biting-arrow",
+  "name": "Biting Arrow",
+  "desc": "As part of the action used to cast this spell, you make a ranged weapon attack with a bow, a crossbow, or a thrown weapon. The effect is limited to a range of 120 feet despite the weapon’s range, and the attack is made with disadvantage if the target is in the weapon’s long range.\n\nIf the weapon attack hits, it deals damage as usual. In addition, the target becomes coated in thin frost until the start of your next turn. If the target uses its reaction before the start of your next turn, it immediately takes 1d6 cold damage and the spell ends.",
+  "higher_level": "The spell’s damage, for both the ranged attack and the cold damage, increases by 1d6 when you reach 5th level (+1d6 and 2d6), 11th level (+2d6 and 3d6), and 17th level (+3d6 and 4d6).",
+  "level": "Cantrip",
+  "level_int": 0,
+  "school": "Evocation",
+  "components": "V, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": false,
+  "requires_material_components": true,
+  "material": "an arrow or a thrown weapon",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "1 round",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "Self",
+  "target_range_sort": 0,
+  "spell_level": 0,
+  "dnd_class": "Druid, Sorcerer, Wizard",
+  "spell_lists": [
+    "druid",
+    "sorcerer",
+    "wizard"
+  ]
+}

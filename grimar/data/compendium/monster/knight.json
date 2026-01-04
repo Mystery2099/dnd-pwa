@@ -1,0 +1,7 @@
+{
+  "index": "knight",
+  "name": "Knight",
+  "type": "humanoid",
+  "size": "Medium",
+  "challenge_rating": 3
+}

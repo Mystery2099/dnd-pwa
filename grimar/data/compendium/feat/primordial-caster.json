@@ -1,0 +1,13 @@
+{
+  "slug": "primordial-caster",
+  "name": "Primordial Caster",
+  "desc": "Your blood seethes with elemental power.\nSelect an elemental damage type (acid, cold, fire, lightning, or thunder).\nThis feat can be selected multiple times, choosing a different damage type each time.",
+  "prerequisite": "Requires the ability to cast one spell.",
+  "effects_desc": [
+    "Your spells dealing that damage type ignore any damage resistance possessed by the target.",
+    "When you cast a spell that deals damage of the chosen type, you deal 1 additional damage for every damage die with a result of 1."
+  ],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

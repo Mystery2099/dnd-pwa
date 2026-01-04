@@ -1,0 +1,11 @@
+{
+  "slug": "bandana-of-bravado",
+  "name": "Bandana of Bravado",
+  "type": "Wondrous item",
+  "desc": "While wearing this bright red bandana, you have advantage on Charisma (Intimidation) checks and on saving throws against being frightened.",
+  "rarity": "uncommon",
+  "requires_attunement": "requires attunement",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

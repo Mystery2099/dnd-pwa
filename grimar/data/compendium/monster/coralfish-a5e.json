@@ -1,0 +1,45 @@
+{
+  "slug": "coralfish-a5e",
+  "name": "Coralfish",
+  "size": "Small",
+  "type": "Monstrosity",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 12,
+  "armor_desc": "",
+  "hit_points": 27,
+  "hit_dice": "6d6+6",
+  "speed": {
+    "walk": 20,
+    "swim": 40
+  },
+  "strength": 6,
+  "dexterity": 14,
+  "constitution": 12,
+  "intelligence": 2,
+  "wisdom": 12,
+  "charisma": 5,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 11",
+  "languages": "",
+  "cr": 0.5,
+  "challenge_rating": "1/2",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) piercing damage  and the target makes a DC 11 Constitution saving throw against being petrified. On a failure  the target is restrained as it begins to turn to a brightly colored statue. A lesser restoration spell ends this effect. If still restrained  the creature must repeat the saving throw at the end of its next turn. On a success  the effect ends. On a failure  the creature is petrified for 24 hours."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Aquatic",
+      "desc": "The coralfish can only breathe underwater."
+    }
+  ],
+  "legendary_actions": null
+}

@@ -1,0 +1,29 @@
+{
+  "slug": "amplify-gravity",
+  "name": "Amplify Gravity",
+  "desc": "This spell intensifies gravity in a 50-foot-radius area within range. Inside the area, damage from falling is quadrupled (2d6 per 5 feet fallen) and maximum damage from falling is 40d6. Any creature on the ground in the area when the spell is cast must make a successful Strength saving throw or be knocked prone; the same applies to a creature that enters the area or ends its turn in the area. A prone creature in the area must make a successful Strength saving throw to stand up. A creature on the ground in the area moves at half speed and has disadvantage on Dexterity checks and ranged attack rolls.",
+  "higher_level": "",
+  "level": "7th-level",
+  "level_int": 7,
+  "school": "transmutation",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "a piece of lead",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Up to 1 minute",
+  "concentration": "yes",
+  "requires_concentration": true,
+  "casting_time": "1 action",
+  "range": "100 feet",
+  "target_range_sort": 100,
+  "spell_level": 7,
+  "dnd_class": "Sorcerer, Warlock, Wizard",
+  "spell_lists": [
+    "sorcerer",
+    "warlock",
+    "wizard"
+  ]
+}

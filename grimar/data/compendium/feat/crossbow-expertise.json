@@ -1,0 +1,14 @@
+{
+  "slug": "crossbow-expertise",
+  "name": "Crossbow Expertise",
+  "desc": "Crossbows are lethal in your hands.",
+  "prerequisite": null,
+  "effects_desc": [
+    "Crossbows you wield do not have the loading quality.",
+    "You do not suffer disadvantage when attacking creatures adjacent to you.",
+    "If you take the attack action while wielding a hand crossbow in your off-hand, you may use your bonus action to attack with it."
+  ],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

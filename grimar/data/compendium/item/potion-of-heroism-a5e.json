@@ -1,0 +1,11 @@
+{
+  "slug": "potion-of-heroism-a5e",
+  "name": "Potion of Heroism",
+  "type": "Potion",
+  "desc": "After drinking this glowing white potion, for the next hour you gain 10 temporary hit points and the benefits of the _bless_  spell (but without the need for _concentration_ ).",
+  "rarity": "Rare",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

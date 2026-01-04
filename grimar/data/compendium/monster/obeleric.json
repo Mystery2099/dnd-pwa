@@ -1,0 +1,63 @@
+{
+  "slug": "obeleric",
+  "name": "Obeleric",
+  "size": "Medium",
+  "type": "Aberration",
+  "subtype": "",
+  "group": null,
+  "alignment": "chaotic evil",
+  "armor_class": 15,
+  "armor_desc": "natural armor",
+  "hit_points": 75,
+  "hit_dice": "10d8+30",
+  "speed": {
+    "walk": 30,
+    "burrow": 15
+  },
+  "strength": 16,
+  "dexterity": 14,
+  "constitution": 16,
+  "intelligence": 7,
+  "wisdom": 12,
+  "charisma": 7,
+  "skills": {
+    "perception": 1
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "petrified, prone",
+  "senses": "tremorsense 30', passive Perception 12",
+  "languages": "understands Common and Void Speech but can't speak",
+  "cr": 3,
+  "challenge_rating": "3",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "Two Tentacle Slam or Acid Spit attacks."
+    },
+    {
+      "name": "Boulder Bash (Defensive Form Only)",
+      "desc": "Melee Weapon Attack: +5 to hit, 5 ft., one target, 14 (2d10+3) bludgeoning damage and target knocked prone (DC 13 Str not prone)."
+    },
+    {
+      "name": "Tentacle Slam",
+      "desc": "Melee Weapon Attack: +5 to hit, 5 ft., one target, 8 (2d4+3) bludgeoning damage + 3 (1d6) acid."
+    },
+    {
+      "name": "Spit Acid",
+      "desc": "Ranged Weapon Attack: +4 to hit 20/60' one target 9 (2d6+2) acid. A creature hit by this takes additional 3 (1d6) acid at the start of its next turn."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "False Appearance",
+      "desc": "While motionless indistinguishable from normal boulder."
+    },
+    {
+      "name": "Ricochet Charge (Defensive Form Only)",
+      "desc": "If it moves 15 ft.+ straight to target and then hits target with Boulder Bash attack on same turn target has disadvantage on save vs. being knocked prone. If target is prone obeleric can move up to 15 ft. straight to 2nd target with o provoking opportunity attacks from 1st target and make one Boulder Bash attack vs. 2nd target as a bonus action if 2nd target is within its reach."
+    }
+  ],
+  "legendary_actions": null
+}

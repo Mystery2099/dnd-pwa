@@ -1,5 +1,5 @@
 import type { Handle } from '@sveltejs/kit';
-import { handleAuth } from '$lib/server/services/auth/service';
+import { handleAuth } from '$lib/server/services/auth/auth-service';
 import { startCacheCleanup } from '$lib/server/utils/cache';
 
 // Initialize cache cleanup when app starts

@@ -1,0 +1,74 @@
+{
+  "slug": "goblin-siege-engine",
+  "name": "Goblin Siege Engine",
+  "size": "Huge",
+  "type": "Construct",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 20,
+  "armor_desc": "natural armor",
+  "hit_points": 178,
+  "hit_dice": "17d10+85",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 22,
+  "dexterity": 10,
+  "constitution": 20,
+  "intelligence": 3,
+  "wisdom": 11,
+  "charisma": 1,
+  "skills": {
+    "perception": 0
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "acid, fire",
+  "damage_immunities": "poison, psychic; nonmagic bludgeoning, piercing, and slashing attacks not made with adamantine weapons",
+  "condition_immunities": "blinded, charmed, exhaustion, frightened, paralyzed, petrified, poisoned",
+  "senses": "darkvision 120', passive Perception 10",
+  "languages": "understands creator's languages but can't speak",
+  "cr": 11,
+  "challenge_rating": "11",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "Three Slam attacks."
+    },
+    {
+      "name": "Slam",
+      "desc": "Melee Weapon Attack: +10 to hit, 10 ft., one target, 22 (3d10+6) bludgeoning damage."
+    },
+    {
+      "name": "Acid Jet (Recharge 5-6)",
+      "desc": "Sprays jet of acid in 30' line by 5 ft. wide. Each creature in line: 40 (9d8) acid (DC 17 Dex half)."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Adaptable Locomotion",
+      "desc": "Moving through difficult terrain doesn't cost it extra movement. In addition it has advantage on ability checks and saves made to escape a grapple or end the restrained condition."
+    },
+    {
+      "name": "Construct Nature",
+      "desc": "Doesn't require air food drink or sleep."
+    },
+    {
+      "name": "Defensive Mount",
+      "desc": "Can serve as a mount for one Large creature up to 4 Med creatures or up to 6 Small or smaller creatures. While mounted creatures riding in siege engine's turret gain half cover."
+    },
+    {
+      "name": "Immutable Form",
+      "desc": "Immune: form-altering spells/effects."
+    },
+    {
+      "name": "Magic Resistance",
+      "desc": "Advantage: spell/magic effect saves."
+    },
+    {
+      "name": "Siege Monster",
+      "desc": "Double damage to objects/structures."
+    }
+  ],
+  "legendary_actions": null
+}

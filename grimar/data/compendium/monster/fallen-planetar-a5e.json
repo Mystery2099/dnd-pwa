@@ -1,0 +1,70 @@
+{
+  "slug": "fallen-planetar-a5e",
+  "name": "Fallen Planetar",
+  "size": "Large",
+  "type": "Celestial",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 19,
+  "armor_desc": "",
+  "hit_points": 250,
+  "hit_dice": "20d10+140",
+  "speed": {
+    "walk": 40,
+    "fly": 120
+  },
+  "strength": 22,
+  "dexterity": 22,
+  "constitution": 24,
+  "intelligence": 22,
+  "wisdom": 24,
+  "charisma": 24,
+  "skills": {
+    "athletics": 11,
+    "insight": 12,
+    "perception": 12,
+    "religion": 12
+  },
+  "damage_vulnerabilities": "radiant",
+  "damage_resistances": "radiant; damage from nonmagical weapons",
+  "damage_immunities": "necrotic, poison",
+  "condition_immunities": "charmed, exhaustion, frightened, poisoned",
+  "senses": "truesight 60 ft., passive Perception 22",
+  "languages": "all, telepathy 120 ft.",
+  "cr": 16,
+  "challenge_rating": "16",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The planetar attacks twice with its flaming sword."
+    },
+    {
+      "name": "Flaming Sword",
+      "desc": "Melee Weapon Attack: +11 to hit, reach 10 ft., one target. Hit: 20 (4d6 + 6) slashing damage plus 21 (6d6) ongoing fire or radiant damage (the planetars choice). A creature can use an action to extinguish this holy flame on itself or a creature within 5 feet."
+    },
+    {
+      "name": "Heavenly Bolt",
+      "desc": "The planetar fires a lightning bolt in a line 100 feet long and 5 feet wide. Each creature in the line makes a Dexterity saving throw  taking 56 (16d6) lightning damage on a failed save  or half damage on a success."
+    },
+    {
+      "name": "Heal (2/Day)",
+      "desc": "The planetar touches a creature other than itself  magically healing 60 hit points of damage and ending any blindness  curse  deafness  disease  or poison on the target."
+    },
+    {
+      "name": "Consume Life Energy (1/Day)",
+      "desc": "The angel feasts on the departing life energy of a humanoid within 5 feet. The target must have been slain within the last hour. The angel magically gains temporary hit points equal to half the dead creatures maximum hit points. These hit points last until depleted. Only a spell cast with a 9th-level slot can raise the corpse from the dead."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Champion of Truth",
+      "desc": "The planetar automatically detects lies. Additionally, it cannot lie."
+    },
+    {
+      "name": "Innate Spellcasting",
+      "desc": "The planetars spellcasting ability is Charisma (spell save DC 20). The planetar can innately cast the following spells, requiring no material components: 1/day each: commune, control weather, raise dead"
+    }
+  ],
+  "legendary_actions": null
+}

@@ -1,0 +1,14 @@
+{
+  "slug": "deadeye",
+  "name": "Deadeye",
+  "desc": "Your natural talent or skill makes you lethal with a ranged weapon.",
+  "prerequisite": "Prerequisite: 8th level or higher",
+  "effects_desc": [
+    "You gain proficiency with the Farshot Stance and Ricochet maneuvers, and do not have to spend exertion to activate them.",
+    "Cover does not grant your targets an AC bonus when you make attacks against them with a ranged weapon.",
+    "Before making an attack with a ranged weapon you are proficient with, you may choose to forgo your proficiency bonus on the attack roll, applying twice your proficiency bonus to damage instead."
+  ],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

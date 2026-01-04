@@ -1,0 +1,58 @@
+{
+  "slug": "ogre-black-sun",
+  "name": "Ogre, Black Sun",
+  "size": "Large",
+  "type": "Giant",
+  "subtype": "",
+  "group": null,
+  "alignment": "lawful evil",
+  "armor_class": 17,
+  "armor_desc": "half plate, Infernal Runes",
+  "hit_points": 152,
+  "hit_dice": "16d10+64",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 20,
+  "dexterity": 13,
+  "constitution": 18,
+  "intelligence": 10,
+  "wisdom": 12,
+  "charisma": 14,
+  "skills": {
+    "perception": 1
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60', passive Perception 14",
+  "languages": "Common, Giant, Orc",
+  "cr": 8,
+  "challenge_rating": "8",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "Two Greatsword attacks."
+    },
+    {
+      "name": "Greatsword",
+      "desc": "Melee Weapon Attack: +8 to hit, 5 ft., one target, 19 (4d6+5) slashing damage + 7 (2d6) necrotic."
+    },
+    {
+      "name": "Dark Word",
+      "desc": "Speaks an infernal word of unmaking at up to two creatures it can see within 120' of it. Each target: DC 16 Con save or take 22 (5d8) necrotic."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Infernal Runes",
+      "desc": "Its tattoos give it a +2 bonus to its AC (included above). In addition the ogre has advantage on saves vs. spells and other magical effects."
+    },
+    {
+      "name": "Unholy Blade",
+      "desc": "Infused with unholy power the ogre's weapon attacks are magical. When it hits with any weapon weapon deals an extra 2d6 necrotic (included below)."
+    }
+  ],
+  "legendary_actions": null
+}

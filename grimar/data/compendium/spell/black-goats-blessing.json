@@ -1,0 +1,33 @@
+{
+  "slug": "black-goats-blessing",
+  "name": "Black Goat’s Blessing",
+  "desc": "You raise your hand with fingers splayed and utter an incantation of the Black Goat with a Thousand Young. Your magic is blessed with the eldritch virility of the All‑Mother. The target has disadvantage on saving throws against spells you cast until the end of your next turn.",
+  "higher_level": "",
+  "level": "Cantrip",
+  "level_int": 0,
+  "school": "Enchantment",
+  "components": "V, S",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "1 round",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "30 feet",
+  "target_range_sort": 30,
+  "spell_level": 0,
+  "dnd_class": "Bard, Cleric, Druid, Paladin, Ranger, Sorcerer, Warlock, Wizard",
+  "spell_lists": [
+    "cleric",
+    "druid",
+    "ranger",
+    "bard",
+    "sorcerer",
+    "warlock",
+    "wizard"
+  ]
+}

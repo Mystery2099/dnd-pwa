@@ -1,0 +1,44 @@
+{
+  "slug": "pixies-umbrella",
+  "name": "Pixie’s Umbrella",
+  "size": "Small",
+  "type": "Plant",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 7,
+  "armor_desc": null,
+  "hit_points": 10,
+  "hit_dice": "4d4",
+  "speed": {
+    "walk": 5
+  },
+  "strength": 1,
+  "dexterity": 5,
+  "constitution": 10,
+  "intelligence": 1,
+  "wisdom": 5,
+  "charisma": 1,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "blinded, deafened, frightened",
+  "senses": "blindsight 30 ft. (blind beyond this radius), passive Perception 7",
+  "languages": "—",
+  "cr": 0.125,
+  "challenge_rating": "1/8",
+  "actions": [
+    {
+      "name": "Twirl",
+      "desc": "The pixie's umbrella twirls, spinning its spores at nearby creatures. Each creature within 5 feet of the pixie's umbrella must make a DC 10 Constitution saving throw, taking 5 (2d4) poison damage on a failed save, or half as much damage on a successful one. If the saving throw fails by 5 or more, the target is also poisoned until the end of its next turn."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "False Appearance",
+      "desc": "While the pixie's umbrella remains motionless, it is indistinguishable from an ordinary fungus."
+    }
+  ],
+  "legendary_actions": null
+}

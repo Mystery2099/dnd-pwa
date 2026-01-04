@@ -1,0 +1,11 @@
+{
+  "slug": "silver-string",
+  "name": "Silver String",
+  "type": "Wondrous item",
+  "desc": "These silver wires magically adjust to fit any stringed instrument, making its sound richer and more melodious. You have advantage on Charisma (Performance) checks made when playing the instrument.",
+  "rarity": "uncommon",
+  "requires_attunement": "requires attunement",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

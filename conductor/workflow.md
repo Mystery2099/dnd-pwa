@@ -9,6 +9,12 @@
 5. **User Experience First:** Every decision should prioritize user experience
 6. **Non-Interactive & CI-Aware:** Prefer non-interactive commands. Use `CI=true` for watch-mode tools (tests, linters) to ensure single execution.
 
+## AI Agent Guidelines
+
+1. **Documentation Source:** When you need documentation for a tool, library, or framework, you **MUST** use the `context7` MCP first. Only look elsewhere if you cannot find the information there.
+2. **Commit Message Generation:** Always propose commit messages based on the `Commit Guidelines` section.
+3. **Test Generation:** When generating tests, always check existing tests for patterns and conventions.
+
 ## Task Workflow
 
 All tasks follow a strict lifecycle:

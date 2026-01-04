@@ -1,0 +1,45 @@
+{
+  "slug": "homunculus-a5e",
+  "name": "Homunculus",
+  "size": "Tiny",
+  "type": "Construct",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 13,
+  "armor_desc": "",
+  "hit_points": 5,
+  "hit_dice": "2d4",
+  "speed": {
+    "walk": 20,
+    "fly": 40
+  },
+  "strength": 4,
+  "dexterity": 16,
+  "constitution": 10,
+  "intelligence": 10,
+  "wisdom": 10,
+  "charisma": 10,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "poison",
+  "condition_immunities": "charmed, poisoned",
+  "senses": "darkvision 60 ft., passive Perception 10",
+  "languages": "understands the languages of its creator but can't speak",
+  "cr": 0,
+  "challenge_rating": "0",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one creature. Hit: 1 piercing damage  and the target makes a DC 10 Constitution saving throw. On a failure  it is poisoned. At the end of its next turn  it repeats the saving throw. On a success  the effect ends. On a failure  it falls unconscious for 1 minute. If it takes damage or a creature uses an action to shake it awake  it wakes up  and the poisoned effect ends."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Telepathic Bond",
+      "desc": "While they are on the same plane, the homunculus and its creator can communicate telepathically at any distance."
+    }
+  ],
+  "legendary_actions": null
+}

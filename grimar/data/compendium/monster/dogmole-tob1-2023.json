@@ -1,0 +1,53 @@
+{
+  "slug": "dogmole-tob1-2023",
+  "name": "Dogmole",
+  "size": "Medium",
+  "type": "Beast",
+  "subtype": "",
+  "group": "null",
+  "alignment": "Unaligned",
+  "armor_class": 14,
+  "armor_desc": "natural armor",
+  "hit_points": 58,
+  "hit_dice": "9d8 + 18",
+  "speed": {
+    "walk": 10,
+    "burrow": 30
+  },
+  "strength": 14,
+  "dexterity": 17,
+  "constitution": 15,
+  "intelligence": 2,
+  "wisdom": 12,
+  "charisma": 10,
+  "skills": {},
+  "damage_vulnerabilities": "False",
+  "damage_resistances": "False",
+  "damage_immunities": "False",
+  "condition_immunities": "False",
+  "senses": "blindsight 30 ft., passive Perception 11",
+  "languages": "—",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The dogmole makes one Bite attack and one Claw attack."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) piercing damage."
+    },
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 8 (2d4 + 3) slashing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Burrowed Tunnels",
+      "desc": "If the dogmole burrows at half its burrowing speed, it can leave a 5-foot diameter tunnel in its wake."
+    }
+  ],
+  "legendary_actions": []
+}

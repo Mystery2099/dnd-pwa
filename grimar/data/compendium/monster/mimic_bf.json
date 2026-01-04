@@ -1,0 +1,64 @@
+{
+  "slug": "mimic_bf",
+  "name": "Mimic",
+  "size": "medium",
+  "type": "Monstrosity",
+  "subtype": "Shapechanger",
+  "group": null,
+  "alignment": "",
+  "armor_class": 12,
+  "armor_desc": "natural armor",
+  "hit_points": 58,
+  "hit_dice": "",
+  "speed": {
+    "walk": 20
+  },
+  "strength": 16,
+  "dexterity": 12,
+  "constitution": 14,
+  "intelligence": 4,
+  "wisdom": 12,
+  "charisma": 8,
+  "skills": {},
+  "damage_vulnerabilities": "cold",
+  "damage_resistances": "grappled,Monstrosity Resilience",
+  "damage_immunities": "acid,prone",
+  "condition_immunities": "",
+  "senses": "keensense 60 ft.",
+  "languages": "-",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The mimic makes two Pseudopod attacks. If it is grappling a creature, it can replace one attack with a Bite attack."
+    },
+    {
+      "name": "Bite",
+      "desc": "_Melee Weapon Attack:_ +5 to hit, reach 5 ft., one grappled creature. _Hit:_ 7 (1d8+3) piercing damage plus 7 (2d6) acid damage."
+    },
+    {
+      "name": "Pseudopod",
+      "desc": "_Melee Weapon Attack:_ +5 to hit, reach 5 ft., one target. _Hit:_ 10 (2d6+3) bludgeoning damage. If the mimic is in object form, the target is subjected to its Adhesive trait."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Adhesive (Object Form Only)",
+      "desc": "The mimic adheres to anything that touches it. A Huge or smaller creature adhered to the mimic is also grappled by it (escape DC 13). Ability checks made to escape this grapple have disadvantage."
+    },
+    {
+      "name": "False Appearance (Object Form Only)",
+      "desc": "While the mimic remains motionless, it is indistinguishable from an ordinary object."
+    },
+    {
+      "name": "Grappler",
+      "desc": "The mimic has advantage on attack rolls against any creature grappled by it."
+    },
+    {
+      "name": "Monstrosity Resilience",
+      "desc": "The mimic is resistant to exhaustion and to the frightened condition."
+    }
+  ],
+  "legendary_actions": []
+}

@@ -1,0 +1,55 @@
+{
+  "slug": "climbing-vine",
+  "name": "Climbing Vine",
+  "size": "Medium",
+  "type": "Plant",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 11,
+  "armor_desc": "natural armor",
+  "hit_points": 13,
+  "hit_dice": "2d8+4",
+  "speed": {
+    "walk": 10,
+    "climb": 10
+  },
+  "strength": 13,
+  "dexterity": 7,
+  "constitution": 15,
+  "intelligence": 1,
+  "wisdom": 7,
+  "charisma": 1,
+  "skills": {
+    "perception": -2
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "psychic",
+  "condition_immunities": "blinded, charmed, deafened, exhaustion, frightened, prone",
+  "senses": "blindsight 20', passive Perception 8",
+  "languages": "—",
+  "cr": 0.125,
+  "challenge_rating": "1/8",
+  "actions": [
+    {
+      "name": "Dewvine",
+      "desc": "Melee Weapon Attack: +3 to hit, 5 ft., one creature,. The target is grappled (escape DC 11). The climbing vine has two attacking vines each of which can grapple only one creature."
+    },
+    {
+      "name": "Squeeze",
+      "desc": "Squeezes creatures in its grasp. Each creature grappled by the climbing vine must make DC 11 Str save or take 5 (2d4) bludgeoning damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Digestive Dew",
+      "desc": "A creature that starts its turned grappled by the climbing vine takes 2 (1d4) acid."
+    },
+    {
+      "name": "Flexible Form",
+      "desc": "A climbing vine can move through a space as narrow as 6 inches wide with o squeezing."
+    }
+  ],
+  "legendary_actions": null
+}

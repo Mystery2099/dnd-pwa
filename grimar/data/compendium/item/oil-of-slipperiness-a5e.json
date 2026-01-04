@@ -1,0 +1,11 @@
+{
+  "slug": "oil-of-slipperiness-a5e",
+  "name": "Oil of Slipperiness",
+  "type": "Potion",
+  "desc": "You can spend 10 minutes applying this thick black oil to a Medium or smaller creature, as well as its gear. One additional vial is required for each size category above Medium. A creature covered in the oil gains the effect of a __freedom of movement_ spell for 2 hours. Alternatively, you can use an action to pour the oil on the ground next to you, making a 10-foot square slippery (as the _grease_ spell) for 8 hours.",
+  "rarity": "Uncommon",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

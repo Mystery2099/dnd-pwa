@@ -1,0 +1,11 @@
+{
+  "slug": "bag-of-traps",
+  "name": "Bag of Traps",
+  "type": "Wondrous item",
+  "desc": "Anyone reaching into this apparently empty bag feels a small coin, which resembles no known currency. Removing the coin and placing or tossing it up to 20 feet creates a random mechanical trap that remains for 10 minutes or until discharged or disarmed, whereupon it disappears. The coin returns to the bag only after the trap disappears. You may draw up to 10 traps from the bag each week. The GM has the statistics for mechanical traps.",
+  "rarity": "rare",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

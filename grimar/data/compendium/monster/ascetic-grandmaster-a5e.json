@@ -1,0 +1,78 @@
+{
+  "slug": "ascetic-grandmaster-a5e",
+  "name": "Ascetic Grandmaster",
+  "size": "Medium",
+  "type": "Humanoid",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 20,
+  "armor_desc": "",
+  "hit_points": 172,
+  "hit_dice": "23d8+69",
+  "speed": {
+    "walk": 60,
+    "climb": 60
+  },
+  "strength": 16,
+  "dexterity": 20,
+  "constitution": 16,
+  "intelligence": 10,
+  "wisdom": 20,
+  "charisma": 10,
+  "skills": {
+    "acrobatics": 10,
+    "athletics": 8,
+    "perception": 10,
+    "stealth": 10
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "damage from nonmagical weapons",
+  "damage_immunities": "",
+  "condition_immunities": "charmed, frightened, poisoned",
+  "senses": "passive Perception 22",
+  "languages": "any one",
+  "cr": 14,
+  "challenge_rating": "14",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The grandmaster attacks six times."
+    },
+    {
+      "name": "Unarmed Strike",
+      "desc": "Melee Weapon Attack: +10 to hit, reach 5 ft., one target. Hit: 10 (1d10 + 5) bludgeoning damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Athlete",
+      "desc": "The grandmaster only uses 5 feet of movement when standing from prone and can make a running jump after moving only 5 feet rather than 10."
+    },
+    {
+      "name": "Evasion",
+      "desc": "When the grandmaster makes a Dexterity saving throw against an effect that deals half damage on a success, they take no damage on a success and half damage on a failure."
+    },
+    {
+      "name": "Magic Resistance",
+      "desc": "The grandmaster has advantage on saving throws against spells and magical effects."
+    },
+    {
+      "name": "Mobile",
+      "desc": "After the grandmaster makes a melee attack against a creature on their turn, until the end of their turn they do not provoke opportunity attacks from that creature."
+    },
+    {
+      "name": "Reactive",
+      "desc": "The grandmaster can take a reaction on each creatures turn."
+    },
+    {
+      "name": "Stunning Strike (1/Turn)",
+      "desc": "When the grandmaster hits a creature with a melee attack, they can force it to make a DC 18 Constitution saving throw. On a failure, it is stunned until the end of the grandmasters next turn."
+    },
+    {
+      "name": "Unarmored Defense",
+      "desc": "The grandmasters AC equals 10 + their Dexterity modifier + their Wisdom modifier."
+    }
+  ],
+  "legendary_actions": null
+}

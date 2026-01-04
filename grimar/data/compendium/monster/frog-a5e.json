@@ -1,0 +1,46 @@
+{
+  "slug": "frog-a5e",
+  "name": "Frog",
+  "size": "Tiny",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 11,
+  "armor_desc": "",
+  "hit_points": 1,
+  "hit_dice": "1d4-1",
+  "speed": {
+    "walk": 20,
+    "swim": 20
+  },
+  "strength": 1,
+  "dexterity": 12,
+  "constitution": 8,
+  "intelligence": 2,
+  "wisdom": 12,
+  "charisma": 4,
+  "skills": {
+    "stealth": 3
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 30 ft., passive Perception 11",
+  "languages": "",
+  "cr": 0,
+  "challenge_rating": "0",
+  "actions": null,
+  "special_abilities": [
+    {
+      "name": "Amphibious",
+      "desc": "The frog can breathe air and water."
+    },
+    {
+      "name": "Jumper",
+      "desc": "The frog can jump up to 10 feet horizontally and 5 feet vertically without a running start."
+    }
+  ],
+  "legendary_actions": null
+}

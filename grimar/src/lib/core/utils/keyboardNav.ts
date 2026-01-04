@@ -6,7 +6,6 @@
  */
 
 import { goto } from '$app/navigation';
-import { onMount } from 'svelte';
 import type { CompendiumItem } from '$lib/core/types/compendium';
 
 interface KeyboardNavOptions {

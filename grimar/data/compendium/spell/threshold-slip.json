@@ -1,0 +1,29 @@
+{
+  "slug": "threshold-slip",
+  "name": "Threshold Slip",
+  "desc": "The threshold of a doorway, the sill of a window, the junction where the floor meets the wall, the intersection of two walls—these are all points of travel for you. When you cast this spell, you can step into the junction of two surfaces, slip through the boundary of the Material Plane, and reappear in an unoccupied space with another junction you can see within 60 feet.\n  You can take one willing creature of your size or smaller that you're touching with you. The target junction must have unoccupied spaces for both of you to enter when you reappear or the spell fails.",
+  "higher_level": "",
+  "level": "2nd-level",
+  "level_int": 2,
+  "school": "conjuration",
+  "components": "V",
+  "requires_verbal_components": true,
+  "requires_somatic_components": false,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Instantaneous",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 bonus action",
+  "range": "Self",
+  "target_range_sort": 0,
+  "spell_level": 2,
+  "dnd_class": "Druid, Warlock, Wizard",
+  "spell_lists": [
+    "druid",
+    "warlock",
+    "wizard"
+  ]
+}

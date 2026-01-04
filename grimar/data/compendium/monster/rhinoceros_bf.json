@@ -1,0 +1,48 @@
+{
+  "slug": "rhinoceros_bf",
+  "name": "Rhinoceros",
+  "size": "large",
+  "type": "Beast",
+  "subtype": "",
+  "group": "Animals",
+  "alignment": "",
+  "armor_class": 11,
+  "armor_desc": "natural armor",
+  "hit_points": 63,
+  "hit_dice": "",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 20,
+  "dexterity": 8,
+  "constitution": 14,
+  "intelligence": 2,
+  "wisdom": 12,
+  "charisma": 6,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "bludgeoning,stunned",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "-",
+  "languages": "-",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The rhinoceros makes two Gore attacks."
+    },
+    {
+      "name": "Gore",
+      "desc": "_Melee Weapon Attack:_ +7 to hit, reach 5 ft., one target. _Hit:_ 12 (2d6+5) bludgeoning damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Charge",
+      "desc": "If the rhinoceros moves at least 20 feet straight toward a target and then hits it with a Gore attack on the same turn, the target takes an extra 7 (2d6) piercing damage. If the target is a creature, it must succeed on a DC 15 STR save or be pushed up to 10 feet away from the rhinoceros and knocked prone."
+    }
+  ],
+  "legendary_actions": []
+}

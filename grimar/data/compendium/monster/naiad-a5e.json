@@ -1,0 +1,58 @@
+{
+  "slug": "naiad-a5e",
+  "name": "Naiad",
+  "size": "Medium",
+  "type": "Fey",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 15,
+  "armor_desc": "",
+  "hit_points": 22,
+  "hit_dice": "5d8",
+  "speed": {
+    "walk": 30,
+    "swim": 30
+  },
+  "strength": 14,
+  "dexterity": 12,
+  "constitution": 10,
+  "intelligence": 12,
+  "wisdom": 16,
+  "charisma": 18,
+  "skills": {
+    "nature": 3,
+    "perception": 5,
+    "stealth": 3,
+    "survival": 5
+  },
+  "damage_vulnerabilities": "fire",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 14",
+  "languages": "Elvish, Sylvan",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Watery Grasp",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) bludgeoning damage  and the target is grappled (escape DC 12). While grappling a creature this way  the naiad can't use Watery Grasp on a different target and can swim at full speed."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Magic Resistance",
+      "desc": "The naiad has advantage on saving throws against spells and magical effects."
+    },
+    {
+      "name": "Speak with Nature",
+      "desc": "The naiad can communicate with beasts and plants."
+    },
+    {
+      "name": "Amphibious",
+      "desc": "The naiad can breathe air and water."
+    }
+  ],
+  "legendary_actions": null
+}

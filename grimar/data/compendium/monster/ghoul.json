@@ -1,0 +1,7 @@
+{
+  "index": "ghoul",
+  "name": "Ghoul",
+  "type": "undead",
+  "size": "Medium",
+  "challenge_rating": 1
+}

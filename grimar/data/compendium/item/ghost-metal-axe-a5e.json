@@ -1,0 +1,11 @@
+{
+  "slug": "ghost-metal-axe-a5e",
+  "name": "Ghost Metal Axe",
+  "type": "Weapon",
+  "desc": "While you are attuned to and wielding this extremely light axe, you are able to see 20 feet into the Ethereal Plane and use it to make melee weapon attacks against creatures on the Ethereal Plane. If you are on the Ethereal Plane, you are able to see 20 feet into the Material Plane and use the axe to make melee weapon attacks against creatures on the Material Plane.\n\nIn addition, once per turn when you take the Attack action, you can strike at an undead possessing another creature, forcing it to make a Wisdom _saving throw_  (DC 8 + your proficiency bonus + your Charisma modifier) or exit the possessed creature.",
+  "rarity": "Very Rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

@@ -1,0 +1,59 @@
+{
+  "slug": "roachlinglord-tob1-2023",
+  "name": "Roachling Lord",
+  "size": "Small",
+  "type": "Humanoid",
+  "subtype": "",
+  "group": "null",
+  "alignment": "Chaotic Neutral",
+  "armor_class": 15,
+  "armor_desc": "natural armor",
+  "hit_points": 63,
+  "hit_dice": "14d6 + 14",
+  "speed": {
+    "walk": 25
+  },
+  "strength": 10,
+  "dexterity": 16,
+  "constitution": 12,
+  "intelligence": 10,
+  "wisdom": 10,
+  "charisma": 10,
+  "skills": {
+    "Acrobatics": 5,
+    "Stealth": 7
+  },
+  "damage_vulnerabilities": "False",
+  "damage_resistances": "False",
+  "damage_immunities": "False",
+  "condition_immunities": "poisoned",
+  "senses": "darkvision 60 ft., tremorsense 10 ft., passive Perception 10",
+  "languages": "Common",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The roachling lord makes two Begrimed Shortsword or Begrimed Dart attacks."
+    },
+    {
+      "name": "Begrimed Shortsword",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) piercing damage plus 3 (1d6) poison damage."
+    },
+    {
+      "name": "Begrimed Dart",
+      "desc": "Ranged Weapon Attack: +5 to hit, range 20/60 ft., one target. Hit: 5 (1d4 + 3) piercing damage plus 3 (1d6) poison damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Hardy",
+      "desc": "The roachling is immune to diseases and has advantage on Constitution saving throws."
+    },
+    {
+      "name": "Unpleasant Scent",
+      "desc": "The roachling has disadvantage on Wisdom (Animal Handling) checks when interacting with Beasts and on Charisma checks when interacting with Humanoids. If the roachling bathes meticulously, it loses this trait for 24 hours."
+    }
+  ],
+  "legendary_actions": []
+}

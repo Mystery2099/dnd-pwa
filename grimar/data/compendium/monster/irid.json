@@ -1,0 +1,72 @@
+{
+  "slug": "irid",
+  "name": "Irid",
+  "size": "Tiny",
+  "type": "Celestial",
+  "subtype": "",
+  "group": null,
+  "alignment": "chaotic neutral",
+  "armor_class": 13,
+  "armor_desc": null,
+  "hit_points": 20,
+  "hit_dice": "8d4",
+  "speed": {
+    "fly": 40,
+    "walk": 10
+  },
+  "strength": 4,
+  "dexterity": 17,
+  "constitution": 10,
+  "intelligence": 12,
+  "wisdom": 10,
+  "charisma": 16,
+  "skills": {
+    "deception": 7,
+    "perception": 2,
+    "persuasion": 7,
+    "stealth": 5
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "radiant",
+  "damage_immunities": "poison",
+  "condition_immunities": "charmed, exhaustion, frightened, poisoned",
+  "senses": "darkvision 60 ft., passive Perception 12",
+  "languages": "Celestial, Common, telepathy 60 ft.",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The irid uses its Gossip. It then uses its Iridescent Blast once."
+    },
+    {
+      "name": "Iridescent Blast",
+      "desc": "Ranged Spell Attack: +5 to hit, range 60 ft., one target. Hit: 7 (2d6) radiant damage.",
+      "attack_bonus": 5,
+      "damage_dice": "2d6"
+    },
+    {
+      "name": "Gossip",
+      "desc": "The irid spouts gossip and exaggerated truths about a target it can see within 30 feet. If the target is hostile, it must succeed on a DC 13 Charisma saving throw or have disadvantage on its next attack roll. If the target is friendly, it has advantage on its next attack roll."
+    },
+    {
+      "name": "Invisibility",
+      "desc": "The irid magically turns invisible until it attacks or uses Gossip, or until its concentration ends (as if concentrating on a spell). Any equipment the irid wears or carries is invisible with it."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Iridescence",
+      "desc": "The irid sheds bright light in a 10-foot radius and dim light for an additional 10 feet. The light can be any color the irid desires. The irid can create or suppress the light as a bonus action."
+    },
+    {
+      "name": "Magic Resistance",
+      "desc": "The irid has advantage on saving throws against spells and other magical effects."
+    },
+    {
+      "name": "Photographic Memory",
+      "desc": "The irid can perfectly recall anything it has seen or heard in the last month."
+    }
+  ],
+  "legendary_actions": null
+}

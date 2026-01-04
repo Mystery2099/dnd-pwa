@@ -1,0 +1,11 @@
+{
+  "slug": "sword-of-the-serpent-a5e",
+  "name": "Sword of the Serpent",
+  "type": "Weapon",
+  "desc": "You gain a +2 bonus to _attack and damage rolls_  made with this magic sword. When you hit with this weapon, you deal an extra 1d6 poison damage. The sword has 3 charges and regains all expended charges at dawn.\n\nWhile wielding the sword, you can use an action to expend 1 charge and cast __polymorph_ on yourself, transforming into a _giant poisonous snake_ . While in this form, you retain your Intelligence, Wisdom, and Charisma scores.",
+  "rarity": "Very Rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

@@ -1,0 +1,48 @@
+{
+  "slug": "ankheg-spawn-a5e",
+  "name": "Ankheg Spawn",
+  "size": "Medium",
+  "type": "Monstrosity",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 13,
+  "armor_desc": "",
+  "hit_points": 11,
+  "hit_dice": "2d8+2",
+  "speed": {
+    "walk": 30,
+    "burrow": 10
+  },
+  "strength": 14,
+  "dexterity": 12,
+  "constitution": 12,
+  "intelligence": 2,
+  "wisdom": 14,
+  "charisma": 8,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "acid",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "tremorsense 30 ft., passive Perception 12",
+  "languages": "",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) slashing damage."
+    },
+    {
+      "name": "Claws",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one Medium or smaller creature. Hit: 4 (1d4 + 2) slashing damage  and the target makes a DC 12 Strength check. On a failure  it is knocked prone. If the target is already prone  the ankheg can instead move up to half its Speed  dragging the target with it."
+    },
+    {
+      "name": "Acid Spit",
+      "desc": "Ranged Weapon Attack: +3 to hit, range 30 ft., one creature. Hit: 4 (1d8) acid damage."
+    }
+  ],
+  "special_abilities": null,
+  "legendary_actions": null
+}

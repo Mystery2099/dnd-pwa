@@ -6,11 +6,12 @@
 	import AppShell from '$lib/components/layout/AppShell.svelte';
 	import GlobalHeader from '$lib/components/layout/GlobalHeader.svelte';
 	import OfflineIndicator from '$lib/components/ui/OfflineIndicator.svelte';
-	import CleanupNotification from '$lib/components/ui/CleanupNotification.svelte';
-	import { clientCache } from '$lib/core/client/cache';
-	import { initializeOfflineExperience } from '$lib/core/client/offline-init';
 	import { page } from '$app/state';
 	import { initThemeSync, initTheme, logThemesToConsole } from '$lib/core/client/themeStore.svelte';
+	import { QueryClientProvider } from '@tanstack/svelte-query';
+	import { createQueryClient, setQueryClient } from '$lib/core/client/query-client';
+	import { startCacheSync } from '$lib/core/client/cache-sync';
+	import { browser } from '$app/environment';
 
 	// Initialize theme synchronously before first render to prevent FOUC
 	initThemeSync();
@@ -23,15 +24,9 @@
 			? pwaInfo.webManifest.linkTag
 			: '';
 
-	let cleanupReason = $state<string>('');
-	let cleanupDetails = $state<
-		| {
-				itemsRemoved?: number;
-				cacheUsage?: number;
-				spaceFreed?: string;
-		  }
-		| undefined
-	>(undefined);
+	// Create QueryClient synchronously - needed for SSR and initial render
+	const queryClient = createQueryClient();
+	setQueryClient(queryClient);
 
 	onMount(async () => {
 		if (pwaInfo) {
@@ -39,8 +34,14 @@
 			registerSW({ immediate: true });
 		}
 
-		// Initialize offline data for seamless offline experience
-		initializeOfflineExperience();
+		// Initialize persistence in background (doesn't block rendering)
+		const { initializePersistence } = await import('$lib/core/client/query-client');
+		await initializePersistence(queryClient);
+
+		// Start cache sync for SSE invalidation
+		if (browser) {
+			startCacheSync();
+		}
 
 		// Initialize theme from localStorage
 		initTheme();
@@ -49,22 +50,6 @@
 		if (import.meta.env.DEV) {
 			logThemesToConsole();
 		}
-
-		// Register for cache cleanup notifications
-		clientCache.onCleanup((reason: string) => {
-			const usage = clientCache.getCacheStats();
-			cleanupReason = reason;
-			cleanupDetails = {
-				cacheUsage: usage.percentage,
-				spaceFreed: `${(usage.used / 1024 / 1024).toFixed(1)}MB`
-			};
-
-			// Auto-hide after 8 seconds for cleanup notifications
-			setTimeout(() => {
-				cleanupReason = '';
-				cleanupDetails = undefined;
-			}, 8000);
-		});
 	});
 
 	// Simple active link helper
@@ -106,11 +91,6 @@
 	class="pointer-events-none fixed inset-0 z-50 opacity-40 mix-blend-overlay"
 	style="background-image: url(&quot;data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.5'/%3E%3C/svg%3E&quot;);"
 ></div>
-
-<!-- Cleanup Notification -->
-{#if cleanupReason}
-	<CleanupNotification reason={cleanupReason} details={cleanupDetails} duration={8000} />
-{/if}
 
 {#snippet header()}
 	<GlobalHeader title="Grimar" homeHref="/dashboard" />
@@ -158,5 +138,7 @@
 {/snippet}
 
 <AppShell {header} {nav}>
-	{@render children()}
+	<QueryClientProvider client={queryClient}>
+		{@render children()}
+	</QueryClientProvider>
 </AppShell>

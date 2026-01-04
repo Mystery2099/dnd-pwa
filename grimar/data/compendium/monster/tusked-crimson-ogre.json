@@ -1,0 +1,67 @@
+{
+  "slug": "tusked-crimson-ogre",
+  "name": "Tusked Crimson Ogre",
+  "size": "Large",
+  "type": "Giant",
+  "subtype": "",
+  "group": null,
+  "alignment": "chaotic evil",
+  "armor_class": 14,
+  "armor_desc": "half plate",
+  "hit_points": 93,
+  "hit_dice": "11d10+33",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 19,
+  "dexterity": 8,
+  "constitution": 16,
+  "intelligence": 5,
+  "wisdom": 7,
+  "charisma": 7,
+  "skills": {
+    "athletics": 7,
+    "intimidation": 4
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "poison",
+  "damage_immunities": "",
+  "condition_immunities": "frightened",
+  "senses": "darkvision 60 ft., passive Perception 8",
+  "languages": "Common, Giant",
+  "cr": 5,
+  "challenge_rating": "5",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The tusked crimson ogre makes two attacks: one with its morningstar and one with its bite."
+    },
+    {
+      "name": "Morningstar",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) piercing damage.",
+      "attack_bonus": 7,
+      "damage_dice": "2d8+4"
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) piercing damage.",
+      "attack_bonus": 7,
+      "damage_dice": "2d6+4"
+    },
+    {
+      "name": "Berserker's Blood (Recharge 5-6)",
+      "desc": "If the tusked crimson ogre doesn't have all of its hp, it flexes and roars, spraying blood from its wounds. Each creature within 15 feet of the ogre must make a DC 14 Constitution saving throw. On a failure, a creature takes 21 (6d6) acid damage and goes berserk. On a success, a creature takes half the damage and doesn't go berserk. On each of its turns, a berserk creature must attack the nearest creature it can see, eschewing ranged or magical attacks in favor of melee attacks. If no creature is near enough to move to and attack, the berserk creature attacks an object, with preference for an object smaller than itself. Once a creature goes berserk, it continues to do so until it is unconscious, regains all of its hp, or is cured through lesser restoration or similar magic."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Blood Frenzy",
+      "desc": "The ogre has advantage on melee attack rolls against any creature that doesn't have all its hp."
+    },
+    {
+      "name": "Rampage",
+      "desc": "When the ogre reduces a creature to 0 hp with a melee attack on its turn, the ogre can take a bonus action to move up to half its speed and make one bite attack."
+    }
+  ],
+  "legendary_actions": null
+}

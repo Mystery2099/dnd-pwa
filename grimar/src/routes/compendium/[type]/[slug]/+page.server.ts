@@ -2,8 +2,12 @@ import type { PageServerLoad } from './$types';
 import { loadCompendiumItem } from '$lib/server/services/compendium/loader';
 import { getCompendiumConfig, getTypeFromPath } from '$lib/core/constants/compendium';
 import { error } from '@sveltejs/kit';
+import { requireUser } from '$lib/server/services/auth';
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async ({ locals, params }) => {
+	// Require authentication
+	requireUser(locals);
+
 	const { type: pathType, slug } = params;
 
 	try {

@@ -1,0 +1,64 @@
+{
+  "slug": "mydnari",
+  "name": "Mydnari",
+  "size": "Medium",
+  "type": "Humanoid",
+  "subtype": "",
+  "group": null,
+  "alignment": "neutral evil",
+  "armor_class": 13,
+  "armor_desc": null,
+  "hit_points": 22,
+  "hit_dice": "4d8+4",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 12,
+  "dexterity": 16,
+  "constitution": 13,
+  "intelligence": 14,
+  "wisdom": 16,
+  "charisma": 14,
+  "skills": {
+    "deception": 4,
+    "intimidation": 4,
+    "perception": 5
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "acid",
+  "condition_immunities": "paralyzed",
+  "senses": "blindsight 60 ft. (blind beyond this radius), passive Perception 15",
+  "languages": "Deep Speech, Undercommon",
+  "cr": 0.5,
+  "challenge_rating": "1/2",
+  "actions": [
+    {
+      "name": "Shortsword",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) piercing damage.",
+      "attack_bonus": 5,
+      "damage_dice": "1d6+3"
+    },
+    {
+      "name": "Acid Glob",
+      "desc": "Ranged Weapon Attack: +5 to hit, range 30/60 ft., one target. Hit: 5 (1d4 + 3) acid damage, and the target must succeed on a DC 12 Constitution saving throw or be poisoned for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.",
+      "attack_bonus": 5,
+      "damage_dice": "1d4+3"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Bound in Jelly",
+      "desc": "The mydnari and its jelly are wholly reliant on each other. If the mydnari's jelly is somehow separated from its master, the jelly dies within 1 minute. If the mydnari is separated from its jelly, it loses its blindsight, Acid Glob action, and Jelly Symbiosis trait."
+    },
+    {
+      "name": "Jelly Symbiosis",
+      "desc": "A creature that touches the mydnari or hits it with a melee attack while within 5 feet of it takes 2 (1d4) acid damage."
+    },
+    {
+      "name": "Ooze Empathy",
+      "desc": "A mydnari can use its Animal Handling skill on ooze-type creatures with an Intelligence score of 5 or lower. An ooze never attacks a mydnari unless provoked."
+    }
+  ],
+  "legendary_actions": null
+}

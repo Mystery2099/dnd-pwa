@@ -14,7 +14,7 @@
 // Re-export from sync subdirectory
 export * from './sync/orchestrator';
 export * from './sync/retry';
-export * from './sync/metrics';
+export * from './sync/sync-metrics';
 
 // Types for external consumers
-export type { SyncMetrics } from './sync/metrics';
+export type { SyncMetrics } from './sync/sync-metrics';

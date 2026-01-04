@@ -1,0 +1,69 @@
+{
+  "slug": "scribe-devil",
+  "name": "Scribe Devil",
+  "size": "Medium",
+  "type": "Fiend",
+  "subtype": "devil",
+  "group": null,
+  "alignment": "lawful evil",
+  "armor_class": 15,
+  "armor_desc": "natural armor",
+  "hit_points": 82,
+  "hit_dice": "11d8+33",
+  "speed": {
+    "walk": 30,
+    "fly": 30
+  },
+  "strength": 14,
+  "dexterity": 16,
+  "constitution": 16,
+  "intelligence": 18,
+  "wisdom": 14,
+  "charisma": 17,
+  "skills": {
+    "deception": 6,
+    "insight": 5,
+    "perception": 4
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "cold; bludgeoning, piercing, and slashing damage from nonmagical attacks not made with silvered weapons",
+  "damage_immunities": "fire, poison",
+  "condition_immunities": "poisoned",
+  "senses": "darkvision 120 ft., passive Perception 14",
+  "languages": "Common, Infernal, telepathy 120 ft.",
+  "cr": 5,
+  "challenge_rating": "5",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The scribe devil makes two attacks: one with its claws and one with its tail."
+    },
+    {
+      "name": "Claws",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 10 (2d6 + 3) slashing damage.",
+      "attack_bonus": 6,
+      "damage_dice": "2d6+3"
+    },
+    {
+      "name": "Tail",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 8 (2d4 + 3) piercing damage, and if the target is a creature, it must succeed on a DC 14 Constitution saving throw or become blinded as its eyes turn black and fill with infernal ink. The condition can be removed with a greater restoration spell or similar magic. Alternatively, a creature with a healer's kit can drain the ink from a blinded creature's eyes with a successful DC 14 Wisdom (Medicine) check. If this check fails by 5 or more, the attempt to drain the ink instead removes the blinded creature's eyes and the creature takes 21 (6d6) piercing damage.",
+      "attack_bonus": 6,
+      "damage_dice": "2d4+3"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Devil's Sight",
+      "desc": "Magical darkness doesn't impede the scribe's darkvision."
+    },
+    {
+      "name": "Magic Resistance",
+      "desc": "The scribe has advantage on saving throws against spells and other magical effects."
+    },
+    {
+      "name": "Innate Spellcasting",
+      "desc": "The scribe devil's spellcasting ability is Intelligence (spell save DC 15). The devil can innately cast the following spells, requiring no material components:\nAt will: detect magic, illusory script\n3/day each: dispel magic, zone of truth\n1/day each: glyph of warding, modify memory"
+    }
+  ],
+  "legendary_actions": null
+}

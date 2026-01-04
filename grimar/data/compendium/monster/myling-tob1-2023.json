@@ -1,0 +1,51 @@
+{
+  "slug": "myling-tob1-2023",
+  "name": "Myling",
+  "size": "Small",
+  "type": "Undead",
+  "subtype": "",
+  "group": "null",
+  "alignment": "Chaotic Evil",
+  "armor_class": 13,
+  "armor_desc": "natural armor",
+  "hit_points": 45,
+  "hit_dice": "10d6 + 10",
+  "speed": {
+    "walk": 10,
+    "burrow": 30
+  },
+  "strength": 10,
+  "dexterity": 16,
+  "constitution": 12,
+  "intelligence": 10,
+  "wisdom": 12,
+  "charisma": 10,
+  "skills": {
+    "Stealth": 5
+  },
+  "damage_vulnerabilities": "False",
+  "damage_resistances": "bludgeoning, piercing, and slashing from nonmagical attacks not made with silvered weapons",
+  "damage_immunities": "necrotic, poison",
+  "condition_immunities": "charmed, frightened, poisoned, stunned, unconscious",
+  "senses": "darkvision 60 ft., passive Perception 11",
+  "languages": "the languages it knew in life",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 10 (2d6 + 3) slashing damage plus 7 (2d6) necrotic damage, and the target must succeed on a DC 13 Dexterity saving throw or the myling attaches to it. While attached, the myling sinks its teeth into the target and can't attack, and at the start of each of the myling's turns, the target takes 17 (5d6) necrotic damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Enfeebling Attacks",
+      "desc": "Each time the myling deals necrotic damage to a creature that is below half its hp maximum, the target's Strength score is reduced by 1d4. The target dies if this reduces its Strength to 0. Otherwise, the reduction lasts until the target finishes a short or long rest."
+    },
+    {
+      "name": "Undead Nature",
+      "desc": "The myling doesn't require air, food, drink, or sleep."
+    }
+  ],
+  "legendary_actions": []
+}

@@ -1,0 +1,66 @@
+{
+  "slug": "hinn_bf",
+  "name": "Hinn",
+  "size": "large",
+  "type": "Elemental",
+  "subtype": "Outsider",
+  "group": "Genies",
+  "alignment": "",
+  "armor_class": 17,
+  "armor_desc": "natural armor",
+  "hit_points": 199,
+  "hit_dice": "",
+  "speed": {
+    "walk": 30,
+    "burrow": 30,
+    "fly": 60
+  },
+  "strength": 22,
+  "dexterity": 12,
+  "constitution": 32,
+  "intelligence": 14,
+  "wisdom": 24,
+  "charisma": 26,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "prone",
+  "damage_immunities": "petrified",
+  "condition_immunities": "",
+  "senses": "darkvision 120 ft.",
+  "languages": "Common,Terran",
+  "cr": 11,
+  "challenge_rating": "11",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The hinn makes three Gem-Studded Mace or Lob Stone attacks. If two Gem-Studded Mace attacks hit one creature, the target must succeed on a DC 16 CON save or be stunned until the end of its next turn."
+    },
+    {
+      "name": "Gem-Studded Mace",
+      "desc": "_Melee Weapon Attack:_ +10 to hit, reach 5 ft., one target. _Hit:_ 13 (2d6+6) bludgeoning damage plus 9 (2d8) piercing damage."
+    },
+    {
+      "name": "Lob Stone",
+      "desc": "_Ranged Weapon Attack:_ +10 to hit, range 20/60 ft., one target. _Hit:_ 22 (3d10+6) bludgeoning damage."
+    },
+    {
+      "name": "Create Earth Elemental (1/Day)",
+      "desc": "The hinn magically creates one earth-based Elemental of CR 5 or lower in an unoccupied space the hinn can see within 30 feet of it. The elemental acts as an ally of the hinn, obeying its spoken commands. The elemental remains for 1 hour, until the hinn dies, or until the hinn dismisses it as a bonus action."
+    },
+    {
+      "name": "Travel the Planes (1/Day)",
+      "desc": "The hinn transports itself to a different plane of existence. This works like the plane shift spell, except it can affect only itself and can't use this action to banish an unwilling creature."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Earth Glide",
+      "desc": "The hinn can burrow through nonmagical, unworked earth and stone. While doing so, the hinn doesn't disturb the material through which it moves."
+    },
+    {
+      "name": "Nebulous (Cloud Form Only)",
+      "desc": "The hinn's Stealth is 20, it can hover while flying, can't manipulate objects or attack, and it can pass through any space air can pass through without squeezing. In addition, it can enter and hide in any Tiny or larger container, such as a pouch, lamp, backpack, or barrel."
+    }
+  ],
+  "legendary_actions": []
+}

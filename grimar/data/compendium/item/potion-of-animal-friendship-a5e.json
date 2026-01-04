@@ -1,0 +1,11 @@
+{
+  "slug": "potion-of-animal-friendship-a5e",
+  "name": "Potion of Animal Friendship",
+  "type": "Potion",
+  "desc": "After drinking this potion, for the next hour you can cast _animal friendship_ (save DC 13) at will.",
+  "rarity": "Uncommon",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

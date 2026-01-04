@@ -1,0 +1,63 @@
+{
+  "slug": "relentless-hound",
+  "name": "Relentless Hound",
+  "size": "Medium",
+  "type": "Undead",
+  "subtype": "",
+  "group": null,
+  "alignment": "chaotic neutral",
+  "armor_class": 12,
+  "armor_desc": "",
+  "hit_points": 52,
+  "hit_dice": "8d8+16",
+  "speed": {
+    "walk": 40,
+    "fly": 20
+  },
+  "strength": 17,
+  "dexterity": 14,
+  "constitution": 15,
+  "intelligence": 4,
+  "wisdom": 11,
+  "charisma": 6,
+  "skills": {
+    "perception": 0
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "acid, fire, lightning, thunder; nonmagic B/P/S attacks",
+  "damage_immunities": "cold, necrotic, poison",
+  "condition_immunities": "exhaustion, grappled, paralyzed, petrified, poisoned, prone, restrained, unconscious",
+  "senses": "darkvision 60 ft, passive Perception 14",
+  "languages": "—",
+  "cr": 4,
+  "challenge_rating": "4",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "Two Spectral Bites. If both hit same target it takes 10 (3d6) necrotic and hp max is reduced by that amount (DC 13 Con negates damage and hp max). Reduction lasts until target finishes a long rest. Target dies if this reduces its hp max to 0."
+    },
+    {
+      "name": "Spectral Bite",
+      "desc": "Melee Weapon Attack: +5 to hit, 5 ft., one creature,. 10 (2d6+3) necrotic."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Good Dog",
+      "desc": "If a Humanoid that hasn't harmed hound in last 24 hrs and takes action to offer it bit of food or speak kind words to it hound must make DC 12 Wis save or be charmed by that Humanoid for 1 hr or until Humanoid or its companions do anything harmful to hound. Also hound has disadvantage on saves vs. command spell."
+    },
+    {
+      "name": "Incorporeal Movement",
+      "desc": "Move through others/objects as difficult terrain. Takes 5 (1d10) force if it ends turn in object."
+    },
+    {
+      "name": "Pack Tactics",
+      "desc": "Advantage on attacks vs. creature if 1+ unincapacitated attacker ally is within 5 ft. of target."
+    },
+    {
+      "name": "Undead Nature",
+      "desc": "Doesn't require air food drink or sleep."
+    }
+  ],
+  "legendary_actions": null
+}

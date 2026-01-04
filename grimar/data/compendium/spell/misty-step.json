@@ -1,0 +1,32 @@
+{
+  "index": "misty-step",
+  "name": "Misty Step",
+  "level": 2,
+  "school": {
+    "name": "Conjuration"
+  },
+  "classes": [
+    {
+      "name": "Sorcerer"
+    },
+    {
+      "name": "Warlock"
+    },
+    {
+      "name": "Wizard"
+    }
+  ],
+  "desc": [
+    "Briefly surrounded by silvery mist, you teleport up to 30 feet to an unoccupied space that you can see."
+  ],
+  "higher_level": null,
+  "range": "Self",
+  "components": [
+    "V"
+  ],
+  "material": null,
+  "ritual": false,
+  "duration": "Instantaneous",
+  "concentration": false,
+  "casting_time": "1 bonus action"
+}

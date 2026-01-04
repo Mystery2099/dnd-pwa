@@ -4,7 +4,6 @@
 
 import { Sparkles } from 'lucide-svelte';
 import type { CompendiumTypeConfig } from '$lib/core/types/compendium';
-import { colorMap } from '$lib/core/constants/colors';
 
 export const ITEMS_CONFIG: CompendiumTypeConfig = {
 	routes: {

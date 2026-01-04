@@ -1,0 +1,7 @@
+{
+  "index": "gladiator",
+  "name": "Gladiator",
+  "type": "humanoid",
+  "size": "Medium",
+  "challenge_rating": 5
+}

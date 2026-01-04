@@ -1,0 +1,55 @@
+{
+  "slug": "kobold-sorcerer-a5e",
+  "name": "Kobold Sorcerer",
+  "size": "Small",
+  "type": "Humanoid",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 12,
+  "armor_desc": "",
+  "hit_points": 27,
+  "hit_dice": "5d6+10",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 6,
+  "dexterity": 14,
+  "constitution": 14,
+  "intelligence": 10,
+  "wisdom": 10,
+  "charisma": 14,
+  "skills": {
+    "arcana": 2,
+    "intimidation": 4
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 10",
+  "languages": "Common, Draconic",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Multiattack (2/day)",
+      "desc": "The kobold sorcerer makes three flame bolt attacks."
+    },
+    {
+      "name": "Flame Bolt",
+      "desc": "Ranged Spell Attack: +4 to hit, range 120 ft., one target. Hit: 5 (1d10) fire damage."
+    },
+    {
+      "name": "Shiv",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) piercing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Innate Spellcasting",
+      "desc": "The kobolds innate spellcasting ability is Charisma (save DC 12). It can innately cast the following spells, requiring no material components: At will: mage hand, mending, 1/day each: charm person, expeditious retreat, mage armor"
+    }
+  ],
+  "legendary_actions": null
+}

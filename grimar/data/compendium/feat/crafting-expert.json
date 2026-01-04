@@ -1,0 +1,14 @@
+{
+  "slug": "crafting-expert",
+  "name": "Crafting Expert",
+  "desc": "You have devoted time to studying and practicing the art of crafting, gaining the following benefits:\nThis feat can be selected multiple times, choosing a different type of crafted item each time.",
+  "prerequisite": null,
+  "effects_desc": [
+    "Choose one of the following types of crafted item: armor, engineered items, potions, rings and rods, staves and wands, weapons, wondrous items. You gain advantage on checks made to craft, maintain, and repair that type of item.",
+    "You gain an expertise die on checks made to craft, maintain, and repair items.",
+    "You gain proficiency with two tools of your choice."
+  ],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

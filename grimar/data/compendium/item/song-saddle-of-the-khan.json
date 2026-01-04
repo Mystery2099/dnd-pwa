@@ -1,0 +1,11 @@
+{
+  "slug": "song-saddle-of-the-khan",
+  "name": "Song-Saddle of the Khan",
+  "type": "Wondrous item",
+  "desc": "Made from enchanted leather and decorated with songs lyrics written in calligraphy, this well-crafted saddle is enchanted with the impossible speed of a great horseman. While this saddle is attached to a horse, that horse's speed is increased by 10 feet. In addition, the horse can Disengage as a bonus action.",
+  "rarity": "rare",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

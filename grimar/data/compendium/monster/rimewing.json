@@ -1,0 +1,54 @@
+{
+  "slug": "rimewing",
+  "name": "Rimewing",
+  "size": "Small",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 12,
+  "armor_desc": null,
+  "hit_points": 22,
+  "hit_dice": "5d6+5",
+  "speed": {
+    "fly": 30,
+    "walk": 25
+  },
+  "strength": 11,
+  "dexterity": 14,
+  "constitution": 12,
+  "intelligence": 3,
+  "wisdom": 10,
+  "charisma": 7,
+  "skills": {
+    "perception": 2,
+    "stealth": 4
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "cold",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 12",
+  "languages": "-",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Proboscis",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.",
+      "attack_bonus": 4,
+      "damage_dice": "1d6+2"
+    },
+    {
+      "name": "Frosted Wings (1/Day)",
+      "desc": "A 20-foot radius cloud of colorful ice crystals extends from the rimewing. Each creature in that area must succeed on a DC 10 Wisdom saving throw or be charmed by the rimewing for 1 minute. While charmed by the rimewing, a creature is incapacitated and must move up to its speed toward the rimewing at the start of its turn, stopping when it is 5 feet away. A charmed creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Antennae",
+      "desc": "The giant moth has advantage on Wisdom (Perception) checks that rely on smell."
+    }
+  ],
+  "legendary_actions": null
+}

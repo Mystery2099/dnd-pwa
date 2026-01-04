@@ -20,12 +20,8 @@ export function logSync(message: string, data?: unknown): void {
 	const dataStr = data ? JSON.stringify(data, null, 2) : '';
 	const line = `[${timestamp}] ${message} ${dataStr}\n`;
 
-	// Write to file
-	try {
-		createWriteStream(LOG_FILE, { flags: 'a' }).write(line);
-	} catch (e) {
-		// Ignore file write errors
-	}
+	// Write to file (ignore errors)
+	createWriteStream(LOG_FILE, { flags: 'a' }).write(line);
 
 	// Also log to console for immediate visibility
 	console.log(line.trim());

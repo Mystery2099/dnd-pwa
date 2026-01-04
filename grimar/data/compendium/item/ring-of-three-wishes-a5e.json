@@ -1,0 +1,11 @@
+{
+  "slug": "ring-of-three-wishes-a5e",
+  "name": "Ring of Three Wishes",
+  "type": "Ring",
+  "desc": "While wearing this ring, you can use an action to expend 1 of its 3 charges to cast __wish_ . When all the ring’s charges are expended, it loses its magic.",
+  "rarity": "Legendary",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

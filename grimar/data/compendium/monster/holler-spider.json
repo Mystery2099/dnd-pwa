@@ -1,0 +1,64 @@
+{
+  "slug": "holler-spider",
+  "name": "Holler Spider",
+  "size": "Tiny",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "chaotic neutral",
+  "armor_class": 12,
+  "armor_desc": null,
+  "hit_points": 14,
+  "hit_dice": "4d4+4",
+  "speed": {
+    "climb": 25,
+    "walk": 25
+  },
+  "strength": 7,
+  "dexterity": 15,
+  "constitution": 10,
+  "intelligence": 5,
+  "wisdom": 14,
+  "charisma": 5,
+  "skills": {
+    "perception": 4,
+    "stealth": 4
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "thunder",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "blindsight 10 ft., darkvision 60 ft., passive Perception 14",
+  "languages": "understands Common but can’t speak",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one creature. Hit: 4 (1d4 + 2) piercing damage.",
+      "attack_bonus": 4,
+      "damage_dice": "1d4+2"
+    },
+    {
+      "name": "Hoot",
+      "desc": "Ranged Weapon Attack: +4 to hit, range 20/60 ft., one target. Hit: 5 (1d6 + 2) thunder damage. If the holler spider scores a critical hit, it is pushed 5 feet away from the target.",
+      "attack_bonus": 4,
+      "damage_dice": "1d6+2"
+    },
+    {
+      "name": "Distressed Discharge (Recharge 5-6)",
+      "desc": "The holler spider releases a short, distressed cacophony in a 15-foot cone. Each creature in the area must make a DC 12 Constitution saving throw, taking 5 (2d4) thunder damage on a failed save, or half as much damage on a successful one. The holler spider is pushed 15 feet in the opposite direction of the cone."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Spider Climb",
+      "desc": "The holler spider can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check."
+    },
+    {
+      "name": "Vigilant",
+      "desc": "If the holler spider remains motionless for at least 1 minute, it has advantage on Wisdom (Perception) checks and Dexterity (Stealth) checks."
+    }
+  ],
+  "legendary_actions": null
+}

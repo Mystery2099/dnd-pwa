@@ -1,0 +1,64 @@
+{
+  "slug": "weretiger_bf",
+  "name": "Weretiger",
+  "size": "medium",
+  "type": "Humanoid",
+  "subtype": "Lycanthrope",
+  "group": "Lycanthropes",
+  "alignment": "",
+  "armor_class": 12,
+  "armor_desc": null,
+  "hit_points": 95,
+  "hit_dice": "",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 16,
+  "dexterity": 18,
+  "constitution": 16,
+  "intelligence": 10,
+  "wisdom": 12,
+  "charisma": 10,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "bludgeoning,piercing,and slashing damage from nonmagical attacks",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft.",
+  "languages": "Common (can't speak in tiger form)",
+  "cr": 4,
+  "challenge_rating": "4",
+  "actions": [
+    {
+      "name": "Multiattack (Humanoid or Hybrid Form Only)",
+      "desc": "The weretiger makes four Claw or Scimitar attacks, or it makes four Longbow attacks. It can replace one attack with a Bite attack, provided it is in the appropriate form."
+    },
+    {
+      "name": "Bite (Tiger or Hybrid Form Only)",
+      "desc": "_Melee Weapon Attack:_ +5 to hit, reach 5 ft., one target. _Hit:_ 8 (1d10+3) piercing damage. If the target is a Humanoid, it must succeed on a DC 13 CON save or be cursed with the weretiger lycanthropy curse (see Curse of Lycanthropy sidebar)."
+    },
+    {
+      "name": "Claw (Tiger or Hybrid Form Only)",
+      "desc": "_Melee Weapon Attack:_ +5 to hit, reach 5 ft., one target. _Hit:_ 7 (1d8+3) slashing damage."
+    },
+    {
+      "name": "Scimitar (Humanoid or Hybrid Form Only)",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. _Hit:_ 6 (1d6+3) slashing damage."
+    },
+    {
+      "name": "Longbow (Humanoid or Hybrid Form Only)",
+      "desc": "Ranged Weapon Attack: +4 to hit, range 150/600 ft., one target. _Hit:_ 6 (1d8+2) piercing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Heightened Hearing and Smell",
+      "desc": "The weretiger's Perception is 18 when perceiving by hearing or smell."
+    },
+    {
+      "name": "Pounce (Tiger or Hybrid Form Only)",
+      "desc": "If the weretiger moves at least 15 feet straight toward a creature and then hits it with a Claw attack on the same turn, that target must succeed on a DC 14 STR save or be knocked prone. If the target is prone, the weretiger can make one Bite or Claw attack against it as a bonus action."
+    }
+  ],
+  "legendary_actions": []
+}

@@ -1,0 +1,55 @@
+{
+  "slug": "venom-elemental",
+  "name": "Venom Elemental",
+  "size": "Large",
+  "type": "Elemental",
+  "subtype": "",
+  "group": null,
+  "alignment": "neutral",
+  "armor_class": 14,
+  "armor_desc": "natural armor",
+  "hit_points": 93,
+  "hit_dice": "11d10+33",
+  "speed": {
+    "swim": 50,
+    "walk": 40
+  },
+  "strength": 17,
+  "dexterity": 14,
+  "constitution": 16,
+  "intelligence": 6,
+  "wisdom": 10,
+  "charisma": 8,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "bludgeoning, piercing, and slashing from nonmagical attacks",
+  "damage_immunities": "poison",
+  "condition_immunities": "exhaustion, grappled, paralyzed, petrified, poisoned, prone, restrained, unconscious",
+  "senses": "darkvision 60 ft., passive Perception 10",
+  "languages": "understands Primordial but can't speak",
+  "cr": 4,
+  "challenge_rating": "4",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The venom elemental makes two bite attacks."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 10 ft., one creature. Hit: 6 (1d6 + 3) piercing damage plus 7 (2d6) poison damage, and the creature must succeed on a DC 13 Constitution saving throw or be poisoned until the end of its next turn.",
+      "attack_bonus": 5,
+      "damage_dice": "1d6+3"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Liquid Form",
+      "desc": "The elemental can enter a hostile creature's space and stop there. It can move through a space as narrow as 1 inch wide without squeezing."
+    },
+    {
+      "name": "Underwater Camouflage",
+      "desc": "The elemental has advantage on Dexterity (Stealth) checks made while underwater."
+    }
+  ],
+  "legendary_actions": null
+}

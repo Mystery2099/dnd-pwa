@@ -1,0 +1,13 @@
+{
+  "slug": "weapons-specialist",
+  "name": "Weapons Specialist",
+  "desc": "Nearly any weapon is lethal in your hands.",
+  "prerequisite": null,
+  "effects_desc": [
+    "Raise your Strength or Dexterity Attribute by 1, to the attribute cap of 20.",
+    "Select and learn any four weapon proficiencies. Three of these must be a simple or martial weapons. The fourth choice can be a simple, martial, or rare weapon."
+  ],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

@@ -1,0 +1,60 @@
+{
+  "slug": "ghoulsteed",
+  "name": "Ghoulsteed",
+  "size": "Large",
+  "type": "Undead",
+  "subtype": "",
+  "group": null,
+  "alignment": "neutral evil",
+  "armor_class": 13,
+  "armor_desc": "natural armor",
+  "hit_points": 85,
+  "hit_dice": "10d10+30",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 18,
+  "dexterity": 10,
+  "constitution": 16,
+  "intelligence": 6,
+  "wisdom": 10,
+  "charisma": 6,
+  "skills": {
+    "perception": 2
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "poison",
+  "condition_immunities": "poisoned",
+  "senses": "darkvision 60 ft., passive Perception 12",
+  "languages": "Common, Darakhul",
+  "cr": 3,
+  "challenge_rating": "3",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "A ghoulsteed makes two bite attacks."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) piercing damage and the ghoulsteed gains 5 (1d10) temporary hp. These temporary hp stack with each other, but the ghoulsteed can only have a maximum of 10 temporary hp at one time.",
+      "attack_bonus": 6,
+      "damage_dice": "2d8+4"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Pounce",
+      "desc": "If the ghoulsteed moves at least 20 feet straight toward a creature and then hits it with a bite attack on the same turn, that target must succeed on a DC 14 Strength saving throw or be knocked prone. If the target is prone, the ghoulsteed can make one bite attack against it as a bonus action."
+    },
+    {
+      "name": "Sprint (3/Day)",
+      "desc": "When the ghoulsteed uses the Dash action, it can Dash again as a bonus action."
+    },
+    {
+      "name": "Undead Fortitude",
+      "desc": "If damage reduces the ghoulsteed to 0 hp, it makes a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the ghoulsteed drops to 1 hp instead."
+    }
+  ],
+  "legendary_actions": null
+}

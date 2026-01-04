@@ -1,0 +1,31 @@
+{
+  "slug": "beguiling-gift",
+  "name": "Beguiling Gift",
+  "desc": "Deep Magic: hieroglyph You implant a powerful suggestion into an item as you hand it to someone. If the person you hand it to accepts it willingly, they must make a successful Wisdom saving throw or use the object as it's meant to be used at their first opportunity: writing with a pen, consuming food or drink, wearing clothing, drawing a weapon, etc. After the first use, they're under no compulsion to continue using the object or even to keep it.",
+  "higher_level": "",
+  "level": "1st-level",
+  "level_int": 1,
+  "school": "enchantment",
+  "components": "S",
+  "requires_verbal_components": false,
+  "requires_somatic_components": true,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Instantaneous",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "Touch",
+  "target_range_sort": 1,
+  "spell_level": 1,
+  "dnd_class": "Wizard, Warlock, Sorceror, Druid, Cleric, Bard",
+  "spell_lists": [
+    "cleric",
+    "druid",
+    "bard",
+    "warlock",
+    "wizard"
+  ]
+}

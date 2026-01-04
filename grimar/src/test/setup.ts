@@ -24,22 +24,12 @@ vi.mock('$lib/core/types/compendium/filter', () => ({
 }));
 
 // Mock Svelte internals
-const mockSet = new Set<string>();
-const mockSvelteSet = class Set {
-	has = (v: string) => mockSet.has(v);
-	add = (v: string) => {
-		mockSet.add(v);
-		return this;
-	};
-	delete = (v: string) => mockSet.delete(v);
-	size = mockSet.size;
-	forEach = (cb: (v: string) => void) => mockSet.forEach(cb);
-	clear = () => mockSet.clear();
-	values = () => mockSet.values();
-};
-
 vi.mock('svelte/reactivity', () => ({
-	SvelteSet: mockSvelteSet,
+	SvelteSet: class extends Set {
+		constructor(iterable?: any) {
+			super(iterable);
+		}
+	},
 	SvelteURL: class {
 		searchParams: URLSearchParams;
 		constructor(url: string) {
@@ -116,5 +106,4 @@ Object.defineProperty(global, 'localStorage', {
 // Clean up after each test
 afterEach(() => {
 	vi.clearAllMocks();
-	mockSet.clear();
 });

@@ -1,0 +1,27 @@
+{
+  "slug": "seal-red-portal",
+  "name": "Seal Red Portal",
+  "desc": "You seal a Red Portal or other dimensional gate within range, rendering it inoperable until this spell is dispelled. While the portal remains sealed in this way, it cannot be found with the locate Red Portal spell.",
+  "higher_level": "",
+  "level": "6th-level",
+  "level_int": 6,
+  "school": "abjuration",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Until dispelled",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "60 Feet",
+  "target_range_sort": 60,
+  "spell_level": 6,
+  "dnd_class": "Wizard",
+  "spell_lists": [
+    "wizard"
+  ]
+}

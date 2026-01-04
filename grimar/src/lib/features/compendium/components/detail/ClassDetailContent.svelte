@@ -45,7 +45,7 @@
 		<div class="mb-1 text-xs font-bold text-[var(--color-text-muted)] uppercase">Proficiencies</div>
 		<div class="flex flex-wrap gap-2 pt-1">
 			{#if proficiencies}
-				{#each proficiencies as p}
+				{#each proficiencies as p (p.index)}
 					<span
 						class="rounded bg-[var(--color-bg-card)] px-2 py-0.5 text-xs text-[var(--color-text-primary)]"
 						>{p.name}</span
@@ -56,7 +56,7 @@
 		{#if savingThrows}
 			<div class="mt-3 flex items-center gap-2">
 				<span class="text-xs font-bold text-[var(--color-text-muted)] uppercase">Saves:</span>
-				{#each savingThrows as s}
+				{#each savingThrows as s (s.index)}
 					<span class="text-xs font-medium text-[var(--color-accent)]">{s.name}</span>
 				{/each}
 			</div>

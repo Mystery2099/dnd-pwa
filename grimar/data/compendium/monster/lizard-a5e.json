@@ -1,0 +1,40 @@
+{
+  "slug": "lizard-a5e",
+  "name": "Lizard",
+  "size": "Tiny",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 10,
+  "armor_desc": "",
+  "hit_points": 2,
+  "hit_dice": "1d4",
+  "speed": {
+    "walk": 20,
+    "climb": 20
+  },
+  "strength": 2,
+  "dexterity": 10,
+  "constitution": 10,
+  "intelligence": 2,
+  "wisdom": 10,
+  "charisma": 4,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 30 ft., passive Perception 10",
+  "languages": "",
+  "cr": 0,
+  "challenge_rating": "0",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +0 to hit, reach 5 ft., one target. Hit: 1 piercing damage. If this damage would reduce a Small or larger target to 0 hit points  the target takes no damage from this attack."
+    }
+  ],
+  "special_abilities": null,
+  "legendary_actions": null
+}

@@ -1,0 +1,66 @@
+{
+  "slug": "brownie-mystic",
+  "name": "Brownie Mystic",
+  "size": "Tiny",
+  "type": "Fey",
+  "subtype": "",
+  "group": null,
+  "alignment": "neutral good",
+  "armor_class": 15,
+  "armor_desc": "",
+  "hit_points": 82,
+  "hit_dice": "15d4+45",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 4,
+  "dexterity": 20,
+  "constitution": 16,
+  "intelligence": 10,
+  "wisdom": 17,
+  "charisma": 12,
+  "skills": {
+    "perception": 3
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 16",
+  "languages": "Common, Sylvan",
+  "cr": 5,
+  "challenge_rating": "5",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "Three Mystic Staff or Magical Blast attacks. Can replace one of the attacks with use of Spellcasting."
+    },
+    {
+      "name": "Mystic Staff",
+      "desc": "Melee Weapon Attack: +7 to hit, 5 ft., one target, 7 (1d4+5) bludgeoning damage + 3 (1d6) psychic."
+    },
+    {
+      "name": "Mystic Blast",
+      "desc": "Ranged Spell Attack: +6 to hit, 60 ft., one target, 10 (2d6+3) psychic."
+    },
+    {
+      "name": "Invisibility",
+      "desc": "Magically turns invisible until it attacks or uses Spellcasting or until its concentration ends (as if concentrating on a spell). Any equipment brownie wears or carries is invisible with it."
+    },
+    {
+      "name": "Spellcasting",
+      "desc": "Wis (DC 13) no material components: At will: mending minor illusion prestidigitation3/day ea: entangle mirror image1/day ea: confusion conjure animals dimension door"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Magic Resistance",
+      "desc": "Advantage: spell/magic effect saves."
+    },
+    {
+      "name": "Speak with Beasts",
+      "desc": "Can communicate with Beasts as if they shared a language."
+    }
+  ],
+  "legendary_actions": null
+}

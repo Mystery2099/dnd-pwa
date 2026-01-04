@@ -1,0 +1,11 @@
+{
+  "slug": "helm-of-comprehending-languages-a5e",
+  "name": "Helm of Comprehending Languages",
+  "type": "Wondrous Item",
+  "desc": "While wearing this helm, you can use an action to cast __comprehend languages_ at will.",
+  "rarity": "Uncommon",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

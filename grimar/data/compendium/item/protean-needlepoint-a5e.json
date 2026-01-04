@@ -1,0 +1,11 @@
+{
+  "slug": "protean-needlepoint-a5e",
+  "name": "Protean Needlepoint",
+  "type": "Wondrous Item",
+  "desc": "Always pristine, easy to thread—and most importantly—able to change its size to suit any purpose, this miraculous sewing needle promises to always be the right tool for the job. The needle’s exact size randomly changes every hour, but you can also choose the form it takes by spending 1 minute threading it with the proper filament.\n\n**Cotton (Sharp Needle)**. Perfect for delicate stitching, beading, and general use.\n\n**Silk (Embroidery Needle)**. Ideal for more decorative needlework.\n\n**Wool (Canvas Needle)**. Large and blunt, for bulkier, loosely woven material.\n\n**Leather (Glover Needle)**. Big, sharp, made for punching through thick hide.\n\nThe _protean needlepoint_ can be used as an improvised weapon when it is sized as a canvas needle for wool (1 magical piercing damage) or a glover needle for leather (1d4 magical piercing damage). When you score a critical hit with it, the tip of the needle snaps off and it becomes a mundane item.",
+  "rarity": "Uncommon",
+  "requires_attunement": "requires attunement",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

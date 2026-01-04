@@ -1,0 +1,62 @@
+{
+  "slug": "orphan-of-the-black",
+  "name": "Orphan of the Black",
+  "size": "Small",
+  "type": "Fey",
+  "subtype": "",
+  "group": null,
+  "alignment": "neutral evil",
+  "armor_class": 13,
+  "armor_desc": null,
+  "hit_points": 49,
+  "hit_dice": "9d6+18",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 10,
+  "dexterity": 16,
+  "constitution": 14,
+  "intelligence": 8,
+  "wisdom": 10,
+  "charisma": 13,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "bludgeoning",
+  "damage_immunities": "",
+  "condition_immunities": "charmed, frightened",
+  "senses": "darkvision 60 ft., passive Perception 10",
+  "languages": "Common",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The orphan of the black makes two melee attacks."
+    },
+    {
+      "name": "Slam",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) bludgeoning damage.",
+      "attack_bonus": 5,
+      "damage_dice": "1d6+3"
+    },
+    {
+      "name": "Incite Violence (Recharge 5-6)",
+      "desc": "The orphan of the black forces a creature it can see within 15 feet of it to commit an outburst of violence. The target must make a DC 12 Wisdom saving throw. On a failed save, the creature must use its action on its next turn to attack the nearest creature other than the orphan of the black. On a success, the creature takes 7 (2d6) psychic damage from the violence boiling at the edge of its consciousness. A creature immune to being charmed isn't affected by the orphan's Incite Violence."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Forbiddance",
+      "desc": "An orphan of the black can't enter a residence without an invitation from one of the occupants."
+    },
+    {
+      "name": "Sense Law",
+      "desc": "An orphan of the black can pinpoint the location of a lawful creature within 30 feet of it."
+    },
+    {
+      "name": "Transmit Pain",
+      "desc": "A creature that hits the orphan of the black with an attack must succeed on a DC 12 Wisdom saving throw or take 7 (2d6) psychic damage."
+    }
+  ],
+  "legendary_actions": null
+}

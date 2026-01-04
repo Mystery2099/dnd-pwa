@@ -1,0 +1,72 @@
+{
+  "slug": "marilith_bf",
+  "name": "Marilith",
+  "size": "large",
+  "type": "Fiend",
+  "subtype": "Demon",
+  "group": "Demons",
+  "alignment": "",
+  "armor_class": 18,
+  "armor_desc": "natural armor",
+  "hit_points": 217,
+  "hit_dice": "",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 28,
+  "dexterity": 20,
+  "constitution": 30,
+  "intelligence": 18,
+  "wisdom": 26,
+  "charisma": 30,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "bludgeoning,piercing,and slashing damage from nonmagical attacks,Demonic Resilience",
+  "damage_immunities": "Demonic Resilience",
+  "condition_immunities": "",
+  "senses": "truesight 120 ft.",
+  "languages": "Abyssal,telepathy 120 ft.",
+  "cr": 16,
+  "challenge_rating": "16",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The marilith makes two Dagger attacks, two Mace attacks, and two Longsword attacks. It can replace two Dagger attacks with a Tail attack."
+    },
+    {
+      "name": "Dagger",
+      "desc": "_Melee or Ranged Weapon Attack:_ +9 to hit, reach 5 ft. or range 20/60 ft., one target. _Hit:_ 9 (2d4+4) piercing damage plus 7 (2d6) fire damage."
+    },
+    {
+      "name": "Mace",
+      "desc": "_Melee Weapon Attack:_ +9 to hit, reach 5 ft., one target. _Hit:_ 11 (2d6+4) bludgeoning damage plus 7 (2d6) fire damage."
+    },
+    {
+      "name": "Longsword",
+      "desc": "_Melee Weapon Attack:_ +9 to hit, reach 5 ft., one target. _Hit:_ 13 (2d8+4) slashing damage plus 7 (2d6) fire damage."
+    },
+    {
+      "name": "Tail",
+      "desc": "_Melee Weapon Attack:_ +9 to hit, reach 10 ft., one creature. _Hit:_ 20 (3d10+4) bludgeoning damage plus 7 (2d6) fire damage. If the target is Medium or smaller, it is grappled (escape DC 17). Until this grapple ends, the target is restrained, the marilith can automatically hit the target with its Tail, and the marilith can't make Tail attacks against other targets."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Demonic Resilience",
+      "desc": "The marilith is resistant to cold, fire, and lightning damage. In addition, it is immune to poison damage and to the poisoned condition."
+    },
+    {
+      "name": "Flaming Weapons",
+      "desc": "The marilith's weapon attacks are magical. When it hits with any weapon, the weapon deals an extra 2d6 fire damage (included in the attack)."
+    },
+    {
+      "name": "Magic Resistance",
+      "desc": "The marilith has advantage on saves against spells and other magical effects."
+    },
+    {
+      "name": "Reactive",
+      "desc": "The marilith gets up to five extra reactions, but these extra reactions can be used only for Parry."
+    }
+  ],
+  "legendary_actions": []
+}

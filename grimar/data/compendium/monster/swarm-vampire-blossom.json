@@ -1,0 +1,59 @@
+{
+  "slug": "swarm-vampire-blossom",
+  "name": "Swarm, Vampire Blossom",
+  "size": "Large",
+  "type": "Plant",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 14,
+  "armor_desc": "",
+  "hit_points": 82,
+  "hit_dice": "11d10+22",
+  "speed": {
+    "walk": 20,
+    "fly": 10
+  },
+  "strength": 3,
+  "dexterity": 19,
+  "constitution": 14,
+  "intelligence": 3,
+  "wisdom": 14,
+  "charisma": 13,
+  "skills": {
+    "perception": 2
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "bludgeoning, piercing, slashing",
+  "damage_immunities": "psychic",
+  "condition_immunities": "charmed, frightened, grappled, paralyzed, petrified, prone, restrained, stunned",
+  "senses": "passive Perception 12",
+  "languages": "—",
+  "cr": 3,
+  "challenge_rating": "3",
+  "actions": [
+    {
+      "name": "Petal Slashes",
+      "desc": "Melee Weapon Attack: +6 to hit, 0 ft., one creature, in the swarm's space. 18 (4d8) slashing damage or 9 (2d8) slashing damage if the swarm has half its hp or fewer. Target must make a DC 13 Con save reducing its hp max by an amount equal to damage taken on a failed save or by half as much if made. This reduction lasts until creature finishes a long rest. Target dies if this reduces its hp max to 0."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Blood Frenzy",
+      "desc": "Has advantage on melee attack rolls vs. any creature that doesn't have all its hp."
+    },
+    {
+      "name": "Blood Sense",
+      "desc": "Can pinpoint by scent location of creatures that aren't constructs or undead within 30' of it. Swarm is otherwise blind."
+    },
+    {
+      "name": "False Appearance",
+      "desc": "While motionless indistinguishable from carpet of flower petals."
+    },
+    {
+      "name": "Swarm",
+      "desc": "Can occupy another creature's space and vice versa and swarm can move through any opening large enough for a Tiny plant. Swarm can't regain hp or gain temp hp."
+    }
+  ],
+  "legendary_actions": null
+}

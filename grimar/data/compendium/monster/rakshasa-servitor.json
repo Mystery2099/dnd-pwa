@@ -1,0 +1,54 @@
+{
+  "slug": "rakshasa-servitor",
+  "name": "Rakshasa, Servitor",
+  "size": "Medium",
+  "type": "Fiend",
+  "subtype": "",
+  "group": null,
+  "alignment": "lawful evil",
+  "armor_class": 13,
+  "armor_desc": "",
+  "hit_points": 32,
+  "hit_dice": "5d8+10",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 14,
+  "dexterity": 17,
+  "constitution": 14,
+  "intelligence": 12,
+  "wisdom": 14,
+  "charisma": 11,
+  "skills": {
+    "perception": 2
+  },
+  "damage_vulnerabilities": "piercing from magic weapons wielded by good creatures",
+  "damage_resistances": "nonmagic B/P/S attacks",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60', passive Perception 14",
+  "languages": "Common, Infernal",
+  "cr": 0.5,
+  "challenge_rating": "1/2",
+  "actions": [
+    {
+      "name": "Dagger",
+      "desc": "Melee Weapon Attack: +5 to hit, 5 ft., one target, 5 (1d4+3) piercing damage + 3 (1d6) poison."
+    },
+    {
+      "name": "Hand Crossbow",
+      "desc": "Ranged Weapon Attack: +5 to hit 30/120' one target 6 (1d6+3) piercing damage + 3 (1d6) poison."
+    },
+    {
+      "name": "Spellcasting",
+      "desc": "Cha (DC 11) no material components: At will: detect thoughts disguise self1/day: cause fear"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Limited Magic Immunity",
+      "desc": "Can't be affected or detected by cantrips unless it wishes to be. Has advantage on saves vs. all other spells and magical effects."
+    }
+  ],
+  "legendary_actions": null
+}

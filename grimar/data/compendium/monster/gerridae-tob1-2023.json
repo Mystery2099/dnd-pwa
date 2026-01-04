@@ -1,0 +1,60 @@
+{
+  "slug": "gerridae-tob1-2023",
+  "name": "Gerridae",
+  "size": "Large",
+  "type": "Fey",
+  "subtype": "",
+  "group": "null",
+  "alignment": "Unaligned",
+  "armor_class": 14,
+  "armor_desc": "natural armor",
+  "hit_points": 76,
+  "hit_dice": "9d10 + 27",
+  "speed": {
+    "walk": 20
+  },
+  "strength": 16,
+  "dexterity": 15,
+  "constitution": 17,
+  "intelligence": 2,
+  "wisdom": 13,
+  "charisma": 7,
+  "skills": {},
+  "damage_vulnerabilities": "False",
+  "damage_resistances": "False",
+  "damage_immunities": "False",
+  "condition_immunities": "False",
+  "senses": "darkvision 60 ft., passive Perception 11",
+  "languages": "—",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The gerridae makes one Bite attack and one Claw attack."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) piercing damage."
+    },
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 5 (1d4 + 3) slashing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Bred to the Saddle",
+      "desc": "The gerridae can't be charmed or frightened while it has a rider."
+    },
+    {
+      "name": "Water Bound",
+      "desc": "For every hour the gerridae spends on dry land, its hp maximum is reduced by 2 (1d4)."
+    },
+    {
+      "name": "Water Walker",
+      "desc": "The gerridae can move across the surface of water as if it were harmless, solid ground. This trait works like the water walk spell."
+    }
+  ],
+  "legendary_actions": []
+}

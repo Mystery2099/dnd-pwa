@@ -1,0 +1,46 @@
+{
+  "slug": "spurred-water-skate",
+  "name": "Spurred Water Skate",
+  "size": "Large",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 13,
+  "armor_desc": null,
+  "hit_points": 60,
+  "hit_dice": "8d10+16",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 12,
+  "dexterity": 17,
+  "constitution": 15,
+  "intelligence": 3,
+  "wisdom": 10,
+  "charisma": 6,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 10",
+  "languages": "—",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Stabbing Forelimbs",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one creature. Hit: 10 (2d6 + 3) piercing damage. The target is grappled (escape DC 12) if it is a Medium or smaller creature and the skate doesn't have two other creatures grappled. Until this grapple ends, the target is restrained. If the target is in a liquid, the skate can hold it under the surface, and the target risks suffocating.",
+      "attack_bonus": 5,
+      "damage_dice": "2d6+3"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Water Walker",
+      "desc": "The spurred water skate can move across the surface of water as if it were harmless, solid ground. This trait works like the water walk spell."
+    }
+  ],
+  "legendary_actions": null
+}

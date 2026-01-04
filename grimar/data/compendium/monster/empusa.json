@@ -1,0 +1,72 @@
+{
+  "slug": "empusa",
+  "name": "Empusa",
+  "size": "Medium",
+  "type": "Monstrosity",
+  "subtype": "shapechanger",
+  "group": null,
+  "alignment": "chaotic evil",
+  "armor_class": 16,
+  "armor_desc": "natural armor",
+  "hit_points": 102,
+  "hit_dice": "12d8+48",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 20,
+  "dexterity": 13,
+  "constitution": 18,
+  "intelligence": 10,
+  "wisdom": 14,
+  "charisma": 19,
+  "skills": {
+    "deception": 7,
+    "perception": 5,
+    "stealth": 4
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 15",
+  "languages": "Common",
+  "cr": 5,
+  "challenge_rating": "5",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The empusa makes two claw attacks, or one claw attack and one kick attack."
+    },
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 14 (2d8 + 5) slashing damage.",
+      "attack_bonus": 8,
+      "damage_dice": "2d8+5"
+    },
+    {
+      "name": "Kick",
+      "desc": "Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 12 (2d6 + 5) bludgeoning damage, and the target must succeed on a DC 15 Strength saving throw or be pushed up to 10 feet away from the empusa and knocked prone.",
+      "attack_bonus": 8,
+      "damage_dice": "2d6+5"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Ambusher",
+      "desc": "In the first round of combat, the empusa has advantage on attack rolls against any creature she has surprised."
+    },
+    {
+      "name": "Magical Copper",
+      "desc": "The empusa's claw and kick attacks are magical."
+    },
+    {
+      "name": "Nimble Fighter",
+      "desc": "The empusa can take the Dash or Disengage action as a bonus action on each of her turns."
+    },
+    {
+      "name": "Shapechanger",
+      "desc": "The empusa can use her action to polymorph into a Small or Medium beast that has a challenge rating no higher than her own, or back into her true form. Her statistics, other than her size, are the same in each form. While transformed, at least one of her limbs has a coppery color. Any equipment she is wearing or carrying isn't transformed. She reverts to her true form if she dies."
+    }
+  ],
+  "legendary_actions": null
+}

@@ -1,0 +1,106 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - generic [ref=e11]:
+    - link "Grimar" [ref=e13]:
+      - /url: /dashboard
+    - generic [ref=e15]:
+      - searchbox "Search spells, items, characters…" [ref=e16]
+      - generic:
+        - generic: ⌘
+        - generic: K
+    - navigation [ref=e18]:
+      - link "Dashboard" [ref=e19]:
+        - /url: /dashboard
+      - link "Compendium" [ref=e20]:
+        - /url: /compendium
+      - link "Settings" [ref=e21]:
+        - /url: /settings
+  - generic [ref=e23]:
+    - complementary [ref=e24]:
+      - navigation [ref=e26]:
+        - generic [ref=e27]: Grimoire
+        - link "Dashboard" [ref=e28]:
+          - /url: /dashboard
+        - link "Compendium" [ref=e29]:
+          - /url: /compendium
+        - link "Characters" [ref=e30]:
+          - /url: /characters
+        - link "The Forge" [ref=e31]:
+          - /url: /forge
+        - generic [ref=e32]: System
+        - link "Settings" [ref=e33]:
+          - /url: /settings
+        - generic [ref=e35]:
+          - generic [ref=e36]:
+            - generic [ref=e37]:
+              - img [ref=e38]
+              - generic [ref=e42]: Online
+            - button "Sync" [ref=e43]:
+              - img [ref=e44]
+              - text: Sync
+          - generic [ref=e49]:
+            - paragraph [ref=e50]: Connected to server. All features available.
+            - paragraph [ref=e51]: "Last online: Just now"
+    - main [ref=e52]:
+      - generic [ref=e54]:
+        - complementary [ref=e55]:
+          - generic [ref=e56]:
+            - generic [ref=e57]:
+              - heading "Index Filter" [level=2] [ref=e59]
+              - generic [ref=e60]:
+                - img [ref=e61]
+                - textbox "Search..." [ref=e64]
+              - generic [ref=e65]:
+                - img
+                - generic [ref=e66]:
+                  - combobox [ref=e67] [cursor=pointer]:
+                    - option "Name (A-Z)" [selected]
+                    - option "Name (Z-A)"
+                    - option "Level (Low to High)"
+                    - option "Level (High to Low)"
+                    - option "School (A-Z)"
+                    - option "School (Z-A)"
+                  - generic:
+                    - img
+              - generic [ref=e68]:
+                - button "All Items" [ref=e69]
+                - button "Bookmarks" [ref=e70]:
+                  - img [ref=e71]
+                  - generic [ref=e73]: Bookmarks
+            - generic [ref=e74]:
+              - button "Filter Logic AND" [ref=e76]:
+                - generic [ref=e77]: Filter Logic
+                - generic [ref=e78]: AND
+              - generic [ref=e79]:
+                - button "Spell Level" [ref=e80]:
+                  - generic [ref=e81]: Spell Level
+                  - img [ref=e82]
+                - generic [ref=e85]:
+                  - button "Cantrip" [ref=e86]
+                  - button "1st Level" [ref=e87]
+                  - button "2nd Level" [ref=e88]
+                  - button "3rd Level" [ref=e89]
+                  - button "4th Level" [ref=e90]
+                  - button "5th Level" [ref=e91]
+                  - button "6th Level" [ref=e92]
+                  - button "7th Level" [ref=e93]
+                  - button "8th Level" [ref=e94]
+                  - button "9th Level" [ref=e95]
+              - generic [ref=e96]:
+                - button "School of Magic" [ref=e97]:
+                  - generic [ref=e98]: School of Magic
+                  - img [ref=e99]
+                - generic [ref=e102]:
+                  - button "Evocation" [ref=e103]
+                  - button "Abjuration" [ref=e104]
+                  - button "Necromancy" [ref=e105]
+                  - button "Illusion" [ref=e106]
+                  - button "Divination" [ref=e107]
+                  - button "Enchantment" [ref=e108]
+                  - button "Conjuration" [ref=e109]
+                  - button "Transmutation" [ref=e110]
+        - main [ref=e111]:
+          - heading "Spells" [level=1] [ref=e113]
+```

@@ -1,0 +1,30 @@
+{
+  "slug": "rive",
+  "name": "Rive",
+  "desc": "You pull on the filaments of transition and possibility to tear at your enemies. Choose a creature you can see within range and make a ranged spell attack. On a hit, the target takes 5d8 cold damage as strands of icy nothingness whip from your outstretched hand to envelop it. If the target isn't native to the plane you're on, it takes an extra 3d6 psychic damage and must succeed on a Constitution saving throw or be stunned until the end of its next turn.",
+  "higher_level": "",
+  "level": "4th-level",
+  "level_int": 4,
+  "school": "evocation",
+  "components": "S, M",
+  "requires_verbal_components": false,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Instantaneous",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "60 Feet",
+  "target_range_sort": 60,
+  "spell_level": 4,
+  "dnd_class": "Cleric, Druid, Warlock, Wizard",
+  "spell_lists": [
+    "cleric",
+    "druid",
+    "warlock",
+    "wizard"
+  ]
+}

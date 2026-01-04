@@ -1,17 +1,14 @@
-import { test, expect, waitForElement } from '../fixtures';
+import { test, expect } from '../fixtures';
 
 test.describe('API Sync', () => {
-	test.beforeEach(async ({ page }) => {
-		// Mock the user for auth bypass
-		await page.addInitScript(() => {
-			window.localStorage.setItem('VITE_MOCK_USER', 'test-dm');
-		});
+	test.beforeEach(async ({ authenticatedPage, page }) => {
+		// Auth is handled by the authenticatedPage fixture
 	});
 
 	test('sync endpoint returns success when triggered', async ({ page }) => {
 		// Navigate to dashboard or compendium page first to establish session
 		await page.goto('/dashboard');
-		await page.waitForLoadState('networkidle');
+		await page.waitForLoadState('domcontentloaded');
 
 		// The sync should be accessible - check that the page loads correctly
 		await expect(page.locator('body')).toBeVisible();
@@ -20,7 +17,7 @@ test.describe('API Sync', () => {
 	test('sync endpoint handles rate limiting gracefully', async ({ page }) => {
 		// This test verifies the API handles concurrent requests appropriately
 		await page.goto('/dashboard');
-		await page.waitForLoadState('networkidle');
+		await page.waitForLoadState('domcontentloaded');
 
 		// Just verify the page loads without errors
 		await expect(page.locator('h1')).toBeVisible();
@@ -28,7 +25,7 @@ test.describe('API Sync', () => {
 
 	test('compendium pages handle loading states', async ({ page }) => {
 		await page.goto('/compendium/spells');
-		await page.waitForLoadState('networkidle');
+		await page.waitForLoadState('domcontentloaded');
 
 		// The page should eventually show content or loading indicator
 		const content = page.locator('body');
@@ -37,7 +34,7 @@ test.describe('API Sync', () => {
 
 	test('character creation page loads', async ({ page }) => {
 		await page.goto('/characters');
-		await page.waitForLoadState('networkidle');
+		await page.waitForLoadState('domcontentloaded');
 
 		// Should load without errors
 		await expect(page.locator('body')).toBeVisible();
@@ -45,7 +42,7 @@ test.describe('API Sync', () => {
 
 	test('dashboard loads and shows user info', async ({ page }) => {
 		await page.goto('/dashboard');
-		await page.waitForLoadState('networkidle');
+		await page.waitForLoadState('domcontentloaded');
 
 		// Should load the dashboard
 		await expect(page.locator('body')).toBeVisible();

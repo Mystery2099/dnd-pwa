@@ -1,0 +1,55 @@
+{
+  "slug": "gbahali-tob1-2023",
+  "name": "Gbahali",
+  "size": "Huge",
+  "type": "Beast",
+  "subtype": "",
+  "group": "null",
+  "alignment": "Unaligned",
+  "armor_class": 15,
+  "armor_desc": "natural armor",
+  "hit_points": 126,
+  "hit_dice": "12d12 + 48",
+  "speed": {
+    "walk": 50
+  },
+  "strength": 19,
+  "dexterity": 14,
+  "constitution": 19,
+  "intelligence": 2,
+  "wisdom": 13,
+  "charisma": 7,
+  "skills": {
+    "Perception": 4,
+    "Stealth": 8
+  },
+  "damage_vulnerabilities": "False",
+  "damage_resistances": "False",
+  "damage_immunities": "False",
+  "condition_immunities": "False",
+  "senses": "passive Perception 14",
+  "languages": "—",
+  "cr": 6,
+  "challenge_rating": "6",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The gbahali makes one Bite attack and two Claw attacks."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack:+7 to hit, reach 10 ft., one target. Hit: 15 (2d10 + 4) piercing damage. If the target is a Medium or smaller creature, it is grappled (escape DC 15). Until this grapple ends, the target is restrained, and the gbahali can't Bite another target."
+    },
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) slashing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Shifting Camouflage",
+      "desc": "The gbahali's hide adapts to its current surroundings. The gbahali has advantage on Dexterity (Stealth) checks made to hide in nonmagical, natural terrain."
+    }
+  ],
+  "legendary_actions": []
+}

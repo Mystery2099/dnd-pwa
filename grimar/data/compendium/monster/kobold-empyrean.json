@@ -1,0 +1,75 @@
+{
+  "slug": "kobold-empyrean",
+  "name": "Kobold, Empyrean",
+  "size": "Small",
+  "type": "Celestial",
+  "subtype": "",
+  "group": null,
+  "alignment": "neutral",
+  "armor_class": 18,
+  "armor_desc": "natural armor",
+  "hit_points": 150,
+  "hit_dice": "20d6+80",
+  "speed": {
+    "walk": 30,
+    "fly": 90
+  },
+  "strength": 19,
+  "dexterity": 18,
+  "constitution": 18,
+  "intelligence": 17,
+  "wisdom": 20,
+  "charisma": 18,
+  "skills": {
+    "perception": 5
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "acid, cold, fire, lightning, poison; nonmagic B/P/S attacks",
+  "damage_immunities": "radiant",
+  "condition_immunities": "charmed, exhaustion, frightened, poisoned",
+  "senses": "darkvision 120', passive Perception 19",
+  "languages": "all, telepathy 120'",
+  "cr": 10,
+  "challenge_rating": "10",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "Three Claws. Can replace one Claw with Divine Command."
+    },
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +8 to hit, 5 ft., one target, 7 (1d6+4) slashing damage + 13 (3d8) acid cold fire lightning or poison (the kobold's choice)."
+    },
+    {
+      "name": "Invoke the Dragon Gods (Recharge 5-6)",
+      "desc": "Exhales elemental energy in 60' cone. Each creature in area: 49 (14d6) acid cold fire lightning or poison (the kobold's choice; DC 16 Dex half)."
+    },
+    {
+      "name": "Divine Command",
+      "desc": "Chooses a creature it can see within its Aura of Draconic Virtue and directs a kobold within aura to attack target. Kobold can make one weapon attack vs. target as a reaction."
+    },
+    {
+      "name": "Invisibility",
+      "desc": "Magically turns invisible until it attacks/concentration ends (as if on a spell). Items worn/carried are invisible with it."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Aura of Draconic Virtue",
+      "desc": "Kobolds within 30' of an empyrean kobold have advantage on attack rolls and ability checks. At the start of each of its turns empyrean kobold can choose to exclude any number of kobolds from this aura (no action required)."
+    },
+    {
+      "name": "Elemental Weapons",
+      "desc": "Its weapon attacks are magical. When it hits with any weapon weapon deal extra 3d8 acid cold fire lightning or poison (included below) kobold's choice."
+    },
+    {
+      "name": "Immortal Nature",
+      "desc": "Doesn't require food drink or sleep"
+    },
+    {
+      "name": "Magic Resistance",
+      "desc": "Advantage: spell/magic effect saves."
+    }
+  ],
+  "legendary_actions": null
+}

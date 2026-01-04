@@ -1,0 +1,7 @@
+{
+  "index": "duergar",
+  "name": "Duergar",
+  "type": "humanoid",
+  "size": "Medium",
+  "challenge_rating": 1
+}

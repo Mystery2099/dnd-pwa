@@ -1,63 +1,78 @@
-# 📖 Compendium Page Specifications
+# Compendium Page Specifications
 
-The Compendium pages serve two primary functions: efficient filtering/browsing (Index) and immersive data presentation (Detail).
+The Compendium pages have two routes: a browse index and a detail view.
 
-## 1. The Index Page (The Browser)
+## Routes
 
-**Route:** `/compendium/[type]` (e.g., `/compendium/spells`)
+- `/compendium` - Landing page with type tabs
+- `/compendium/[type]` - Browse page (spells, monsters, items)
+- `/compendium/[type]/[slug]` - Detail page (e.g., `/compendium/spells/fireball`)
 
-This page uses a **fixed split-pane layout** inspired by your previous spellbook. 
+## 1. Browse Page (`/compendium/[type]`)
 
-### 1.1 Layout (`CompendiumShell.svelte`)
+**File:** `routes/compendium/[type]/+page.svelte`
 
-| Section | Size/Behavior | Material/Component | Rationale |
-| :--- | :--- | :--- | :--- |
-| **Left Sidebar** | Fixed width (e.g., 350px). | **Obsidian** surface (`surface.canvas`). Contains `CompendiumSidebar.svelte`. | Dedicated space for filtering, always visible. |
-| **Right Content** | Remaining width. | **Deep Weave** background (content floats on the background). Contains the `DetailView` slot. | Displays either the results grid or the detail modal/view. |
+Uses a split-pane layout:
 
-### 1.2 The Filtering Sidebar (`CompendiumSidebar.svelte`)
+| Section | Location | Description |
+|---------|----------|-------------|
+| Sidebar | Left | Filters and search |
+| List | Center | Results grid |
+| Detail | Right (overlay) | Item details |
 
-This is the power center for filtering and searching.
+### Sidebar (`CompendiumSidebar.svelte`)
 
-* **Primary Search:** A prominent, full-width `InputCrystal` at the top for name search.
-* **Filter Groups:** Uses collapsible/expandable `FilterGroup` components.
-    * **Control Type:** Filters use the `Select` primitive or `Toggle` switches, all adhering to the **Crystal Input** aesthetic.
-    * **Example Filters (Spells):** Level, School, Class, Components (V, S, M).
-* **View Toggle:** A prominent button to switch the list view between "Full Index" and **"Your Bookmarks"**.
+Located in `lib/features/compendium/components/layout/`.
 
-### 1.3 The Results List
+- Search input (uses `Input.svelte`)
+- Filter groups by type (level, school, etc.)
+- Filter logic toggle (AND/OR)
 
-The main content area lists the filtered results when a detail view is not active.
+### List View
 
-* **Result Item:** Each item is a clickable **Lozenge/Pill Button** to signal interactivity.
-* **Accent:** The hover state highlights the item using the type's specific **Gemstone Accent** color (e.g., **Amethyst** for spells).
-* **Click Action:** Clicking a list item loads the full details into the adjacent right content panel, creating a continuous browsing experience.
+- Category cards for type landing
+- `CompendiumListItem` for list items
+- Pagination at bottom
 
-## 2. 📝 The Detail View (The Tome Entry)
+### Detail Panel
 
-**Route:** Nested view or modal within `/compendium/[type]`
+- Opens as overlay panel on the right
+- Uses `CompendiumDetail.svelte`
+- Close button dismisses overlay
+- URL updates to include slug (deep linking)
 
-When an item is selected from the list, the full entry loads into the right panel.
+## 2. Detail Page (`/compendium/[type]/[slug]`)
 
-### 2.1 Display Type
+**File:** `routes/compendium/[type]/[slug]/+page.svelte`
 
-* **For Desktop:** The detail view loads directly into the adjacent right pane, replacing the empty state. It uses the `SurfaceCard` material.
-* **For Mobile:** It may be required to open as a full-screen **Modal** (`SurfaceOverlay` material) due to screen constraints.
+Dedicated page for individual items.
 
-### 2.2 Layout Structure
+### Detail Components
 
-The detail view uses a clear **Two-Column structure** to present data, mirroring a stat block or book entry.
+Located in `lib/features/compendium/components/detail/`:
 
-| Section | Content | Styling and Components |
-| :--- | :--- | :--- |
-| **Header** | Item Name, Bookmark Toggle, Close Button. | Uses the Type's Accent Color (e.g., Amethyst for Spells) for the header bar/line. Includes the `BookmarkToggle.svelte`. |
-| **Left Column** | **Attributes Table:** Lists fixed, concise data points (e.g., AC, HP, Speed, CR for Monsters; Casting Time, Range, Duration for Spells). | Uses `Divider` components to separate data fields. Key values are emphasized with bolding and the accent color. |
-| **Right Column** | **Description & Lore:** The long-form text, flavor, and rules explanation (the "Tome" entry). | Text is highly readable. Implements **Dynamic Linking**: All references to other Compendium items (e.g., "Fireball," "Poisoned Condition") are automatically hyperlinked to their detail view. |
+- `SpellDetailContent.svelte` - Spell-specific fields
+- `MonsterDetailContent.svelte` - Monster stat block
+- `ItemDetailContent.svelte` - Item details
+- `ClassDetailContent.svelte`, `RaceDetailContent.svelte`, etc.
+- `StatBlock.svelte` - Monster stat block
+- `AbilityScores.svelte` - Ability score display
+- `DetailNavigation.svelte` - Previous/next navigation
 
-### 2.3 Key Detail Components
+### Shared Components
 
-* `CompendiumDetailModal.svelte`: The overall container for the display.
-* `BookmarkToggle.svelte`: Allows the user to flag the item for quick access on the dashboard.
-* `Badge.svelte`: Used to clearly label key attributes like Spell School (Evocation, Abjuration) or Item Rarity (Legendary, Rare) using the appropriate color tokens.
+- `CompendiumDetail.svelte` - Wrapper container
+- `Badge.svelte` - Spell school, rarity tags
 
-This design ensures the Compendium is both a powerful data filtration tool and an aesthetically immersive archive.
+## Mobile Behavior
+
+- Detail view uses overlay panel (not full-screen modal)
+- Sidebar collapses to drawer on small screens
+- Compresses to single-column layout
+
+## Removed Features
+
+- `InputCrystal` - Doesn't exist, use `Input.svelte`
+- `BookmarkToggle` - Never implemented
+- `CompendiumDetailModal` - Replaced with overlay panel
+- Modal pattern - Uses split-pane/overlay instead

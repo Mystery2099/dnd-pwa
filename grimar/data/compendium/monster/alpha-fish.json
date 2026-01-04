@@ -1,0 +1,70 @@
+{
+  "slug": "alpha-fish",
+  "name": "Alpha Fish",
+  "size": "Large",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 13,
+  "armor_desc": "natural armor",
+  "hit_points": 59,
+  "hit_dice": "7d10+21",
+  "speed": {
+    "walk": 0,
+    "swim": 50
+  },
+  "strength": 16,
+  "dexterity": 13,
+  "constitution": 16,
+  "intelligence": 1,
+  "wisdom": 10,
+  "charisma": 12,
+  "skills": {
+    "intimidation": 5,
+    "perception": 3
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 13",
+  "languages": "—",
+  "cr": 3,
+  "challenge_rating": "3",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The alpha fish uses its Fin Flare. It then makes two headbutt attacks."
+    },
+    {
+      "name": "Headbutt",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 10 (2d6 + 3) bludgeoning damage.",
+      "attack_bonus": 5,
+      "damage_dice": "2d6+3"
+    },
+    {
+      "name": "Fin Flare",
+      "desc": "The alpha fish flares its fins in an attempt to frighten its opponents. Each creature within 30 feet that can see the fish must succeed on a DC 13 Wisdom saving throw or be frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the alpha fish's Fin Flare for the next 24 hours."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Defensive Frenzy",
+      "desc": "When it has half its hit points or fewer, the alpha fish can make one headbutt attack as a bonus action."
+    },
+    {
+      "name": "Frightening Display",
+      "desc": "When the alpha fish uses its Fin Flare, it looks one size category larger than it actually is to any creature that can see it until the start of its next turn."
+    },
+    {
+      "name": "Too Aggressive",
+      "desc": "The alpha fish attacks anything it thinks is threatening, even inanimate objects or illusions. It automatically fails ability checks and saving throws to detect or see through illusions."
+    },
+    {
+      "name": "Water Breathing",
+      "desc": "The fish can breathe only under water."
+    }
+  ],
+  "legendary_actions": null
+}

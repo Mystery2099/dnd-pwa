@@ -1,0 +1,62 @@
+{
+  "slug": "alseid-woad-warrior",
+  "name": "Alseid, Woad Warrior",
+  "size": "Medium",
+  "type": "Monstrosity",
+  "subtype": "",
+  "group": null,
+  "alignment": "chaotic neutral",
+  "armor_class": 14,
+  "armor_desc": "leather armor",
+  "hit_points": 55,
+  "hit_dice": "10d8+10",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 14,
+  "dexterity": 17,
+  "constitution": 12,
+  "intelligence": 8,
+  "wisdom": 16,
+  "charisma": 10,
+  "skills": {
+    "perception": 3
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60', passive Perception 15",
+  "languages": "Common, Elvish, Sylvan",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "Two Greatsword or Shortbow attacks."
+    },
+    {
+      "name": "Greatsword",
+      "desc": "Melee Weapon Attack: +5 to hit, 5 ft., one target, 9 (2d6+2) slashing damage."
+    },
+    {
+      "name": "Shortbow",
+      "desc": "Ranged Weapon Attack: +6 to hit 80/320' one target 6 (1d6+3) piercing damage."
+    },
+    {
+      "name": "Dye Bomb (3/Day)",
+      "desc": "Lobs a sphere of concentrated dye that explodes on impact marking creatures caught in its effect. Each creature within a 10 ft. radius of where sphere landed: DC 13 Dex save or be brightly painted for 8 hrs. Any attack roll vs. creature has advantage if attacker can see it and other creatures have advantage on any Wis (Perception) or Wis (Survival) check made to find the marked creature. To remove the effect a creature must spend 1 min bathing. Alternatively spells that create water or clean objects such as prestidigitation also remove the effect."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Painted for War",
+      "desc": "Advantage on Cha (Intimidation) checks and advantage on savings throws vs. being frightened. In addition each friendly creature within 10 ft. of warrior and that can see it has advantage on saves vs. being frightened."
+    },
+    {
+      "name": "Woodfriend",
+      "desc": "When in a forest alseid leave no tracks and automatically discern true north."
+    }
+  ],
+  "legendary_actions": null
+}

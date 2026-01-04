@@ -11,7 +11,7 @@
 	let { variant = 'glass', color = '', class: className = '', children }: Props = $props();
 
 	const baseClasses =
-		'inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase transition-all';
+		'inline-flex items-center min-w-0 px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase transition-all';
 
 	const variantClasses = {
 		glass:

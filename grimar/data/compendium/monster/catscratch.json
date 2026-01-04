@@ -1,0 +1,72 @@
+{
+  "slug": "catscratch",
+  "name": "Catscratch",
+  "size": "Huge",
+  "type": "Aberration",
+  "subtype": "",
+  "group": null,
+  "alignment": "chaotic evil",
+  "armor_class": 13,
+  "armor_desc": "natural armor",
+  "hit_points": 76,
+  "hit_dice": "8d12+24",
+  "speed": {
+    "climb": 15,
+    "walk": 30
+  },
+  "strength": 18,
+  "dexterity": 14,
+  "constitution": 17,
+  "intelligence": 3,
+  "wisdom": 12,
+  "charisma": 8,
+  "skills": {
+    "perception": 3,
+    "stealth": 6
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "poison",
+  "condition_immunities": "poisoned",
+  "senses": "darkvision 60 ft., passive Perception 11",
+  "languages": "—",
+  "cr": 3,
+  "challenge_rating": "3",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The catscratch makes one bite attack and one claw attack."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 9 (1d10 + 4) piercing damage, and the target must succeed on a DC 13 Constitution saving throw or be poisoned for 1 hour. A felid or feline humanoid that fails this saving throw contracts catscratch fugue.",
+      "attack_bonus": 6,
+      "damage_dice": "1d10+4"
+    },
+    {
+      "name": "Claws",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 6 (1d4 + 4) slashing damage.",
+      "attack_bonus": 6,
+      "damage_dice": "1d4+4"
+    },
+    {
+      "name": "Vomit (Recharge 5-6)",
+      "desc": "The catscratch vomits poisonous bile in a 15-foot cone. Each creature in that area must make a DC 13 Constitution saving throw, taking 10 (3d6) poison damage on a failed save or half as much damage on a successful one. A felid or feline humanoid that fails this saving throw contracts catscratch fugue."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Keen Smell",
+      "desc": "The catscratch has advantage on Wisdom (Perception) checks that rely on smell."
+    },
+    {
+      "name": "Nine Lives (Recharges after a Short or Long Rest)",
+      "desc": "When the catscratch would be reduced to 0 hp, it instead drops to 9 hp."
+    },
+    {
+      "name": "Pounce",
+      "desc": "If the catscratch moves at least 20 feet straight toward a creature and then hits it with a claw attack on the same turn, that target must succeed on a DC 14 Strength saving throw or be knocked prone. If the target is prone, the catscratch can make one bite attack against it as a bonus action."
+    }
+  ],
+  "legendary_actions": null
+}

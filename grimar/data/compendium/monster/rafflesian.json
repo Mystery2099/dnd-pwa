@@ -1,0 +1,58 @@
+{
+  "slug": "rafflesian",
+  "name": "Rafflesian",
+  "size": "Small",
+  "type": "Plant",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 17,
+  "armor_desc": "natural armor",
+  "hit_points": 136,
+  "hit_dice": "16d6+80",
+  "speed": {
+    "walk": 15
+  },
+  "strength": 18,
+  "dexterity": 8,
+  "constitution": 20,
+  "intelligence": 14,
+  "wisdom": 14,
+  "charisma": 18,
+  "skills": {
+    "perception": 2
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "blindsight 120' (blind beyond), passive Perception 17",
+  "languages": "understands the languages of its host companion but can't speak",
+  "cr": 7,
+  "challenge_rating": "7",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "3 Vine Whips. Can replace 1 attack with Blood Root use."
+    },
+    {
+      "name": "Vine Whip",
+      "desc": "Melee Weapon Attack: +7 to hit, 10 ft., one target, 17 (3d8+4) slashing damage."
+    },
+    {
+      "name": "Blood Root",
+      "desc": "Launches a root toward one creature it can see within 30' of it. The creature must make DC 15 Dex save or take 14 (4d6) necrotic as the rafflesian drains blood from it. The rafflesian or the host (the rafflesian's choice) then regains hp equal to damage taken."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Symbiote",
+      "desc": "Can bond with willing Humanoid creature that remains in physical contact with it for 10 min. While bonded this way host gains +2 bonus to AC and saves and resistance to all damage and rafflesian's speed is 0 moving with host when it moves. Each time host takes damage rafflesian takes same amount. If host is subjected to effect that would force it to save host can use its save bonuses or rafflesian's. If both are subjected to same effect only one is affected rafflesian's choice. Rafflesian and host otherwise retain their own stats and take separate turns. Rafflesian and host can't be separated unless rafflesian chooses to terminate connection. Rafflesian can detach itself safely from host over course of 1 hr or can detach itself from creature as an action which immediately kills host."
+    },
+    {
+      "name": "Symbiotic Thought",
+      "desc": "Bonded it and host communicate telepathically."
+    }
+  ],
+  "legendary_actions": null
+}

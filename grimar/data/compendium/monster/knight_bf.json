@@ -1,0 +1,52 @@
+{
+  "slug": "knight_bf",
+  "name": "Knight",
+  "size": "medium",
+  "type": "Humanoid",
+  "subtype": "Any Lineage",
+  "group": "NPCs",
+  "alignment": "",
+  "armor_class": 18,
+  "armor_desc": "plate",
+  "hit_points": 68,
+  "hit_dice": "",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 16,
+  "dexterity": 10,
+  "constitution": 14,
+  "intelligence": 12,
+  "wisdom": 12,
+  "charisma": 14,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "charmed,frightened",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "-",
+  "languages": "Common and one other language",
+  "cr": 3,
+  "challenge_rating": "3",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The knight makes three Greatsword attacks, or it makes four Javelin attacks."
+    },
+    {
+      "name": "Greatsword",
+      "desc": "_Melee Weapon Attack:_ +5 to hit, reach 5 ft., one target. _Hit:_ 10 (2d6+3) slashing damage."
+    },
+    {
+      "name": "Javelin",
+      "desc": "_Melee or Ranged Weapon Attack:_ +5 to hit, reach 5 ft. or range 30/120 ft., one target. _Hit:_ 6 (1d6+3) piercing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Chivalrous Presence",
+      "desc": "The knight exudes a powerful presence. At the start of each of the knight's turns, it chooses one of the following presences, which lasts until the start of the knight's next turn.\n- **Empowering Presence.** Each friendly creature that starts its turn within 15 feet of the knight has advantage on the first attack roll it makes before this presence ends.\n- **Protective Presence.** Hostile creatures have disadvantage on attack rolls against friendly creatures within 5 feet of the knight.\n- **Unwavering Presence.** Each friendly creature within 15 feet of the knight is resistant to the charmed and frightened conditions."
+    }
+  ],
+  "legendary_actions": []
+}

@@ -1,0 +1,53 @@
+{
+  "slug": "octopus_bf",
+  "name": "Octopus",
+  "size": "small",
+  "type": "Beast",
+  "subtype": "",
+  "group": "Animals",
+  "alignment": "",
+  "armor_class": 11,
+  "armor_desc": null,
+  "hit_points": 8,
+  "hit_dice": "",
+  "speed": {
+    "walk": 5,
+    "swim": 30
+  },
+  "strength": 4,
+  "dexterity": 12,
+  "constitution": 10,
+  "intelligence": 2,
+  "wisdom": 10,
+  "charisma": 4,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 30 ft.",
+  "languages": "-",
+  "cr": 0,
+  "challenge_rating": "0",
+  "actions": [
+    {
+      "name": "Tentacles",
+      "desc": "_Melee Weapon Attack:_ +3 to hit, reach 5 ft., one target. _Hit:_ 3 (1d4+1) bludgeoning damage, and the target is grappled (escape DC 11), if it is a Medium or smaller creature. Until this grapple ends, the octopus can't use its Tentacles on another target."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Hold Breath",
+      "desc": "While out of water, the octopus can hold its breath for 30 minutes."
+    },
+    {
+      "name": "Underwater Camouflage",
+      "desc": "The octopus's Stealth is 18 while underwater."
+    },
+    {
+      "name": "Water Breathing",
+      "desc": "The octopus can breathe only underwater."
+    }
+  ],
+  "legendary_actions": []
+}

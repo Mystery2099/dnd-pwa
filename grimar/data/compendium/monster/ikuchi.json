@@ -1,0 +1,67 @@
+{
+  "slug": "ikuchi",
+  "name": "Ikuchi",
+  "size": "Gargantuan",
+  "type": "Elemental",
+  "subtype": "",
+  "group": null,
+  "alignment": "chaotic neutral",
+  "armor_class": 16,
+  "armor_desc": "natural armor",
+  "hit_points": 116,
+  "hit_dice": "8d20+32",
+  "speed": {
+    "walk": 20,
+    "swim": 50
+  },
+  "strength": 20,
+  "dexterity": 13,
+  "constitution": 18,
+  "intelligence": 6,
+  "wisdom": 12,
+  "charisma": 8,
+  "skills": {
+    "perception": 4
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "bludgeoning, piercing, and slashing from nonmagical attacks",
+  "damage_immunities": "poison",
+  "condition_immunities": "poisoned",
+  "senses": "darkvision 60 ft., passive Perception 14",
+  "languages": "Aquan",
+  "cr": 8,
+  "challenge_rating": "8",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The ikuchi makes two attacks: one with its bite and one to constrict."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +8 to hit, reach 15 ft., one target. Hit: 16 (2d10 + 5) piercing damage.",
+      "attack_bonus": 8,
+      "damage_dice": "2d10+5"
+    },
+    {
+      "name": "Constrict",
+      "desc": "Melee Weapon Attack: +8 to hit, reach 20 ft., one Huge or smaller creature. Hit: 14 (2d8 + 5) bludgeoning damage. The target is grappled (escape DC 16) if the ikuchi isn't already constricting two other creatures. Until this grapple ends, the target is restrained.",
+      "attack_bonus": 8,
+      "damage_dice": "2d8+5"
+    },
+    {
+      "name": "Crush (Recharge 4-6)",
+      "desc": "Each creature grappled by the ikuchi must make a DC 16 Strength saving throw, taking 23 (4d8 + 5) bludgeoning damage on a failed save, or half as much damage on a successful one."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Ikuchi Oil",
+      "desc": "The ikuchi constantly emits a thick, nonflammable, yellowish oil. When the ikuchi is underwater, this oil makes the water within 30 feet of the ikuchi difficult terrain. Each time a creature moves more than 10 feet through this area it must succeed on a DC 15 Strength saving throw or be restrained by the thick oil until the end of its next turn. A creature under the effects of a freedom of movement spell or similar magic is immune to the effects of Ikuchi Oil."
+    },
+    {
+      "name": "Water Breathing",
+      "desc": "The ikuchi can breathe only underwater."
+    }
+  ],
+  "legendary_actions": null
+}

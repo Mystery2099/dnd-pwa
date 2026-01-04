@@ -1,0 +1,11 @@
+{
+  "slug": "orb-of-elsewhere-a5e",
+  "name": "Orb of Elsewhere",
+  "type": "Wondrous Item",
+  "desc": "This crystalline orb is filled with dense smoke that constantly changes color. While holding the orb, you can use an action and speak its command word to open a portal to a random location on a plane from the Orb of Elsewhere table. The portal remains open either until the next dawn on your original Material Plane, or until you use an action to speak the command word to close it.\n\nOnce the portal is closed, the orb remains at the entry point to that plane. If at the end of the duration the orb has not been used to create a portal of return, it teleports to a random point on its plane of origin (leaving any creatures that traveled through the portal stranded).\n\nThe orb’s destination changes at dawn on your Material Plane each day, and its portal never goes to the same location twice in a row.\n\n__**Table: Orb of Elsewhere**__\n| **d12** | **Plane**      |\n| ------- | -------------- |\n| 1       | Plane of Air   |\n| 2       | Plane of Earth |\n| 3       | Plane of Water |\n| 4       | Plane of Fire  |\n| 5       | Plane of Death |\n| 6       | Plane of Life  |\n| 7       | Plane of Space |\n| 8       | Plane of Time  |\n| 9       | Ethereal Plane |\n| 10      | Astral Plane   |\n| 11      | Dreaming       |\n| 12      | Bleak Gate     |",
+  "rarity": "Legendary",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

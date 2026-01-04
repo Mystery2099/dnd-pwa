@@ -1,0 +1,11 @@
+{
+  "slug": "ring-of-spell-negation",
+  "name": "Ring of Spell Negation",
+  "type": "Ring",
+  "desc": "This ring has 3 charges, and it regains 1d3 expended charges daily at dawn. While wearing the ring, you can use your reaction to expend 1 of its charges to cast counterspell, and you lose hit points related to the spell's level. You can't use this feature of the ring if you don't have blood. The types of spells you can counter and the amount of hit points you lose depend on the type of ring you are wearing. | d8 | School |\n| --- | ------------- |\n| 1 | Abjuration |\n| 2 | Conjuration |\n| 3 | Divination |\n| 4 | Enchantment |\n| 5 | Evocation |\n| 6 | Illusion |\n| 7 | Necromancy |\n| 8 | Transmutation |",
+  "rarity": "varies",
+  "requires_attunement": "requires attunement",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

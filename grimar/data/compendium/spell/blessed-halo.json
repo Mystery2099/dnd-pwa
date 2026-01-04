@@ -1,0 +1,29 @@
+{
+  "slug": "blessed-halo",
+  "name": "Blessed Halo",
+  "desc": "A nimbus of golden light surrounds your head for the duration. The halo sheds bright light in a 20-foot radius and dim light for an additional 20 feet.\n\nThis spell grants you a pool of 10 points of healing. When you cast the spell and as an action on subsequent turns during the spell’s duration, you can expend points from this pool to restore an equal number of hit points to one creature within 20 feet that you can see.\n\nAdditionally, you have advantage on Charisma checks made against good creatures within 20 feet.\n\nIf any of the light created by this spell overlaps an area of magical darkness created by a spell of 2nd level or lower, the spell that created the darkness is dispelled.\n",
+  "higher_level": "When you cast this spell using a spell slot of 3rd level or higher, the spell’s pool of healing points increases by 5 for each spell slot above 2nd, and the spell dispels magical darkness created by a spell of a level equal to the slot used to cast this spell.",
+  "level": "2nd-level",
+  "level_int": 2,
+  "school": "evocation",
+  "components": "V, S",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Up to 1 minute",
+  "concentration": "yes",
+  "requires_concentration": true,
+  "casting_time": "1 action",
+  "range": "Self",
+  "target_range_sort": 0,
+  "spell_level": 2,
+  "dnd_class": "Cleric, Paladin, Warlock, Wizard",
+  "spell_lists": [
+    "cleric",
+    "warlock",
+    "wizard"
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "slug": "mei-jiao-shou",
+  "name": "Mei Jiao Shou",
+  "size": "Gargantuan",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 14,
+  "armor_desc": "natural armor",
+  "hit_points": 139,
+  "hit_dice": "9d20+45",
+  "speed": {
+    "walk": 50
+  },
+  "strength": 23,
+  "dexterity": 7,
+  "constitution": 21,
+  "intelligence": 3,
+  "wisdom": 9,
+  "charisma": 6,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 9",
+  "languages": "—",
+  "cr": 7,
+  "challenge_rating": "7",
+  "actions": [
+    {
+      "name": "Head Bash",
+      "desc": "Melee Weapon Attack: +9 to hit, reach 10 ft., one target. Hit: 19 (3d8 + 6) bludgeoning damage.",
+      "attack_bonus": 9,
+      "damage_dice": "3d8+6"
+    },
+    {
+      "name": "Stomp",
+      "desc": "Melee Weapon Attack: +9 to hit, reach 5 ft., one prone creature. Hit: 28 (4d10 + 6) bludgeoning damage.",
+      "attack_bonus": 9,
+      "damage_dice": "4d10+6"
+    },
+    {
+      "name": "Earth-Shaking Thump (Recharge 5-6)",
+      "desc": "The mei jiao shou rears up and lands heavily, kicking up a shower of debris and rattling and cracking the ground. Each creature in contact with the ground within 30 feet of the mei jiao shou must make a DC 16 Dexterity saving throw. On a failure, a creature takes 22 (4d10) bludgeoning damage and is knocked prone. On a success, a creature takes half the damage and isn't knocked prone. The area then becomes difficult terrain."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Trampling Charge",
+      "desc": "If the mei jiao shou moves at least 20 feet straight toward a creature and then hits it with a head bash attack on the same turn, that target must succeed on a DC 16 Strength saving throw or be knocked prone. If the target is prone, the mei jiao shou can make one stomp attack against it as a bonus action."
+    }
+  ],
+  "legendary_actions": null
+}

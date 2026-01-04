@@ -1,0 +1,44 @@
+{
+  "slug": "awakened-tree-a5e",
+  "name": "Awakened Tree",
+  "size": "Huge",
+  "type": "Plant",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 13,
+  "armor_desc": "",
+  "hit_points": 51,
+  "hit_dice": "6d12+12",
+  "speed": {
+    "walk": 20
+  },
+  "strength": 18,
+  "dexterity": 6,
+  "constitution": 14,
+  "intelligence": 10,
+  "wisdom": 10,
+  "charisma": 10,
+  "skills": {},
+  "damage_vulnerabilities": "fire",
+  "damage_resistances": "bludgeoning, piercing",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 10",
+  "languages": "one language known by its creator",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Slam",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 10 ft., one target. Hit: 14 (3d6+4) bludgeoning damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "False Appearance",
+      "desc": "While motionless, the tree is indistinguishable from a normal tree."
+    }
+  ],
+  "legendary_actions": null
+}

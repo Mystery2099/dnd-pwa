@@ -1,0 +1,51 @@
+{
+  "slug": "giant-weasel-a5e",
+  "name": "Giant Weasel",
+  "size": "Medium",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 12,
+  "armor_desc": "",
+  "hit_points": 9,
+  "hit_dice": "2d8",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 10,
+  "dexterity": 14,
+  "constitution": 10,
+  "intelligence": 4,
+  "wisdom": 12,
+  "charisma": 4,
+  "skills": {
+    "perception": 3,
+    "stealth": 4
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 13",
+  "languages": "",
+  "cr": 0.125,
+  "challenge_rating": "1/8",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4+2) piercing damage  or 7 (2d4+2) piercing damage against a creature the weasel is grappling."
+    },
+    {
+      "name": "Grab",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: The target is grappled (escape DC 12)."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Keen Hearing and Smell",
+      "desc": "The weasel has advantage on Perception checks that rely on hearing and smell."
+    }
+  ],
+  "legendary_actions": null
+}

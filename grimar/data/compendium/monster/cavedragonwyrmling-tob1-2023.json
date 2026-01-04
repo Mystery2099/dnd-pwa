@@ -1,0 +1,57 @@
+{
+  "slug": "cavedragonwyrmling-tob1-2023",
+  "name": "Cave Dragon Wyrmling",
+  "size": "Medium",
+  "type": "Dragon",
+  "subtype": "",
+  "group": "null",
+  "alignment": "Neutral Evil",
+  "armor_class": 16,
+  "armor_desc": "natural armor",
+  "hit_points": 52,
+  "hit_dice": "7d8 + 21",
+  "speed": {
+    "walk": 20,
+    "fly": 20,
+    "burrow": 30
+  },
+  "strength": 19,
+  "dexterity": 12,
+  "constitution": 17,
+  "intelligence": 8,
+  "wisdom": 10,
+  "charisma": 12,
+  "skills": {
+    "Perception": 4,
+    "Stealth": 3
+  },
+  "damage_vulnerabilities": "False",
+  "damage_resistances": "False",
+  "damage_immunities": "poison",
+  "condition_immunities": "blinded, poisoned",
+  "senses": "blindsight 10 ft., tremorsense 60 ft., passive Perception 14",
+  "languages": "Draconic",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 9 (1d10 + 4) piercing damage plus 3 (1d6) poison damage."
+    },
+    {
+      "name": "Poison Breath (Recharge 5-6)",
+      "desc": "The dragon exhales a cone of black, poisonous gas in a 15-foot cone. Each creature in that area must make a DC 13 Constitution saving throw. On a failure, a creature takes 14 (4d6) poison damage and is poisoned until the end of its next turn. On a success, a creature takes half the damage and isn't poisoned."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Darkness Shroud",
+      "desc": "The cave dragon naturally suppresses light near it. Bright light within 15 feet of the dragon becomes dim light, and dim light within 15 feet becomes nonmagical darkness."
+    },
+    {
+      "name": "Magical Tunneler",
+      "desc": "The cave dragon can burrow through nonmagical unworked earth and stone. While doing so, the dragon can choose whether to leave the material it moves through undisturbed or leave a 5-foot diameter tunnel in its wake."
+    }
+  ],
+  "legendary_actions": []
+}

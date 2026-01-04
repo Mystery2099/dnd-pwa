@@ -1,0 +1,53 @@
+{
+  "slug": "giant-firestorm",
+  "name": "Giant, Firestorm",
+  "size": "Huge",
+  "type": "Giant",
+  "subtype": "",
+  "group": null,
+  "alignment": "neutral",
+  "armor_class": 14,
+  "armor_desc": "hide armor",
+  "hit_points": 149,
+  "hit_dice": "13d12+65",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 23,
+  "dexterity": 15,
+  "constitution": 20,
+  "intelligence": 12,
+  "wisdom": 16,
+  "charisma": 9,
+  "skills": {
+    "perception": 3
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "cold, fire",
+  "condition_immunities": "",
+  "senses": "passive Perception 16",
+  "languages": "Giant",
+  "cr": 7,
+  "challenge_rating": "7",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "Two Obsidian Axe or Firestorm Bolt attacks."
+    },
+    {
+      "name": "Obsidian Axe",
+      "desc": "Melee Weapon Attack: +9 to hit, 10 ft., one target, 19 (3d8+6) slashing damage + 3 (1d6) cold and 3 (1d6) fire."
+    },
+    {
+      "name": "Firestorm Bolt",
+      "desc": "Ranged Spell Attack: +6 to hit, 120 ft., one target, 13 (3d6+3) fire + 10 (3d6) cold."
+    },
+    {
+      "name": "Lava Geyser (Recharge 5-6)",
+      "desc": "Gestures at a point on the ground it can see within 60' of it. A fountain of molten rock erupts from that point in a 10 ft. radius 40' high cylinder. The area is difficult terrain for 1 min. Each creature in the cylinder must make a DC 16 Dex save. On a failure a creature takes 24 (7d6) fire and is coated in hardened lava. On a success a creature takes half the damage and isn't coated in hardened lava. A creature coated in hardened lava has its speed halved while it remains coated. A creature including the coated creature can take its action to break and remove the hardened lava ending the effect."
+    }
+  ],
+  "special_abilities": null,
+  "legendary_actions": null
+}

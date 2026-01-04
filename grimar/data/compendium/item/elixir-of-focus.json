@@ -1,0 +1,11 @@
+{
+  "slug": "elixir-of-focus",
+  "name": "Elixir of Focus",
+  "type": "Potion",
+  "desc": "This deep amber concoction seems to glow with an inner light. When you drink this potion, you have advantage on the next ability check you make within 10 minutes, then the elixir's effect ends.",
+  "rarity": "common",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

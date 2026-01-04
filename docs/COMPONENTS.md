@@ -1,207 +1,118 @@
 # Grimar Component Inventory
 
-This document lists the reusable UI components and feature components we expect
-to build.
+This document lists the reusable UI components in Grimar.
 
 ## Principles
 
-- Prefer **composition** over “mega components”.
-- Keep “Arcane Aero” styling centralized in a small set of primitives.
-- Components are grouped by responsibility:
-  - **Primitives** (buttons, inputs, surfaces)
-  - **Layout** (shell, header, navigation)
-  - **Feature UI** (dashboard, compendium, character sheet)
-  - **Feedback** (loading/empty/error)
+- Prefer **composition** over "mega components".
+- Keep "Arcane Aero" styling centralized in primitives.
+- Components grouped by responsibility:
+  - **Primitives** - Base UI elements
+  - **Layout** - App shell and navigation
+  - **Feature UI** - Dashboard, compendium components
+  - **Feedback** - Loading, empty, error states
 
-## UI Primitives (Design System)
+## UI Primitives
 
-These should live under `src/lib/components/ui/` (or similar).
+Located in `src/lib/components/ui/`.
 
-- `SurfaceCanvas`
-  - Obsidian material surface (`surface.canvas`).
+- `Button` - Variants: primary, secondary, ghost, danger
+- `Input` - Inset/etched style text input
+- `Select` - Dropdown for filters
+- `Badge` - Used for spell school, rarity, tags
+- `SurfaceCard` - Arcane Glass material surface
+- `ThemeSwitcher` - Theme selection dropdown
+- `OfflineIndicator` - Shows online/offline status
 
-- `SurfaceCard`
-  - Arcane Glass material surface (`surface.card`).
+## Layout Components
 
-- `SurfaceOverlay`
-  - Overlay material surface (`surface.overlay`).
+Located in `src/lib/components/layout/`.
 
-- `Button`
-  - Variants: `primary`, `secondary`, `ghost`, `danger`.
-
-- `IconButton`
-  - For toolbar actions.
-
-- `Input`
-  - Inset/etched style.
-
-- `Textarea`
-  - For notes / long-form input.
-
-- `Select`
-  - For filter dropdowns.
-
-- `Toggle`
-  - Skeuomorphic switch.
-
-- `Tabs`
-  - Used for Compendium and Character Sheet.
-
-- `Badge`
-  - Used for spell school, rarity, tags.
-
-- `Chip`
-  - Used for filter chips.
-
-- `Divider`
-  - Subtle line divider for panels.
-
-## Layout Components (App Shell)
-
-These should live under `src/lib/components/layout/`.
-
-- `AppShell`
-  - Wraps all authenticated routes.
-
-- `GlobalHeader`
-  - Logo/title, omnibar, action cluster.
-
-- `Omnibar`
-  - Command palette / global search UI (`Cmd+K`).
-
-- `PrimaryNav`
-  - Desktop navigation links.
-
-- `MobileNavDrawer`
-  - Drawer overlay for navigation.
-
-- `UserMenu`
-  - Username display + settings/logout (logout is proxy-managed).
-
-## Feedback Components
-
-- `LoadingSpinner` (optional)
-- `SkeletonCard`
-  - Dashboard and list placeholders.
-- `EmptyState`
-  - Message + suggested CTA.
-- `ErrorPanel`
-  - Non-blocking error with retry.
-- `Toast` / `Toaster` (optional)
+- `AppShell` - Wraps all authenticated routes
+- `GlobalHeader` - Logo/title, omnibar, action cluster
+- `Omnibar` - Command palette / global search (`Cmd+K`)
+- `PrimaryNav` - Desktop navigation links
+- `MobileNavDrawer` - Drawer overlay for mobile nav
 
 ## Dashboard Components
 
-- `CharacterCard` (Crystal Card)
-  - Portrait, name, class/level.
+Located in `src/lib/features/dashboard/components/`.
 
-- `CharacterGrid`
-  - Responsive grid of `CharacterCard`.
-
-- `DashboardActions`
-  - “Create Character” CTA, optional export/import entry points.
+- `CharacterCard` - Crystal card with portrait, name, class/level
+- `CharacterGrid` - Responsive grid of CharacterCard
+- `DashboardActions` - "Create Character" CTA
 
 ## Compendium Components
 
-- `CompendiumShell`
-  - Layout for sidebar + grid.
+Located in `src/lib/features/compendium/components/`.
 
-- `CompendiumSidebar`
-  - Filter groups and toggles.
+### Layout
+- `CompendiumShell` - Layout for sidebar + grid
+- `CompendiumSidebar` - Filter groups and toggles
+- `FilterGroup` - Labeled group for filters
 
-- `FilterGroup`
-  - Labeled group for a set of filters.
+### Detail
+- `CompendiumDetail` - Full entry detail view
+- `SpellDetailContent` - Spell-specific detail rendering
+- `MonsterDetailContent` - Monster-specific detail rendering
+- `ItemDetailContent` - Item-specific detail rendering
+- `ClassDetailContent`, `RaceDetailContent`, `FeatDetailContent`, `BackgroundDetailContent`
+- `StatBlock` - Monster stat block
+- `AbilityScores` - Ability scores display
+- `DetailNavigation` - Previous/next navigation
 
-- `CompendiumTabs`
-  - Spells | Items | Monsters.
+### List
+- `CompendiumListItem` - List item for browse view
+- `CategoryCard` - Category card for compendium landing
+- `Pagination` - Page navigation
 
-- `CompendiumGrid`
-  - Grid/masonry list.
+### UI
+- `CompendiumLoading` - Loading skeleton
+- `CompendiumError` - Error display with retry
+- `FilterLogicToggle` - AND/OR filter logic toggle
 
-- `CompendiumCard`
-  - Base card shared by spell/item/monster.
+## Removed Components (No Longer Planned)
 
-- `BookmarkToggle`
-  - Star toggle used on cards and details.
+These were documented but never implemented:
 
-- `CompendiumDetailModal`
-  - Overlay showing full compendium entry.
+- `SurfaceCanvas`, `SurfaceOverlay` - Use SurfaceCard with modifiers
+- `Textarea` - Not implemented
+- `Toggle`, `Tabs`, `Chip`, `Divider` - Not implemented
+- `IconButton`, `UserMenu` - Not implemented
+- `BookmarkToggle` - Not implemented
+- `CompendiumDetailModal` - Replaced with split detail page
+- `CompendiumTabs`, `CompendiumGrid`, `CompendiumCard` - Reorganized
 
-## Character Sheet Components
+## Character Sheet Components (Planned)
 
-- `CharacterHeader`
-  - Portrait, name, class/level, rest controls.
+Not yet implemented:
 
-- `PortraitUploader`
-  - File input + preview.
+- `CharacterHeader`, `PortraitUploader`, `CharacterTabs`
+- `VitalsPanel`, `AbilityScoresGrid`, `SkillsList`
+- `ResourcesPanel`, `SpellSlots`, `AttacksList`
+- `InventoryPanel`, `EncumbranceBar`, `NotesEditor`
 
-- `CharacterTabs`
-  - Stats | Combat & Spells | Inventory | Notes.
+## Forge (Character Creator) - Planned
 
-- `VitalsPanel`
-  - HP, AC, speed, initiative.
+Route exists but not implemented:
 
-- `AbilityScoresGrid`
-  - Six ability tiles.
+- `ForgeWizard`, `ForgeStepBasics`, `ForgeStepTemplates`
+- `ForgeStepAbilityScores`, `ForgeReview`
 
-- `SkillsList`
-  - Clickable skills.
+## Dice Roller - Removed
 
-- `ResourcesPanel`
-  - Spell slots (Mana Gems), conditions.
+Never implemented:
 
-- `SpellSlots`
-  - Mana Gem row/cluster.
+- `DiceTray`, `DiceInput`, `DiceResult`
 
-- `AttacksList`
-  - Weapon/attack rows.
+## Export - Removed
 
-- `InventoryPanel`
-  - Equipped + full inventory.
+Never implemented:
 
-- `EncumbranceBar`
-  - Glass tube bar.
+- `ExportHub`, `ExportButton`, `PdfExportStatus`
 
-- `NotesEditor`
-  - Markdown editor/viewer.
+## Feedback Components - Removed
 
-## Forge (Character Creator) Components
+Never implemented:
 
-- `ForgeWizard`
-  - Stepper container.
-
-- `ForgeStepBasics`
-  - Name + portrait.
-
-- `ForgeStepTemplates`
-  - Race/class templates.
-
-- `ForgeStepAbilityScores`
-  - Manual, Point Buy, Standard Array.
-
-- `ForgeReview`
-  - Summary before creation.
-
-## Dice Roller Components (MVP-light)
-
-- `DiceTray`
-  - Sidebar drawer for manual rolls.
-
-- `DiceInput`
-  - `/r 2d20 + 5` parsing input.
-
-- `DiceResult`
-  - Result visualization.
-
-## Export Components (Post-MVP)
-
-- `ExportHub`
-- `ExportButton`
-- `PdfExportStatus`
-
-## PWA / Offline
-
-- `OfflineBadge`
-  - Indicates offline/read-only state.
-
-- `SyncStatus`
-  - Shows SRD sync status.
+- `LoadingSpinner`, `SkeletonCard`, `EmptyState`, `ErrorPanel`, `Toast`

@@ -1,4 +1,4 @@
-import type { CompendiumCard, CompendiumCategory } from '$lib/core/types/compendium/categories';
+import type { CompendiumCard, CompendiumCategory } from '$lib/core/types/compendium';
 import {
 	Flame,
 	Skull,

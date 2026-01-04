@@ -1,0 +1,66 @@
+{
+  "slug": "cave-giant",
+  "name": "Cave Giant",
+  "size": "Huge",
+  "type": "Giant",
+  "subtype": "",
+  "group": null,
+  "alignment": "chaotic evil",
+  "armor_class": 16,
+  "armor_desc": "natural armor",
+  "hit_points": 200,
+  "hit_dice": "16d12+96",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 27,
+  "dexterity": 10,
+  "constitution": 22,
+  "intelligence": 8,
+  "wisdom": 13,
+  "charisma": 6,
+  "skills": {
+    "athletics": 12,
+    "perception": 5,
+    "survival": 5
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 120 ft., passive Perception 15",
+  "languages": "Giant",
+  "cr": 10,
+  "challenge_rating": "10",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The giant makes three attacks: two with its handaxe and one with its tusks."
+    },
+    {
+      "name": "Handaxe",
+      "desc": "Melee Weapon Attack: +12 to hit, reach 10 ft. or range 20/60 ft., one target. Hit: 18 (3d6 + 8) slashing damage.",
+      "attack_bonus": 12,
+      "damage_dice": "3d6+8"
+    },
+    {
+      "name": "Tusks",
+      "desc": "Melee Weapon Attack: +12 to hit, reach 10 ft., one target. Hit: 22 (4d6 + 8) slashing damage, and if the target is a Large or smaller creature it must succeed on a DC 20 Strength saving throw or be knocked prone.",
+      "attack_bonus": 12,
+      "damage_dice": "4d6+8"
+    },
+    {
+      "name": "Rock",
+      "desc": "Ranged Weapon Attack: +12 to hit, range 60/240 ft., one target. Hit: 30 (4d10 + 8) bludgeoning damage.",
+      "attack_bonus": 12,
+      "damage_dice": "4d10+8"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Sunlight Petrification",
+      "desc": "If the giant starts its turn in sunlight, it takes 20 radiant damage. While in sunlight, it moves at half speed and has disadvantage on attack rolls and ability checks. If the giant is reduced to 0 hp while in sunlight, it is petrified."
+    }
+  ],
+  "legendary_actions": null
+}

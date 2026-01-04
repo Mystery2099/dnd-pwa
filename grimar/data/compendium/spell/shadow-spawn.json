@@ -1,0 +1,28 @@
+{
+  "slug": "shadow-spawn",
+  "name": "Shadow Spawn",
+  "desc": "Casting this spell consumes the corpse of a creature and creates a shadowy duplicate of it. The creature returns as a shadow beast. The shadow beast has dim memories of its former life and retains free will; casters are advised to be ready to make an attractive offer to the newly-risen shadow beast, to gain its cooperation.",
+  "higher_level": "",
+  "level": "6th-level",
+  "level_int": 6,
+  "school": "illusion",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Instantaneous",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "4 hours",
+  "range": "Touch",
+  "target_range_sort": 1,
+  "spell_level": 6,
+  "dnd_class": "Wizard, Sorceror, Cleric",
+  "spell_lists": [
+    "cleric",
+    "wizard"
+  ]
+}

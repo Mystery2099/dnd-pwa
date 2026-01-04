@@ -1,0 +1,11 @@
+{
+  "slug": "bracelet-of-the-fire-tender",
+  "name": "Bracelet of the Fire Tender",
+  "type": "Wondrous item",
+  "desc": "This bracelet is made of thirteen small, roasted pinecones lashed together with lengths of dried sinew. It smells of pine and woodsmoke. It is uncomfortable to wear over bare skin. While wearing this bracelet, you don't have disadvantage on Wisdom (Perception) checks that rely on sight when looking in areas lightly obscured by nonmagical smoke or fog.",
+  "rarity": "uncommon",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

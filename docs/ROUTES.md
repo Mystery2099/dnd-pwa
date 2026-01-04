@@ -1,12 +1,12 @@
 # Grimar Route Map
 
-This document lists the SvelteKit routes Grimar will implement.
+This document lists the SvelteKit routes in Grimar.
 
 ## Conventions
 
 - Routes are grouped by **Public** vs **Authenticated**.
-- MVP routes are prioritized.
-- Some features (e.g. PDFs, dice SSE) are listed as **Post-MVP**.
+- Planned features are marked as **Planned**.
+- Post-MVP/never-implemented features are marked as **Removed**.
 
 ## Public Routes
 
@@ -14,103 +14,99 @@ This document lists the SvelteKit routes Grimar will implement.
   - **Purpose:** Landing page.
   - **Behavior:** Redirect to `/dashboard` if authenticated; otherwise show a login prompt.
 
-- `/healthz` (optional)
+- `/healthz`
   - **Purpose:** Container health check endpoint.
   - **Behavior:** Return `200` if server is running.
 
 ## Authenticated App Shell
 
-All authenticated pages should render inside an app shell layout providing:
+All authenticated pages render inside an app shell layout providing:
 
 - Global header (logo/title, omnibar, user/actions)
 - Mobile navigation drawer
+- Offline indicator
+- Theme switching
 
-## Authenticated Routes (MVP)
+## Authenticated Routes
 
 - `/dashboard`
   - **Purpose:** Home for returning users.
-  - **Data:** User profile + list of characters.
+  - **Data:** User profile + list of characters + recent activity.
 
 - `/compendium`
-  - **Purpose:** Browse spells/items/monsters.
-  - **UI:** Tabs or segmented control for type.
+  - **Purpose:** Compendium landing with type tabs.
+  - **UI:** Tab navigation between spells/monsters/items.
 
-- `/compendium/[type]` (optional)
-  - **Purpose:** Type-specific index page.
-  - **Examples:** `/compendium/spells`, `/compendium/items`, `/compendium/monsters`.
+- `/compendium/[type]`
+  - **Purpose:** Type-specific browse page.
+  - **Examples:** `/compendium/spells`, `/compendium/monsters`, `/compendium/items`.
+  - **Features:** Search, filters, infinite scroll.
 
-- `/compendium/[type]/[id]` (optional)
-  - **Purpose:** Dedicated detail route if we choose route-based details instead of modals.
+- `/compendium/[type]/[slug]`
+  - **Purpose:** Dedicated detail page for items.
+  - **Examples:** `/compendium/spells/fireball`, `/compendium/monsters/balrog`.
+  - **Behavior:** Overlay panel with full details.
 
-- `/characters/[id]`
-  - **Purpose:** Character sheet.
-  - **Data:** Character record by `id`.
-
-- `/forge`
-  - **Purpose:** Create a new character.
+- `/characters`
+  - **Purpose:** Character management.
+  - **Features:** List characters, create new, view details inline.
 
 - `/settings`
-  - **Purpose:** User preferences and admin utilities.
+  - **Purpose:** User preferences.
+  - **Features:** Theme selection, offline data management.
 
-## Authenticated Routes (Post-MVP / Planned)
+- `/forge`
+  - **Purpose:** Character creation (planned).
+  - **Status:** Route linked in nav, not yet implemented.
 
-- `/export`
-  - **Purpose:** Export hub (JSON + PDF).
+## Planned Routes (Not Yet Implemented)
 
-- `/export/characters/[id].pdf`
-  - **Purpose:** Render/download PDF for a character.
+- `/forge`
+  - **Purpose:** Character creation wizard.
+  - **Features:** Race/class selection, ability scores, equipment.
 
-- `/bookmarks`
-  - **Purpose:** Dedicated bookmark view (optional; MVP may use compendium toggle only).
+## Removed Routes (No Longer Planned)
 
-- `/campaigns`
-  - **Purpose:** Campaign list (optional module).
-
-- `/campaigns/[id]`
-  - **Purpose:** Campaign detail (future).
+- `/campaigns` - Campaign management module removed
+- `/campaigns/[id]` - Removed
+- `/bookmarks` - Bookmarks integrated into compendium
+- `/export` - Export hub removed
+- `/export/characters/[id].pdf` - PDF export removed
 
 ## Internal API Routes (Server)
 
 These are SvelteKit `+server.ts` endpoints.
 
-### MVP
+### Compendium
 
-- `/api/me`
-  - **Purpose:** Return the current user.
+- `/api/compendium/sync`
+  - **POST:** Trigger sync from all providers.
+  - **Auth:** Authenticated users.
 
-- `/api/characters`
-  - **GET:** List current user’s characters.
-  - **POST:** Create character (if not using form actions).
+- `/api/compendium/export`
+  - **GET:** Export compendium data as JSON.
 
-- `/api/characters/[id]`
-  - **GET:** Character details.
-  - **PATCH/PUT:** Update character.
+- `/api/spells`
+  - **GET:** List spells with filters.
 
-- `/api/compendium`
-  - **GET:** Query compendium items with filters.
+- `/api/spells/[slug]`
+  - **GET:** Get spell details by slug.
 
-- `/api/compendium/[id]`
-  - **GET:** Compendium item details.
+- `/api/monsters/[slug]`
+  - **GET:** Get monster details by slug.
 
-- `/api/uploads`
-  - **POST:** Upload portrait image.
+### Admin
 
-### Post-MVP
+- `/api/admin/sync`
+  - **POST:** Admin-only sync with auth token.
+  - **Auth:** Bearer token in `ADMIN_SYNC_TOKEN` env var.
 
-- `/api/open5e/sync`
-  - **POST:** Refresh SRD cache.
+### Removed Endpoints
 
-- `/api/roll`
-  - **POST:** Roll dice (server-authoritative) (optional).
-
-- `/api/events`
-  - **GET:** SSE stream for realtime events (dice, etc.).
-
-## Error / Utility Pages
-
-- `/(error)` (optional group)
-  - `/(error)/unauthorized` (optional)
-  - `/(error)/not-found` (optional)
-
-Notes:
-- SvelteKit already provides default 404 handling; custom pages are optional.
+- `/api/roll` - Dice roller SSE removed
+- `/api/events` - SSE events removed
+- `/api/admin/sync` - Deprecated (use `/api/compendium/sync`)
+- `/api/uploads` - Image upload removed
+- `/api/me` - Handled by auth hook
+- `/api/characters` - Handled by +page.server actions
+- `/api/characters/[id]` - Handled by +page.server actions

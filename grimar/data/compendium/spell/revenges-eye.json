@@ -1,0 +1,27 @@
+{
+  "slug": "revenges-eye",
+  "name": "Revenge's Eye",
+  "desc": "You touch a creature's visual organs and grant them the ability to see the trail left by creatures damaged by a weapon you cast invisible creatures; it only reveals trails left by those affected by order of revenge also cast by the spellcaster.",
+  "higher_level": "When you cast this spell using a spell slot of 3rd level or higher, you can target +1 creature for each slot level above second.",
+  "level": "2nd-level",
+  "level_int": 2,
+  "school": "divination",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "1 Hour",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "Touch",
+  "target_range_sort": 1,
+  "spell_level": 2,
+  "dnd_class": "Warlock",
+  "spell_lists": [
+    "warlock"
+  ]
+}

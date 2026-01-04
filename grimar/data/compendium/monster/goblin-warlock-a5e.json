@@ -1,0 +1,51 @@
+{
+  "slug": "goblin-warlock-a5e",
+  "name": "Goblin Warlock",
+  "size": "Small",
+  "type": "Humanoid",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 15,
+  "armor_desc": "",
+  "hit_points": 21,
+  "hit_dice": "6d6",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 10,
+  "dexterity": 14,
+  "constitution": 10,
+  "intelligence": 12,
+  "wisdom": 12,
+  "charisma": 14,
+  "skills": {
+    "arcana": 3,
+    "stealth": 4,
+    "intimidation": 4
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 11",
+  "languages": "Common, Goblin",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Dagger",
+      "desc": "Melee or Ranged Weapon Attack: +4 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 4 (1d4 + 2) piercing damage."
+    },
+    {
+      "name": "Silver Fire",
+      "desc": "Ranged Spell Attack: +4 to hit, range 60 ft., one target. Hit: 7 (2d6) fire damage and 7 (2d6) ongoing fire damage. A creature can use an action to douse the fire on a target  ending the ongoing damage."
+    },
+    {
+      "name": "Clinging Illusion",
+      "desc": "The warlock creates a magical illusion of an unmoving Medium or smaller object in a space it can see within 30 feet. The illusion can hide a smaller object in the same space. The illusion lasts 24 hours  until a creature touches it  or until the warlock uses Clinging Illusion again. A creature can take an action to make a DC 12 Investigation check to disbelieve the illusion. On a success  the illusion appears transparent to the creature."
+    }
+  ],
+  "special_abilities": null,
+  "legendary_actions": null
+}

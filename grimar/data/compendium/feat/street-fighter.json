@@ -1,0 +1,15 @@
+{
+  "slug": "street-fighter",
+  "name": "Street Fighter",
+  "desc": "You've left a trail of broken opponents in the back alleys and barrooms of your home.",
+  "prerequisite": null,
+  "effects_desc": [
+    "Raise your Strength or Constitution attribute by 1, up to the attribute cap of 20.",
+    "You can roll 1d4 in place of your normal damage for unarmed strikes.",
+    "Learn the improvised weapons proficiency.",
+    "You may expend your bonus action to attempt the Grapple maneuver on an enemy you've hit with an unarmed or improvised weapon attack."
+  ],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

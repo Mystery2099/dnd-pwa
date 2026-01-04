@@ -1,0 +1,65 @@
+{
+  "slug": "sea_hag_bf",
+  "name": "Sea Hag",
+  "size": "medium",
+  "type": "Fey",
+  "subtype": "",
+  "group": "Hags",
+  "alignment": "",
+  "armor_class": 14,
+  "armor_desc": "natural armor",
+  "hit_points": 51,
+  "hit_dice": "",
+  "speed": {
+    "walk": 30,
+    "swim": 40
+  },
+  "strength": 16,
+  "dexterity": 12,
+  "constitution": 14,
+  "intelligence": 12,
+  "wisdom": 12,
+  "charisma": 12,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "Fey Resilience",
+  "damage_immunities": "frightened",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft.",
+  "languages": "Aquan,Common,Giant",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The hag uses Death Glare. It then makes two Claw attacks."
+    },
+    {
+      "name": "Claw",
+      "desc": "_Melee Weapon Attack:_ +5 to hit, reach 5 ft., one target. _Hit:_ 10 (2d6+3) slashing damage."
+    },
+    {
+      "name": "Death Glare",
+      "desc": "One creature the hag can see within 30 feet of it must succeed on a DC 12 WIS save or be frightened until the end of its next turn. If the target is already frightened and fails the save, it is reduced to 0 HP instead. If reduced to 0 HP in this way, the creature is stable."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Amphibious",
+      "desc": "The sea hag can breathe air and water."
+    },
+    {
+      "name": "Fey Resilience",
+      "desc": "The sea hag is resistant to the charmed and unconscious conditions."
+    },
+    {
+      "name": "Horrific Appearance",
+      "desc": "When a Humanoid that can see the hag's true form starts its turn within 30 feet of the hag, the hag can force it to make a DC 12 WIS save. On a failure, the creature is frightened until the start of its next turn. Unless surprised or the revelation of the hag's true form is sudden, such as the ending of Illusory Appearance, a creature can avert its eyes to avoid the save at the start of its turn. If the creature does so, it can't see the hag until the start of its next turn, when it can avert its eyes again. If the creature looks at the hag in the meantime, it must immediately make the save."
+    },
+    {
+      "name": "Underwater Camouflage",
+      "desc": "The hag's Stealth is 18 while underwater and not using Illusory Appearance."
+    }
+  ],
+  "legendary_actions": []
+}

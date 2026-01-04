@@ -1,0 +1,46 @@
+{
+  "slug": "musk-deer-swarm",
+  "name": "Musk Deer, Swarm",
+  "size": "Medium",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 13,
+  "armor_desc": "",
+  "hit_points": 44,
+  "hit_dice": "8d8+8",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 11,
+  "dexterity": 16,
+  "constitution": 12,
+  "intelligence": 2,
+  "wisdom": 14,
+  "charisma": 7,
+  "skills": {
+    "perception": 2
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "bludgeoning, piercing, slashing",
+  "damage_immunities": "",
+  "condition_immunities": "charmed, frightened, grappled, paralyzed, petrified, poisoned, prone, restrained, stunned",
+  "senses": "passive Perception 12",
+  "languages": "—",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +5 to hit, 0 ft., one creature, in the swarm's space. 18 (4d8) piercing damage or 9 (2d8) piercing damage if the swarm has half its hp or fewer."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Swarm",
+      "desc": "Can occupy another creature's space and vice versa and the swarm can move through any opening large enough for a Tiny deer. Swarm can't regain hp or gain temp hp."
+    }
+  ],
+  "legendary_actions": null
+}

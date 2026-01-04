@@ -1,0 +1,63 @@
+{
+  "slug": "megantereon",
+  "name": "Megantereon",
+  "size": "Medium",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 13,
+  "armor_desc": "",
+  "hit_points": 52,
+  "hit_dice": "8d8+16",
+  "speed": {
+    "walk": 40,
+    "climb": 20
+  },
+  "strength": 18,
+  "dexterity": 16,
+  "constitution": 15,
+  "intelligence": 3,
+  "wisdom": 12,
+  "charisma": 9,
+  "skills": {
+    "perception": 1
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60', passive Perception 13",
+  "languages": "—",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +6 to hit, 5 ft., one creature,. 13 (2d8+4) piercing damage. If the target is a creature other than an Undead or Construct it must make DC 12 Con save or lose 2 (1d4) hp at the start of each of its turns due to a bleeding wound. The creature can re-save at end of each of its turns success ends effect on itself. Any creature can take an action to stanch the wound with successful DC 12 Wis (Medicine) check. The wound also closes if the target receives magical healing."
+    },
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +6 to hit, 5 ft., one creature,. 11 (2d6+4) slashing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Grassland Camouflage",
+      "desc": "Has advantage on Dex (Stealth) checks made to hide in grassland terrain."
+    },
+    {
+      "name": "Keen Smell",
+      "desc": "Advantage: smell Wis (Percept) checks."
+    },
+    {
+      "name": "Pounce",
+      "desc": "If the megantereon moves at least 20' straight toward a creature and then hits with Claw attack on the same turn that target must make DC 14 Str save or be knocked prone. If the target is prone the megantereon can make one Bite attack vs. it as a bonus action."
+    },
+    {
+      "name": "Running Leap",
+      "desc": "With a 10 ft. running start the megantereon can long jump up to 20'."
+    }
+  ],
+  "legendary_actions": null
+}

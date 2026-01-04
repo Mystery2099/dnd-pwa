@@ -1,0 +1,40 @@
+{
+  "slug": "seahorse-a5e",
+  "name": "Seahorse",
+  "size": "Tiny",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 11,
+  "armor_desc": "",
+  "hit_points": 1,
+  "hit_dice": "1d4-1",
+  "speed": {
+    "walk": 0,
+    "swim": 20
+  },
+  "strength": 1,
+  "dexterity": 12,
+  "constitution": 8,
+  "intelligence": 2,
+  "wisdom": 10,
+  "charisma": 4,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 10",
+  "languages": "",
+  "cr": 0,
+  "challenge_rating": "0",
+  "actions": null,
+  "special_abilities": [
+    {
+      "name": "Water Breathing",
+      "desc": "The seahorse breathes only water."
+    }
+  ],
+  "legendary_actions": null
+}

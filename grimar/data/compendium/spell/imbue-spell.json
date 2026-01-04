@@ -1,0 +1,28 @@
+{
+  "slug": "imbue-spell",
+  "name": "Imbue Spell",
+  "desc": "Deep Magic: clockwork You imbue a spell of 1st thru 3rd level that has a casting time of instantaneous onto a gear worth 100 gp per level of spell you are imbuing. At the end of the ritual, the gear is placed into a piece of clockwork that includes a timer or trigger mechanism. When the timer or trigger goes off, the spell is cast. If the range of the spell was Touch, it effects only a target touching the device. If the spell had a range in feet, the spell is cast on the closest viable target within range, based on the nature of the spell. Spells with a range of Self or Sight can't be imbued. If the gear is placed with a timer, it activates when the time elapses regardless of whether a legitimate target is available.",
+  "higher_level": "You can perform this ritual as a 7th-level spell to imbue a spell of 4th or 5th level.",
+  "level": "5th-level",
+  "level_int": 5,
+  "school": "transmutation",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": true,
+  "ritual": "yes",
+  "duration": "Instantaneous",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 hour",
+  "range": "Touch",
+  "target_range_sort": 1,
+  "spell_level": 5,
+  "dnd_class": "Wizard, Cleric",
+  "spell_lists": [
+    "cleric",
+    "wizard"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "slug": "blood-offering",
+  "name": "Blood Offering",
+  "desc": "You touch the corpse of a creature that isn’t undead or a construct and consume its life force. You must have dealt damage to the creature before it died, and it must have been dead for no more than 1 hour. You regain a number of hit points equal to 1d4 × the creature's challenge rating (minimum of 1d4). The creature can be restored to life only by means of a [true resurrection](https://api.open5e.com/spells/true-resurrection) or a [wish](https://api.open5e.com/spells/wish) spell.",
+  "higher_level": "",
+  "level": "3rd-level",
+  "level_int": 3,
+  "school": "necromancy",
+  "components": "V, S",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Instantaneous",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 minute",
+  "range": "Touch",
+  "target_range_sort": 1,
+  "spell_level": 3,
+  "dnd_class": "Druid, Ranger, Sorcerer, Warlock, Wizard",
+  "spell_lists": [
+    "druid",
+    "ranger",
+    "sorcerer",
+    "warlock",
+    "wizard"
+  ]
+}

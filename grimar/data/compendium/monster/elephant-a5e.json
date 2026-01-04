@@ -1,0 +1,43 @@
+{
+  "slug": "elephant-a5e",
+  "name": "Elephant",
+  "size": "Huge",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 12,
+  "armor_desc": "",
+  "hit_points": 76,
+  "hit_dice": "8d12+24",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 22,
+  "dexterity": 8,
+  "constitution": 16,
+  "intelligence": 4,
+  "wisdom": 10,
+  "charisma": 6,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 10",
+  "languages": "",
+  "cr": 4,
+  "challenge_rating": "4",
+  "actions": [
+    {
+      "name": "Gore",
+      "desc": "Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 19 (3d8+6) piercing damage. If the elephant moves at least 20 feet straight towards the target before the attack  the target makes a DC 16 Strength saving throw  falling prone on a failure."
+    },
+    {
+      "name": "Stomp",
+      "desc": "Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 22 (3d10+6) bludgeoning damage."
+    }
+  ],
+  "special_abilities": null,
+  "legendary_actions": null
+}

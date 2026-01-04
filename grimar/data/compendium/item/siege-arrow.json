@@ -1,0 +1,11 @@
+{
+  "slug": "siege-arrow",
+  "name": "Siege Arrow",
+  "type": "Ammunition",
+  "desc": "This magic arrow's tip is enchanted to soften stone and warp wood. When this arrow hits an object or structure, it deals double damage then becomes a nonmagical arrow.",
+  "rarity": "common",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

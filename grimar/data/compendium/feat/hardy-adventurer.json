@@ -1,0 +1,13 @@
+{
+  "slug": "hardy-adventurer",
+  "name": "Hardy Adventurer",
+  "desc": "You can endure punishment that would break lesser beings.",
+  "prerequisite": null,
+  "effects_desc": [
+    "Your maximum hitpoint total gains a bonus equal to twice your character level, increasing by 2 for each level you gain after taking this feat.",
+    "During a short rest, you regain 1 additional hit point per hit die spent to heal."
+  ],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

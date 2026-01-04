@@ -1,0 +1,69 @@
+{
+  "slug": "flithidir",
+  "name": "Flithidir",
+  "size": "Small",
+  "type": "Fey",
+  "subtype": "shapechanger",
+  "group": null,
+  "alignment": "chaotic neutral",
+  "armor_class": 13,
+  "armor_desc": null,
+  "hit_points": 27,
+  "hit_dice": "6d6+6",
+  "speed": {
+    "walk": 30,
+    "fly": 60
+  },
+  "strength": 10,
+  "dexterity": 16,
+  "constitution": 12,
+  "intelligence": 12,
+  "wisdom": 13,
+  "charisma": 15,
+  "skills": {
+    "acrobatics": 5,
+    "perception": 3,
+    "performance": 6
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 13",
+  "languages": "Auran, Common, Sylvan",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The flithidir makes two melee attacks."
+    },
+    {
+      "name": "Dagger (Humanoid or Fey Form Only)",
+      "desc": "Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 5 (1d4 + 3) piercing damage.",
+      "attack_bonus": 5,
+      "damage_dice": "1d4+3"
+    },
+    {
+      "name": "Beak (Bird Form Only)",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 5 (1d4 + 3) piercing damage.",
+      "attack_bonus": 5,
+      "damage_dice": "1d4+3"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Cacophony",
+      "desc": "If three or more flithidirs are within 15 feet of each other, they can use their reactions to start a cacophony. Each creature that starts its turn within 30 feet of one of the flithidirs and that can hear the cacophony must succeed on a DC 10 Constitution saving throw or have disadvantage on its next attack roll or ability check. The DC increases by 1 for each flithidir participating in the cacophony to a maximum of DC 16. To join or maintain an existing cacophony, a flithidir must use its bonus action on its turn and end its turn within 15 feet of another flithidir participating in the cacophony. The cacophony ends when less than three flithidir maintain it. A flithidir can still speak and cast spells with verbal components while participating in a cacophony."
+    },
+    {
+      "name": "Shapechanger",
+      "desc": "The flithidir can use its action to polymorph into a Small humanoid, into a Small or smaller bird, or back into its true fey form. Its statistics, other than its size and speed, are the same in each form. Any equipment it is wearing or carrying isn't transformed. No matter the form, it always has bright or multicolored hair, fur, scales, or feathers. It reverts to its true form if it dies."
+    },
+    {
+      "name": "Innate Spellcasting",
+      "desc": "The flithidir's innate spellcasting ability is Charisma (spell save DC 12). It can innately cast the following spells, requiring no material components.\nAt will: minor illusion (auditory only), vicious mockery\n1/day each: charm person, enthrall"
+    }
+  ],
+  "legendary_actions": null
+}

@@ -1,0 +1,68 @@
+{
+  "slug": "minotaur_bf",
+  "name": "Minotaur",
+  "size": "large",
+  "type": "Monstrosity",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 14,
+  "armor_desc": "natural armor",
+  "hit_points": 80,
+  "hit_dice": "",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 22,
+  "dexterity": 10,
+  "constitution": 16,
+  "intelligence": 6,
+  "wisdom": 16,
+  "charisma": 8,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "Monstrosity Resilience",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft.",
+  "languages": "Abyssal",
+  "cr": 3,
+  "challenge_rating": "3",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The minotaur makes one Gore attack and one Greataxe attack."
+    },
+    {
+      "name": "Gore",
+      "desc": "_Melee Weapon Attack:_ +6 to hit, reach 5 ft., one target. _Hit:_ 11 (2d6+4) piercing damage."
+    },
+    {
+      "name": "Greataxe",
+      "desc": "_Melee Weapon Attack:_ +6 to hit, reach 5 ft., one target. _Hit:_ 17 (2d12+4) slashing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Charge",
+      "desc": "If the minotaur moves at least 10 feet straight toward a target and then hits it with a Gore attack on the same turn, the target takes an extra 7 (2d6) piercing damage. If the target is a creature, it must succeed on a DC 14 STR save or be pushed up to 10 feet away from the minotaur and knocked prone."
+    },
+    {
+      "name": "Labyrinthine Recall",
+      "desc": "The minotaur can perfectly recall any path it has traveled."
+    },
+    {
+      "name": "Monstrosity Resilience",
+      "desc": "The minotaur is resistant to exhaustion and to the frightened condition."
+    },
+    {
+      "name": "Reckless",
+      "desc": "At the start of its turn, the minotaur can gain advantage on all melee weapon attack rolls it makes during that turn, but attack rolls against it have advantage until the start of its next turn."
+    },
+    {
+      "name": "Siege Monster",
+      "desc": "The minotaur deals double damage to objects and structures."
+    }
+  ],
+  "legendary_actions": []
+}

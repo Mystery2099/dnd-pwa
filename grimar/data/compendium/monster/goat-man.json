@@ -1,0 +1,60 @@
+{
+  "slug": "goat-man",
+  "name": "Goat-Man",
+  "size": "Medium",
+  "type": "Monstrosity",
+  "subtype": "",
+  "group": null,
+  "alignment": "chaotic evil",
+  "armor_class": 14,
+  "armor_desc": "natural armor",
+  "hit_points": 65,
+  "hit_dice": "10d8+20",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 19,
+  "dexterity": 14,
+  "constitution": 14,
+  "intelligence": 10,
+  "wisdom": 13,
+  "charisma": 8,
+  "skills": {
+    "acrobatics": 4,
+    "athletics": 6,
+    "stealth": 6
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "bludgeoning, piercing, and slashing from nonmagical attacks not made with silvered weapons",
+  "damage_immunities": "",
+  "condition_immunities": "charmed, frightened",
+  "senses": "darkvision 60 ft., passive Perception 11",
+  "languages": "Common, Giant, Trollkin, but cannot speak",
+  "cr": 3,
+  "challenge_rating": "3",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The goat-man makes one bite attack and one slam attack."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) piercing damage.",
+      "attack_bonus": 6,
+      "damage_dice": "1d6"
+    },
+    {
+      "name": "Slam",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) bludgeoning damage.",
+      "attack_bonus": 6,
+      "damage_dice": "2d8"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Headbutt",
+      "desc": "If the goat-man moves at least 10 feet straight toward a creature and then hits it with a slam attack on the same turn, the target must succeed on a DC 14 Strength saving throw or be knocked prone and stunned for 1 round. If the target is prone, the goat-man can make one bite attack against it immediately as a bonus action."
+    }
+  ],
+  "legendary_actions": null
+}

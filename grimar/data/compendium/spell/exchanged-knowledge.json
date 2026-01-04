@@ -1,0 +1,29 @@
+{
+  "slug": "exchanged-knowledge",
+  "name": "Exchanged Knowledge",
+  "desc": "When you cast this spell, you open a conduit to the Castle Library, granting access to difficult-to-obtain information. For the spell's duration, you double your proficiency bonus whenever you make an Intelligence check to recall information about any subject. Additionally, you can gain advantage on an Intelligence check to recall information. To do so, you must either sacrifice another lore-filled book or succeed on a Charisma saving throw. On a failed save, the spell ends, and you have disadvantage on all Intelligence checks to recall information for 1 week. A wish spell ends this effect.",
+  "higher_level": "",
+  "level": "3rd-level",
+  "level_int": 3,
+  "school": "divination",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "1 Hour",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "Self",
+  "target_range_sort": 0,
+  "spell_level": 3,
+  "dnd_class": "Wizard, Cleric, Bard",
+  "spell_lists": [
+    "cleric",
+    "bard",
+    "wizard"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "slug": "clockwork-mace-of-divinity",
+  "name": "Clockwork Mace of Divinity",
+  "type": "Weapon",
+  "desc": "This clockwork mace is composed of several different metals. While attuned to this magic weapon, you have proficiency with it. As a bonus action, you can command the mace to transform into a trident. When you hit with an attack using this weapon's trident form, the target takes an extra 1d6 radiant damage.",
+  "rarity": "uncommon",
+  "requires_attunement": "requires attunement",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

@@ -1,0 +1,11 @@
+{
+  "slug": "rod-of-blade-bending",
+  "name": "Rod of Blade Bending",
+  "type": "Rod",
+  "desc": "This simple iron rod functions as a magic mace that grants a +1 bonus to attack and damage rolls made with it. Blade Bend. While holding the rod, you can use an action to activate it, creating a magical field around you for 10 minutes. When a creature attacks you with a melee weapon that deals piercing or slashing damage while the field is active, it must make a DC 15 Wisdom saving throw. On a failure, the creature’s attack misses. On a success, the creature’s attack hits you, but you have resistance to any piercing or slashing damage dealt by the attack as the weapon bends partially away from your body. Once used, this property can’t be used again until the next dawn.",
+  "rarity": "rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

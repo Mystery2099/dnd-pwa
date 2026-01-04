@@ -8,9 +8,13 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			$lib: resolve(__dirname, './src/lib'),
-			'$app/environment': resolve(__dirname, './src/test/mocks/app-environment.ts')
+			'$app/environment': resolve(__dirname, './src/test/mocks/app-environment.ts'),
+			'$app/navigation': resolve(__dirname, './src/test/mocks/app-navigation.ts'),
+			'$app/state': resolve(__dirname, './src/test/mocks/app-state.ts'),
+			'$env/dynamic/private': resolve(__dirname, './src/test/mocks/env-dynamic-private.ts'),
+			'bun:sqlite': resolve(__dirname, './src/test/mocks/bun-sqlite.ts')
 		},
-		conditions: ['browser']
+		conditions: ['browser', 'node']
 	},
 	test: {
 		environment: 'happy-dom',

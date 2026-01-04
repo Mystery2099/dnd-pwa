@@ -1,0 +1,11 @@
+{
+  "slug": "campaign-field-tent",
+  "name": "Campaign Field Tent",
+  "type": "Wondrous item",
+  "desc": "You can use an action to place this 1-inch cloth cube on the ground and speak its command word. The cube rapidly grows into a field tent with open or closed sides (your choice) that remains until you use an action to speak the command word that dismisses it, which works only if the tent is empty.\n  The field tent is a canvas tent, 15 feet on a side and 10 feet high. It remains firmly fixed to the ground, even when standing on bare stone, a ship's deck, or loose sand, and its magic prevents it from being tipped over.\n  Each creature in the area where the tent appears must make a DC 15 Dexterity saving throw, taking 5d10 bludgeoning damage on a failed save, or half as much damage on a successful one. In either case, the creature is pushed to an unoccupied space outside but next to the tent. Objects in the area that aren't being worn or carried take this damage and are pushed automatically.\n  The tent has 50 hit points, immunity to nonmagical attacks, excluding siege weapons, and resistance to all other damage. The tent contains a small table with a chair and five simple beds made of cloth and foldable wooden frames.\n  The field tent can hold up to six Medium or smaller creatures. When a creature finishes a short rest in the tent, it regains double the hit points from any Hit Dice it spends. When a creature finishes a long rest in the tent, it reduces its exhaustion level by 2 instead of 1. In addition, a creature has advantage on saving throws it makes against disease and poison while it rests in the tent.",
+  "rarity": "uncommon",
+  "requires_attunement": "",
+  "document__slug": "toh",
+  "document__title": "Tome of Heroes",
+  "document__url": "https://koboldpress.com/kpstore/product/tome-of-heroes-for-5th-edition/"
+}

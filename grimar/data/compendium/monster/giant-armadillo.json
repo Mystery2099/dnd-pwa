@@ -1,0 +1,46 @@
+{
+  "slug": "giant-armadillo",
+  "name": "Giant Armadillo",
+  "size": "Small",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 12,
+  "armor_desc": "natural armor",
+  "hit_points": 10,
+  "hit_dice": "3d6",
+  "speed": {
+    "burrow": 15,
+    "walk": 25
+  },
+  "strength": 12,
+  "dexterity": 8,
+  "constitution": 10,
+  "intelligence": 2,
+  "wisdom": 10,
+  "charisma": 6,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 10",
+  "languages": "—",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Claws",
+      "desc": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) slashing damage.",
+      "attack_bonus": 3,
+      "damage_dice": "1d6+1"
+    },
+    {
+      "name": "Tuck In",
+      "desc": "The giant armadillo tucks its entire body into its shell, forming an armored ball. While in this form, it moves by rolling around, it has resistance to bludgeoning, piercing, and slashing damage, and it can't take the Attack action or burrow. The giant armadillo can return to its true form as a bonus action."
+    }
+  ],
+  "special_abilities": null,
+  "legendary_actions": null
+}

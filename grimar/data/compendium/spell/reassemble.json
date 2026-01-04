@@ -1,0 +1,28 @@
+{
+  "slug": "reassemble",
+  "name": "Reassemble",
+  "desc": "You touch an undead creature (dust and bones suffice) destroyed not more than 10 hours ago; the creature is surrounded by purple fire for 1 round and is returned to life with full hit points. This spell has no effect on any creatures except undead, and it cannot restore a lich whose phylactery has been destroyed, a vampire destroyed by sunlight, any undead whose remains are destroyed by fire, acid, or holy water, or any remains affected by a gentle repose spell. This spell doesn't remove magical effects. If they aren't removed prior to casting, they return when the undead creature comes back to life. This spell closes all mortal wounds but doesn't restore missing body parts. If the creature doesn't have body parts or organs necessary for survival, the spell fails. Sudden reassembly is an ordeal involving enormous expenditure of necrotic energy; ley line casters within 5 miles are aware that some great shift in life forces has occurred and a sense of its direction. The target takes a -4 penalty to all attacks, saves, and ability checks. Every time it finishes a long rest, the penalty is reduced by 1 until it disappears.",
+  "higher_level": "",
+  "level": "5th-level",
+  "level_int": 5,
+  "school": "necromancy",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Instantaneous",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 hour",
+  "range": "Touch",
+  "target_range_sort": 1,
+  "spell_level": 5,
+  "dnd_class": "Wizard, Cleric",
+  "spell_lists": [
+    "cleric",
+    "wizard"
+  ]
+}

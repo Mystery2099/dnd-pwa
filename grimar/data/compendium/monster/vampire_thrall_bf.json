@@ -1,0 +1,61 @@
+{
+  "slug": "vampire_thrall_bf",
+  "name": "Vampire Thrall",
+  "size": "medium",
+  "type": "Humanoid",
+  "subtype": "Any Lineage",
+  "group": "Vampires",
+  "alignment": "",
+  "armor_class": 13,
+  "armor_desc": null,
+  "hit_points": 40,
+  "hit_dice": "",
+  "speed": {
+    "walk": 30,
+    "climb": 10
+  },
+  "strength": 14,
+  "dexterity": 20,
+  "constitution": 18,
+  "intelligence": 10,
+  "wisdom": 12,
+  "charisma": 14,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "exhaustion",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 30 ft.",
+  "languages": "any one language (usually Common)",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The vampire thrall makes two Rapier attacks."
+    },
+    {
+      "name": "Rapier",
+      "desc": "_Melee Weapon Attack:_ +5 to hit, reach 5 ft., one target. _Hit:_ 7 (1d8+3) piercing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Blood-Bound",
+      "desc": "If the thrall has not consumed 1 ounce of blood from a vampire within the past week, it is poisoned for 1 week, and it loses darkvision and its Limited Regeneration, Spider Climb, and Sunlight Sensitivity traits until it consumes 1 ounce of vampire blood."
+    },
+    {
+      "name": "Limited Regeneration",
+      "desc": "The thrall regains 2 HP at the start of its turn if it has at least 1 HP and isn't in sunlight. If the thrall takes radiant damage, this trait doesn't function at the start of the thrall's next turn."
+    },
+    {
+      "name": "Spider Climb",
+      "desc": "The thrall can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check."
+    },
+    {
+      "name": "Sunlight Sensitivity",
+      "desc": "While in sunlight, the thrall has disadvantage on attack rolls, and its Perception is 8 when perceiving by sight."
+    }
+  ],
+  "legendary_actions": []
+}

@@ -1,0 +1,11 @@
+{
+  "slug": "ward-against-wild-appetites",
+  "name": "Ward Against Wild Appetites",
+  "type": "Wondrous item",
+  "desc": "Seventeen animal teeth of various sizes hang together on a simple leather thong, and each tooth is dyed a different color using pigments from plants native to old-growth forests. When a beast or monstrosity with an Intelligence of 4 or lower targets you with an attack, it has disadvantage on the attack roll if the attack is a bite. You must be wearing the necklace to gain this benefit.",
+  "rarity": "uncommon",
+  "requires_attunement": "requires attunement",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

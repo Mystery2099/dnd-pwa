@@ -1,0 +1,7 @@
+{
+  "index": "zombie",
+  "name": "Zombie",
+  "type": "undead",
+  "size": "Medium",
+  "challenge_rating": 0.25
+}

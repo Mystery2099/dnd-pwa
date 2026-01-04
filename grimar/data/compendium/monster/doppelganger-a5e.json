@@ -1,0 +1,43 @@
+{
+  "slug": "doppelganger-a5e",
+  "name": "Doppelganger",
+  "size": "Medium",
+  "type": "Monstrosity",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 14,
+  "armor_desc": "",
+  "hit_points": 52,
+  "hit_dice": "8d8+16",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 10,
+  "dexterity": 18,
+  "constitution": 14,
+  "intelligence": 10,
+  "wisdom": 14,
+  "charisma": 16,
+  "skills": {
+    "deception": 5,
+    "insight": 4,
+    "stealth": 6
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 12",
+  "languages": "Common",
+  "cr": 3,
+  "challenge_rating": "3",
+  "actions": [
+    {
+      "name": "Precise Strike",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) bludgeoning damage. If the target is surprised  it takes an extra 10 (3d6) damage."
+    }
+  ],
+  "special_abilities": null,
+  "legendary_actions": null
+}

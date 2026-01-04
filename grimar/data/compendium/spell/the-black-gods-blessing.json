@@ -1,0 +1,27 @@
+{
+  "slug": "the-black-gods-blessing",
+  "name": "The Black God's Blessing",
+  "desc": "Chernobog doesn't care that the Night Cauldron only focuses on one aspect of his dominion. After all, eternal night leads perfectly well to destruction and murder, especially by the desperate fools seeking to survive in the new, lightless world. Having devotees at the forefront of the mayhem suits him, so he allows a small measure of his power to infuse worthy souls. After contacting the Black God, the ritual caster makes a respectful yet forceful demand for him to deposit some of his power into the creature that is the target of the ritual. For Chernobog to comply with this demand, the caster must make a successful DC 20 spellcasting check. If the check fails, the spell fails and the caster and the spell's target become permanently vulnerable to fire; this vulnerability can be ended with remove curse or comparable magic. If the spell succeeds, the target creature gains darkvision (60 feet) and immunity to cold. Chernobog retains the privilege of revoking these gifts if the recipient ever wavers in devotion to him.",
+  "higher_level": "",
+  "level": "9th-level",
+  "level_int": 9,
+  "school": "transmutation",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": true,
+  "ritual": "yes",
+  "duration": "Instantaneous",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "7 hours",
+  "range": "Touch",
+  "target_range_sort": 1,
+  "spell_level": 9,
+  "dnd_class": "Wizard, Sorceror",
+  "spell_lists": [
+    "wizard"
+  ]
+}

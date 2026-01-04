@@ -1,0 +1,11 @@
+{
+  "slug": "almanac-of-common-wisdom",
+  "name": "Almanac of Common Wisdom",
+  "type": "Wondrous item",
+  "desc": "The dog-eared pages of this thick, weathered tome contain useful advice, facts, and statistical information on a wide range of topics. The topics change to match information relevant to the area where it is currently located. If you spend a short rest consulting the almanac, you treat your proficiency bonus as 1 higher when making any Intelligence, Wisdom, or Charisma skill checks to discover, recall, or cite information about local events, locations, or creatures for the next 4 hours. For example, this almanac's magic can help you recall and find the location of a city's oldest tavern, but its magic won't help you notice a thug hiding in an alley near the tavern.",
+  "rarity": "common",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

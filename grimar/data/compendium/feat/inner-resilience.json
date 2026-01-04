@@ -1,0 +1,14 @@
+{
+  "slug": "inner-resilience",
+  "name": "Inner Resilience",
+  "desc": "Your internal discipline gives you access to a small pool of ki points. You gain the following benefits:",
+  "prerequisite": "*Wisdom 13 or higher*",
+  "effects_desc": [
+    "* Increase your Wisdom score by 1, to a maximum of 20",
+    "* You have 3 ki points, which you can spend to fuel the Patient Defense or Step of the Wind features from the monk class. When you spend a ki point, it is unavailable until you finish a short or long rest, at the end of which you draw all of your expended ki back into yourself. You must spend at least 30 minutes of the rest meditating to regain your ki points",
+    "* If you already have ki points, your ki point maximum increases by 3 instead."
+  ],
+  "document__slug": "toh",
+  "document__title": "Tome of Heroes",
+  "document__url": "https://koboldpress.com/kpstore/product/tome-of-heroes-for-5th-edition/"
+}

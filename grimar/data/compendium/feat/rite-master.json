@@ -1,0 +1,10 @@
+{
+  "slug": "rite-master",
+  "name": "Rite Master",
+  "desc": "You have delved into ancient mysteries.\nWhen you acquire this feat, select from the bard, cleric, druid, herald, sorcerer, warlock, or wizard spell list and choose two 1st level spells with the ritual tag, which are entered into your ritual book. These spells use the same casting attribute as the list from which they were drawn.\nWhen you discover spells in written form from your chosen spell list, you may add them to you your ritual book by spending 50 gp and two hours per level of the spell. In order to copy spells in this manner, they cannot be greater than half your character level, rounding up.\nYou may cast any spells in your ritual book as rituals so long as the book is in your possession.",
+  "prerequisite": "Requires intelligence or Wisdom 13 or higher",
+  "effects_desc": [],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

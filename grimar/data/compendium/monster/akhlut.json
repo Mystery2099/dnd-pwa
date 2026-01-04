@@ -1,0 +1,72 @@
+{
+  "slug": "akhlut",
+  "name": "Akhlut",
+  "size": "Large",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 14,
+  "armor_desc": "natural armor",
+  "hit_points": 120,
+  "hit_dice": "16d10+32",
+  "speed": {
+    "walk": 40,
+    "swim": 60
+  },
+  "strength": 19,
+  "dexterity": 15,
+  "constitution": 15,
+  "intelligence": 4,
+  "wisdom": 12,
+  "charisma": 10,
+  "skills": {
+    "perception": 4,
+    "stealth": 5
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "cold",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "blindsight 120 ft., passive Perception 14",
+  "languages": "—",
+  "cr": 6,
+  "challenge_rating": "6",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The akhlut makes two attacks: one with its bite and one with its tail slam. It can't make both attacks against the same target."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 18 (4d6 + 4) piercing damage.",
+      "attack_bonus": 7,
+      "damage_dice": "4d6+4"
+    },
+    {
+      "name": "Tail Slam",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 10 ft., one target. Hit: 22 (4d8 +4) bludgeoning damage.",
+      "attack_bonus": 7,
+      "damage_dice": "4d8+4"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Echolocation",
+      "desc": "The akhlut can't use its blindsight while deafened."
+    },
+    {
+      "name": "Hold Breath",
+      "desc": "The akhlut can hold its breath for 30 minutes."
+    },
+    {
+      "name": "Keen Hearing and Smell",
+      "desc": "The akhlut has advantage on Wisdom (Perception) checks that rely on hearing or smell."
+    },
+    {
+      "name": "Pack Tactics",
+      "desc": "The akhlut has advantage on attack rolls against a creature if at least one of the akhlut's allies is within 5 feet of the creature and the ally isn't incapacitated."
+    }
+  ],
+  "legendary_actions": null
+}

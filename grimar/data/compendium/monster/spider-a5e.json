@@ -1,0 +1,55 @@
+{
+  "slug": "spider-a5e",
+  "name": "Spider",
+  "size": "Tiny",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 12,
+  "armor_desc": "",
+  "hit_points": 1,
+  "hit_dice": "1d4-1",
+  "speed": {
+    "walk": 20,
+    "climb": 20
+  },
+  "strength": 2,
+  "dexterity": 14,
+  "constitution": 8,
+  "intelligence": 1,
+  "wisdom": 10,
+  "charisma": 2,
+  "skills": {
+    "stealth": 4
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 30 ft., passive Perception 10",
+  "languages": "",
+  "cr": 0,
+  "challenge_rating": "0",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 1 piercing damage and the target makes a DC 9 Constitution saving throw  taking 2 (1d4) poison damage on a failure."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Spider Climb",
+      "desc": "The spider can climb even on difficult surfaces and upside down on ceilings."
+    },
+    {
+      "name": "Web Sense",
+      "desc": "While touching a web, the spider knows the location of other creatures touching that web."
+    },
+    {
+      "name": "Web Walker",
+      "desc": "The spider ignores movement restrictions imposed by webs."
+    }
+  ],
+  "legendary_actions": null
+}

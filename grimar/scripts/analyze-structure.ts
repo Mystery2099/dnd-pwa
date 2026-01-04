@@ -4,7 +4,7 @@
  * Provides an in-depth overview of the project's directory structure
  */
 
-import { existsSync, readdirSync, lstatSync, readFileSync } from 'fs';
+import { existsSync, readdirSync, lstatSync } from 'fs';
 import { join } from 'path';
 
 const ROOT = '/home/mystery/misc-projects/dnd-pwa/grimar';
@@ -42,7 +42,7 @@ function getFileCount(dir: string): { files: number; dirs: number; totalSize: nu
 				totalSize += lstatSync(fullPath).size;
 			}
 		}
-	} catch (e) {
+	} catch {
 		// Ignore permission errors
 	}
 
@@ -93,7 +93,9 @@ function getFileTypeBreakdown(dir: string): Record<string, number> {
 					breakdown[ext] = (breakdown[ext] || 0) + 1;
 				}
 			}
-		} catch (e) {}
+		} catch {
+			// Ignore errors
+		}
 	}
 
 	scan(dir);
@@ -118,7 +120,6 @@ function getTopLevelDirs() {
 
 function getSourceStats() {
 	const srcDir = join(ROOT, 'src');
-	const libDir = join(srcDir, 'lib');
 
 	log('\n📁 SOURCE STRUCTURE:');
 	log('='.repeat(50));
@@ -162,7 +163,9 @@ function checkForUnusedOrOrphaned() {
 					findLarge(fullPath);
 				}
 			}
-		} catch (e) {}
+		} catch {
+			// Ignore errors
+		}
 	}
 
 	findLarge(ROOT);

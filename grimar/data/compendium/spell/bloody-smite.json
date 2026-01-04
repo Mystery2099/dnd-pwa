@@ -1,0 +1,30 @@
+{
+  "slug": "bloody-smite",
+  "name": "Bloody Smite",
+  "desc": "The next time during the spell’s duration that you hit a creature with a melee weapon attack, your weapon pulses with a dull red light, and the attack deals an extra 1d6 necrotic damage to the target. Until the spell ends, the target must make a Constitution saving throw at the start of each of its turns. On a failed save, it takes 1d6 necrotic damage, it bleeds profusely from the mouth, and it can’t speak intelligibly or cast spells that have a verbal component. On a successful save, the spell ends. If the target or an ally within 5 feet of it uses an action to tend the wound and makes a successful Wisdom (Medicine) check against your spell save DC, or if the target receives magical healing, the spell ends.",
+  "higher_level": "",
+  "level": "1st-level",
+  "level_int": 1,
+  "school": "necromancy",
+  "components": "V",
+  "requires_verbal_components": true,
+  "requires_somatic_components": false,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Up to 1 minute",
+  "concentration": "yes",
+  "requires_concentration": true,
+  "casting_time": "1 bonus action",
+  "range": "Self",
+  "target_range_sort": 0,
+  "spell_level": 1,
+  "dnd_class": "Cleric, Druid, Ranger, Wizard",
+  "spell_lists": [
+    "cleric",
+    "druid",
+    "ranger",
+    "wizard"
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "slug": "kech-a5e",
+  "name": "Kech",
+  "size": "Medium",
+  "type": "Humanoid",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 12,
+  "armor_desc": "",
+  "hit_points": 30,
+  "hit_dice": "5d8+8",
+  "speed": {
+    "walk": 30,
+    "climb": 40
+  },
+  "strength": 14,
+  "dexterity": 14,
+  "constitution": 14,
+  "intelligence": 10,
+  "wisdom": 12,
+  "charisma": 10,
+  "skills": {
+    "athletics": 4,
+    "stealth": 4,
+    "perception": 3,
+    "survival": 3
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 15",
+  "languages": "Common, Goblin",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Strangle",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 10 ft., one Medium or smaller creature that is surprised  grappled by the kech  or that can't see the kech. Hit: 9 (2d6 + 2) bludgeoning damage  and the target is pulled 5 feet towards the kech and grappled (escape DC 12). Until this grapple ends  the kech automatically hits with the Strangle attack and the target can't breathe."
+    },
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 9 (2d6 + 2) slashing damage."
+    },
+    {
+      "name": "Stealthy Sneak",
+      "desc": "The kech moves up to half its Speed without provoking opportunity attacks. It can then attempt to hide."
+    }
+  ],
+  "special_abilities": null,
+  "legendary_actions": null
+}

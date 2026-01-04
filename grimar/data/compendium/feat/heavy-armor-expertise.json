@@ -1,0 +1,13 @@
+{
+  "slug": "heavy-armor-expertise",
+  "name": "Heavy Armor Expertise",
+  "desc": "Plate and chain are your fortress.",
+  "prerequisite": "Requires proficiency with heavy armor",
+  "effects_desc": [
+    "Raise your Strength attribute by 1, up to the attribute cap of 20.",
+    "You reduce incoming physical (piercing, slashing, or bludgeoning) damage by 3 so long as you are wearing heavy armor. This bonus is negated if the damage is dealt by a magical weapon."
+  ],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

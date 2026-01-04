@@ -141,6 +141,59 @@ export const SrdMonsterSummarySchema = z.object({
 	challenge_rating: z.number()
 });
 
+export const SrdMonsterDetailSchema = SrdMonsterSummarySchema.extend({
+	alignment: z.string().optional(),
+	subtype: z.string().optional(),
+	armor_class: z
+		.union([z.number(), z.array(z.object({ type: z.string(), value: z.number() }))])
+		.optional(),
+	armor_desc: z.string().nullable().optional(),
+	hit_points: z.number().optional(),
+	hit_dice: z.string().optional(),
+	speed: z.record(z.string(), z.union([z.string(), z.number()])).optional(),
+	strength: z.number().optional(),
+	dexterity: z.number().optional(),
+	constitution: z.number().optional(),
+	intelligence: z.number().optional(),
+	wisdom: z.number().optional(),
+	charisma: z.number().optional(),
+	skills: z.record(z.string(), z.number()).optional(),
+	damage_vulnerabilities: z.string().optional(),
+	damage_resistances: z.string().optional(),
+	damage_immunities: z.string().optional(),
+	condition_immunities: z.string().optional(),
+	senses: z.string().optional(),
+	languages: z.string().optional(),
+	actions: z
+		.array(
+			z.object({
+				name: z.string(),
+				desc: z.string(),
+				attack_bonus: z.number().optional(),
+				damage_dice: z.string().optional()
+			})
+		)
+		.optional(),
+	special_abilities: z
+		.array(
+			z.object({
+				name: z.string(),
+				desc: z.string(),
+				attack_bonus: z.number().optional()
+			})
+		)
+		.optional(),
+	legendary_actions: z
+		.array(
+			z.object({
+				name: z.string(),
+				desc: z.string(),
+				attack_bonus: z.number().optional()
+			})
+		)
+		.optional()
+});
+
 // ============================================================================
 // Homebrew Schema
 // ============================================================================
@@ -186,3 +239,17 @@ export function tryValidate<T>(schema: z.ZodType<T>, data: unknown, context: str
 	}
 	return result.data;
 }
+
+// ============================================================================
+// Type Exports (derived from Zod schemas)
+// These are the source of truth for TypeScript types
+// ============================================================================
+
+export type Open5eSpell = z.infer<typeof Open5eSpellSchema>;
+export type Open5eMonster = z.infer<typeof Open5eMonsterSchema>;
+export type Open5eItem = z.infer<typeof Open5eItemSchema>;
+export type Open5eListResponse = z.infer<typeof Open5eListResponseSchema>;
+export type SrdSpell = z.infer<typeof SrdSpellSchema>;
+export type SrdMonsterSummary = z.infer<typeof SrdMonsterSummarySchema>;
+export type SrdMonsterDetail = z.infer<typeof SrdMonsterDetailSchema>;
+export type HomebrewItem = z.infer<typeof HomebrewItemSchema>;

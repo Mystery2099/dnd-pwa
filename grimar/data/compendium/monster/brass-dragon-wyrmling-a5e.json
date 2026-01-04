@@ -1,0 +1,65 @@
+{
+  "slug": "brass-dragon-wyrmling-a5e",
+  "name": "Brass Dragon Wyrmling",
+  "size": "Medium",
+  "type": "Dragon",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 16,
+  "armor_desc": "",
+  "hit_points": 38,
+  "hit_dice": "7d8+7",
+  "speed": {
+    "walk": 30,
+    "burrow": 15,
+    "fly": 60
+  },
+  "strength": 14,
+  "dexterity": 12,
+  "constitution": 12,
+  "intelligence": 14,
+  "wisdom": 12,
+  "charisma": 12,
+  "skills": {
+    "arcana": 4,
+    "history": 4,
+    "nature": 4,
+    "perception": 3,
+    "religion": 4,
+    "stealth": 3
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "fire",
+  "condition_immunities": "",
+  "senses": "blindsight 10 ft., darkvision 60 ft., passive Perception 13",
+  "languages": "Draconic",
+  "cr": 2,
+  "challenge_rating": "2",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 13 (2d10 + 2) piercing damage."
+    },
+    {
+      "name": "Breath Weapons (Recharge 5-6)",
+      "desc": "The dragon uses one of the following breath weapons:"
+    },
+    {
+      "name": "Molten Breath",
+      "desc": "The dragon exhales molten glass in a 20-foot-long  5-foot-wide line. Each creature in the area makes a DC 11 saving throw  taking 10 (3d6) fire damage on a failed save or half damage on a success."
+    },
+    {
+      "name": "Sleep Breath",
+      "desc": "The dragon exhales sleep gas in a 15-foot cone. Each creature in the area makes a DC 11 Constitution saving throw. On a failure  a creature falls unconscious for 10 minutes or until it takes damage or someone uses an action to wake it."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Self-Sufficient",
+      "desc": "The brass dragon can subsist on only a quart of water and a pound of food per day."
+    }
+  ],
+  "legendary_actions": null
+}

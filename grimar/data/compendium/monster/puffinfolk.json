@@ -1,0 +1,56 @@
+{
+  "slug": "puffinfolk",
+  "name": "Puffinfolk",
+  "size": "Small",
+  "type": "Humanoid",
+  "subtype": "",
+  "group": null,
+  "alignment": "neutral",
+  "armor_class": 15,
+  "armor_desc": "leather armor",
+  "hit_points": 22,
+  "hit_dice": "4d6+8",
+  "speed": {
+    "walk": 20,
+    "swim": 30,
+    "fly": 40
+  },
+  "strength": 12,
+  "dexterity": 18,
+  "constitution": 15,
+  "intelligence": 12,
+  "wisdom": 14,
+  "charisma": 10,
+  "skills": {
+    "perception": 2
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60', passive Perception 12",
+  "languages": "Aquan, Common",
+  "cr": 0.5,
+  "challenge_rating": "1/2",
+  "actions": [
+    {
+      "name": "Peck",
+      "desc": "Melee Weapon Attack: +6 to hit, 5 ft., one target, 7 (1d6+4) piercing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Blessings of the Sea Gods",
+      "desc": "Has advantage on saves while flying over or swimming in ocean waters."
+    },
+    {
+      "name": "Hardy Ocean Explorers",
+      "desc": "Considered a Med creature when determining its carrying capacity. Holds its breath 30 min."
+    },
+    {
+      "name": "Oceanic Recall",
+      "desc": "Can perfectly recall any path it has traveled above or within an ocean."
+    }
+  ],
+  "legendary_actions": null
+}

@@ -1,0 +1,72 @@
+{
+  "slug": "myrmex",
+  "name": "Myrmex",
+  "size": "Medium",
+  "type": "Elemental",
+  "subtype": "",
+  "group": null,
+  "alignment": "neutral good",
+  "armor_class": 15,
+  "armor_desc": "natural armor",
+  "hit_points": 90,
+  "hit_dice": "12d8+36",
+  "speed": {
+    "walk": 40,
+    "burrow": 40,
+    "climb": 40
+  },
+  "strength": 16,
+  "dexterity": 13,
+  "constitution": 16,
+  "intelligence": 10,
+  "wisdom": 14,
+  "charisma": 8,
+  "skills": {
+    "perception": 2
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "poison; nonmagic B/P/S attacks",
+  "damage_immunities": "",
+  "condition_immunities": "exhaustion, paralyzed, petrified, poisoned, prone, unconscious ",
+  "senses": "blindsight 60', passive Perception 15",
+  "languages": "understands Terran but can't speak",
+  "cr": 5,
+  "challenge_rating": "5",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "Three Bite attacks."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +6 to hit, 5 ft., one target, 7 (1d8+3) piercing damage + 3 (1d6) poison."
+    },
+    {
+      "name": "Earth Shift",
+      "desc": "Ranged Spell Attack: +5 to hit 60' 1 tgt in contact with ground. Target pushed up to 15 ft. in direction of myrmex's choice speed half til end of its next turn."
+    },
+    {
+      "name": "Wall of Earth",
+      "desc": "Makes a wall of earth spring out of earth or rock on a point it can sense within 30' of it. Works like wall of stone spell except  can create only one 10 ft. × 10 ft. panel with AC 13 and 15 hp."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Elemental Nature",
+      "desc": "Doesn't require air food drink or sleep."
+    },
+    {
+      "name": "Keen Smell",
+      "desc": "Advantage: smell Wis (Percept) checks."
+    },
+    {
+      "name": "Limited Telepathy",
+      "desc": "Magically transmit simple messages and images to any creature within 120' of it that can understand a language. This telepathy doesn't allow receiving creature to telepathically respond."
+    },
+    {
+      "name": "Stone Walk",
+      "desc": "Difficult terrain composed of earth or stone doesn't cost the myrmex extra movement."
+    }
+  ],
+  "legendary_actions": null
+}

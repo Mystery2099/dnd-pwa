@@ -1,0 +1,11 @@
+{
+  "slug": "mask-of-the-leaping-gazelle",
+  "name": "Mask of the Leaping Gazelle",
+  "type": "Wondrous item",
+  "desc": "This painted wooden animal mask is adorned with a pair of gazelle horns. While wearing this mask, your walking speed increases by 10 feet, and your long jump is up to 25 feet with a 10-foot running start.",
+  "rarity": "uncommon",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

@@ -1,0 +1,45 @@
+{
+  "slug": "cat_bf",
+  "name": "Cat",
+  "size": "tiny",
+  "type": "Beast",
+  "subtype": "",
+  "group": "Animals",
+  "alignment": "",
+  "armor_class": 11,
+  "armor_desc": null,
+  "hit_points": 8,
+  "hit_dice": "",
+  "speed": {
+    "walk": 40,
+    "climb": 30
+  },
+  "strength": 2,
+  "dexterity": 12,
+  "constitution": 10,
+  "intelligence": 2,
+  "wisdom": 12,
+  "charisma": 6,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 30 ft.",
+  "languages": "-",
+  "cr": 0,
+  "challenge_rating": "0",
+  "actions": [
+    {
+      "name": "Claws",
+      "desc": "_Melee Weapon Attack:_ +3 to hit, reach 5 ft., one creature. _Hit:_ 3 (1d4+1) slashing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Heightened Smell",
+      "desc": "The cat's Perception is 18 when perceiving by smell."
+    }
+  ],
+  "legendary_actions": []
+}

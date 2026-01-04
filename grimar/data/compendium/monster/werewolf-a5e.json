@@ -1,0 +1,64 @@
+{
+  "slug": "werewolf-a5e",
+  "name": "Werewolf",
+  "size": "Medium",
+  "type": "Humanoid",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 12,
+  "armor_desc": "",
+  "hit_points": 58,
+  "hit_dice": "9d8+18",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 14,
+  "dexterity": 14,
+  "constitution": 14,
+  "intelligence": 10,
+  "wisdom": 10,
+  "charisma": 10,
+  "skills": {
+    "perception": 2,
+    "stealth": 4,
+    "survival": 2
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "damage from nonmagical, non-silvered weapons",
+  "condition_immunities": "",
+  "senses": "darkvision 30 ft. (wolf or hybrid form only), passive Perception 14",
+  "languages": "Common",
+  "cr": 3,
+  "challenge_rating": "3",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The werewolf makes two melee attacks  only one of which can be with its bite."
+    },
+    {
+      "name": "Greatclub (Humanoid or Hybrid Form Only)",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8 + 2) bludgeoning damage."
+    },
+    {
+      "name": "Claw (Wolf or Hybrid Form Only)",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8 + 2) slashing damage."
+    },
+    {
+      "name": "Bite (Wolf or Hybrid Form Only)",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8 + 2) piercing damage. If the target is a humanoid  it makes a DC 12 Constitution saving throw. On a failure  it is cursed with werewolf lycanthropy."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Keen Hearing and Smell",
+      "desc": "The werewolf has advantage on Perception checks that rely on hearing or smell."
+    },
+    {
+      "name": "Pack Tactics",
+      "desc": "The werewolf has advantage on attack rolls against a creature if at least one of the werewolfs allies is within 5 feet of the creature and not incapacitated."
+    }
+  ],
+  "legendary_actions": null
+}

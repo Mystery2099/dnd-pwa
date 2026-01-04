@@ -1,0 +1,46 @@
+{
+  "slug": "nodosaurus",
+  "name": "Nodosaurus",
+  "size": "Large",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 13,
+  "armor_desc": "natural armor",
+  "hit_points": 45,
+  "hit_dice": "6d10+12",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 17,
+  "dexterity": 11,
+  "constitution": 14,
+  "intelligence": 2,
+  "wisdom": 12,
+  "charisma": 5,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 11",
+  "languages": "-",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Tail",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 10 ft., one target. Hit: 12 (2d8 + 3) bludgeoning damage.",
+      "attack_bonus": 5,
+      "damage_dice": "2d8+3"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Swamp Camouflage",
+      "desc": "The nodosaurus has advantage on Dexterity (Stealth) checks made to hide in swampy terrain."
+    }
+  ],
+  "legendary_actions": null
+}

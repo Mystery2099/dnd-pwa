@@ -1,0 +1,14 @@
+{
+  "slug": "shield-focus",
+  "name": "Shield Focus",
+  "desc": "A shield is a nearly impassable barrier in your hands.",
+  "prerequisite": null,
+  "effects_desc": [
+    "Using your shield, you may expend your bonus action to make a shove maneuver against an adjacent creature when you take the attack action.",
+    "When you have a shield in your hand, you may apply its AC bonus to dexterity saves made against effects that target you.",
+    "While wielding a shield, you may expend your reaction following a successful Dexterity saving throw to take no damage from a spell or effect."
+  ],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

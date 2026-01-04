@@ -1,0 +1,28 @@
+{
+  "slug": "ancestors-strength",
+  "name": "Ancestor’s Strength",
+  "desc": "Choose a willing creature you can see and touch. Its muscles bulge and become invigorated. For the duration, the target is considered one size category larger for determining its carrying capacity, the maximum weight it can lift, push, or pull, and its ability to break objects. It also has advantage on Strength checks.",
+  "higher_level": "",
+  "level": "1st-level",
+  "level_int": 1,
+  "school": "transmutation",
+  "components": "V, S",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Up to 8 hours",
+  "concentration": "yes",
+  "requires_concentration": true,
+  "casting_time": "1 action",
+  "range": "Touch",
+  "target_range_sort": 1,
+  "spell_level": 1,
+  "dnd_class": "Cleric, Druid, Paladin",
+  "spell_lists": [
+    "cleric",
+    "druid"
+  ]
+}

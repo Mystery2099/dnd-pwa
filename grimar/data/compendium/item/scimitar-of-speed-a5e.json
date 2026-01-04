@@ -1,0 +1,11 @@
+{
+  "slug": "scimitar-of-speed-a5e",
+  "name": "Scimitar of Speed",
+  "type": "Weapon",
+  "desc": "\\[You gain a +2 bonus to _attack and damage rolls_  made with this magic scimitar, and on each of your turns you can use a bonus action to make one attack with it.",
+  "rarity": "Very Rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

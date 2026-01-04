@@ -1,0 +1,11 @@
+{
+  "slug": "cloak-of-the-bat-a5e",
+  "name": "Cloak of the Bat",
+  "type": "Wondrous Item",
+  "desc": "While wearing this cloak, you gain _advantage_  on Dexterity (Stealth) checks. In addition, while in an area of _dim light or darkness_ , you gain the following benefits:\n\n* A fly speed of 40 feet while gripping the edges of the cloak with both hands.\n* Once between _long rests_  you can use an action to cast _polymorph_  on yourself, transforming into a bat. Unlike normal, you retain your Intelligence, Wisdom, and Charisma scores.",
+  "rarity": "Rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

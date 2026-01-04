@@ -1,0 +1,59 @@
+{
+  "slug": "hinderling",
+  "name": "Hinderling",
+  "size": "Small",
+  "type": "Fey",
+  "subtype": "",
+  "group": null,
+  "alignment": "chaotic neutral",
+  "armor_class": 13,
+  "armor_desc": "",
+  "hit_points": 13,
+  "hit_dice": "3d6+3",
+  "speed": {
+    "walk": 30,
+    "climb": 20
+  },
+  "strength": 11,
+  "dexterity": 17,
+  "constitution": 13,
+  "intelligence": 9,
+  "wisdom": 15,
+  "charisma": 13,
+  "skills": {
+    "perception": 2
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60', passive Perception 14",
+  "languages": "Common, Sylvan",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Stolen Belonging",
+      "desc": "Melee Weapon Attack: +5 to hit, 5 ft., one target, 5 (1d4+3) bludgeoning damage."
+    },
+    {
+      "name": "Hurl Stolen Belonging",
+      "desc": "Ranged Weapon Attack: +5 to hit 20/60' one target 5 (1d4+3) bludgeoning damage."
+    },
+    {
+      "name": "Mad Dash",
+      "desc": "Moves up to twice its speed and can move through space of any creature that is Med or larger. When it moves through a creature's space creature must make DC 13 Dex save or fall prone. This move doesn't provoke opportunity attacks."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Aura of Misfortune",
+      "desc": "Creatures within 15 ft. of it treat attack rolls of 20 as 19 and can't gain advantage on ability checks attacks and saves."
+    },
+    {
+      "name": "Rejuvenation",
+      "desc": "While hinderling curse remains on a victim a slain hinderling returns to life in 1 day regaining all its hp and becoming active again. Hinderling appears within 100' of victim."
+    }
+  ],
+  "legendary_actions": null
+}

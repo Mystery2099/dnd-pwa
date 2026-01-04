@@ -1,0 +1,52 @@
+{
+  "slug": "thug_bf",
+  "name": "Thug",
+  "size": "medium",
+  "type": "Humanoid",
+  "subtype": "Any Lineage",
+  "group": "NPCs",
+  "alignment": "",
+  "armor_class": 11,
+  "armor_desc": "leather armor",
+  "hit_points": 25,
+  "hit_dice": "",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 14,
+  "dexterity": 10,
+  "constitution": 14,
+  "intelligence": 10,
+  "wisdom": 10,
+  "charisma": 10,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "-",
+  "languages": "any one language (usually Common)",
+  "cr": 0.5,
+  "challenge_rating": "1/2",
+  "actions": [
+    {
+      "name": "Club",
+      "desc": "_Melee Weapon Attack:_ +4 to hit, reach 5 ft., one target. _Hit:_ 7 (2d4+2) bludgeoning damage."
+    },
+    {
+      "name": "Heavy Crossbow",
+      "desc": "_Ranged Weapon Attack:_ +2 to hit, range 100/400 ft., one target. _Hit:_ 5 (1d10) piercing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Brutal",
+      "desc": "A melee weapon deals one extra die of its damage when the thug hits with it (included in the attack)."
+    },
+    {
+      "name": "Pack Tactics",
+      "desc": "The thug has advantage on attack rolls against a creature if at least one of the thug's allies is within 5 feet of the creature and the ally isn't incapacitated."
+    }
+  ],
+  "legendary_actions": []
+}

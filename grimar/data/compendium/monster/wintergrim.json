@@ -1,0 +1,61 @@
+{
+  "slug": "wintergrim",
+  "name": "Wintergrim",
+  "size": "Small",
+  "type": "Fey",
+  "subtype": "",
+  "group": null,
+  "alignment": "chaotic good",
+  "armor_class": 13,
+  "armor_desc": "hide armor",
+  "hit_points": 26,
+  "hit_dice": "4d6+12",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 19,
+  "dexterity": 12,
+  "constitution": 17,
+  "intelligence": 12,
+  "wisdom": 16,
+  "charisma": 11,
+  "skills": {
+    "insight": 5,
+    "nature": 3,
+    "persuasion": 2,
+    "survival": 5
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "cold",
+  "damage_immunities": "",
+  "condition_immunities": "charmed",
+  "senses": "darkvision 60 ft., passive Perception 13",
+  "languages": "Common, Sylvan",
+  "cr": 0.5,
+  "challenge_rating": "1/2",
+  "actions": [
+    {
+      "name": "Fist",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 6 (1d4 + 4) bludgeoning damage.",
+      "attack_bonus": 6,
+      "damage_dice": "1d4+4"
+    },
+    {
+      "name": "Handaxe",
+      "desc": "Melee or Ranged Weapon Attack: +6 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 7 (1d6 + 4) slashing damage, or 8 (1d8 + 4) slashing damage if used with two hands to make a melee attack.",
+      "attack_bonus": 6,
+      "damage_dice": "1d6+4"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Unique Rules",
+      "desc": "If a creature breaks one of the wintergrim's rules of conduct, it becomes enraged. The wintergrim has advantage on Charisma (Intimidation) checks and attack rolls against the offending creature. An offending creature that succeeds on a DC 14 Charisma (Persuasion) check can calm the enraged wintergrim. If the offending creature has damaged the wintergrim in the last hour, it has disadvantage on this check. A creature that succeeds on a DC 12 Intelligence (Investigation) or Wisdom (Insight) check can determine the wintergrim's rules before enraging it."
+    },
+    {
+      "name": "Innate Spellcasting",
+      "desc": "The wintergrim's innate spellcasting ability is Wisdom (spell save DC 13). It can innately cast the following spells, requiring no material components.\n3/day each: goodberry, speak with animals\n1/day each: lesser restoration, protection from poison"
+    }
+  ],
+  "legendary_actions": null
+}

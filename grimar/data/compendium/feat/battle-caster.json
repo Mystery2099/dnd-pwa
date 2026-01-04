@@ -1,0 +1,14 @@
+{
+  "slug": "battle-caster",
+  "name": "Battle Caster",
+  "desc": "You're comfortable casting, even in the chaos of battle.",
+  "prerequisite": "Requires the ability to cast at least one spell of 1st-level or higher",
+  "effects_desc": [
+    "You gain a 1d6 expertise die on concentration checks to maintain spells you have cast.",
+    "While wielding weapons and shields, you may cast spells with a seen component.",
+    "Instead of making an opportunity attack with a weapon, you may use your reaction to cast a spell with a casting time of 1 action. The spell must be one that only targets that creature."
+  ],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

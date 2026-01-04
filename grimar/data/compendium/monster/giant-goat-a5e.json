@@ -1,0 +1,41 @@
+{
+  "slug": "giant-goat-a5e",
+  "name": "Giant Goat",
+  "size": "Large",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 11,
+  "armor_desc": "",
+  "hit_points": 22,
+  "hit_dice": "3d10+6",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 16,
+  "dexterity": 10,
+  "constitution": 14,
+  "intelligence": 3,
+  "wisdom": 12,
+  "charisma": 6,
+  "skills": {
+    "athletics": 5
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 11",
+  "languages": "",
+  "cr": 0.5,
+  "challenge_rating": "1/2",
+  "actions": [
+    {
+      "name": "Ram",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 8 (2d4+3) bludgeoning damage. If the target is a creature and the goat moves at least 20 feet straight towards the target before the attack  the target takes an additional 5 (2d4) bludgeoning damage and makes a DC 13 Strength saving throw  falling prone on a failure."
+    }
+  ],
+  "special_abilities": null,
+  "legendary_actions": null
+}

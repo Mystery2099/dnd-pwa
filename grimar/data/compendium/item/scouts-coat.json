@@ -1,0 +1,11 @@
+{
+  "slug": "scouts-coat",
+  "name": "Scout's Coat",
+  "type": "Wondrous item",
+  "desc": "This lightweight, woolen coat is typically left naturally colored or dyed in earth tones or darker shades of green. While wearing the coat, you can tolerate temperatures as low as –100 degrees Fahrenheit.",
+  "rarity": "common",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

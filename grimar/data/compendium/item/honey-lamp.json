@@ -1,0 +1,11 @@
+{
+  "slug": "honey-lamp",
+  "name": "Honey Lamp",
+  "type": "Wondrous item",
+  "desc": "Honey lamps, made from glowing honey encased in beeswax, shed light as a lamp. Though the lamps are often found in the shape of a globe, the honey can also be sealed inside stone or wood recesses. If the wax that shields the honey is broken or smashed, the honey crystallizes in 7 days and ceases to glow. Eating the honey while it is still glowing grants darkvision out to a range of 30 feet for 1 week and 1 day.",
+  "rarity": "uncommon",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

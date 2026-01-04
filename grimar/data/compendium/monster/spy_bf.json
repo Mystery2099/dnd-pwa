@@ -1,0 +1,47 @@
+{
+  "slug": "spy_bf",
+  "name": "Spy",
+  "size": "medium",
+  "type": "Humanoid",
+  "subtype": "Any Lineage",
+  "group": "NPCs",
+  "alignment": "",
+  "armor_class": 13,
+  "armor_desc": null,
+  "hit_points": 40,
+  "hit_dice": "",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 10,
+  "dexterity": 20,
+  "constitution": 10,
+  "intelligence": 12,
+  "wisdom": 14,
+  "charisma": 16,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "-",
+  "languages": "any two languages",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The spy makes two Shortsword or Hand Crossbow attacks."
+    },
+    {
+      "name": "Shortsword",
+      "desc": "_Melee Weapon Attack:_ +5 to hit, reach 5 ft., one target. _Hit:_ 6 (1d6+3) piercing damage."
+    },
+    {
+      "name": "Hand Crossbow",
+      "desc": "_Ranged Weapon Attack:_ +5 to hit, range 30/120 ft., one target. _Hit:_ 6 (1d6+3) piercing damage."
+    }
+  ],
+  "special_abilities": [],
+  "legendary_actions": []
+}

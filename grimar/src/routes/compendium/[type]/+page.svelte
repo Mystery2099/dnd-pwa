@@ -63,7 +63,7 @@
 	});
 
 	// Initialize filter store using config
-	let filters: CompendiumFilterStore = $derived.by(() => new CompendiumFilterStore(filterConfig));
+	let filters: CompendiumFilterStore = $derived(new CompendiumFilterStore(filterConfig));
 
 	// -- State --
 	let selectedItem = $state<CompendiumItem | null>(null);
@@ -252,133 +252,133 @@
 
 	<!-- Scrollable entries container -->
 	<div class="relative flex-1 {selectedItem ? 'hidden lg:block' : 'block'}">
-			{#if !query}
-				<!-- Loading state while query initializes on client -->
-				<CompendiumLoading
-					message={`Loading ${config.ui.displayNamePlural.toLowerCase()}...`}
-					subtext="Initializing"
-					accentColor={config.ui.categoryAccent.replace('text', 'border-t')}
-				/>
-			{:else if query.isPending}
-				<CompendiumLoading
-					message={`Loading ${config.ui.displayNamePlural.toLowerCase()}...`}
-					subtext="Fetching from archives"
-					accentColor={config.ui.categoryAccent.replace('text', 'border-t')}
-				/>
-			{:else if query.isError}
-				<CompendiumError
-					message={query.error instanceof Error ? query.error.message : 'Unknown error'}
-				/>
-			{:else}
-				{@const resolved = query.data}
-				{#if !resolved.hasAnyItems}
-					<div class="flex h-full items-center justify-center p-8">
-						<div class="max-w-md text-center">
-							<div class="mb-6 text-6xl">
-								<config.ui.icon class="mx-auto size-16" />
-							</div>
-							<h3 class="mb-4 text-xl font-bold text-[var(--color-text-primary)]">
-								{config.ui.databaseEmptyState.title}
-							</h3>
-							<p class="mb-6 text-[var(--color-text-muted)]">
-								{config.ui.databaseEmptyState.description}
-							</p>
-
-							<!-- Sync Button -->
-							<div class="mb-6 flex justify-center">
-								<button
-									class="relative flex items-center gap-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] px-4 py-2 text-sm font-medium text-[var(--color-text-primary)] transition-all hover:bg-[var(--color-bg-overlay)] disabled:cursor-not-allowed disabled:opacity-50"
-									onclick={syncItems}
-									disabled={isSyncing}
-								>
-									{#if isSyncing}
-										<RefreshCw class="h-4 w-4 animate-spin" />
-										Syncing...
-									{:else}
-										<Download class="h-4 w-4" />
-										{config.ui.databaseEmptyState.ctaText || 'Sync Now'}
-									{/if}
-								</button>
-							</div>
-
-							{#if syncMessage}
-								<div
-									class="mb-4 rounded-md border border-[var(--color-gem-emerald)]/30 bg-[var(--color-gem-emerald)]/10 p-3"
-								>
-									<p class="text-sm text-[var(--color-gem-emerald)]">{syncMessage}</p>
-								</div>
-							{/if}
-
-							{#if syncError}
-								<div
-									class="mb-4 rounded-md border border-[var(--color-gem-ruby)]/30 bg-[var(--color-gem-ruby)]/10 p-3"
-								>
-									<p class="text-sm text-[var(--color-gem-ruby)]">{syncError}</p>
-								</div>
-							{/if}
+		{#if !query}
+			<!-- Loading state while query initializes on client -->
+			<CompendiumLoading
+				message={`Loading ${config.ui.displayNamePlural.toLowerCase()}...`}
+				subtext="Initializing"
+				accentColor={config.ui.categoryAccent.replace('text', 'border-t')}
+			/>
+		{:else if query.isPending}
+			<CompendiumLoading
+				message={`Loading ${config.ui.displayNamePlural.toLowerCase()}...`}
+				subtext="Fetching from archives"
+				accentColor={config.ui.categoryAccent.replace('text', 'border-t')}
+			/>
+		{:else if query.isError}
+			<CompendiumError
+				message={query.error instanceof Error ? query.error.message : 'Unknown error'}
+			/>
+		{:else}
+			{@const resolved = query.data}
+			{#if !resolved.hasAnyItems}
+				<div class="flex h-full items-center justify-center p-8">
+					<div class="max-w-md text-center">
+						<div class="mb-6 text-6xl">
+							<config.ui.icon class="mx-auto size-16" />
 						</div>
+						<h3 class="mb-4 text-xl font-bold text-[var(--color-text-primary)]">
+							{config.ui.databaseEmptyState.title}
+						</h3>
+						<p class="mb-6 text-[var(--color-text-muted)]">
+							{config.ui.databaseEmptyState.description}
+						</p>
+
+						<!-- Sync Button -->
+						<div class="mb-6 flex justify-center">
+							<button
+								class="relative flex items-center gap-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] px-4 py-2 text-sm font-medium text-[var(--color-text-primary)] transition-all hover:bg-[var(--color-bg-overlay)] disabled:cursor-not-allowed disabled:opacity-50"
+								onclick={syncItems}
+								disabled={isSyncing}
+							>
+								{#if isSyncing}
+									<RefreshCw class="h-4 w-4 animate-spin" />
+									Syncing...
+								{:else}
+									<Download class="h-4 w-4" />
+									{config.ui.databaseEmptyState.ctaText || 'Sync Now'}
+								{/if}
+							</button>
+						</div>
+
+						{#if syncMessage}
+							<div
+								class="mb-4 rounded-md border border-[var(--color-gem-emerald)]/30 bg-[var(--color-gem-emerald)]/10 p-3"
+							>
+								<p class="text-sm text-[var(--color-gem-emerald)]">{syncMessage}</p>
+							</div>
+						{/if}
+
+						{#if syncError}
+							<div
+								class="mb-4 rounded-md border border-[var(--color-gem-ruby)]/30 bg-[var(--color-gem-ruby)]/10 p-3"
+							>
+								<p class="text-sm text-[var(--color-gem-ruby)]">{syncError}</p>
+							</div>
+						{/if}
 					</div>
-				{:else}
-					<VirtualList items={filteredItems} estimateSize={80} class="glass-scroll p-1">
-						{#snippet children(item)}
-							<div class="p-1">
-								<CompendiumListItem
-									title={item.name}
-									subtitle={config.display.subtitle(item)}
-									source={item.source}
-									icon={config.ui.icon}
-									accentClass={config.display.listItemAccent(item)}
-									onclick={() => selectItem(item)}
-								/>
-							</div>
-						{/snippet}
-					</VirtualList>
-
-					{#if filteredItems.length === 0}
-						<div class="py-12 text-center text-[var(--color-text-muted)]">
-							{config.ui.emptyState.title}. {config.ui.emptyState.description}
+				</div>
+			{:else}
+				<VirtualList items={filteredItems} estimateSize={80} class="glass-scroll p-1">
+					{#snippet children(item)}
+						<div class="p-1">
+							<CompendiumListItem
+								title={item.name}
+								subtitle={config.display.subtitle(item)}
+								source={item.source}
+								icon={config.ui.icon}
+								accentClass={config.display.listItemAccent(item)}
+								onclick={() => selectItem(item)}
+							/>
 						</div>
-					{/if}
+					{/snippet}
+				</VirtualList>
+
+				{#if filteredItems.length === 0}
+					<div class="py-12 text-center text-[var(--color-text-muted)]">
+						{config.ui.emptyState.title}. {config.ui.emptyState.description}
+					</div>
 				{/if}
 			{/if}
-		</div>
-
-		<!-- Detail View Overlay -->
-		{#if selectedItem}
-			<div class="absolute inset-0 z-20 p-2 lg:p-4" transition:fly={{ x: 20, duration: 300 }}>
-				<CompendiumDetail
-					title={selectedItem.name}
-					type={config.ui.displayName}
-					source={selectedItem.source}
-					tags={config.display.tags(selectedItem)}
-					onClose={closeOverlay}
-					accentColor={config.display.detailAccent(selectedItem)}
-					animate={false}
-				>
-					{#if dbType === 'spell'}
-						<SpellDetailContent spell={selectedItem.details} />
-					{:else if dbType === 'monster'}
-						<MonsterDetailContent monster={selectedItem.details} />
-					{:else if dbType === 'feat'}
-						<FeatDetailContent feat={selectedItem.details} />
-					{:else if dbType === 'background'}
-						<BackgroundDetailContent background={selectedItem.details} />
-					{:else if dbType === 'race'}
-						<RaceDetailContent race={selectedItem.details} />
-					{:else if dbType === 'class'}
-						<ClassDetailContent classData={selectedItem.details} />
-					{:else if dbType === 'item'}
-						<ItemDetailContent item={selectedItem.details} />
-					{:else}
-						<div class="space-y-4">
-							<div
-								class="rounded-lg border border-[var(--color-border)] bg-black/20 p-4 font-mono text-xs"
-							>
-								<pre>{JSON.stringify(selectedItem.details, null, 2)}</pre>
-							</div>
-						</div>
-					{/if}
-				</CompendiumDetail>
-			</div>
 		{/if}
+	</div>
+
+	<!-- Detail View Overlay -->
+	{#if selectedItem}
+		<div class="absolute inset-0 z-20 p-2 lg:p-4" transition:fly={{ x: 20, duration: 300 }}>
+			<CompendiumDetail
+				title={selectedItem.name}
+				type={config.ui.displayName}
+				source={selectedItem.source}
+				tags={config.display.tags(selectedItem)}
+				onClose={closeOverlay}
+				accentColor={config.display.detailAccent(selectedItem)}
+				animate={false}
+			>
+				{#if dbType === 'spell'}
+					<SpellDetailContent spell={selectedItem.details} />
+				{:else if dbType === 'monster'}
+					<MonsterDetailContent monster={selectedItem.details} />
+				{:else if dbType === 'feat'}
+					<FeatDetailContent feat={selectedItem.details} />
+				{:else if dbType === 'background'}
+					<BackgroundDetailContent background={selectedItem.details} />
+				{:else if dbType === 'race'}
+					<RaceDetailContent race={selectedItem.details} />
+				{:else if dbType === 'class'}
+					<ClassDetailContent classData={selectedItem.details} />
+				{:else if dbType === 'item'}
+					<ItemDetailContent item={selectedItem.details} />
+				{:else}
+					<div class="space-y-4">
+						<div
+							class="rounded-lg border border-[var(--color-border)] bg-black/20 p-4 font-mono text-xs"
+						>
+							<pre>{JSON.stringify(selectedItem.details, null, 2)}</pre>
+						</div>
+					</div>
+				{/if}
+			</CompendiumDetail>
+		</div>
+	{/if}
 </CompendiumShell>

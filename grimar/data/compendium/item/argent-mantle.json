@@ -1,0 +1,11 @@
+{
+  "slug": "argent-mantle",
+  "name": "Argent Mantle",
+  "type": "Wondrous item",
+  "desc": "Often reserved for ranking knights of more dogmatic or monastic military orders, these finely made, hood-and-shoulder pieces endow the wearer with exceptional battlefield, statecraft, and leadership skills. You can use a bonus action to speak a command word, causing a nimbus of golden light to surround your head. This nimbus sheds bright light in a 20-foot radius and dim light for an additional 20 feet. Friendly creatures in the bright light shed by this nimbus have advantage on initiative checks and can't be surprised except when incapacitated. The nimbus lasts until you use a bonus action to speak the command word again or you remove the mantle.\n  ***Endearing Leader.*** While wearing this mantle, you can use an action to increase your Charisma score to 20 for 10 minutes. This has no effect on you if your Charisma is already 20 or higher. This property of the mantle can't be used again until the next dawn.",
+  "rarity": "rare",
+  "requires_attunement": "",
+  "document__slug": "toh",
+  "document__title": "Tome of Heroes",
+  "document__url": "https://koboldpress.com/kpstore/product/tome-of-heroes-for-5th-edition/"
+}

@@ -1,0 +1,52 @@
+{
+  "slug": "panther-a5e",
+  "name": "Panther",
+  "size": "Medium",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 12,
+  "armor_desc": "",
+  "hit_points": 13,
+  "hit_dice": "3d8",
+  "speed": {
+    "walk": 50,
+    "climb": 40
+  },
+  "strength": 14,
+  "dexterity": 14,
+  "constitution": 10,
+  "intelligence": 3,
+  "wisdom": 14,
+  "charisma": 6,
+  "skills": {
+    "perception": 4,
+    "stealth": 4
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 30 ft., passive Perception 14",
+  "languages": "",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Claws",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4+2) slashing damage. If the panther moves at least 20 feet straight towards the target before the attack  the target makes a DC 12 Strength saving throw  falling prone on a failure."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4+2) piercing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Keen Smell",
+      "desc": "The panther has advantage on Perception checks that rely on smell."
+    }
+  ],
+  "legendary_actions": null
+}

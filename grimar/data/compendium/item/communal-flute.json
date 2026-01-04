@@ -1,0 +1,11 @@
+{
+  "slug": "communal-flute",
+  "name": "Communal Flute",
+  "type": "Wondrous item",
+  "desc": "This flute is carved with skulls and can be used as a spellcasting focus. If you spend 10 minutes playing the flute over a dead creature, you can cast the speak with dead spell from the flute. The flute can't be used this way again until the next dawn.",
+  "rarity": "rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

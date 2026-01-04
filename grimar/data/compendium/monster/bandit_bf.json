@@ -1,0 +1,48 @@
+{
+  "slug": "bandit_bf",
+  "name": "Bandit",
+  "size": "medium",
+  "type": "Humanoid",
+  "subtype": "Any Lineage",
+  "group": "NPCs",
+  "alignment": "",
+  "armor_class": 12,
+  "armor_desc": "leather armor",
+  "hit_points": 9,
+  "hit_dice": "",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 10,
+  "dexterity": 12,
+  "constitution": 12,
+  "intelligence": 10,
+  "wisdom": 10,
+  "charisma": 10,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "-",
+  "languages": "any one language (usually Common)",
+  "cr": 0.125,
+  "challenge_rating": "1/8",
+  "actions": [
+    {
+      "name": "Scimitar",
+      "desc": "_Melee Weapon Attack:_ +3 to hit, reach 5 ft., one target. _Hit:_ 4 (1d6+1) slashing damage."
+    },
+    {
+      "name": "Light Crossbow",
+      "desc": "_Ranged Weapon Attack:_ +3 to hit, range 80/320 ft., one target. _Hit:_ 5 (1d8+1) piercing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Opportunist",
+      "desc": "The bandit has advantage on opportunity attacks."
+    }
+  ],
+  "legendary_actions": []
+}

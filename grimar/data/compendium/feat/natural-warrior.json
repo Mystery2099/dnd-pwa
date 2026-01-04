@@ -1,0 +1,15 @@
+{
+  "slug": "natural-warrior",
+  "name": "Natural Warrior",
+  "desc": "The urge to fight runs hot in your veins and you take to battle naturally. You gain the following benefits:",
+  "prerequisite": null,
+  "effects_desc": [
+    "Your Speed increases by 5 feet.",
+    "When making an Acrobatics or Athletics check during combat, you can choose to use your Strength or Dexterity modifier for either skill.",
+    "You gain proficiency with the Bounding Strike maneuver and do not have to spend exertion to activate it.",
+    "You can roll 1d4 in place of your normal damage for unarmed strikes. When rolling damage for your unarmed strikes, you can choose to deal bludgeoning, piercing, or slashing damage."
+  ],
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

@@ -1,0 +1,52 @@
+{
+  "slug": "gnoll-demonfang-a5e",
+  "name": "Gnoll Demonfang",
+  "size": "Medium",
+  "type": "Humanoid",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 15,
+  "armor_desc": "",
+  "hit_points": 65,
+  "hit_dice": "10d8+20",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 16,
+  "dexterity": 16,
+  "constitution": 14,
+  "intelligence": 10,
+  "wisdom": 10,
+  "charisma": 12,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "charmed, frightened",
+  "senses": "darkvision 60 ft., passive Perception 10",
+  "languages": "Abyssal, Gnoll",
+  "cr": 4,
+  "challenge_rating": "4",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The gnoll attacks three times with its Charging Claw."
+    },
+    {
+      "name": "Charging Claw",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) slashing damage  or 10 (2d6 + 3) slashing damage if this is the gnolls first attack on this target this turn. The gnoll may then move up to 10 feet without provoking opportunity attacks."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Aligned",
+      "desc": "The gnoll radiates a Chaotic and Evil aura."
+    },
+    {
+      "name": "Possessed",
+      "desc": "If the gnoll demonfang is turned or affected by dispel evil and good or a similar effect, it transforms into an ordinary gnoll. Any damage it has taken carries over to its new form. If this damage exceeds its maximum hit points, it dies."
+    }
+  ],
+  "legendary_actions": null
+}

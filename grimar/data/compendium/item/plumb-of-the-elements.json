@@ -1,0 +1,11 @@
+{
+  "slug": "plumb-of-the-elements",
+  "name": "Plumb of the Elements",
+  "type": "Wondrous item",
+  "desc": "This four-faceted lead weight is hung on a long leather strip, which can be wound around the haft or handle of any melee weapon. You can remove the plumb and transfer it to another weapon whenever you wish. Weapons with the plumb attached to it deal additional force damage equal to your proficiency bonus (up to a maximum of 3). As an action, you can activate the plumb to change this additional damage type to fire, cold, lightning, or back to force.",
+  "rarity": "rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

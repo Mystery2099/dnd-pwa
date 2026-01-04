@@ -1,0 +1,27 @@
+{
+  "slug": "reset-red-portal",
+  "name": "Reset Red Portal",
+  "desc": "When you cast this spell, you can reset the destination of a Red Portal within range, diverting the shadow road so it leads to a location of your choosing. This destination must be in the present day. You can specify the target destination in general terms such as the City of the Fire Snakes, Mammon's home, the Halls of Avarice, or in the Eleven Hells, and anyone stepping through the portal while the spell is in effect will appear in or near that destination. If you reset the destination to the City of the Fire Snakes, for example, the portal might now lead to the first inner courtyard inside the city, or to the marketplace just outside at the GM's discretion. Once the spell's duration expires, the Red Portal resets to its original destination (50% chance) or to a new random destination (roll on the Destinations table).",
+  "higher_level": "When you cast this spell using a spell slot of 6th level or higher, you can specify a destination up to 100 years in the past for each slot level beyond 5th.",
+  "level": "5th-level",
+  "level_int": 5,
+  "school": "transmutation",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "1 Hour",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "10 Feet",
+  "target_range_sort": 10,
+  "spell_level": 5,
+  "dnd_class": "Wizard",
+  "spell_lists": [
+    "wizard"
+  ]
+}

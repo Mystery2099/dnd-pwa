@@ -1,0 +1,77 @@
+{
+  "slug": "wereowl",
+  "name": "Wereowl",
+  "size": "Medium",
+  "type": "Humanoid",
+  "subtype": "elf, shapechanger",
+  "group": null,
+  "alignment": "lawful evil",
+  "armor_class": 13,
+  "armor_desc": null,
+  "hit_points": 117,
+  "hit_dice": "18d8+36",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 15,
+  "dexterity": 16,
+  "constitution": 15,
+  "intelligence": 10,
+  "wisdom": 13,
+  "charisma": 11,
+  "skills": {
+    "perception": 7,
+    "stealth": 6
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "bludgeoning, piercing, and slashing from nonmagical attacks not made with silvered weapons",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 17",
+  "languages": "Common (can’t speak in owl form), Giant Owl (can’t speak in humanoid form)",
+  "cr": 5,
+  "challenge_rating": "5",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "In owl form, the wereowl makes two talon attacks. In humanoid form, it makes three shortbow or shortsword attacks. In hybrid form, it can attack like an owl or a humanoid."
+    },
+    {
+      "name": "Shortsword (Humanoid or Hybrid Form Only)",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) piercing damage.",
+      "attack_bonus": 6,
+      "damage_dice": "1d6+3"
+    },
+    {
+      "name": "Talon (Hybrid or Owl Form Only)",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 9 (2d6 + 2) slashing damage. If the target is a humanoid, it must succeed on a DC 13 Constitution saving throw or be cursed with wereowl lycanthropy.",
+      "attack_bonus": 5,
+      "damage_dice": "2d6+2"
+    },
+    {
+      "name": "Shortbow (Humanoid or Hybrid Form Only)",
+      "desc": "Ranged Weapon Attack: +6 to hit, range 80/320 ft., one target. Hit: 6 (1d6 + 3) piercing damage.",
+      "attack_bonus": 6,
+      "damage_dice": "1d6+3"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Flyby",
+      "desc": "The wereowl doesn't provoke opportunity attacks when it flies out of an enemy's reach."
+    },
+    {
+      "name": "Keen Hearing and Sight",
+      "desc": "The wereowl has advantage on Wisdom (Perception) checks that rely on hearing or sight."
+    },
+    {
+      "name": "Shapechanger",
+      "desc": "The wereowl can use its action to polymorph into an owl-humanoid hybrid or into a giant owl, or back into its true form, which is humanoid. Its statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies."
+    },
+    {
+      "name": "Silent Flight (Hybrid or Owl Form Only)",
+      "desc": "The wereowl has advantage on Dexterity (Stealth) checks when it flies."
+    }
+  ],
+  "legendary_actions": null
+}

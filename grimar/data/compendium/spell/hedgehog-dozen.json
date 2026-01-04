@@ -1,0 +1,27 @@
+{
+  "slug": "hedgehog-dozen",
+  "name": "Hedgehog Dozen",
+  "desc": "Eleven illusory duplicates of the touched creature appear in its space. A creature affected by hedgehog dozen seems to have a dozen arms, shields, and weapons-a swarm of partially overlapping, identical creatures. Until the spell ends, these duplicates move with the target and mimic its actions, shifting position so it's impossible to track which image is real. You can use your action to dismiss the illusory duplicates. While surrounded by duplicates, a creature gains advantage against any opponent because of the bewildering number of weapons and movements. Each time a creature targets you with an attack during the spell's duration, roll a d8 to determine whether the attack instead targets one of your duplicates. On a roll of 1, it strikes you. On any other roll it removes one of your duplicates; when you have only five duplicates remaining, the spell ends. A creature is unaffected by this spell if it can't see, if it relies on senses other than sight, such as blindsight, or if it can perceive illusions as false as with truesight.",
+  "higher_level": "",
+  "level": "3rd-level",
+  "level_int": 3,
+  "school": "illusion",
+  "components": "V, S",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "1 Minute",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "Touch",
+  "target_range_sort": 1,
+  "spell_level": 3,
+  "dnd_class": "Warlock",
+  "spell_lists": [
+    "warlock"
+  ]
+}

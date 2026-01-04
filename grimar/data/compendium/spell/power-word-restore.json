@@ -1,0 +1,28 @@
+{
+  "slug": "power-word-restore",
+  "name": "Power Word Restore",
+  "desc": "Deep Magic: clockwork You speak a word of power, and energy washes over a single construct you touch. The construct regains all of its lost hit points, all negative conditions on the construct end, and it can use a reaction to stand up, if it was prone.",
+  "higher_level": "",
+  "level": "8th-level",
+  "level_int": 8,
+  "school": "evocation",
+  "components": "V",
+  "requires_verbal_components": true,
+  "requires_somatic_components": false,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Instantaneous",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "Touch",
+  "target_range_sort": 1,
+  "spell_level": 8,
+  "dnd_class": "Wizard, Sorceror, Cleric",
+  "spell_lists": [
+    "cleric",
+    "wizard"
+  ]
+}

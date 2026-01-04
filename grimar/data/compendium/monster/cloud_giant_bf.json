@@ -1,0 +1,61 @@
+{
+  "slug": "cloud_giant_bf",
+  "name": "Cloud Giant",
+  "size": "huge",
+  "type": "Giant",
+  "subtype": "",
+  "group": "Giants",
+  "alignment": "",
+  "armor_class": 14,
+  "armor_desc": "natural armor",
+  "hit_points": 175,
+  "hit_dice": "",
+  "speed": {
+    "walk": 40,
+    "fly": 60
+  },
+  "strength": 26,
+  "dexterity": 10,
+  "constitution": 30,
+  "intelligence": 12,
+  "wisdom": 24,
+  "charisma": 26,
+  "skills": {},
+  "damage_vulnerabilities": "Giant Attributes",
+  "damage_resistances": "cold,Giant Attributes",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "-",
+  "languages": "Giant",
+  "cr": 9,
+  "challenge_rating": "9",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The cloud giant makes three Cloud-Coated Mace attacks, or it makes two Wind Burst attacks."
+    },
+    {
+      "name": "Cloud-Coated Mace",
+      "desc": "_Melee Weapon Attack:_ +12 to hit, reach 10 ft., one target. _Hit:_ 18 (3d6+8) piercing damage plus 4 (1d8) cold damage."
+    },
+    {
+      "name": "Wind Burst",
+      "desc": "_Ranged Spell Attack:_ +8 to hit, range 150 ft., one target. _Hit:_ 31 (5d10+4) bludgeoning damage, and the target must succeed on a DC 16 STR save or be pushed up to 10 feet away from the cloud giant and knocked prone."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Cloudsight",
+      "desc": "The cloud giant can see through areas obscured by clouds, fog, smoke, and steam without penalty."
+    },
+    {
+      "name": "Giant Attributes",
+      "desc": "The cloud giant is resistant to the stunned condition, and it is vulnerable to the prone condition."
+    },
+    {
+      "name": "Heightened Smell",
+      "desc": "The cloud giant's Perception is 22 when perceiving by smell."
+    }
+  ],
+  "legendary_actions": []
+}

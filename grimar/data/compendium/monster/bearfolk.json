@@ -1,0 +1,66 @@
+{
+  "slug": "bearfolk",
+  "name": "Bearfolk",
+  "size": "Medium",
+  "type": "Humanoid",
+  "subtype": "bearfolk",
+  "group": null,
+  "alignment": "chaotic good",
+  "armor_class": 14,
+  "armor_desc": "hide armor",
+  "hit_points": 45,
+  "hit_dice": "6d8+18",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 19,
+  "dexterity": 14,
+  "constitution": 16,
+  "intelligence": 8,
+  "wisdom": 12,
+  "charisma": 9,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60 ft., passive Perception 11",
+  "languages": "Common, Giant",
+  "cr": 3,
+  "challenge_rating": "3",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The bearfolk makes three attacks: one with its battleaxe, one with its warhammer, and one with its bite."
+    },
+    {
+      "name": "Battleaxe",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 8 (1d8 + 4) slashing damage, or 9 (1d10 + 4) slashing damage if used two-handed.",
+      "attack_bonus": 6,
+      "damage_dice": "1d8"
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) piercing damage.",
+      "attack_bonus": 6,
+      "damage_dice": "2d6"
+    },
+    {
+      "name": "Warhammer",
+      "desc": "Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 8 (1d8 + 4) bludgeoning damage, or 9 (1d10 + 4) bludgeoning damage if used two-handed.",
+      "attack_bonus": 6,
+      "damage_dice": "1d8"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Frenzy (1/rest)",
+      "desc": "As a bonus action, the bearfolk can trigger a berserk frenzy that lasts 1 minute. While in frenzy, it gains resistance to bludgeoning, piercing, and slashing damage and has advantage on attack rolls. Attack rolls made against a frenzied bearfolk have advantage."
+    },
+    {
+      "name": "Keen Smell",
+      "desc": "The bearfolk has advantage on Wisdom (Perception) checks that rely on smell."
+    }
+  ],
+  "legendary_actions": null
+}

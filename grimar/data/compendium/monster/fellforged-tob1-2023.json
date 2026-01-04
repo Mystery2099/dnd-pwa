@@ -1,0 +1,56 @@
+{
+  "slug": "fellforged-tob1-2023",
+  "name": "Fellforged",
+  "size": "Medium",
+  "type": "Construct",
+  "subtype": "",
+  "group": "null",
+  "alignment": "Lawful Evil",
+  "armor_class": 15,
+  "armor_desc": "natural armor",
+  "hit_points": 135,
+  "hit_dice": "18d8 + 54",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 14,
+  "dexterity": 12,
+  "constitution": 17,
+  "intelligence": 12,
+  "wisdom": 14,
+  "charisma": 15,
+  "skills": {},
+  "damage_vulnerabilities": "False",
+  "damage_resistances": "acid, cold, fire, lightning",
+  "damage_immunities": "necrotic, poison, psychic",
+  "condition_immunities": "charmed, exhaustion, frightened, paralyzed, petrified, poisoned",
+  "senses": "darkvision 60 ft., passive Perception 12",
+  "languages": "the languages it knew in life",
+  "cr": 5,
+  "challenge_rating": "5",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The fellforged makes two Necrotic Slam attacks."
+    },
+    {
+      "name": "Necrotic Slam",
+      "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 9 (2d6 + 2) bludgeoning damage plus 9 (2d8) necrotic damage. If the target is a creature, it must succeed on a DC 14 Constitution saving throw or its hp maximum is reduced by an amount equal to the necrotic damage taken. This reduction lasts until the target finishes a long rest. The target dies if this effect reduces its hp maximum to 0."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Construct Nature",
+      "desc": "The fellforged doesn't require air, food, drink, or sleep."
+    },
+    {
+      "name": "Inhabiting Spirit",
+      "desc": "The fellforged is inhabited and animated by a specter. If the fellforged fails a saving throw against an effect that turns undead, the specter is expelled into an unoccupied space within 5 feet of the fellforged with the hp total it had before it was expelled. The specter otherwise uses the statistics of a specter."
+    },
+    {
+      "name": "Sunlight Sensitivity",
+      "desc": "While in sunlight, the fellforged has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight."
+    }
+  ],
+  "legendary_actions": []
+}

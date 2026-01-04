@@ -1,0 +1,40 @@
+{
+  "slug": "lizard_giant_bf",
+  "name": "Lizard, Giant",
+  "size": "large",
+  "type": "Beast",
+  "subtype": "",
+  "group": "Animals",
+  "alignment": "",
+  "armor_class": 12,
+  "armor_desc": "natural armor",
+  "hit_points": 15,
+  "hit_dice": "",
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "strength": 14,
+  "dexterity": 12,
+  "constitution": 12,
+  "intelligence": 2,
+  "wisdom": 10,
+  "charisma": 4,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 30 ft.",
+  "languages": "-",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "_Melee Weapon Attack:_ +4 to hit, reach 5 ft., one creature. _Hit:_ 6 (1d8+2) piercing damage."
+    }
+  ],
+  "special_abilities": [],
+  "legendary_actions": []
+}

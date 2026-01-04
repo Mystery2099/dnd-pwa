@@ -1,0 +1,27 @@
+{
+  "slug": "march-of-the-dead",
+  "name": "March of the Dead",
+  "desc": "This spell animates the recently dead to remove them from a battlefield. Choose one corpse of a Medium or Small humanoid per level of the caster (within range). Your spell imbues the targets with an animating spirit, raising them as construct creatures similar in appearance to flesh golems, though with the strength and abilities of zombies. Dwarves use this to return the bodies of the fallen to clan tombs and to deny the corpses the foul attention of ghouls, necromancers, and similar foes. On each of your turns, you can use a bonus action to mentally command all the creatures you made with this spell if the creatures are within 60 feet of you. You decide what action the creatures will take and where they will move during the next day; you cannot command them to guard. If you issue no commands, the creatures only defend themselves against hostile creatures. Once given an order and direction of march, the creatures continue to follow it until they arrive at the destination you named or until 24 hours have elapsed when the spell ends and the corpses fall lifeless once more. To tell creatures to move for another 24 hours, you must cast this spell on the creatures again before the current 24-hour period ends. This use of the spell reasserts your control over up to 50 creatures you have animated with this spell rather than animating a new one.",
+  "higher_level": "When you cast this spell using a spell slot of 4th level or higher, you animate or reassert control over two additional construct creatures for each slot level above 3rd (two creatures/level at 4th, three creatures/level at 5th). Each of the creatures must come from a different corpse.",
+  "level": "3rd-level",
+  "level_int": 3,
+  "school": "necromancy",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Instantaneous",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 minute",
+  "range": "50 Feet",
+  "target_range_sort": 50,
+  "spell_level": 3,
+  "dnd_class": "Warlock",
+  "spell_lists": [
+    "warlock"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "slug": "floriographer",
+  "name": "Floriographer",
+  "desc": "You have studied the secret language of Floriography. You gain the following benefits:",
+  "prerequisite": "*Proficiency in one of the following skills: Arcana, History, or Nature*",
+  "effects_desc": [
+    "* Increase your Intelligence or Wisdom score by 1, to a maximum of 20.",
+    "* You learn Floriography, the language of flowers. Similar to Druidic and Thieves' Cant, Floriography is a secret language often used to communicate subtle ideas, symbolic meaning, and even basic messages. Floriography is conveyed through the combinations of colors, styles, and even types of flowers in bouquets, floral arrangements, and floral illustrations, often with a gift-giving component.",
+    "* Your fluency with the subtle messages in floral displays gives you a keen eye for discerning subtle or hidden messages elsewhere. You have advantage on Intelligence (Investigation) and Wisdom (Insight) checks to notice and discern hidden messages of a visual nature, such as the runes of a magic trap or the subtle hand signals passing between two individuals."
+  ],
+  "document__slug": "toh",
+  "document__title": "Tome of Heroes",
+  "document__url": "https://koboldpress.com/kpstore/product/tome-of-heroes-for-5th-edition/"
+}

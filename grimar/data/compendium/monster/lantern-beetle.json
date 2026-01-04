@@ -1,0 +1,46 @@
+{
+  "slug": "lantern-beetle",
+  "name": "Lantern Beetle",
+  "size": "Tiny",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 13,
+  "armor_desc": "natural armor",
+  "hit_points": 2,
+  "hit_dice": "1d4",
+  "speed": {
+    "walk": 30,
+    "climb": 10,
+    "fly": 10
+  },
+  "strength": 6,
+  "dexterity": 12,
+  "constitution": 10,
+  "intelligence": 1,
+  "wisdom": 7,
+  "charisma": 3,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 8",
+  "languages": "—",
+  "cr": 0,
+  "challenge_rating": "0",
+  "actions": [
+    {
+      "name": "Horn",
+      "desc": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 1 piercing damage."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Illumination",
+      "desc": "The beetle sheds bright light in a 10-foot radius and dim light for an additional 10 feet. When it dies, its body continues to glow for another 6 hours."
+    }
+  ],
+  "legendary_actions": null
+}

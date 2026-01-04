@@ -1,0 +1,27 @@
+{
+  "slug": "shield-of-star-and-shadow",
+  "name": "Shield of Star and Shadow",
+  "desc": "You wrap yourself in a protective shroud of the night sky made from swirling shadows punctuated with twinkling motes of light. The shroud grants you resistance against either radiant or necrotic damage (choose when the spell is cast). You also shed dim light in a 10-foot radius. You can end the spell early by using an action to dismiss it.",
+  "higher_level": "",
+  "level": "3rd-level",
+  "level_int": 3,
+  "school": "abjuration",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "10 Minutes",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "Self",
+  "target_range_sort": 0,
+  "spell_level": 3,
+  "dnd_class": "Wizard",
+  "spell_lists": [
+    "wizard"
+  ]
+}

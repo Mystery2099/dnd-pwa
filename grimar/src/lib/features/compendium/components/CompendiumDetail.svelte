@@ -89,8 +89,8 @@
 		</div>
 	</div>
 
-	<!-- Scrollable Content -->
-	<div class="glass-scroll flex-1 overflow-y-auto p-6">
+	<!-- Content - scrolls with main container -->
+	<div class="flex-1 overflow-y-auto p-6">
 		<div
 			class="prose max-w-none prose-invert prose-headings:text-[var(--color-text-primary)] prose-p:text-[var(--color-text-secondary)] prose-a:text-[var(--color-accent)] prose-a:no-underline hover:prose-a:underline prose-strong:text-[var(--color-text-primary)]"
 		>

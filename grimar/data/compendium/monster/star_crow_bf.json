@@ -1,0 +1,54 @@
+{
+  "slug": "star_crow_bf",
+  "name": "Star Crow",
+  "size": "tiny",
+  "type": "Aberration",
+  "subtype": "",
+  "group": null,
+  "alignment": "",
+  "armor_class": 15,
+  "armor_desc": "natural armor",
+  "hit_points": 12,
+  "hit_dice": "",
+  "speed": {
+    "walk": 20,
+    "fly": 60,
+    "hover": true
+  },
+  "strength": 6,
+  "dexterity": 16,
+  "constitution": 12,
+  "intelligence": 1,
+  "wisdom": 16,
+  "charisma": 1,
+  "skills": {},
+  "damage_vulnerabilities": "poison",
+  "damage_resistances": "Aberrant Resilience",
+  "damage_immunities": "psychic,radiant,blinded,exhaustion,prone",
+  "condition_immunities": "",
+  "senses": "truesight 120 ft.",
+  "languages": "-",
+  "cr": 0.25,
+  "challenge_rating": "1/4",
+  "actions": [
+    {
+      "name": "Radiant Touch",
+      "desc": "_Melee Weapon Attack:_ +5 to hit, reach 5 ft., one target. _Hit:_ 5 (1d4+3) radiant damage, and the star crow attaches to the target. While attached, the star crow can use only the Thought Share action and Blinding Burst bonus action, and it moves with the target whenever the target moves, requiring none of the star crow's movement. The star crow can detach itself by spending 5 feet of its movement. A creature, including the target, can take its action to detach the star crow by succeeding on a DC 13 STR check."
+    },
+    {
+      "name": "Thought Share",
+      "desc": "The star crow learns some of the attached target's memories, and the attached target experiences a rapid sequence of memories from other creatures the star crow has encountered. The target takes 5 (2d4) psychic damage and must succeed on a DC 13 CHA save or be stunned until the end of its next turn."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Aberrant Resilience",
+      "desc": "The star crow is resistant to the charmed, frightened, paralyzed, and stunned conditions, and it has advantage on saves against spells or effects that would alter its form."
+    },
+    {
+      "name": "Illumination",
+      "desc": "The star crow sheds bright light in a 20-foot radius and dim light for an additional 20 feet."
+    }
+  ],
+  "legendary_actions": []
+}

@@ -1,0 +1,28 @@
+{
+  "slug": "reciprocating-portal",
+  "name": "Reciprocating Portal",
+  "desc": "With a gesture and a muttered word, you cause an inky black, circular portal to open on the ground beneath one or more creatures. You can create one 15-foot-diameter portal, two 10-foot-diameter portals, or six 5-foot-diameter portals. A creature that's standing where you create a portal must make a Dexterity saving throw. On a failed save, the creature falls through the portal, disappears into a demiplane where it is stunned as it falls endlessly, and the portal closes.\n  At the start of your next turn, the creatures that failed their saving throws fall through matching portals directly above their previous locations. A falling creature lands prone in the space it once occupied or the nearest unoccupied space and takes falling damage as if it fell 60 feet, regardless of the distance between the exit portal and the ground. Flying and levitating creatures can't be affected by this spell.",
+  "higher_level": "",
+  "level": "3rd-level",
+  "level_int": 3,
+  "school": "conjuration",
+  "components": "V, S",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Instantaneous",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "60 Feet",
+  "target_range_sort": 60,
+  "spell_level": 3,
+  "dnd_class": "Warlock, Wizard",
+  "spell_lists": [
+    "warlock",
+    "wizard"
+  ]
+}

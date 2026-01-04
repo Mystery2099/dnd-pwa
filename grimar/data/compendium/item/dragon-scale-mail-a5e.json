@@ -1,0 +1,11 @@
+{
+  "slug": "dragon-scale-mail-a5e",
+  "name": "Dragon Scale Mail",
+  "type": "Armor",
+  "desc": "While wearing this armor, you gain following benefits:\n\n* Your Armor Class increases by +1.\n* _Advantage_  on _saving throws_  against the Frightful Presence and breath weapons of dragons.\n* Resistance to one damage type (determined by the type of dragon that provided the scales).\n\nIn addition, once between _long rests_  you can use an action to magically detect the distance and direction to the closest dragon of the same type as the armor that is within 30 miles.\n\n__**Table: Dragon Scale Mail**__\n| Dragon   | Resistance  |\n| -------- | ----------- |\n| Amethyst | Force       |\n| Black    | Acid        |\n| Blue     | Lightning   |\n| Brass    | Fire        |\n| Bronze   | Lightning   |\n| Copper   | Acid        |\n| Earth    | Slashing    |\n| Emerald  | Thunder     |\n| Gold     | Fire        |\n| Green    | Poison      |\n| Red      | Fire        |\n| River    | Bludgeoning |\n| Sapphire | Psychic     |\n| Shadow   | Necrotic    |\n| Silver   | Cold        |\n| Spirit   | Radiant     |\n| White    | Cold        |",
+  "rarity": "Very Rare",
+  "requires_attunement": "requires attunement",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

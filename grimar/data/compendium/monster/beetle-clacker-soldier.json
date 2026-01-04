@@ -1,0 +1,51 @@
+{
+  "slug": "beetle-clacker-soldier",
+  "name": "Beetle, Clacker Soldier",
+  "size": "Small",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 15,
+  "armor_desc": "natural armor",
+  "hit_points": 18,
+  "hit_dice": "4d6+4",
+  "speed": {
+    "walk": 20,
+    "climb": 20
+  },
+  "strength": 8,
+  "dexterity": 14,
+  "constitution": 13,
+  "intelligence": 1,
+  "wisdom": 7,
+  "charisma": 3,
+  "skills": {
+    "perception": -2
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "slashing from nonmagical attacks",
+  "damage_immunities": "thunder",
+  "condition_immunities": "",
+  "senses": "blindsight 30', passive Perception 8",
+  "languages": "—",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +4 to hit, 0 ft., one creature,. 11 (2d8+2) piercing damage."
+    },
+    {
+      "name": "Clack",
+      "desc": "Clacks its mandibles to create small but dangerous booming noise in 15 ft. cone. Each creature in area: 5 (2d4) thunder (DC 13 Con half). When multiple beetles clack in same turn and create overlapping cones each creature in overlapping cones makes one save with disadvantage vs. total damage from all overlapping cones rather than one save for each."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Compact",
+      "desc": "Can occupy same space as one other clacker soldier."
+    }
+  ],
+  "legendary_actions": null
+}

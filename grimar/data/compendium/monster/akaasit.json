@@ -1,0 +1,58 @@
+{
+  "slug": "akaasit",
+  "name": "Akaasit",
+  "size": "Medium",
+  "type": "Construct",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 15,
+  "armor_desc": "natural armor",
+  "hit_points": 91,
+  "hit_dice": "14d8+28",
+  "speed": {
+    "walk": 30
+  },
+  "strength": 13,
+  "dexterity": 18,
+  "constitution": 14,
+  "intelligence": 3,
+  "wisdom": 10,
+  "charisma": 5,
+  "skills": {},
+  "damage_vulnerabilities": "",
+  "damage_resistances": "piercing",
+  "damage_immunities": "poison, psychic",
+  "condition_immunities": "blinded, charmed, exhaustion, frightened, paralyzed, petrified, poisoned",
+  "senses": "truesight 60 ft., passive Perception 10",
+  "languages": "—",
+  "cr": 6,
+  "challenge_rating": "6",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The akaasit makes two arm blade attacks."
+    },
+    {
+      "name": "Arm Blade",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) slashing damage plus 3 (1d6) force damage.",
+      "attack_bonus": 7,
+      "damage_dice": "2d8+4"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Immutable Form",
+      "desc": "The akaasit is immune to any spell or effect that would alter its form."
+    },
+    {
+      "name": "Unfixed in Time",
+      "desc": "To those properly fixed in time, the akaasit flickers in and out of time, its position never fully clear. Attack rolls against the akaasit have disadvantage. If it is hit by an attack, this trait ceases to function until the start of its next turn."
+    },
+    {
+      "name": "Magic Resistance",
+      "desc": "The akaasit has advantage on saving throws against spells and other magical effects."
+    }
+  ],
+  "legendary_actions": null
+}

@@ -1,0 +1,27 @@
+{
+  "slug": "toxic-pollen",
+  "name": "Toxic Pollen",
+  "desc": "Upon casting this spell, one type of plant within range gains the ability to puff a cloud of pollen based on conditions you supply during casting. If the conditions are met, an affected plant sprays a pollen cloud in a 10-foot-radius sphere centered on it. Creatures in the area must succeed on a Constitution saving throw or become poisoned for 1 minute. At the end of a poisoned creature's turn, it can make a Constitution saving throw. On a success, it is no longer poisoned. A plant can only release this pollen once within the duration.",
+  "higher_level": "",
+  "level": "2nd-level",
+  "level_int": 2,
+  "school": "transmutation",
+  "components": "V, S, M",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": true,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "1 Year",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "30 Feet",
+  "target_range_sort": 30,
+  "spell_level": 2,
+  "dnd_class": "Druid",
+  "spell_lists": [
+    "druid"
+  ]
+}

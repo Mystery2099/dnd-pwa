@@ -1,0 +1,32 @@
+{
+  "slug": "anticipate-attack",
+  "name": "Anticipate Attack",
+  "desc": "In a flash of foreknowledge, you spot an oncoming attack with enough time to avoid it. Upon casting this spell, you can move up to half your speed without provoking opportunity attacks. The oncoming attack still occurs but misses automatically if you are no longer within the attack’s range, are in a space that's impossible for the attack to hit, or can’t be targeted by that attack in your new position. If none of those circumstances apply but the situation has changed—you have moved into a position where you have cover, for example—then the attack is made after taking the new situation into account.",
+  "higher_level": "",
+  "level": "2nd-level",
+  "level_int": 2,
+  "school": "divination",
+  "components": "V, S",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "Instantaneous",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 reaction, which you take when you are attacked but before the attack roll is made",
+  "range": "Self",
+  "target_range_sort": 0,
+  "spell_level": 2,
+  "dnd_class": "Bard, Cleric, Druid, Paladin, Ranger, Sorcerer, Wizard",
+  "spell_lists": [
+    "cleric",
+    "druid",
+    "ranger",
+    "bard",
+    "sorcerer",
+    "wizard"
+  ]
+}

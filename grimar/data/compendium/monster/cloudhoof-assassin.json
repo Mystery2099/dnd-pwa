@@ -1,0 +1,58 @@
+{
+  "slug": "cloudhoof-assassin",
+  "name": "Cloudhoof Assassin",
+  "size": "Medium",
+  "type": "Beast",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 13,
+  "armor_desc": "",
+  "hit_points": 45,
+  "hit_dice": "7d8+14",
+  "speed": {
+    "walk": 40
+  },
+  "strength": 17,
+  "dexterity": 17,
+  "constitution": 14,
+  "intelligence": 2,
+  "wisdom": 11,
+  "charisma": 7,
+  "skills": {
+    "perception": 0
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "passive Perception 10",
+  "languages": "—",
+  "cr": 1,
+  "challenge_rating": "1",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "One Headbutt attack and one Shoving Kick attack."
+    },
+    {
+      "name": "Headbutt",
+      "desc": "Melee Weapon Attack: +5 to hit, 5 ft., one target, 6 (1d6+3) bludgeoning damage."
+    },
+    {
+      "name": "Shoving Kick",
+      "desc": "Melee Weapon Attack: +5 to hit, 5 ft., one target, 5 (1d4+3) bludgeoning damage and the target must make DC 13 Str save or be pushed up to 5 ft. away from the cloudhoof assassin. If the cloudhoof scores a critical hit the target is pushed up to 10 ft. on a failed save."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Shoving Charge",
+      "desc": "If it moves at least 20' straight toward a target and then hits it with Headbutt attack on the same turn that target must make DC 13 Str save or be pushed up to 10 ft. away from the cloudhoof. If a creature fails this save by 5 or more it is pushed up to 15 ft.."
+    },
+    {
+      "name": "Sure-Hooved",
+      "desc": "Has advantage on Str and Dex checks and saves made vs. effects that would knock it prone. In addition it has advantage on Str (Athletics) checks to climb rocky surfaces and Dex (Acrobatics) checks to maintain its balance on rocky surfaces."
+    }
+  ],
+  "legendary_actions": null
+}

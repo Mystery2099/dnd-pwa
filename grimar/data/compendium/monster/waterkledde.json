@@ -1,0 +1,60 @@
+{
+  "slug": "waterkledde",
+  "name": "Waterkledde",
+  "size": "Large",
+  "type": "Fiend",
+  "subtype": "",
+  "group": null,
+  "alignment": "chaotic evil",
+  "armor_class": 14,
+  "armor_desc": "natural armor",
+  "hit_points": 123,
+  "hit_dice": "13d10+52",
+  "speed": {
+    "walk": 40,
+    "fly": 40,
+    "swim": 40
+  },
+  "strength": 19,
+  "dexterity": 15,
+  "constitution": 18,
+  "intelligence": 10,
+  "wisdom": 12,
+  "charisma": 14,
+  "skills": {
+    "perception": 1
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "cold; nonmagic B/P/S attacks",
+  "damage_immunities": "",
+  "condition_immunities": "",
+  "senses": "darkvision 60', passive Perception 11",
+  "languages": "Common",
+  "cr": 5,
+  "challenge_rating": "5",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "One Bite and two Claws. If it hits one Med or smaller creature with both Claws the waterkledde latches onto creature with its Beak and target is grappled (escape DC 15). Until this grapple ends target is restrained waterkledde can automatically hit target with its Beak and waterkledde can't make Beak attacks vs. other targets."
+    },
+    {
+      "name": "Beak",
+      "desc": "Melee Weapon Attack: +7 to hit, 5 ft., one target, 13 (2d8+4) piercing damage."
+    },
+    {
+      "name": "Claw",
+      "desc": "Melee Weapon Attack: +7 to hit, 5 ft., one target, 11 (2d6+4) slashing damage."
+    },
+    {
+      "name": "Frightening Call (Recharge 5-6)",
+      "desc": "Screeches “Kludde! Kledde! Kleure!” in a 30' cone. Each creature in that area: 22 (5d8) psychic and frightened 1 min (DC 15 Wis half damage not frightened). Frightened creature can re-save at end of each of its turns success ends effect on itself."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Hold Breath",
+      "desc": "Can hold its breath for 15 min."
+    }
+  ],
+  "legendary_actions": null
+}

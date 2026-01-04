@@ -1,0 +1,11 @@
+{
+  "slug": "potion-of-water-breathing-a5e",
+  "name": "Potion of Water Breathing",
+  "type": "Potion",
+  "desc": "After drinking this murky blue potion, you are able to _breathe underwater_  for 1 hour.",
+  "rarity": "Uncommon",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

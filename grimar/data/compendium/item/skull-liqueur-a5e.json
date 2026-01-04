@@ -1,0 +1,11 @@
+{
+  "slug": "skull-liqueur-a5e",
+  "name": "Skull Liqueur",
+  "type": "Potion",
+  "desc": "This crystal phial appears empty unless it is agitated, which reveals that it is filled to the brim with a clear liqueur. Close examination reveals bubbles within the liquid that seem to be shaped like tiny skulls. Pouring the phial’s contents into the mouth of a dead creature animates it as if it were the target of a __speak with dead_ spell.",
+  "rarity": "Uncommon",
+  "requires_attunement": "",
+  "document__slug": "a5e",
+  "document__title": "Level Up Advanced 5e",
+  "document__url": "https://a5esrd.com/a5esrd"
+}

@@ -1,0 +1,11 @@
+{
+  "slug": "labyrs-of-the-raging-bull",
+  "name": "Labyrs of the Raging Bull",
+  "type": "Weapon",
+  "desc": "You gain a +1 bonus to attack and damage rolls made with this magic weapon. While you wield the axe, you have advantage on Strength (Athletics) checks to shove a creature, and you can shove a creature up to two sizes larger than you.",
+  "rarity": "rare",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

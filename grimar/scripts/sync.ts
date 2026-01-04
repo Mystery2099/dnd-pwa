@@ -220,7 +220,6 @@ async function main() {
 			const provider = providerRegistry.getProvider(result.providerId);
 			const providerName = provider?.name || result.providerId;
 			const summary = summarizeResult(result);
-			const duration = Date.now() - startTime;
 
 			log(`\n${colors.bright}${providerName}${colors.reset}`, 'cyan');
 			log(
@@ -255,7 +254,7 @@ async function main() {
 	} catch (error) {
 		log(`\nSync failed: ${error}`, 'red');
 		logSection('Error Details');
-		console.error(error);
+		console.error('[sync] Error during sync:', error);
 		return 1;
 	}
 }
@@ -266,6 +265,6 @@ main()
 		process.exit(code);
 	})
 	.catch((error) => {
-		console.error('Fatal error:', error);
+		console.error('[sync] Fatal error:', error);
 		process.exit(1);
 	});

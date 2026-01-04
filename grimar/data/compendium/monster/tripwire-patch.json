@@ -1,0 +1,59 @@
+{
+  "slug": "tripwire-patch",
+  "name": "Tripwire Patch",
+  "size": "Huge",
+  "type": "Plant",
+  "subtype": "",
+  "group": null,
+  "alignment": "unaligned",
+  "armor_class": 14,
+  "armor_desc": "natural armor",
+  "hit_points": 95,
+  "hit_dice": "10d12+30",
+  "speed": {
+    "walk": 10,
+    "burrow": 20
+  },
+  "strength": 18,
+  "dexterity": 10,
+  "constitution": 17,
+  "intelligence": 2,
+  "wisdom": 12,
+  "charisma": 6,
+  "skills": {
+    "perception": 1
+  },
+  "damage_vulnerabilities": "",
+  "damage_resistances": "",
+  "damage_immunities": "",
+  "condition_immunities": "blinded, deafened, prone",
+  "senses": "tremorsense 60', passive Perception 15",
+  "languages": "—",
+  "cr": 4,
+  "challenge_rating": "4",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "Two Bite attacks or one Bite attack and two Tripwire Vine attacks."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +6 to hit, 5 ft., one creature,. 13 (2d8+4) piercing damage."
+    },
+    {
+      "name": "Tripwire Vine",
+      "desc": "Melee Weapon Attack: +6 to hit, 20 ft., one creature,. 7 (1d6+4) bludgeoning damage and the target must make DC 14 Str save or be knocked prone and pulled up to 15 ft. toward the tripwire patch."
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Bountiful Death",
+      "desc": "When the tripwire patch reduces a creature to 0 hp nearby plants erupt with growth. Plants within 20' of the body become thick overgrown difficult terrain and all plants within a 2-mile radius centered on the point where the creature was killed become enriched for 7 days for each CR of the slain creature (minimum of 7 days) cumulatively increasing in duration each time the patch kills a creature. Enriched plants yield twice the normal amount of food when harvested."
+    },
+    {
+      "name": "False Appearance",
+      "desc": "While motionless indistinguishable from normal patch of foliage such as flowers or bushes."
+    }
+  ],
+  "legendary_actions": null
+}

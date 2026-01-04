@@ -29,7 +29,13 @@ export default defineConfig(
 			'svelte/no-navigation-without-resolve': 'off',
 
 			// Allow any for complex API responses where types are dynamic
-			'@typescript-eslint/no-explicit-any': 'warn'
+			'@typescript-eslint/no-explicit-any': 'warn',
+
+			// Allow unused variables prefixed with underscore (common pattern for intentionally unused params)
+			'@typescript-eslint/no-unused-vars': [
+				'error',
+				{ argsIgnorePattern: '^_', varsIgnorePattern: '^_' }
+			]
 		}
 	},
 	{

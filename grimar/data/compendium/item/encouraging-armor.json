@@ -1,0 +1,11 @@
+{
+  "slug": "encouraging-armor",
+  "name": "Encouraging Armor",
+  "type": "Armor",
+  "desc": "While wearing this armor, you gain a +1 bonus to AC. In addition, each friendly creature within 10 feet of you that can see you gains a +1 bonus to attack rolls and saving throws. If you are a paladin with the Aura of Courage feature, this bonus increases to +2.",
+  "rarity": "very rare",
+  "requires_attunement": "",
+  "document__slug": "vom",
+  "document__title": "Vault of Magic",
+  "document__url": "https://koboldpress.com/kpstore/product/vault-of-magic-for-5th-edition/"
+}

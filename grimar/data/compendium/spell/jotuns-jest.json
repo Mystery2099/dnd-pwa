@@ -1,0 +1,29 @@
+{
+  "slug": "jotuns-jest",
+  "name": "Jotun's Jest",
+  "desc": "Giants never tire of having fun with this spell. It causes a weapon or other item to vastly increase in size, temporarily becoming sized for a Gargantuan creature. The item weighs 12 times its original weight and in most circumstances cannot be used effectively by creatures smaller than Gargantuan size. The item retains its usual qualities (including magical powers and effects) and returns to normal size when the spell ends.",
+  "higher_level": "",
+  "level": "4th-level",
+  "level_int": 4,
+  "school": "transmutation",
+  "components": "V, S",
+  "requires_verbal_components": true,
+  "requires_somatic_components": true,
+  "requires_material_components": false,
+  "material": "",
+  "can_be_cast_as_ritual": false,
+  "ritual": "no",
+  "duration": "1 Minute",
+  "concentration": "no",
+  "requires_concentration": false,
+  "casting_time": "1 action",
+  "range": "25 Feet",
+  "target_range_sort": 25,
+  "spell_level": 4,
+  "dnd_class": "Wizard, Warlock, Sorceror, Bard",
+  "spell_lists": [
+    "bard",
+    "warlock",
+    "wizard"
+  ]
+}

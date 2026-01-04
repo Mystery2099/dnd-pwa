@@ -15,10 +15,6 @@ import {
 } from '$lib/core/types/compendium/schemas';
 import { logRawSample, logSpellFields } from '$lib/server/services/sync/debug-sync';
 
-// Type inferences from Zod schemas
-type Open5eSpell = z.infer<typeof Open5eSpellSchema>;
-type Open5eMonster = z.infer<typeof Open5eMonsterSchema>;
-
 /**
  * Validate data with Zod schema
  */

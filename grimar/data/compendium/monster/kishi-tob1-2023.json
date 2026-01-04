@@ -1,0 +1,68 @@
+{
+  "slug": "kishi-tob1-2023",
+  "name": "Kishi",
+  "size": "Medium",
+  "type": "Fiend",
+  "subtype": "",
+  "group": "null",
+  "alignment": "Chaotic Evil",
+  "armor_class": 18,
+  "armor_desc": "natural armor, shield",
+  "hit_points": 119,
+  "hit_dice": "14d8 + 56",
+  "speed": {
+    "walk": 50
+  },
+  "strength": 19,
+  "dexterity": 20,
+  "constitution": 19,
+  "intelligence": 15,
+  "wisdom": 11,
+  "charisma": 22,
+  "skills": {
+    "Deception": 9,
+    "Perception": 3,
+    "Performance": 9
+  },
+  "damage_vulnerabilities": "False",
+  "damage_resistances": "cold, fire, lightning; bludgeoning, piercing, and slashing from nonmagical attacks",
+  "damage_immunities": "poison",
+  "condition_immunities": "poisoned",
+  "senses": "darkvision 120 ft., passive Perception 13",
+  "languages": "Abyssal, Celestial, Common, Draconic, telepathy 120 ft.",
+  "cr": 8,
+  "challenge_rating": "8",
+  "actions": [
+    {
+      "name": "Multiattack",
+      "desc": "The kishi makes one Bite attack and two Spear attacks."
+    },
+    {
+      "name": "Bite",
+      "desc": "Melee Weapon Attack: +7 to hit, reach 5 ft., one creature. Hit: 11 (2d6 + 4) piercing damage plus 9 (2d8) cold damage."
+    },
+    {
+      "name": "Spear",
+      "desc": "Melee or Ranged Weapon Attack: +7 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 7 (1d6 + 4) piercing damage, or 8 (1d8 + 4) piercing damage if used with two hands to make a melee attack, plus 9 (2d8) cold damage."
+    },
+    {
+      "name": "Spellcasting",
+      "desc": "The kishi casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save DC 17):\nAt will: detect evil and good, detect magic, suggestion\n3/day: glibness\n1/day: dominate person"
+    }
+  ],
+  "special_abilities": [
+    {
+      "name": "Fiendish Weapons",
+      "desc": "The kishi's weapon attacks are magical. When the kishi hits with any weapon, the weapon deals an extra 2d8 cold damage (included in the attack)."
+    },
+    {
+      "name": "Two Heads",
+      "desc": "The kishi has advantage on Wisdom (Perception) checks and on saving throws against being blinded, charmed, deafened, frightened, stunned, and knocked unconscious."
+    },
+    {
+      "name": "Magic Resistance",
+      "desc": "The kishi has advantage on saving throws against spells and other magical effects."
+    }
+  ],
+  "legendary_actions": []
+}
