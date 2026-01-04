@@ -62,23 +62,18 @@
 		}
 	});
 
-	// Initialize filter store - recreate when pathType changes
-	let filters = $state<CompendiumFilterStore>(new CompendiumFilterStore(filterConfig));
-
-	// Recreate filter store when pathType changes
-	$effect(() => {
-		filters = new CompendiumFilterStore(filterConfig);
+	// Initialize filter store - use derived to recreate when pathType changes
+	const filters = $derived.by(() => {
+		const store = new CompendiumFilterStore(filterConfig);
+		// Build search index if data is available
+		if (query?.data?.items && query.data.items.length > 0) {
+			store.buildSearchIndex(query.data.items);
+		}
+		return store;
 	});
 
 	// -- State --
 	let selectedItem = $state<CompendiumItem | null>(null);
-
-	// Build search index when data loads
-	$effect(() => {
-		if (query?.data?.items) {
-			filters.buildSearchIndex(query.data.items);
-		}
-	});
 
 	// Derived filtered items
 	const filteredItems = $derived.by(() => {
