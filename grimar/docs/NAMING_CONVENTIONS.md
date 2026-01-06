@@ -12,17 +12,17 @@ This document establishes consistent naming conventions for Grimar.
 
 ### Directory-Specific Patterns
 
-| Directory | Pattern | Examples |
-|-----------|---------|----------|
-| `db/` | `db-*` prefix | `db-connection.ts`, `db-fts.ts`, `db-retry.ts` |
-| `auth/` | `auth-*` prefix | `auth-handler.ts`, `auth-guard.ts`, `auth-service.ts` |
-| `sync/` | `sync-*` prefix | `sync-cleanup.ts`, `sync-metrics.ts`, `orchestrator.ts` |
-| `cache/` | `cache-*` prefix | `cache-manager.ts`, `cache-cleanup.ts` |
-| `utils/` | Descriptive name | `data-loader.ts`, `monitoring.ts` |
-| `services/` | Domain name | `characters/service.ts`, `dataTransformer.ts` |
-| `components/ui/` | Descriptive name | `button.svelte`, `input.svelte` |
-| `components/layout/` | PascalCase | `AppShell.svelte`, `GlobalHeader.svelte` |
-| `features/*/components/` | PascalCase | `CompendiumDetail.svelte`, `CharacterSheet.svelte` |
+| Directory                | Pattern          | Examples                                                |
+| ------------------------ | ---------------- | ------------------------------------------------------- |
+| `db/`                    | `db-*` prefix    | `db-connection.ts`, `db-fts.ts`, `db-retry.ts`          |
+| `auth/`                  | `auth-*` prefix  | `auth-handler.ts`, `auth-guard.ts`, `auth-service.ts`   |
+| `sync/`                  | `sync-*` prefix  | `sync-cleanup.ts`, `sync-metrics.ts`, `orchestrator.ts` |
+| `cache/`                 | `cache-*` prefix | `cache-manager.ts`, `cache-cleanup.ts`                  |
+| `utils/`                 | Descriptive name | `data-loader.ts`, `monitoring.ts`                       |
+| `services/`              | Domain name      | `characters/service.ts`, `dataTransformer.ts`           |
+| `components/ui/`         | Descriptive name | `button.svelte`, `input.svelte`                         |
+| `components/layout/`     | PascalCase       | `AppShell.svelte`, `GlobalHeader.svelte`                |
+| `features/*/components/` | PascalCase       | `CompendiumDetail.svelte`, `CharacterSheet.svelte`      |
 
 ### Service Layer Pattern
 
@@ -134,13 +134,13 @@ import type { CompendiumItem } from '$lib/core/types/compendium';
 
 SvelteKit uses specific naming:
 
-| File | Purpose |
-|------|---------|
-| `+page.svelte` | Page component |
-| `+page.server.ts` | Page load/actions |
-| `+server.ts` | API endpoint |
-| `+layout.svelte` | Layout wrapper |
-| `+layout.server.ts` | Layout load |
+| File                | Purpose           |
+| ------------------- | ----------------- |
+| `+page.svelte`      | Page component    |
+| `+page.server.ts`   | Page load/actions |
+| `+server.ts`        | API endpoint      |
+| `+layout.svelte`    | Layout wrapper    |
+| `+layout.server.ts` | Layout load       |
 
 ## Component Props (Svelte 5)
 
@@ -168,5 +168,5 @@ export const COMPENDIUM_TYPES = {
 	CLASS: 'class'
 } as const;
 
-export type CompendiumType = typeof COMPENDIUM_TYPES[keyof typeof COMPENDIUM_TYPES];
+export type CompendiumType = (typeof COMPENDIUM_TYPES)[keyof typeof COMPENDIUM_TYPES];
 ```

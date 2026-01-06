@@ -1,6 +1,9 @@
 import { redirect, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { getSession, createSession, destroySession } from '$lib/server/auth/session';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('AuthCallback');
 
 /**
  * GET /auth/callback
@@ -13,7 +16,10 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 
 	// Handle error from Authentik
 	if (errorParam) {
-		console.error('[auth] Authentik error:', errorParam, url.searchParams.get('error_description'));
+		log.error(
+			{ error: errorParam, description: url.searchParams.get('error_description') },
+			'Authentik authentication error'
+		);
 		throw error(401, 'Authentication failed');
 	}
 
@@ -57,7 +63,7 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 
 		if (!tokenResponse.ok) {
 			const errorText = await tokenResponse.text();
-			console.error('[auth] Token exchange failed:', errorText);
+			log.error({ errorText }, 'Token exchange failed');
 			throw error(401, 'Failed to exchange authorization code');
 		}
 
@@ -71,7 +77,7 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 		});
 
 		if (!userInfoResponse.ok) {
-			console.error('[auth] Failed to fetch user info');
+			log.error({}, 'Failed to fetch user info');
 			throw error(401, 'Failed to fetch user info');
 		}
 
@@ -100,7 +106,7 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 		if (typeof err === 'object' && err !== null && 'location' in err) {
 			throw err;
 		}
-		console.error('[auth] Callback error:', err);
+		log.error({ error: err }, 'Authentication callback failed');
 		throw error(500, 'Authentication failed');
 	}
 };

@@ -57,8 +57,8 @@ describe('AuthHandler', () => {
 	beforeEach(async () => {
 		vi.resetAllMocks();
 
-        const { getDb } = await import('$lib/server/db');
-        (getDb as any).mockResolvedValue(mockDb);
+		const { getDb } = await import('$lib/server/db');
+		(getDb as any).mockResolvedValue(mockDb);
 
 		// Setup default mock chain
 		mockDb.select.mockReturnValue(mockDb);
@@ -73,29 +73,30 @@ describe('AuthHandler', () => {
 
 	describe('handleAuth', () => {
 		it('should extract user from X-Authentik-Username header', async () => {
-            const event = createMockEvent('http://test.com/', { 'X-Authentik-Username': 'testuser' });
-            const resolve = vi.fn().mockResolvedValue(new Response('ok'));
+			const event = createMockEvent('http://test.com/', { 'X-Authentik-Username': 'testuser' });
+			const resolve = vi.fn().mockResolvedValue(new Response('ok'));
 
 			// Mock user exists
-            mockDb.query.users.findFirst.mockResolvedValueOnce({ username: 'testuser', settings: {} });
+			mockDb.query.users.findFirst.mockResolvedValueOnce({ username: 'testuser', settings: {} });
 
 			await handleAuth({ event, resolve });
-            
+
 			expect(event.locals.user).toBeDefined();
 			expect(event.locals.user.username).toBe('testuser');
-            expect(resolve).toHaveBeenCalled();
+			expect(resolve).toHaveBeenCalled();
 		});
 
 		it('should create new user on first access', async () => {
-            const event = createMockEvent('http://test.com/', { 'X-Authentik-Username': 'newuser' });
-            const resolve = vi.fn().mockResolvedValue(new Response('ok'));
+			const event = createMockEvent('http://test.com/', { 'X-Authentik-Username': 'newuser' });
+			const resolve = vi.fn().mockResolvedValue(new Response('ok'));
 
 			// Mock user doesn't exist
-            mockDb.query.users.findFirst.mockResolvedValueOnce(null) // First check
-                                       .mockResolvedValueOnce({ username: 'newuser', settings: {} }); // After insert check
+			mockDb.query.users.findFirst
+				.mockResolvedValueOnce(null) // First check
+				.mockResolvedValueOnce({ username: 'newuser', settings: {} }); // After insert check
 
 			await handleAuth({ event, resolve });
-            
+
 			expect(event.locals.user).toBeDefined();
 			expect(event.locals.user.username).toBe('newuser');
 			expect(mockDb.insert).toHaveBeenCalled();
@@ -104,15 +105,15 @@ describe('AuthHandler', () => {
 
 	describe('resolveUser', () => {
 		it('should return null for unauthenticated request', async () => {
-            const event = createMockEvent('http://test.com/', {});
+			const event = createMockEvent('http://test.com/', {});
 			const result = await resolveUser(event);
 			expect(result.user).toBeNull();
 		});
 
 		it('should return AuthUser for authenticated request', async () => {
-            const event = createMockEvent('http://test.com/', { 'X-Authentik-Username': 'testuser' });
-            
-            mockDb.query.users.findFirst.mockResolvedValueOnce({ username: 'testuser', settings: {} });
+			const event = createMockEvent('http://test.com/', { 'X-Authentik-Username': 'testuser' });
+
+			mockDb.query.users.findFirst.mockResolvedValueOnce({ username: 'testuser', settings: {} });
 
 			const result = await resolveUser(event);
 			expect(result.user).not.toBeNull();

@@ -3,6 +3,9 @@ import { loadCompendiumItem } from '$lib/server/services/compendium/loader';
 import { getCompendiumConfig, getTypeFromPath } from '$lib/core/constants/compendium';
 import { error } from '@sveltejs/kit';
 import { requireUser } from '$lib/server/services/auth';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('CompendiumItemPage');
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	// Require authentication
@@ -27,7 +30,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 			pathType
 		};
 	} catch (e) {
-		console.error(`Failed to load compendium item: ${pathType}/${slug}`, e);
+		log.error({ error: e, pathType, slug }, 'Failed to load compendium item');
 		throw error(404, `Item not found`);
 	}
 };

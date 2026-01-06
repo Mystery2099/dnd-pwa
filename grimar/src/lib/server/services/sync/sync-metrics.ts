@@ -4,6 +4,10 @@
  * Tracks sync operation metrics for monitoring and reporting.
  */
 
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('SyncMetrics');
+
 /**
  * Metrics collected during a sync operation
  */
@@ -22,6 +26,7 @@ export interface SyncMetrics {
  * Create a new sync metrics instance
  */
 export function createSyncMetrics(): SyncMetrics {
+	log.debug('Creating new sync metrics instance');
 	return {
 		startTime: Date.now(),
 		itemsProcessed: 0,
@@ -36,7 +41,9 @@ export function createSyncMetrics(): SyncMetrics {
 export function recordItemProcessed(metrics: SyncMetrics, itemDetails?: unknown): void {
 	metrics.itemsProcessed++;
 	if (itemDetails) {
-		metrics.bytesProcessed += JSON.stringify(itemDetails).length;
+		const bytes = JSON.stringify(itemDetails).length;
+		metrics.bytesProcessed += bytes;
+		log.debug({ itemsProcessed: metrics.itemsProcessed, bytesProcessed: bytes }, 'Item processed');
 	}
 }
 
@@ -47,6 +54,7 @@ export function recordError(metrics: SyncMetrics, providerId: string, error: str
 	const errors = metrics.providerErrors.get(providerId) || [];
 	errors.push(error);
 	metrics.providerErrors.set(providerId, errors);
+	log.warn({ providerId, error, errorCount: errors.length }, 'Sync error recorded');
 }
 
 /**
@@ -66,11 +74,14 @@ export function getSyncSummary(metrics: SyncMetrics): {
 		totalErrors += errors.length;
 	}
 
-	return {
+	const summary = {
 		duration,
 		totalItems: metrics.itemsProcessed,
 		totalBytes: metrics.bytesProcessed,
 		providersWithErrors,
 		totalErrors
 	};
+
+	log.debug(summary, 'Sync metrics summary generated');
+	return summary;
 }

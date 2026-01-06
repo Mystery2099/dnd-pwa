@@ -6,6 +6,9 @@
 
 import { createWriteStream, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('SyncDebug');
 
 const LOG_DIR = join(process.cwd(), 'logs');
 const LOG_FILE = join(LOG_DIR, 'sync-debug.log');
@@ -23,8 +26,8 @@ export function logSync(message: string, data?: unknown): void {
 	// Write to file (ignore errors)
 	createWriteStream(LOG_FILE, { flags: 'a' }).write(line);
 
-	// Also log to console for immediate visibility
-	console.log(line.trim());
+	// Also log via Winston for structured logging
+	log.debug(data ? (data as Record<string, unknown>) : {}, message);
 }
 
 export function logSyncStart(type: string, providerId: string, itemCount: number): void {

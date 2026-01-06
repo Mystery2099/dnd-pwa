@@ -7,12 +7,16 @@
 
 import { getDb } from '$lib/server/db';
 import { sql } from 'drizzle-orm';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('FtsService');
 
 /**
  * Initialize FTS virtual table for compendium search
  * Run this once during app startup or migration
  */
 export async function initFts(): Promise<void> {
+	log.info('Initializing FTS5 virtual table');
 	const db = await getDb();
 
 	// Create FTS5 virtual table for fast name/summary search
@@ -25,15 +29,16 @@ export async function initFts(): Promise<void> {
 			contentless_rowid='yes'
 		)
 	`);
+	log.info('FTS5 virtual table created');
 
 	// Populate FTS with existing data
-	await db.run(sql`
+	log.debug('Populating FTS with existing compendium data');
+	const populateResult = await db.run(sql`
 		INSERT INTO compendium_items_fts(rowid, name, summary)
 		SELECT id, name, COALESCE(summary, '') FROM compendiumItems
 		WHERE NOT EXISTS (SELECT 1 FROM compendium_items_fts WHERE rowid = compendiumItems.id)
 	`);
-
-	console.info('[FTS] Initialized successfully');
+	log.info({ affectedRows: 'see database' }, 'FTS populated with existing data');
 }
 
 /**
@@ -49,6 +54,7 @@ export async function syncItemToFts(
 	await db.run(
 		sql`INSERT OR REPLACE INTO compendium_items_fts(rowid, name, summary) VALUES (${id}, ${name}, ${summary ?? ''})`
 	);
+	log.debug({ id, name }, 'Item synced to FTS');
 }
 
 /**
@@ -57,6 +63,7 @@ export async function syncItemToFts(
 export async function removeItemFromFts(id: number): Promise<void> {
 	const db = await getDb();
 	await db.run(sql`DELETE FROM compendium_items_fts WHERE rowid = ${id}`);
+	log.debug({ id }, 'Item removed from FTS');
 }
 
 /**
@@ -72,10 +79,12 @@ export async function searchFts(query: string, limit: number = 50): Promise<numb
 	// Use * prefix for prefix matching, quoted phrases for exact phrases
 	const ftsQuery = query.trim().split(/\s+/).join(' ') + '*';
 
+	log.debug({ query: ftsQuery, limit }, 'FTS search executed');
 	const results = await db.all<{ rowid: number }>(
 		sql`SELECT rowid FROM compendium_items_fts WHERE compendium_items_fts MATCH ${ftsQuery} LIMIT ${limit}`
 	);
 
+	log.debug({ resultCount: results.length }, 'FTS search completed');
 	return results.map((r) => r.rowid);
 }
 
@@ -90,9 +99,11 @@ export async function searchFtsRanked(
 
 	const ftsQuery = query.trim().split(/\s+/).join(' ') + '*';
 
+	log.debug({ query: ftsQuery, limit }, 'FTS ranked search executed');
 	const results = await db.all<{ rowid: number; rank: number }>(
 		sql`SELECT rowid, bm25(compendium_items_fts) as rank FROM compendium_items_fts WHERE compendium_items_fts MATCH ${ftsQuery} ORDER BY rank LIMIT ${limit}`
 	);
 
+	log.debug({ resultCount: results.length }, 'FTS ranked search completed');
 	return results;
 }

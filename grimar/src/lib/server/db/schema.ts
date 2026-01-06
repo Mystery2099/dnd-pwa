@@ -40,7 +40,11 @@ export const compendiumItems = sqliteTable(
 		createdBy: text('created_by').references(() => users.username)
 	},
 	(table) => ({
-		externalIdx: uniqueIndex('compendium_items_external').on(table.type, table.externalId),
+		externalIdx: uniqueIndex('compendium_items_external').on(
+			table.type,
+			table.source,
+			table.externalId
+		),
 		typeIdx: index('compendium_items_type_idx').on(table.type),
 		nameIdx: index('compendium_items_name_idx').on(table.name),
 		typeNameIdx: index('compendium_items_type_name_idx').on(table.type, table.name),

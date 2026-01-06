@@ -3,8 +3,10 @@
  *
  * Exponential backoff retry logic for database connections.
  */
-
 import { getDb } from './db-connection';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('DbRetry');
 
 /** Retry configuration */
 export const DB_CONFIG = {
@@ -23,7 +25,7 @@ export async function getDbWithRetry(maxRetries = 3): Promise<ReturnType<typeof 
 			return await getDb();
 		} catch (error) {
 			lastError = error as Error;
-			console.warn(`Database connection attempt ${i + 1} failed:`, error);
+			log.warn({ attempt: i + 1, maxRetries, error }, 'Database connection attempt failed');
 			if (i < maxRetries - 1) {
 				// Exponential backoff: 100ms, 200ms, 400ms
 				const delay = Math.pow(2, i) * 100;

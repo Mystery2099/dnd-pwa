@@ -12,19 +12,24 @@ const DEFAULT_SETTINGS = {
 	animationLevel: 'full' as const,
 	defaultCompendiumView: 'grid' as const,
 	itemsPerPage: 24,
+	gridMaxColumns: 4,
 	showSRDBadge: true,
 	syncOnLoad: false,
 	offlineEnabled: true,
 	autoSyncInterval: 'never' as const,
 	reducedMotion: false,
 	highContrast: false,
-	keyboardShortcuts: true
+	keyboardShortcuts: true,
+	showA5eContent: false,
+	spellSortOrder: 'name' as const,
+	autoExpandDetails: false
 };
 
 type FontSize = 'sm' | 'md' | 'lg' | 'xl';
 type AnimationLevel = 'full' | 'reduced' | 'minimal';
 type CompendiumView = 'grid' | 'list';
 type SyncInterval = 'never' | '15min' | '30min' | '1h';
+type SpellSortOrder = 'name' | 'level' | 'school';
 
 export interface Settings {
 	fontSize: FontSize;
@@ -32,6 +37,7 @@ export interface Settings {
 	animationLevel: AnimationLevel;
 	defaultCompendiumView: CompendiumView;
 	itemsPerPage: number;
+	gridMaxColumns: number;
 	showSRDBadge: boolean;
 	syncOnLoad: boolean;
 	offlineEnabled: boolean;
@@ -39,14 +45,18 @@ export interface Settings {
 	reducedMotion: boolean;
 	highContrast: boolean;
 	keyboardShortcuts: boolean;
+	showA5eContent: boolean;
+	spellSortOrder: SpellSortOrder;
+	autoExpandDetails: boolean;
 }
 
-interface SettingsActions {
+interface _SettingsActions {
 	setFontSize: (value: FontSize) => void;
 	setCompactMode: (value: boolean) => void;
 	setAnimationLevel: (value: AnimationLevel) => void;
 	setDefaultCompendiumView: (value: CompendiumView) => void;
 	setItemsPerPage: (value: number) => void;
+	setGridMaxColumns: (value: number) => void;
 	setShowSRDBadge: (value: boolean) => void;
 	setSyncOnLoad: (value: boolean) => void;
 	setOfflineEnabled: (value: boolean) => void;
@@ -54,6 +64,9 @@ interface SettingsActions {
 	setReducedMotion: (value: boolean) => void;
 	setHighContrast: (value: boolean) => void;
 	setKeyboardShortcuts: (value: boolean) => void;
+	setShowA5eContent: (value: boolean) => void;
+	setSpellSortOrder: (value: SpellSortOrder) => void;
+	setAutoExpandDetails: (value: boolean) => void;
 	reset: () => void;
 }
 
@@ -108,6 +121,11 @@ function createSettingsStore() {
 		save();
 	}
 
+	function setGridMaxColumns(value: number) {
+		settings.gridMaxColumns = value;
+		save();
+	}
+
 	function setShowSRDBadge(value: boolean) {
 		settings.showSRDBadge = value;
 		save();
@@ -143,6 +161,21 @@ function createSettingsStore() {
 		save();
 	}
 
+	function setShowA5eContent(value: boolean) {
+		settings.showA5eContent = value;
+		save();
+	}
+
+	function setSpellSortOrder(value: SpellSortOrder) {
+		settings.spellSortOrder = value;
+		save();
+	}
+
+	function setAutoExpandDetails(value: boolean) {
+		settings.autoExpandDetails = value;
+		save();
+	}
+
 	function reset() {
 		settings = { ...DEFAULT_SETTINGS };
 		save();
@@ -162,6 +195,7 @@ function createSettingsStore() {
 		setAnimationLevel,
 		setDefaultCompendiumView,
 		setItemsPerPage,
+		setGridMaxColumns,
 		setShowSRDBadge,
 		setSyncOnLoad,
 		setOfflineEnabled,
@@ -169,6 +203,9 @@ function createSettingsStore() {
 		setReducedMotion,
 		setHighContrast,
 		setKeyboardShortcuts,
+		setShowA5eContent,
+		setSpellSortOrder,
+		setAutoExpandDetails,
 		reset,
 		load
 	};
@@ -207,4 +244,18 @@ export const SYNC_INTERVAL_OPTIONS = [
 	{ value: '15min', label: '15 minutes', description: 'Sync every 15 minutes' },
 	{ value: '30min', label: '30 minutes', description: 'Sync every 30 minutes' },
 	{ value: '1h', label: 'Hourly', description: 'Sync every hour' }
+] as const;
+
+export const GRID_MAX_COLUMNS_OPTIONS = [
+	{ value: '2', label: '2', description: 'Up to 2 columns' },
+	{ value: '3', label: '3', description: 'Up to 3 columns' },
+	{ value: '4', label: '4', description: 'Up to 4 columns' },
+	{ value: '5', label: '5', description: 'Up to 5 columns' },
+	{ value: '6', label: '6', description: 'Up to 6 columns' }
+] as const;
+
+export const SPELL_SORT_OPTIONS = [
+	{ value: 'name', label: 'Name', description: 'Alphabetical order' },
+	{ value: 'level', label: 'Level', description: 'By spell level' },
+	{ value: 'school', label: 'School', description: 'By spell school' }
 ] as const;

@@ -15,7 +15,7 @@ This phase focuses on setting up the foundation for high-performance rendering. 
     - [x] Sub-task: Verify performance with 500+ spells.
 - [x] Task: Refactor 'Monsters' and 'Items' lists to use `VirtualList`. 0d3ff5c
     - [x] Sub-task: Apply the same pattern to the other major compendium sections.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Virtualization' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Virtualization'
 
 ## Phase 2: Advanced Search & Indexing
 This phase introduces a client-side search engine to enable fast, fuzzy, full-text search across the datasets.
@@ -28,19 +28,35 @@ This phase introduces a client-side search engine to enable fast, fuzzy, full-te
 - [x] Task: Integrate search into CompendiumFilterStore. b9020ff
     - [x] Sub-task: Integrate SearchIndexer into existing filter store
     - [x] Sub-task: Update filter tests to use proper CompendiumItem objects
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Advanced Search & Indexing' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Advanced Search & Indexing'
 
 ## Phase 3: Faceted Filtering & Deep Linking
 This phase adds the "control panel" power: multi-select filters and URL synchronization.
 
-- [ ] Task: Design and implement the `FilterPanel` component.
-    - [ ] Sub-task: Create a UI for multi-select groups (checkboxes, tags) with accessible interactions.
-    - [ ] Sub-task: Implement "Arcane Aero" styling for the panel (glassmorphism, collapsible sections).
-- [ ] Task: Implement filter logic in `useCompendiumSearch`.
-    - [ ] Sub-task: update the hook to accept complex filter objects (e.g., `{ type: ['undead', 'fiend'], cr: { min: 5, max: 10 } }`).
-    - [ ] Sub-task: Ensure filtering happens efficiently against the indexed/cached data.
-- [ ] Task: Implement URL synchronization.
-    - [ ] Sub-task: Create a utility to serialize/deserialize filter state to URL search params.
-    - [ ] Sub-task: Update page `load` functions to initialize state from the URL.
-    - [ ] Sub-task: Update URL on filter changes without reloading the page (`replaceState`).
+- [x] Task: Implement filter logic in `useCompendiumSearch` / `CompendiumFilterStore`.
+    - [x] Sub-task: update the hook to accept complex filter objects (e.g., `{ type: ['undead', 'fiend'], cr: { min: 5, max: 10 } }`).
+    - [x] Sub-task: Ensure filtering happens efficiently against the indexed/cached data.
+- [x] Task: Implement URL synchronization.
+    - [x] Sub-task: Create a utility to serialize/deserialize filter state to URL search params.
+    - [x] Sub-task: Update page `load` functions to initialize state from the URL.
+    - [x] Sub-task: Update URL on filter changes without reloading the page (`replaceState`).
+- [/] Task: Design and implement the `FilterPanel` component.
+    - [x] Sub-task: Create a UI for multi-select groups (buttons/tags) with accessible interactions.
+    - [ ] Sub-task: Refactor sidebar/filter panel styling based on critiques (reduce glow, improve contrast).
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Faceted Filtering & Deep Linking' (Protocol in workflow.md)
+
+## Phase 4: UX Refinement & "Arcane Aero" Stabilization (New)
+Based on AI critiques from Jan 5, 2026. Address usability and accessibility debt.
+
+- [ ] Task: Refactor `ThemeSwitcher.svelte`.
+    - [ ] Sub-task: Remove the "Orbital Nexus" layout for desktop (Mystery Meat Navigation).
+    - [ ] Sub-task: Use the grid layout with text labels for all screen sizes.
+- [ ] Task: Refactor `Toggle.svelte`.
+    - [ ] Sub-task: Replace the SVG shape-swapping with a standard track-and-thumb switch.
+- [ ] Task: Audit and Improve Contrast & Hierarchy.
+    - [ ] Sub-task: Reduce blur and glow opacity by ~50% across the app.
+    - [ ] Sub-task: Implement standard focus rings for keyboard navigation.
+    - [ ] Sub-task: Standardize "destructive" action buttons (Clear Cache, etc.) to look dangerous.
+- [ ] Task: Optimize Settings Page Information Architecture.
+    - [ ] Sub-task: Implement internal navigation (tabs or anchor links) for the long settings page.
+    - [ ] Sub-task: Replace massive `SelectCard` grids with compact dropdowns for simple numeric options.

@@ -25,6 +25,9 @@ import { providerRegistry } from '../src/lib/server/providers';
 import type { ProviderSyncResult } from '../src/lib/server/providers/types';
 import type { CompendiumTypeName } from '../src/lib/types/compendium';
 import { applyPragmas } from '../src/lib/server/db/db-config';
+import { createModuleLogger } from '../src/lib/server/logger';
+
+const logger = createModuleLogger('SyncCLI');
 
 // Valid compendium types
 const VALID_TYPES: CompendiumTypeName[] = [
@@ -254,7 +257,7 @@ async function main() {
 	} catch (error) {
 		log(`\nSync failed: ${error}`, 'red');
 		logSection('Error Details');
-		console.error('[sync] Error during sync:', error);
+		logger.error({ error }, 'Error during sync');
 		return 1;
 	}
 }
@@ -265,6 +268,6 @@ main()
 		process.exit(code);
 	})
 	.catch((error) => {
-		console.error('[sync] Fatal error:', error);
+		logger.error({ error }, 'Fatal error');
 		process.exit(1);
 	});

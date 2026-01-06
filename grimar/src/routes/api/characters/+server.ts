@@ -8,7 +8,10 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { requireUser } from '$lib/server/services/auth/auth-service';
-import { listByOwner } from '$lib/server/repositories/characters';
+import { characterRepository } from '$lib/server/repositories/characters';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('CharactersAPI');
 
 /**
  * GET /api/characters
@@ -17,17 +20,15 @@ import { listByOwner } from '$lib/server/repositories/characters';
 export const GET: RequestHandler = async ({ locals }) => {
 	try {
 		const user = requireUser(locals);
+		log.debug({ username: user.username }, 'Fetching characters list');
 		const db = await import('$lib/server/db').then((m) => m.getDb());
 
-		const characters = await listByOwner(db, user.username);
+		const characters = await characterRepository.listByOwner(db, user.username);
+		log.info({ username: user.username, count: characters.length }, 'Characters list retrieved');
 
-		return json(characters, {
-			headers: {
-				'Cache-Control': 'private, max-age=120' // 2 minutes
-			}
-		});
+		return json(characters);
 	} catch (error) {
-		console.error('[API/characters] Error fetching characters:', error);
+		log.error({ error }, 'Error fetching characters');
 		return json({ error: 'Failed to fetch characters' }, { status: 500 });
 	}
 };

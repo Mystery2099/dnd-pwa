@@ -11,6 +11,9 @@ import { nanoid } from 'nanoid';
 import { BaseProvider } from './base-provider';
 import type { ProviderListResponse, TransformResult } from './types';
 import type { CompendiumTypeName } from '$lib/core/types/compendium';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('HomebrewProvider');
 
 /**
  * Homebrew item structure (follows Open5e format for compatibility)
@@ -244,7 +247,7 @@ export class HomebrewProvider extends BaseProvider {
 		const filePath = join(process.cwd(), this.dataPath, fileName);
 
 		if (!existsSync(filePath)) {
-			console.warn(`[homebrew] File not found: ${filePath}`);
+			log.warn({ filePath }, 'File not found');
 			return [];
 		}
 
@@ -253,14 +256,14 @@ export class HomebrewProvider extends BaseProvider {
 			const data = JSON.parse(content) as unknown[];
 
 			if (!Array.isArray(data)) {
-				console.error(`[homebrew] Invalid data in ${fileName}: expected array`);
+				log.error({ fileName }, 'Invalid data - expected array');
 				return [];
 			}
 
-			console.info(`[homebrew] Loaded ${data.length} items from ${fileName}`);
+			log.info({ fileName, itemCount: data.length }, 'Loaded items from file');
 			return data;
 		} catch (error) {
-			console.error(`[homebrew] Failed to load ${fileName}:`, error);
+			log.error({ fileName, error }, 'Failed to load file');
 			return [];
 		}
 	}

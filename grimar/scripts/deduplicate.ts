@@ -10,6 +10,9 @@ import { Database } from 'bun:sqlite';
 import { drizzle } from 'drizzle-orm/bun-sqlite';
 import { compendiumItems, compendiumCache } from '../src/lib/server/db/schema';
 import { eq, sql, and, inArray } from 'drizzle-orm';
+import { createModuleLogger } from '../src/lib/server/logger';
+
+const logger = createModuleLogger('DeduplicateCLI');
 
 const DATABASE_URL = process.env.DATABASE_URL || 'local.db';
 
@@ -117,4 +120,7 @@ async function deduplicate() {
 	}
 }
 
-deduplicate().catch(console.error);
+deduplicate().catch((error) => {
+	logger.error({ error }, 'Deduplication failed');
+	process.exit(1);
+});

@@ -4,6 +4,9 @@
 import type { Db } from '$lib/server/db';
 import { syncMetadata as syncMetadataTable } from '$lib/server/db/schema';
 import { eq, desc } from 'drizzle-orm';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('SyncMetadata');
 
 // Define the table row type inline (avoid naming conflict with interface)
 type SyncMetadataRow = typeof syncMetadataTable.$inferSelect;
@@ -32,7 +35,7 @@ export class SyncMetadataManager {
 				.limit(1);
 			return result[0]?.lastSyncAt ?? null;
 		} catch (error) {
-			console.warn(`[sync-metadata] Could not get last sync time for ${providerId}:`, error);
+			log.warn({ providerId, error }, 'Could not get last sync time');
 			return null;
 		}
 	}
@@ -64,11 +67,12 @@ export class SyncMetadataManager {
 						itemsSynced
 					}
 				});
-			console.log(
-				`[sync-metadata] Updated metadata for ${providerId}: ${itemsSynced} items at ${new Date(timestamp).toISOString()}`
+			log.info(
+				{ providerId, itemsSynced, timestamp: new Date(timestamp).toISOString() },
+				'Updated metadata'
 			);
 		} catch (error) {
-			console.warn(`[sync-metadata] Could not update metadata for ${providerId}:`, error);
+			log.warn({ providerId, error }, 'Could not update metadata');
 		}
 	}
 
@@ -89,7 +93,7 @@ export class SyncMetadataManager {
 				lastSyncType: (r.lastSyncType as 'full' | 'incremental') ?? 'full'
 			}));
 		} catch (error) {
-			console.warn('[sync-metadata] Could not get sync metadata:', error);
+			log.warn({ error }, 'Could not get sync metadata');
 			return [];
 		}
 	}
@@ -114,7 +118,7 @@ export class SyncMetadataManager {
 				lastSyncType: (r.lastSyncType as 'full' | 'incremental') ?? 'full'
 			};
 		} catch (error) {
-			console.warn(`[sync-metadata] Could not get metadata for ${providerId}:`, error);
+			log.warn({ providerId, error }, 'Could not get metadata');
 			return null;
 		}
 	}

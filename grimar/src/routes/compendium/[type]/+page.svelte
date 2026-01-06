@@ -10,14 +10,17 @@
 	import CompendiumSidebar from '$lib/features/compendium/components/layout/CompendiumSidebar.svelte';
 	import FilterGroup from '$lib/features/compendium/components/layout/FilterGroup.svelte';
 	import CompendiumListItem from '$lib/features/compendium/components/CompendiumListItem.svelte';
+	import CompendiumCardItem from '$lib/features/compendium/components/CompendiumItem.svelte';
 	import CompendiumDetail from '$lib/features/compendium/components/CompendiumDetail.svelte';
 	import VirtualList from '$lib/components/ui/VirtualList.svelte';
 	import { Download, RefreshCw } from 'lucide-svelte';
 	import { CompendiumFilterStore } from '$lib/features/compendium/stores/filter.svelte';
 	import type { CompendiumItem } from '$lib/core/types/compendium';
-	import CompendiumLoading from '$lib/features/compendium/components/ui/CompendiumLoading.svelte';
+	import CompendiumSkeleton from '$lib/features/compendium/components/ui/CompendiumSkeleton.svelte';
 	import FilterLogicToggle from '$lib/features/compendium/components/ui/FilterLogicToggle.svelte';
 	import CompendiumError from '$lib/features/compendium/components/ui/CompendiumError.svelte';
+	import { settingsStore } from '$lib/core/client/settingsStore.svelte';
+	import VirtualGrid from '$lib/components/ui/VirtualGrid.svelte';
 
 	// Detail Content Components
 	import SpellDetailContent from '$lib/features/compendium/components/detail/SpellDetailContent.svelte';
@@ -82,12 +85,12 @@
 	});
 
 	// Navigation helper - finds adjacent items in the current list
+	// Use database id to uniquely identify items (handles duplicates from different sources)
 	let itemNav = $derived(() => {
 		const items = filteredItems;
 		if (!selectedItem || items.length === 0) return null;
-		const idx = items.findIndex(
-			(i) => i.externalId === selectedItem?.externalId || i.name === selectedItem?.name
-		);
+		const selectedId = selectedItem.id;
+		const idx = items.findIndex((i) => i.id === selectedId);
 		if (idx === -1) return null;
 		return {
 			prev: items[idx - 1] ?? null,
@@ -121,6 +124,11 @@
 			} catch (e) {
 				console.warn('Failed to restore filter state:', e);
 			}
+		}
+
+		// Sync on load if setting is enabled
+		if (settingsStore.settings.syncOnLoad) {
+			syncItems();
 		}
 	});
 
@@ -258,20 +266,20 @@
 	</header>
 
 	<!-- Scrollable entries container -->
-	<div class="relative flex min-h-0 flex-1 flex-col {selectedItem ? 'hidden lg:flex' : 'flex'}">
+	<div class="relative flex min-h-0 flex-1 flex-col {selectedItem ? 'lg:flex' : 'flex'}">
 		{#if !query}
 			<!-- Loading state while query initializes on client -->
-			<CompendiumLoading
-				message={`Loading ${config.ui.displayNamePlural.toLowerCase()}...`}
-				subtext="Initializing"
-				accentColor={config.ui.categoryAccent.replace('text', 'border-t')}
-			/>
+			{#if settingsStore.settings.defaultCompendiumView === 'grid'}
+				<CompendiumSkeleton variant="grid" count={8} />
+			{:else}
+				<CompendiumSkeleton variant="list" count={8} />
+			{/if}
 		{:else if query.isPending}
-			<CompendiumLoading
-				message={`Loading ${config.ui.displayNamePlural.toLowerCase()}...`}
-				subtext="Fetching from archives"
-				accentColor={config.ui.categoryAccent.replace('text', 'border-t')}
-			/>
+			{#if settingsStore.settings.defaultCompendiumView === 'grid'}
+				<CompendiumSkeleton variant="grid" count={8} />
+			{:else}
+				<CompendiumSkeleton variant="list" count={8} />
+			{/if}
 		{:else if query.isError}
 			<CompendiumError
 				message={query.error instanceof Error ? query.error.message : 'Unknown error'}
@@ -279,7 +287,7 @@
 		{:else}
 			{@const resolved = query.data}
 			{#if !resolved.hasAnyItems}
-				<div class="flex h-full items-center justify-center p-8">
+				<div class="z-50 flex h-full items-center justify-center p-8">
 					<div class="max-w-md text-center">
 						<div class="mb-6 text-6xl">
 							<config.ui.icon class="mx-auto size-16" />
@@ -325,36 +333,51 @@
 						{/if}
 					</div>
 				</div>
+			{:else if filteredItems.length === 0}
+				<div
+					class="flex flex-1 items-center justify-center py-12 text-center text-[var(--color-text-muted)]"
+				>
+					{config.ui.emptyState.title}. {config.ui.emptyState.description}
+				</div>
 			{:else}
-				{#if filteredItems.length === 0}
-					<div class="flex flex-1 items-center justify-center py-12 text-center text-[var(--color-text-muted)]">
-						{config.ui.emptyState.title}. {config.ui.emptyState.description}
-					</div>
-				{:else}
-					<div class="min-h-0 flex-1">
-						<VirtualList items={filteredItems} estimateSize={80} class="glass-scroll p-1">
-							{#snippet children(item, index)}
+				<div class="relative z-10 max-h-[calc(100vh-280px)] min-h-0 flex-1">
+					{#if settingsStore.settings.defaultCompendiumView === 'grid'}
+						<VirtualGrid items={filteredItems} class="glass-scroll">
+							{#snippet children(item: CompendiumItem, _index: number)}
+								<CompendiumCardItem
+									title={item.name}
+									subtitle={config.display.subtitle(item)}
+									source={item.source}
+									icon={config.ui.icon}
+									school={config.display.cardSchool?.(item)}
+									variant="grid"
+									onclick={() => selectItem(item)}
+								/>
+							{/snippet}
+						</VirtualGrid>
+					{:else}
+						<VirtualList items={filteredItems} class="glass-scroll p-1">
+							{#snippet children(item: CompendiumItem, _index: number)}
 								<div class="p-1">
 									<CompendiumListItem
 										title={item.name}
 										subtitle={config.display.subtitle(item)}
 										source={item.source}
 										icon={config.ui.icon}
-										accentClass={config.display.listItemAccent(item)}
 										onclick={() => selectItem(item)}
 									/>
 								</div>
 							{/snippet}
 						</VirtualList>
-					</div>
-				{/if}
+					{/if}
+				</div>
 			{/if}
 		{/if}
 	</div>
 
 	<!-- Detail View Overlay -->
 	{#if selectedItem}
-		<div class="absolute inset-0 z-20 p-2 lg:p-4" transition:fly={{ x: 20, duration: 300 }}>
+		<div class="absolute inset-0 z-50 p-2 lg:p-4" transition:fly={{ x: 20, duration: 300 }}>
 			<CompendiumDetail
 				title={selectedItem.name}
 				type={config.ui.displayName}

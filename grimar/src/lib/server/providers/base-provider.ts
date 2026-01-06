@@ -16,6 +16,9 @@ import type {
 	TransformResult
 } from './types';
 import type { CompendiumTypeName } from '$lib/core/types/compendium';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('BaseProvider');
 
 /**
  * Abstract base class for all compendium providers.
@@ -69,7 +72,7 @@ export abstract class BaseProvider implements CompendiumProvider {
 		const allItems: unknown[] = [];
 
 		while (nextUrl) {
-			console.info(`[${this.id}] Fetching: ${nextUrl}`);
+			log.debug({ providerId: this.id, url: nextUrl }, 'Fetching page');
 
 			const response = await fetch(nextUrl);
 			if (!response.ok) {
@@ -84,12 +87,15 @@ export abstract class BaseProvider implements CompendiumProvider {
 			const results = data[responseKey] as unknown[];
 			const next = data[nextKey] as string | null;
 
-			console.info(`[${this.id}] Received ${results.length} items, hasMore: ${next !== null}`);
+			log.debug(
+				{ providerId: this.id, itemCount: results.length, hasMore: next !== null },
+				'Received items'
+			);
 			allItems.push(...results);
 			nextUrl = next;
 		}
 
-		console.info(`[${this.id}] Total items fetched: ${allItems.length}`);
+		log.info({ providerId: this.id, totalItems: allItems.length }, 'Total items fetched');
 		return allItems;
 	}
 

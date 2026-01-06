@@ -4,11 +4,11 @@ This document outlines the testing standards and patterns used in Grimar.
 
 ## Test File Location
 
-| Test Type | Location Pattern | Example |
-|-----------|-----------------|---------|
-| Unit tests | `*.test.ts` alongside source files | `service.ts` → `service.test.ts` |
-| Integration tests | `/tests/` directory | `/tests/compendium/spells.spec.ts` |
-| E2E tests | `/tests/` directory with Playwright | `/tests/sync/api.spec.ts` |
+| Test Type         | Location Pattern                    | Example                            |
+| ----------------- | ----------------------------------- | ---------------------------------- |
+| Unit tests        | `*.test.ts` alongside source files  | `service.ts` → `service.test.ts`   |
+| Integration tests | `/tests/` directory                 | `/tests/compendium/spells.spec.ts` |
+| E2E tests         | `/tests/` directory with Playwright | `/tests/sync/api.spec.ts`          |
 
 ## Test Framework
 
@@ -114,19 +114,19 @@ E2E tests use `VITE_MOCK_USER` for authentication bypass:
 // In playwright.config.ts
 use: {
 	env: {
-		VITE_MOCK_USER: 'testuser'
+		VITE_MOCK_USER: 'testuser';
 	}
 }
 ```
 
 ## Coverage Expectations
 
-| Module Type | Minimum Coverage |
-|-------------|------------------|
-| Services | 70% |
-| Providers | 85% |
-| Utilities | 70% |
-| Transformers | 80% |
+| Module Type  | Minimum Coverage |
+| ------------ | ---------------- |
+| Services     | 70%              |
+| Providers    | 85%              |
+| Utilities    | 70%              |
+| Transformers | 80%              |
 
 ## Best Practices
 

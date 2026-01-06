@@ -5,6 +5,10 @@
  * since this is a single-instance deployment.
  */
 
+import { createModuleLogger } from './logger';
+
+const log = createModuleLogger('CacheVersion');
+
 let currentVersion = {
 	version: 'v1',
 	timestamp: Date.now()
@@ -25,7 +29,7 @@ export function setCacheVersion(version: string): { version: string; timestamp: 
 		version,
 		timestamp: Date.now()
 	};
-	console.log('[CacheVersion] Version updated:', version);
+	log.info({ version }, 'Cache version updated');
 	return currentVersion;
 }
 

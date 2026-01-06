@@ -13,6 +13,7 @@ import { persistQueryClient } from '@tanstack/query-persist-client-core';
 import { browser } from '$app/environment';
 import { getCachedVersion, setCachedVersion } from './cache-version';
 import type { CacheVersion } from './cache-version';
+import { settingsStore } from './settingsStore.svelte';
 
 // Cache configuration
 const CACHE_KEY = 'grimar-query-cache';
@@ -80,6 +81,12 @@ function createPersister() {
  */
 export async function initializePersistence(client: QueryClient): Promise<void> {
 	if (!browser) return;
+
+	// Check if offline data is enabled
+	if (!settingsStore.settings.offlineEnabled) {
+		console.log('[QueryClient] Offline data disabled');
+		return;
+	}
 
 	const persister = createPersister();
 	if (!persister) return;

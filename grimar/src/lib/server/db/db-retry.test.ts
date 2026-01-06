@@ -57,7 +57,7 @@ describe('db-retry', () => {
 			mockGetDb.mockRejectedValue(testError);
 
 			const resultPromise = getDbWithRetry(3).catch((e) => e);
-			
+
 			// Advance through both retry delays
 			await vi.advanceTimersByTimeAsync(100);
 			await vi.advanceTimersByTimeAsync(200);
@@ -69,12 +69,10 @@ describe('db-retry', () => {
 
 		it('should use exponential backoff', async () => {
 			const mockDb = {} as any;
-			mockGetDb
-				.mockRejectedValueOnce(new Error('Fail 1'))
-				.mockResolvedValue(mockDb);
+			mockGetDb.mockRejectedValueOnce(new Error('Fail 1')).mockResolvedValue(mockDb);
 
 			const resultPromise = getDbWithRetry(3);
-			
+
 			// Advance past the first delay (100ms)
 			await vi.advanceTimersByTimeAsync(100);
 
@@ -85,12 +83,10 @@ describe('db-retry', () => {
 
 		it('should respect custom maxRetries parameter', async () => {
 			const mockDb = {} as any;
-			mockGetDb
-				.mockRejectedValueOnce(new Error('Fail'))
-				.mockResolvedValue(mockDb);
+			mockGetDb.mockRejectedValueOnce(new Error('Fail')).mockResolvedValue(mockDb);
 
 			const resultPromise = getDbWithRetry(2); // Only 2 retries
-			
+
 			await vi.advanceTimersByTimeAsync(100);
 
 			const result = await resultPromise;

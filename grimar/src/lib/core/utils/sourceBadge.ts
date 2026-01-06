@@ -8,6 +8,8 @@ export function getSourceBadgeClass(source: string): string {
 	switch (source) {
 		case 'open5e':
 			return 'bg-[var(--color-gem-sapphire)]/20 text-[var(--color-gem-sapphire)] border-[var(--color-gem-sapphire)]/30';
+		case '5e-bits':
+			return 'bg-[var(--color-gem-amethyst)]/20 text-[var(--color-gem-amethyst)] border-[var(--color-gem-amethyst)]/30';
 		case 'srd':
 			return 'bg-[var(--color-gem-topaz)]/20 text-[var(--color-gem-topaz)] border-[var(--color-gem-topaz)]/30';
 		case 'homebrew':
@@ -21,6 +23,8 @@ export function getSourceLabel(source: string): string {
 	switch (source) {
 		case 'open5e':
 			return 'Open5e';
+		case '5e-bits':
+			return '5e Bits';
 		case 'srd':
 			return 'SRD';
 		case 'homebrew':

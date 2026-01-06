@@ -1,5 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
+	import { browser } from '$app/environment';
+	import { open5eToInternalPath } from '$lib/core/utils/link-interceptor';
 
 	interface Props {
 		monster: Record<string, unknown> & { externalId?: string };
@@ -31,6 +34,29 @@
 	let hasMarkdown = $derived(
 		(actions?.some((a) => a.desc) ?? false) || (specialAbilities?.some((s) => s.desc) ?? false)
 	);
+
+	// Custom link renderer for svelte-markdown
+	const renderers = $derived({
+		link: {
+			component: 'a',
+			props: {
+				href: (props: { href: string }) => props.href,
+				onclick: (props: { href: string }) => {
+					return function handleClick(event: MouseEvent) {
+						event.preventDefault();
+						const href = props.href;
+						const internalPath = open5eToInternalPath(href);
+
+						if (internalPath && browser) {
+							goto(internalPath);
+						} else if (browser) {
+							window.open(href, '_blank', 'noopener,noreferrer');
+						}
+					};
+				}
+			}
+		}
+	});
 
 	onMount(async () => {
 		if (hasMarkdown) {
@@ -111,7 +137,7 @@
 				</div>
 				{#if action.desc && SvelteMarkdown}
 					<div class="prose prose-sm max-w-none text-[var(--color-text-secondary)] prose-invert">
-						<SvelteMarkdown source={action.desc as string} />
+						<SvelteMarkdown source={action.desc as string} {renderers} />
 					</div>
 				{/if}
 				{#if action.damage}
@@ -139,7 +165,7 @@
 				<div class="mb-1 font-bold text-[var(--color-text-primary)]">{trait.name}</div>
 				{#if trait.desc && SvelteMarkdown}
 					<div class="prose prose-sm max-w-none text-[var(--color-text-secondary)] prose-invert">
-						<SvelteMarkdown source={trait.desc as string} />
+						<SvelteMarkdown source={trait.desc as string} {renderers} />
 					</div>
 				{/if}
 			</div>

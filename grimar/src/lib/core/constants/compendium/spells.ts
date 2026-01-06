@@ -40,6 +40,19 @@ const SPELL_SCHOOLS = [
 	{ label: 'Transmutation', value: 'Transmutation', color: colorMap('teal') }
 ];
 
+// Map spell school name to simplified school name for card styling
+const SPELL_SCHOOL_TO_GEM: Record<string, string> = {
+	Evocation: 'evocation',
+	Abjuration: 'abjuration',
+	Necromancy: 'necromancy',
+	Illusion: 'illusion',
+	Divination: 'divination',
+	Enchantment: 'illusion',
+	Conjuration: 'necromancy',
+	Transmutation: 'divination',
+	default: 'evocation'
+};
+
 export const SPELLS_CONFIG: CompendiumTypeConfig = {
 	routes: {
 		basePath: '/compendium/spells',
@@ -145,6 +158,12 @@ export const SPELLS_CONFIG: CompendiumTypeConfig = {
 				SPELL_SCHOOL_COLORS[school as keyof typeof SPELL_SCHOOL_COLORS] ||
 				SPELL_SCHOOL_COLORS.default
 			);
+		},
+
+		// Get simplified school name for card styling (maps to gem colors)
+		cardSchool: (item) => {
+			const school = getSpellSchool(item);
+			return SPELL_SCHOOL_TO_GEM[school] || SPELL_SCHOOL_TO_GEM.default;
 		},
 
 		detailAccent: (item) => {

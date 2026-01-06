@@ -6,6 +6,9 @@
 
 import type { Cookies } from '@sveltejs/kit';
 import { encrypt, decrypt } from '$lib/server/crypto';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('SessionService');
 
 const SESSION_COOKIE_NAME = 'grimar_session';
 const SESSION_MAX_AGE = 60 * 60 * 24 * 7; // 7 days in seconds
@@ -34,6 +37,7 @@ export function createSessionCookie(cookies: Cookies, session: SessionData): voi
 		secure: process.env.NODE_ENV === 'production',
 		maxAge: SESSION_MAX_AGE
 	});
+	log.debug({ userId: session.userId, expiresAt: session.expiresAt }, 'Session cookie created');
 }
 
 /**
@@ -41,7 +45,10 @@ export function createSessionCookie(cookies: Cookies, session: SessionData): voi
  */
 export function getSession(cookies: Cookies): SessionData | null {
 	const cookie = cookies.get(SESSION_COOKIE_NAME);
-	if (!cookie) return null;
+	if (!cookie) {
+		log.debug('No session cookie found');
+		return null;
+	}
 
 	try {
 		const decrypted = decrypt(cookie);
@@ -49,12 +56,15 @@ export function getSession(cookies: Cookies): SessionData | null {
 
 		// Check if session has expired
 		if (session.expiresAt < Date.now()) {
+			log.debug({ userId: session.userId }, 'Session expired, destroying');
 			destroySession(cookies);
 			return null;
 		}
 
+		log.debug({ userId: session.userId }, 'Session retrieved successfully');
 		return session;
-	} catch {
+	} catch (error) {
+		log.warn({ error }, 'Invalid session cookie, destroying');
 		// Invalid session - delete cookie
 		destroySession(cookies);
 		return null;
@@ -71,12 +81,14 @@ export function destroySession(cookies: Cookies): void {
 		sameSite: 'lax',
 		secure: process.env.NODE_ENV === 'production'
 	});
+	log.debug('Session cookie destroyed');
 }
 
 /**
  * Refresh session expiration
  */
 export function refreshSession(cookies: Cookies, session: SessionData): void {
+	log.debug({ userId: session.userId }, 'Refreshing session');
 	session.expiresAt = Date.now() + SESSION_MAX_AGE * 1000;
 	createSessionCookie(cookies, session);
 }
@@ -100,6 +112,7 @@ export function createSession(
 		createdAt: now,
 		expiresAt: now + SESSION_MAX_AGE * 1000
 	};
+	log.info({ userId, username }, 'Creating new session');
 	createSessionCookie(cookies, session);
 	return session;
 }

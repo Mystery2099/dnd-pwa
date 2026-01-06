@@ -3,7 +3,7 @@
 
 	type Props = {
 		value?: string | number;
-		options: Option[];
+		options?: readonly Option[];
 		placeholder?: string;
 		id?: string;
 		name?: string;

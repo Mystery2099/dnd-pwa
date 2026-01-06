@@ -1,6 +1,13 @@
 import Fuse, { type IFuseOptions } from 'fuse.js';
 import type { CompendiumItem } from '$lib/core/types/compendium';
 
+// Debug logging helper for client-side
+function debugLog(...args: unknown[]) {
+	if (typeof console !== 'undefined' && console.debug) {
+		console.debug('[SearchIndexer]', ...args);
+	}
+}
+
 /**
  * SearchIndexer service for full-text search across compendium items.
  * Uses Fuse.js for fuzzy matching and relevance scoring.
@@ -8,6 +15,7 @@ import type { CompendiumItem } from '$lib/core/types/compendium';
 export class SearchIndexer<T extends CompendiumItem> {
 	private fuse: Fuse<T> | null = null;
 	private items: T[] = [];
+	private indexedCount = 0;
 
 	/**
 	 * Configuration for Fuse.js search
@@ -41,6 +49,8 @@ export class SearchIndexer<T extends CompendiumItem> {
 	buildIndex(items: T[]): void {
 		this.items = items;
 		this.fuse = new Fuse(items, this.fuseOptions);
+		this.indexedCount = items.length;
+		debugLog('Index built with', items.length, 'items');
 	}
 
 	/**
@@ -49,10 +59,22 @@ export class SearchIndexer<T extends CompendiumItem> {
 	 */
 	search(query: string): T[] {
 		if (!this.fuse || !query.trim()) {
+			debugLog('Search - no index or empty query, returning all items:', this.items.length);
 			return this.items;
 		}
 
+		const startTime = performance.now();
 		const results = this.fuse.search(query);
+		const duration = performance.now() - startTime;
+		debugLog(
+			'Search query:',
+			query,
+			'- found',
+			results.length,
+			'results in',
+			duration.toFixed(2),
+			'ms'
+		);
 		return results.map((result) => result.item);
 	}
 
@@ -67,15 +89,18 @@ export class SearchIndexer<T extends CompendiumItem> {
 	 * Check if index is built
 	 */
 	isIndexed(): boolean {
-		return this.fuse !== null;
+		const ready = this.fuse !== null;
+		debugLog('Index status:', ready, '- items:', this.indexedCount);
+		return ready;
 	}
 
 	/**
 	 * Clear the index
 	 */
 	clear(): void {
+		debugLog('Clearing index - was holding', this.indexedCount, 'items');
 		this.fuse = null;
 		this.items = [];
+		this.indexedCount = 0;
 	}
 }
-

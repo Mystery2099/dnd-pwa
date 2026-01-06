@@ -32,6 +32,9 @@ import {
 	logTransformFailed,
 	logInsertFailed
 } from './debug-sync';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('SyncOrchestrator');
 
 interface SyncOptions {
 	/** Types to sync (defaults to all) */
@@ -108,21 +111,25 @@ export async function syncAllProviders(
 	const maxRetries = options?.maxRetries ?? DEFAULT_MAX_RETRIES;
 	const retryDelayMs = options?.retryDelayMs ?? DEFAULT_RETRY_DELAY_MS;
 
-	console.info(`[sync-orchestrator] Starting sync with ${enabledProviders.length} providers`, {
-		maxRetries,
-		retryDelayMs,
-		types: typesToSync,
-		providerFilter: providerIds || 'all'
-	});
+	log.info(
+		{
+			providerCount: enabledProviders.length,
+			maxRetries,
+			retryDelayMs,
+			types: typesToSync,
+			providerFilter: providerIds || 'all'
+		},
+		'Starting sync'
+	);
 
 	const results: ProviderSyncResult[] = [];
 
-	console.info(`[sync-orchestrator] Types to sync:`, typesToSync);
+	log.info({ types: typesToSync }, 'Types to sync');
 
 	for (const provider of enabledProviders) {
 		// Filter by provider IDs if specified
 		if (providerIds && !providerIds.includes(provider.id)) {
-			console.debug(`[sync-orchestrator] Skipping provider: ${provider.id}`);
+			log.debug({ providerId: provider.id }, 'Skipping provider');
 			continue;
 		}
 
@@ -136,14 +143,19 @@ export async function syncAllProviders(
 
 	// Log final metrics
 	const summary = getSyncSummary(metrics);
-	console.info(`[sync-orchestrator] Sync completed in ${summary.duration}ms`, summary);
+	log.info({ ...summary }, 'Sync completed');
 
 	// Cleanup disabled sources
-	console.info('[sync-orchestrator] Running cleanup for disabled sources...');
+	log.info('Running cleanup for disabled sources...');
 	const cleanupResult = await cleanupDisabledSources(db);
 	if (cleanupResult.disabledSources.length > 0) {
-		console.info(
-			`[sync-orchestrator] Cleanup: Removed ${cleanupResult.itemsRemoved} items and ${cleanupResult.cacheRemoved} cache entries from ${cleanupResult.disabledSources.length} disabled source(s)`
+		log.info(
+			{
+				itemsRemoved: cleanupResult.itemsRemoved,
+				cacheRemoved: cleanupResult.cacheRemoved,
+				disabledSources: cleanupResult.disabledSources
+			},
+			'Cleanup completed'
 		);
 	}
 
@@ -190,12 +202,12 @@ async function syncSingleProvider(
 		errors: []
 	};
 
-	console.info(`[sync-orchestrator] Syncing provider: ${provider.name}`);
+	log.info({ providerName: provider.name }, 'Syncing provider');
 
 	for (const type of types) {
 		// Check if provider supports this type
 		if (!provider.supportedTypes.includes(type)) {
-			console.debug(`[sync-orchestrator] Provider ${provider.id} does not support type: ${type}`);
+			log.debug({ providerId: provider.id, type }, 'Provider does not support type');
 			continue;
 		}
 
@@ -238,12 +250,13 @@ async function syncSingleProvider(
 			const errorMessage = error instanceof Error ? error.message : String(error);
 			result.errors.push(`Failed to sync ${type}: ${errorMessage}`);
 			recordError(metrics, provider.id, errorMessage);
-			console.error(`[sync-orchestrator] Error syncing ${type} from ${provider.id}:`, error);
+			log.error({ providerId: provider.id, type, error }, 'Error syncing type');
 		}
 	}
 
-	console.info(
-		`[sync-orchestrator] Completed sync for ${provider.id}: ${result.totalItems} items, ${result.errors.length} errors`
+	log.info(
+		{ providerId: provider.id, totalItems: result.totalItems, errorCount: result.errors.length },
+		'Completed sync for provider'
 	);
 	return result;
 }
@@ -285,8 +298,8 @@ async function syncTypeFromProvider(
 		try {
 			const transformed = await provider.transformItem(rawItem, type);
 
-			// Deduplicate: keep only the first occurrence of each externalId
-			const key = `${type}:${transformed.externalId}`;
+			// Deduplicate: keep only the first occurrence of each (type, source, externalId)
+			const key = `${type}:${providerId}:${transformed.externalId}`;
 			if (seenExternalIds.has(key)) {
 				logTransformFailed(type, transformed.externalId, 'Duplicate item skipped', { index });
 				continue;
@@ -302,8 +315,9 @@ async function syncTypeFromProvider(
 	}
 
 	if (seenExternalIds.size < rawItems.length) {
-		console.info(
-			`[sync-orchestrator] Deduplication: ${rawItems.length - seenExternalIds.size} duplicate items removed`
+		log.info(
+			{ duplicatesRemoved: rawItems.length - seenExternalIds.size },
+			'Deduplication completed'
 		);
 	}
 
@@ -328,7 +342,7 @@ async function syncTypeFromProvider(
 					try {
 						writeFileSync(fullPath, JSON.stringify(transformed.details, null, 2));
 					} catch (fsError) {
-						console.error(`[sync-orchestrator] Failed to write file: ${fullPath}`, fsError);
+						log.error({ filePath: fullPath, error: fsError }, 'Failed to write file');
 						// We continue with DB insert anyway, but jsonPath might be broken
 					}
 
@@ -371,7 +385,7 @@ async function syncTypeFromProvider(
 							featPrerequisites: transformed.featPrerequisites
 						})
 						.onConflictDoUpdate({
-							target: [compendiumItems.type, compendiumItems.externalId],
+							target: [compendiumItems.type, compendiumItems.source, compendiumItems.externalId],
 							set: {
 								name: transformed.name,
 								summary: transformed.summary,

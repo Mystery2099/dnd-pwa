@@ -1,5 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
+	import { browser } from '$app/environment';
+	import { open5eToInternalPath } from '$lib/core/utils/link-interceptor';
 
 	interface Props {
 		spell: Record<string, unknown> & { externalId?: string };
@@ -25,6 +28,29 @@
 
 	// Lazy load svelte-markdown only when needed
 	let SvelteMarkdown: any = $state(null);
+
+	// Custom link renderer for svelte-markdown
+	const renderers = $derived({
+		link: {
+			component: 'a',
+			props: {
+				href: (props: { href: string }) => props.href,
+				onclick: (props: { href: string }) => {
+					return function handleClick(event: MouseEvent) {
+						event.preventDefault();
+						const href = props.href;
+						const internalPath = open5eToInternalPath(href);
+
+						if (internalPath && browser) {
+							goto(internalPath);
+						} else if (browser) {
+							window.open(href, '_blank', 'noopener,noreferrer');
+						}
+					};
+				}
+			}
+		}
+	});
 
 	onMount(async () => {
 		if (descriptionMd || higherLevelMd) {
@@ -65,7 +91,7 @@
 <!-- Description (Markdown rendered) -->
 {#if descriptionMd && SvelteMarkdown}
 	<div class="prose prose-sm max-w-none text-[var(--color-text-secondary)] prose-invert">
-		<SvelteMarkdown source={descriptionMd} />
+		<SvelteMarkdown source={descriptionMd} {renderers} />
 	</div>
 {/if}
 
@@ -73,7 +99,7 @@
 	<div class="mt-6 border-t border-[var(--color-border)] pt-6">
 		<h4 class="mb-2 font-bold text-[var(--color-text-primary)]">At Higher Levels</h4>
 		<div class="prose prose-sm max-w-none text-[var(--color-text-secondary)] prose-invert">
-			<SvelteMarkdown source={higherLevelMd} />
+			<SvelteMarkdown source={higherLevelMd} {renderers} />
 		</div>
 	</div>
 {/if}

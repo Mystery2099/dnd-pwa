@@ -8,6 +8,9 @@
 import { GRAPHQL_URL, BASE_URL, createGraphQLRequest } from './client';
 import { SrdMonsterSummarySchema, validateData } from '$lib/core/types/compendium/schemas';
 import { z } from 'zod';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('SRDMonsters');
 
 export type SrdMonsterSummary = z.infer<typeof SrdMonsterSummarySchema>;
 
@@ -76,13 +79,13 @@ export async function getMonsters(limit = 500): Promise<SrdMonsterSummary[]> {
 				const validated = validateData(SrdMonsterSummarySchema, monster, 'SRD monster');
 				monsters.push(validated);
 			} catch (e) {
-				console.warn('[srd] Skipping invalid monster:', e);
+				log.warn({ monsterName: monster.name, error: e }, 'Skipping invalid monster');
 			}
 		}
 
 		return monsters.sort((a, b) => a.name.localeCompare(b.name));
 	} catch (e) {
-		console.error('SRD Monsters Fetch Error:', e);
+		log.error({ error: e }, 'SRD Monsters Fetch Error');
 		return [];
 	}
 }
@@ -95,7 +98,7 @@ export async function getMonstersWithDetails(limit = 500): Promise<SrdMonsterDet
 	// Get summary list
 	const summaries = await getMonsters(limit);
 
-	console.info(`[srd] Fetching full details for ${summaries.length} monsters...`);
+	log.info({ count: summaries.length }, 'Fetching full details for monsters');
 
 	// Fetch detail for each monster in parallel with concurrency limit
 	const BATCH_SIZE = 10;
@@ -106,7 +109,7 @@ export async function getMonstersWithDetails(limit = 500): Promise<SrdMonsterDet
 		const batchNum = Math.floor(i / BATCH_SIZE) + 1;
 		const totalBatches = Math.ceil(summaries.length / BATCH_SIZE);
 
-		console.info(`[srd] Fetching details batch ${batchNum}/${totalBatches}...`);
+		log.debug({ batchNum, totalBatches }, 'Fetching details batch');
 
 		const results = await Promise.all(
 			batch.map(async (monster) => {
@@ -126,7 +129,7 @@ export async function getMonstersWithDetails(limit = 500): Promise<SrdMonsterDet
 		details.push(...results);
 	}
 
-	console.info(`[srd] Fetched full details for ${details.length} monsters`);
+	log.info({ count: details.length }, 'Fetched full details for monsters');
 	return details;
 }
 
@@ -136,7 +139,7 @@ export async function getMonsterDetail(index: string): Promise<Record<string, un
 		if (!res.ok) throw new Error('Failed to fetch monster detail');
 		return (await res.json()) as Record<string, unknown>;
 	} catch (e) {
-		console.error('SRD Monster Detail Error:', e);
+		log.error({ error: e, monsterIndex: index }, 'SRD Monster Detail Error');
 		return null;
 	}
 }

@@ -79,16 +79,10 @@ export function getTypeFromPath(path: string): CompendiumTypeName {
 /**
  * Get all available compendium configurations
  */
-export function getAllCompendiumConfigs(): CompendiumTypeConfig[] {
-	return Object.values(CONFIG_MAP);
-}
 
 /**
  * Check if a compendium type or path is supported
  */
-export function isSupportedType(type: string): boolean {
-	return type in CONFIG_MAP || type in PATH_TO_TYPE;
-}
 
 export { SPELLS_CONFIG } from './spells';
 export { MONSTERS_CONFIG } from './monsters';

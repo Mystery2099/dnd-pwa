@@ -14,25 +14,27 @@
 		HardDrive,
 		Users,
 		Clock,
-		Database,
-		Accessibility
+		Upload,
+		RotateCcw,
+		Sword
 	} from 'lucide-svelte';
 	import ThemeSwitcher from '$lib/components/ui/ThemeSwitcher.svelte';
 	import Toggle from '$lib/components/ui/Toggle.svelte';
-	import SelectCard from '$lib/components/ui/SelectCard.svelte';
+	import SegmentedControl from '$lib/components/ui/SegmentedControl.svelte';
+	import CycleButton from '$lib/components/ui/CycleButton.svelte';
 	import SettingsGroup from '$lib/components/ui/SettingsGroup.svelte';
 	import SettingsItem from '$lib/components/ui/SettingsItem.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
-	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
 	import SettingsNavigation from '$lib/components/ui/SettingsNavigation.svelte';
 	import type { NavSection } from '$lib/components/ui/SettingsNavigation.svelte';
 	import {
 		settingsStore,
 		FONT_SIZE_OPTIONS,
 		ANIMATION_LEVEL_OPTIONS,
-		COMPENDIUM_VIEW_OPTIONS,
 		ITEMS_PER_PAGE_OPTIONS,
-		SYNC_INTERVAL_OPTIONS
+		SYNC_INTERVAL_OPTIONS,
+		GRID_MAX_COLUMNS_OPTIONS,
+		SPELL_SORT_OPTIONS
 	} from '$lib/core/client/settingsStore.svelte';
 
 	let { data } = $props();
@@ -43,6 +45,8 @@
 	// Form states
 	let clearingCache = $state(false);
 	let clearingOffline = $state(false);
+	let clearingCharacters = $state(false);
+	let resettingSettings = $state(false);
 	let loggingOut = $state(false);
 
 	// Define sections data for navigation
@@ -149,6 +153,43 @@
 		}
 	}
 
+	async function clearCharacterData() {
+		clearingCharacters = true;
+		try {
+			// Clear character-specific data from localStorage
+			const keys = Object.keys(localStorage).filter(
+				(key) => key.startsWith('grimar-characters') || key.startsWith('grimar-character-')
+			);
+			keys.forEach((key) => localStorage.removeItem(key));
+
+			// Clear IndexedDB character stores if they exist
+			const databases = await indexedDB.databases();
+			databases.forEach((db) => {
+				if (db?.name?.includes('character')) {
+					indexedDB.deleteDatabase(db.name);
+				}
+			});
+
+			console.log('[Settings] Character data cleared successfully');
+		} catch (error) {
+			console.error('[Settings] Failed to clear character data:', error);
+		} finally {
+			clearingCharacters = false;
+		}
+	}
+
+	function resetAllSettings() {
+		resettingSettings = true;
+		try {
+			settingsStore.reset();
+			console.log('[Settings] All settings reset to defaults');
+		} catch (error) {
+			console.error('[Settings] Failed to reset settings:', error);
+		} finally {
+			resettingSettings = false;
+		}
+	}
+
 	// Helper to format session duration
 	function getSessionInfo() {
 		if (!user) return null;
@@ -210,44 +251,27 @@
 			icon={Palette}
 			index={0}
 		>
-			<SettingsItem
-				label="Theme"
-				description="Choose a magical essence for your interface"
-				category="appearance"
-			>
-				{#snippet control()}
-					<div class="w-full max-w-md">
-						<ThemeSwitcher />
-					</div>
-				{/snippet}
-			</SettingsItem>
+			<!-- Theme switcher using consistent SelectCard approach -->
+			<div class="w-full py-4">
+				<ThemeSwitcher class="w-full" />
+			</div>
 
-			<SettingsItem
-				label="Font Size"
-				description="Adjust text size for readability"
-				category="appearance"
-			>
+			<SettingsItem label="Font Size" description="Adjust text size for readability">
 				{#snippet control()}
-					<SelectCard
+					<CycleButton
 						value={settingsStore.settings.fontSize}
 						options={FONT_SIZE_OPTIONS}
 						onchange={(v) => settingsStore.setFontSize(v as 'sm' | 'md' | 'lg' | 'xl')}
-						gridCols={2}
-						label=""
-						class="w-48"
+						size="sm"
 					/>
 				{/snippet}
 			</SettingsItem>
 
-			<SettingsItem
-				label="Compact Mode"
-				description="Use a denser layout with smaller spacing"
-				category="appearance"
-			>
+			<SettingsItem label="Compact Mode" description="Use a denser layout with smaller spacing">
 				{#snippet control()}
 					<Toggle
 						checked={settingsStore.settings.compactMode}
-						onchange={(v) => settingsStore.setCompactMode(v)}
+						onchange={(v: boolean) => settingsStore.setCompactMode(v)}
 					/>
 				{/snippet}
 			</SettingsItem>
@@ -255,17 +279,14 @@
 			<SettingsItem
 				label="Animation Level"
 				description="Control the intensity of animations"
-				category="appearance"
 				divider={false}
 			>
 				{#snippet control()}
-					<SelectCard
+					<SegmentedControl
 						value={settingsStore.settings.animationLevel}
 						options={ANIMATION_LEVEL_OPTIONS}
 						onchange={(v) => settingsStore.setAnimationLevel(v as 'full' | 'reduced' | 'minimal')}
-						gridCols={3}
-						label=""
-						class="w-64"
+						size="sm"
 					/>
 				{/snippet}
 			</SettingsItem>
@@ -279,36 +300,33 @@
 			icon={Book}
 			index={1}
 		>
-			<SettingsItem
-				label="Default View"
-				description="Choose how compendium items are displayed"
-				category="compendium"
-			>
+			<SettingsItem label="Default View" description="Choose how compendium items are displayed">
 				{#snippet control()}
-					<SelectCard
-						value={settingsStore.settings.defaultCompendiumView}
-						options={COMPENDIUM_VIEW_OPTIONS}
-						onchange={(v) => settingsStore.setDefaultCompendiumView(v as 'grid' | 'list')}
-						gridCols={2}
-						label=""
-						class="w-48"
+					<Toggle
+						checked={settingsStore.settings.defaultCompendiumView === 'grid'}
+						onchange={(v: boolean) => settingsStore.setDefaultCompendiumView(v ? 'grid' : 'list')}
 					/>
 				{/snippet}
 			</SettingsItem>
 
-			<SettingsItem
-				label="Items Per Page"
-				description="Number of items shown in lists"
-				category="compendium"
-			>
+			<SettingsItem label="Max Grid Columns" description="Maximum columns in grid view">
 				{#snippet control()}
-					<SelectCard
+					<CycleButton
+						value={settingsStore.settings.gridMaxColumns.toString()}
+						options={GRID_MAX_COLUMNS_OPTIONS}
+						onchange={(v) => settingsStore.setGridMaxColumns(Number(v))}
+						size="sm"
+					/>
+				{/snippet}
+			</SettingsItem>
+
+			<SettingsItem label="Items Per Page" description="Number of items shown in lists">
+				{#snippet control()}
+					<CycleButton
 						value={settingsStore.settings.itemsPerPage.toString()}
 						options={ITEMS_PER_PAGE_OPTIONS}
 						onchange={(v) => settingsStore.setItemsPerPage(Number(v))}
-						gridCols={4}
-						label=""
-						class="w-56"
+						size="sm"
 					/>
 				{/snippet}
 			</SettingsItem>
@@ -316,12 +334,11 @@
 			<SettingsItem
 				label="Show SRD Badges"
 				description="Display indicator for System Reference Document content"
-				category="compendium"
 			>
 				{#snippet control()}
 					<Toggle
 						checked={settingsStore.settings.showSRDBadge}
-						onchange={(v) => settingsStore.setShowSRDBadge(v)}
+						onchange={(v: boolean) => settingsStore.setShowSRDBadge(v)}
 					/>
 				{/snippet}
 			</SettingsItem>
@@ -329,13 +346,47 @@
 			<SettingsItem
 				label="Sync on Load"
 				description="Automatically sync compendium when page loads"
-				category="compendium"
-				divider={false}
 			>
 				{#snippet control()}
 					<Toggle
 						checked={settingsStore.settings.syncOnLoad}
-						onchange={(v) => settingsStore.setSyncOnLoad(v)}
+						onchange={(v: boolean) => settingsStore.setSyncOnLoad(v)}
+					/>
+				{/snippet}
+			</SettingsItem>
+
+			<SettingsItem
+				label="Show Advanced 5e Content"
+				description="Display content from the Advanced 5e (A5e) expansion"
+			>
+				{#snippet control()}
+					<Toggle
+						checked={settingsStore.settings.showA5eContent}
+						onchange={(v: boolean) => settingsStore.setShowA5eContent(v)}
+					/>
+				{/snippet}
+			</SettingsItem>
+
+			<SettingsItem label="Spell Sort Order" description="How spells are ordered in lists">
+				{#snippet control()}
+					<SegmentedControl
+						value={settingsStore.settings.spellSortOrder}
+						options={SPELL_SORT_OPTIONS}
+						onchange={(v) => settingsStore.setSpellSortOrder(v as 'name' | 'level' | 'school')}
+						size="sm"
+					/>
+				{/snippet}
+			</SettingsItem>
+
+			<SettingsItem
+				label="Auto-Expand Details"
+				description="Automatically expand item details when navigating"
+				divider={false}
+			>
+				{#snippet control()}
+					<Toggle
+						checked={settingsStore.settings.autoExpandDetails}
+						onchange={(v: boolean) => settingsStore.setAutoExpandDetails(v)}
 					/>
 				{/snippet}
 			</SettingsItem>
@@ -349,46 +400,32 @@
 			icon={RefreshCw}
 			index={2}
 		>
-			<SettingsItem
-				label="Offline Data"
-				description="Enable caching for offline use"
-				category="data"
-			>
+			<SettingsItem label="Offline Data" description="Enable caching for offline use">
 				{#snippet control()}
 					<Toggle
 						checked={settingsStore.settings.offlineEnabled}
-						onchange={(v) => settingsStore.setOfflineEnabled(v)}
+						onchange={(v: boolean) => settingsStore.setOfflineEnabled(v)}
 					/>
 				{/snippet}
 			</SettingsItem>
 
-			<SettingsItem
-				label="Auto-Sync Interval"
-				description="How often to automatically sync data"
-				category="data"
-			>
+			<SettingsItem label="Auto-Sync Interval" description="How often to automatically sync data">
 				{#snippet control()}
-					<SelectCard
+					<CycleButton
 						value={settingsStore.settings.autoSyncInterval}
 						options={SYNC_INTERVAL_OPTIONS}
 						onchange={(v) =>
 							settingsStore.setAutoSyncInterval(v as 'never' | '15min' | '30min' | '1h')}
-						gridCols={2}
-						label=""
-						class="w-56"
+						size="sm"
 					/>
 				{/snippet}
 			</SettingsItem>
 
-			<SettingsItem
-				label="Clear Cache"
-				description="Remove cached data to free up storage"
-				category="data"
-			>
+			<SettingsItem label="Clear Cache" description="Remove cached data to free up storage">
 				{#snippet control()}
 					<Button
 						type="button"
-						variant="outline"
+						variant="danger"
 						size="sm"
 						disabled={clearingCache}
 						onclick={clearCache}
@@ -404,15 +441,11 @@
 				{/snippet}
 			</SettingsItem>
 
-			<SettingsItem
-				label="Clear Offline Data"
-				description="Remove all IndexedDB data"
-				category="data"
-			>
+			<SettingsItem label="Clear Offline Data" description="Remove all IndexedDB data">
 				{#snippet control()}
 					<Button
 						type="button"
-						variant="outline"
+						variant="danger"
 						size="sm"
 						disabled={clearingOffline}
 						onclick={clearOfflineData}
@@ -431,13 +464,64 @@
 			<SettingsItem
 				label="Export Data"
 				description="Download your settings and data"
-				category="data"
-				divider={false}
 			>
 				{#snippet control()}
 					<Button variant="outline" size="sm">
 						<Download class="size-4" />
 						Export
+					</Button>
+				{/snippet}
+			</SettingsItem>
+
+			<SettingsItem label="Import Data" description="Restore settings and data from backup">
+				{#snippet control()}
+					<Button variant="outline" size="sm">
+						<Upload class="size-4" />
+						Import
+					</Button>
+				{/snippet}
+			</SettingsItem>
+
+			<SettingsItem label="Clear Characters" description="Remove all character data">
+				{#snippet control()}
+					<Button
+						type="button"
+						variant="danger"
+						size="sm"
+						disabled={clearingCharacters}
+						onclick={clearCharacterData}
+					>
+						{#if clearingCharacters}
+							<RefreshCw class="size-4 animate-spin" />
+							Clearing...
+						{:else}
+							<Sword class="size-4" />
+							Clear Characters
+						{/if}
+					</Button>
+				{/snippet}
+			</SettingsItem>
+
+			<SettingsItem
+				label="Reset Settings"
+				description="Restore all settings to defaults"
+				divider={false}
+			>
+				{#snippet control()}
+					<Button
+						type="button"
+						variant="outline"
+						size="sm"
+						disabled={resettingSettings}
+						onclick={resetAllSettings}
+					>
+						{#if resettingSettings}
+							<RefreshCw class="size-4 animate-spin" />
+							Resetting...
+						{:else}
+							<RotateCcw class="size-4" />
+							Reset All
+						{/if}
 					</Button>
 				{/snippet}
 			</SettingsItem>
@@ -451,28 +535,20 @@
 			icon={Eye}
 			index={3}
 		>
-			<SettingsItem
-				label="Reduced Motion"
-				description="Minimize animations for motion sensitivity"
-				category="accessibility"
-			>
+			<SettingsItem label="Reduced Motion" description="Minimize animations for motion sensitivity">
 				{#snippet control()}
 					<Toggle
 						checked={settingsStore.settings.reducedMotion}
-						onchange={(v) => settingsStore.setReducedMotion(v)}
+						onchange={(v: boolean) => settingsStore.setReducedMotion(v)}
 					/>
 				{/snippet}
 			</SettingsItem>
 
-			<SettingsItem
-				label="High Contrast"
-				description="Increase visual contrast for better clarity"
-				category="accessibility"
-			>
+			<SettingsItem label="High Contrast" description="Increase visual contrast for better clarity">
 				{#snippet control()}
 					<Toggle
 						checked={settingsStore.settings.highContrast}
-						onchange={(v) => settingsStore.setHighContrast(v)}
+						onchange={(v: boolean) => settingsStore.setHighContrast(v)}
 					/>
 				{/snippet}
 			</SettingsItem>
@@ -480,13 +556,12 @@
 			<SettingsItem
 				label="Keyboard Shortcuts"
 				description="Enable keyboard navigation and shortcuts"
-				category="accessibility"
 				divider={false}
 			>
 				{#snippet control()}
 					<Toggle
 						checked={settingsStore.settings.keyboardShortcuts}
-						onchange={(v) => settingsStore.setKeyboardShortcuts(v)}
+						onchange={(v: boolean) => settingsStore.setKeyboardShortcuts(v)}
 					/>
 				{/snippet}
 			</SettingsItem>
@@ -501,7 +576,7 @@
 			index={4}
 		>
 			{#if user}
-				<SettingsItem label="Username" description={user.username} category="account">
+				<SettingsItem label="Username" description={user.username}>
 					{#snippet control()}
 						<span class="text-sm font-medium text-[var(--color-text-primary)]">{user.username}</span
 						>
@@ -509,14 +584,14 @@
 				</SettingsItem>
 
 				{#if user.email}
-					<SettingsItem label="Email" description={user.email} category="account">
+					<SettingsItem label="Email" description={user.email}>
 						{#snippet control()}
 							<span class="text-sm text-[var(--color-text-secondary)]">{user.email}</span>
 						{/snippet}
 					</SettingsItem>
 				{/if}
 
-				<SettingsItem label="Account Type" description="Authentication method" category="account">
+				<SettingsItem label="Account Type" description="Authentication method">
 					{#snippet control()}
 						<div class="rounded-lg border border-green-500/30 bg-green-500/10 px-3 py-1.5">
 							<span class="text-xs font-medium text-green-400">Authenticated</span>
@@ -524,11 +599,7 @@
 					{/snippet}
 				</SettingsItem>
 
-				<SettingsItem
-					label="Session"
-					description={sessionInfo?.text ?? 'Unknown'}
-					category="account"
-				>
+				<SettingsItem label="Session" description={sessionInfo?.text ?? 'Unknown'}>
 					{#snippet control()}
 						<div class="flex items-center gap-2">
 							{#if sessionInfo?.valid}
@@ -549,7 +620,6 @@
 				<SettingsItem
 					label="Account Created"
 					description={formatDate(user.createdAt)}
-					category="account"
 					divider={false}
 				>
 					{#snippet control()}
@@ -599,17 +669,13 @@
 			icon={Info}
 			index={5}
 		>
-			<SettingsItem
-				label="Application"
-				description="Grimar Hermetica - Your D&D 5e Companion"
-				category="about"
-			>
+			<SettingsItem label="Application" description="Grimar Hermetica - Your D&D 5e Companion">
 				{#snippet control()}
 					<span class="text-sm font-medium text-[var(--color-text-primary)]">Grimar Hermetica</span>
 				{/snippet}
 			</SettingsItem>
 
-			<SettingsItem label="Version" description="Current application version" category="about">
+			<SettingsItem label="Version" description="Current application version">
 				{#snippet control()}
 					<div class="rounded-lg border border-purple-500/30 bg-purple-500/10 px-3 py-1.5">
 						<span class="text-xs font-medium text-purple-400">v1.0.0</span>
@@ -617,18 +683,13 @@
 				{/snippet}
 			</SettingsItem>
 
-			<SettingsItem label="Build" description="Self-hosted D&D 5e Grimoire" category="about">
+			<SettingsItem label="Build" description="Self-hosted D&D 5e Grimoire">
 				{#snippet control()}
 					<span class="text-sm text-[var(--color-text-secondary)]">Local Build</span>
 				{/snippet}
 			</SettingsItem>
 
-			<SettingsItem
-				label="License"
-				description="Open source under MIT License"
-				category="about"
-				divider={false}
-			>
+			<SettingsItem label="License" description="Open source under MIT License" divider={false}>
 				{#snippet control()}
 					<a
 						href="https://github.com"

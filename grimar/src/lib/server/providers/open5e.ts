@@ -14,6 +14,9 @@ import {
 	Open5eMonsterSchema
 } from '$lib/core/types/compendium/schemas';
 import { logRawSample, logSpellFields } from '$lib/server/services/sync/debug-sync';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('Open5eProvider');
 
 /**
  * Validate data with Zod schema
@@ -21,7 +24,7 @@ import { logRawSample, logSpellFields } from '$lib/server/services/sync/debug-sy
 function validateData<T>(schema: z.ZodType<T>, data: unknown, context: string): T {
 	const result = schema.safeParse(data);
 	if (!result.success) {
-		console.error(`[open5e] Validation failed for ${context}:`, result.error.issues);
+		log.error({ context, issues: result.error.issues }, 'Validation failed');
 		throw new Error(`Invalid ${context} data from Open5e API`);
 	}
 	return result.data;

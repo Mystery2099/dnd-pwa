@@ -4,14 +4,18 @@ import { getDb } from '$lib/server/db';
 import { compendiumItems } from '$lib/server/db/schema';
 import { eq, like, and, or, desc, asc } from 'drizzle-orm';
 import { getTypeFromPath } from '$lib/core/constants/compendium';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('CompendiumItemsAPI');
 
 /**
  * GET /api/compendium/items?type=spells&page=1&limit=20&search=&sortBy=name&sortOrder=asc
  * Fetches a paginated list of compendium items by type with filtering and sorting.
  */
 export const GET: RequestHandler = async ({ url }) => {
+	const pathType = url.searchParams.get('type');
+
 	try {
-		const pathType = url.searchParams.get('type');
 		const all = url.searchParams.get('all') === 'true';
 		const page = parseInt(url.searchParams.get('page') || '1');
 		const limit = all ? 10000 : Math.min(parseInt(url.searchParams.get('limit') || '50'), 100);
@@ -90,7 +94,7 @@ export const GET: RequestHandler = async ({ url }) => {
 			hasAnyItems: totalCount > 0
 		});
 	} catch (error) {
-		console.error('Error fetching compendium items:', error);
+		log.error({ error, pathType }, 'Error fetching compendium items');
 		return json({ error: 'Failed to fetch compendium items' }, { status: 500 });
 	}
 };

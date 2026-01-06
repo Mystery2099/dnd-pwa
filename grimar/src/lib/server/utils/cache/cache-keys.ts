@@ -41,5 +41,8 @@ export const CacheKeys = {
 		`compendium:list:${type}:${normalizeOptions(options)}`,
 	compendiumItem: (type: string, id: string) => `compendium:item:${type}:${id}`,
 	compendiumSearch: (type: string, query: string) => `compendium:search:${type}:${query}`,
-	compendiumCount: (type: string) => `compendium:count:${type}`
+	compendiumCount: (type: string) => `compendium:count:${type}`,
+	// Character cache keys
+	characterList: (owner: string) => `character:list:${owner}`,
+	characterDetail: (id: number, owner?: string) => `character:detail:${id}:${owner ?? 'all'}`
 };

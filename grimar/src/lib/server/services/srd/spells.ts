@@ -8,6 +8,9 @@
 import { GRAPHQL_URL, BASE_URL, createGraphQLRequest } from './client';
 import { SrdSpellSchema, validateData } from '$lib/core/types/compendium/schemas';
 import { z } from 'zod';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('SRDSpells');
 
 export type SrdSpell = z.infer<typeof SrdSpellSchema>;
 
@@ -33,13 +36,13 @@ export async function getSpells(limit = 500): Promise<SrdSpell[]> {
 				const validated = validateData(SrdSpellSchema, spell, 'SRD spell');
 				spells.push(validated);
 			} catch (e) {
-				console.warn('[srd] Skipping invalid spell:', e);
+				log.warn({ spellName: spell.name, error: e }, 'Skipping invalid spell');
 			}
 		}
 
 		return spells.sort((a, b) => a.name.localeCompare(b.name));
 	} catch (e) {
-		console.error('SRD Spells Fetch Error:', e);
+		log.error({ error: e }, 'SRD Spells Fetch Error');
 		return [];
 	}
 }
@@ -50,7 +53,7 @@ export async function getSpellDetail(index: string): Promise<Record<string, unkn
 		if (!res.ok) throw new Error('Failed to fetch spell detail');
 		return (await res.json()) as Record<string, unknown>;
 	} catch (e) {
-		console.error('SRD Spell Detail Error:', e);
+		log.error({ error: e, spellIndex: index }, 'SRD Spell Detail Error');
 		return null;
 	}
 }

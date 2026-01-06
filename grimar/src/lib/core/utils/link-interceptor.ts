@@ -1,0 +1,127 @@
+/**
+ * Link Interceptor Utility
+ *
+ * Intercepts clicks on links in svelte-markdown rendered content.
+ * Converts open5e.com URLs to internal navigation paths.
+ */
+
+import { goto } from '$app/navigation';
+import { browser } from '$app/environment';
+
+/**
+ * URL patterns to intercept and their corresponding compendium types
+ */
+const OPEN5E_PATTERNS: Record<string, string> = {
+	monsters: 'monster',
+	spells: 'spell',
+	items: 'item',
+	feats: 'feat',
+	backgrounds: 'background',
+	races: 'race',
+	classes: 'class'
+};
+
+/**
+ * Parse an open5e URL and return an internal path if valid
+ * @param url - The URL to parse (e.g., https://api.open5e.com/monsters/shroud)
+ * @returns Internal path (e.g., /compendium/monsters/shroud) or null if not an open5e URL
+ */
+export function open5eToInternalPath(url: string): string | null {
+	try {
+		const urlObj = new URL(url);
+		const hostname = urlObj.hostname;
+
+		// Only intercept api.open5e.com URLs
+		if (hostname !== 'api.open5e.com' && hostname !== 'open5e.com') {
+			return null;
+		}
+
+		// Parse the path: /monsters/shroud -> ["monsters", "shroud"]
+		const pathParts = urlObj.pathname.split('/').filter(Boolean);
+		if (pathParts.length < 2) {
+			return null;
+		}
+
+		const [type, ...slugParts] = pathParts;
+		const compendiumType = OPEN5E_PATTERNS[type];
+
+		if (!compendiumType) {
+			// Unknown type - let it remain an external link
+			return null;
+		}
+
+		const slug = slugParts.join('-');
+		return `/compendium/${compendiumType}/${slug}`;
+	} catch {
+		// Invalid URL
+		return null;
+	}
+}
+
+/**
+ * Check if a URL should be handled as an internal link
+ * @param url - The URL to check
+ * @returns true if this is an open5e URL that should be intercepted
+ */
+export function isOpen5eUrl(url: string): boolean {
+	return open5eToInternalPath(url) !== null;
+}
+
+/**
+ * Options for the link interceptor
+ */
+export interface LinkInterceptorOptions {
+	/** Called when an internal open5e URL is clicked */
+	onInternal?: (path: string) => void;
+	/** Called when an external URL is clicked */
+	onExternal?: (url: string) => void;
+}
+
+/**
+ * Create a custom link renderer for svelte-markdown
+ * @param options - Configuration options for link handling
+ * @returns A renderer object for svelte-markdown
+ */
+export function createLinkInterceptor(options: LinkInterceptorOptions = {}) {
+	const { onInternal, onExternal } = options;
+
+	return {
+		component: 'a',
+		props: {
+			href: (props: { href: string }) => props.href,
+			onclick: (props: { href: string }) => {
+				return function handleClick(event: MouseEvent) {
+					event.preventDefault();
+
+					const href = props.href;
+					const internalPath = open5eToInternalPath(href);
+
+					if (internalPath) {
+						// This is an open5e URL - navigate internally
+						if (browser && onInternal) {
+							onInternal(internalPath);
+						} else if (browser) {
+							goto(internalPath);
+						}
+					} else {
+						// External link - open in new tab
+						if (browser && onExternal) {
+							onExternal(href);
+						} else if (browser) {
+							window.open(href, '_blank', 'noopener,noreferrer');
+						}
+					}
+				};
+			}
+		}
+	};
+}
+
+/**
+ * Default link interceptor for compendium content
+ * Navigates internally for open5e URLs, opens external URLs in new tabs
+ */
+export const defaultLinkInterceptor = createLinkInterceptor({
+	onInternal: (path) => goto(path),
+	onExternal: (url) => window.open(url, '_blank', 'noopener,noreferrer')
+});

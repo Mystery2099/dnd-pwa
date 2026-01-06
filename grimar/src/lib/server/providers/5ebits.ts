@@ -17,6 +17,9 @@ import {
 	FiveEBitsRaceSchema,
 	FiveEBitsClassSchema
 } from './schemas/5ebits-schemas';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('FiveEBitsProvider');
 
 /**
  * Validate data with Zod schema
@@ -24,7 +27,7 @@ import {
 function validateData<T>(schema: z.ZodType<T>, data: unknown, context: string): T {
 	const result = schema.safeParse(data);
 	if (!result.success) {
-		console.error(`[5e-bits] Validation failed for ${context}:`, result.error.issues);
+		log.error({ context, issues: result.error.issues }, 'Validation failed');
 		throw new Error(`Invalid ${context} data from 5e-bits API`);
 	}
 	return result.data;

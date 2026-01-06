@@ -3,6 +3,9 @@
  *
  * Provides exponential backoff retry logic for sync operations.
  */
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('SyncRetry');
 
 const DEFAULT_MAX_RETRIES = 3;
 const DEFAULT_RETRY_DELAY_MS = 1000;
@@ -40,9 +43,9 @@ export async function withRetry<T>(
 			if (attempt <= maxRetries) {
 				// Exponential backoff: 1x, 2x, 4x, etc.
 				const delay = retryDelayMs * Math.pow(2, attempt - 1);
-				console.warn(
-					`[sync-retry] ${operationName} failed (attempt ${attempt}/${maxRetries + 1}), retrying in ${delay}ms:`,
-					lastError.message
+				log.warn(
+					{ operationName, attempt, maxRetries: maxRetries + 1, delay, error: lastError.message },
+					'Operation failed, retrying'
 				);
 
 				if (options.onRetry) {

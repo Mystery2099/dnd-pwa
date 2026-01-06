@@ -8,6 +8,9 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { getCacheVersion } from '$lib/server/cache-version';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('CacheVersionAPI');
 
 /**
  * GET /api/cache/version
@@ -22,7 +25,7 @@ export const GET: RequestHandler = async () => {
 			timestamp: version.timestamp
 		});
 	} catch (error) {
-		console.error('[API/cache/version] Error:', error);
+		log.error({ error }, 'Failed to get cache version');
 		return json({ error: 'Failed to get cache version' }, { status: 500 });
 	}
 };

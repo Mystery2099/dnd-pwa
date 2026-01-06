@@ -8,6 +8,9 @@
 import { readFileSync, existsSync, readdirSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import type { CompendiumTypeName } from '$lib/core/types/compendium';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('DataLoader');
 
 // Default data directory relative to project root
 const DEFAULT_DATA_ROOT = 'data/compendium';
@@ -27,7 +30,7 @@ export async function loadDetails(jsonPath: string): Promise<Record<string, unkn
 		const content = readFileSync(fullPath, 'utf-8');
 		return JSON.parse(content) as Record<string, unknown>;
 	} catch (error) {
-		console.error(`[data-loader] Failed to parse compendium data at ${jsonPath}:`, error);
+		log.error({ jsonPath, error }, 'Failed to parse compendium data');
 		throw new Error(`Invalid JSON in compendium data file: ${jsonPath}`);
 	}
 }
@@ -46,7 +49,7 @@ export async function loadAllDetails(
 	const detailsMap = new Map<string, Record<string, unknown>>();
 
 	if (!existsSync(typeDir)) {
-		console.warn(`Data directory for type '${type}' not found: ${typeDir}`);
+		log.warn({ type, path: typeDir }, 'Data directory not found');
 		return detailsMap;
 	}
 
@@ -61,7 +64,7 @@ export async function loadAllDetails(
 			detailsMap.set(slug, data);
 		}
 	} catch (error) {
-		console.error(`[data-loader] Failed to load all details for type '${type}':`, error);
+		log.error({ type, error }, 'Failed to load all details');
 	}
 
 	return detailsMap;

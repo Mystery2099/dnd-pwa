@@ -3,6 +3,9 @@
  */
 import { syncAllProviders } from '../multiProviderSync';
 import { getDb } from '$lib/server/db';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('SyncScheduler');
 
 export class SyncScheduler {
 	private static instance: SyncScheduler;
@@ -28,15 +31,15 @@ export class SyncScheduler {
 
 			const msUntilSync = tomorrow.getTime() - now.getTime();
 
-			console.log(`[sync-scheduler] Next daily sync scheduled for ${tomorrow.toISOString()}`);
+			log.info({ nextSync: tomorrow.toISOString() }, 'Next daily sync scheduled');
 
 			setTimeout(async () => {
 				try {
 					const db = await getDb();
 					await syncAllProviders(db);
-					console.info('[sync-scheduler] Daily sync completed successfully');
+					log.info('Daily sync completed successfully');
 				} catch (error) {
-					console.error('[sync-scheduler] Daily sync failed:', error);
+					log.error({ error }, 'Daily sync failed');
 				}
 
 				// Schedule next sync

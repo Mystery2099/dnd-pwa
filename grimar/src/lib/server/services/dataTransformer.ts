@@ -1,5 +1,9 @@
 // Data transformation utilities for compendium items
 
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('DataTransformer');
+
 export type {
 	Open5eSpell,
 	Open5eMonster,
@@ -19,22 +23,33 @@ export class DataTransformer {
 	 * Transform Open5e spell data to standardized format
 	 */
 	static transformSpell(spell: Open5eSpell): SpellItem {
+		log.debug({ slug: spell.slug, name: spell.name }, 'Transforming spell');
+
 		const asArray = (value?: string[] | string): string[] => {
 			if (!value) return [];
 			return Array.isArray(value) ? value : [value];
 		};
 
-		const level = typeof spell.level === 'string' ? parseInt(spell.level) : (spell.level ?? 0);
-		const school =
-			typeof spell.school === 'string'
-				? spell.school
-				: spell.school?.name ?? 'Unknown';
+		const levelRaw = spell.level;
+		const level = typeof levelRaw === 'string' ? parseInt(levelRaw) : (levelRaw ?? 0);
+		if (typeof levelRaw === 'string' && isNaN(parseInt(levelRaw))) {
+			log.warn({ rawLevel: levelRaw, defaultingTo: 0 }, 'Invalid spell level, defaulting to 0');
+		}
 
-		const components = Array.isArray(spell.components)
-			? spell.components
-			: typeof spell.components === 'string'
-				? spell.components.split(',').map((c) => c.trim())
+		const schoolRaw = spell.school;
+		const school = typeof schoolRaw === 'string' ? schoolRaw : (schoolRaw?.name ?? 'Unknown');
+
+		const componentsRaw = spell.components;
+		const components = Array.isArray(componentsRaw)
+			? componentsRaw
+			: typeof componentsRaw === 'string'
+				? componentsRaw.split(',').map((c) => c.trim())
 				: [];
+
+		log.debug(
+			{ slug: spell.slug, level, school, componentCount: components.length },
+			'Spell transformed'
+		);
 
 		return {
 			index: spell.slug,
@@ -56,6 +71,8 @@ export class DataTransformer {
 	 * Transform Open5e monster data to standardized format
 	 */
 	static transformMonster(monster: Open5eMonster): MonsterItem {
+		log.debug({ slug: monster.slug, name: monster.name }, 'Transforming monster');
+
 		const getArmorClass = (
 			ac?: number | { type: string; value: number }[]
 		): number | { type: string; value: number }[] => {
@@ -63,9 +80,11 @@ export class DataTransformer {
 			return ac;
 		};
 
-		const cr = typeof monster.challenge_rating === 'string' 
-            ? parseFloat(monster.challenge_rating) 
-            : (monster.challenge_rating ?? 0);
+		const crRaw = monster.challenge_rating;
+		const cr = typeof crRaw === 'string' ? parseFloat(crRaw) : (crRaw ?? 0);
+		if (typeof crRaw === 'string' && isNaN(parseFloat(crRaw))) {
+			log.warn({ rawCr: crRaw, defaultingTo: 0 }, 'Invalid challenge rating, defaulting to 0');
+		}
 
 		// Sanitize speed to exclude booleans
 		const speed: Record<string, string | number> = {};
@@ -73,9 +92,26 @@ export class DataTransformer {
 			for (const [key, value] of Object.entries(monster.speed)) {
 				if (typeof value === 'string' || typeof value === 'number') {
 					speed[key] = value;
+				} else {
+					log.debug({ key, valueType: typeof value }, 'Skipping non-string/number speed value');
 				}
 			}
 		}
+
+		const actionsCount = monster.actions?.length || 0;
+		const specialAbilitiesCount = monster.special_abilities?.length || 0;
+
+		log.debug(
+			{
+				slug: monster.slug,
+				size: monster.size,
+				type: monster.type,
+				cr,
+				actionsCount,
+				specialAbilitiesCount
+			},
+			'Monster transformed'
+		);
 
 		return {
 			index: monster.slug,
@@ -119,10 +155,7 @@ export class DataTransformer {
 	/**
 	 * Create a summary text for items
 	 */
-	static createSummary(
-		type: string,
-		item: any
-	): string {
+	static createSummary(type: string, item: any): string {
 		switch (type) {
 			case 'spells':
 				return `Level ${item.level ?? 0} ${item.school ?? 'Unknown'} spell`;

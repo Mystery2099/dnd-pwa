@@ -9,6 +9,9 @@ import { providerRegistry } from '$lib/server/providers';
 import { compendiumCache, compendiumItems } from '$lib/server/db/schema';
 import { eq, like } from 'drizzle-orm';
 import type { Db } from '$lib/server/db';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('SyncCleanup');
 
 interface CleanupResult {
 	disabledSources: string[];
@@ -48,13 +51,11 @@ export async function cleanupDisabledSources(db: Db): Promise<CleanupResult> {
 	const disabledSources = allSources.filter((source) => !enabledIds.has(source));
 
 	if (disabledSources.length === 0) {
-		console.info('[cleanup] No disabled sources found - nothing to clean');
+		log.info('No disabled sources found - nothing to clean');
 		return result;
 	}
 
-	console.info(
-		`[cleanup] Found ${disabledSources.length} disabled sources to remove: ${disabledSources.join(', ')}`
-	);
+	log.info({ disabledSources }, 'Found disabled sources to remove');
 
 	// Delete items and cache for each disabled source
 	for (const source of disabledSources) {
@@ -66,7 +67,7 @@ export async function cleanupDisabledSources(db: Db): Promise<CleanupResult> {
 		result.itemsRemoved += itemsCount;
 		result.disabledSources.push(source);
 
-		console.info(`[cleanup] Removed ${itemsCount} items from disabled source: ${source}`);
+		log.info({ source, itemsCount }, 'Removed items from disabled source');
 
 		// Count cache entries for this source (filter in memory)
 		const allCache = await db.select().from(compendiumCache);
@@ -80,11 +81,12 @@ export async function cleanupDisabledSources(db: Db): Promise<CleanupResult> {
 			.execute();
 		result.cacheRemoved += cacheCount;
 
-		console.info(`[cleanup] Removed ${cacheCount} cache entries from disabled source: ${source}`);
+		log.info({ source, cacheCount }, 'Removed cache entries from disabled source');
 	}
 
-	console.info(
-		`[cleanup] Complete: ${result.itemsRemoved} items, ${result.cacheRemoved} cache entries removed`
+	log.info(
+		{ itemsRemoved: result.itemsRemoved, cacheRemoved: result.cacheRemoved },
+		'Cleanup complete'
 	);
 
 	return result;

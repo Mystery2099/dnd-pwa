@@ -3,6 +3,9 @@ import { getDb } from '$lib/server/db';
 import { compendiumItems } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { MemoryCache, CacheKeys } from '$lib/server/utils/cache';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('MonsterDetailAPI');
 
 export const GET = async ({ params }: { params: { slug: string } }) => {
 	const { slug } = params;
@@ -57,7 +60,7 @@ export const GET = async ({ params }: { params: { slug: string } }) => {
 			__rowId: monster.id
 		});
 	} catch (error) {
-		console.error('Error fetching monster detail:', error);
+		log.error({ error, slug }, 'Error fetching monster detail');
 		return json({ error: 'Internal server error' }, { status: 500 });
 	}
 };

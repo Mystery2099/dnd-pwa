@@ -144,6 +144,7 @@ export interface SortOption {
 export type SubtitleGenerator = (item: CompendiumItem) => string;
 export type TagsGenerator = (item: CompendiumItem) => string[];
 export type ListItemAccentGenerator = (item: CompendiumItem) => string;
+export type CardSchoolGenerator = (item: CompendiumItem) => string | undefined;
 export type DetailAccentGenerator = (item: CompendiumItem) => string;
 export type MetaDescriptionGenerator = (item: CompendiumItem) => string;
 
@@ -151,6 +152,7 @@ export interface DisplayConfig {
 	subtitle: SubtitleGenerator;
 	tags: TagsGenerator;
 	listItemAccent: ListItemAccentGenerator;
+	cardSchool?: CardSchoolGenerator;
 	detailAccent: DetailAccentGenerator;
 	metaDescription: MetaDescriptionGenerator;
 }

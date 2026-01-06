@@ -1,5 +1,9 @@
 export type { URL } from 'url';
 
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('CompendiumQueryParser');
+
 /**
  * Query filter options for compendium items
  */
@@ -46,13 +50,19 @@ export class CompendiumQueryParser {
 	 * @returns Parsed query options
 	 */
 	static parseQuery(url: URL, defaultOptions: Partial<QueryOptions> = {}): QueryOptions {
+		log.debug(
+			{ originalParams: url.searchParams.toString(), defaultOptions },
+			'Parsing query options'
+		);
+
 		const params = url.searchParams;
 
 		// Parse pagination options
-		const limit = Math.min(
-			parseInt(params.get('limit') || defaultOptions.limit?.toString() || '50'),
-			100
-		); // Max 100 per page
+		const limitRaw = params.get('limit') || defaultOptions.limit?.toString() || '50';
+		const limit = Math.min(parseInt(limitRaw), 100); // Max 100 per page
+		if (parseInt(limitRaw) > 100) {
+			log.warn({ rawLimit: limitRaw, clampedTo: limit }, 'Limit exceeded maximum, clamping to 100');
+		}
 
 		const offset = parseInt(params.get('offset') || defaultOptions.offset?.toString() || '0');
 
@@ -83,7 +93,7 @@ export class CompendiumQueryParser {
 			monsterSize: this.parseCSV(params.get('sizes') || undefined)
 		};
 
-		return {
+		const result = {
 			limit,
 			offset,
 			search,
@@ -92,6 +102,9 @@ export class CompendiumQueryParser {
 			filterLogic,
 			filters
 		};
+
+		log.debug({ parsed: result }, 'Query options parsed successfully');
+		return result;
 	}
 
 	/**
@@ -141,6 +154,8 @@ export class CompendiumQueryParser {
 	 */
 	static toSearchParams(options: QueryOptions): URLSearchParams {
 		const params = new URLSearchParams();
+
+		log.debug({ options }, 'Converting query options to URL params');
 
 		// Add pagination params
 		if (options.limit && options.limit !== 50) {
@@ -194,6 +209,7 @@ export class CompendiumQueryParser {
 			params.set('sizes', options.filters.monsterSize.join(','));
 		}
 
+		log.debug({ params: params.toString() }, 'URL params generated');
 		return params;
 	}
 

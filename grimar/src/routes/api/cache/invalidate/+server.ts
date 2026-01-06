@@ -9,6 +9,9 @@
 import { json, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { setCacheVersion } from '$lib/server/cache-version';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('CacheInvalidateAPI');
 
 /**
  * POST /api/cache/invalidate
@@ -39,7 +42,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		});
 	} catch (err) {
 		if ((err as { status?: number }).status) throw err;
-		console.error('[API/cache/invalidate] Error:', err);
+		log.error({ error: err }, 'Failed to invalidate cache');
 		return json({ error: 'Failed to invalidate cache' }, { status: 500 });
 	}
 };

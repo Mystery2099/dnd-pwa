@@ -12,6 +12,10 @@ const AUTH_TAG_LENGTH = 16;
 const KEY_LENGTH = 32;
 
 // Get encryption key from environment or generate a stable one
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('Crypto');
+
 function getEncryptionKey(): Buffer {
 	const key = process.env.SESSION_ENCRYPTION_KEY;
 	if (key) {
@@ -19,7 +23,7 @@ function getEncryptionKey(): Buffer {
 	}
 
 	// For development, use a fixed key (in production, always set SESSION_ENCRYPTION_KEY)
-	console.warn('[auth] SESSION_ENCRYPTION_KEY not set, using development key');
+	log.warn('SESSION_ENCRYPTION_KEY not set, using development key');
 	return crypto.scryptSync('grimar-dev-key-do-not-use-in-production', 'grimar-salt', KEY_LENGTH);
 }
 
@@ -48,7 +52,10 @@ export function decrypt(encryptedData: string): string {
 
 	// Extract IV, authTag, and encrypted data
 	const iv = Buffer.from(encryptedData.slice(0, IV_LENGTH * 2), 'hex');
-	const authTag = Buffer.from(encryptedData.slice(IV_LENGTH * 2, (IV_LENGTH + AUTH_TAG_LENGTH) * 2), 'hex');
+	const authTag = Buffer.from(
+		encryptedData.slice(IV_LENGTH * 2, (IV_LENGTH + AUTH_TAG_LENGTH) * 2),
+		'hex'
+	);
 	const encrypted = encryptedData.slice((IV_LENGTH + AUTH_TAG_LENGTH) * 2);
 
 	const decipher = crypto.createDecipheriv(ALGORITHM, key, iv);

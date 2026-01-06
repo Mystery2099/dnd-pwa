@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getTypeFromPath, isSupportedType } from '$lib/core/constants/compendium';
+import { getTypeFromPath } from '$lib/core/constants/compendium';
 
 describe('Compendium Constants', () => {
 	describe('getTypeFromPath', () => {
@@ -53,23 +53,6 @@ describe('Compendium Constants', () => {
 
 		it('should throw error for unknown path', () => {
 			expect(() => getTypeFromPath('unknown')).toThrow('Unknown compendium path: unknown');
-		});
-	});
-
-	describe('isSupportedType', () => {
-		it('should return true for path types', () => {
-			expect(isSupportedType('monsters')).toBe(true);
-			expect(isSupportedType('spells')).toBe(true);
-		});
-
-		it('should return true for database types', () => {
-			expect(isSupportedType('monster')).toBe(true);
-			expect(isSupportedType('spell')).toBe(true);
-		});
-
-		it('should return false for unsupported types', () => {
-			expect(isSupportedType('unknown')).toBe(false);
-			expect(isSupportedType('notreal')).toBe(false);
 		});
 	});
 

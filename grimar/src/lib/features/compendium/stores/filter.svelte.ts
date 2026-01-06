@@ -6,6 +6,14 @@ import { SvelteSet, SvelteURL } from 'svelte/reactivity';
 import type { CompendiumFilterConfig } from '$lib/core/types/compendium/filter';
 import { SearchIndexer } from '$lib/features/compendium/services/SearchIndexer';
 import type { CompendiumItem } from '$lib/core/types/compendium';
+import { settingsStore } from '$lib/core/client/settingsStore.svelte';
+
+// Debug logging helper
+function debugLog(...args: unknown[]) {
+	if (typeof console !== 'undefined' && console.debug) {
+		console.debug('[CompendiumFilterStore]', ...args);
+	}
+}
 
 export class CompendiumFilterStore {
 	// State using Svelte 5 runes
@@ -97,6 +105,7 @@ export class CompendiumFilterStore {
 			return;
 		}
 
+		debugLog('Setting sort:', sortBy, sortOrder);
 		this.state.sortBy = sortBy;
 		this.state.sortOrder = sortOrder;
 		this.updateUrl();
@@ -147,6 +156,8 @@ export class CompendiumFilterStore {
 	 * Apply current filters and sorting to a list of items.
 	 */
 	apply<T extends Record<string, any>>(items: T[]): T[] {
+		const startTime = performance.now();
+
 		// Store items for search indexing if they're CompendiumItems
 		if (items.length > 0 && 'externalId' in items[0]) {
 			this.buildSearchIndex(items as unknown as CompendiumItem[]);
@@ -154,11 +165,23 @@ export class CompendiumFilterStore {
 
 		let filtered = items;
 
+		// 0. A5e content filter - hide Advanced 5e content by default
+		if (!settingsStore.settings.showA5eContent) {
+			filtered = filtered.filter((item) => {
+				// Check if this is an A5e item (externalId ends with -a5e and source is open5e)
+				const externalId = item.externalId as string;
+				const source = item.source as string;
+				return !(source === 'open5e' && externalId.endsWith('-a5e'));
+			});
+			debugLog('A5e filter applied:', filtered.length, 'items remaining');
+		}
+
 		// 1. Search filter with full-text search
 		if (this.state.searchTerm && this.searchIndexer.isIndexed()) {
 			const searchResults = this.searchIndexer.search(this.state.searchTerm);
 			const searchIds = new Set(searchResults.map((item) => item.id));
 			filtered = filtered.filter((item) => searchIds.has(item.id));
+			debugLog('Search filter applied:', this.state.searchTerm, '- results:', filtered.length);
 		}
 
 		// 2. Faceted filters
@@ -167,6 +190,7 @@ export class CompendiumFilterStore {
 		);
 
 		if (activeFilterKeys.length > 0) {
+			debugLog('Applying faceted filters:', activeFilterKeys);
 			filtered = filtered.filter((item) => {
 				const matches = activeFilterKeys.map((key) => {
 					const set = this.state.sets[key];
@@ -183,6 +207,7 @@ export class CompendiumFilterStore {
 					return matches.some((m) => m);
 				}
 			});
+			debugLog('After faceted filters:', filtered.length, 'items');
 		}
 
 		// 3. Sorting
@@ -200,6 +225,17 @@ export class CompendiumFilterStore {
 			if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
 			return 0;
 		});
+
+		const duration = performance.now() - startTime;
+		debugLog(
+			'Filter apply completed:',
+			items.length,
+			'->',
+			filtered.length,
+			'items in',
+			duration.toFixed(2),
+			'ms'
+		);
 
 		return filtered;
 	}

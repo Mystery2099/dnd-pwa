@@ -14,8 +14,7 @@
 <div
 	class="relative min-h-dvh text-[var(--color-text-primary)] selection:bg-[var(--color-accent)]/30"
 >
-	<!-- THE OBSIDIAN FRAME -->
-	<!-- Common Frame Styles: bg-indigo-950/60 backdrop-blur-2xl border-[var(--color-border)] -->
+	<!-- THE FRAME -->
 
 	<!-- Left Rail -->
 	<div

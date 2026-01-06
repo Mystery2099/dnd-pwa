@@ -23,6 +23,9 @@ import {
 	validateData,
 	tryValidate
 } from '$lib/core/types/compendium/schemas';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('SrdProvider');
 
 /**
  * SRD Provider Implementation
@@ -57,17 +60,17 @@ export class SrdProvider extends BaseProvider {
 	}
 
 	async fetchAllPages(type: CompendiumTypeName): Promise<unknown[]> {
-		console.info(`[srd] Fetching all ${type}s`);
+		log.info({ type }, 'Fetching all items');
 
 		if (type === 'spell') {
 			const spells = await getSpellsApi(500);
-			console.info(`[srd] Received ${spells.length} spells`);
+			log.info({ type, count: spells.length }, 'Received spells');
 			return spells;
 		}
 		if (type === 'monster') {
 			// Fetch full details for each monster (not just summary)
 			const monsters = await getMonstersWithDetails(500);
-			console.info(`[srd] Received ${monsters.length} monsters with full details`);
+			log.info({ type, count: monsters.length }, 'Received monsters with full details');
 			return monsters;
 		}
 		return [];

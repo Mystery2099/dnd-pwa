@@ -4,6 +4,9 @@ import { eq, sql, desc, like, or, and, inArray } from 'drizzle-orm';
 import { MemoryCache, CacheKeys, getCacheTTL } from '$lib/server/utils/cache';
 import { measureDb } from '$lib/server/utils/monitoring';
 import { CompendiumQueryParser, type QueryOptions } from './CompendiumQueryParser';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('CompendiumRepository');
 
 export interface PaginationOptions {
 	limit?: number;
@@ -52,10 +55,10 @@ export class CompendiumRepository {
 		const cacheKey = CacheKeys.compendiumList(type, options);
 		const cached = this.cache.get<PaginatedResult<typeof compendiumItems.$inferSelect>>(cacheKey);
 		if (cached) {
-			console.info('[compendium-repo] Cache hit for', type);
+			log.debug({ type, cacheKey }, 'Cache hit');
 			return cached;
 		}
-		console.info('[compendium-repo] Cache miss for', type, '- fetching from DB');
+		log.debug({ type, cacheKey }, 'Cache miss - fetching from DB');
 
 		const db = await measureDb('compendium_db_connection', () => getDb());
 
@@ -63,11 +66,11 @@ export class CompendiumRepository {
 		const whereClause = this.buildWhereClause(type, options);
 		const orderClause = this.buildOrderClause(options);
 
-		console.info('[compendium-repo] Querying with type:', type);
+		log.debug({ type }, 'Querying database');
 
 		// Get total count efficiently using $count() instead of loading all rows
 		const total = await db.$count(compendiumItems, whereClause);
-		console.info('[compendium-repo] Total items matching type:', total);
+		log.debug({ type, total }, 'Total items matching type');
 
 		// Get paginated items
 		const items = await db
@@ -114,14 +117,17 @@ export class CompendiumRepository {
 		// Check cache first
 		const cached = this.cache.get<typeof compendiumItems.$inferSelect>(cacheKey);
 		if (cached) {
+			log.debug({ type, id, cacheKey }, 'Cache hit - item found');
 			return cached;
 		}
+		log.debug({ type, id, cacheKey }, 'Cache miss - fetching from DB');
 
 		const db = await getDb();
 
 		let item;
 		if (typeof id === 'string') {
 			// Search by external ID
+			log.debug({ type, externalId: id }, 'Querying by external ID');
 			item = await db
 				.select()
 				.from(compendiumItems)
@@ -129,6 +135,7 @@ export class CompendiumRepository {
 				.limit(1);
 		} else {
 			// Search by internal ID
+			log.debug({ type, internalId: id }, 'Querying by internal ID');
 			item = await db
 				.select()
 				.from(compendiumItems)
@@ -138,9 +145,12 @@ export class CompendiumRepository {
 
 		const result = item.length > 0 ? item[0] : null;
 
-		// Cache result
 		if (result) {
+			log.debug({ type, id, found: true }, 'Item found in database');
+			// Cache result
 			this.cache.set(cacheKey, result, getCacheTTL('compendium'));
+		} else {
+			log.debug({ type, id }, 'Item not found in database');
 		}
 
 		return result;
@@ -198,8 +208,10 @@ export class CompendiumRepository {
 		// Check cache first
 		const cached = this.cache.get<(typeof compendiumItems.$inferSelect)[]>(cacheKey);
 		if (cached) {
+			log.debug({ type, query, cacheKey, resultCount: cached.length }, 'Search cache hit');
 			return cached;
 		}
+		log.debug({ type, query, cacheKey }, 'Search cache miss');
 
 		const db = await getDb();
 
@@ -211,6 +223,7 @@ export class CompendiumRepository {
 			const ftsIds = await searchFts(query, 50);
 
 			if (ftsIds.length > 0) {
+				log.debug({ query, ftsResultCount: ftsIds.length }, 'FTS search successful');
 				// Fetch items by FTS rowids, filtered by type
 				items = await db
 					.select()
@@ -220,6 +233,7 @@ export class CompendiumRepository {
 					);
 			} else {
 				// Fallback to LIKE if FTS finds nothing
+				log.info({ query }, 'FTS returned no results, falling back to LIKE');
 				items = await db
 					.select()
 					.from(compendiumItems)
@@ -234,8 +248,9 @@ export class CompendiumRepository {
 					)
 					.limit(20);
 			}
-		} catch {
+		} catch (error) {
 			// If FTS fails (not initialized), fall back to LIKE
+			log.warn({ query, error }, 'FTS search failed, falling back to LIKE');
 			items = await db
 				.select()
 				.from(compendiumItems)
@@ -251,6 +266,7 @@ export class CompendiumRepository {
 				.limit(20);
 		}
 
+		log.debug({ query, resultCount: items.length }, 'Search completed');
 		// Cache result
 		this.cache.set(cacheKey, items, getCacheTTL('search'));
 

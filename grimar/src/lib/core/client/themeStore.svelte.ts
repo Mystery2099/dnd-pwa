@@ -17,6 +17,52 @@ export const THEMES: Theme[] = [
 	{ id: 'ocean', name: 'Ocean', description: 'Abyssal depths' }
 ];
 
+// Theme options for SelectCard component
+export const THEME_OPTIONS = [
+	{
+		value: 'amethyst',
+		label: 'Amethyst',
+		description: 'Deep purple magic',
+		icon: '🔮'
+	},
+	{
+		value: 'arcane',
+		label: 'Arcane',
+		description: 'Golden Weave radiance',
+		icon: '⚡'
+	},
+	{
+		value: 'nature',
+		label: 'Nature',
+		description: 'Verdant forest',
+		icon: '🌿'
+	},
+	{
+		value: 'fire',
+		label: 'Fire',
+		description: 'Blazing inferno',
+		icon: '🔥'
+	},
+	{
+		value: 'ice',
+		label: 'Ice',
+		description: 'Crystalline frost',
+		icon: '❄️'
+	},
+	{
+		value: 'void',
+		label: 'Void',
+		description: 'Cosmic darkness',
+		icon: '🌑'
+	},
+	{
+		value: 'ocean',
+		label: 'Ocean',
+		description: 'Abyssal depths',
+		icon: '🌊'
+	}
+] as const;
+
 const STORAGE_KEY = 'grimar-theme';
 
 let currentTheme = $state(THEMES[0].id);

@@ -17,6 +17,9 @@ import { Open5eProvider } from './open5e';
 import { FiveEBitsProvider } from './5ebits';
 import { SrdProvider } from './srd';
 import { HomebrewProvider } from './homebrew';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('ProviderRegistry');
 
 /**
  * Provider Registry - Singleton pattern
@@ -55,10 +58,10 @@ class ProviderRegistryClass {
 			try {
 				const content = readFileSync(configPath, 'utf-8');
 				const config = JSON.parse(content) as ProviderConfig;
-				console.info('[provider-registry] Loaded configuration from providers.json');
+				log.info('Loaded configuration from providers.json');
 				return config;
 			} catch (error) {
-				console.error('[provider-registry] Failed to load providers.json:', error);
+				log.error({ error }, 'Failed to load providers.json');
 			}
 		}
 
@@ -101,7 +104,7 @@ class ProviderRegistryClass {
 			}
 		};
 
-		console.info('[provider-registry] Using default provider configuration');
+		log.info('Using default provider configuration');
 		return defaultConfig;
 	}
 
@@ -115,7 +118,7 @@ class ProviderRegistryClass {
 			const provider = this.createProvider(settings);
 			if (provider) {
 				this.providers.set(settings.id, provider);
-				console.info(`[provider-registry] Registered provider: ${settings.id} (${provider.name})`);
+				log.info({ providerId: settings.id, providerName: provider.name }, 'Registered provider');
 			}
 		}
 
@@ -141,11 +144,11 @@ class ProviderRegistryClass {
 					return new HomebrewProvider(settings.options?.dataPath as string);
 
 				default:
-					console.warn(`[provider-registry] Unknown provider type: ${settings.type}`);
+					log.warn({ providerType: settings.type }, 'Unknown provider type');
 					return null;
 			}
 		} catch (error) {
-			console.error(`[provider-registry] Failed to create provider ${settings.id}:`, error);
+			log.error({ providerId: settings.id, error }, 'Failed to create provider');
 			return null;
 		}
 	}
@@ -204,7 +207,7 @@ class ProviderRegistryClass {
 		this.providers.clear();
 		this.config = this.loadConfig();
 		this.initializeProviders();
-		console.info('[provider-registry] Configuration reloaded');
+		log.info('Configuration reloaded');
 	}
 
 	/**

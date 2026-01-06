@@ -1,6 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import { DataTransformer } from './dataTransformer';
-import type { Open5eSpell, Open5eMonster, SpellItem, MonsterItem } from '$lib/core/types/compendium/transformers';
+import type {
+	Open5eSpell,
+	Open5eMonster,
+	SpellItem,
+	MonsterItem
+} from '$lib/core/types/compendium/transformers';
 
 describe('DataTransformer', () => {
 	describe('transformSpell', () => {
@@ -10,7 +15,9 @@ describe('DataTransformer', () => {
 				slug: 'fireball',
 				name: 'Fireball',
 				desc: ['A bright streak flashes from your pointing finger.'],
-				higher_level: ['When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d6 for each slot level above 3rd.'],
+				higher_level: [
+					'When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d6 for each slot level above 3rd.'
+				],
 				level: 3,
 				school: { name: 'Evocation' },
 				components: ['V', 'S', 'M']
@@ -40,7 +47,9 @@ describe('DataTransformer', () => {
 
 			const result = DataTransformer.transformSpell(mockSpell);
 
-			expect(result.description).toEqual(['You touch a willing creature and protect it with magical force.']);
+			expect(result.description).toEqual([
+				'You touch a willing creature and protect it with magical force.'
+			]);
 		});
 
 		it('should handle optional fields gracefully', () => {

@@ -10,6 +10,9 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { getDb } from '$lib/server/db';
 import { compendiumItems } from '$lib/server/db/schema';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('CompendiumExportAPI');
 import { nanoid } from 'nanoid';
 
 export const GET: RequestHandler = async ({ url, request }) => {
@@ -75,7 +78,7 @@ export const GET: RequestHandler = async ({ url, request }) => {
 			}
 		});
 	} catch (error) {
-		console.error('[compendium/export] Error:', error);
+		log.error({ error }, 'Failed to export compendium data');
 		return json({ error: 'Failed to export compendium data' }, { status: 500 });
 	}
 };

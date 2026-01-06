@@ -3,6 +3,9 @@ import { getDb } from '$lib/server/db';
 import { syncAllProviders } from '$lib/server/services/sync/orchestrator';
 import { invalidateAllCompendiumCache } from '$lib/server/repositories/compendium';
 import { setCacheVersion } from '$lib/server/cache-version';
+import { createModuleLogger } from '$lib/server/logger';
+
+const log = createModuleLogger('CompendiumSyncAPI');
 
 export const POST = async () => {
 	const db = await getDb();
@@ -25,16 +28,19 @@ export const POST = async () => {
 		const totalMonsters = results.reduce((sum, r) => sum + r.monsters, 0);
 		const totalErrors = results.reduce((sum, r) => sum + r.errors.length, 0);
 
-		console.info('[compendium-sync] Results:', {
-			spells: totalSpells,
-			monsters: totalMonsters,
-			providers: results.map((r) => ({
-				id: r.providerId,
-				spells: r.spells,
-				monsters: r.monsters,
-				errors: r.errors
-			}))
-		});
+		log.info(
+			{
+				spells: totalSpells,
+				monsters: totalMonsters,
+				providers: results.map((r) => ({
+					id: r.providerId,
+					spells: r.spells,
+					monsters: r.monsters,
+					errors: r.errors
+				}))
+			},
+			'Sync completed'
+		);
 
 		return json({
 			ok: totalErrors === 0,
@@ -45,7 +51,7 @@ export const POST = async () => {
 			errors: totalErrors > 0 ? results.flatMap((r) => r.errors) : undefined
 		});
 	} catch (error) {
-		console.error('[compendium-sync] Error:', error);
+		log.error({ error }, 'Sync failed');
 		return json(
 			{
 				ok: false,

@@ -222,7 +222,8 @@ export function validateData<T>(schema: z.ZodType<T>, data: unknown, context: st
 	const result = schema.safeParse(data);
 	if (!result.success) {
 		const error = result.error;
-		console.error(`[validation] ${context}:`, error.issues);
+		// Note: This is a utility function that may be called from both client and server
+		// For server-side validation, use logger directly in the calling code
 		throw new Error(`Invalid ${context} data: ${error.message}`);
 	}
 	return result.data;
