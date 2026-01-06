@@ -1,11 +1,9 @@
 <script lang="ts">
-	import { Search, Bookmark, ArrowUpDown } from 'lucide-svelte';
+	import { Bookmark, ArrowUpDown } from 'lucide-svelte';
 	import { type Snippet } from 'svelte';
-	import Input from '$lib/components/ui/Input.svelte';
 	import Select from '$lib/components/ui/Select.svelte';
 
 	interface Props {
-		onSearch: (term: string) => void;
 		onClear?: () => void;
 		onSort?: (value: string) => void;
 		sortOptions?: { label: string; value: string }[];
@@ -15,7 +13,6 @@
 	}
 
 	let {
-		onSearch,
 		onClear,
 		onSort,
 		sortOptions = [],
@@ -23,7 +20,6 @@
 		hasActiveFilters = false,
 		filters
 	}: Props = $props();
-	let searchTerm = $state('');
 	let currentSort = $state('');
 
 	// Initialize sort value from prop or first option
@@ -39,8 +35,6 @@
 	});
 
 	function clear() {
-		searchTerm = '';
-		onSearch('');
 		onClear?.();
 	}
 
@@ -51,13 +45,13 @@
 </script>
 
 <div class="flex h-full flex-col overflow-hidden">
-	<!-- Header / Search -->
+	<!-- Header -->
 	<div class="shrink-0 space-y-4 border-b border-[var(--color-border)] p-4">
 		<div class="flex items-center justify-between">
 			<h2 class="text-xs font-bold tracking-widest text-[var(--color-text-muted)] uppercase">
 				Index Filter
 			</h2>
-			{#if hasActiveFilters || searchTerm}
+			{#if hasActiveFilters}
 				<button
 					onclick={clear}
 					class="text-xs font-bold text-[var(--color-accent)] transition-colors hover:text-[var(--color-accent)]"
@@ -65,19 +59,6 @@
 					Clear All
 				</button>
 			{/if}
-		</div>
-
-		<!-- Crystal Input -->
-		<div class="relative">
-			<Search
-				class="absolute top-1/2 left-3 z-10 size-4 -translate-y-1/2 text-[var(--color-text-secondary)]"
-			/>
-			<Input
-				placeholder="Search..."
-				bind:value={searchTerm}
-				oninput={() => onSearch(searchTerm)}
-				class="h-10 pr-3 pl-9"
-			/>
 		</div>
 
 		<!-- Sort Dropdown -->

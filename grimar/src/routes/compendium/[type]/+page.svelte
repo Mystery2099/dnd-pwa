@@ -169,10 +169,6 @@
 		filters.toggle(groupKey, String(value));
 	}
 
-	function handleSearch(query: string) {
-		filters.setSearchTerm(query);
-	}
-
 	function clearFilters() {
 		filters.clearFilters();
 	}
@@ -243,7 +239,6 @@
 
 {#snippet sidebarSnippet()}
 	<CompendiumSidebar
-		onSearch={handleSearch}
 		onClear={clearFilters}
 		onSort={handleSort}
 		sortOptions={config.sorting.options}
