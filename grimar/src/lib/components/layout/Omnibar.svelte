@@ -407,8 +407,10 @@
 <style>
 	.omnibar-debug-panel {
 		position: fixed;
-		bottom: 20px;
+		bottom: auto;
+		top: 80px;
 		right: 20px;
+		left: 20px;
 		background: rgba(15, 23, 42, 0.95);
 		border: 1px solid #ef4444;
 		border-radius: 8px;
@@ -416,7 +418,9 @@
 		font-size: 12px;
 		font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
 		z-index: 9999;
-		max-width: 320px;
+		max-width: 360px;
+		max-height: 80vh;
+		overflow-y: auto;
 		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
 	}
 
