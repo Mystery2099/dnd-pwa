@@ -15,13 +15,7 @@
 		size?: 'sm' | 'md' | 'lg';
 	};
 
-	let {
-		value,
-		options,
-		onchange,
-		class: className = '',
-		size = 'md'
-	}: Props = $props();
+	let { value, options, onchange, class: className = '', size = 'md' }: Props = $props();
 
 	const sizeClasses = {
 		sm: 'text-xs gap-1 px-2 py-1',
@@ -50,7 +44,7 @@
 
 <div class={className}>
 	<div
-		class="inline-flex items-center bg-[var(--color-bg-card)] border border-white/10 rounded-xl p-1 shadow-inner"
+		class="inline-flex items-center rounded-xl border border-white/10 bg-[var(--color-bg-card)] p-1 shadow-inner"
 		role="radiogroup"
 		aria-label="Segmented control"
 	>
@@ -64,7 +58,9 @@
 				onclick={() => handleSelect(option.value)}
 				onkeydown={(e) => handleKeydown(e, option.value, index)}
 				disabled={isSelected}
-				class="inline-flex items-center justify-center rounded-lg transition-all duration-200 {sizeClasses[size]}"
+				class="inline-flex items-center justify-center rounded-lg transition-all duration-200 {sizeClasses[
+					size
+				]}"
 				class:bg-[var(--color-accent)]={isSelected}
 				class:text-white={isSelected}
 				class:shadow-md={isSelected}
@@ -74,9 +70,16 @@
 				class:disabled:cursor-default={isSelected}
 			>
 				{#if isSelected}
-					<Check class="shrink-0" style="width: {size === 'sm' ? '12px' : size === 'md' ? '14px' : '16px'}; height: {size === 'sm' ? '12px' : size === 'md' ? '14px' : '16px'}" />
+					<Check
+						class="shrink-0"
+						style="width: {size === 'sm'
+							? '12px'
+							: size === 'md'
+								? '14px'
+								: '16px'}; height: {size === 'sm' ? '12px' : size === 'md' ? '14px' : '16px'}"
+					/>
 				{/if}
-				<span class="whitespace-nowrap font-medium">{option.label}</span>
+				<span class="font-medium whitespace-nowrap">{option.label}</span>
 			</button>
 		{/each}
 	</div>

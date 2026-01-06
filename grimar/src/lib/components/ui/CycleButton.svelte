@@ -32,7 +32,8 @@
 	};
 
 	const variantClasses = {
-		default: 'bg-[var(--color-bg-card)] border border-white/10 hover:border-[var(--color-accent)]/50',
+		default:
+			'bg-[var(--color-bg-card)] border border-white/10 hover:border-[var(--color-accent)]/50',
 		gem: 'btn-3d bg-[var(--color-bg-card)]'
 	};
 
@@ -85,7 +86,9 @@
 
 <button
 	type="button"
-	class="inline-flex items-center gap-2 rounded-xl font-medium transition-all active:scale-95 select-none {sizeClasses[size]} {variantClasses[variant]} {className}"
+	class="inline-flex items-center gap-2 rounded-xl font-medium transition-all select-none active:scale-95 {sizeClasses[
+		size
+	]} {variantClasses[variant]} {className}"
 	onclick={handleClick}
 	onkeydown={handleKeydown}
 	aria-label="Cycle option: {getCurrentOption().label}"
