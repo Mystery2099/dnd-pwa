@@ -461,10 +461,7 @@
 				{/snippet}
 			</SettingsItem>
 
-			<SettingsItem
-				label="Export Data"
-				description="Download your settings and data"
-			>
+			<SettingsItem label="Export Data" description="Download your settings and data">
 				{#snippet control()}
 					<Button variant="outline" size="sm">
 						<Download class="size-4" />
