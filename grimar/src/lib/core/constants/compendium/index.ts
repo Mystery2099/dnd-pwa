@@ -35,6 +35,7 @@ const CONFIG_MAP: Record<CompendiumTypeName, CompendiumTypeConfig> = {
 };
 
 // Map URL path segments to database types
+// Note: 'characters' is not included here - characters are stored in a separate table, not compendium_items
 const PATH_TO_TYPE: Record<string, CompendiumTypeName> = {
 	spells: 'spell',
 	monsters: 'monster',
