@@ -80,12 +80,13 @@
 			results = data.results || [];
 
 			if (isDev) {
-				console.log('Results count:', results.length);
-				console.log('Results:', results);
-				if (results.length === 0) {
+				const snapshot = $state.snapshot(results);
+				console.log('Results count:', snapshot.length);
+				console.log('Results:', snapshot);
+				if (snapshot.length === 0) {
 					console.warn('⚠️ No results returned - check if compendium data exists');
 				} else {
-					console.log('First result:', results[0]);
+					console.log('First result:', snapshot[0]);
 				}
 			}
 		} catch (error) {
