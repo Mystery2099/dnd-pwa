@@ -19,6 +19,22 @@ import type { ComponentType } from 'svelte';
 export type { CompendiumFilterConfig } from './filter';
 export type { CompendiumCategory, CompendiumCard } from './categories';
 
+// All valid compendium type names as a tuple for runtime checks
+export const COMPENDIUM_TYPES = [
+	'spell',
+	'monster',
+	'item',
+	'feat',
+	'background',
+	'race',
+	'class',
+	'weapon',
+	'armor',
+	'condition',
+	'plane',
+	'section'
+] as const;
+
 //#region Core Types
 
 /**

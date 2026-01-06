@@ -5,6 +5,7 @@ import { compendiumItems } from '$lib/server/db/schema';
 import { like, or, desc, eq, and, gte, lte } from 'drizzle-orm';
 import { createModuleLogger } from '$lib/server/logger';
 import { getCompendiumConfig, getTypeFromPath } from '$lib/core/constants/compendium';
+import { COMPENDIUM_TYPES } from '$lib/core/types/compendium';
 
 const log = createModuleLogger('CompendiumSearchAPI');
 
@@ -136,7 +137,10 @@ export const GET: RequestHandler = async ({ url }) => {
 
 		// Apply type filter
 		if (filters.type) {
-			const dbType = getTypeFromPath(filters.type);
+			// Skip getTypeFromPath if already a valid compendium type (singular form)
+			const dbType = COMPENDIUM_TYPES.includes(filters.type as any)
+				? (filters.type as any)
+				: getTypeFromPath(filters.type);
 			conditions.push(eq(compendiumItems.type, dbType));
 		}
 
