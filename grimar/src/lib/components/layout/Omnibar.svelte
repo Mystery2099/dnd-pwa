@@ -49,6 +49,8 @@
 			console.log('Section:', section);
 		}
 
+		// Clear input to disable Command's fuzzy filtering on results
+		inputValue = '';
 		searchMode = section;
 		isLoading = true;
 		errorMessage = null;
