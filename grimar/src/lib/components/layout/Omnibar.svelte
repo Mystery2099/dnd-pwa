@@ -291,7 +291,7 @@
 		{#if searchMode && results.length > 0}
 			<CommandSeparator class="my-1" />
 			<CommandGroup heading="Results">
-				{#each results as result (result.slug + result.type)}
+				{#each results as result, index}
 					<CommandItem
 						value="result-{result.slug}"
 						onclick={() => handleSearchSelect(result)}
