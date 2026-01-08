@@ -1,20 +1,20 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
-@plugin '@tailwindcss/typography';
+@plugin 'tailwind-scrollbar';
 
 @theme {
 	--font-sans:
 		'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
 		Arial, sans-serif;
 
-	/* Gem Colors (Spell School Colors) */
+	/* Gem Colors */
 	--color-gem-ruby: var(--theme-gem-ruby);
 	--color-gem-sapphire: var(--theme-gem-sapphire);
 	--color-gem-emerald: var(--theme-gem-emerald);
 	--color-gem-amethyst: var(--theme-gem-amethyst);
 	--color-gem-topaz: var(--theme-gem-topaz);
 
-	/* Semantic theme colors - these are what components use */
+	/* Semantic theme colors */
 	--color-bg-canvas: var(--theme-bg-canvas);
 	--color-bg-card: var(--theme-bg-card);
 	--color-bg-overlay: var(--theme-bg-overlay);
@@ -30,6 +30,12 @@
 	--animate-float: float 6s ease-in-out infinite;
 	--animate-enter: slide-up-fade 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 	--animate-pulse-slow: pulse-glow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+	--animate-fade-in: fade-in 0.2s ease-out;
+	--animate-arcane-particles: arcane-particles 15s ease-in-out infinite;
+	--animate-arcane-materialize: arcane-materialize 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+	--animate-rune-activate: rune-activate 0.3s ease-out;
+	--animate-energy-flow: energy-flow 1.5s linear infinite;
+	--animate-aura-pulse: aura-pulse 2s ease-in-out infinite;
 
 	@keyframes shimmer {
 		0% {
@@ -72,6 +78,75 @@
 			box-shadow: 0 0 20px var(--color-accent-glow);
 		}
 	}
+
+	@keyframes fade-in {
+		from {
+			opacity: 0;
+			transform: translateY(4px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes arcane-particles {
+		0%,
+		100% {
+			background-position: 0% 0%;
+			opacity: 0.6;
+		}
+		50% {
+			background-position: 100% 100%;
+			opacity: 1;
+		}
+	}
+
+	@keyframes arcane-materialize {
+		0% {
+			opacity: 0;
+			transform: translateY(20px) scale(0.96);
+			filter: blur(8px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateY(0) scale(1);
+			filter: blur(0);
+		}
+	}
+
+	@keyframes rune-activate {
+		0% {
+			transform: scale(1);
+		}
+		50% {
+			transform: scale(1.15);
+		}
+		100% {
+			transform: scale(1);
+		}
+	}
+
+	@keyframes energy-flow {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+
+	@keyframes aura-pulse {
+		0%,
+		100% {
+			opacity: 0.2;
+			transform: scale(1);
+		}
+		50% {
+			opacity: 0.4;
+			transform: scale(1.02);
+		}
+	}
 }
 
 /* ========================
@@ -101,7 +176,7 @@
 	--theme-effect-url: '';
 }
 
-/* Arcane - Golden Weave radiance (warm divine magic) */
+/* Arcane - Golden Weave radiance */
 [data-theme='arcane'] {
 	--theme-bg-canvas: #451a03;
 	--theme-bg-card: rgba(120, 53, 15, 0.7);
@@ -122,7 +197,7 @@
 	--theme-border-hover: rgba(245, 158, 11, 0.5);
 }
 
-/* Nature - Verdant forest (druidic magic) */
+/* Nature - Verdant forest */
 [data-theme='nature'] {
 	--theme-bg-canvas: #052e16;
 	--theme-bg-card: rgba(19, 78, 74, 0.7);
@@ -143,7 +218,7 @@
 	--theme-border-hover: rgba(16, 185, 129, 0.4);
 }
 
-/* Fire - Blazing inferno (dragonfire rage) */
+/* Fire - Blazing inferno */
 [data-theme='fire'] {
 	--theme-bg-canvas: #450a0a;
 	--theme-bg-card: rgba(127, 29, 29, 0.7);
@@ -164,7 +239,7 @@
 	--theme-border-hover: rgba(249, 115, 22, 0.5);
 }
 
-/* Ice - Crystalline frost (clarity, precision) */
+/* Ice - Crystalline frost */
 [data-theme='ice'] {
 	--theme-bg-canvas: #0c4a6e;
 	--theme-bg-card: rgba(14, 116, 144, 0.7);
@@ -185,7 +260,7 @@
 	--theme-border-hover: rgba(6, 182, 212, 0.4);
 }
 
-/* Void - Cosmic darkness (eldritch, forbidden knowledge) */
+/* Void - Cosmic darkness */
 [data-theme='void'] {
 	--theme-bg-canvas: #000000;
 	--theme-bg-card: rgba(20, 20, 30, 0.8);
@@ -206,7 +281,7 @@
 	--theme-border-hover: rgba(139, 92, 246, 0.4);
 }
 
-/* Ocean - Abyssal depths (kraken-pact, bioluminescence) */
+/* Ocean - Abyssal depths */
 [data-theme='ocean'] {
 	--theme-bg-canvas: #042f2e;
 	--theme-bg-card: rgba(13, 148, 136, 0.6);
@@ -233,36 +308,24 @@
 
 @layer base {
 	body {
+		@apply relative min-h-screen bg-fixed text-[var(--color-text-primary)];
 		background: radial-gradient(circle at 50% 0%, var(--theme-bg-card), var(--theme-bg-canvas));
-		background-attachment: fixed;
-		min-height: 100vh;
-		color: var(--color-text-primary);
 		font-family: var(--font-sans);
 		-webkit-font-smoothing: antialiased;
-		position: relative;
-	}
-
-	/* Smooth scrolling for anchor links */
-	html {
-		scroll-behavior: smooth;
-		scroll-padding-top: 100px;
 	}
 
 	/* Noise Texture Overlay */
 	body::before {
 		content: '';
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		pointer-events: none;
+		@apply pointer-events-none fixed inset-0 z-[9999];
 		opacity: 0.03;
 		background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-		z-index: 9999;
 	}
 
-	/* Typography Defaults */
+	html {
+		@apply scroll-pt-24 scroll-smooth;
+	}
+
 	h1,
 	h2,
 	h3,
@@ -292,87 +355,74 @@
 
 	/* The Crystal Card */
 	.card-crystal {
+		@apply rounded-2xl border-b border-[var(--color-border)] transition-all duration-300;
 		background-color: var(--color-bg-card);
 		backdrop-filter: blur(12px);
-		/* 3D effect: top highlight edge + deep shadow */
 		box-shadow:
-			/* Top highlight edge - light coming from above */
 			inset 0 1px 0 color-mix(in srgb, var(--color-text-primary) 20%, transparent),
-			/* Subtle side highlights */ inset 1px 0 0
-				color-mix(in srgb, var(--color-text-primary) 8%, transparent),
+			inset 1px 0 0 color-mix(in srgb, var(--color-text-primary) 8%, transparent),
 			inset -1px 0 0 color-mix(in srgb, var(--color-text-primary) 8%, transparent),
-			/* Deep drop shadow for floating effect */ 0 8px 32px
-				color-mix(in srgb, black 60%, transparent),
-			/* Thin border for definition */ 0 0 0 1px var(--color-border);
-		border-bottom: 1px solid var(--color-border);
-		border-radius: 1rem;
-		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+			0 8px 32px color-mix(in srgb, black 60%, transparent),
+			0 0 0 1px var(--color-border);
 	}
 
 	.card-crystal:hover {
-		/* Enhanced shadow on hover - appears to lift */
+		@apply -translate-y-0.5;
 		box-shadow:
 			inset 0 1px 0 color-mix(in srgb, var(--color-text-primary) 30%, transparent),
 			inset 1px 0 0 color-mix(in srgb, var(--color-text-primary) 12%, transparent),
 			inset -1px 0 0 color-mix(in srgb, var(--color-text-primary) 12%, transparent),
 			0 12px 48px color-mix(in srgb, black 70%, transparent),
 			0 0 0 1px var(--color-border-hover);
-		transform: translateY(-2px);
 	}
 
 	.card-crystal:active {
-		transform: translateY(0);
+		@apply translate-y-0;
 		box-shadow:
 			inset 0 1px 0 color-mix(in srgb, var(--color-text-primary) 18%, transparent),
 			0 4px 16px color-mix(in srgb, black 50%, transparent),
 			0 0 0 1px var(--color-border);
 	}
 
-	/* 3D Card - Compendium spell/item cards with stronger floating effect */
+	/* 3D Card */
 	.card-3d {
+		@apply rounded-xl transition-all duration-200;
 		background-color: var(--color-bg-card);
 		backdrop-filter: blur(8px);
-		/* Strong top highlight + floating shadow */
 		box-shadow:
-			/* Top edge highlight - key 3D element */
 			inset 0 1px 0 color-mix(in srgb, var(--color-text-primary) 25%, transparent),
-			/* Side subtle highlights */ inset 1px 0 0
-				color-mix(in srgb, var(--color-text-primary) 6%, transparent),
+			inset 1px 0 0 color-mix(in srgb, var(--color-text-primary) 6%, transparent),
 			inset -1px 0 0 color-mix(in srgb, var(--color-text-primary) 6%, transparent),
-			/* Soft shadow for depth */ 0 4px 16px color-mix(in srgb, black 50%, transparent),
+			0 4px 16px color-mix(in srgb, black 50%, transparent),
 			0 0 0 1px var(--color-border);
-		border-radius: 0.75rem;
-		transition: all 0.2s ease;
 	}
 
 	.card-3d:hover {
+		@apply -translate-y-0.75;
 		box-shadow:
 			inset 0 1px 0 color-mix(in srgb, var(--color-text-primary) 35%, transparent),
 			inset 1px 0 0 color-mix(in srgb, var(--color-text-primary) 10%, transparent),
 			inset -1px 0 0 color-mix(in srgb, var(--color-text-primary) 10%, transparent),
 			0 8px 24px color-mix(in srgb, black 60%, transparent),
 			0 0 0 1px var(--color-border-hover);
-		transform: translateY(-3px);
 	}
 
-	/* 3D Button - Strong convex appearance */
+	/* 3D Button */
 	.btn-3d {
+		@apply rounded-lg font-semibold transition-all duration-150;
 		background: linear-gradient(
 			180deg,
 			color-mix(in srgb, var(--color-text-primary) 12%, var(--color-bg-card)) 0%,
 			color-mix(in srgb, var(--color-text-primary) 5%, var(--color-bg-card)) 100%
 		);
 		box-shadow:
-			/* Inner light edge */
 			inset 0 1px 0 color-mix(in srgb, var(--color-text-primary) 25%, transparent),
-			/* Drop shadow */ 0 3px 6px rgba(0, 0, 0, 0.4),
-			/* Border */ 0 0 0 1px var(--color-border);
-		border-radius: 0.5rem;
-		font-weight: 600;
-		transition: all 0.15s ease;
+			0 3px 6px rgba(0, 0, 0, 0.4),
+			0 0 0 1px var(--color-border);
 	}
 
 	.btn-3d:hover {
+		@apply -translate-y-0.5;
 		background: linear-gradient(
 			180deg,
 			color-mix(in srgb, var(--color-text-primary) 18%, var(--color-bg-card)) 0%,
@@ -382,10 +432,10 @@
 			inset 0 1px 0 color-mix(in srgb, var(--color-text-primary) 35%, transparent),
 			0 5px 12px color-mix(in srgb, black 50%, transparent),
 			0 0 0 1px var(--color-border-hover);
-		transform: translateY(-1px);
 	}
 
 	.btn-3d:active {
+		@apply translate-y-0.5;
 		background: linear-gradient(
 			180deg,
 			color-mix(in srgb, var(--color-text-primary) 6%, var(--color-bg-card)) 0%,
@@ -395,47 +445,40 @@
 			inset 0 2px 4px color-mix(in srgb, black 30%, transparent),
 			0 1px 3px color-mix(in srgb, black 40%, transparent),
 			0 0 0 1px var(--color-border);
-		transform: translateY(1px);
 	}
 
-	/* Recessed Input - Looks like a slot/well */
+	/* Recessed Input */
 	.input-recessed {
+		@apply rounded-lg transition-all duration-200;
 		background-color: color-mix(in srgb, black 30%, transparent);
 		box-shadow:
-			/* Inner shadow creates recessed effect */
 			inset 0 2px 4px color-mix(in srgb, black 50%, transparent),
 			inset 0 1px 0 color-mix(in srgb, var(--color-text-primary) 5%, transparent),
-			/* Subtle border */ 0 0 0 1px var(--color-border);
-		border-radius: 0.5rem;
-		transition: all 0.2s ease;
+			0 0 0 1px var(--color-border);
 	}
 
 	.input-recessed:focus {
+		@apply outline-none;
 		box-shadow:
 			inset 0 2px 4px color-mix(in srgb, black 50%, transparent),
 			inset 0 0 0 2px var(--color-accent),
 			0 0 0 1px var(--color-border);
-		outline: none;
 	}
 
-	/* 3D Panel - Floating panel with strong shadow */
+	/* 3D Panel */
 	.panel-3d {
+		@apply rounded-xl;
 		background-color: var(--color-bg-card);
 		backdrop-filter: blur(16px);
 		box-shadow:
-			/* Top highlight */
 			inset 0 1px 0 color-mix(in srgb, var(--color-text-primary) 20%, transparent),
-			/* Deep shadow for floating effect */ 0 8px 40px color-mix(in srgb, black 60%, transparent),
+			0 8px 40px color-mix(in srgb, black 60%, transparent),
 			0 0 0 1px var(--color-border);
-		border-radius: 0.75rem;
 	}
 
 	/* The "Gem" Button */
 	.btn-gem {
-		position: relative;
-		overflow: hidden;
-		border: none;
-		border-radius: 9999px;
+		@apply relative inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-full px-4 py-2 font-bold text-white transition-all duration-200;
 		background: linear-gradient(
 			180deg,
 			var(--color-accent) 0%,
@@ -445,16 +488,12 @@
 			inset 0 1px 0 color-mix(in srgb, white 40%, transparent),
 			0 2px 4px color-mix(in srgb, black 30%, transparent),
 			0 0 12px var(--color-accent-glow);
-		color: white;
-		font-weight: 700;
 		text-shadow: 0 -1px 0 color-mix(in srgb, black 50%, transparent);
-		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-		@apply inline-flex cursor-pointer items-center justify-center px-4 py-2;
 	}
 
 	.btn-gem:hover {
+		@apply -translate-y-0.5;
 		filter: brightness(1.1);
-		transform: translateY(-1px);
 		box-shadow:
 			inset 0 1px 0 color-mix(in srgb, white 60%, transparent),
 			0 4px 12px color-mix(in srgb, black 40%, transparent),
@@ -462,7 +501,7 @@
 	}
 
 	.btn-gem:active {
-		transform: translateY(1px);
+		@apply translate-y-0.5;
 		background: linear-gradient(
 			180deg,
 			color-mix(in srgb, var(--color-accent) 60%, black) 0%,
@@ -475,10 +514,9 @@
 
 	/* The "Engraved" Panel */
 	.panel-inset {
+		@apply rounded-xl border-b border-[var(--color-border)];
 		background: color-mix(in srgb, black 20%, transparent);
-		border-radius: 0.75rem;
 		box-shadow: inset 0 2px 4px color-mix(in srgb, black 40%, transparent);
-		border-bottom: 1px solid var(--color-border);
 	}
 
 	/* Text Effects */
@@ -488,10 +526,9 @@
 			0 2px 4px color-mix(in srgb, black 80%, transparent);
 	}
 
-	/* Input/Textarea Crystal Inset */
+	/* Input Crystal */
 	.input-crystal {
 		@apply rounded-xl border border-[var(--color-border)] bg-[color-mix(in_srgb,black_40%,transparent)] text-sm text-[var(--color-text-primary)] transition-all placeholder:text-[var(--color-text-muted)];
-		/* Recessed effect with inner shadows */
 		box-shadow:
 			inset 0 2px 4px color-mix(in srgb, black 50%, transparent),
 			inset 0 1px 0 color-mix(in srgb, var(--color-text-primary) 5%, transparent);
@@ -505,34 +542,34 @@
 			0 0 0 1px var(--color-border);
 	}
 
-	/* Smooth scrolling for filter panels */
+	/* Scrollbar styles */
 	.glass-scroll {
-		scrollbar-width: thin;
+		@apply scrollbar-thin;
 		scrollbar-color: color-mix(in srgb, var(--color-accent) 30%, transparent) transparent;
 	}
 
 	.glass-scroll::-webkit-scrollbar {
-		width: 6px;
+		@apply w-1.5;
 	}
 
 	.glass-scroll::-webkit-scrollbar-track {
-		background: transparent;
+		@apply bg-transparent;
 	}
 
 	.glass-scroll::-webkit-scrollbar-thumb {
+		@apply rounded-[3px];
 		background: color-mix(in srgb, var(--color-accent) 30%, transparent);
-		border-radius: 3px;
 	}
 
 	.glass-scroll::-webkit-scrollbar-thumb:hover {
 		background: color-mix(in srgb, var(--color-accent) 50%, transparent);
 	}
 
-	/* Toggle Switch Styles */
+	/* Toggle styles */
 	.toggle-track {
+		@apply transition-all duration-300;
 		background: rgba(var(--theme-bg-overlay-rgb, 49, 46, 129), 0.6);
 		border-color: var(--color-border);
-		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 	}
 
 	.toggle-track:hover:not(:disabled) {
@@ -540,41 +577,39 @@
 	}
 
 	.toggle-track.toggle-checked {
+		@apply transition-all duration-300;
 		background: rgba(var(--theme-accent-rgb, 168, 85, 247), 0.4);
 		border-color: var(--theme-accent);
 	}
 
 	.toggle-thumb {
+		@apply transition-all duration-300;
 		background: var(--theme-accent);
 		box-shadow: 0 0 10px var(--theme-accent-glow);
-		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 	}
 
 	.toggle-thumb.translate-x-4 {
-		transform: translateX(1.25rem);
+		@apply translate-x-5;
 	}
 
 	/* ========================
 	   ARCANE DASHBOARD - SETTINGS
 	   ======================== */
 
-	/* Settings Workspace Background */
+	/* Settings Workspace */
 	.settings-workspace {
+		@apply relative min-h-full overflow-hidden;
 		background:
 			radial-gradient(ellipse at 20% 0%, rgba(var(--theme-accent-rgb), 0.12) 0%, transparent 50%),
 			radial-gradient(ellipse at 80% 100%, rgba(var(--theme-accent-rgb), 0.08) 0%, transparent 50%),
 			radial-gradient(circle at 50% 50%, rgba(var(--theme-accent-rgb), 0.03) 0%, transparent 70%),
 			var(--color-bg-canvas);
-		min-height: 100%;
-		position: relative;
-		overflow: hidden;
 	}
 
 	/* Animated Magic Particles */
 	.settings-workspace::before {
 		content: '';
-		position: absolute;
-		inset: 0;
+		@apply pointer-events-none absolute inset-0 z-0;
 		background-image:
 			radial-gradient(1px 1px at 20% 30%, rgba(var(--theme-accent-rgb), 0.3), transparent),
 			radial-gradient(1px 1px at 40% 70%, rgba(var(--theme-accent-rgb), 0.2), transparent),
@@ -582,300 +617,166 @@
 			radial-gradient(1px 1px at 80% 60%, rgba(var(--theme-accent-rgb), 0.2), transparent),
 			radial-gradient(1px 1px at 90% 40%, rgba(var(--theme-accent-rgb), 0.15), transparent);
 		background-size: 200% 200%;
-		animation: arcane-particles 15s ease-in-out infinite;
-		pointer-events: none;
-		z-index: 0;
+		animation: var(--animate-arcane-particles);
 	}
 
-	@keyframes arcane-particles {
-		0%,
-		100% {
-			background-position: 0% 0%;
-			opacity: 0.6;
-		}
-		50% {
-			background-position: 100% 100%;
-			opacity: 1;
-		}
-	}
-
-	/* Arcane Panel - Instrument Panel Style */
+	/* Arcane Panel */
 	.arcane-panel {
+		@apply relative animate-arcane-materialize overflow-hidden rounded-2xl border border-[var(--color-border)] opacity-0;
 		background: color-mix(in srgb, var(--color-bg-card) 80%, transparent);
 		backdrop-filter: blur(16px);
-		border: 1px solid var(--color-border);
-		border-radius: 1rem;
-		position: relative;
-		overflow: hidden;
-		/* Bezel effect */
 		box-shadow:
 			inset 0 1px 0 color-mix(in srgb, var(--color-text-primary) 15%, transparent),
 			0 4px 24px color-mix(in srgb, black 40%, transparent),
 			0 0 0 1px var(--color-border);
-		animation: arcane-materialize 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-		opacity: 0;
 	}
 
-	/* Decorative header bar */
 	.arcane-panel::before {
 		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		height: 3px;
+		@apply absolute top-0 right-0 left-0 h-0.5;
 		background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
 		opacity: 0.6;
 	}
 
-	/* Corner accents */
 	.arcane-panel::after {
 		content: '';
-		position: absolute;
-		top: 8px;
-		right: 8px;
-		width: 12px;
-		height: 12px;
+		@apply absolute top-2 right-2 h-3 w-3 rounded-tr-md;
 		border-top: 2px solid color-mix(in srgb, var(--color-accent) 50%, transparent);
 		border-right: 2px solid color-mix(in srgb, var(--color-accent) 50%, transparent);
-		border-radius: 0 4px 0 0;
 	}
 
-	@keyframes arcane-materialize {
-		0% {
-			opacity: 0;
-			transform: translateY(20px) scale(0.96);
-			filter: blur(8px);
-		}
-		100% {
-			opacity: 1;
-			transform: translateY(0) scale(1);
-			filter: blur(0);
-		}
-	}
-
-	/* Panel header styling */
 	.arcane-panel-header {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
-		padding: 1.25rem 1.5rem 0.5rem;
+		@apply flex items-center gap-3 px-6 pt-5;
 	}
 
 	.arcane-panel-icon {
+		@apply flex items-center justify-center rounded-lg text-[var(--color-accent)];
 		width: 2.5rem;
 		height: 2.5rem;
-		border-radius: 0.625rem;
 		background: color-mix(in srgb, var(--color-accent) 15%, transparent);
 		border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		color: var(--color-accent);
 		box-shadow:
 			0 0 12px color-mix(in srgb, var(--color-accent) 20%, transparent),
 			inset 0 1px 0 color-mix(in srgb, var(--color-accent) 20%, transparent);
 	}
 
 	.arcane-panel-title {
-		font-size: 0.875rem;
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		color: var(--color-text-primary);
+		@apply text-sm font-semibold tracking-widest text-[var(--color-text-primary)] uppercase;
 	}
 
 	.arcane-panel-description {
-		font-size: 0.75rem;
-		color: var(--color-text-secondary);
-		margin-top: 0.25rem;
+		@apply mt-1 text-xs text-[var(--color-text-secondary)];
 	}
 
 	.arcane-panel-content {
-		padding: 0.75rem 1.5rem 1.5rem;
+		@apply px-6 pb-6;
 	}
 
-	/* Runic Row - Settings Item */
+	/* Runic Row */
 	.runic-row {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		padding: 1rem 0;
-		position: relative;
+		@apply relative flex items-center gap-4 py-4;
 	}
 
-	/* Runic indicator */
 	.runic-indicator {
+		@apply flex items-center justify-center text-[var(--color-text-muted)] transition-all duration-300;
 		width: 1.75rem;
 		height: 1.75rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		color: var(--color-text-muted);
-		transition: all 0.3s ease;
 	}
 
 	.runic-row:hover .runic-indicator {
-		color: var(--color-accent);
+		@apply text-[var(--color-accent)];
 		text-shadow: 0 0 8px var(--color-accent-glow);
 	}
 
 	.runic-text {
-		flex: 1;
-		min-width: 0;
+		@apply min-w-0 flex-1;
 	}
 
 	.runic-label {
-		display: block;
-		font-size: 0.875rem;
-		font-weight: 500;
-		color: var(--color-text-primary);
-		transition: color 0.2s ease;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
+		@apply block overflow-hidden text-sm font-medium text-ellipsis whitespace-nowrap text-[var(--color-text-primary)] transition-colors duration-200;
 	}
 
 	.runic-row:hover .runic-label {
-		color: var(--color-accent);
+		@apply text-[var(--color-accent)];
 	}
 
 	.runic-description {
-		display: block;
-		font-size: 0.75rem;
-		color: var(--color-text-secondary);
-		margin-top: 0.125rem;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
+		@apply mt-0.5 block overflow-hidden text-xs text-ellipsis whitespace-nowrap text-[var(--color-text-secondary)];
 	}
 
 	.runic-control {
-		flex-shrink: 0;
-		min-width: 0;
-		max-width: 50%;
-		overflow: hidden;
+		@apply max-w-[50%] min-w-0 flex-shrink-0 overflow-hidden;
 	}
 
-	/* Enhanced decorative divider */
+	/* Runic Divider */
 	.runic-divider {
-		height: 1px;
+		@apply relative my-0 h-px;
 		background: linear-gradient(90deg, transparent, var(--color-border), transparent);
-		position: relative;
-		margin: 0;
 	}
 
 	.runic-divider::before {
 		content: '';
-		position: absolute;
-		left: 50%;
-		top: -1px;
-		width: 4px;
-		height: 3px;
+		@apply absolute -top-px left-1/2 h-0.75 w-1 rounded-sm;
 		background: var(--color-accent);
-		border-radius: 2px;
-		transform: translateX(-50%);
+		transform: translate-x-[-50%];
 		opacity: 0.5;
 	}
 
 	/* Runic Seal Toggle */
 	.runic-seal {
+		@apply relative flex cursor-pointer items-center justify-center rounded-full text-[var(--color-text-muted)] transition-all duration-300;
 		width: 2.25rem;
 		height: 2.25rem;
-		border-radius: 50%;
 		background: color-mix(in srgb, black 30%, transparent);
 		border: 2px solid var(--color-border);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		cursor: pointer;
-		position: relative;
-		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-		color: var(--color-text-muted);
 	}
 
 	.runic-seal:hover:not(:disabled) {
+		@apply scale-105;
 		border-color: color-mix(in srgb, var(--color-accent) 50%, transparent);
-		transform: scale(1.05);
 	}
 
 	.runic-seal:disabled {
-		opacity: 0.5;
-		cursor: not-allowed;
+		@apply cursor-not-allowed opacity-50;
 	}
 
 	.runic-seal[data-state='checked'] {
+		@apply animate-rune-activate text-[var(--color-accent)];
 		background: color-mix(in srgb, var(--color-accent) 20%, transparent);
 		border-color: var(--color-accent);
-		color: var(--color-accent);
 		box-shadow:
 			0 0 12px color-mix(in srgb, var(--color-accent) 30%, transparent),
 			inset 0 0 8px color-mix(in srgb, var(--color-accent) 15%, transparent);
-		animation: rune-activate 0.3s ease-out;
 	}
 
-	@keyframes rune-activate {
-		0% {
-			transform: scale(1);
-		}
-		50% {
-			transform: scale(1.15);
-		}
-		100% {
-			transform: scale(1);
-		}
-	}
-
-	/* Energy ring around active seal */
 	.runic-seal::after {
 		content: '';
-		position: absolute;
-		inset: -4px;
-		border-radius: 50%;
-		border: 1px solid transparent;
+		@apply absolute -inset-1 rounded-full border border-transparent;
 		background: conic-gradient(from 0deg, var(--color-accent), transparent, var(--color-accent));
 		opacity: 0;
 		mask: radial-gradient(circle, transparent 60%, black 61%);
 		-webkit-mask: radial-gradient(circle, transparent 60%, black 61%);
-		animation: energy-flow 1.5s linear infinite;
+		animation: var(--animate-energy-flow);
 	}
 
 	.runic-seal[data-state='checked']::after {
 		opacity: 0.4;
 	}
 
-	@keyframes energy-flow {
-		0% {
-			transform: rotate(0deg);
-		}
-		100% {
-			transform: rotate(360deg);
-		}
-	}
-
 	/* Runestone Card */
 	.runestone {
-		position: relative;
+		@apply relative cursor-pointer overflow-hidden rounded-xl px-4 py-3 text-left transition-all duration-300;
 		background: linear-gradient(
 			145deg,
 			color-mix(in srgb, var(--color-bg-card) 80%, transparent) 0%,
 			color-mix(in srgb, black 20%, transparent) 100%
 		);
 		border: 1px solid var(--color-border);
-		border-radius: 0.75rem;
-		padding: 0.75rem 1rem;
-		cursor: pointer;
-		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-		text-align: left;
-		overflow: hidden;
 	}
 
-	/* Chiseled edge effect */
 	.runestone::before {
 		content: '';
-		position: absolute;
-		inset: 0;
-		border-radius: 0.75rem;
+		@apply pointer-events-none absolute inset-0 rounded-xl;
 		padding: 1px;
 		background: linear-gradient(
 			145deg,
@@ -891,21 +792,20 @@
 			linear-gradient(#fff 0 0);
 		-webkit-mask-composite: xor;
 		mask-composite: exclude;
-		pointer-events: none;
 	}
 
 	.runestone:hover {
-		transform: translateY(-2px);
+		@apply -translate-y-0.5;
 		border-color: var(--color-border-hover);
 	}
 
 	.runestone[data-state='selected'] {
+		@apply border-[var(--color-accent)];
 		background: linear-gradient(
 			145deg,
 			color-mix(in srgb, var(--color-accent) 12%, transparent) 0%,
 			color-mix(in srgb, var(--color-accent) 5%, transparent) 100%
 		);
-		border-color: var(--color-accent);
 		box-shadow:
 			0 4px 16px color-mix(in srgb, var(--color-accent) 25%, transparent),
 			inset 0 0 12px color-mix(in srgb, var(--color-accent) 8%, transparent);
@@ -920,92 +820,56 @@
 		);
 	}
 
-	/* Selection aura */
 	.runestone[data-state='selected']::after {
 		content: '';
-		position: absolute;
-		inset: -2px;
-		border-radius: 0.875rem;
-		border: 1px solid var(--color-accent);
+		@apply pointer-events-none absolute inset-[-2px] rounded-[calc(0.75rem+2px)] border border-[var(--color-accent)];
 		opacity: 0.3;
-		animation: aura-pulse 2s ease-in-out infinite;
-	}
-
-	@keyframes aura-pulse {
-		0%,
-		100% {
-			opacity: 0.2;
-			transform: scale(1);
-		}
-		50% {
-			opacity: 0.4;
-			transform: scale(1.02);
-		}
+		animation: var(--animate-aura-pulse);
 	}
 
 	.runestone-content {
-		display: flex;
-		align-items: center;
-		gap: 0.625rem;
-		position: relative;
-		z-index: 1;
+		@apply relative z-10 flex items-center gap-2.5;
 	}
 
 	.runestone-rune {
+		@apply flex items-center justify-center text-xs text-[var(--color-text-muted)] transition-all duration-300;
 		width: 1.5rem;
 		height: 1.5rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: 0.75rem;
-		color: var(--color-text-muted);
-		transition: all 0.3s ease;
 	}
 
 	.runestone[data-state='selected'] .runestone-rune {
-		color: var(--color-accent);
+		@apply text-[var(--color-accent)];
 		text-shadow: 0 0 8px var(--color-accent-glow);
 	}
 
 	.runestone-label {
-		flex: 1;
+		@apply flex-1;
 	}
 
 	.runestone-label-text {
-		display: block;
-		font-size: 0.8125rem;
-		font-weight: 500;
-		color: var(--color-text-primary);
+		@apply block text-[13px] font-medium text-[var(--color-text-primary)];
 	}
 
 	.runestone[data-state='selected'] .runestone-label-text {
-		color: var(--color-accent);
+		@apply text-[var(--color-accent)];
 	}
 
 	.runestone-label-desc {
-		display: block;
-		font-size: 0.6875rem;
-		color: var(--color-text-secondary);
-		margin-top: 0.125rem;
+		@apply mt-0.5 block text-[11px] text-[var(--color-text-secondary)];
 	}
 
-	/* Theme Nexus - Orbital Theme Selector */
+	/* Theme Nexus */
 	.theme-nexus {
-		position: relative;
-		width: 100%;
+		@apply relative mx-auto w-full;
 		max-width: 280px;
 		height: 280px;
-		margin: 0 auto;
 	}
 
 	.theme-nexus-center {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
+		@apply absolute top-1/2 left-1/2 z-20 flex cursor-pointer items-center justify-center rounded-full transition-all duration-300;
 		width: 80px;
 		height: 80px;
-		border-radius: 50%;
+		transform: translate(-50%, -50%);
 		background: radial-gradient(
 			circle at 30% 30%,
 			color-mix(in srgb, var(--color-accent) 30%, transparent),
@@ -1015,46 +879,31 @@
 		box-shadow:
 			0 0 24px color-mix(in srgb, var(--color-accent) 30%, transparent),
 			inset 0 0 16px color-mix(in srgb, var(--color-accent) 20%, transparent);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		z-index: 2;
-		cursor: pointer;
-		transition: all 0.3s ease;
 	}
 
 	.theme-nexus-center:hover {
-		transform: translate(-50%, -50%) scale(1.05);
+		@apply scale-105;
 		box-shadow:
 			0 0 32px color-mix(in srgb, var(--color-accent) 40%, transparent),
 			inset 0 0 20px color-mix(in srgb, var(--color-accent) 25%, transparent);
 	}
 
 	.theme-nexus-orb {
-		position: absolute;
-		top: 50%;
-		left: 50%;
+		@apply absolute top-1/2 left-1/2 z-30 flex cursor-pointer items-center justify-center rounded-full transition-all duration-300;
 		width: 48px;
 		height: 48px;
-		border-radius: 50%;
 		background: color-mix(in srgb, var(--color-bg-card) 90%, transparent);
 		border: 1px solid var(--color-border);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		cursor: pointer;
-		transition: all 0.3s ease;
-		z-index: 3;
+		transform: translate(-50%, -50%);
 	}
 
 	.theme-nexus-orb:hover {
-		border-color: var(--color-accent);
-		transform: scale(1.15);
+		@apply scale-[1.15] border-[var(--color-accent)];
 		box-shadow: 0 0 16px color-mix(in srgb, var(--color-accent) 25%, transparent);
 	}
 
 	.theme-nexus-orb[data-active='true'] {
-		border-color: var(--color-accent);
+		@apply border-[var(--color-accent)];
 		background: color-mix(in srgb, var(--color-accent) 15%, transparent);
 		box-shadow:
 			0 0 12px color-mix(in srgb, var(--color-accent) 30%, transparent),
@@ -1062,138 +911,94 @@
 	}
 
 	.theme-nexus-orb-preview {
+		@apply rounded-full border border-white/20;
 		width: 24px;
 		height: 24px;
-		border-radius: 50%;
-		border: 1px solid rgba(255, 255, 255, 0.2);
 	}
 
 	.theme-nexus-ring {
-		position: absolute;
-		top: 50%;
-		left: 50%;
+		@apply pointer-events-none absolute top-1/2 left-1/2 rounded-full border border-dashed border-[var(--color-border)] opacity-50;
 		width: 220px;
 		height: 220px;
-		border-radius: 50%;
-		border: 1px dashed var(--color-border);
 		transform: translate(-50%, -50%);
-		opacity: 0.5;
 	}
 
-	/* Section header decorative style */
+	/* Settings Section Header */
 	.settings-section-header {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
+		@apply flex items-center gap-2;
 	}
 
 	.settings-section-header h2 {
-		font-size: 0.75rem;
-		font-weight: 700;
-		text-transform: uppercase;
-		letter-spacing: 0.15em;
-		color: var(--color-text-primary);
-		margin: 0;
+		@apply m-0 text-xs font-bold tracking-[0.15em] text-[var(--color-text-primary)] uppercase;
 	}
 
 	.settings-section-header::after {
 		content: '';
-		flex: 1;
-		height: 1px;
+		@apply h-px flex-1;
 		background: linear-gradient(90deg, var(--color-border), transparent);
 	}
 
 	/* ========================
-	   SETTINGS PAGE REDESIGN
+	   SETTINGS PAGE
 	   ======================== */
 
-	/* Settings container with two-column layout */
 	.settings-container {
-		display: grid;
+		@apply mx-auto grid max-w-[1200px] gap-8;
 		grid-template-columns: 240px 1fr;
-		gap: 2rem;
-		max-width: 1200px;
-		margin: 0 auto;
 	}
 
-	/* Sticky sidebar navigation */
 	.settings-sidebar {
-		position: sticky;
-		top: 1.5rem;
-		height: fit-content;
-		max-height: calc(100vh - 3rem);
-		overflow-y: auto;
-		padding-right: 0.5rem;
+		@apply sticky top-6 h-fit overflow-y-auto pr-2;
+		max-height: calc(100vh - 1.5rem);
 	}
 
 	.settings-sidebar::-webkit-scrollbar {
-		width: 4px;
+		@apply w-1;
 	}
 
 	.settings-sidebar::-webkit-scrollbar-track {
-		background: transparent;
+		@apply bg-transparent;
 	}
 
 	.settings-sidebar::-webkit-scrollbar-thumb {
-		background: var(--color-border);
-		border-radius: 2px;
+		@apply rounded-sm bg-[var(--color-border)];
 	}
 
-	/* Sidebar navigation */
 	.settings-nav {
-		display: flex;
-		flex-direction: column;
-		gap: 0.25rem;
+		@apply flex flex-col gap-1;
 	}
 
 	.settings-nav-item {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
-		padding: 0.75rem 1rem;
-		border-radius: 0.5rem;
-		color: var(--color-text-secondary);
-		text-decoration: none;
-		transition: all 0.2s ease;
-		font-size: 0.875rem;
-		font-weight: 500;
+		@apply flex w-full cursor-pointer items-center gap-3 rounded-lg border-0 bg-transparent px-4 py-3 text-left text-sm font-medium text-[var(--color-text-secondary)] transition-all;
 	}
 
 	.settings-nav-item:hover {
-		background: color-mix(in srgb, var(--color-accent) 10%, transparent);
-		color: var(--color-text-primary);
+		@apply bg-[color-mix(in_srgb,var(--color-accent)_10%,transparent)] text-[var(--color-text-primary)];
 	}
 
-	.settings-nav-item.active {
-		background: color-mix(in srgb, var(--color-accent) 15%, transparent);
-		color: var(--color-accent);
-		box-shadow: 0 0 12px color-mix(in srgb, var(--color-accent) 20%, transparent);
+	.settings-nav-item[data-state='active'] {
+		@apply bg-[color-mix(in_srgb,var(--color-accent)_15%,transparent)] text-[var(--color-accent)] shadow-[0_0_12px_color-mix(in_srgb,var(--color-accent)_20%,transparent)];
 	}
 
 	.settings-nav-item .nav-icon {
-		flex-shrink: 0;
+		@apply flex-shrink-0;
 	}
 
 	.settings-nav-item .nav-label {
-		flex: 1;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
+		@apply flex-1 overflow-hidden text-ellipsis whitespace-nowrap;
 	}
 
-	/* Settings group with gem-colored accents */
+	.settings-tab-content {
+		@apply flex min-w-0 animate-fade-in flex-col gap-6;
+	}
+
 	.settings-group {
-		position: relative;
-		overflow: hidden;
+		@apply relative overflow-hidden;
 	}
 
 	.settings-group::before {
 		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		height: 2px;
+		@apply absolute top-0 right-0 left-0 h-0.5;
 		background: linear-gradient(90deg, var(--accent-color, var(--color-accent)), transparent);
 		opacity: 0.8;
 	}
@@ -1203,7 +1008,6 @@
 		box-shadow: 0 0 12px var(--accent-color, var(--color-accent-glow));
 	}
 
-	/* Gem color modifiers for settings groups */
 	.settings-group[data-accent='amethyst'] {
 		--group-accent: var(--gem-amethyst, #c084fc);
 	}
@@ -1228,55 +1032,41 @@
 		--group-accent: #f8fafc;
 	}
 
-	/* Main content area */
 	.settings-main {
-		display: flex;
-		flex-direction: column;
-		gap: 1.5rem;
-		min-width: 0;
+		@apply flex min-w-0 flex-col gap-6;
 	}
 
-	/* Responsive: collapse sidebar on tablet and below */
+	/* Responsive: tablet and below */
 	@media (max-width: 1024px) {
 		.settings-container {
 			grid-template-columns: 1fr;
 		}
 
 		.settings-sidebar {
-			position: relative;
-			top: 0;
-			height: auto;
-			max-height: none;
-			padding-right: 0;
-			margin-bottom: 1rem;
+			@apply relative top-0 mb-4 h-auto max-h-none pr-0;
 		}
 
 		.settings-nav {
-			flex-direction: row;
-			flex-wrap: nowrap;
-			overflow-x: auto;
-			gap: 0.5rem;
-			padding-bottom: 0.5rem;
+			@apply flex-row flex-nowrap gap-2 overflow-x-auto pb-2;
 		}
 
 		.settings-nav-item {
-			flex-shrink: 0;
-			white-space: nowrap;
+			@apply flex-shrink-0 whitespace-nowrap;
 		}
 	}
 
 	/* Mobile: compact navigation */
 	@media (max-width: 640px) {
 		.settings-nav-item .nav-label {
-			display: none;
+			@apply hidden;
 		}
 
 		.settings-nav-item {
-			padding: 0.625rem 0.75rem;
+			@apply px-3 py-2.5;
 		}
 
 		.settings-nav-item .nav-icon {
-			margin: 0;
+			@apply m-0;
 		}
 	}
 }
@@ -1286,7 +1076,6 @@
    ======================== */
 
 @layer utilities {
-	/* Theme-aware text colors */
 	.text-theme-primary {
 		color: var(--color-text-primary);
 	}
@@ -1299,7 +1088,6 @@
 		color: var(--color-text-muted);
 	}
 
-	/* Theme-aware background colors */
 	.bg-theme-canvas {
 		background-color: var(--color-bg-canvas);
 	}
@@ -1312,7 +1100,6 @@
 		background-color: var(--color-bg-overlay);
 	}
 
-	/* Theme-aware border */
 	.border-theme {
 		border-color: var(--color-border);
 	}
@@ -1321,7 +1108,6 @@
 		border-color: var(--color-border-hover);
 	}
 
-	/* Theme accent colors */
 	.text-accent {
 		color: var(--color-accent);
 	}
