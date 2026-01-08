@@ -31,14 +31,18 @@
 			case 'ArrowRight':
 			case 'ArrowDown':
 				event.preventDefault();
-				const nextIndex = (currentIndex + 1) % sections.length;
-				(cards[nextIndex] as HTMLElement)?.focus();
+				{
+					const nextIndex = (currentIndex + 1) % sections.length;
+					(cards[nextIndex] as HTMLElement)?.focus();
+				}
 				break;
 			case 'ArrowLeft':
 			case 'ArrowUp':
 				event.preventDefault();
-				const prevIndex = (currentIndex - 1 + sections.length) % sections.length;
-				(cards[prevIndex] as HTMLElement)?.focus();
+				{
+					const prevIndex = (currentIndex - 1 + sections.length) % sections.length;
+					(cards[prevIndex] as HTMLElement)?.focus();
+				}
 				break;
 			case 'Home':
 				event.preventDefault();

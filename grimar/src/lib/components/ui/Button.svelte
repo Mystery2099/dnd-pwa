@@ -19,7 +19,7 @@
 		size = 'md',
 		href,
 		class: className = '',
-		title,
+		title: _title,
 		disabled = false,
 		onclick,
 		children,

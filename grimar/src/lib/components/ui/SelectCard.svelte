@@ -34,7 +34,7 @@
 	}
 
 	// Get rune for option value (first letter as fallback)
-	function getRune(option: Option, isSelected: boolean): string {
+	function getRune(option: Option, _isSelected: boolean): string {
 		if (option.icon) return option.icon;
 		return option.label.charAt(0).toUpperCase();
 	}
