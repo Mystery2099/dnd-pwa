@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Bookmark, ArrowUpDown } from 'lucide-svelte';
 	import { type Snippet } from 'svelte';
-	import Select from '$lib/components/ui/Select.svelte';
+	import Select from '$lib/components/ui/select/select.svelte';
 
 	interface Props {
 		onClear?: () => void;
@@ -68,8 +68,8 @@
 					class="pointer-events-none absolute top-1/2 left-3 z-10 size-4 -translate-y-1/2 text-[var(--color-text-secondary)]"
 				/>
 				<Select
-					value={currentSort}
-					onchange={handleSort}
+					type="single"
+					bind:value={currentSort}
 					options={sortOptions}
 					class="h-10 pr-10 pl-9"
 				/>
