@@ -1,6 +1,6 @@
 import type { PageServerLoad } from './$types';
 import { getTypeFromPath } from '$lib/core/constants/compendium';
-import { error, redirect } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
 import { requireUser } from '$lib/server/services/auth';
 import { createModuleLogger } from '$lib/server/logger';
 

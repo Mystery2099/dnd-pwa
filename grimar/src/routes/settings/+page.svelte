@@ -18,7 +18,7 @@
 		RotateCcw,
 		Sword
 	} from 'lucide-svelte';
-	import ThemeSwitcher from '$lib/components/ui/ThemeSwitcher.svelte';
+	import ThemeCardSelector from '$lib/components/ui/ThemeCardSelector.svelte';
 	import Toggle from '$lib/components/ui/Toggle.svelte';
 	import SegmentedControl from '$lib/components/ui/SegmentedControl.svelte';
 	import CycleButton from '$lib/components/ui/CycleButton.svelte';
@@ -26,6 +26,7 @@
 	import SettingsItem from '$lib/components/ui/SettingsItem.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import SettingsNavigation from '$lib/components/ui/SettingsNavigation.svelte';
+import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import type { NavSection } from '$lib/components/ui/SettingsNavigation.svelte';
 	import {
 		settingsStore,
@@ -48,6 +49,13 @@
 	let clearingCharacters = $state(false);
 	let resettingSettings = $state(false);
 	let loggingOut = $state(false);
+
+	// Confirmation dialogs
+	let showClearCacheDialog = $state(false);
+	let showClearOfflineDialog = $state(false);
+	let showClearCharactersDialog = $state(false);
+	let showLogoutDialog = $state(false);
+	let showResetDialog = $state(false);
 
 	// Define sections data for navigation
 	const sections: NavSection[] = [
@@ -123,7 +131,11 @@
 	});
 
 	// Client-side cache clearing functions
-	async function clearCache() {
+		async function clearCache() {
+		showClearCacheDialog = true;
+	}
+
+	async function confirmClearCache() {
 		clearingCache = true;
 		try {
 			const keys = Object.keys(localStorage).filter((key) => key.startsWith('grimar-'));
@@ -133,10 +145,15 @@
 			console.error('[Settings] Failed to clear cache:', error);
 		} finally {
 			clearingCache = false;
+			showClearCacheDialog = false;
 		}
 	}
 
-	async function clearOfflineData() {
+		async function clearOfflineData() {
+		showClearOfflineDialog = true;
+	}
+
+	async function confirmClearOfflineData() {
 		clearingOffline = true;
 		try {
 			const databases = await indexedDB.databases();
@@ -150,10 +167,15 @@
 			console.error('[Settings] Failed to clear offline data:', error);
 		} finally {
 			clearingOffline = false;
+			showClearOfflineDialog = false;
 		}
 	}
 
-	async function clearCharacterData() {
+		async function clearCharacterData() {
+		showClearCharactersDialog = true;
+	}
+
+	async function confirmClearCharacterData() {
 		clearingCharacters = true;
 		try {
 			// Clear character-specific data from localStorage
@@ -175,10 +197,15 @@
 			console.error('[Settings] Failed to clear character data:', error);
 		} finally {
 			clearingCharacters = false;
+			showClearCharactersDialog = false;
 		}
 	}
 
-	function resetAllSettings() {
+		function resetAllSettings() {
+		showResetDialog = true;
+	}
+
+	async function confirmResetSettings() {
 		resettingSettings = true;
 		try {
 			settingsStore.reset();
@@ -187,7 +214,13 @@
 			console.error('[Settings] Failed to reset settings:', error);
 		} finally {
 			resettingSettings = false;
+			showResetDialog = false;
 		}
+	}
+
+	async function confirmLogout() {
+		showLogoutDialog = false;
+		loggingOut = true;
 	}
 
 	// Helper to format session duration
@@ -251,9 +284,9 @@
 			icon={Palette}
 			index={0}
 		>
-			<!-- Theme switcher using consistent SelectCard approach -->
+			<!-- Theme switcher using card-based selector -->
 			<div class="w-full py-4">
-				<ThemeSwitcher class="w-full" />
+				<ThemeCardSelector />
 			</div>
 
 			<SettingsItem label="Font Size" description="Adjust text size for readability">
@@ -638,7 +671,14 @@
 							};
 						}}
 					>
-						<Button type="submit" variant="danger" size="lg" class="w-full" disabled={loggingOut}>
+						<Button
+							type="button"
+							variant="danger"
+							size="lg"
+							class="w-full"
+							disabled={loggingOut}
+							onclick={() => (showLogoutDialog = true)}
+						>
 							{#if loggingOut}
 								<RefreshCw class="size-5 animate-spin" />
 								Signing out...
@@ -700,4 +740,59 @@
 			</SettingsItem>
 		</SettingsGroup>
 	</div>
+
+	<!-- Confirmation Dialogs -->
+	<Dialog.Confirm
+		bind:open={showClearCacheDialog}
+		title="Clear Cache"
+		description="This will remove all cached data from your browser's local storage. Your settings will be preserved."
+		confirmText="Clear Cache"
+		variant="danger"
+		icon={Trash2}
+		onconfirm={confirmClearCache}
+		onclose={() => (showClearCacheDialog = false)}
+	/>
+
+	<Dialog.Confirm
+		bind:open={showClearOfflineDialog}
+		title="Clear All Data"
+		description="This will remove all offline data from IndexedDB. This includes cached compendium data and any locally stored information. Are you sure?"
+		confirmText="Clear All Data"
+		variant="danger"
+		icon={HardDrive}
+		onconfirm={confirmClearOfflineData}
+		onclose={() => (showClearOfflineDialog = false)}
+	/>
+
+	<Dialog.Confirm
+		bind:open={showClearCharactersDialog}
+		title="Clear Characters"
+		description="This will remove all character data. This action cannot be undone. Are you sure?"
+		confirmText="Clear Characters"
+		variant="danger"
+		icon={Sword}
+		onconfirm={confirmClearCharacterData}
+		onclose={() => (showClearCharactersDialog = false)}
+	/>
+
+	<Dialog.Confirm
+		bind:open={showResetDialog}
+		title="Reset Settings"
+		description="This will reset all settings to their default values. This action cannot be undone. Are you sure?"
+		confirmText="Reset All"
+		icon={RotateCcw}
+		onconfirm={confirmResetSettings}
+		onclose={() => (showResetDialog = false)}
+	/>
+
+	<Dialog.Confirm
+		bind:open={showLogoutDialog}
+		title="Sign Out"
+		description="Are you sure you want to sign out? You'll need to authenticate again to access your account."
+		confirmText="Sign Out"
+		variant="danger"
+		icon={LogOut}
+		onconfirm={confirmLogout}
+		onclose={() => (showLogoutDialog = false)}
+	/>
 </div>

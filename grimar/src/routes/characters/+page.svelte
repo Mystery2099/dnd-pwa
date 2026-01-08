@@ -5,7 +5,7 @@
 	import CompendiumLoading from '$lib/features/compendium/components/ui/CompendiumLoading.svelte';
 	import CompendiumError from '$lib/features/compendium/components/ui/CompendiumError.svelte';
 
-	let { data } = $props();
+	let { data: _data } = $props();
 
 	// TanStack Query for characters (server-first, NetworkOnly)
 	const charactersQuery = $derived(createCharactersQuery());

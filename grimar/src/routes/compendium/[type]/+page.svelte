@@ -17,7 +17,6 @@
 	import { CompendiumFilterStore } from '$lib/features/compendium/stores/filter.svelte';
 	import type { CompendiumItem } from '$lib/core/types/compendium';
 	import CompendiumSkeleton from '$lib/features/compendium/components/ui/CompendiumSkeleton.svelte';
-	import FilterLogicToggle from '$lib/features/compendium/components/ui/FilterLogicToggle.svelte';
 	import CompendiumError from '$lib/features/compendium/components/ui/CompendiumError.svelte';
 	import { settingsStore } from '$lib/core/client/settingsStore.svelte';
 	import VirtualGrid from '$lib/components/ui/VirtualGrid.svelte';
@@ -161,10 +160,6 @@
 	}
 
 	// -- Filter Handlers --
-	function toggleLogic() {
-		filters.toggleLogic();
-	}
-
 	function toggleFilter(groupKey: string, value: string) {
 		filters.toggle(groupKey, String(value));
 	}
@@ -212,8 +207,6 @@
 </script>
 
 {#snippet filtersSnippet()}
-	<FilterLogicToggle logic={filters.filterLogic} onToggle={toggleLogic} />
-
 	{#each config.filters as group (group.key)}
 		<FilterGroup title={group.title} open={group.openByDefault}>
 			<div class="flex flex-wrap gap-2">
@@ -337,7 +330,13 @@
 			{:else}
 				<div class="relative z-10 max-h-[calc(100vh-280px)] min-h-0 flex-1">
 					{#if settingsStore.settings.defaultCompendiumView === 'grid'}
-						<VirtualGrid items={filteredItems} class="glass-scroll">
+						<VirtualGrid
+							items={filteredItems}
+							class="glass-scroll"
+							mobileMinCardWidth={140}
+							tabletMinCardWidth={180}
+							minCardWidth={220}
+						>
 							{#snippet children(item: CompendiumItem, _index: number)}
 								<CompendiumCardItem
 									title={item.name}

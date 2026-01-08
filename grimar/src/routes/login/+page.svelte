@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Lock, LogIn, Terminal } from 'lucide-svelte';
 
-	let { data } = $props();
+	let { data: _data } = $props();
 
 	// Check if we're in dev mode with mock user
 	const isDevMode = import.meta.env.DEV;
