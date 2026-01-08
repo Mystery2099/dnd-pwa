@@ -22,6 +22,7 @@
 	import Toggle from '$lib/components/ui/Toggle.svelte';
 	import SegmentedControl from '$lib/components/ui/SegmentedControl.svelte';
 	import CycleButton from '$lib/components/ui/CycleButton.svelte';
+	import RadioCardGrid from '$lib/components/ui/RadioCardGrid.svelte';
 	import SettingsGroup from '$lib/components/ui/SettingsGroup.svelte';
 	import SettingsItem from '$lib/components/ui/SettingsItem.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
@@ -291,11 +292,12 @@
 
 			<SettingsItem label="Font Size" description="Adjust text size for readability">
 				{#snippet control()}
-					<CycleButton
-						value={settingsStore.settings.fontSize}
+					<RadioCardGrid
+						name="fontSize"
 						options={FONT_SIZE_OPTIONS}
+						value={settingsStore.settings.fontSize}
 						onchange={(v) => settingsStore.setFontSize(v as 'sm' | 'md' | 'lg' | 'xl')}
-						size="sm"
+						columns={4}
 					/>
 				{/snippet}
 			</SettingsItem>
@@ -343,22 +345,24 @@
 
 			<SettingsItem label="Max Grid Columns" description="Maximum columns in grid view">
 				{#snippet control()}
-					<CycleButton
-						value={settingsStore.settings.gridMaxColumns.toString()}
+					<RadioCardGrid
+						name="gridMaxColumns"
 						options={GRID_MAX_COLUMNS_OPTIONS}
+						value={settingsStore.settings.gridMaxColumns.toString()}
 						onchange={(v) => settingsStore.setGridMaxColumns(Number(v))}
-						size="sm"
+						columns={3}
 					/>
 				{/snippet}
 			</SettingsItem>
 
 			<SettingsItem label="Items Per Page" description="Number of items shown in lists">
 				{#snippet control()}
-					<CycleButton
-						value={settingsStore.settings.itemsPerPage.toString()}
+					<RadioCardGrid
+						name="itemsPerPage"
 						options={ITEMS_PER_PAGE_OPTIONS}
+						value={settingsStore.settings.itemsPerPage.toString()}
 						onchange={(v) => settingsStore.setItemsPerPage(Number(v))}
-						size="sm"
+						columns={4}
 					/>
 				{/snippet}
 			</SettingsItem>
@@ -442,12 +446,13 @@
 
 			<SettingsItem label="Auto-Sync Interval" description="How often to automatically sync data">
 				{#snippet control()}
-					<CycleButton
-						value={settingsStore.settings.autoSyncInterval}
+					<RadioCardGrid
+						name="autoSyncInterval"
 						options={SYNC_INTERVAL_OPTIONS}
+						value={settingsStore.settings.autoSyncInterval}
 						onchange={(v) =>
 							settingsStore.setAutoSyncInterval(v as 'never' | '15min' | '30min' | '1h')}
-						size="sm"
+						columns={4}
 					/>
 				{/snippet}
 			</SettingsItem>
