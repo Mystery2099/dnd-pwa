@@ -1,17 +1,7 @@
 <script lang="ts">
 	import { setTheme, THEMES } from '$lib/core/client/themeStore.svelte';
 	import { Palette } from 'lucide-svelte';
-	import type { ThemeConfig } from '$lib/core/client/themes';
-
-	// Get theme metadata - now derived from single source of truth
-	const getThemeMeta = (themeId: string): { icon: any; gradient: string; accentClass: string } => {
-		const theme = THEMES.find((t) => t.id === themeId);
-		return {
-			icon: theme?.icon || Palette,
-			gradient: theme?.gradient || 'from-purple-500/20 to-pink-500/20',
-			accentClass: theme?.accentClass || 'text-purple-400'
-		};
-	};
+	import { THEME_GRADIENTS, getThemeAccentClass } from '$lib/core/client/themes';
 
 	import { getTheme } from '$lib/core/client/themeStore.svelte';
 
@@ -20,11 +10,10 @@
 
 <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 	{#each THEMES as theme (theme.id)}
-		{@const meta = getThemeMeta(theme.id)}
-		{@const Icon = meta.icon}
 		{@const isSelected = currentTheme === theme.id}
-		{@const gradient = theme.gradient}
-		{@const accentClass = theme.accentClass}
+		{@const gradient = THEME_GRADIENTS[theme.id]}
+		{@const accentClass = getThemeAccentClass(theme.id)}
+		{@const Icon = theme.icon}
 
 		<button
 			type="button"

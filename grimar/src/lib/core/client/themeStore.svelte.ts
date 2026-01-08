@@ -1,21 +1,7 @@
 import { browser } from '$app/environment';
-import {
-	THEMES,
-	type ThemeConfig,
-	type ThemeId,
-	generateAllThemesCSS,
-	generateThemeCSS
-} from './themes';
+import { THEMES, type ThemeId, type ThemeInfo, THEME_OPTIONS, getThemeAccentClass } from './themes';
 
-export { THEMES, type ThemeId, type ThemeConfig, generateAllThemesCSS, generateThemeCSS };
-
-// Derived arrays for compatibility
-export const THEME_OPTIONS = THEMES.map((t) => ({
-	value: t.id,
-	label: t.name,
-	description: t.description,
-	icon: t.id
-})) as ReadonlyArray<{ value: ThemeId; label: string; description: string; icon: string }>;
+export { THEMES, type ThemeId, type ThemeInfo, THEME_OPTIONS, getThemeAccentClass };
 
 const STORAGE_KEY = 'grimar-theme';
 
@@ -25,15 +11,27 @@ export function getTheme(): ThemeId {
 	return currentTheme;
 }
 
-export function getThemeInfo(): ThemeConfig {
+export function getThemeInfo(): ThemeInfo {
 	return THEMES.find((t) => t.id === currentTheme) || THEMES[0];
+}
+
+// Get accent class for current theme (for UI styling)
+export function getCurrentAccentClass(): string {
+	return getThemeAccentClass(currentTheme);
+}
+
+// Get any CSS variable from current theme
+export function getThemeCSSVar(varName: string): string {
+	if (!browser) return '';
+	const root = document.documentElement;
+	return getComputedStyle(root).getPropertyValue(varName).trim();
 }
 
 export function setTheme(themeId: string): boolean {
 	const theme = THEMES.find((t) => t.id === themeId);
 	if (!theme) return false;
 
-	currentTheme = themeId;
+	currentTheme = themeId as ThemeId;
 	if (browser) {
 		document.documentElement.setAttribute('data-theme', themeId);
 		localStorage.setItem(STORAGE_KEY, themeId);
@@ -42,19 +40,19 @@ export function setTheme(themeId: string): boolean {
 }
 
 // Synchronous initialization - must be called before first render
-// Reads from localStorage immediately without waiting for onMount
 export function initThemeSync() {
 	if (!browser) return;
 
 	const saved = localStorage.getItem(STORAGE_KEY);
-	const themeToSet = saved && THEMES.find((t) => t.id === saved) ? saved : THEMES[0].id;
+	const themeToSet = (
+		saved && THEMES.find((t) => t.id === saved) ? saved : THEMES[0].id
+	) as ThemeId;
 
-	// Apply immediately - before any paint
 	document.documentElement.setAttribute('data-theme', themeToSet);
 	currentTheme = themeToSet;
 }
 
-// Dev-only: Log available themes to console for easy testing
+// Dev-only: Log available themes to console
 export function logThemesToConsole() {
 	if (!browser) return;
 
@@ -99,18 +97,3 @@ export function logThemesToConsole() {
 
 // Legacy export for backward compatibility
 export const initTheme = initThemeSync;
-
-// Helper to get CSS variables for current theme (useful for JS-based styling)
-export function getThemeCSSVariables(): Record<string, string> {
-	const theme = getThemeInfo();
-	return {
-		'--theme-bg-canvas': theme.css.bgCanvas,
-		'--theme-bg-card': theme.css.bgCard,
-		'--theme-bg-overlay': theme.css.bgOverlay,
-		'--theme-accent': theme.css.accent,
-		'--theme-accent-glow': theme.css.accentGlow,
-		'--theme-text-primary': theme.css.textPrimary,
-		'--theme-text-secondary': theme.css.textSecondary,
-		'--theme-text-muted': theme.css.textMuted
-	};
-}
