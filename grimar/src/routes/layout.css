@@ -189,7 +189,7 @@
 }
 
 /* Arcane - Golden Weave radiance */
-[data-theme='arcane'] {
+/*[data-theme='arcane'] {
 	--theme-bg-canvas: #451a03;
 	--theme-bg-card: rgba(120, 53, 15, 0.7);
 	--theme-bg-overlay: rgba(146, 64, 14, 0.8);
@@ -207,10 +207,31 @@
 	--theme-text-muted: #d97706;
 	--theme-border: rgba(245, 158, 11, 0.3);
 	--theme-border-hover: rgba(245, 158, 11, 0.5);
+}*/
+/* Arcane - Gold runes on dark leather */
+[data-theme='arcane'] {
+	--theme-bg-canvas: #271c19; /* Dark Espresso Leather */
+	--theme-bg-card: rgba(66, 32, 6, 0.5); /* Amber glass */
+	--theme-bg-overlay: rgba(120, 53, 15, 0.6);
+
+	/* Accent: Golden Amber */
+	--theme-accent: #fbbf24;
+	--theme-accent-glow: rgba(251, 191, 36, 0.5);
+	--theme-accent-rgb: 251, 191, 36;
+	--theme-bg-overlay-rgb: 120, 53, 15;
+
+	/* Text: Parchment/Papyrus */
+	--theme-text-primary: #fef3c7; /* Amber-100 */
+	--theme-text-secondary: #fcd34d; /* Amber-300 */
+	--theme-text-muted: #d97706;
+
+	/* Border: Gold leaf */
+	--theme-border: rgba(251, 191, 36, 0.2);
+	--theme-border-hover: rgba(251, 191, 36, 0.5);
 }
 
 /* Nature - Verdant forest */
-[data-theme='nature'] {
+/*[data-theme='nature'] {
 	--theme-bg-canvas: #052e16;
 	--theme-bg-card: rgba(19, 78, 74, 0.7);
 	--theme-bg-overlay: rgba(17, 94, 89, 0.8);
@@ -228,31 +249,54 @@
 	--theme-text-muted: #6ee7b7;
 	--theme-border: rgba(16, 185, 129, 0.25);
 	--theme-border-hover: rgba(16, 185, 129, 0.4);
+}*/
+/* Nature - Bioluminescence in the dark */
+[data-theme='nature'] {
+	--theme-bg-canvas: #022c22; /* Very deep jungle night */
+	--theme-bg-card: rgba(6, 78, 59, 0.5); /* Deep moss glass */
+	--theme-bg-overlay: rgba(6, 95, 70, 0.7);
+
+	/* Accent: Spring Green / Neon Leaf */
+	--theme-accent: #4ade80;
+	--theme-accent-glow: rgba(74, 222, 128, 0.5);
+	--theme-accent-rgb: 74, 222, 128;
+	--theme-bg-overlay-rgb: 6, 95, 70;
+
+	/* Text: Pale Mint */
+	--theme-text-primary: #f0fdf4;
+	--theme-text-secondary: #86efac;
+	--theme-text-muted: #34d399;
+
+	/* Border: Vine-like */
+	--theme-border: rgba(134, 239, 172, 0.15);
+	--theme-border-hover: rgba(74, 222, 128, 0.4);
 }
 
 /* Fire - Blazing inferno */
+/* Fire - Magma flowing over cold stone */
 [data-theme='fire'] {
-	--theme-bg-canvas: #450a0a;
-	--theme-bg-card: rgba(127, 29, 29, 0.7);
-	--theme-bg-overlay: rgba(153, 27, 27, 0.8);
+	--theme-bg-canvas: #1c1917; /* Warm Dark Stone */
+	--theme-bg-card: rgba(41, 37, 36, 0.6); /* Semi-transparent Ash */
+	--theme-bg-overlay: rgba(68, 64, 60, 0.7);
+
+	/* Accent: Blazing Orange/Red */
 	--theme-accent: #f97316;
-	--theme-accent-glow: rgba(249, 115, 22, 0.6);
+	--theme-accent-glow: rgba(249, 115, 22, 0.5);
 	--theme-accent-rgb: 249, 115, 22;
-	--theme-bg-overlay-rgb: 153, 27, 27;
-	--theme-gem-ruby: #ef4444;
-	--theme-gem-sapphire: #f97316;
-	--theme-gem-emerald: #facc15;
-	--theme-gem-amethyst: #fde047;
-	--theme-gem-topaz: #fef3c7;
-	--theme-text-primary: #fef2f2;
-	--theme-text-secondary: #fca5a5;
-	--theme-text-muted: #f87171;
-	--theme-border: rgba(249, 115, 22, 0.3);
-	--theme-border-hover: rgba(249, 115, 22, 0.5);
+	--theme-bg-overlay-rgb: 68, 64, 60;
+
+	/* Text: Hot White/Peach */
+	--theme-text-primary: #fff7ed;
+	--theme-text-secondary: #fdba74; /* Orange-300 */
+	--theme-text-muted: #a8a29e;
+
+	/* Border: Embers */
+	--theme-border: rgba(253, 186, 116, 0.15);
+	--theme-border-hover: rgba(249, 115, 22, 0.4);
 }
 
 /* Ice - Crystalline frost */
-[data-theme='ice'] {
+/*[data-theme='ice'] {
 	--theme-bg-canvas: #0c4a6e;
 	--theme-bg-card: rgba(14, 116, 144, 0.7);
 	--theme-bg-overlay: rgba(21, 94, 117, 0.8);
@@ -270,10 +314,32 @@
 	--theme-text-muted: #38bdf8;
 	--theme-border: rgba(6, 182, 212, 0.25);
 	--theme-border-hover: rgba(6, 182, 212, 0.4);
+}*/
+
+/* Ice - Deep freeze */
+[data-theme='ice'] {
+	--theme-bg-canvas: #082f49; /* Deep Sky Dark */
+	--theme-bg-card: rgba(12, 74, 110, 0.6);
+	--theme-bg-overlay: rgba(7, 89, 133, 0.7);
+
+	/* Accent: Cyan Ice */
+	--theme-accent: #67e8f9;
+	--theme-accent-glow: rgba(103, 232, 249, 0.5);
+	--theme-accent-rgb: 103, 232, 249;
+	--theme-bg-overlay-rgb: 7, 89, 133;
+
+	/* Text: Frosty White/Blue */
+	--theme-text-primary: #f0f9ff;
+	--theme-text-secondary: #bae6fd;
+	--theme-text-muted: #38bdf8;
+
+	/* Border: Icicle sharp */
+	--theme-border: rgba(186, 230, 253, 0.15);
+	--theme-border-hover: rgba(103, 232, 249, 0.5);
 }
 
 /* Void - Cosmic darkness */
-[data-theme='void'] {
+/*[data-theme='void'] {
 	--theme-bg-canvas: #000000;
 	--theme-bg-card: rgba(20, 20, 30, 0.8);
 	--theme-bg-overlay: rgba(30, 25, 45, 0.85);
@@ -291,10 +357,32 @@
 	--theme-text-muted: #8b5cf6;
 	--theme-border: rgba(139, 92, 246, 0.25);
 	--theme-border-hover: rgba(139, 92, 246, 0.4);
+}*/
+
+/* Void - Cosmic emptiness */
+[data-theme='void'] {
+	--theme-bg-canvas: #0a0a0a; /* Almost Pure Black */
+	--theme-bg-card: rgba(23, 23, 23, 0.8); /* Neutral Zinc */
+	--theme-bg-overlay: rgba(38, 38, 38, 0.8);
+
+	/* Accent: Electric Violet */
+	--theme-accent: #c084fc;
+	--theme-accent-glow: rgba(192, 132, 252, 0.6);
+	--theme-accent-rgb: 192, 132, 252;
+	--theme-bg-overlay-rgb: 38, 38, 38;
+
+	/* Text: Silver & Ghost Purple */
+	--theme-text-primary: #fafafa;
+	--theme-text-secondary: #e9d5ff; /* Purple-200 */
+	--theme-text-muted: #a855f7;
+
+	/* Border: Faint nebulae */
+	--theme-border: rgba(192, 132, 252, 0.15);
+	--theme-border-hover: rgba(192, 132, 252, 0.4);
 }
 
 /* Ocean - Abyssal depths */
-[data-theme='ocean'] {
+/*[data-theme='ocean'] {
 	--theme-bg-canvas: #042f2e;
 	--theme-bg-card: rgba(13, 148, 136, 0.6);
 	--theme-bg-overlay: rgba(17, 94, 89, 0.8);
@@ -312,6 +400,66 @@
 	--theme-text-muted: #2dd4bf;
 	--theme-border: rgba(20, 184, 166, 0.25);
 	--theme-border-hover: rgba(20, 184, 166, 0.4);
+}*/
+
+/* Ocean - Mariana Trench */
+[data-theme='ocean'] {
+	--theme-bg-canvas: #020617; /* Slate-950 (Ink Blue) */
+	--theme-bg-card: rgba(30, 41, 59, 0.6);
+	--theme-bg-overlay: rgba(15, 23, 42, 0.8);
+
+	/* Accent: Deep Sea Teal */
+	--theme-accent: #14b8a6;
+	--theme-accent-glow: rgba(20, 184, 166, 0.5);
+	--theme-accent-rgb: 20, 184, 166;
+	--theme-bg-overlay-rgb: 15, 23, 42;
+
+	/* Text: Pale Aqua */
+	--theme-text-primary: #f0fdfa;
+	--theme-text-secondary: #5eead4;
+	--theme-text-muted: #0f766e;
+
+	/* Border: Saltwater */
+	--theme-border: rgba(94, 234, 212, 0.1);
+	--theme-border-hover: rgba(20, 184, 166, 0.4);
+}
+
+[data-theme='beach'] {
+	/* Canvas: Dark, wet compacted sand (Warm Earth) */
+	--theme-bg-canvas: #292524;
+
+	/* Cards: Translucent bronze/mud */
+	--theme-bg-card: rgba(69, 58, 43, 0.6);
+	--theme-bg-overlay: rgba(87, 76, 60, 0.7);
+
+	/* Accent: The Ocean Waves (Electric Cyan) */
+	/* This provides the high contrast "Water" element */
+	--theme-accent: #22d3ee;
+	--theme-accent-glow: rgba(34, 211, 238, 0.5);
+	--theme-accent-rgb: 34, 211, 238;
+
+	/* Overlay tint */
+	--theme-bg-overlay-rgb: 87, 76, 60;
+
+	/* Gems: Tropical/Reef colors */
+	--theme-gem-ruby: #fb7185; /* Coral */
+	--theme-gem-sapphire: #0ea5e9; /* Deep Water */
+	--theme-gem-emerald: #14b8a6; /* Seaweed */
+	--theme-gem-amethyst: #a78bfa; /* Seashell */
+	--theme-gem-topaz: #facc15; /* Sun */
+
+	/* TEXT: The "Dry Sand" Effect */
+	/* Primary: Very pale, warm beige (Orange-50ish) */
+	--theme-text-primary: #fff7ed;
+	/* Secondary: Light Tan (Orange-200ish) */
+	--theme-text-secondary: #fed7aa;
+	/* Muted: Warm Earthy Grey */
+	--theme-text-muted: #d6d3d1;
+
+	/* Border: Sandy ridge with Water hover */
+	--theme-border: rgba(254, 215, 170, 0.15); /* Low opacity tan */
+	--theme-border-hover: rgba(34, 211, 238, 0.4); /* Cyan water glow */
+	--theme-effect-url: '';
 }
 
 /* ========================

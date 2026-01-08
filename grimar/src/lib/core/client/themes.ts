@@ -1,5 +1,5 @@
 import type { ComponentType } from 'svelte';
-import { Sparkles, Flame, Leaf, Droplets, CircleDot, Snowflake } from 'lucide-svelte';
+import { Sparkles, Flame, Leaf, Droplets, CircleDot, Snowflake, Palmtree } from 'lucide-svelte';
 
 // Lightweight theme registry - SINGLE SOURCE OF TRUTH FOR METADATA
 // Colors are defined in layout.css via CSS custom properties
@@ -13,13 +13,14 @@ export interface ThemeMeta {
 }
 
 export const THEMES = [
-	{ id: 'amethyst', name: 'Amethyst', description: 'Deep purple magic', icon: Sparkles },
-	{ id: 'arcane', name: 'Arcane', description: 'Golden Weave radiance', icon: Flame },
-	{ id: 'nature', name: 'Nature', description: 'Verdant forest', icon: Leaf },
-	{ id: 'fire', name: 'Fire', description: 'Blazing inferno', icon: Flame },
-	{ id: 'ice', name: 'Ice', description: 'Crystalline frost', icon: Snowflake },
+	{ id: 'amethyst', name: 'Amethyst', description: 'Deep mystical purple', icon: Sparkles },
+	{ id: 'arcane', name: 'Arcane', description: 'Gold runes on dark leather', icon: Flame },
+	{ id: 'nature', name: 'Nature', description: 'Bioluminescence in the dark', icon: Leaf },
+	{ id: 'fire', name: 'Fire', description: 'Magma flowing over cold stone', icon: Flame },
+	{ id: 'ice', name: 'Ice', description: 'Deep freeze', icon: Snowflake },
 	{ id: 'ocean', name: 'Ocean', description: 'Abyssal depths', icon: Droplets },
-	{ id: 'void', name: 'Void', description: 'Cosmic darkness', icon: CircleDot }
+	{ id: 'void', name: 'Void', description: 'Cosmic emptiness', icon: CircleDot },
+	{ id: 'beach', name: 'Beach', description: 'Sandy shores', icon: Palmtree }
 ] as const;
 
 // Theme styling helpers - derived from CSS custom properties
@@ -36,7 +37,8 @@ export const THEME_GRADIENTS: Record<ThemeId, string> = {
 	fire: 'from-red-500/20 to-orange-500/20',
 	ice: 'from-cyan-500/20 to-blue-500/20',
 	ocean: 'from-cyan-500/20 to-teal-500/20',
-	void: 'from-violet-500/20 to-gray-500/20'
+	void: 'from-violet-500/20 to-gray-500/20',
+	beach: 'from-amber-500/20 to-cyan-500/20'
 };
 
 // Helper to get accent class for a theme
@@ -47,8 +49,9 @@ export function getThemeAccentClass(themeId: string): string {
 		nature: 'text-emerald-400',
 		fire: 'text-red-400',
 		ice: 'text-cyan-400',
-		ocean: 'text-cyan-400',
-		void: 'text-violet-400'
+		ocean: 'text-teal-400',
+		void: 'text-violet-400',
+		beach: 'text-cyan-400'
 	};
 	return map[themeId] || 'text-purple-400';
 }
