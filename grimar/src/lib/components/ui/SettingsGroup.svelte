@@ -43,7 +43,7 @@
 	</div>
 
 	<div class="arcane-panel-content">
-		<div class="divide-y divide-white/5">
+		<div class="w-full divide-y divide-white/5">
 			{@render children()}
 		</div>
 	</div>
