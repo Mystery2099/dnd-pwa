@@ -10,6 +10,7 @@
 		id?: string;
 		class?: string;
 		index?: number;
+		accentColor?: string; // Section-specific accent color (gem color)
 	};
 
 	let {
@@ -19,18 +20,26 @@
 		children,
 		id,
 		class: className = '',
-		index = 0
+		index = 0,
+		accentColor = 'var(--color-accent)'
 	}: Props = $props();
 
 	// Calculate animation delay based on index
 	let animationDelay = $derived(`${index * 0.1}s`);
+
+	// Generate accent border style
+	let accentBorderStyle = $derived(`--accent-color: ${accentColor}`);
 </script>
 
-<div class="arcane-panel {className}" style="animation-delay: {animationDelay}" {id}>
+<div
+	class="arcane-panel settings-group {className}"
+	style="animation-delay: {animationDelay}; {accentBorderStyle}"
+	{id}
+>
 	<div class="arcane-panel-header">
 		{#if icon}
 			{@const Icon = icon}
-			<div class="arcane-panel-icon">
+			<div class="arcane-panel-icon" style="color: {accentColor}">
 				<Icon class="size-5" />
 			</div>
 		{/if}
