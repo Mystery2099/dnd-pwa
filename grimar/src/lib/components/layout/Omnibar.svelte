@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/environment';
+	import { SvelteURLSearchParams } from 'svelte/reactivity';
 	import {
 		CommandDialog,
 		CommandInput,
@@ -11,7 +12,16 @@
 		CommandSeparator,
 		CommandLoading
 	} from '$lib/components/ui/command';
-	import { BookOpen, Settings, Database, Users, Loader2, Search, Trash2 } from 'lucide-svelte';
+	import {
+		BookOpen,
+		Settings,
+		Database,
+		Users,
+		Loader2,
+		Search,
+		Trash2,
+		ArrowLeft
+	} from 'lucide-svelte';
 
 	interface SearchResult {
 		type: string;
@@ -29,7 +39,7 @@
 	let searchMode = $state<string | null>(null);
 	let inputRef = $state<HTMLInputElement | null>(null);
 	let errorMessage = $state<string | null>(null);
-	let debugMode = $state(false); // Toggle for debug panel
+	let debugMode = $state(false);
 
 	const isDev = import.meta.env.DEV;
 
@@ -49,14 +59,12 @@
 			console.log('Section:', section);
 		}
 
-		// Clear input to disable Command's fuzzy filtering on results
-		inputValue = '';
 		searchMode = section;
 		isLoading = true;
 		errorMessage = null;
 
 		try {
-			const params = new URLSearchParams();
+			const params = new SvelteURLSearchParams();
 			params.set('q', '*');
 			params.set('section', section);
 			params.set('limit', '12');
@@ -85,11 +93,6 @@
 				const snapshot = $state.snapshot(results);
 				console.log('Results count:', snapshot.length);
 				console.log('Results:', snapshot);
-				if (snapshot.length === 0) {
-					console.warn('⚠️ No results returned - check if compendium data exists');
-				} else {
-					console.log('First result:', snapshot[0]);
-				}
 			}
 		} catch (error) {
 			const msg = error instanceof Error ? error.message : 'Unknown error';
@@ -114,6 +117,14 @@
 		inputValue = '';
 		searchMode = null;
 		results = [];
+	}
+
+	// Go back to commands list
+	function backToCommands() {
+		searchMode = null;
+		results = [];
+		errorMessage = null;
+		setTimeout(() => inputRef?.focus(), 0);
 	}
 
 	// Sync compendium
@@ -181,12 +192,12 @@
 <!-- Trigger Button -->
 <button
 	onclick={() => (open = true)}
-	class="flex h-10 w-full items-center gap-2 rounded-md border border-[var(--color-border)] bg-[var(--color-bg-card)] px-3 text-sm text-[var(--color-text-muted)] transition-colors hover:border-[var(--color-accent)] hover:bg-[var(--color-bg-overlay)]"
+	class="border-theme bg-theme-card text-theme-muted hover:bg-theme-overlay flex h-10 w-full items-center gap-2 rounded-md border px-3 text-sm transition-colors hover:border-accent"
 >
 	<Search class="size-4" />
 	<span class="flex-1 text-left">Search commands...</span>
 	<div
-		class="flex items-center gap-1 rounded border border-[var(--color-border)] bg-[var(--color-bg-card)] px-1.5 py-0.5 text-[10px] font-bold text-[var(--color-text-muted)]"
+		class="border-theme bg-theme-card text-theme-muted flex items-center gap-1 rounded border px-1.5 py-0.5 text-[10px] font-bold"
 	>
 		<span>⌘</span><span>K</span>
 	</div>
@@ -196,174 +207,198 @@
 	<CommandInput
 		bind:ref={inputRef}
 		bind:value={inputValue}
-		placeholder="Type to search commands..."
-		class="h-12 border-b border-[var(--color-border)] bg-[var(--color-bg-card)] text-base text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)]"
+		placeholder={searchMode ? `Search ${searchMode}...` : 'Type to search commands...'}
+		class="border-theme bg-theme-card text-theme-primary placeholder:text-theme-muted h-12 border-b text-base"
 	/>
 	<CommandList class="max-h-[60vh] overflow-y-auto">
 		{#if isLoading}
 			<CommandLoading>
 				<div class="flex items-center justify-center py-8">
-					<Loader2 class="size-5 animate-spin text-[var(--color-accent)]" />
+					<Loader2 class="size-5 animate-spin text-accent" />
 				</div>
 			</CommandLoading>
 		{/if}
 
-		<!-- Search Sections - fuzzy matches on value -->
-		<CommandGroup heading="Search">
-			<CommandItem
-				value="search-spells"
-				onclick={() => performSearch('spells')}
-				class="flex items-center gap-3 px-4 py-2.5"
-			>
-				<BookOpen class="size-5 text-blue-500" />
-				<span class="flex-1">Search Spells</span>
-				<span class="text-xs text-[var(--color-text-muted)]">spells</span>
-			</CommandItem>
-			<CommandItem
-				value="search-monsters"
-				onclick={() => performSearch('monsters')}
-				class="flex items-center gap-3 px-4 py-2.5"
-			>
-				<Database class="size-5 text-red-500" />
-				<span class="flex-1">Search Monsters</span>
-				<span class="text-xs text-[var(--color-text-muted)]">monsters</span>
-			</CommandItem>
-			<CommandItem
-				value="search-items"
-				onclick={() => performSearch('items')}
-				class="flex items-center gap-3 px-4 py-2.5"
-			>
-				<Database class="size-5 text-amber-500" />
-				<span class="flex-1">Search Items</span>
-				<span class="text-xs text-[var(--color-text-muted)]">items</span>
-			</CommandItem>
-			<CommandItem
-				value="search-feats"
-				onclick={() => performSearch('feats')}
-				class="flex items-center gap-3 px-4 py-2.5"
-			>
-				<BookOpen class="size-5 text-emerald-500" />
-				<span class="flex-1">Search Feats</span>
-				<span class="text-xs text-[var(--color-text-muted)]">feats</span>
-			</CommandItem>
-		</CommandGroup>
-
-		<CommandSeparator class="my-1" />
-
-		<!-- Navigate -->
-		<CommandGroup heading="Navigate">
-			<CommandItem
-				value="goto-spells"
-				onclick={() => navigate('/compendium/spells')}
-				class="flex items-center gap-3 px-4 py-2.5"
-			>
-				<BookOpen class="size-5 text-blue-500" />
-				<span class="flex-1">Go to Spells</span>
-			</CommandItem>
-			<CommandItem
-				value="goto-monsters"
-				onclick={() => navigate('/compendium/monsters')}
-				class="flex items-center gap-3 px-4 py-2.5"
-			>
-				<Database class="size-5 text-red-500" />
-				<span class="flex-1">Go to Monsters</span>
-			</CommandItem>
-			<CommandItem
-				value="goto-characters"
-				onclick={() => navigate('/characters')}
-				class="flex items-center gap-3 px-4 py-2.5"
-			>
-				<Users class="size-5 text-green-500" />
-				<span class="flex-1">Go to Characters</span>
-			</CommandItem>
-			<CommandItem
-				value="goto-settings"
-				onclick={() => navigate('/settings')}
-				class="flex items-center gap-3 px-4 py-2.5"
-			>
-				<Settings class="size-5 text-purple-500" />
-				<span class="flex-1">Go to Settings</span>
-			</CommandItem>
-		</CommandGroup>
-
-		<CommandSeparator class="my-1" />
-
-		<!-- Commands -->
-		<CommandGroup heading="Commands">
-			<CommandItem
-				value="sync-compendium"
-				onclick={handleSync}
-				class="flex items-center gap-3 px-4 py-2.5"
-			>
-				<Database class="size-5 text-[var(--color-accent)]" />
-				<span class="flex-1">Sync Compendium</span>
-				<span class="text-xs text-[var(--color-text-muted)]">sync</span>
-			</CommandItem>
-			<CommandItem
-				value="clear-cache"
-				onclick={handleClearCache}
-				class="flex items-center gap-3 px-4 py-2.5"
-			>
-				<Trash2 class="size-5 text-red-500" />
-				<span class="flex-1">Clear Cache</span>
-				<span class="text-xs text-[var(--color-text-muted)]">cache</span>
-			</CommandItem>
-		</CommandGroup>
-
-		<CommandSeparator class="my-1" />
-
-		<!-- Theme -->
-		<CommandGroup heading="Theme">
-			<CommandItem
-				value="theme-dark"
-				onclick={handleThemeDark}
-				class="flex items-center gap-3 px-4 py-2.5"
-			>
-				<span class="flex-1">Dark Theme</span>
-				<span class="text-xs text-[var(--color-text-muted)]">dark</span>
-			</CommandItem>
-			<CommandItem
-				value="theme-light"
-				onclick={handleThemeLight}
-				class="flex items-center gap-3 px-4 py-2.5"
-			>
-				<span class="flex-1">Light Theme</span>
-				<span class="text-xs text-[var(--color-text-muted)]">light</span>
-			</CommandItem>
-		</CommandGroup>
-
-		<!-- Search Results -->
-		{#if searchMode && results.length > 0}
-			<CommandSeparator class="my-1" />
-			<CommandGroup heading="Results">
-				{#each results as result, index}
-					<CommandItem
-						value="result-{result.slug}"
-						onclick={() => handleSearchSelect(result)}
-						class="flex items-center gap-3 px-4 py-2.5"
+		{#if searchMode}
+			<!-- Search Results Panel (plain HTML, no Command filtering) -->
+			<div class="py-2">
+				<div class="border-theme bg-theme-card flex items-center gap-2 border-b px-3 py-2">
+					<button
+						class="hover:bg-theme-overlay flex cursor-pointer items-center gap-1 rounded border-none bg-transparent px-2 py-1 text-sm text-accent"
+						onclick={backToCommands}
 					>
-						<div class="flex-1">
-							<span class="font-medium">{result.name}</span>
-							<span
-								class="ml-2 rounded px-1.5 py-0.5 text-[10px] text-[var(--color-text-muted)] uppercase"
-							>
-								{result.type}
-							</span>
-						</div>
-						{#if result.summary}
-							<span class="line-clamp-1 text-sm text-[var(--color-text-secondary)]"
-								>{result.summary}</span
-							>
-						{/if}
-					</CommandItem>
-				{/each}
-			</CommandGroup>
-		{:else if searchMode && !isLoading}
-			<CommandSeparator class="my-1" />
-			<CommandGroup heading="Results">
-				<div class="px-4 py-8 text-center text-sm text-[var(--color-text-muted)]">
-					No results found
+						<ArrowLeft class="size-4" />
+						<span>Back</span>
+					</button>
+					<span class="text-sm font-semibold capitalize">Results for {searchMode}</span>
 				</div>
+
+				{#if results.length > 0}
+					<div class="py-1">
+						{#each results as result (result.slug)}
+							<button
+								class="text-theme-primary hover:bg-theme-overlay flex w-full cursor-pointer flex-col items-start gap-1 border-none bg-transparent p-[10px] text-left"
+								onclick={() => handleSearchSelect(result)}
+							>
+								<div class="flex w-full items-center gap-2">
+									<span class="text-sm font-medium">{result.name}</span>
+									<span
+										class="text-theme-muted bg-theme-card rounded px-1.5 py-0.5 text-[10px] uppercase"
+										>{result.type}</span
+									>
+								</div>
+								{#if result.summary}
+									<span class="text-theme-secondary w-full text-xs">{result.summary}</span>
+								{/if}
+							</button>
+						{/each}
+					</div>
+				{:else if errorMessage}
+					<div class="text-theme-muted p-6 text-center">
+						<p>Error: {errorMessage}</p>
+						<button
+							class="bg-theme-card border-theme text-theme-primary mt-3 cursor-pointer rounded border px-3 py-1.5 hover:border-accent"
+							onclick={backToCommands}
+						>
+							Go Back
+						</button>
+					</div>
+				{:else}
+					<div class="text-theme-muted p-6 text-center">
+						<p>No results found</p>
+						<button
+							class="bg-theme-card border-theme text-theme-primary mt-3 cursor-pointer rounded border px-3 py-1.5 hover:border-accent"
+							onclick={backToCommands}
+						>
+							Go Back
+						</button>
+					</div>
+				{/if}
+			</div>
+		{:else}
+			<!-- Commands Panel -->
+			<!-- Search Sections -->
+			<CommandGroup heading="Search">
+				<CommandItem
+					value="search-spells"
+					onclick={() => performSearch('spells')}
+					class="flex items-center gap-3 px-4 py-2.5"
+				>
+					<BookOpen class="size-5 text-blue-500" />
+					<span class="flex-1">Search Spells</span>
+					<span class="text-theme-muted text-xs">spells</span>
+				</CommandItem>
+				<CommandItem
+					value="search-monsters"
+					onclick={() => performSearch('monsters')}
+					class="flex items-center gap-3 px-4 py-2.5"
+				>
+					<Database class="size-5 text-red-500" />
+					<span class="flex-1">Search Monsters</span>
+					<span class="text-theme-muted text-xs">monsters</span>
+				</CommandItem>
+				<CommandItem
+					value="search-items"
+					onclick={() => performSearch('items')}
+					class="flex items-center gap-3 px-4 py-2.5"
+				>
+					<Database class="size-5 text-amber-500" />
+					<span class="flex-1">Search Items</span>
+					<span class="text-theme-muted text-xs">items</span>
+				</CommandItem>
+				<CommandItem
+					value="search-feats"
+					onclick={() => performSearch('feats')}
+					class="flex items-center gap-3 px-4 py-2.5"
+				>
+					<BookOpen class="size-5 text-emerald-500" />
+					<span class="flex-1">Search Feats</span>
+					<span class="text-theme-muted text-xs">feats</span>
+				</CommandItem>
+			</CommandGroup>
+
+			<CommandSeparator class="my-1" />
+
+			<!-- Navigate -->
+			<CommandGroup heading="Navigate">
+				<CommandItem
+					value="goto-spells"
+					onclick={() => navigate('/compendium/spells')}
+					class="flex items-center gap-3 px-4 py-2.5"
+				>
+					<BookOpen class="size-5 text-blue-500" />
+					<span class="flex-1">Go to Spells</span>
+				</CommandItem>
+				<CommandItem
+					value="goto-monsters"
+					onclick={() => navigate('/compendium/monsters')}
+					class="flex items-center gap-3 px-4 py-2.5"
+				>
+					<Database class="size-5 text-red-500" />
+					<span class="flex-1">Go to Monsters</span>
+				</CommandItem>
+				<CommandItem
+					value="goto-characters"
+					onclick={() => navigate('/characters')}
+					class="flex items-center gap-3 px-4 py-2.5"
+				>
+					<Users class="size-5 text-green-500" />
+					<span class="flex-1">Go to Characters</span>
+				</CommandItem>
+				<CommandItem
+					value="goto-settings"
+					onclick={() => navigate('/settings')}
+					class="flex items-center gap-3 px-4 py-2.5"
+				>
+					<Settings class="size-5 text-purple-500" />
+					<span class="flex-1">Go to Settings</span>
+				</CommandItem>
+			</CommandGroup>
+
+			<CommandSeparator class="my-1" />
+
+			<!-- Commands -->
+			<CommandGroup heading="Commands">
+				<CommandItem
+					value="sync-compendium"
+					onclick={handleSync}
+					class="flex items-center gap-3 px-4 py-2.5"
+				>
+					<Database class="size-5 text-accent" />
+					<span class="flex-1">Sync Compendium</span>
+					<span class="text-theme-muted text-xs">sync</span>
+				</CommandItem>
+				<CommandItem
+					value="clear-cache"
+					onclick={handleClearCache}
+					class="flex items-center gap-3 px-4 py-2.5"
+				>
+					<Trash2 class="size-5 text-red-500" />
+					<span class="flex-1">Clear Cache</span>
+					<span class="text-theme-muted text-xs">cache</span>
+				</CommandItem>
+			</CommandGroup>
+
+			<CommandSeparator class="my-1" />
+
+			<!-- Theme -->
+			<CommandGroup heading="Theme">
+				<CommandItem
+					value="theme-dark"
+					onclick={handleThemeDark}
+					class="flex items-center gap-3 px-4 py-2.5"
+				>
+					<span class="flex-1">Dark Theme</span>
+					<span class="text-theme-muted text-xs">dark</span>
+				</CommandItem>
+				<CommandItem
+					value="theme-light"
+					onclick={handleThemeLight}
+					class="flex items-center gap-3 px-4 py-2.5"
+				>
+					<span class="flex-1">Light Theme</span>
+					<span class="text-theme-muted text-xs">light</span>
+				</CommandItem>
 			</CommandGroup>
 		{/if}
 	</CommandList>
@@ -371,156 +406,54 @@
 
 <!-- Debug Panel (development only) -->
 {#if isDev && searchMode}
-	<div class="omnibar-debug-panel">
-		<div class="debug-header">
+	<div
+		class="fixed top-20 right-5 left-5 z-[9999] max-h-[80vh] max-w-xs overflow-y-auto rounded-lg bg-slate-950/95 font-mono text-xs shadow-xl dark:border dark:border-red-500"
+	>
+		<div
+			class="flex items-center justify-between bg-red-900/20 px-3 py-2 font-semibold text-red-400 dark:border-b dark:border-red-500/50"
+		>
 			<span>🔍 Omnibar Debug</span>
-			<button class="debug-close" onclick={() => (searchMode = null)}>✕</button>
+			<button
+				class="cursor-pointer border-none bg-transparent p-1 text-sm text-red-400 opacity-70 hover:opacity-100"
+				onclick={() => (searchMode = null)}
+			>
+				✕
+			</button>
 		</div>
-		<div class="debug-content">
-			<div class="debug-row">
-				<span class="debug-label">Mode:</span>
-				<code>{searchMode}</code>
+		<div class="p-3 text-slate-300">
+			<div class="mb-1.5 flex items-center justify-between">
+				<span class="text-slate-400">Mode:</span>
+				<code class="rounded bg-slate-800/60 px-1.5 py-0.5 text-xs">{searchMode}</code>
 			</div>
-			<div class="debug-row">
-				<span class="debug-label">Results:</span>
-				<code>{results.length}</code>
+			<div class="mb-1.5 flex items-center justify-between">
+				<span class="text-slate-400">Results:</span>
+				<code class="rounded bg-slate-800/60 px-1.5 py-0.5 text-xs">{results.length}</code>
 			</div>
 			{#if errorMessage}
-				<div class="debug-row error">
-					<span class="debug-label">Error:</span>
-					<code>{errorMessage}</code>
+				<div class="mb-1.5 flex items-center justify-between text-red-400">
+					<span class="text-slate-400">Error:</span>
+					<code class="rounded bg-slate-800/60 px-1.5 py-0.5 text-xs">{errorMessage}</code>
 				</div>
 			{/if}
-			<div class="debug-actions">
-				<button onclick={() => (debugMode = !debugMode)}>
+			<div class="mt-2.5 border-t border-slate-700/50 pt-2.5">
+				<button
+					class="cursor-pointer rounded border border-slate-600/50 bg-slate-700/40 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-700/60"
+					onclick={() => (debugMode = !debugMode)}
+				>
 					{debugMode ? 'Hide' : 'Show'} Details
 				</button>
 			</div>
 			{#if debugMode && results.length > 0}
-				<details class="debug-details">
-					<summary>Results JSON</summary>
-					<pre>{JSON.stringify(results, null, 2)}</pre>
+				<details class="mt-2.5 border-t border-slate-700/50 pt-2.5">
+					<summary class="mb-1.5 cursor-pointer text-xs text-slate-400">Results JSON</summary>
+					<pre
+						class="max-h-48 overflow-auto rounded border border-slate-700/50 bg-slate-950/80 px-2 py-1 text-[10px] break-all whitespace-pre-wrap">{JSON.stringify(
+							results,
+							null,
+							2
+						)}</pre>
 				</details>
 			{/if}
 		</div>
 	</div>
 {/if}
-
-<style>
-	.omnibar-debug-panel {
-		position: fixed;
-		bottom: auto;
-		top: 80px;
-		right: 20px;
-		left: 20px;
-		background: rgba(15, 23, 42, 0.95);
-		border: 1px solid #ef4444;
-		border-radius: 8px;
-		padding: 0;
-		font-size: 12px;
-		font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
-		z-index: 9999;
-		max-width: 360px;
-		max-height: 80vh;
-		overflow-y: auto;
-		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-	}
-
-	.debug-header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 8px 12px;
-		background: rgba(239, 68, 68, 0.2);
-		border-bottom: 1px solid rgba(239, 68, 68, 0.3);
-		color: #fca5a5;
-		font-weight: 600;
-	}
-
-	.debug-close {
-		background: none;
-		border: none;
-		color: #fca5a5;
-		cursor: pointer;
-		padding: 2px 6px;
-		font-size: 14px;
-		line-height: 1;
-		opacity: 0.7;
-	}
-
-	.debug-close:hover {
-		opacity: 1;
-	}
-
-	.debug-content {
-		padding: 12px;
-		color: #cbd5e1;
-	}
-
-	.debug-row {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-bottom: 6px;
-	}
-
-	.debug-row.error {
-		color: #fca5a5;
-	}
-
-	.debug-label {
-		color: #94a3b8;
-	}
-
-	.debug-row code {
-		background: rgba(51, 65, 85, 0.6);
-		padding: 2px 6px;
-		border-radius: 4px;
-		font-size: 11px;
-	}
-
-	.debug-actions {
-		margin-top: 10px;
-		padding-top: 10px;
-		border-top: 1px solid rgba(71, 85, 105, 0.5);
-	}
-
-	.debug-actions button {
-		background: rgba(71, 85, 105, 0.4);
-		border: 1px solid rgba(100, 116, 139, 0.5);
-		color: #cbd5e1;
-		padding: 4px 10px;
-		border-radius: 4px;
-		font-size: 11px;
-		cursor: pointer;
-	}
-
-	.debug-actions button:hover {
-		background: rgba(71, 85, 105, 0.6);
-	}
-
-	.debug-details {
-		margin-top: 10px;
-		padding-top: 10px;
-		border-top: 1px solid rgba(71, 85, 105, 0.5);
-	}
-
-	.debug-details summary {
-		color: #94a3b8;
-		font-size: 11px;
-		cursor: pointer;
-		margin-bottom: 6px;
-	}
-
-	.debug-details pre {
-		background: rgba(15, 23, 42, 0.8);
-		border: 1px solid rgba(71, 85, 105, 0.5);
-		border-radius: 4px;
-		padding: 8px;
-		font-size: 10px;
-		max-height: 200px;
-		overflow: auto;
-		white-space: pre-wrap;
-		word-break: break-all;
-	}
-</style>
