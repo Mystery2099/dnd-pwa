@@ -291,12 +291,10 @@
 
 			<SettingsItem label="Font Size" description="Adjust text size for readability">
 				{#snippet control()}
-					<RadioCardGrid
-						name="fontSize"
+					<SegmentedControl
+						bind:value={settingsStore.settings.fontSize}
 						options={FONT_SIZE_OPTIONS}
-						value={settingsStore.settings.fontSize}
-						onchange={(v) => settingsStore.setFontSize(v as 'sm' | 'md' | 'lg' | 'xl')}
-						columns={4}
+						size="sm"
 					/>
 				{/snippet}
 			</SettingsItem>
