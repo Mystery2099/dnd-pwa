@@ -731,6 +731,9 @@
 		font-weight: 500;
 		color: var(--color-text-primary);
 		transition: color 0.2s ease;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 
 	.runic-row:hover .runic-label {
@@ -742,6 +745,9 @@
 		font-size: 0.75rem;
 		color: var(--color-text-secondary);
 		margin-top: 0.125rem;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 
 	.runic-control {
