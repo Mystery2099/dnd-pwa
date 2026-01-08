@@ -8,6 +8,7 @@ import Content from './dialog-content.svelte';
 import Description from './dialog-description.svelte';
 import Trigger from './dialog-trigger.svelte';
 import Close from './dialog-close.svelte';
+import ConfirmDialog from './ConfirmDialog.svelte';
 
 export {
 	Root,
@@ -30,5 +31,6 @@ export {
 	Overlay as DialogOverlay,
 	Content as DialogContent,
 	Description as DialogDescription,
-	Close as DialogClose
+	Close as DialogClose,
+	ConfirmDialog as Confirm
 };
