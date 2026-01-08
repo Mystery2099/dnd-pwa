@@ -1,77 +1,31 @@
 import { browser } from '$app/environment';
+import {
+	THEMES,
+	type ThemeConfig,
+	type ThemeId,
+	generateAllThemesCSS,
+	generateThemeCSS
+} from './themes';
 
-export interface Theme {
-	id: string;
-	name: string;
-	description: string;
-	icon?: string;
-}
+export { THEMES, type ThemeId, type ThemeConfig, generateAllThemesCSS, generateThemeCSS };
 
-export const THEMES: Theme[] = [
-	{ id: 'amethyst', name: 'Amethyst', description: 'Deep purple magic' },
-	{ id: 'arcane', name: 'Arcane', description: 'Golden Weave radiance' },
-	{ id: 'nature', name: 'Nature', description: 'Verdant forest' },
-	{ id: 'fire', name: 'Fire', description: 'Blazing inferno' },
-	{ id: 'ice', name: 'Ice', description: 'Crystalline frost' },
-	{ id: 'void', name: 'Void', description: 'Cosmic darkness' },
-	{ id: 'ocean', name: 'Ocean', description: 'Abyssal depths' }
-];
-
-// Theme options for SelectCard component
-export const THEME_OPTIONS = [
-	{
-		value: 'amethyst',
-		label: 'Amethyst',
-		description: 'Deep purple magic',
-		icon: '🔮'
-	},
-	{
-		value: 'arcane',
-		label: 'Arcane',
-		description: 'Golden Weave radiance',
-		icon: '⚡'
-	},
-	{
-		value: 'nature',
-		label: 'Nature',
-		description: 'Verdant forest',
-		icon: '🌿'
-	},
-	{
-		value: 'fire',
-		label: 'Fire',
-		description: 'Blazing inferno',
-		icon: '🔥'
-	},
-	{
-		value: 'ice',
-		label: 'Ice',
-		description: 'Crystalline frost',
-		icon: '❄️'
-	},
-	{
-		value: 'void',
-		label: 'Void',
-		description: 'Cosmic darkness',
-		icon: '🌑'
-	},
-	{
-		value: 'ocean',
-		label: 'Ocean',
-		description: 'Abyssal depths',
-		icon: '🌊'
-	}
-] as const;
+// Derived arrays for compatibility
+export const THEME_OPTIONS = THEMES.map((t) => ({
+	value: t.id,
+	label: t.name,
+	description: t.description,
+	icon: t.id
+})) as ReadonlyArray<{ value: ThemeId; label: string; description: string; icon: string }>;
 
 const STORAGE_KEY = 'grimar-theme';
 
-let currentTheme = $state(THEMES[0].id);
+let currentTheme = $state<ThemeId>(THEMES[0].id);
 
-export function getTheme(): string {
+export function getTheme(): ThemeId {
 	return currentTheme;
 }
 
-export function getThemeInfo(): Theme {
+export function getThemeInfo(): ThemeConfig {
 	return THEMES.find((t) => t.id === currentTheme) || THEMES[0];
 }
 
@@ -98,18 +52,6 @@ export function initThemeSync() {
 	// Apply immediately - before any paint
 	document.documentElement.setAttribute('data-theme', themeToSet);
 	currentTheme = themeToSet;
-}
-
-// Async initialization for dev tools logging (safe to call in onMount)
-export function initTheme() {
-	if (!browser) return;
-
-	const saved = localStorage.getItem(STORAGE_KEY);
-	if (saved && THEMES.find((t) => t.id === saved)) {
-		setTheme(saved);
-	} else {
-		setTheme(THEMES[0].id);
-	}
 }
 
 // Dev-only: Log available themes to console for easy testing
@@ -145,16 +87,30 @@ export function logThemesToConsole() {
 	// Expose helper globally for dev tools
 	if (typeof window !== 'undefined') {
 		(window as any).grimar = {
+			...((window as any).grimar || {}),
 			setTheme,
 			getTheme,
 			getThemeInfo,
-			themes: THEMES,
-			theme: {
-				set: setTheme,
-				get: getTheme,
-				info: getThemeInfo,
-				list: THEMES
-			}
+			logThemesToConsole,
+			themes: THEMES
 		};
 	}
+}
+
+// Legacy export for backward compatibility
+export const initTheme = initThemeSync;
+
+// Helper to get CSS variables for current theme (useful for JS-based styling)
+export function getThemeCSSVariables(): Record<string, string> {
+	const theme = getThemeInfo();
+	return {
+		'--theme-bg-canvas': theme.css.bgCanvas,
+		'--theme-bg-card': theme.css.bgCard,
+		'--theme-bg-overlay': theme.css.bgOverlay,
+		'--theme-accent': theme.css.accent,
+		'--theme-accent-glow': theme.css.accentGlow,
+		'--theme-text-primary': theme.css.textPrimary,
+		'--theme-text-secondary': theme.css.textSecondary,
+		'--theme-text-muted': theme.css.textMuted
+	};
 }

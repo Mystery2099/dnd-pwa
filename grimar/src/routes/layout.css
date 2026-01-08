@@ -25,7 +25,7 @@
 	--color-text-muted: var(--theme-text-muted);
 	--color-border: var(--theme-border);
 	--color-border-hover: var(--theme-border-hover);
-
+	/* Animations */
 	--animate-shimmer: shimmer 3s linear infinite;
 	--animate-float: float 6s ease-in-out infinite;
 	--animate-enter: slide-up-fade 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -151,7 +151,19 @@
 
 /* ========================
    THEME DEFINITIONS
-   ======================== */
+   ========================
+
+   NOTE: Theme definitions are now maintained in:
+   /src/lib/core/client/themes.ts
+
+   This file (layout.css) should be kept in sync with themes.ts.
+   When adding a new theme, update both files.
+
+   The themes.ts file generates:
+   - CSS custom properties (via generateThemeCSS)
+   - Theme metadata for ThemeCardSelector
+   - Theme store arrays (THEMES, THEME_OPTIONS)
+   ======================================= */
 
 /* Amethyst - Deep mystical purple (default) */
 :root,
