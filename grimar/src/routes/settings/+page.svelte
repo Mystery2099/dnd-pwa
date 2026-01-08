@@ -50,6 +50,14 @@
 	let resettingSettings = $state(false);
 	let loggingOut = $state(false);
 
+	// Local bindings for segmented controls (convert to/from strings)
+	let gridMaxColumns = $state(settingsStore.settings.gridMaxColumns.toString());
+
+	// Sync local bindings back to store
+	$effect(() => {
+		settingsStore.setGridMaxColumns(Number(gridMaxColumns));
+	});
+
 	// Confirmation dialogs
 	let showClearCacheDialog = $state(false);
 	let showClearOfflineDialog = $state(false);
@@ -342,12 +350,10 @@
 
 			<SettingsItem label="Max Grid Columns" description="Maximum columns in grid view">
 				{#snippet control()}
-					<RadioCardGrid
-						name="gridMaxColumns"
+					<SegmentedControl
+						bind:value={gridMaxColumns}
 						options={GRID_MAX_COLUMNS_OPTIONS}
-						value={settingsStore.settings.gridMaxColumns.toString()}
-						onchange={(v) => settingsStore.setGridMaxColumns(Number(v))}
-						columns={3}
+						size="sm"
 					/>
 				{/snippet}
 			</SettingsItem>
