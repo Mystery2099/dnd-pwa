@@ -33,7 +33,6 @@
 		settingsStore,
 		FONT_SIZE_OPTIONS,
 		ANIMATION_LEVEL_OPTIONS,
-		ITEMS_PER_PAGE_OPTIONS,
 		SYNC_INTERVAL_OPTIONS,
 		GRID_MAX_COLUMNS_OPTIONS,
 		SPELL_SORT_OPTIONS
@@ -351,18 +350,6 @@
 						value={settingsStore.settings.gridMaxColumns.toString()}
 						onchange={(v) => settingsStore.setGridMaxColumns(Number(v))}
 						columns={3}
-					/>
-				{/snippet}
-			</SettingsItem>
-
-			<SettingsItem label="Items Per Page" description="Number of items shown in lists">
-				{#snippet control()}
-					<RadioCardGrid
-						name="itemsPerPage"
-						options={ITEMS_PER_PAGE_OPTIONS}
-						value={settingsStore.settings.itemsPerPage.toString()}
-						onchange={(v) => settingsStore.setItemsPerPage(Number(v))}
-						columns={4}
 					/>
 				{/snippet}
 			</SettingsItem>

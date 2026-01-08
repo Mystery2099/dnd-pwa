@@ -11,7 +11,6 @@ const DEFAULT_SETTINGS = {
 	compactMode: false,
 	animationLevel: 'full' as const,
 	defaultCompendiumView: 'grid' as const,
-	itemsPerPage: 24,
 	gridMaxColumns: 4,
 	showSRDBadge: true,
 	syncOnLoad: false,
@@ -36,7 +35,6 @@ export interface Settings {
 	compactMode: boolean;
 	animationLevel: AnimationLevel;
 	defaultCompendiumView: CompendiumView;
-	itemsPerPage: number;
 	gridMaxColumns: number;
 	showSRDBadge: boolean;
 	syncOnLoad: boolean;
@@ -55,7 +53,6 @@ interface _SettingsActions {
 	setCompactMode: (value: boolean) => void;
 	setAnimationLevel: (value: AnimationLevel) => void;
 	setDefaultCompendiumView: (value: CompendiumView) => void;
-	setItemsPerPage: (value: number) => void;
 	setGridMaxColumns: (value: number) => void;
 	setShowSRDBadge: (value: boolean) => void;
 	setSyncOnLoad: (value: boolean) => void;
@@ -113,11 +110,6 @@ function createSettingsStore() {
 
 	function setDefaultCompendiumView(value: CompendiumView) {
 		settings.defaultCompendiumView = value;
-		save();
-	}
-
-	function setItemsPerPage(value: number) {
-		settings.itemsPerPage = value;
 		save();
 	}
 
@@ -194,7 +186,6 @@ function createSettingsStore() {
 		setCompactMode,
 		setAnimationLevel,
 		setDefaultCompendiumView,
-		setItemsPerPage,
 		setGridMaxColumns,
 		setShowSRDBadge,
 		setSyncOnLoad,
@@ -230,13 +221,6 @@ export const ANIMATION_LEVEL_OPTIONS = [
 export const COMPENDIUM_VIEW_OPTIONS = [
 	{ value: 'grid', label: 'Grid', description: 'Card-based grid layout' },
 	{ value: 'list', label: 'List', description: 'Compact list layout' }
-] as const;
-
-export const ITEMS_PER_PAGE_OPTIONS = [
-	{ value: '12', label: '12', description: 'Fewer items per page' },
-	{ value: '24', label: '24', description: 'Standard amount' },
-	{ value: '48', label: '48', description: 'More items per page' },
-	{ value: '96', label: '96', description: 'Maximum items per page' }
 ] as const;
 
 export const SYNC_INTERVAL_OPTIONS = [

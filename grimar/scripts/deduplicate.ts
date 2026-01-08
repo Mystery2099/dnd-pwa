@@ -9,7 +9,7 @@
 import { Database } from 'bun:sqlite';
 import { drizzle } from 'drizzle-orm/bun-sqlite';
 import { compendiumItems, compendiumCache } from '../src/lib/server/db/schema';
-import { eq, sql, and, inArray } from 'drizzle-orm';
+import { sql, inArray } from 'drizzle-orm';
 import { createModuleLogger } from '../src/lib/server/logger';
 
 const logger = createModuleLogger('DeduplicateCLI');
