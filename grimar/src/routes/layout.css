@@ -746,7 +746,9 @@
 
 	.runic-control {
 		flex-shrink: 0;
-		min-width: fit-content;
+		min-width: 0;
+		max-width: 50%;
+		overflow: hidden;
 	}
 
 	/* Enhanced decorative divider */
