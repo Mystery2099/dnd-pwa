@@ -1,5 +1,5 @@
 export class Database {
-	constructor(path: string) {}
+	constructor(_path: string) {}
 	query() {
 		return { get: () => {}, all: () => [] };
 	}

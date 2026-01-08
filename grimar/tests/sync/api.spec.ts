@@ -1,7 +1,7 @@
 import { test, expect } from '../fixtures';
 
 test.describe('API Sync', () => {
-	test.beforeEach(async ({ authenticatedPage, page }) => {
+	test.beforeEach(async () => {
 		// Auth is handled by the authenticatedPage fixture
 	});
 

@@ -1,5 +1,5 @@
 // Test setup file for Vitest
-import { vi, beforeEach, afterEach } from 'vitest';
+import { vi, afterEach } from 'vitest';
 
 // Mock SvelteKit app imports
 const mockPageState = {
