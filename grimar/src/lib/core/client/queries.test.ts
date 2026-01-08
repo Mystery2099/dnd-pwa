@@ -15,7 +15,7 @@ const mockLocation = {
 describe('queries.ts', () => {
 	beforeEach(() => {
 		vi.resetAllMocks();
-		// @ts-ignore
+		// @ts-expect-error - Intentionally assigning to window.location for testing
 		global.window = { location: mockLocation };
 	});
 

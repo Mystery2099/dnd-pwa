@@ -132,16 +132,6 @@ export interface FilterGroupConfig {
 	showMoreLimit?: number;
 }
 
-/**
- * Helper function to create color mapping from a single color name
- */
-export function colorMap(color: string): FilterColorMapping {
-	return {
-		base: `text-${color}-400`,
-		hover: `group-hover:border-${color}-500/50`
-	};
-}
-
 //#endregion
 
 //#region Sort Configuration
