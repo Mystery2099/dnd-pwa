@@ -270,8 +270,7 @@
 	<header class="mb-6 flex items-center gap-4">
 		<div class="rounded-xl border border-[var(--color-accent)]/30 bg-[var(--color-accent)]/10 p-3">
 			<Cog
-				class="size-7 text-[var(--color-accent)]"
-				style="filter: drop-shadow(0 0 8px var(--color-accent-glow))"
+				class="size-7 text-[var(--color-accent)] drop-shadow-[0_0_8px_var(--color-accent-glow)]"
 			/>
 		</div>
 		<div>
