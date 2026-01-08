@@ -1,6 +1,7 @@
 import { json } from '@sveltejs/kit';
 import { getDb } from '$lib/server/db';
 import { compendiumItems } from '$lib/server/db/schema';
+import type { CompendiumItem } from '$lib/core/types/compendium';
 import { eq } from 'drizzle-orm';
 import { MemoryCache, CacheKeys } from '$lib/server/utils/cache';
 import { createModuleLogger } from '$lib/server/logger';
@@ -21,9 +22,9 @@ export const GET = async ({ params }: { params: { slug: string } }) => {
 		const cached = cache.get(cacheKey);
 
 		if (cached) {
-			const cachedItem = cached as any;
+			const cachedItem = cached as CompendiumItem;
 			return json({
-				...cachedItem.details,
+				...(cachedItem.details as Record<string, unknown>),
 				externalId: cachedItem.externalId,
 				__rowId: cachedItem.id
 			});
@@ -56,7 +57,7 @@ export const GET = async ({ params }: { params: { slug: string } }) => {
 		cache.set(cacheKey, spell, 15 * 60 * 1000);
 
 		return json({
-			...(spell as any).details,
+			...(spell.details as Record<string, unknown>),
 			externalId: spell.externalId,
 			__rowId: spell.id
 		});

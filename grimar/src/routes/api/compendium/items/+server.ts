@@ -2,7 +2,7 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { getDb } from '$lib/server/db';
 import { compendiumItems } from '$lib/server/db/schema';
-import { eq, like, and, or, desc, asc } from 'drizzle-orm';
+import { eq, like, and, desc, asc } from 'drizzle-orm';
 import { getTypeFromPath } from '$lib/core/constants/compendium';
 import { createModuleLogger } from '$lib/server/logger';
 
