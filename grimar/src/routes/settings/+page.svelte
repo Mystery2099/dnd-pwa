@@ -100,7 +100,7 @@
 			color: 'ruby',
 			accent: 'var(--gem-ruby)'
 		},
-		{ id: 'about', label: 'About', icon: Info, color: 'pearl', accent: '#f8fafc' }
+		{ id: 'about', label: 'About', icon: Info, color: 'pearl', accent: 'var(--gem-pearl)' }
 	] as const;
 
 	// Track active section - now bound to Tabs
@@ -727,7 +727,7 @@
 							description="Information about your grimoire"
 							icon={Info}
 							index={5}
-							accentColor="#f8fafc"
+							accentColor="var(--gem-pearl)"
 						>
 							<SettingsItem
 								label="Application"
