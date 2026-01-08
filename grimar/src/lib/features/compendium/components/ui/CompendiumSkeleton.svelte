@@ -10,7 +10,7 @@
 </script>
 
 <div class="contents" data-testid="skeleton-{variant}">
-	{#each Array(count) as _, i}
+	{#each Array(count) as _, _i (_i)}
 		<div
 			class="group relative w-full overflow-hidden rounded-2xl border border-[var(--color-border)]/40 bg-[color-mix(in_srgb,var(--color-bg-card)_85%,var(--color-bg-overlay))] backdrop-blur-sm {variant ===
 			'grid'

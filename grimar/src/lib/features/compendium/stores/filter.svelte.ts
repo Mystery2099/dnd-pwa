@@ -19,7 +19,6 @@ export class CompendiumFilterStore {
 	// State using Svelte 5 runes
 	state = $state({
 		searchTerm: '',
-		filterLogic: 'and' as 'and' | 'or',
 		sortBy: 'name',
 		sortOrder: 'asc' as 'asc' | 'desc',
 		// dynamic sets keyed by the internal names defined in config
@@ -56,10 +55,6 @@ export class CompendiumFilterStore {
 
 	get searchTerm(): string {
 		return this.state.searchTerm;
-	}
-
-	get filterLogic(): 'and' | 'or' {
-		return this.state.filterLogic;
 	}
 
 	get sortBy(): string {
@@ -111,11 +106,6 @@ export class CompendiumFilterStore {
 		this.updateUrl();
 	}
 
-	toggleLogic() {
-		this.state.filterLogic = this.state.filterLogic === 'and' ? 'or' : 'and';
-		this.updateUrl();
-	}
-
 	toggle(key: string, value: string) {
 		if (!this.state.sets[key]) {
 			console.warn(
@@ -136,7 +126,6 @@ export class CompendiumFilterStore {
 
 	clearFilters() {
 		this.state.searchTerm = '';
-		this.state.filterLogic = 'and';
 		Object.keys(this.state.sets).forEach((key) => {
 			this.state.sets[key] = new SvelteSet();
 		});
@@ -179,7 +168,7 @@ export class CompendiumFilterStore {
 		// 1. Search filter with full-text search
 		if (this.state.searchTerm && this.searchIndexer.isIndexed()) {
 			const searchResults = this.searchIndexer.search(this.state.searchTerm);
-			const searchIds = new Set(searchResults.map((item) => item.id));
+			const searchIds = new SvelteSet(searchResults.map((item) => item.id));
 			filtered = filtered.filter((item) => searchIds.has(item.id));
 			debugLog('Search filter applied:', this.state.searchTerm, '- results:', filtered.length);
 		}
@@ -201,11 +190,8 @@ export class CompendiumFilterStore {
 					return set.has(String(val));
 				});
 
-				if (this.state.filterLogic === 'and') {
-					return matches.every((m) => m);
-				} else {
-					return matches.some((m) => m);
-				}
+				// Always use AND logic - all filters must match
+				return matches.every((m) => m);
 			});
 			debugLog('After faceted filters:', filtered.length, 'items');
 		}
@@ -244,7 +230,6 @@ export class CompendiumFilterStore {
 
 	public syncWithUrl(url: URL | SvelteURL) {
 		this.state.searchTerm = url.searchParams.get('search') || '';
-		this.state.filterLogic = (url.searchParams.get('logic') || 'and') as 'and' | 'or';
 		this.state.sortBy = url.searchParams.get('sortBy') || this.config.defaults?.sortBy || 'name';
 		this.state.sortOrder = (url.searchParams.get('sortOrder') ||
 			this.config.defaults?.sortOrder ||
@@ -263,14 +248,12 @@ export class CompendiumFilterStore {
 	// Serialize current state for sessionStorage
 	serialize(): {
 		searchTerm: string;
-		filterLogic: 'and' | 'or';
 		sortBy: string;
 		sortOrder: 'asc' | 'desc';
 		sets: Record<string, string[]>;
 	} {
 		return {
 			searchTerm: this.state.searchTerm,
-			filterLogic: this.state.filterLogic,
 			sortBy: this.state.sortBy,
 			sortOrder: this.state.sortOrder,
 			sets: Object.fromEntries(Object.entries(this.state.sets).map(([k, v]) => [k, Array.from(v)]))
@@ -280,7 +263,6 @@ export class CompendiumFilterStore {
 	// Restore state from serialized object
 	deserialize(data: ReturnType<this['serialize']>) {
 		this.state.searchTerm = data.searchTerm;
-		this.state.filterLogic = data.filterLogic;
 		this.state.sortBy = data.sortBy;
 		this.state.sortOrder = data.sortOrder;
 
@@ -299,13 +281,6 @@ export class CompendiumFilterStore {
 			url.searchParams.set('search', this.state.searchTerm);
 		} else {
 			url.searchParams.delete('search');
-		}
-
-		// Logic
-		if (this.state.filterLogic !== 'and') {
-			url.searchParams.set('logic', this.state.filterLogic);
-		} else {
-			url.searchParams.delete('logic');
 		}
 
 		// Sort (only write if not default)

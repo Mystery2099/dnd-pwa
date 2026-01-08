@@ -23,7 +23,7 @@
 		source,
 		active,
 		icon: Icon,
-		accentClass = 'hover:border-[var(--color-accent)]/50',
+		accentClass: _accentClass = 'hover:border-[var(--color-accent)]/50',
 		school,
 		variant = 'list',
 		onclick

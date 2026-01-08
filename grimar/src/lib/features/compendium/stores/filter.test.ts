@@ -61,22 +61,13 @@ describe('CompendiumFilterStore.apply', () => {
 		expect(result[0].name).toBe('Fireball');
 	});
 
-	it('filters by faceted sets (AND logic)', () => {
+	it('filters by faceted sets', () => {
 		const store = new CompendiumFilterStore(config as any);
 		store.toggle('spellLevel', '1');
 		store.toggle('spellSchool', 'Evocation');
 		const result = store.apply(items);
 		expect(result).toHaveLength(1);
 		expect(result[0].name).toBe('Cure Wounds');
-	});
-
-	it('filters by faceted sets (OR logic)', () => {
-		const store = new CompendiumFilterStore(config as any);
-		store.toggle('spellLevel', '3');
-		store.toggle('spellSchool', 'Abjuration');
-		store.toggleLogic(); // set to 'or'
-		const result = store.apply(items);
-		expect(result).toHaveLength(2); // Fireball (Level 3) and Shield (Abjuration)
 	});
 
 	it('sorts items', () => {
