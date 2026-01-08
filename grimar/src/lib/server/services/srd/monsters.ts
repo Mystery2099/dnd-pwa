@@ -5,7 +5,7 @@
  * Uses GraphQL for bulk queries and REST for detail lookups.
  */
 
-import { GRAPHQL_URL, BASE_URL, createGraphQLRequest } from './client';
+import { fetchSrdData, fetchSrdDetail } from './client';
 import { SrdMonsterSummarySchema, validateData } from '$lib/core/types/compendium/schemas';
 import { z } from 'zod';
 import { createModuleLogger } from '$lib/server/logger';
@@ -66,28 +66,7 @@ export async function getMonsters(limit = 500): Promise<SrdMonsterSummary[]> {
             }
         }`;
 
-	try {
-		const res = await fetch(GRAPHQL_URL, createGraphQLRequest(query));
-		const json = await res.json();
-
-		// Validate and parse each monster
-		const rawMonsters = json.data?.monsters || [];
-		const monsters: SrdMonsterSummary[] = [];
-
-		for (const monster of rawMonsters) {
-			try {
-				const validated = validateData(SrdMonsterSummarySchema, monster, 'SRD monster');
-				monsters.push(validated);
-			} catch (e) {
-				log.warn({ monsterName: monster.name, error: e }, 'Skipping invalid monster');
-			}
-		}
-
-		return monsters.sort((a, b) => a.name.localeCompare(b.name));
-	} catch (e) {
-		log.error({ error: e }, 'SRD Monsters Fetch Error');
-		return [];
-	}
+	return fetchSrdData(query, 'monsters', SrdMonsterSummarySchema, 'monster', validateData);
 }
 
 /**
@@ -134,12 +113,5 @@ export async function getMonstersWithDetails(limit = 500): Promise<SrdMonsterDet
 }
 
 export async function getMonsterDetail(index: string): Promise<Record<string, unknown> | null> {
-	try {
-		const res = await fetch(`${BASE_URL}/monsters/${index}`);
-		if (!res.ok) throw new Error('Failed to fetch monster detail');
-		return (await res.json()) as Record<string, unknown>;
-	} catch (e) {
-		log.error({ error: e, monsterIndex: index }, 'SRD Monster Detail Error');
-		return null;
-	}
+	return fetchSrdDetail('monsters', index, 'monster');
 }

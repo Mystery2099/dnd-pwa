@@ -1,6 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
 import { measureDb, createRequestLogger } from '$lib/server/utils/monitoring';
-import type { Handle } from '@sveltejs/kit';
 
 describe('monitoring', () => {
 	describe('measureDb', () => {

@@ -59,7 +59,7 @@ export function measureDb<T>(name: string, dbOperation: () => T): T {
 	}
 }
 
-import type { Handle, HandleServerError } from '@sveltejs/kit';
+import type { Handle } from '@sveltejs/kit';
 import { nanoid } from 'nanoid';
 import logger, { createModuleLogger } from '$lib/server/logger';
 
