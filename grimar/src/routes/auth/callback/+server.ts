@@ -1,6 +1,6 @@
 import { redirect, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { getSession, createSession, destroySession } from '$lib/server/auth/session';
+import { createSession, destroySession } from '$lib/server/auth/session';
 import { createModuleLogger } from '$lib/server/logger';
 
 const log = createModuleLogger('AuthCallback');
