@@ -33,7 +33,7 @@ export async function initFts(): Promise<void> {
 
 	// Populate FTS with existing data
 	log.debug('Populating FTS with existing compendium data');
-	const populateResult = await db.run(sql`
+	const _populateResult = await db.run(sql`
 		INSERT INTO compendium_items_fts(rowid, name, summary)
 		SELECT id, name, COALESCE(summary, '') FROM compendiumItems
 		WHERE NOT EXISTS (SELECT 1 FROM compendium_items_fts WHERE rowid = compendiumItems.id)
