@@ -34,6 +34,17 @@
 		md: '14px',
 		lg: '16px'
 	};
+
+	// Build class string for selected state
+	function getItemClass(checked: boolean) {
+		return cn(
+			'inline-flex items-center justify-center rounded-lg transition-all duration-200',
+			sizeClasses[size],
+			checked
+				? 'bg-[var(--color-accent)] text-white shadow-md shadow-[var(--color-accent-glow)]'
+				: 'text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-surface)]'
+		);
+	}
 </script>
 
 <div class={className}>
@@ -42,19 +53,7 @@
 		class="inline-flex items-center rounded-xl border border-white/10 bg-[var(--color-bg-card)] p-1 shadow-inner"
 	>
 		{#each options as option (option.value)}
-			{@const isSelected = value === option.value}
-			<RadioGroup.Item
-				value={option.value}
-				class="inline-flex items-center justify-center rounded-lg transition-all duration-200 {sizeClasses[
-					size
-				]}"
-				class:bg-[var(--color-accent)]={isSelected}
-				class:text-white={isSelected}
-				class:shadow-md={isSelected}
-				class:shadow-[var(--color-accent-glow)]={isSelected}
-				class:text-[var(--color-text-secondary)]={!isSelected}
-				class:hover:bg-[var(--color-bg-surface)]={!isSelected}
-			>
+			<RadioGroup.Item value={option.value} class={getItemClass(value === option.value)}>
 				{#snippet children({ checked })}
 					{#if checked}
 						<Check class="shrink-0" style="width: {iconSizes[size]}; height: {iconSizes[size]}" />

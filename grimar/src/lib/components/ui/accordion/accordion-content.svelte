@@ -15,6 +15,6 @@
 	class={cn('overflow-hidden text-sm transition-all duration-200', className)}
 >
 	<div class="pt-0 pb-4 text-[var(--color-text-secondary)]">
-		{@render children()}
+		{@render children?.()}
 	</div>
 </AccordionPrimitive.Content>

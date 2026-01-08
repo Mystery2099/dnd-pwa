@@ -26,7 +26,7 @@
 	import SettingsItem from '$lib/components/ui/SettingsItem.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import SettingsNavigation from '$lib/components/ui/SettingsNavigation.svelte';
-import * as Dialog from '$lib/components/ui/dialog/index.js';
+	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import type { NavSection } from '$lib/components/ui/SettingsNavigation.svelte';
 	import {
 		settingsStore,
@@ -131,7 +131,7 @@ import * as Dialog from '$lib/components/ui/dialog/index.js';
 	});
 
 	// Client-side cache clearing functions
-		async function clearCache() {
+	async function clearCache() {
 		showClearCacheDialog = true;
 	}
 
@@ -149,7 +149,7 @@ import * as Dialog from '$lib/components/ui/dialog/index.js';
 		}
 	}
 
-		async function clearOfflineData() {
+	async function clearOfflineData() {
 		showClearOfflineDialog = true;
 	}
 
@@ -171,7 +171,7 @@ import * as Dialog from '$lib/components/ui/dialog/index.js';
 		}
 	}
 
-		async function clearCharacterData() {
+	async function clearCharacterData() {
 		showClearCharactersDialog = true;
 	}
 
@@ -201,7 +201,7 @@ import * as Dialog from '$lib/components/ui/dialog/index.js';
 		}
 	}
 
-		function resetAllSettings() {
+	function resetAllSettings() {
 		showResetDialog = true;
 	}
 
@@ -316,9 +316,8 @@ import * as Dialog from '$lib/components/ui/dialog/index.js';
 			>
 				{#snippet control()}
 					<SegmentedControl
-						value={settingsStore.settings.animationLevel}
+						bind:value={settingsStore.settings.animationLevel}
 						options={ANIMATION_LEVEL_OPTIONS}
-						onchange={(v) => settingsStore.setAnimationLevel(v as 'full' | 'reduced' | 'minimal')}
 						size="sm"
 					/>
 				{/snippet}
@@ -403,9 +402,8 @@ import * as Dialog from '$lib/components/ui/dialog/index.js';
 			<SettingsItem label="Spell Sort Order" description="How spells are ordered in lists">
 				{#snippet control()}
 					<SegmentedControl
-						value={settingsStore.settings.spellSortOrder}
+						bind:value={settingsStore.settings.spellSortOrder}
 						options={SPELL_SORT_OPTIONS}
-						onchange={(v) => settingsStore.setSpellSortOrder(v as 'name' | 'level' | 'school')}
 						size="sm"
 					/>
 				{/snippet}

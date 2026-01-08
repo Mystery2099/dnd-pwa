@@ -20,7 +20,7 @@
 			className
 		)}
 	>
-		{@render children()}
+		{@render children?.()}
 		<ChevronDown
 			class="size-4 shrink-0 text-[var(--color-text-muted)] transition-transform duration-200"
 		/>

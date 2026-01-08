@@ -13,5 +13,5 @@
 </script>
 
 <AccordionPrimitive.Item {value} class={cn('border-b border-[var(--color-border)]', className)}>
-	{@render children()}
+	{@render children?.()}
 </AccordionPrimitive.Item>

@@ -30,11 +30,6 @@
 		onchange,
 		children
 	}: Props = $props();
-
-	function handleSelect(optionValue: string) {
-		value = optionValue;
-		onchange?.(optionValue);
-	}
 </script>
 
 <div class={className}>
@@ -47,13 +42,29 @@
 		</div>
 	{/if}
 
-	<RadioGroup.Root bind:value class="grid gap-3" style="grid-template-columns: repeat({gridCols}, minmax(0, 1fr));">
+	<div class="grid gap-3" style="grid-template-columns: repeat({gridCols}, minmax(0, 1fr));">
 		{#each options as option (option.value)}
-			<RadioGroup.Item value={option.value} class="contents">
-				{#snippet children({ checked })}
-					{@render children?.({ option, checked })}
-				{/snippet}
-			</RadioGroup.Item>
+			{@const isSelected = value === option.value}
+			<button
+				type="button"
+				onclick={() => {
+					value = option.value;
+					onchange?.(option.value);
+				}}
+				class="runestone"
+				data-state={isSelected ? 'selected' : 'unselected'}
+				aria-label="Select {option.label}"
+			>
+				{#if children}
+					{@render children({ option, checked: isSelected })}
+				{:else}
+					<div class="runestone-content">
+						<div class="runestone-label">
+							<span class="runestone-label-text">{option.label}</span>
+						</div>
+					</div>
+				{/if}
+			</button>
 		{/each}
-	</RadioGroup.Root>
+	</div>
 </div>

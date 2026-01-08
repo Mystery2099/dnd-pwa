@@ -13,10 +13,11 @@
 	type Props = {
 		type: 'single';
 		placeholder?: string;
-		options: SelectOption[];
+		options: readonly SelectOption[];
 		class?: string;
 		contentClass?: string;
 		value?: string;
+		onchange?: (value: string) => void;
 	};
 
 	let {
@@ -26,18 +27,24 @@
 		options,
 		class: className = '',
 		contentClass = '',
+		onchange,
 		...restProps
 	}: Props = $props();
 
-	const selectedOption = $derived(
-		options.find((option) => option.value === value)
-	);
+	const selectedOption = $derived(options.find((option) => option.value === value));
+
+	// Trigger onchange when value changes
+	$effect(() => {
+		if (value !== undefined && onchange) {
+			onchange(value);
+		}
+	});
 </script>
 
 <SelectPrimitive.Root {type} bind:value {...restProps}>
 	<SelectPrimitive.Trigger
 		class={cn(
-			'flex h-10 w-full items-center justify-between rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] px-4 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] hover:border-[var(--color-border-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg-canvas)] disabled:cursor-not-allowed disabled:opacity-50',
+			'flex h-10 w-full items-center justify-between rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] px-4 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] hover:border-[var(--color-border-hover)] focus:ring-2 focus:ring-[var(--color-accent)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg-canvas)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50',
 			className
 		)}
 	>
@@ -62,7 +69,7 @@
 					<SelectPrimitive.Item
 						value={option.value}
 						disabled={option.disabled}
-						class="relative flex cursor-pointer select-none items-center rounded-lg px-3 py-2 text-sm text-[var(--color-text-primary)] outline-none transition-colors hover:bg-[var(--color-accent)]/10 focus:bg-[var(--color-accent)]/20 data-[state=checked]:bg-[var(--color-accent)]/15 data-[state=checked]:text-[var(--color-accent)] disabled:pointer-events-none disabled:opacity-50"
+						class="relative flex cursor-pointer items-center rounded-lg px-3 py-2 text-sm text-[var(--color-text-primary)] transition-colors outline-none select-none hover:bg-[var(--color-accent)]/10 focus:bg-[var(--color-accent)]/20 disabled:pointer-events-none disabled:opacity-50 data-[state=checked]:bg-[var(--color-accent)]/15 data-[state=checked]:text-[var(--color-accent)]"
 					>
 						{#snippet children({ selected })}
 							{#if selected}

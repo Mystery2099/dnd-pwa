@@ -10,17 +10,12 @@
 		content?: Snippet;
 	};
 
-	let {
-		delayDuration = 200,
-		class: className = '',
-		children,
-		content
-	}: Props = $props();
+	let { delayDuration = 200, class: className = '', children, content }: Props = $props();
 </script>
 
 <TooltipPrimitive.Root {delayDuration}>
 	<TooltipPrimitive.Trigger class="contents">
-		{@render children()}
+		{@render children?.()}
 	</TooltipPrimitive.Trigger>
 
 	<TooltipPrimitive.Portal>
