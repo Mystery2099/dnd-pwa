@@ -6,7 +6,7 @@
  *
  * Usage:
  *   bun run db:sync                 # Sync all providers (default)
- *   bun run db:sync --type spell    # Sync only spells
+ *   bun run db:ssync --type spell   # Sync only spells
  *   bun run db:sync --provider open5e  # Sync only a specific provider
  *   bun run db:sync --full          # Force full re-sync
  *
@@ -65,7 +65,8 @@ const colors = {
 	red: '\x1b[31m',
 	cyan: '\x1b[36m',
 	magenta: '\x1b[35m',
-	white: '\x1b[37m'
+	white: '\x1b[37m',
+	blue: '\x1b[34m'
 };
 
 interface Args {
@@ -119,47 +120,60 @@ function formatNumber(n: number | undefined): string {
 function formatDuration(ms: number): string {
 	if (ms < 1000) return `${ms}ms`;
 	if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;
-	return `${Math.floor(ms / 60000)}m ${((ms % 60000) / 1000).toFixed(0)}s`;
+	const mins = Math.floor(ms / 60000);
+	const secs = Math.floor((ms % 60000) / 1000);
+	return `${mins}m ${secs}s`;
 }
 
-function formatPercent(a: number, b: number): string {
-	if (b === 0) return '0%';
-	return `${((a / b) * 100).toFixed(1)}%`;
+function formatBytes(bytes: number): string {
+	if (bytes < 1024) return `${bytes} B`;
+	if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+	return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-// Progress spinner class
-class ProgressSpinner {
-	private chars = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
+// Spinner for ongoing operations
+class Spinner {
+	private chars = ['◐', '◓', '◑', '◒'];
 	private idx = 0;
-	private message: string;
 	private interval: number | null = null;
+	private message: string;
 
 	constructor(message: string) {
 		this.message = message;
 	}
 
 	start() {
-		process.stdout.write(`${this.chars[0]} ${this.message}`);
+		process.stdout.write(`${colors.dim}${this.chars[0]}${colors.reset} ${this.message}`);
 		this.interval = setInterval(() => {
 			this.idx = (this.idx + 1) % this.chars.length;
-			process.stdout.write(`\r${this.chars[this.idx]} ${this.message}`);
-		}, 100);
+			process.stdout.write(`\r${colors.dim}${this.chars[this.idx]}${colors.reset} ${this.message}`);
+		}, 150);
 	}
 
-	stop(success: boolean = true) {
+	stop(message?: string) {
 		if (this.interval) {
 			clearInterval(this.interval);
 			process.stdout.write('\r');
 		}
-		process.stdout.write(`${success ? '✓' : '✗'} ${this.message}\n`);
+		if (message) {
+			console.log(`${colors.green}✓${colors.reset} ${message}`);
+		}
+	}
+
+	fail(message: string) {
+		if (this.interval) {
+			clearInterval(this.interval);
+			process.stdout.write('\r');
+		}
+		console.log(`${colors.red}✗${colors.reset} ${message}`);
 	}
 }
 
 function showHelp() {
 	const help = `
-${colors.bright}${colors.cyan}┌─────────────────────────────────────────┐${colors.reset}
-${colors.bright}${colors.cyan}│${colors.reset}         ${colors.bright}Compendium Sync CLI${colors.reset}          ${colors.bright}${colors.cyan}│${colors.reset}
-${colors.bright}${colors.cyan}└─────────────────────────────────────────┘${colors.reset}
+${colors.bright}${colors.cyan}╔════════════════════════════════════════╗${colors.reset}
+${colors.bright}${colors.cyan}║${colors.reset}       ${colors.bright}Compendium Sync CLI${colors.reset}           ${colors.bright}${colors.cyan}║${colors.reset}
+${colors.bright}${colors.cyan}╚════════════════════════════════════════╝${colors.reset}
 ${colors.dim}Sync D&D 5e data from providers into local database${colors.reset}
 
 ${colors.bright}Usage:${colors.reset}
@@ -192,6 +206,13 @@ async function getDbStats(db: any): Promise<Record<CompendiumTypeName, number>> 
 		stats[type] = (await db.$count(compendiumItems, undefined)) as number;
 	}
 	return stats as Record<CompendiumTypeName, number>;
+}
+
+function createProgressBar(current: number, total: number, width: number = 30): string {
+	const percent = total > 0 ? current / total : 0;
+	const filled = Math.round(percent * width);
+	const empty = width - filled;
+	return `${colors.cyan}${'█'.repeat(filled)}${'░'.repeat(empty)}${colors.reset}`;
 }
 
 async function main() {
@@ -257,8 +278,8 @@ async function main() {
 	console.log('');
 
 	// Initialize database
-	const progress = new ProgressSpinner('Connecting to database...');
-	progress.start();
+	const dbSpinner = new Spinner('Connecting to database...');
+	dbSpinner.start();
 
 	let db: any;
 	try {
@@ -266,10 +287,9 @@ async function main() {
 		applyPragmas(client);
 		db = drizzle(client, { schema });
 		migrate(db, { migrationsFolder: './drizzle' });
-		progress.stop(true);
+		dbSpinner.stop('Database connected');
 	} catch (error) {
-		progress.stop(false);
-		console.log(`${colors.red}✗ Failed to connect: ${error}${colors.reset}`);
+		dbSpinner.fail(`Failed to connect: ${error}`);
 		return 1;
 	}
 
@@ -277,29 +297,33 @@ async function main() {
 	const beforeStats = await getDbStats(db);
 	const beforeTotal = Object.values(beforeStats).reduce((a, b) => a + b, 0);
 
+	// Find max for progress bar scaling
+	const maxCount = Math.max(...Object.values(beforeStats), 1);
+
+	console.log('');
 	console.log(`${colors.dim}📊 Current database state:${colors.reset}`);
 	for (const type of VALID_TYPES) {
 		const count = beforeStats[type];
 		const label = TYPE_LABELS[type];
-		const bar = '█'.repeat(Math.min(count / 100, 40)) + '░'.repeat(40 - Math.min(count / 100, 40));
+		const bar = createProgressBar(count, maxCount, 25);
 		console.log(
 			`   ${colors.cyan}${label.padEnd(12)}${colors.reset} ${bar} ${formatNumber(count)}`
 		);
 	}
+	const totalBar = createProgressBar(beforeTotal, beforeTotal, 25);
 	console.log(
-		`   ${colors.white}${'Total'.padEnd(12)}${colors.reset} ${'█'.repeat(40)} ${formatNumber(beforeTotal)}`
+		`   ${colors.white}${'Total'.padEnd(12)}${colors.reset} ${totalBar} ${formatNumber(beforeTotal)}`
 	);
 	console.log('');
 
 	// Run sync
 	console.log(`${colors.bright}${colors.cyan}🚀 Starting sync...${colors.reset}`);
-	console.log(`${colors.dim}${'─'.repeat(60)}${colors.reset}\n`);
+	console.log(`${colors.dim}${'─'.repeat(60)}${colors.reset}`);
+	console.log('');
 
 	const startTime = Date.now();
 	let totalErrors = 0;
 	let totalItems = 0;
-	const providerResults: Array<ProviderSyncResult & { duration: number; providerName: string }> =
-		[];
 
 	try {
 		const results = await syncAllProviders(db, {
@@ -312,11 +336,10 @@ async function main() {
 		for (const result of results) {
 			const provider = providerRegistry.getProvider(result.providerId);
 			const providerName = provider?.name || result.providerId;
-			const duration =
-				providerResults.find((r) => r.providerId === result.providerId)?.duration || 0;
 
-			console.log(`${colors.bright}${colors.cyan}┌─── ${providerName}${colors.reset}`);
-			console.log(`${colors.bright}${colors.cyan}│${colors.reset}`);
+			// Provider card
+			console.log(`${colors.bright}${colors.blue}┌─── ${providerName}${colors.reset}`);
+			console.log(`${colors.bright}${colors.blue}│${colors.reset}`);
 
 			// Type breakdown
 			const typeResults: string[] = [];
@@ -332,55 +355,52 @@ async function main() {
 
 			if (typeResults.length > 0) {
 				console.log(
-					`${colors.bright}${colors.cyan}│${colors.reset}   ${typeResults.join(`  ${colors.dim}│${colors.reset}   `)}`
+					`${colors.bright}${colors.blue}│${colors.reset}   ${typeResults.join(`  ${colors.dim}│${colors.reset}   `)}`
 				);
 			} else {
 				console.log(
-					`${colors.bright}${colors.cyan}│${colors.reset}   ${colors.dim}No items synced${colors.reset}`
+					`${colors.bright}${colors.blue}│${colors.reset}   ${colors.dim}No items synced${colors.reset}`
 				);
 			}
 
-			console.log(`${colors.bright}${colors.cyan}│${colors.reset}`);
-			console.log(
-				`${colors.bright}${colors.cyan}│${colors.reset}   ${colors.dim}Duration:${colors.reset} ${formatDuration(duration)}`
-			);
+			console.log(`${colors.bright}${colors.blue}│${colors.reset}`);
 
 			if (result.skipped > 0) {
 				console.log(
-					`${colors.bright}${colors.cyan}│${colors.reset}   ${colors.yellow}⏭ Skipped:${colors.reset} ${formatNumber(result.skipped)}`
+					`${colors.bright}${colors.blue}│${colors.reset}   ${colors.yellow}⏭ Skipped:${colors.reset} ${formatNumber(result.skipped)}`
 				);
 			}
 
 			if (result.errors.length > 0) {
 				console.log(
-					`${colors.bright}${colors.cyan}│${colors.reset}   ${colors.red}✗ Errors:${colors.reset} ${result.errors.length}`
+					`${colors.bright}${colors.blue}│${colors.reset}   ${colors.red}✗ Errors:${colors.reset} ${result.errors.length}`
 				);
 				if (args.verbose) {
 					for (const error of result.errors.slice(0, 3)) {
 						const errorMsg = typeof error === 'string' ? error : error.message;
 						console.log(
-							`${colors.bright}${colors.cyan}│${colors.reset}      ${colors.red}•${colors.reset} ${errorMsg.substring(0, 60)}${colors.dim}${errorMsg.length > 60 ? '...' : ''}${colors.reset}`
+							`${colors.bright}${colors.blue}│${colors.reset}      ${colors.red}•${colors.reset} ${errorMsg.substring(0, 60)}${errorMsg.length > 60 ? '...' : ''}`
 						);
 					}
 					if (result.errors.length > 3) {
 						console.log(
-							`${colors.bright}${colors.cyan}│${colors.reset}      ${colors.dim}... and ${result.errors.length - 3} more${colors.reset}`
+							`${colors.bright}${colors.blue}│${colors.reset}      ${colors.dim}... and ${result.errors.length - 3} more${colors.reset}`
 						);
 					}
 				}
 			} else {
 				console.log(
-					`${colors.bright}${colors.cyan}│${colors.reset}   ${colors.green}✓ All operations successful${colors.reset}`
+					`${colors.bright}${colors.blue}│${colors.reset}   ${colors.green}✓ All operations successful${colors.reset}`
 				);
 			}
 
 			console.log(
-				`${colors.bright}${colors.cyan}└${colors.dim}${'─'.repeat(providerName.length + 2)}${colors.reset}\n`
+				`${colors.bright}${colors.blue}└${colors.dim}${'─'.repeat(providerName.length + 2)}${colors.reset}`
 			);
+			console.log('');
 
 			totalItems += result.totalItems;
 			totalErrors += result.errors.length;
-			providerResults.push({ ...result, duration, providerName });
 		}
 
 		// Get after stats
@@ -390,6 +410,7 @@ async function main() {
 		// Summary
 		const duration = Date.now() - startTime;
 
+		// Summary box
 		console.log(
 			`${colors.bright}${colors.cyan}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${colors.reset}`
 		);
@@ -399,76 +420,58 @@ async function main() {
 		);
 		console.log('');
 
+		// Before → After table
 		console.log(
-			`${colors.dim}┌${'─'.repeat(15)}┬${'─'.repeat(25)}┬${'─'.repeat(15)}┐${colors.reset}`
+			`${colors.dim}┌${'─'.repeat(14)}┬${'─'.repeat(12)}┬${'─'.repeat(12)}┬${'─'.repeat(10)}┐${colors.reset}`
 		);
 		console.log(
-			`${colors.dim}│${colors.reset} ${colors.white}Type${colors.reset.padEnd(13)} ${colors.dim}│${colors.reset} ${colors.white}Before${colors.reset.padEnd(23)} ${colors.dim}│${colors.reset} ${colors.white}After${colors.reset.padEnd(13)} ${colors.dim}│${colors.reset}`
+			`${colors.dim}│${colors.reset} ${colors.white}Type${colors.reset.padEnd(12)} ${colors.dim}│${colors.reset} ${colors.white}Before${colors.reset.padEnd(10)} ${colors.dim}│${colors.reset} ${colors.white}After${colors.reset.padEnd(10)} ${colors.dim}│${colors.reset} ${colors.white}Change${colors.reset.padEnd(8)} ${colors.dim}│${colors.reset}`
 		);
 		console.log(
-			`${colors.dim}├${'─'.repeat(15)}┼${'─'.repeat(25)}┼${'─'.repeat(15)}┤${colors.reset}`
+			`${colors.dim}├${'─'.repeat(14)}┼${'─'.repeat(12)}┼${'─'.repeat(12)}┼${'─'.repeat(10)}┤${colors.reset}`
 		);
 
-		let changedTypes = 0;
 		for (const type of VALID_TYPES) {
 			const before = beforeStats[type];
 			const after = afterStats[type];
 			const diff = after - before;
 
-			if (diff !== 0) {
-				const diffStr = diff > 0 ? `+${formatNumber(diff)}` : `${formatNumber(diff)}`;
-				const diffColor = diff > 0 ? 'green' : 'red';
+			if (diff !== 0 || before > 0) {
+				const diffStr = diff > 0 ? `+${formatNumber(diff)}` : diff < 0 ? formatNumber(diff) : '0';
+				const diffColor = diff > 0 ? 'green' : diff < 0 ? 'red' : 'dim';
 				console.log(
-					`${colors.dim}│${colors.reset} ${colors.cyan}${TYPE_LABELS[type].padEnd(13)} ${colors.dim}│${colors.reset} ${formatNumber(before).padEnd(23)} ${colors.dim}│${colors.reset} ${formatNumber(after).padEnd(13)} ${colors.dim}│${colors.reset}`
+					`${colors.dim}│${colors.reset} ${colors.cyan}${TYPE_LABELS[type].padEnd(12)} ${colors.dim}│${colors.reset} ${formatNumber(before).padEnd(10)} ${colors.dim}│${colors.reset} ${formatNumber(after).padEnd(10)} ${colors.dim}│${colors.reset} ${colors[diffColor]}${diffStr.padEnd(8)}${colors.reset} ${colors.dim}│${colors.reset}`
 				);
-				console.log(
-					`${colors.dim}│${colors.reset} ${colors.dim}Change${colors.reset.padEnd(11)} ${colors.dim}│${colors.reset} ${colors[diffColor]}${diffStr.padEnd(23)}${colors.reset} ${colors.dim}│${colors.reset}`
-				);
-				changedTypes++;
 			}
 		}
 
-		console.log(
-			`${colors.dim}├${'─'.repeat(15)}┼${'─'.repeat(25)}┼${'─'.repeat(15)}┤${colors.reset}`
-		);
-		console.log(
-			`${colors.dim}│${colors.reset} ${colors.white}Total${colors.reset.padEnd(13)} ${colors.dim}│${colors.reset} ${formatNumber(beforeTotal).padEnd(23)} ${colors.dim}│${colors.reset} ${formatNumber(afterTotal).padEnd(13)} ${colors.dim}│${colors.reset}`
-		);
-
+		// Total row
 		const totalDiff = afterTotal - beforeTotal;
-		const totalDiffStr =
-			totalDiff > 0 ? `+${formatNumber(totalDiff)}` : `${formatNumber(totalDiff)}`;
+		const totalDiffStr = totalDiff > 0 ? `+${formatNumber(totalDiff)}` : formatNumber(totalDiff);
 		const totalDiffColor = totalDiff >= 0 ? 'green' : 'red';
-		console.log(
-			`${colors.dim}│${colors.reset} ${colors.dim}Change${colors.reset.padEnd(11)} ${colors.dim}│${colors.reset} ${colors[totalDiffColor]}${totalDiffStr.padEnd(23)}${colors.reset} ${colors.dim}│${colors.reset}`
-		);
 
 		console.log(
-			`${colors.dim}└${'─'.repeat(15)}┴${'─'.repeat(25)}┴${'─'.repeat(15)}┘${colors.reset}`
+			`${colors.dim}├${'─'.repeat(14)}┼${'─'.repeat(12)}┼${'─'.repeat(12)}┼${'─'.repeat(10)}┤${colors.reset}`
+		);
+		console.log(
+			`${colors.dim}│${colors.reset} ${colors.white}${'Total'.padEnd(12)} ${colors.dim}│${colors.reset} ${formatNumber(beforeTotal).padEnd(10)} ${colors.dim}│${colors.reset} ${formatNumber(afterTotal).padEnd(10)} ${colors.dim}│${colors.reset} ${colors[totalDiffColor]}${totalDiffStr.padEnd(8)}${colors.reset} ${colors.dim}│${colors.reset}`
+		);
+		console.log(
+			`${colors.dim}└${'─'.repeat(14)}┴${'─'.repeat(12)}┴${'─'.repeat(12)}┴${'─'.repeat(10)}┘${colors.reset}`
 		);
 		console.log('');
 
-		// Stats
+		// Statistics
 		console.log(`${colors.bright}📈 Statistics:${colors.reset}`);
 		console.log(
-			`   ${colors.cyan}Total synced:${colors.reset} ${colors.bright}${formatNumber(totalItems)}${colors.reset} items`
+			`   ${colors.cyan}Items synced:${colors.reset} ${colors.bright}${formatNumber(totalItems)}${colors.reset}`
 		);
 		console.log(
-			`   ${colors.cyan}Duration:${colors.reset} ${colors.bright}${formatDuration(duration)}${colors.reset}`
+			`   ${colors.cyan}Duration:${colors.reset}    ${colors.bright}${formatDuration(duration)}${colors.reset}`
 		);
-		console.log(`   ${colors.cyan}Providers:${colors.reset} ${providerResults.length}`);
-
-		if (providerResults.length > 0) {
-			const avgDuration =
-				providerResults.reduce((a, b) => a + b.duration, 0) / providerResults.length;
-			console.log(
-				`   ${colors.cyan}Avg per provider:${colors.reset} ${formatDuration(avgDuration)}`
-			);
-		}
-
-		console.log('');
+		console.log(`   ${colors.cyan}Providers:${colors.reset}   ${results.length}`);
 		console.log(
-			`${colors.bright}📋 Errors:${colors.reset} ${totalErrors === 0 ? colors.green + '✓ None' : colors.red + totalErrors}${colors.reset}`
+			`   ${colors.cyan}Errors:${colors.reset}      ${totalErrors === 0 ? colors.green + 'None' : colors.red + formatNumber(totalErrors)}${colors.reset}`
 		);
 		console.log('');
 
@@ -477,7 +480,7 @@ async function main() {
 			console.log(`${colors.green}${colors.bright}✅ Sync completed successfully!${colors.reset}`);
 		} else if (totalErrors > 0) {
 			console.log(
-				`${colors.yellow}${colors.bright}⚠ Sync completed with ${totalErrors} error(s)${colors.reset}`
+				`${colors.yellow}${colors.bright}⚠ Sync completed with ${formatNumber(totalErrors)} error(s)${colors.reset}`
 			);
 		} else {
 			console.log(`${colors.dim}${colors.bright}ℹ No new items to sync${colors.reset}`);
