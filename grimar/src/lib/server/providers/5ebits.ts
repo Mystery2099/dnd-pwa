@@ -142,8 +142,8 @@ export class FiveEBitsProvider extends BaseProvider {
 			school: schoolName,
 			spellLevel: spell.level,
 			spellSchool: schoolName,
-			dnd_class: spell.classes.map((c) => c.name).join(', '),
-			spell_lists: spell.classes.map((c) => c.index),
+			dnd_class: spell.classes?.map((c) => c.name).join(', ') || '',
+			spell_lists: spell.classes?.map((c) => c.index) || [],
 			archetype: spell.subclasses?.map((s) => s.name).join(', ') || '',
 			circles: spell.subclasses?.map((s) => s.name) || [],
 			source: '5e-bits',
@@ -166,8 +166,8 @@ export class FiveEBitsProvider extends BaseProvider {
 	private transformMonster(raw: unknown): TransformResult {
 		const monster = validateData(FiveEBitsMonsterSchema, raw, 'monster');
 
-		const size = this.toTitleCase(monster.size);
-		const typeName = this.toTitleCase(monster.type);
+		const size = this.toTitleCase(monster.size || '');
+		const typeName = this.toTitleCase(monster.type || '');
 		const subtype = monster.subtype ? ` (${monster.subtype})` : '';
 		const cr = monster.challenge_rating;
 
@@ -351,7 +351,7 @@ export class FiveEBitsProvider extends BaseProvider {
 			summary,
 			details,
 			classHitDie: cls.hit_die,
-			classProficiencies: cls.proficiencies.map((p) => p.name),
+			classProficiencies: cls.proficiencies?.map((p) => p.name) || [],
 			classSpellcasting: cls.spellcasting || {}
 		};
 	}
