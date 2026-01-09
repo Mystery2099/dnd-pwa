@@ -34,7 +34,7 @@
 		}),
 		// Arcane Aero styling for active pagination link
 		isActive
-			? 'bg-[var(--color-accent)] text-white shadow-[0_0_15px_var(--color-accent-glow,rgba(139,92,246,0.4))] ring-1 ring-white/20'
+			? 'bg-[var(--color-accent)] text-[var(--color-text-inverted)] shadow-[0_0_15px_var(--color-accent-glow)] ring-1 ring-[var(--color-overlay-light)]'
 			: 'bg-[var(--color-bg-card)] hover:bg-[var(--color-bg-overlay)]',
 		className
 	)}

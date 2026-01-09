@@ -21,11 +21,11 @@
 	<div class="w-full max-w-md">
 		<!-- Card -->
 		<div
-			class="card-crystal rounded-xl border border-white/10 bg-gray-800/60 p-8 text-center backdrop-blur-sm"
+			class="card-crystal rounded-xl border border-[var(--color-overlay-light)] bg-[var(--color-bg-card)] p-8 text-center backdrop-blur-sm"
 		>
 			<!-- Icon -->
 			<div
-				class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-gray-700/50"
+				class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-bg-overlay)]"
 			>
 				<Lock class="h-8 w-8 text-[var(--color-accent)]" />
 			</div>
@@ -80,7 +80,7 @@
 				{#if !isDevMode || hasAuthentikConfig || (!mockUser && !hasAuthentikConfig)}
 					<a
 						href="/auth/login"
-						class="btn-primary flex items-center justify-center gap-2 rounded-lg bg-[var(--color-accent)] px-6 py-3 font-medium text-white transition-all hover:bg-[var(--color-accent)]/80"
+						class="btn-primary flex items-center justify-center gap-2 rounded-lg bg-[var(--color-accent)] px-6 py-3 font-medium text-[var(--color-text-inverted)] transition-all hover:bg-[var(--color-accent)]/80"
 					>
 						<LogIn class="h-5 w-5" />
 						Sign In with Authentik

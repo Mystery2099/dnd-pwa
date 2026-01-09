@@ -10,10 +10,10 @@
 			variant: {
 				// Primary gem button with glow
 				default:
-					'bg-[var(--color-accent)] text-white shadow-[0_0_20px_var(--color-accent-glow,rgba(139,92,246,0.3))]',
+					'bg-[var(--color-accent)] text-[var(--color-text-inverted)] shadow-[0_0_20px_var(--color-accent-glow)]',
 				// Destructive action
 				destructive:
-					'bg-[var(--color-gem-ruby)] text-white shadow-[0_0_20px_var(--color-gem-ruby-glow,rgba(239,68,68,0.3))]',
+					'bg-[var(--color-gem-ruby)] text-[var(--color-text-inverted)] shadow-[0_0_20px_var(--color-gem-ruby-glow,rgba(239,68,68,0.3))]',
 				// Glass outline - fits Arcane Aero aesthetic
 				outline:
 					'bg-[var(--color-bg-card)] border border-[var(--color-border)] hover:bg-[var(--color-bg-overlay)] hover:border-[var(--color-accent)]',

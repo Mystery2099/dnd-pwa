@@ -27,7 +27,7 @@
 			class: 'gap-1.5 px-3'
 		}),
 		// Arcane Aero styling
-		'bg-[var(--color-bg-card)] transition-all hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white',
+		'bg-[var(--color-bg-card)] transition-all hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-[var(--color-text-inverted)]',
 		className
 	)}
 	children={children || Fallback}

@@ -54,10 +54,12 @@
 	{/if}
 
 	<DialogPrimitive.Portal>
-		<DialogPrimitive.Overlay class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm" />
+		<DialogPrimitive.Overlay
+			class="fixed inset-0 z-50 bg-[var(--color-overlay-dark)] backdrop-blur-sm"
+		/>
 		<DialogPrimitive.Content
 			class={cn(
-				'fixed z-50 gap-4 border border-[var(--color-border)] bg-[var(--color-bg-card)] p-6 shadow-[0_0_40px_rgba(0,0,0,0.5)] backdrop-blur-xl',
+				'fixed z-50 gap-4 border border-[var(--color-border)] bg-[var(--color-bg-card)] p-6 shadow-[0_0_40px_var(--color-shadow)] backdrop-blur-xl',
 				sideStyles[side],
 				animations[side],
 				className

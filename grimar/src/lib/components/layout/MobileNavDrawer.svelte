@@ -55,7 +55,7 @@
 			<!-- Backdrop -->
 			<button
 				type="button"
-				class="absolute inset-0 bg-[color-mix(in_srgb,black_60%,transparent)] backdrop-blur-sm"
+				class="absolute inset-0 bg-[var(--color-overlay-dark)] backdrop-blur-sm"
 				aria-label="Close navigation"
 				onclick={close}
 				transition:fade={{ duration: 150 }}
@@ -63,7 +63,7 @@
 
 			<!-- Drawer (Obsidian) -->
 			<div
-				class="absolute top-0 left-0 h-dvh w-[min(85vw,320px)] border-r border-[var(--color-border)] bg-[var(--color-bg-primary)] shadow-[0_0_80px_color-mix(in_srgb,black_80%,transparent)] backdrop-blur-2xl"
+				class="absolute top-0 left-0 h-dvh w-[min(85vw,320px)] border-r border-[var(--color-border)] bg-[var(--color-bg-primary)] shadow-[0_0_80px_var(--color-shadow)] backdrop-blur-2xl"
 				transition:fly={{ x: -16, duration: 180 }}
 			>
 				<!-- Static Glossy Overlay -->
