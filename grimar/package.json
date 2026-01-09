@@ -23,7 +23,8 @@
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "drizzle-kit migrate",
 		"db:studio": "drizzle-kit studio",
-		"db:sync": "bun scripts/sync.ts"
+		"db:sync": "bun scripts/sync-standalone.ts",
+		"reindex-fts": "bun scripts/reindex-fts.ts"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.4.1",
