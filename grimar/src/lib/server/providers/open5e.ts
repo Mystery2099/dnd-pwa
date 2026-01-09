@@ -37,7 +37,8 @@ export class Open5eProvider extends BaseProvider {
 	readonly id = 'open5e';
 	readonly name = 'Open5e';
 	readonly baseUrl: string;
-	readonly supportedTypes = [
+
+	private static readonly DEFAULT_TYPES = [
 		'spell',
 		'monster',
 		'item',
@@ -45,10 +46,13 @@ export class Open5eProvider extends BaseProvider {
 		'background',
 		'race',
 		'class'
-	] as const;
+	] as const satisfies readonly CompendiumTypeName[];
 
-	constructor(baseUrl: string = 'https://api.open5e.com') {
-		super();
+	constructor(
+		baseUrl: string = 'https://api.open5e.com',
+		supportedTypes?: readonly CompendiumTypeName[]
+	) {
+		super(supportedTypes ?? Open5eProvider.DEFAULT_TYPES);
 		this.baseUrl = baseUrl;
 	}
 

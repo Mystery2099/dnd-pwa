@@ -14,7 +14,6 @@ import type {
 	ProviderHealthStatus
 } from './types';
 import { Open5eProvider } from './open5e';
-import { FiveEBitsProvider } from './5ebits';
 import { SrdProvider } from './srd';
 import { HomebrewProvider } from './homebrew';
 import { createModuleLogger } from '$lib/server/logger';
@@ -132,16 +131,19 @@ class ProviderRegistryClass {
 		try {
 			switch (settings.type) {
 				case 'open5e':
-					return new Open5eProvider(settings.baseUrl || 'https://api.open5e.com');
-
-				case '5e-bits':
-					return new FiveEBitsProvider(settings.baseUrl || 'https://api.5e-bits.com');
+					return new Open5eProvider(
+						settings.baseUrl || 'https://api.open5e.com',
+						settings.supportedTypes
+					);
 
 				case 'srd':
-					return new SrdProvider();
+					return new SrdProvider(settings.supportedTypes);
 
 				case 'homebrew':
-					return new HomebrewProvider(settings.options?.dataPath as string);
+					return new HomebrewProvider(
+						settings.options?.dataPath as string,
+						settings.supportedTypes
+					);
 
 				default:
 					log.warn({ providerType: settings.type }, 'Unknown provider type');

@@ -55,7 +55,8 @@ export class HomebrewProvider extends BaseProvider {
 	readonly id = 'homebrew';
 	readonly name = 'Homebrew';
 	readonly baseUrl = '';
-	readonly supportedTypes = [
+
+	private static readonly DEFAULT_TYPES = [
 		'spell',
 		'monster',
 		'item',
@@ -63,13 +64,13 @@ export class HomebrewProvider extends BaseProvider {
 		'background',
 		'race',
 		'class'
-	] as const;
+	] as const satisfies readonly CompendiumTypeName[];
 
 	private dataPath: string;
 	private loadedData: Map<string, unknown[]> = new Map();
 
-	constructor(dataPath: string = 'data/homebrew') {
-		super();
+	constructor(dataPath: string = 'data/homebrew', supportedTypes?: readonly CompendiumTypeName[]) {
+		super(supportedTypes ?? HomebrewProvider.DEFAULT_TYPES);
 		this.dataPath = dataPath;
 	}
 
