@@ -19,6 +19,8 @@ export const compendiumItems = sqliteTable(
 		externalId: text('external_id'),
 		name: text('name').notNull(),
 		summary: text('summary'),
+		// Denormalized searchable content extracted from details JSON
+		content: text('content'),
 		// Render-ready payload for list/detail views
 		details: text('details', { mode: 'json' }).notNull(),
 		// External JSON path (Option B: file-per-item)
@@ -37,6 +39,18 @@ export const compendiumItems = sqliteTable(
 		backgroundFeature: text('background_feature'),
 		backgroundSkillProficiencies: text('background_skill_proficiencies'),
 		featPrerequisites: text('feat_prerequisites'),
+		// Subclass-specific columns
+		subclassName: text('subclass_name'),
+		className: text('class_name'),
+		subclassFlavor: text('subclass_flavor'),
+		// Subrace-specific columns
+		subraceName: text('subrace_name'),
+		raceName: text('race_name'),
+		// Trait-specific columns
+		traitName: text('trait_name'),
+		traitRaces: text('trait_races'),
+		// Condition-specific columns
+		conditionName: text('condition_name'),
 		createdBy: text('created_by').references(() => users.username)
 	},
 	(table) => ({

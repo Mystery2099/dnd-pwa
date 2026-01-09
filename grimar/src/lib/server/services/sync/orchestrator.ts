@@ -7,6 +7,8 @@
 
 import { providerRegistry } from '$lib/server/providers';
 import { compendiumCache, compendiumItems } from '$lib/server/db/schema';
+import { eq, and } from 'drizzle-orm';
+import { syncItemToFts } from '$lib/server/db/db-fts';
 import type { Db } from '$lib/server/db';
 import type { CompendiumTypeName } from '$lib/core/types/compendium';
 import type {
@@ -75,7 +77,51 @@ const TYPE_CANONICAL: Record<string, CompendiumTypeName> = {
 	race: 'race',
 	races: 'race',
 	class: 'class',
-	classes: 'class'
+	classes: 'class',
+	subclass: 'subclass',
+	subclasses: 'subclass',
+	subrace: 'subrace',
+	subraces: 'subrace',
+	trait: 'trait',
+	traits: 'trait',
+	condition: 'condition',
+	conditions: 'condition',
+	feature: 'feature',
+	features: 'feature',
+	skill: 'skill',
+	skills: 'skill',
+	language: 'language',
+	languages: 'language',
+	alignment: 'alignment',
+	alignments: 'alignment',
+	proficiency: 'proficiency',
+	proficiencies: 'proficiency',
+	abilityScore: 'abilityScore',
+	abilityScores: 'abilityScore',
+	damageType: 'damageType',
+	damageTypes: 'damageType',
+	magicSchool: 'magicSchool',
+	magicSchools: 'magicSchool',
+	equipment: 'equipment',
+	equipmentCategory: 'equipmentCategory',
+	equipmentCategories: 'equipmentCategory',
+	weaponProperty: 'weaponProperty',
+	weaponProperties: 'weaponProperty',
+	vehicle: 'vehicle',
+	vehicles: 'vehicle',
+	monsterType: 'monsterType',
+	monsterTypes: 'monsterType',
+	rule: 'rule',
+	rules: 'rule',
+	ruleSection: 'ruleSection',
+	ruleSections: 'ruleSection',
+	weapon: 'weapon',
+	weapons: 'weapon',
+	armor: 'armor',
+	plane: 'plane',
+	planes: 'plane',
+	section: 'section',
+	sections: 'section'
 };
 
 function normalizeType(type: string): CompendiumTypeName | null {
@@ -223,7 +269,31 @@ async function syncSingleProvider(
 			backgrounds: 0,
 			races: 0,
 			classes: 0,
+			subclasses: 0,
+			subraces: 0,
+			traits: 0,
+			conditions: 0,
+			features: 0,
+			skills: 0,
+			languages: 0,
+			alignments: 0,
+			proficiencies: 0,
+			abilityScores: 0,
+			damageTypes: 0,
+			magicSchools: 0,
+			equipment: 0,
+			weaponProperties: 0,
+			equipmentCategories: 0,
+			vehicles: 0,
+			monsterTypes: 0,
+			rules: 0,
+			ruleSections: 0,
+			weapons: 0,
+			armor: 0,
+			planes: 0,
+			sections: 0,
 			totalItems: 0,
+			skipped: 0,
 			errors: [`Provider not found: ${providerId}`]
 		};
 	}
@@ -237,7 +307,31 @@ async function syncSingleProvider(
 		backgrounds: 0,
 		races: 0,
 		classes: 0,
+		subclasses: 0,
+		subraces: 0,
+		traits: 0,
+		conditions: 0,
+		features: 0,
+		skills: 0,
+		languages: 0,
+		alignments: 0,
+		proficiencies: 0,
+		abilityScores: 0,
+		damageTypes: 0,
+		magicSchools: 0,
+		equipment: 0,
+		weaponProperties: 0,
+		equipmentCategories: 0,
+		vehicles: 0,
+		monsterTypes: 0,
+		rules: 0,
+		ruleSections: 0,
+		weapons: 0,
+		armor: 0,
+		planes: 0,
+		sections: 0,
 		totalItems: 0,
+		skipped: 0,
 		errors: []
 	};
 
@@ -283,6 +377,75 @@ async function syncSingleProvider(
 					break;
 				case 'class':
 					result.classes = itemCount;
+					break;
+				case 'subclass':
+					result.subclasses = itemCount;
+					break;
+				case 'subrace':
+					result.subraces = itemCount;
+					break;
+				case 'trait':
+					result.traits = itemCount;
+					break;
+				case 'condition':
+					result.conditions = itemCount;
+					break;
+				case 'feature':
+					result.features = itemCount;
+					break;
+				case 'skill':
+					result.skills = itemCount;
+					break;
+				case 'language':
+					result.languages = itemCount;
+					break;
+				case 'alignment':
+					result.alignments = itemCount;
+					break;
+				case 'proficiency':
+					result.proficiencies = itemCount;
+					break;
+				case 'abilityScore':
+					result.abilityScores = itemCount;
+					break;
+				case 'damageType':
+					result.damageTypes = itemCount;
+					break;
+				case 'magicSchool':
+					result.magicSchools = itemCount;
+					break;
+				case 'equipment':
+					result.equipment = itemCount;
+					break;
+				case 'weaponProperty':
+					result.weaponProperties = itemCount;
+					break;
+				case 'equipmentCategory':
+					result.equipmentCategories = itemCount;
+					break;
+				case 'vehicle':
+					result.vehicles = itemCount;
+					break;
+				case 'monsterType':
+					result.monsterTypes = itemCount;
+					break;
+				case 'rule':
+					result.rules = itemCount;
+					break;
+				case 'ruleSection':
+					result.ruleSections = itemCount;
+					break;
+				case 'weapon':
+					result.weapons = itemCount;
+					break;
+				case 'armor':
+					result.armor = itemCount;
+					break;
+				case 'plane':
+					result.planes = itemCount;
+					break;
+				case 'section':
+					result.sections = itemCount;
 					break;
 			}
 		} catch (error) {
@@ -520,6 +683,25 @@ async function syncTypeFromProvider(
 							}
 						})
 						.execute();
+
+					// Sync to FTS index (after successful DB insert)
+					// Note: We need to get the ID of the inserted/updated item
+					const insertedItem = await tx.query.compendiumItems.findFirst({
+						where: and(
+							eq(compendiumItems.type, type),
+							eq(compendiumItems.source, providerId),
+							eq(compendiumItems.externalId, transformed.externalId)
+						)
+					});
+					if (insertedItem) {
+						await syncItemToFts(
+							insertedItem.id,
+							insertedItem.name,
+							insertedItem.summary,
+							insertedItem.details as Record<string, unknown>,
+							insertedItem.content as string | null
+						);
+					}
 				}
 			});
 
@@ -596,7 +778,30 @@ export async function syncProviderById(
 		'feat',
 		'background',
 		'race',
-		'class'
+		'class',
+		'subclass',
+		'subrace',
+		'trait',
+		'condition',
+		'feature',
+		'skill',
+		'language',
+		'alignment',
+		'proficiency',
+		'abilityScore',
+		'damageType',
+		'magicSchool',
+		'equipment',
+		'weaponProperty',
+		'equipmentCategory',
+		'vehicle',
+		'monsterType',
+		'rule',
+		'ruleSection',
+		'weapon',
+		'armor',
+		'plane',
+		'section'
 	];
 	const metrics = createSyncMetrics();
 
