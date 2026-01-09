@@ -143,12 +143,26 @@ export class DataTransformer {
 			desc: undefined,
 			actions:
 				monster.actions?.map((a) => ({
-					...a,
-					damage: a.damage ? JSON.stringify(a.damage) : undefined
+					name: a.name,
+					desc: a.desc,
+					attack_bonus: a.attack_bonus,
+					damage: a.damage_dice || undefined
 				})) || [],
 			special_abilities: monster.special_abilities || [],
-			legendary_actions: monster.legendary_actions || [],
-			reactions: [] // Open5e doesn't always provide reactions in the same way
+			legendary_actions:
+				monster.legendary_actions?.map((a) => ({
+					name: a.name,
+					desc: a.desc,
+					attack_bonus: a.attack_bonus,
+					damage: a.damage_dice || undefined
+				})) || [],
+			reactions:
+				monster.reactions?.map((a) => ({
+					name: a.name,
+					desc: a.desc,
+					attack_bonus: a.attack_bonus,
+					damage: a.damage_dice || undefined
+				})) || []
 		};
 	}
 

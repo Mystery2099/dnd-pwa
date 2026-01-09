@@ -22,7 +22,7 @@ export type SyncProgressPhase =
 export interface SyncProgressEvent {
 	/** Current phase of the sync operation */
 	phase: SyncProgressPhase;
-	/** Provider identifier (e.g., 'open5e', '5e-bits') */
+	/** Provider identifier (e.g., 'open5e', 'srd') */
 	providerId: string;
 	/** Human-readable provider name */
 	providerName: string;
