@@ -59,15 +59,6 @@ export function open5eToInternalPath(url: string): string | null {
 }
 
 /**
- * Check if a URL should be handled as an internal link
- * @param url - The URL to check
- * @returns true if this is an open5e URL that should be intercepted
- */
-export function isOpen5eUrl(url: string): boolean {
-	return open5eToInternalPath(url) !== null;
-}
-
-/**
  * Options for the link interceptor
  */
 export interface LinkInterceptorOptions {
@@ -116,12 +107,3 @@ export function createLinkInterceptor(options: LinkInterceptorOptions = {}) {
 		}
 	};
 }
-
-/**
- * Default link interceptor for compendium content
- * Navigates internally for open5e URLs, opens external URLs in new tabs
- */
-export const defaultLinkInterceptor = createLinkInterceptor({
-	onInternal: (path) => goto(path),
-	onExternal: (url) => window.open(url, '_blank', 'noopener,noreferrer')
-});

@@ -20,6 +20,21 @@ interface CleanupResult {
 }
 
 /**
+ * Get enabled provider IDs as a Set
+ */
+function getEnabledProviderIds(): Set<string> {
+	return new Set(providerRegistry.getEnabledProviders().map((p) => p.id));
+}
+
+/**
+ * Get all unique source IDs from compendium_items
+ */
+async function getAllSourceIds(db: Db): Promise<string[]> {
+	const allItems = await db.select().from(compendiumItems);
+	return [...new Set(allItems.map((r) => r.source).filter((s): s is string => s !== null))];
+}
+
+/**
  * Remove all data from providers that are not enabled in configuration.
  *
  * This function:
@@ -39,13 +54,10 @@ export async function cleanupDisabledSources(db: Db): Promise<CleanupResult> {
 	};
 
 	// Get enabled provider IDs
-	const enabledIds = new Set(providerRegistry.getEnabledProviders().map((p) => p.id));
+	const enabledIds = getEnabledProviderIds();
 
 	// Get all unique source IDs from compendium_items
-	const allItems = await db.select().from(compendiumItems);
-	const allSources = [
-		...new Set(allItems.map((r) => r.source).filter((s): s is string => s !== null))
-	];
+	const allSources = await getAllSourceIds(db);
 
 	// Find sources that are NOT in the enabled list
 	const disabledSources = allSources.filter((source) => !enabledIds.has(source));
@@ -99,12 +111,8 @@ export async function cleanupDisabledSources(db: Db): Promise<CleanupResult> {
  * @returns List of disabled sources that have data in the database
  */
 export async function getDisabledSourcesWithData(db: Db): Promise<string[]> {
-	const enabledIds = new Set(providerRegistry.getEnabledProviders().map((p) => p.id));
-
-	const allItems = await db.select().from(compendiumItems);
-	const allSources = [
-		...new Set(allItems.map((r) => r.source).filter((s): s is string => s !== null))
-	];
+	const enabledIds = getEnabledProviderIds();
+	const allSources = await getAllSourceIds(db);
 
 	return allSources.filter((source) => !enabledIds.has(source));
 }

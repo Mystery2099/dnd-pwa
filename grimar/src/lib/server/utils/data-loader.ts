@@ -69,19 +69,3 @@ export async function loadAllDetails(
 
 	return detailsMap;
 }
-
-/**
- * Helper to ensure the data directory structure exists
- */
-export function ensureDataDirectory(
-	_type: CompendiumTypeName,
-	dataRoot: string = DEFAULT_DATA_ROOT
-): string {
-	const targetDir = join(process.cwd(), dataRoot, _type);
-
-	if (!existsSync(targetDir)) {
-		mkdirSync(targetDir, { recursive: true });
-	}
-
-	return targetDir;
-}
