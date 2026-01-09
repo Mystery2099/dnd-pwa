@@ -6,7 +6,7 @@
  *
  * Usage:
  *   bun run db:sync                 # Sync all providers (default)
- *   bun run db:ssync --type spell   # Sync only spells
+ *   bun run db:sync --type spell    # Sync only spells
  *   bun run db:sync --provider open5e  # Sync only a specific provider
  *   bun run db:sync --full          # Force full re-sync
  *
@@ -15,6 +15,7 @@
  *   --provider <id>   Provider ID to sync (e.g., open5e, 5e-bits, srd, homebrew)
  *   --full            Force full re-sync (vs incremental)
  *   --verbose, -v     Verbose output
+ *   --quiet, -q       Minimal output (only summary)
  *   --help, -h        Show this help message
  */
 
@@ -26,8 +27,12 @@ import { syncAllProviders } from '../src/lib/server/services/sync/orchestrator';
 import { providerRegistry } from '../src/lib/server/providers';
 import type { ProviderSyncResult } from '../src/lib/server/providers/types';
 import type { CompendiumTypeName } from '../src/lib/types/compendium';
+import type {
+	SyncProgressEvent,
+	SyncProgressCallback
+} from '../src/lib/server/services/sync/progress';
 import { applyPragmas } from '../src/lib/server/db/db-config';
-import { createModuleLogger } from '../src/lib/server/logger';
+import { createModuleLogger } from '$lib/server/logger';
 import { $count } from 'drizzle-orm';
 import { compendiumItems } from '../src/lib/server/db/schema';
 
@@ -74,6 +79,7 @@ interface Args {
 	provider?: string;
 	full?: boolean;
 	verbose?: boolean;
+	quiet?: boolean;
 	help?: boolean;
 }
 
@@ -96,6 +102,11 @@ function parseArgs(): Args {
 
 		if (arg === '--verbose' || arg === '-v') {
 			args.verbose = true;
+			continue;
+		}
+
+		if (arg === '--quiet' || arg === '-q') {
+			args.quiet = true;
 			continue;
 		}
 
@@ -125,47 +136,115 @@ function formatDuration(ms: number): string {
 	return `${mins}m ${secs}s`;
 }
 
-function formatBytes(bytes: number): string {
-	if (bytes < 1024) return `${bytes} B`;
-	if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-	return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-}
+/**
+ * Progress display handler for real-time sync updates
+ */
+class ProgressHandler {
+	private quiet: boolean;
+	private currentLine: string = '';
+	private lastUpdate: number = 0;
+	private pendingMessages: string[] = [];
 
-// Spinner for ongoing operations
-class Spinner {
-	private chars = ['◐', '◓', '◑', '◒'];
-	private idx = 0;
-	private interval: number | null = null;
-	private message: string;
-
-	constructor(message: string) {
-		this.message = message;
+	constructor(quiet: boolean = false) {
+		this.quiet = quiet;
 	}
 
-	start() {
-		process.stdout.write(`${colors.dim}${this.chars[0]}${colors.reset} ${this.message}`);
-		this.interval = setInterval(() => {
-			this.idx = (this.idx + 1) % this.chars.length;
-			process.stdout.write(`\r${colors.dim}${this.chars[this.idx]}${colors.reset} ${this.message}`);
-		}, 150);
+	/**
+	 * Handle a progress event and update display
+	 */
+	async handleEvent(event: SyncProgressEvent): Promise<void> {
+		if (this.quiet) return;
+
+		const { phase, providerName, type, current, total } = event;
+		const percent = total && total > 0 ? Math.round(((current || 0) / total) * 100) : 0;
+		const typeLabel = type ? TYPE_LABELS[type] : '';
+
+		switch (phase) {
+			case 'provider:start':
+				this.clearLine();
+				console.log(`${colors.bright}${colors.blue}▶ ${providerName}${colors.reset}`);
+				break;
+
+			case 'fetch:start':
+				this.clearLine();
+				this.showSpinner(
+					`  ${colors.cyan}Fetching ${typeLabel}${colors.reset} from ${providerName}...`
+				);
+				break;
+
+			case 'fetch:complete':
+				this.clearSpinner();
+				console.log(
+					`  ${colors.green}✓${colors.reset} Fetched ${formatNumber(total)} ${typeLabel.toLowerCase()}`
+				);
+				break;
+
+			case 'transform:start':
+				// Already handled by first transform:progress
+				break;
+
+			case 'transform:progress':
+				this.showSpinner(
+					`  ${colors.cyan}Processing${colors.reset} ${formatNumber(current)}/${formatNumber(total)} ${typeLabel.toLowerCase()} (${percent}%)`
+				);
+				break;
+
+			case 'transform:complete':
+				this.clearSpinner();
+				break;
+
+			case 'insert:start':
+				// Already handled by first insert:progress
+				break;
+
+			case 'insert:progress':
+				this.showSpinner(
+					`  ${colors.cyan}Inserting${colors.reset} ${formatNumber(current)}/${formatNumber(total)} ${typeLabel.toLowerCase()} (${percent}%)`
+				);
+				break;
+
+			case 'insert:complete':
+				this.clearSpinner();
+				console.log(`  ${colors.green}✓${colors.reset} Inserted ${formatNumber(current)} items`);
+				break;
+
+			case 'provider:complete':
+				console.log('');
+				break;
+
+			case 'error':
+				this.clearSpinner();
+				console.log(`  ${colors.red}✗ Error:${colors.reset} ${event.error}`);
+				break;
+		}
 	}
 
-	stop(message?: string) {
-		if (this.interval) {
-			clearInterval(this.interval);
-			process.stdout.write('\r');
-		}
-		if (message) {
-			console.log(`${colors.green}✓${colors.reset} ${message}`);
+	private showSpinner(message: string): void {
+		const now = Date.now();
+		// Rate limit updates to 200ms
+		if (now - this.lastUpdate < 200 && this.currentLine) return;
+
+		this.clearLine();
+		const spinChars = ['◐', '◓', '◑', '◒'];
+		const char = spinChars[Math.floor(now / 150) % spinChars.length];
+		this.currentLine = `${colors.dim}${char}${colors.reset} ${message}`;
+		process.stdout.write(this.currentLine);
+		this.lastUpdate = now;
+	}
+
+	private clearLine(): void {
+		if (this.currentLine) {
+			process.stdout.write('\r' + ' '.repeat(this.currentLine.length + 5) + '\r');
+			this.currentLine = '';
 		}
 	}
 
-	fail(message: string) {
-		if (this.interval) {
-			clearInterval(this.interval);
-			process.stdout.write('\r');
-		}
-		console.log(`${colors.red}✗${colors.reset} ${message}`);
+	private clearSpinner(): void {
+		this.clearLine();
+	}
+
+	finish(): void {
+		this.clearLine();
 	}
 }
 
@@ -189,6 +268,7 @@ ${colors.bright}Options:${colors.reset}
                                 ${colors.green}srd${colors.reset}, ${colors.green}homebrew${colors.reset}
   ${colors.cyan}--full${colors.reset}             Force full re-sync (ignore incremental)
   ${colors.cyan}--verbose, -v${colors.reset}     Show detailed progress
+  ${colors.cyan}--quiet, -q${colors.reset}       Minimal output (summary only)
   ${colors.cyan}--help, -h${colors.reset}        Show this help message
 
 ${colors.bright}Examples:${colors.reset}
@@ -208,7 +288,7 @@ async function getDbStats(db: any): Promise<Record<CompendiumTypeName, number>> 
 	return stats as Record<CompendiumTypeName, number>;
 }
 
-function createProgressBar(current: number, total: number, width: number = 30): string {
+function createProgressBar(current: number, total: number, width: number = 25): string {
 	const percent = total > 0 ? current / total : 0;
 	const filled = Math.round(percent * width);
 	const empty = width - filled;
@@ -278,8 +358,14 @@ async function main() {
 	console.log('');
 
 	// Initialize database
-	const dbSpinner = new Spinner('Connecting to database...');
-	dbSpinner.start();
+	const dbSpinner = new ProgressHandler(args.quiet);
+	dbSpinner.handleEvent({
+		phase: 'fetch:start',
+		providerId: 'db',
+		providerName: 'Database',
+		type: 'spell',
+		timestamp: new Date()
+	} as SyncProgressEvent);
 
 	let db: any;
 	try {
@@ -287,9 +373,24 @@ async function main() {
 		applyPragmas(client);
 		db = drizzle(client, { schema });
 		migrate(db, { migrationsFolder: './drizzle' });
-		dbSpinner.stop('Database connected');
+		dbSpinner.handleEvent({
+			phase: 'fetch:complete',
+			providerId: 'db',
+			providerName: 'Database',
+			type: 'spell',
+			current: 1,
+			total: 1,
+			timestamp: new Date()
+		} as SyncProgressEvent);
 	} catch (error) {
-		dbSpinner.fail(`Failed to connect: ${error}`);
+		dbSpinner.handleEvent({
+			phase: 'error',
+			providerId: 'db',
+			providerName: 'Database',
+			type: 'spell',
+			error: String(error),
+			timestamp: new Date()
+		} as SyncProgressEvent);
 		return 1;
 	}
 
@@ -325,12 +426,19 @@ async function main() {
 	let totalErrors = 0;
 	let totalItems = 0;
 
+	// Create progress handler
+	const progress = new ProgressHandler(args.quiet);
+
 	try {
 		const results = await syncAllProviders(db, {
 			types,
 			providerIds,
-			forceFull: args.full
+			forceFull: args.full,
+			onProgress: (event) => progress.handleEvent(event)
 		});
+
+		// Clear any remaining spinner
+		progress.finish();
 
 		// Display results per provider
 		for (const result of results) {
@@ -488,6 +596,7 @@ async function main() {
 
 		return totalErrors > 0 ? 1 : 0;
 	} catch (error) {
+		progress.finish();
 		console.log(`\n${colors.red}✗ Sync failed: ${error}${colors.reset}`);
 		logger.error({ error }, 'Error during sync');
 		return 1;

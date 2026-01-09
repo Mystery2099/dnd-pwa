@@ -14,6 +14,7 @@ import type {
 	ProviderSyncResult,
 	TransformResult
 } from '$lib/server/providers/types';
+import type { SyncProgressCallback } from './progress';
 import { withRetry } from './retry';
 import {
 	createSyncMetrics,
@@ -47,6 +48,8 @@ interface SyncOptions {
 	maxRetries?: number;
 	/** Delay between retries in ms (exponential backoff applied) */
 	retryDelayMs?: number;
+	/** Progress callback for real-time updates */
+	onProgress?: SyncProgressCallback;
 }
 
 // Default retry configuration
@@ -54,6 +57,8 @@ const DEFAULT_MAX_RETRIES = 3;
 const DEFAULT_RETRY_DELAY_MS = 1000;
 // Batch size for transaction processing
 const BATCH_SIZE = 100;
+// Emit progress every N items during transformation
+const TRANSFORM_PROGRESS_INTERVAL = 50;
 
 // Type canonicalization mapping (handles singular/plural variations from different APIs)
 const TYPE_CANONICAL: Record<string, CompendiumTypeName> = {
@@ -75,6 +80,20 @@ const TYPE_CANONICAL: Record<string, CompendiumTypeName> = {
 
 function normalizeType(type: string): CompendiumTypeName | null {
 	return TYPE_CANONICAL[type.toLowerCase()] || null;
+}
+
+/**
+ * Emit a progress event safely (wraps errors to prevent sync failure)
+ */
+function emitProgress(
+	onProgress: SyncProgressCallback | undefined,
+	event: Parameters<SyncProgressCallback>[0]
+): void {
+	try {
+		onProgress?.(event);
+	} catch (error) {
+		log.warn({ error }, 'Progress callback error');
+	}
 }
 
 /**
@@ -110,6 +129,7 @@ export async function syncAllProviders(
 	const providerIds = options?.providerIds;
 	const maxRetries = options?.maxRetries ?? DEFAULT_MAX_RETRIES;
 	const retryDelayMs = options?.retryDelayMs ?? DEFAULT_RETRY_DELAY_MS;
+	const onProgress = options?.onProgress;
 
 	log.info(
 		{
@@ -133,11 +153,29 @@ export async function syncAllProviders(
 			continue;
 		}
 
+		// Emit provider:start
+		emitProgress(onProgress, {
+			phase: 'provider:start',
+			providerId: provider.id,
+			providerName: provider.name,
+			timestamp: new Date()
+		});
+
 		// Use retry logic for provider sync
 		const providerResult = await withRetry(
-			async () => syncSingleProvider(db, provider.id, typesToSync, metrics),
+			async () => syncSingleProvider(db, provider.id, typesToSync, metrics, onProgress),
 			{ maxRetries, retryDelayMs, operationName: provider.name }
 		);
+
+		// Emit provider:complete
+		emitProgress(onProgress, {
+			phase: 'provider:complete',
+			providerId: provider.id,
+			providerName: provider.name,
+			total: providerResult.totalItems,
+			timestamp: new Date()
+		});
+
 		results.push(providerResult);
 	}
 
@@ -169,7 +207,8 @@ async function syncSingleProvider(
 	db: Db,
 	providerId: string,
 	types: CompendiumTypeName[],
-	metrics: ReturnType<typeof createSyncMetrics>
+	metrics: ReturnType<typeof createSyncMetrics>,
+	onProgress?: SyncProgressCallback
 ): Promise<ProviderSyncResult> {
 	const registry = providerRegistry;
 	const provider = registry.getProvider(providerId);
@@ -214,7 +253,7 @@ async function syncSingleProvider(
 		try {
 			// Use retry logic for type sync
 			const itemCount = await withRetry(
-				async () => syncTypeFromProvider(db, provider.id, type, provider, metrics),
+				async () => syncTypeFromProvider(db, provider.id, type, provider, metrics, onProgress),
 				{
 					maxRetries: DEFAULT_MAX_RETRIES,
 					retryDelayMs: DEFAULT_RETRY_DELAY_MS,
@@ -251,6 +290,16 @@ async function syncSingleProvider(
 			result.errors.push(`Failed to sync ${type}: ${errorMessage}`);
 			recordError(metrics, provider.id, errorMessage);
 			log.error({ providerId: provider.id, type, error }, 'Error syncing type');
+
+			// Emit error event
+			emitProgress(onProgress, {
+				phase: 'error',
+				providerId: provider.id,
+				providerName: provider.name,
+				type,
+				error: errorMessage,
+				timestamp: new Date()
+			});
 		}
 	}
 
@@ -269,12 +318,22 @@ async function syncTypeFromProvider(
 	providerId: string,
 	type: CompendiumTypeName,
 	provider: CompendiumProvider,
-	metrics: ReturnType<typeof createSyncMetrics>
+	metrics: ReturnType<typeof createSyncMetrics>,
+	onProgress?: SyncProgressCallback
 ): Promise<number> {
 	// Fetch all items from provider
 	if (!provider.fetchAllPages) {
 		throw new Error(`Provider ${provider.id} does not support bulk fetch`);
 	}
+
+	// Emit fetch:start
+	emitProgress(onProgress, {
+		phase: 'fetch:start',
+		providerId,
+		providerName: provider.name,
+		type,
+		timestamp: new Date()
+	});
 
 	// Fetch with retry logic
 	const rawItems = await withRetry(async () => provider.fetchAllPages!(type), {
@@ -283,9 +342,31 @@ async function syncTypeFromProvider(
 		operationName: `${provider.id}/${type}/fetch`
 	});
 
+	// Emit fetch:complete
+	emitProgress(onProgress, {
+		phase: 'fetch:complete',
+		providerId,
+		providerName: provider.name,
+		type,
+		current: rawItems.length,
+		total: rawItems.length,
+		timestamp: new Date()
+	});
+
 	logSyncStart(type, providerId, rawItems.length);
 
 	let count = 0;
+
+	// Emit transform:start
+	emitProgress(onProgress, {
+		phase: 'transform:start',
+		providerId,
+		providerName: provider.name,
+		type,
+		current: 0,
+		total: rawItems.length,
+		timestamp: new Date()
+	});
 
 	// Transform all items first (outside transaction)
 	const transformedItems: Array<{ raw: unknown; transformed: TransformResult }> = [];
@@ -312,7 +393,31 @@ async function syncTypeFromProvider(
 			const errorMessage = error instanceof Error ? error.message : String(error);
 			logTransformFailed(type, 'unknown', errorMessage, { index });
 		}
+
+		// Emit transform:progress every N items
+		if (index > 0 && index % TRANSFORM_PROGRESS_INTERVAL === 0) {
+			emitProgress(onProgress, {
+				phase: 'transform:progress',
+				providerId,
+				providerName: provider.name,
+				type,
+				current: index,
+				total: rawItems.length,
+				timestamp: new Date()
+			});
+		}
 	}
+
+	// Emit transform:complete
+	emitProgress(onProgress, {
+		phase: 'transform:complete',
+		providerId,
+		providerName: provider.name,
+		type,
+		current: transformedItems.length,
+		total: rawItems.length,
+		timestamp: new Date()
+	});
 
 	if (seenExternalIds.size < rawItems.length) {
 		log.info(
@@ -327,6 +432,17 @@ async function syncTypeFromProvider(
 	if (!existsSync(typeDir)) {
 		mkdirSync(typeDir, { recursive: true });
 	}
+
+	// Emit insert:start
+	emitProgress(onProgress, {
+		phase: 'insert:start',
+		providerId,
+		providerName: provider.name,
+		type,
+		current: 0,
+		total: transformedItems.length,
+		timestamp: new Date()
+	});
 
 	for (let batchIndex = 0; batchIndex < transformedItems.length; batchIndex += BATCH_SIZE) {
 		const batch = transformedItems.slice(batchIndex, batchIndex + BATCH_SIZE);
@@ -343,7 +459,6 @@ async function syncTypeFromProvider(
 						writeFileSync(fullPath, JSON.stringify(transformed.details, null, 2));
 					} catch (fsError) {
 						log.error({ filePath: fullPath, error: fsError }, 'Failed to write file');
-						// We continue with DB insert anyway, but jsonPath might be broken
 					}
 
 					// Store raw cache data
@@ -410,13 +525,34 @@ async function syncTypeFromProvider(
 
 			count += batch.length;
 			recordItemProcessed(metrics, { batchSize: batch.length });
+
+			// Emit insert:progress every batch
+			emitProgress(onProgress, {
+				phase: 'insert:progress',
+				providerId,
+				providerName: provider.name,
+				type,
+				current: count,
+				total: transformedItems.length,
+				timestamp: new Date()
+			});
 		} catch (error) {
 			const errorMessage = error instanceof Error ? error.message : String(error);
 			logInsertFailed(type, 'batch', errorMessage);
 			recordError(metrics, providerId, errorMessage);
-			// Continue with next batch
 		}
 	}
+
+	// Emit insert:complete
+	emitProgress(onProgress, {
+		phase: 'insert:complete',
+		providerId,
+		providerName: provider.name,
+		type,
+		current: count,
+		total: transformedItems.length,
+		timestamp: new Date()
+	});
 
 	logSyncEnd(type, count, rawItems.length);
 	return count;
@@ -464,5 +600,5 @@ export async function syncProviderById(
 	];
 	const metrics = createSyncMetrics();
 
-	return syncSingleProvider(db, providerId, types, metrics);
+	return syncSingleProvider(db, providerId, types, metrics, options?.onProgress);
 }
