@@ -48,6 +48,24 @@ export type CompendiumTypeName =
 	| 'background'
 	| 'race'
 	| 'class'
+	| 'subclass'
+	| 'subrace'
+	| 'trait'
+	| 'feature'
+	| 'skill'
+	| 'language'
+	| 'alignment'
+	| 'proficiency'
+	| 'abilityScore'
+	| 'damageType'
+	| 'magicSchool'
+	| 'equipment'
+	| 'weaponProperty'
+	| 'equipmentCategory'
+	| 'vehicle'
+	| 'monsterType'
+	| 'rule'
+	| 'ruleSection'
 	| 'weapon'
 	| 'armor'
 	| 'condition'
@@ -84,6 +102,56 @@ export interface CompendiumItem {
 	raceSpeed?: number | null;
 	// Class-specific columns
 	classHitDie?: number | null;
+	// Subclass-specific columns
+	subclassName?: string | null;
+	className?: string | null;
+	subclassFlavor?: string | null;
+	// Subrace-specific columns
+	subraceName?: string | null;
+	raceName?: string | null;
+	// Trait-specific columns
+	traitName?: string | null;
+	traitRaces?: string | null;
+	// Condition-specific columns
+	conditionName?: string | null;
+	// Feature-specific columns
+	featureName?: string | null;
+	featureLevel?: number | null;
+	// Skill-specific columns
+	skillName?: string | null;
+	abilityScore?: string | null;
+	// Language-specific columns
+	languageName?: string | null;
+	typicalSpeakers?: string | null;
+	// Alignment-specific columns
+	alignmentName?: string | null;
+	alignmentAbbreviation?: string | null;
+	// Proficiency-specific columns
+	proficiencyName?: string | null;
+	proficiencyType?: string | null;
+	// Ability Score columns
+	abilityScoreName?: string | null;
+	abilityScoreAbbreviation?: string | null;
+	// Damage Type columns
+	damageTypeName?: string | null;
+	// Magic School columns
+	magicSchoolName?: string | null;
+	// Equipment columns
+	equipmentName?: string | null;
+	equipmentCategory?: string | null;
+	// Weapon Property columns
+	weaponPropertyName?: string | null;
+	// Equipment Category columns
+	equipmentCategoryName?: string | null;
+	// Vehicle columns
+	vehicleName?: string | null;
+	vehicleCategory?: string | null;
+	// Monster Type columns
+	monsterTypeName?: string | null;
+	// Rule columns
+	ruleName?: string | null;
+	// Rule Section columns
+	ruleSectionName?: string | null;
 	createdBy: string | null;
 }
 

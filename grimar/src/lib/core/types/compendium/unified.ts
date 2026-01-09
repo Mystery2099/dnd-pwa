@@ -2,7 +2,7 @@
  * Unified Compendium Types
  *
  * These interfaces provide a consistent data structure for all compendium types,
- * regardless of the source provider (Open5e, 5e-bits, SRD, homebrew).
+ * regardless of the source provider (Open5e, SRD, homebrew).
  *
  * The service layer transforms raw database records into these unified types,
  * handling provider-specific field naming and data structure differences.
@@ -19,7 +19,7 @@ export interface BaseCompendiumItem {
 	name: string;
 	/** Brief description for list views */
 	summary: string;
-	/** Data source (e.g., 'open5e', '5e-bits', 'homebrew') */
+	/** Data source (e.g., 'open5e', 'srd', 'homebrew') */
 	source: string;
 	/** Full description as array of paragraphs (always array, never string) */
 	description: string[];
@@ -36,7 +36,22 @@ export type CompendiumType =
 	| 'background'
 	| 'race'
 	| 'class'
-	| 'item';
+	| 'item'
+	| 'subclass'
+	| 'subrace'
+	| 'trait'
+	| 'condition'
+	| 'skill'
+	| 'language'
+	| 'abilityScore'
+	| 'proficiency'
+	| 'damageType'
+	| 'magicSchool'
+	| 'equipment'
+	| 'weapon'
+	| 'armor'
+	| 'tool'
+	| 'vehicle';
 
 export function isSpell(item: UnifiedCompendiumItem): item is UnifiedSpell {
 	return item.type === 'spell';
@@ -64,6 +79,26 @@ export function isClass(item: UnifiedCompendiumItem): item is UnifiedClass {
 
 export function isItem(item: UnifiedCompendiumItem): item is UnifiedItem {
 	return item.type === 'item';
+}
+
+export function isSubclass(item: UnifiedCompendiumItem): item is UnifiedSubclass {
+	return item.type === 'subclass';
+}
+
+export function isSubrace(item: UnifiedCompendiumItem): item is UnifiedSubrace {
+	return item.type === 'subrace';
+}
+
+export function isTrait(item: UnifiedCompendiumItem): item is UnifiedTrait {
+	return item.type === 'trait';
+}
+
+export function isCondition(item: UnifiedCompendiumItem): item is UnifiedCondition {
+	return item.type === 'condition';
+}
+
+export function isSkill(item: UnifiedCompendiumItem): item is UnifiedSkill {
+	return item.type === 'skill';
 }
 
 // ============================================================================
@@ -348,6 +383,401 @@ export interface UnifiedItem extends BaseCompendiumItem {
 }
 
 // ============================================================================
+// Subclass
+// ============================================================================
+
+export interface SubclassFeature {
+	name: string;
+	description: string;
+	level: number;
+}
+
+export interface UnifiedSubclass extends BaseCompendiumItem {
+	type: 'subclass';
+	/** Parent class name (e.g., 'Cleric', 'Fighter') */
+	className: string;
+	/** Flavor text or thematic description */
+	subclassFlavor?: string;
+	/** Description paragraphs */
+	description: string[];
+	/** Features gained at each level */
+	features: SubclassFeature[];
+}
+
+// ============================================================================
+// Subrace
+// ============================================================================
+
+export interface UnifiedSubrace extends BaseCompendiumItem {
+	type: 'subrace';
+	/** Parent race name (e.g., 'Elf', 'Dwarf') */
+	raceName: string;
+	/** Ability score changes */
+	abilityBonuses: RaceAbilityBonus[];
+	/** Traits specific to this subrace */
+	traits: RaceTrait[];
+	/** Starting proficiencies */
+	proficiencies?: {
+		skills?: string[];
+		languages?: string[];
+	};
+	/** Language options */
+	languages?: string[];
+}
+
+// ============================================================================
+// Trait
+// ============================================================================
+
+export interface UnifiedTrait extends BaseCompendiumItem {
+	type: 'trait';
+	/** Races that have this trait */
+	races: Array<{
+		name: string;
+		index: string;
+	}>;
+	/** Trait description */
+	description: string[];
+	/** Optional URL to source */
+	url?: string;
+}
+
+// ============================================================================
+// Condition
+// ============================================================================
+
+export interface UnifiedCondition {
+	type: 'condition';
+	/** Database ID */
+	id?: number;
+	/** Display name */
+	name: string;
+	/** Summary is typically the name */
+	summary: string;
+	/** Description of the condition */
+	description: string[];
+	/** Data source */
+	source?: string;
+	/** URL-friendly identifier */
+	slug: string;
+	/** Raw JSON data from provider */
+	details?: Record<string, unknown>;
+}
+
+// ============================================================================
+// Skill
+// ============================================================================
+
+export interface UnifiedSkill {
+	type: 'skill';
+	/** Database ID */
+	id?: number;
+	/** Display name */
+	name: string;
+	/** Summary is the name */
+	summary: string;
+	/** Associated ability score (e.g., 'DEX', 'WIS') */
+	abilityScore: string;
+	/** Description of what the skill covers */
+	description?: string;
+	/** Data source */
+	source: string;
+	/** URL-friendly identifier */
+	slug: string;
+	/** Raw JSON data from provider */
+	details?: Record<string, unknown>;
+}
+
+// ============================================================================
+// Language
+// ============================================================================
+
+export interface UnifiedLanguage extends BaseCompendiumItem {
+	type: 'language';
+	/** Typical speakers */
+	speakers: string[];
+	/** Script if applicable */
+	script?: string;
+	/** Whether it's an exotic language */
+	exotic: boolean;
+}
+
+// ============================================================================
+// Ability Score
+// ============================================================================
+
+export interface UnifiedAbilityScore {
+	type: 'abilityScore';
+	/** Database ID */
+	id?: number;
+	/** Display name */
+	name: string;
+	/** Summary is the name */
+	summary: string;
+	/** Abbreviation (STR, DEX, etc.) */
+	abbreviation: string;
+	/** Full name */
+	fullName?: string;
+	/** Description */
+	description?: string;
+	/** Data source */
+	source: string;
+	/** URL-friendly identifier */
+	slug: string;
+	/** Raw JSON data from provider */
+	details?: Record<string, unknown>;
+}
+
+// ============================================================================
+// Proficiency
+// ============================================================================
+
+export interface UnifiedProficiency {
+	type: 'proficiency';
+	/** Database ID */
+	id?: number;
+	/** Display name */
+	name: string;
+	/** Summary is the name */
+	summary: string;
+	/** Type of proficiency (e.g., 'Armor', 'Weapon', 'Skill') */
+	proficiencyType: string;
+	/** Relevant category */
+	category?: string;
+	/** Data source */
+	source: string;
+	/** URL-friendly identifier */
+	slug: string;
+	/** Raw JSON data from provider */
+	details?: Record<string, unknown>;
+}
+
+// ============================================================================
+// Damage Type
+// ============================================================================
+
+export interface UnifiedDamageType {
+	type: 'damageType';
+	/** Database ID */
+	id?: number;
+	/** Display name */
+	name: string;
+	/** Summary is the name */
+	summary: string;
+	/** Description of damage type */
+	description?: string;
+	/** Data source */
+	source: string;
+	/** URL-friendly identifier */
+	slug: string;
+	/** Raw JSON data from provider */
+	details?: Record<string, unknown>;
+}
+
+// ============================================================================
+// Magic School
+// ============================================================================
+
+export interface UnifiedMagicSchool {
+	type: 'magicSchool';
+	/** Database ID */
+	id?: number;
+	/** Display name */
+	name: string;
+	/** Summary is the name */
+	summary: string;
+	/** Description of the school */
+	description?: string;
+	/** Data source */
+	source: string;
+	/** URL-friendly identifier */
+	slug: string;
+	/** Raw JSON data from provider */
+	details?: Record<string, unknown>;
+}
+
+// ============================================================================
+// Equipment (generic - weapons, armor, tools, vehicles)
+// Uses discriminated union pattern instead of inheritance
+// ============================================================================
+
+export interface BaseEquipment {
+	/** Database ID */
+	id?: number;
+	/** Display name */
+	name: string;
+	/** Summary */
+	summary: string;
+	/** Equipment category */
+	category: string;
+	/** Rarity if magical */
+	rarity?: string;
+	/** Whether attunement is required */
+	requiresAttunement: boolean;
+	/** Weight in lbs */
+	weight?: number;
+	/** Value in gold pieces */
+	value?: number;
+	/** Description */
+	description?: string;
+	/** Data source */
+	source: string;
+	/** URL-friendly identifier */
+	slug: string;
+	/** Raw JSON data from provider */
+	details?: Record<string, unknown>;
+}
+
+export interface UnifiedEquipment extends BaseEquipment {
+	type: 'equipment';
+}
+
+export interface UnifiedWeapon {
+	type: 'weapon';
+	/** Database ID */
+	id?: number;
+	/** Display name */
+	name: string;
+	/** Summary */
+	summary: string;
+	/** Equipment category */
+	category: string;
+	/** Rarity if magical */
+	rarity?: string;
+	/** Whether attunement is required */
+	requiresAttunement: boolean;
+	/** Weight in lbs */
+	weight?: number;
+	/** Value in gold pieces */
+	value?: number;
+	/** Description */
+	description?: string;
+	/** Data source */
+	source: string;
+	/** URL-friendly identifier */
+	slug: string;
+	/** Weapon category (simple, martial) */
+	weaponCategory: string;
+	/** Damage dice (e.g., '1d8') */
+	damageDice: string;
+	/** Damage type (e.g., 'slashing') */
+	damageType: string;
+	/** Range properties */
+	range?: {
+		normal: number;
+		long?: number;
+	};
+	/** Weapon properties */
+	properties: string[];
+	/** Raw JSON data from provider */
+	details?: Record<string, unknown>;
+}
+
+export interface UnifiedArmor {
+	type: 'armor';
+	/** Database ID */
+	id?: number;
+	/** Display name */
+	name: string;
+	/** Summary */
+	summary: string;
+	/** Equipment category */
+	category: string;
+	/** Rarity if magical */
+	rarity?: string;
+	/** Whether attunement is required */
+	requiresAttunement: boolean;
+	/** Weight in lbs */
+	weight?: number;
+	/** Value in gold pieces */
+	value?: number;
+	/** Description */
+	description?: string;
+	/** Data source */
+	source: string;
+	/** URL-friendly identifier */
+	slug: string;
+	/** Armor category (light, medium, heavy) */
+	armorCategory: string;
+	/** Armor class */
+	armorClass: number;
+	/** Whether dex mod is added */
+	addsDexModifier: boolean;
+	/** Max dex bonus if limited */
+	maxDexBonus?: number;
+	/** Strength requirement */
+	strengthRequirement?: number;
+	/** Stealth penalty */
+	stealthPenalty: boolean;
+	/** Raw JSON data from provider */
+	details?: Record<string, unknown>;
+}
+
+export interface UnifiedTool {
+	type: 'tool';
+	/** Database ID */
+	id?: number;
+	/** Display name */
+	name: string;
+	/** Summary */
+	summary: string;
+	/** Equipment category */
+	category: string;
+	/** Rarity if magical */
+	rarity?: string;
+	/** Whether attunement is required */
+	requiresAttunement: boolean;
+	/** Weight in lbs */
+	weight?: number;
+	/** Value in gold pieces */
+	value?: number;
+	/** Description */
+	description?: string;
+	/** Data source */
+	source: string;
+	/** URL-friendly identifier */
+	slug: string;
+	/** Tool category (instrument, artisan's tool, gaming set) */
+	toolCategory: string;
+	/** Raw JSON data from provider */
+	details?: Record<string, unknown>;
+}
+
+export interface UnifiedVehicle {
+	type: 'vehicle';
+	/** Database ID */
+	id?: number;
+	/** Display name */
+	name: string;
+	/** Summary */
+	summary: string;
+	/** Equipment category */
+	category: string;
+	/** Rarity if magical */
+	rarity?: string;
+	/** Whether attunement is required */
+	requiresAttunement: boolean;
+	/** Weight in lbs */
+	weight?: number;
+	/** Value in gold pieces */
+	value?: number;
+	/** Description */
+	description?: string;
+	/** Data source */
+	source: string;
+	/** URL-friendly identifier */
+	slug: string;
+	/** Vehicle type (land, water, air) */
+	vehicleType: string;
+	/** Speed in feet */
+	speed?: number;
+	/** Capacity */
+	capacity?: string;
+	/** Raw JSON data from provider */
+	details?: Record<string, unknown>;
+}
+
+// ============================================================================
 // Union Type
 // ============================================================================
 
@@ -358,7 +788,22 @@ export type UnifiedCompendiumItem =
 	| UnifiedBackground
 	| UnifiedRace
 	| UnifiedClass
-	| UnifiedItem;
+	| UnifiedItem
+	| UnifiedSubclass
+	| UnifiedSubrace
+	| UnifiedTrait
+	| UnifiedCondition
+	| UnifiedSkill
+	| UnifiedLanguage
+	| UnifiedAbilityScore
+	| UnifiedProficiency
+	| UnifiedDamageType
+	| UnifiedMagicSchool
+	| UnifiedEquipment
+	| UnifiedWeapon
+	| UnifiedArmor
+	| UnifiedTool
+	| UnifiedVehicle;
 
 // ============================================================================
 // Filter Types

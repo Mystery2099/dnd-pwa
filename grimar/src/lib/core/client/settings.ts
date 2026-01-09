@@ -14,7 +14,7 @@ export interface ServerSettings {
 	autoSyncInterval: 'never' | '15min' | '30min' | '1h';
 	/** Show SRD badge on compendium items */
 	showSRDBadge: boolean;
-	/** Show 5eBits content */
+	/** Show A5e content */
 	showA5eContent: boolean;
 	/** Default sort order for spells */
 	spellSortOrder: 'name' | 'level' | 'school';
