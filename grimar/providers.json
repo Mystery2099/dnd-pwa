@@ -1,21 +1,23 @@
 {
-	"primaryProvider": "5e-bits",
+	"primaryProvider": "srd",
 	"providers": [
-		{
-			"id": "5e-bits",
-			"name": "5e-bits",
-			"enabled": true,
-			"type": "5e-bits",
-			"baseUrl": "https://www.dnd5eapi.co/api/2014",
-			"supportedTypes": ["spell", "monster", "feat", "background", "race", "class"]
-		},
 		{
 			"id": "open5e",
 			"name": "Open5e",
 			"enabled": true,
 			"type": "open5e",
 			"baseUrl": "https://api.open5e.com",
-			"supportedTypes": ["spell", "monster", "item", "feat", "background", "race", "class"]
+			"supportedTypes": [
+				"spell",
+				"monster",
+				"item",
+				"feat",
+				"background",
+				"race",
+				"class",
+				"weapon",
+				"armor"
+			]
 		},
 		{
 			"id": "srd",
@@ -23,7 +25,29 @@
 			"enabled": true,
 			"type": "srd",
 			"baseUrl": "https://www.dnd5eapi.co/api/2014",
-			"supportedTypes": ["spells", "monsters"]
+			"supportedTypes": [
+				"spell",
+				"monster",
+				"subclass",
+				"subrace",
+				"trait",
+				"condition",
+				"feature",
+				"skill",
+				"language",
+				"alignment",
+				"proficiency",
+				"abilityScore",
+				"damageType",
+				"magicSchool",
+				"equipment",
+				"weaponProperty",
+				"equipmentCategory",
+				"vehicle",
+				"monsterType",
+				"rule",
+				"ruleSection"
+			]
 		},
 		{
 			"id": "homebrew",

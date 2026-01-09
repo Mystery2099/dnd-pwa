@@ -11,7 +11,11 @@
  *   bun run db:sync --full          # Force full re-sync
  *
  * Options:
- *   --type <type>     Compendium type: spell, monster, item, feat, background, race, class
+ *   --type <type>     Compendium type: spell, monster, item, feat, background, race, class,
+ *                     subclass, subrace, trait, feature, skill, language, alignment,
+ *                     proficiency, abilityScore, damageType, magicSchool, equipment,
+ *                     weaponProperty, equipmentCategory, vehicle, monsterType, rule,
+ *                     ruleSection, weapon, armor, condition, plane, section
  *   --provider <id>   Provider ID to sync (e.g., open5e, 5e-bits, srd, homebrew)
  *   --full            Force full re-sync (vs incremental)
  *   --verbose, -v     Verbose output
@@ -49,7 +53,30 @@ const VALID_TYPES: CompendiumTypeName[] = [
 	'feat',
 	'background',
 	'race',
-	'class'
+	'class',
+	'subclass',
+	'subrace',
+	'trait',
+	'feature',
+	'skill',
+	'language',
+	'alignment',
+	'proficiency',
+	'abilityScore',
+	'damageType',
+	'magicSchool',
+	'equipment',
+	'weaponProperty',
+	'equipmentCategory',
+	'vehicle',
+	'monsterType',
+	'rule',
+	'ruleSection',
+	'weapon',
+	'armor',
+	'condition',
+	'plane',
+	'section'
 ];
 
 // Type labels for display
@@ -60,7 +87,30 @@ const TYPE_LABELS: Record<CompendiumTypeName, string> = {
 	feat: 'Feats',
 	background: 'Backgrounds',
 	race: 'Races',
-	class: 'Classes'
+	class: 'Classes',
+	subclass: 'Subclasses',
+	subrace: 'Subraces',
+	trait: 'Traits',
+	feature: 'Features',
+	skill: 'Skills',
+	language: 'Languages',
+	alignment: 'Alignments',
+	proficiency: 'Proficiencies',
+	abilityScore: 'Ability Scores',
+	damageType: 'Damage Types',
+	magicSchool: 'Magic Schools',
+	equipment: 'Equipment',
+	weaponProperty: 'Weapon Properties',
+	equipmentCategory: 'Equipment Categories',
+	vehicle: 'Vehicles',
+	monsterType: 'Monster Types',
+	rule: 'Rules',
+	ruleSection: 'Rule Sections',
+	weapon: 'Weapons',
+	armor: 'Armor',
+	condition: 'Conditions',
+	plane: 'Planes',
+	section: 'Sections'
 };
 
 // Colors for terminal output
@@ -267,8 +317,7 @@ ${colors.bright}Options:${colors.reset}
                                 ${colors.green}feat${colors.reset}, ${colors.green}background${colors.reset},
                                 ${colors.green}race${colors.reset}, ${colors.green}class${colors.reset}
   ${colors.cyan}--provider <id>${colors.reset}   Sync only a specific provider
-                        Values: ${colors.green}open5e${colors.reset}, ${colors.green}5e-bits${colors.reset},
-                                ${colors.green}srd${colors.reset}, ${colors.green}homebrew${colors.reset}
+                        Values: ${colors.green}open5e${colors.reset}, ${colors.green}srd${colors.reset}, ${colors.green}homebrew${colors.reset}
   ${colors.cyan}--full${colors.reset}             Force full re-sync (ignore incremental)
   ${colors.cyan}--verbose, -v${colors.reset}     Show detailed progress
   ${colors.cyan}--quiet, -q${colors.reset}       Minimal output (summary only)

@@ -24,18 +24,19 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 			throw error(404, `${config.ui.displayName} not found`);
 		}
 
-		// Get navigation for prev/next
-		const navigation = await compendiumService.getNavigation(dbType, item.id);
+		// Get navigation for prev/next (only if item has an id)
+		const navigation = item.id ? await compendiumService.getNavigation(dbType, item.id) : null;
 
 		// Cast to legacy type for compatibility with existing components
 		return {
 			item,
-			navigation: navigation as {
-				prev: typeof item | null;
-				next: typeof item | null;
-				currentIndex: number;
-				total: number;
-			},
+			navigation:
+				(navigation as {
+					prev: typeof item | null;
+					next: typeof item | null;
+					currentIndex: number;
+					total: number;
+				}) || null,
 			dbType,
 			pathType
 		};
