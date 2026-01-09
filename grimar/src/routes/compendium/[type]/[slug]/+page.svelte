@@ -5,6 +5,7 @@
 	import DetailNavigation from '$lib/features/compendium/components/DetailNavigation.svelte';
 	import { getCompendiumConfig } from '$lib/core/constants/compendium';
 	import type { PageData } from './$types';
+	import type { CompendiumItem } from '$lib/core/types/compendium';
 
 	// Detail Content Components
 	import SpellDetailContent from '$lib/features/compendium/components/detail/SpellDetailContent.svelte';
@@ -23,13 +24,17 @@
 	const pathType = $derived(data.pathType);
 	const config = $derived(getCompendiumConfig(pathType));
 
+	// Cast item to CompendiumItem for config functions that expect it
+	// The unified types have the same essential properties
+	const itemForConfig = $derived(item as unknown as CompendiumItem);
+
 	// Get accent color from config
-	const accentColor = $derived(config.display.detailAccent(item));
+	const accentColor = $derived(config.display.detailAccent(itemForConfig));
 
 	// Keyboard navigation
 	$effect(() => {
 		const cleanup = createKeyboardNav({
-			navigation: nav,
+			navigation: nav as { prev: CompendiumItem | null; next: CompendiumItem | null },
 			basePath: `/compendium/${pathType}`,
 			onClose: handleClose,
 			listUrlKey: config.routes.storageKeyListUrl
@@ -46,16 +51,16 @@
 
 <svelte:head>
 	<title>{item.name} - {config.ui.displayName} - Grimar Compendium</title>
-	<meta name="description" content={config.display.metaDescription(item)} />
+	<meta name="description" content={config.display.metaDescription(itemForConfig)} />
 	<meta property="og:title" content={item.name} />
-	<meta property="og:description" content={config.display.subtitle(item)} />
+	<meta property="og:description" content={config.display.subtitle(itemForConfig)} />
 	<meta property="og:type" content="website" />
 </svelte:head>
 
 <div class="mx-auto max-w-4xl p-4 md:p-6">
 	<DetailNavigation
-		prevUrl={nav.prev ? `/compendium/${pathType}/${nav.prev.externalId}` : null}
-		nextUrl={nav.next ? `/compendium/${pathType}/${nav.next.externalId}` : null}
+		prevUrl={nav.prev ? `/compendium/${pathType}/${nav.prev.slug}` : null}
+		nextUrl={nav.next ? `/compendium/${pathType}/${nav.next.slug}` : null}
 		listUrl={`/compendium/${pathType}`}
 	/>
 
@@ -63,24 +68,24 @@
 		title={item.name}
 		type={config.ui.displayName}
 		source={item.source}
-		tags={config.display.tags(item)}
+		tags={config.display.tags(itemForConfig)}
 		onClose={handleClose}
 		{accentColor}
 	>
 		{#if dbType === 'spell'}
-			<SpellDetailContent spell={item.details} />
+			<SpellDetailContent spell={item.details ?? {}} />
 		{:else if dbType === 'monster'}
-			<MonsterDetailContent monster={item.details} />
+			<MonsterDetailContent monster={item.details ?? {}} />
 		{:else if dbType === 'feat'}
-			<FeatDetailContent feat={item.details} />
+			<FeatDetailContent feat={item.details ?? {}} />
 		{:else if dbType === 'background'}
-			<BackgroundDetailContent background={item.details} />
+			<BackgroundDetailContent background={item.details ?? {}} />
 		{:else if dbType === 'race'}
-			<RaceDetailContent race={item.details} />
+			<RaceDetailContent race={item.details ?? {}} />
 		{:else if dbType === 'class'}
-			<ClassDetailContent classData={item.details} />
+			<ClassDetailContent classData={item.details ?? {}} />
 		{:else if dbType === 'item'}
-			<ItemDetailContent item={item.details} />
+			<ItemDetailContent item={item.details ?? {}} />
 		{:else}
 			<div class="space-y-4">
 				<div

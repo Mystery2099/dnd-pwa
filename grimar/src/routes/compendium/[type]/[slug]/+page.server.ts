@@ -1,5 +1,5 @@
 import type { PageServerLoad } from './$types';
-import { loadCompendiumItem } from '$lib/server/services/compendium/loader';
+import { compendiumService } from '$lib/server/services/compendium';
 import { getCompendiumConfig, getTypeFromPath } from '$lib/core/constants/compendium';
 import { error } from '@sveltejs/kit';
 import { requireUser } from '$lib/server/services/auth';
@@ -17,19 +17,30 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		const config = getCompendiumConfig(pathType);
 		const dbType = getTypeFromPath(pathType);
 
-		const result = await loadCompendiumItem({
-			slug,
-			type: dbType,
-			typeLabel: config.ui.displayName
-		});
+		// First, get the item to find its ID
+		const item = await compendiumService.getById(dbType, parseInt(slug) || slug);
 
+		if (!item) {
+			throw error(404, `${config.ui.displayName} not found`);
+		}
+
+		// Get navigation for prev/next
+		const navigation = await compendiumService.getNavigation(dbType, item.id);
+
+		// Cast to legacy type for compatibility with existing components
 		return {
-			item: result.item,
-			navigation: result.navigation,
+			item,
+			navigation: navigation as {
+				prev: typeof item | null;
+				next: typeof item | null;
+				currentIndex: number;
+				total: number;
+			},
 			dbType,
 			pathType
 		};
 	} catch (e) {
+		if (e instanceof Response) throw e; // Re-throw SvelteKit errors
 		log.error({ error: e, pathType, slug }, 'Failed to load compendium item');
 		throw error(404, `Item not found`);
 	}
