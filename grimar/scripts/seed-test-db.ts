@@ -67,6 +67,23 @@ sqlite.exec(`
 	);
 	CREATE INDEX IF NOT EXISTS characters_owner_idx ON characters (owner);
 	CREATE INDEX IF NOT EXISTS characters_name_idx ON characters (name);
+
+	-- Compendium cache for replay/resync
+	CREATE TABLE IF NOT EXISTS compendium_cache (
+		id text PRIMARY KEY NOT NULL,
+		type text NOT NULL,
+		data text NOT NULL
+	);
+	CREATE INDEX IF NOT EXISTS compendium_cache_type_idx ON compendium_cache (type);
+
+	-- Sync metadata
+	CREATE TABLE IF NOT EXISTS sync_metadata (
+		provider_id text PRIMARY KEY NOT NULL,
+		last_sync_at integer,
+		last_sync_type text,
+		items_synced integer DEFAULT 0
+	);
+	CREATE INDEX IF NOT EXISTS sync_metadata_provider_id_idx ON sync_metadata (provider_id);
 `);
 
 console.log('Schema created.');

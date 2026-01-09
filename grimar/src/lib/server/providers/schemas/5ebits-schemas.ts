@@ -3,26 +3,30 @@ import { z } from 'zod';
 export const FiveEBitsSpellSchema = z.object({
 	index: z.string(),
 	name: z.string(),
-	desc: z.array(z.string()),
-	higher_level: z.string().nullable(),
-	range: z.string(),
-	components: z.array(z.string()),
-	material: z.string().nullable(),
-	ritual: z.boolean(),
-	duration: z.string(),
-	concentration: z.boolean(),
-	casting_time: z.string(),
+	desc: z.array(z.string()).optional(),
+	higher_level: z.string().nullable().optional(),
+	range: z.string().optional(),
+	components: z.array(z.string()).optional(),
+	material: z.string().nullable().optional(),
+	ritual: z.boolean().optional(),
+	duration: z.string().optional(),
+	concentration: z.boolean().optional(),
+	casting_time: z.string().optional(),
 	level: z.number(),
-	school: z.object({
-		index: z.string(),
-		name: z.string()
-	}),
-	classes: z.array(
-		z.object({
+	school: z
+		.object({
 			index: z.string(),
 			name: z.string()
 		})
-	),
+		.optional(),
+	classes: z
+		.array(
+			z.object({
+				index: z.string(),
+				name: z.string()
+			})
+		)
+		.optional(),
 	subclasses: z
 		.array(
 			z.object({
@@ -31,39 +35,40 @@ export const FiveEBitsSpellSchema = z.object({
 			})
 		)
 		.nullable()
+		.optional()
 });
 
 export const FiveEBitsMonsterSchema = z.object({
 	index: z.string(),
 	name: z.string(),
-	size: z.string(),
-	type: z.string(),
-	subtype: z.string().nullable(),
-	alignment: z.string(),
-	armor_class: z.array(z.object({ type: z.string(), value: z.number() })),
-	hit_points: z.number(),
-	hit_dice: z.string(),
-	speed: z.record(z.string(), z.string()),
-	strength: z.number(),
-	dexterity: z.number(),
-	constitution: z.number(),
-	intelligence: z.number(),
-	wisdom: z.number(),
-	charisma: z.number(),
+	size: z.string().optional(),
+	type: z.string().optional(),
+	subtype: z.string().nullable().optional(),
+	alignment: z.string().optional(),
+	armor_class: z.array(z.object({ type: z.string(), value: z.number() })).optional(),
+	hit_points: z.number().optional(),
+	hit_dice: z.string().optional(),
+	speed: z.record(z.string(), z.string()).optional(),
+	strength: z.number().optional(),
+	dexterity: z.number().optional(),
+	constitution: z.number().optional(),
+	intelligence: z.number().optional(),
+	wisdom: z.number().optional(),
+	charisma: z.number().optional(),
 	proficiencies: z.array(
 		z.object({
 			proficiency: z.object({ index: z.string(), name: z.string() }),
 			value: z.number()
 		})
-	),
-	damage_vulnerabilities: z.array(z.string()),
-	damage_resistances: z.array(z.string()),
-	damage_immunities: z.array(z.string()),
-	condition_immunities: z.array(z.string()),
-	senses: z.record(z.string(), z.string()),
-	languages: z.string(),
-	challenge_rating: z.string(),
-	xp: z.number(),
+	).optional(),
+	damage_vulnerabilities: z.array(z.string()).optional(),
+	damage_resistances: z.array(z.string()).optional(),
+	damage_immunities: z.array(z.string()).optional(),
+	condition_immunities: z.array(z.string()).optional(),
+	senses: z.record(z.string(), z.string()).optional(),
+	languages: z.string().optional(),
+	challenge_rating: z.string().optional(),
+	xp: z.number().optional(),
 	special_abilities: z.array(
 		z.object({
 			name: z.string(),
@@ -78,7 +83,7 @@ export const FiveEBitsMonsterSchema = z.object({
 				)
 				.optional()
 		})
-	),
+	).optional(),
 	actions: z.array(
 		z.object({
 			name: z.string(),
@@ -94,7 +99,7 @@ export const FiveEBitsMonsterSchema = z.object({
 				.optional(),
 			multiattack: z.object({ action_name: z.string(), count: z.number() }).optional()
 		})
-	),
+	).optional(),
 	legendary_actions: z
 		.array(
 			z.object({
@@ -113,13 +118,13 @@ export const FiveEBitsMonsterSchema = z.object({
 		)
 		.optional(),
 	reactions: z.array(z.object({ name: z.string(), desc: z.string() })).optional()
-});
+});;
 
 export const FiveEBitsFeatSchema = z.object({
 	index: z.string(),
 	name: z.string(),
 	prerequisites: z.array(z.string()).optional(),
-	description: z.array(z.string()),
+	description: z.array(z.string()).optional(),
 	ability_score_increases: z
 		.array(
 			z.object({
@@ -133,7 +138,7 @@ export const FiveEBitsFeatSchema = z.object({
 export const FiveEBitsBackgroundSchema = z.object({
 	index: z.string(),
 	name: z.string(),
-	description: z.array(z.string()),
+	description: z.array(z.string()).optional(),
 	feature: z
 		.object({
 			name: z.string(),
@@ -147,8 +152,8 @@ export const FiveEBitsBackgroundSchema = z.object({
 export const FiveEBitsRaceSchema = z.object({
 	index: z.string(),
 	name: z.string(),
-	size: z.string(),
-	speed: z.number(),
+	size: z.string().optional(),
+	speed: z.number().optional(),
 	ability_bonuses: z
 		.array(
 			z.object({
@@ -165,7 +170,7 @@ export const FiveEBitsRaceSchema = z.object({
 export const FiveEBitsClassSchema = z.object({
 	index: z.string(),
 	name: z.string(),
-	hit_die: z.number(),
+	hit_die: z.number().optional(),
 	proficiency_choices: z
 		.array(
 			z.object({
@@ -175,8 +180,8 @@ export const FiveEBitsClassSchema = z.object({
 			})
 		)
 		.optional(),
-	proficiencies: z.array(z.object({ index: z.string(), name: z.string() })),
-	saving_throws: z.array(z.object({ index: z.string(), name: z.string() })),
+	proficiencies: z.array(z.object({ index: z.string(), name: z.string() })).optional(),
+	saving_throws: z.array(z.object({ index: z.string(), name: z.string() })).optional(),
 	spellcasting: z
 		.object({
 			level: z.number(),

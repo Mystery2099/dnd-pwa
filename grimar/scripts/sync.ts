@@ -19,6 +19,7 @@
 
 import { Database } from 'bun:sqlite';
 import { drizzle } from 'drizzle-orm/bun-sqlite';
+import { migrate } from 'drizzle-orm/bun-sqlite/migrator';
 import * as schema from '../src/lib/server/db/schema';
 import { syncAllProviders } from '../src/lib/server/services/sync/orchestrator';
 import { providerRegistry } from '../src/lib/server/providers';
@@ -198,6 +199,8 @@ async function main() {
 		const client = new Database(databaseUrl);
 		applyPragmas(client);
 		db = drizzle(client, { schema });
+		log('Running migrations...', 'dim');
+		migrate(db, { migrationsFolder: './drizzle' });
 		log('Database connection established', 'green');
 	} catch (error) {
 		log(`Failed to connect to database: ${error}`, 'red');
