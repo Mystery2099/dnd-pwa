@@ -1,75 +1,54 @@
 /**
- * Settings Store
+ * Device Settings Store
  *
- * Client-side settings with localStorage persistence.
- * Uses Svelte 5 runes for reactive state management.
+ * Device-specific preferences stored in localStorage.
+ * These are purely cosmetic/device-specific and don't sync across devices.
+ *
+ * Server-backed settings are in userSettingsStore.svelte.ts
  */
 
-const STORAGE_KEY = 'grimar-settings';
-const DEFAULT_SETTINGS = {
+const STORAGE_KEY = 'grimar-device-settings';
+const DEFAULT_DEVICE_SETTINGS = {
 	fontSize: 'md' as const,
 	compactMode: false,
 	animationLevel: 'full' as const,
 	defaultCompendiumView: 'grid' as const,
 	gridMaxColumns: 4,
-	showSRDBadge: true,
-	syncOnLoad: false,
-	offlineEnabled: true,
-	autoSyncInterval: 'never' as const,
 	reducedMotion: false,
 	highContrast: false,
-	keyboardShortcuts: true,
-	showA5eContent: false,
-	spellSortOrder: 'name' as const,
-	autoExpandDetails: false
+	keyboardShortcuts: true
 };
 
 type FontSize = 'sm' | 'md' | 'lg' | 'xl';
 type AnimationLevel = 'full' | 'reduced' | 'minimal';
 type CompendiumView = 'grid' | 'list';
-type SyncInterval = 'never' | '15min' | '30min' | '1h';
-type SpellSortOrder = 'name' | 'level' | 'school';
 
-export interface Settings {
+export interface DeviceSettings {
 	fontSize: FontSize;
 	compactMode: boolean;
 	animationLevel: AnimationLevel;
 	defaultCompendiumView: CompendiumView;
 	gridMaxColumns: number;
-	showSRDBadge: boolean;
-	syncOnLoad: boolean;
-	offlineEnabled: boolean;
-	autoSyncInterval: SyncInterval;
 	reducedMotion: boolean;
 	highContrast: boolean;
 	keyboardShortcuts: boolean;
-	showA5eContent: boolean;
-	spellSortOrder: SpellSortOrder;
-	autoExpandDetails: boolean;
 }
 
-interface _SettingsActions {
+interface _DeviceSettingsActions {
 	setFontSize: (value: FontSize) => void;
 	setCompactMode: (value: boolean) => void;
 	setAnimationLevel: (value: AnimationLevel) => void;
 	setDefaultCompendiumView: (value: CompendiumView) => void;
 	setGridMaxColumns: (value: number) => void;
-	setShowSRDBadge: (value: boolean) => void;
-	setSyncOnLoad: (value: boolean) => void;
-	setOfflineEnabled: (value: boolean) => void;
-	setAutoSyncInterval: (value: SyncInterval) => void;
 	setReducedMotion: (value: boolean) => void;
 	setHighContrast: (value: boolean) => void;
 	setKeyboardShortcuts: (value: boolean) => void;
-	setShowA5eContent: (value: boolean) => void;
-	setSpellSortOrder: (value: SpellSortOrder) => void;
-	setAutoExpandDetails: (value: boolean) => void;
 	reset: () => void;
 }
 
-function createSettingsStore() {
+function createDeviceSettingsStore() {
 	// Load settings from localStorage or use defaults
-	let settings = $state<Settings>(DEFAULT_SETTINGS);
+	let settings = $state<DeviceSettings>(DEFAULT_DEVICE_SETTINGS);
 
 	function load() {
 		if (typeof window === 'undefined') return;
@@ -77,10 +56,10 @@ function createSettingsStore() {
 			const stored = localStorage.getItem(STORAGE_KEY);
 			if (stored) {
 				const parsed = JSON.parse(stored);
-				settings = { ...DEFAULT_SETTINGS, ...parsed };
+				settings = { ...DEFAULT_DEVICE_SETTINGS, ...parsed };
 			}
 		} catch {
-			console.error('[SettingsStore] Failed to load settings');
+			console.error('[DeviceSettingsStore] Failed to load settings');
 		}
 	}
 
@@ -89,7 +68,7 @@ function createSettingsStore() {
 		try {
 			localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
 		} catch {
-			console.error('[SettingsStore] Failed to save settings');
+			console.error('[DeviceSettingsStore] Failed to save settings');
 		}
 	}
 
@@ -118,26 +97,6 @@ function createSettingsStore() {
 		save();
 	}
 
-	function setShowSRDBadge(value: boolean) {
-		settings.showSRDBadge = value;
-		save();
-	}
-
-	function setSyncOnLoad(value: boolean) {
-		settings.syncOnLoad = value;
-		save();
-	}
-
-	function setOfflineEnabled(value: boolean) {
-		settings.offlineEnabled = value;
-		save();
-	}
-
-	function setAutoSyncInterval(value: SyncInterval) {
-		settings.autoSyncInterval = value;
-		save();
-	}
-
 	function setReducedMotion(value: boolean) {
 		settings.reducedMotion = value;
 		save();
@@ -153,23 +112,8 @@ function createSettingsStore() {
 		save();
 	}
 
-	function setShowA5eContent(value: boolean) {
-		settings.showA5eContent = value;
-		save();
-	}
-
-	function setSpellSortOrder(value: SpellSortOrder) {
-		settings.spellSortOrder = value;
-		save();
-	}
-
-	function setAutoExpandDetails(value: boolean) {
-		settings.autoExpandDetails = value;
-		save();
-	}
-
 	function reset() {
-		settings = { ...DEFAULT_SETTINGS };
+		settings = { ...DEFAULT_DEVICE_SETTINGS };
 		save();
 	}
 
@@ -187,22 +131,18 @@ function createSettingsStore() {
 		setAnimationLevel,
 		setDefaultCompendiumView,
 		setGridMaxColumns,
-		setShowSRDBadge,
-		setSyncOnLoad,
-		setOfflineEnabled,
-		setAutoSyncInterval,
 		setReducedMotion,
 		setHighContrast,
 		setKeyboardShortcuts,
-		setShowA5eContent,
-		setSpellSortOrder,
-		setAutoExpandDetails,
 		reset,
 		load
 	};
 }
 
-export const settingsStore = createSettingsStore();
+export const deviceSettingsStore = createDeviceSettingsStore();
+
+// Backward compatibility alias
+export const settingsStore = deviceSettingsStore;
 
 // Helper functions for dropdown options
 export const FONT_SIZE_OPTIONS = [

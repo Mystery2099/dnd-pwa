@@ -7,6 +7,7 @@ import type { CompendiumFilterConfig } from '$lib/core/types/compendium/filter';
 import { SearchIndexer } from '$lib/features/compendium/services/SearchIndexer';
 import type { CompendiumItem } from '$lib/core/types/compendium';
 import { settingsStore } from '$lib/core/client/settingsStore.svelte';
+import { userSettingsStore } from '$lib/core/client/userSettingsStore.svelte';
 
 // Debug logging helper
 function debugLog(...args: unknown[]) {
@@ -155,7 +156,7 @@ export class CompendiumFilterStore {
 		let filtered = items;
 
 		// 0. A5e content filter - hide Advanced 5e content by default
-		if (!settingsStore.settings.showA5eContent) {
+		if (!userSettingsStore.data.showA5eContent) {
 			filtered = filtered.filter((item) => {
 				// Check if this is an A5e item (externalId ends with -a5e and source is open5e)
 				const externalId = item.externalId as string;

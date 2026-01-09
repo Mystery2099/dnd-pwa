@@ -2,6 +2,7 @@
 	import type { ComponentType } from 'svelte';
 	import { getSourceBadgeClass, getSourceLabel } from '$lib/core/utils/sourceBadge';
 	import { settingsStore } from '$lib/core/client/settingsStore.svelte';
+	import { userSettingsStore } from '$lib/core/client/userSettingsStore.svelte';
 	import Badge from '$lib/components/ui/Badge.svelte';
 
 	type ItemVariant = 'grid' | 'list';
@@ -119,7 +120,7 @@
 				>
 					{title}
 				</span>
-				{#if source && settingsStore.settings.showSRDBadge}
+				{#if source && userSettingsStore.data.showSRDBadge}
 					<Badge color={sourceBadgeClass} class="shrink-0 text-[10px] tracking-wider uppercase">
 						{getSourceLabel(source)}
 					</Badge>

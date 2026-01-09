@@ -14,6 +14,7 @@ import { browser } from '$app/environment';
 import { getCachedVersion, setCachedVersion } from './cache-version';
 import type { CacheVersion } from './cache-version';
 import { settingsStore } from './settingsStore.svelte';
+import { userSettingsStore } from './userSettingsStore.svelte';
 
 // Cache configuration
 const CACHE_KEY = 'grimar-query-cache';
@@ -82,8 +83,8 @@ function createPersister() {
 export async function initializePersistence(client: QueryClient): Promise<void> {
 	if (!browser) return;
 
-	// Check if offline data is enabled
-	if (!settingsStore.settings.offlineEnabled) {
+	// Check if offline data is enabled (from server settings)
+	if (!userSettingsStore.data.offlineEnabled) {
 		console.log('[QueryClient] Offline data disabled');
 		return;
 	}

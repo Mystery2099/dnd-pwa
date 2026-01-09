@@ -19,6 +19,7 @@
 	import CompendiumSkeleton from '$lib/features/compendium/components/ui/CompendiumSkeleton.svelte';
 	import CompendiumError from '$lib/features/compendium/components/ui/CompendiumError.svelte';
 	import { settingsStore } from '$lib/core/client/settingsStore.svelte';
+	import { userSettingsStore } from '$lib/core/client/userSettingsStore.svelte';
 	import VirtualGrid from '$lib/components/ui/VirtualGrid.svelte';
 
 	// Detail Content Components
@@ -126,7 +127,7 @@
 		}
 
 		// Sync on load if setting is enabled
-		if (settingsStore.settings.syncOnLoad) {
+		if (userSettingsStore.data.syncOnLoad) {
 			syncItems();
 		}
 	});

@@ -35,6 +35,7 @@
 		GRID_MAX_COLUMNS_OPTIONS,
 		SPELL_SORT_OPTIONS
 	} from '$lib/core/client/settingsStore.svelte';
+	import { userSettingsStore } from '$lib/core/client/userSettingsStore.svelte';
 
 	let { data } = $props();
 
@@ -185,6 +186,7 @@
 		resettingSettings = true;
 		try {
 			settingsStore.reset();
+			await userSettingsStore.refetch();
 			console.log('[Settings] All settings reset to defaults');
 		} catch (error) {
 			console.error('[Settings] Failed to reset settings:', error);
@@ -242,7 +244,7 @@
 			/>
 		</div>
 		<div>
-			<h1 class="text-3xl font-black tracking-tight text-white">Settings</h1>
+			<h1 class="text-3xl font-black tracking-tight text-[var(--color-text-primary)]">Settings</h1>
 			<p class="text-sm text-[var(--color-text-secondary)]">Configure your grimoire experience</p>
 		</div>
 	</header>
@@ -363,8 +365,8 @@
 							>
 								{#snippet control()}
 									<Toggle
-										checked={settingsStore.settings.showSRDBadge}
-										onchange={(v: boolean) => settingsStore.setShowSRDBadge(v)}
+										checked={userSettingsStore.data.showSRDBadge}
+										onchange={(v: boolean) => userSettingsStore.updateSetting('showSRDBadge', v)}
 									/>
 								{/snippet}
 							</SettingsItem>
@@ -375,8 +377,8 @@
 							>
 								{#snippet control()}
 									<Toggle
-										checked={settingsStore.settings.syncOnLoad}
-										onchange={(v: boolean) => settingsStore.setSyncOnLoad(v)}
+										checked={userSettingsStore.data.syncOnLoad}
+										onchange={(v: boolean) => userSettingsStore.updateSetting('syncOnLoad', v)}
 									/>
 								{/snippet}
 							</SettingsItem>
@@ -387,8 +389,8 @@
 							>
 								{#snippet control()}
 									<Toggle
-										checked={settingsStore.settings.showA5eContent}
-										onchange={(v: boolean) => settingsStore.setShowA5eContent(v)}
+										checked={userSettingsStore.data.showA5eContent}
+										onchange={(v: boolean) => userSettingsStore.updateSetting('showA5eContent', v)}
 									/>
 								{/snippet}
 							</SettingsItem>
@@ -396,7 +398,7 @@
 							<SettingsItem label="Spell Sort Order" description="How spells are ordered in lists">
 								{#snippet control()}
 									<SegmentedControl
-										bind:value={settingsStore.settings.spellSortOrder}
+										bind:value={userSettingsStore.data.spellSortOrder}
 										options={SPELL_SORT_OPTIONS}
 										size="sm"
 									/>
@@ -410,8 +412,9 @@
 							>
 								{#snippet control()}
 									<Toggle
-										checked={settingsStore.settings.autoExpandDetails}
-										onchange={(v: boolean) => settingsStore.setAutoExpandDetails(v)}
+										checked={userSettingsStore.data.autoExpandDetails}
+										onchange={(v: boolean) =>
+											userSettingsStore.updateSetting('autoExpandDetails', v)}
 									/>
 								{/snippet}
 							</SettingsItem>
@@ -433,8 +436,8 @@
 							<SettingsItem label="Offline Data" description="Enable caching for offline use">
 								{#snippet control()}
 									<Toggle
-										checked={settingsStore.settings.offlineEnabled}
-										onchange={(v: boolean) => settingsStore.setOfflineEnabled(v)}
+										checked={userSettingsStore.data.offlineEnabled}
+										onchange={(v: boolean) => userSettingsStore.updateSetting('offlineEnabled', v)}
 									/>
 								{/snippet}
 							</SettingsItem>
@@ -447,9 +450,12 @@
 									<RadioCardGrid
 										name="autoSyncInterval"
 										options={SYNC_INTERVAL_OPTIONS}
-										value={settingsStore.settings.autoSyncInterval}
+										value={userSettingsStore.data.autoSyncInterval}
 										onchange={(v) =>
-											settingsStore.setAutoSyncInterval(v as 'never' | '15min' | '30min' | '1h')}
+											userSettingsStore.updateSetting(
+												'autoSyncInterval',
+												v as 'never' | '15min' | '30min' | '1h'
+											)}
 										columns={4}
 									/>
 								{/snippet}
