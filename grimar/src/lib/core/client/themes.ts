@@ -1,5 +1,17 @@
 import type { ComponentType } from 'svelte';
-import { Sparkles, Flame, Leaf, Droplets, CircleDot, Snowflake, Palmtree } from 'lucide-svelte';
+import {
+	Sparkles,
+	Flame,
+	Leaf,
+	Droplets,
+	CircleDot,
+	Snowflake,
+	Palmtree,
+	Skull,
+	Heart,
+	Sun,
+	Gem
+} from 'lucide-svelte';
 
 // Lightweight theme registry - SINGLE SOURCE OF TRUTH FOR METADATA
 // Colors are defined in layout.css via CSS custom properties
@@ -20,7 +32,11 @@ export const THEMES = [
 	{ id: 'ice', name: 'Ice', description: 'Deep freeze', icon: Snowflake },
 	{ id: 'ocean', name: 'Ocean', description: 'Abyssal depths', icon: Droplets },
 	{ id: 'void', name: 'Void', description: 'Cosmic emptiness', icon: CircleDot },
-	{ id: 'beach', name: 'Beach', description: 'Sandy shores', icon: Palmtree }
+	{ id: 'beach', name: 'Beach', description: 'Sandy shores', icon: Palmtree },
+	{ id: 'necropolis', name: 'Necropolis', description: 'Bone & Spirit', icon: Skull },
+	{ id: 'charmed', name: 'Charmed', description: 'Rose Quartz & Love Potion', icon: Heart },
+	{ id: 'divine', name: 'Divine', description: 'Celestial Bronze', icon: Sun },
+	{ id: 'underdark', name: 'Underdark', description: 'Deep Slate & Spore', icon: Gem }
 ] as const;
 
 // Theme styling helpers - derived from CSS custom properties
@@ -38,7 +54,11 @@ export const THEME_GRADIENTS: Record<ThemeId, string> = {
 	ice: 'from-cyan-500/20 to-blue-500/20',
 	ocean: 'from-cyan-500/20 to-teal-500/20',
 	void: 'from-violet-500/20 to-gray-500/20',
-	beach: 'from-amber-500/20 to-cyan-500/20'
+	beach: 'from-amber-500/20 to-cyan-500/20',
+	necropolis: 'from-lime-500/20 to-gray-600/20',
+	charmed: 'from-pink-500/20 to-rose-500/20',
+	divine: 'from-yellow-500/20 to-amber-500/20',
+	underdark: 'from-indigo-500/20 to-violet-500/20'
 };
 
 // Helper to get accent class for a theme
@@ -51,7 +71,11 @@ export function getThemeAccentClass(themeId: string): string {
 		ice: 'text-cyan-400',
 		ocean: 'text-teal-400',
 		void: 'text-violet-400',
-		beach: 'text-cyan-400'
+		beach: 'text-cyan-400',
+		necropolis: 'text-lime-400',
+		charmed: 'text-pink-400',
+		divine: 'text-yellow-400',
+		underdark: 'text-indigo-400'
 	};
 	return map[themeId] || 'text-purple-400';
 }

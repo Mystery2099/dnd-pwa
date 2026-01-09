@@ -7,12 +7,13 @@
 		'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
 		Arial, sans-serif;
 
-	/* Gem Colors */
-	--color-gem-ruby: var(--theme-gem-ruby);
-	--color-gem-sapphire: var(--theme-gem-sapphire);
-	--color-gem-emerald: var(--theme-gem-emerald);
-	--color-gem-amethyst: var(--theme-gem-amethyst);
-	--color-gem-topaz: var(--theme-gem-topaz);
+	/* Gem Colors (with default fallbacks) */
+	--color-gem-ruby: var(--theme-gem-ruby, #f472b6);
+	--color-gem-sapphire: var(--theme-gem-sapphire, #38bdf8);
+	--color-gem-emerald: var(--theme-gem-emerald, #4ade80);
+	--color-gem-amethyst: var(--theme-gem-amethyst, #c084fc);
+	--color-gem-topaz: var(--theme-gem-topaz, #fbbf24);
+	--color-gem-pearl: var(--theme-gem-pearl, #f8fafc);
 
 	/* Semantic theme colors */
 	--color-bg-canvas: var(--theme-bg-canvas);
@@ -23,8 +24,26 @@
 	--color-text-primary: var(--theme-text-primary);
 	--color-text-secondary: var(--theme-text-secondary);
 	--color-text-muted: var(--theme-text-muted);
+	--color-text-inverted: var(--theme-text-inverted, #ffffff);
 	--color-border: var(--theme-border);
 	--color-border-hover: var(--theme-border-hover);
+	--color-shadow: var(--theme-shadow, rgba(0, 0, 0, 0.5));
+	--color-overlay-light: var(--theme-overlay-light, rgba(255, 255, 255, 0.1));
+	--color-overlay-dark: var(--theme-overlay-dark, rgba(0, 0, 0, 0.3));
+
+	/* Typography */
+	--font-display: var(--theme-font-display);
+	--font-body: var(--theme-font-body);
+
+	/* Animation */
+	--ease-smooth: var(--theme-ease-smooth, cubic-bezier(0.4, 0, 0.2, 1));
+	--duration-fast: var(--theme-duration-fast, 150ms);
+	--duration-slow: var(--theme-duration-slow, 300ms);
+
+	/* Visual Effects */
+	--noise-opacity: var(--theme-noise-opacity, 0.03);
+	--border-separator: var(--theme-border-separator, none);
+
 	/* Animations */
 	--animate-shimmer: shimmer 3s linear infinite;
 	--animate-float: float 6s ease-in-out infinite;
@@ -183,31 +202,28 @@
 	--theme-text-primary: #f8fafc;
 	--theme-text-secondary: #94a3b8;
 	--theme-text-muted: #64748b;
+	--theme-text-inverted: #ffffff;
+	--theme-shadow: rgba(0, 0, 0, 0.5);
+	--theme-overlay-light: rgba(255, 255, 255, 0.1);
+	--theme-overlay-dark: rgba(0, 0, 0, 0.3);
 	--theme-border: rgba(255, 255, 255, 0.15);
 	--theme-border-hover: rgba(255, 255, 255, 0.3);
 	--theme-effect-url: '';
+
+	/* Typography */
+	--theme-font-display: 'Quicksand', system-ui, sans-serif;
+	--theme-font-body: 'Inter', system-ui, sans-serif;
+
+	/* Animation */
+	--theme-ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+	--theme-duration-fast: 150ms;
+	--theme-duration-slow: 300ms;
+
+	/* Visual Effects */
+	--theme-noise-opacity: 0.03;
+	--theme-border-separator: none;
 }
 
-/* Arcane - Golden Weave radiance */
-/*[data-theme='arcane'] {
-	--theme-bg-canvas: #451a03;
-	--theme-bg-card: rgba(120, 53, 15, 0.7);
-	--theme-bg-overlay: rgba(146, 64, 14, 0.8);
-	--theme-accent: #f59e0b;
-	--theme-accent-glow: rgba(245, 158, 11, 0.6);
-	--theme-accent-rgb: 245, 158, 11;
-	--theme-bg-overlay-rgb: 146, 64, 14;
-	--theme-gem-ruby: #dc2626;
-	--theme-gem-sapphire: #eab308;
-	--theme-gem-emerald: #d97706;
-	--theme-gem-amethyst: #fef3c7;
-	--theme-gem-topaz: #fde047;
-	--theme-text-primary: #fef3c7;
-	--theme-text-secondary: #fcd34d;
-	--theme-text-muted: #d97706;
-	--theme-border: rgba(245, 158, 11, 0.3);
-	--theme-border-hover: rgba(245, 158, 11, 0.5);
-}*/
 /* Arcane - Gold runes on dark leather */
 [data-theme='arcane'] {
 	--theme-bg-canvas: #271c19; /* Dark Espresso Leather */
@@ -224,32 +240,29 @@
 	--theme-text-primary: #fef3c7; /* Amber-100 */
 	--theme-text-secondary: #fcd34d; /* Amber-300 */
 	--theme-text-muted: #d97706;
+	--theme-text-inverted: #fef3c7;
+	--theme-shadow: rgba(0, 0, 0, 0.6);
+	--theme-overlay-light: rgba(254, 243, 199, 0.08);
+	--theme-overlay-dark: rgba(0, 0, 0, 0.4);
 
 	/* Border: Gold leaf */
 	--theme-border: rgba(251, 191, 36, 0.2);
 	--theme-border-hover: rgba(251, 191, 36, 0.5);
+
+	/* Typography */
+	--theme-font-display: 'Cinzel', Georgia, serif;
+	--theme-font-body: 'Cormorant Garamond', Georgia, serif;
+
+	/* Animation - Elegant, slower transitions */
+	--theme-ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+	--theme-duration-fast: 200ms;
+	--theme-duration-slow: 400ms;
+
+	/* Visual Effects */
+	--theme-noise-opacity: 0.02;
+	--theme-border-separator: linear-gradient(90deg, transparent, var(--theme-accent), transparent);
 }
 
-/* Nature - Verdant forest */
-/*[data-theme='nature'] {
-	--theme-bg-canvas: #052e16;
-	--theme-bg-card: rgba(19, 78, 74, 0.7);
-	--theme-bg-overlay: rgba(17, 94, 89, 0.8);
-	--theme-accent: #10b981;
-	--theme-accent-glow: rgba(16, 185, 129, 0.5);
-	--theme-accent-rgb: 16, 185, 129;
-	--theme-bg-overlay-rgb: 17, 94, 89;
-	--theme-gem-ruby: #fb7185;
-	--theme-gem-sapphire: #2dd4bf;
-	--theme-gem-emerald: #4ade80;
-	--theme-gem-amethyst: #6ee7b7;
-	--theme-gem-topaz: #fbbf24;
-	--theme-text-primary: #f0fdf4;
-	--theme-text-secondary: #86efac;
-	--theme-text-muted: #6ee7b7;
-	--theme-border: rgba(16, 185, 129, 0.25);
-	--theme-border-hover: rgba(16, 185, 129, 0.4);
-}*/
 /* Nature - Bioluminescence in the dark */
 [data-theme='nature'] {
 	--theme-bg-canvas: #022c22; /* Very deep jungle night */
@@ -266,13 +279,29 @@
 	--theme-text-primary: #f0fdf4;
 	--theme-text-secondary: #86efac;
 	--theme-text-muted: #34d399;
+	--theme-text-inverted: #f0fdf4;
+	--theme-shadow: rgba(0, 0, 0, 0.5);
+	--theme-overlay-light: rgba(255, 255, 255, 0.08);
+	--theme-overlay-dark: rgba(0, 0, 0, 0.4);
 
 	/* Border: Vine-like */
 	--theme-border: rgba(134, 239, 172, 0.15);
 	--theme-border-hover: rgba(74, 222, 128, 0.4);
+
+	/* Typography */
+	--theme-font-display: 'DM Serif Display', Georgia, serif;
+	--theme-font-body: 'DM Sans', system-ui, sans-serif;
+
+	/* Animation - Organic, breathing feel */
+	--theme-ease-smooth: cubic-bezier(0.34, 1.56, 0.64, 1);
+	--theme-duration-fast: 200ms;
+	--theme-duration-slow: 500ms;
+
+	/* Visual Effects */
+	--theme-noise-opacity: 0.025;
+	--theme-border-separator: none;
 }
 
-/* Fire - Blazing inferno */
 /* Fire - Magma flowing over cold stone */
 [data-theme='fire'] {
 	--theme-bg-canvas: #1c1917; /* Warm Dark Stone */
@@ -289,32 +318,28 @@
 	--theme-text-primary: #fff7ed;
 	--theme-text-secondary: #fdba74; /* Orange-300 */
 	--theme-text-muted: #a8a29e;
+	--theme-text-inverted: #fff7ed;
+	--theme-shadow: rgba(0, 0, 0, 0.5);
+	--theme-overlay-light: rgba(255, 255, 255, 0.08);
+	--theme-overlay-dark: rgba(0, 0, 0, 0.4);
 
 	/* Border: Embers */
 	--theme-border: rgba(253, 186, 116, 0.15);
 	--theme-border-hover: rgba(249, 115, 22, 0.4);
-}
 
-/* Ice - Crystalline frost */
-/*[data-theme='ice'] {
-	--theme-bg-canvas: #0c4a6e;
-	--theme-bg-card: rgba(14, 116, 144, 0.7);
-	--theme-bg-overlay: rgba(21, 94, 117, 0.8);
-	--theme-accent: #06b6d4;
-	--theme-accent-glow: rgba(6, 182, 212, 0.5);
-	--theme-accent-rgb: 6, 182, 212;
-	--theme-bg-overlay-rgb: 21, 94, 117;
-	--theme-gem-ruby: #f9a8d4;
-	--theme-gem-sapphire: #7dd3fc;
-	--theme-gem-emerald: #22d3ee;
-	--theme-gem-amethyst: #e0f2fe;
-	--theme-gem-topaz: #cbd5e1;
-	--theme-text-primary: #ecfeff;
-	--theme-text-secondary: #7dd3fc;
-	--theme-text-muted: #38bdf8;
-	--theme-border: rgba(6, 182, 212, 0.25);
-	--theme-border-hover: rgba(6, 182, 212, 0.4);
-}*/
+	/* Typography */
+	--theme-font-display: 'Teko', system-ui, sans-serif;
+	--theme-font-body: 'Rajdhani', system-ui, sans-serif;
+
+	/* Animation - Intense, explosive */
+	--theme-ease-smooth: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+	--theme-duration-fast: 100ms;
+	--theme-duration-slow: 250ms;
+
+	/* Visual Effects */
+	--theme-noise-opacity: 0.04;
+	--theme-border-separator: linear-gradient(90deg, transparent, var(--theme-accent), transparent);
+}
 
 /* Ice - Deep freeze */
 [data-theme='ice'] {
@@ -332,32 +357,28 @@
 	--theme-text-primary: #f0f9ff;
 	--theme-text-secondary: #bae6fd;
 	--theme-text-muted: #38bdf8;
+	--theme-text-inverted: #f0f9ff;
+	--theme-shadow: rgba(0, 0, 0, 0.5);
+	--theme-overlay-light: rgba(255, 255, 255, 0.1);
+	--theme-overlay-dark: rgba(0, 0, 0, 0.4);
 
 	/* Border: Icicle sharp */
 	--theme-border: rgba(186, 230, 253, 0.15);
 	--theme-border-hover: rgba(103, 232, 249, 0.5);
-}
 
-/* Void - Cosmic darkness */
-/*[data-theme='void'] {
-	--theme-bg-canvas: #000000;
-	--theme-bg-card: rgba(20, 20, 30, 0.8);
-	--theme-bg-overlay: rgba(30, 25, 45, 0.85);
-	--theme-accent: #a855f7;
-	--theme-accent-glow: rgba(168, 85, 247, 0.6);
-	--theme-accent-rgb: 168, 85, 247;
-	--theme-bg-overlay-rgb: 30, 25, 45;
-	--theme-gem-ruby: #7f1d1d;
-	--theme-gem-sapphire: #4c1d95;
-	--theme-gem-emerald: #111827;
-	--theme-gem-amethyst: #8b5cf6;
-	--theme-gem-topaz: #f0f9ff;
-	--theme-text-primary: #f5f5f5;
-	--theme-text-secondary: #c4b5fd;
-	--theme-text-muted: #8b5cf6;
-	--theme-border: rgba(139, 92, 246, 0.25);
-	--theme-border-hover: rgba(139, 92, 246, 0.4);
-}*/
+	/* Typography */
+	--theme-font-display: 'Outfit', system-ui, sans-serif;
+	--theme-font-body: 'Inter', system-ui, sans-serif;
+
+	/* Animation - Crisp, crystalline */
+	--theme-ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+	--theme-duration-fast: 120ms;
+	--theme-duration-slow: 280ms;
+
+	/* Visual Effects */
+	--theme-noise-opacity: 0.015;
+	--theme-border-separator: none;
+}
 
 /* Void - Cosmic emptiness */
 [data-theme='void'] {
@@ -375,32 +396,28 @@
 	--theme-text-primary: #fafafa;
 	--theme-text-secondary: #e9d5ff; /* Purple-200 */
 	--theme-text-muted: #a855f7;
+	--theme-text-inverted: #fafafa;
+	--theme-shadow: rgba(0, 0, 0, 0.6);
+	--theme-overlay-light: rgba(255, 255, 255, 0.06);
+	--theme-overlay-dark: rgba(0, 0, 0, 0.5);
 
 	/* Border: Faint nebulae */
 	--theme-border: rgba(192, 132, 252, 0.15);
 	--theme-border-hover: rgba(192, 132, 252, 0.4);
-}
 
-/* Ocean - Abyssal depths */
-/*[data-theme='ocean'] {
-	--theme-bg-canvas: #042f2e;
-	--theme-bg-card: rgba(13, 148, 136, 0.6);
-	--theme-bg-overlay: rgba(17, 94, 89, 0.8);
-	--theme-accent: #14b8a6;
-	--theme-accent-glow: rgba(20, 184, 166, 0.5);
-	--theme-accent-rgb: 20, 184, 166;
-	--theme-bg-overlay-rgb: 17, 94, 89;
-	--theme-gem-ruby: #fb7185;
-	--theme-gem-sapphire: #1e3a8a;
-	--theme-gem-emerald: #0d9488;
-	--theme-gem-amethyst: #5eead4;
-	--theme-gem-topaz: #e0f2f1;
-	--theme-text-primary: #f0fdfa;
-	--theme-text-secondary: #5eead4;
-	--theme-text-muted: #2dd4bf;
-	--theme-border: rgba(20, 184, 166, 0.25);
-	--theme-border-hover: rgba(20, 184, 166, 0.4);
-}*/
+	/* Typography */
+	--theme-font-display: 'Space Grotesk', system-ui, sans-serif;
+	--theme-font-body: 'Inter', system-ui, sans-serif;
+
+	/* Animation - Ethereal, floating */
+	--theme-ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+	--theme-duration-fast: 200ms;
+	--theme-duration-slow: 500ms;
+
+	/* Visual Effects */
+	--theme-noise-opacity: 0.035;
+	--theme-border-separator: none;
+}
 
 /* Ocean - Mariana Trench */
 [data-theme='ocean'] {
@@ -418,10 +435,27 @@
 	--theme-text-primary: #f0fdfa;
 	--theme-text-secondary: #5eead4;
 	--theme-text-muted: #0f766e;
+	--theme-text-inverted: #f0fdfa;
+	--theme-shadow: rgba(0, 0, 0, 0.5);
+	--theme-overlay-light: rgba(255, 255, 255, 0.06);
+	--theme-overlay-dark: rgba(0, 0, 0, 0.5);
 
 	/* Border: Saltwater */
 	--theme-border: rgba(94, 234, 212, 0.1);
 	--theme-border-hover: rgba(20, 184, 166, 0.4);
+
+	/* Typography */
+	--theme-font-display: 'Montserrat', system-ui, sans-serif;
+	--theme-font-body: 'Inter', system-ui, sans-serif;
+
+	/* Animation - Flowing, fluid */
+	--theme-ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+	--theme-duration-fast: 180ms;
+	--theme-duration-slow: 350ms;
+
+	/* Visual Effects */
+	--theme-noise-opacity: 0.02;
+	--theme-border-separator: none;
 }
 
 [data-theme='beach'] {
@@ -455,11 +489,228 @@
 	--theme-text-secondary: #fed7aa;
 	/* Muted: Warm Earthy Grey */
 	--theme-text-muted: #d6d3d1;
+	--theme-text-inverted: #fff7ed;
+	--theme-shadow: rgba(0, 0, 0, 0.5);
+	--theme-overlay-light: rgba(255, 255, 255, 0.08);
+	--theme-overlay-dark: rgba(0, 0, 0, 0.4);
 
 	/* Border: Sandy ridge with Water hover */
 	--theme-border: rgba(254, 215, 170, 0.15); /* Low opacity tan */
 	--theme-border-hover: rgba(34, 211, 238, 0.4); /* Cyan water glow */
 	--theme-effect-url: '';
+
+	/* Typography */
+	--theme-font-display: 'Bebas Neue', system-ui, sans-serif;
+	--theme-font-body: 'Nunito', system-ui, sans-serif;
+
+	/* Animation - Relaxed, beachy */
+	--theme-ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+	--theme-duration-fast: 200ms;
+	--theme-duration-slow: 400ms;
+
+	/* Visual Effects */
+	--theme-noise-opacity: 0.015;
+	--theme-border-separator: none;
+}
+
+/* Necropolis - Bone & Spirit */
+[data-theme='necropolis'] {
+	/* Canvas: Cold Crypt Stone */
+	--theme-bg-canvas: #1c1917;
+
+	/* Cards: Darker tomb slab */
+	--theme-bg-card: rgba(28, 25, 23, 0.8);
+	--theme-bg-overlay: rgba(41, 37, 36, 0.8);
+
+	/* Accent: Necrotic Green (Sickly Lime) */
+	--theme-accent: #84cc16;
+	--theme-accent-glow: rgba(132, 204, 22, 0.5);
+	--theme-accent-rgb: 132, 204, 22;
+	--theme-bg-overlay-rgb: 41, 37, 36;
+
+	/* Text: Old Bone */
+	--theme-text-primary: #e5e5e5;
+	--theme-text-secondary: #a3a3a3;
+	--theme-text-muted: #525252;
+	--theme-text-inverted: #e5e5e5;
+	--theme-shadow: rgba(0, 0, 0, 0.6);
+	--theme-overlay-light: rgba(255, 255, 255, 0.05);
+	--theme-overlay-dark: rgba(0, 0, 0, 0.5);
+
+	/* Border: Cracked Stone */
+	--theme-border: rgba(82, 82, 82, 0.3);
+	--theme-border-hover: rgba(132, 204, 22, 0.5);
+	--theme-effect-url: '';
+
+	/* Typography */
+	--theme-font-display: 'Crimson Text', Georgia, serif;
+	--theme-font-body: 'Inter', system-ui, sans-serif;
+
+	/* Animation - Slow, haunting */
+	--theme-ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+	--theme-duration-fast: 250ms;
+	--theme-duration-slow: 600ms;
+
+	/* Visual Effects */
+	--theme-noise-opacity: 0.04;
+	--theme-border-separator: none;
+}
+
+/* Charmed - Rose Quartz & Love Potion */
+[data-theme='charmed'] {
+	/* Canvas: Deep Plum to Rose gradient */
+	--theme-bg-canvas: #4a044e; /* Fallback */
+	--theme-bg-card: rgba(131, 24, 67, 0.5); /* Pink-900 glass */
+	--theme-bg-overlay: rgba(80, 7, 36, 0.8);
+
+	/* Accent: Hot Pink (Rose-400) */
+	--theme-accent: #f472b6;
+	--theme-accent-rgb: 244, 114, 182; /* REQUIRED for component transparency */
+	--theme-accent-glow: rgba(244, 114, 182, 0.5);
+
+	/* Overlay Tint: Dark Rose */
+	--theme-bg-overlay-rgb: 80, 7, 36;
+
+	/* Gems */
+	--theme-gem-ruby: #f472b6;
+	--theme-gem-sapphire: #60a5fa;
+	--theme-gem-emerald: #34d399;
+	--theme-gem-amethyst: #c084fc;
+	--theme-gem-topaz: #fbbf24;
+
+	/* Text: Soft Pink/White */
+	--theme-text-primary: #fff1f2;
+	--theme-text-secondary: #fda4af;
+	--theme-text-muted: #be123c;
+	--theme-text-inverted: #fff1f2;
+
+	/* Shadows */
+	--theme-shadow: rgba(80, 7, 36, 0.6);
+	--theme-overlay-light: rgba(255, 255, 255, 0.15);
+	--theme-overlay-dark: rgba(0, 0, 0, 0.4);
+
+	/* Border: Soft Pink Glass */
+	--theme-border: rgba(244, 114, 182, 0.2);
+	--theme-border-hover: rgba(244, 114, 182, 0.5);
+	--theme-effect-url: '';
+
+	/* Typography */
+	--theme-font-display: 'Quicksand', system-ui, sans-serif;
+	--theme-font-body: 'Nunito', system-ui, sans-serif;
+
+	/* Animation */
+	--theme-ease-smooth: cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncy */
+	--theme-duration-fast: 200ms;
+	--theme-duration-slow: 400ms;
+
+	/* Visual Effects */
+	--theme-noise-opacity: 0.02;
+	--theme-border-separator: none;
+}
+
+/* Divine - Celestial Bronze */
+[data-theme='divine'] {
+	/* Canvas: Sunburst in the void */
+	--theme-bg-canvas: #271a0c;
+	/* Card: Bronze/Amber Glass */
+	--theme-bg-card: rgba(66, 32, 6, 0.6);
+	--theme-bg-overlay: rgba(30, 20, 10, 0.9);
+
+	/* Accent: Holy Gold (Yellow-400) */
+	--theme-accent: #facc15;
+	--theme-accent-rgb: 250, 204, 21; /* REQUIRED */
+	--theme-accent-glow: rgba(250, 204, 21, 0.6);
+
+	/* Overlay Tint: Dark Bronze */
+	--theme-bg-overlay-rgb: 66, 32, 6;
+
+	/* Gems */
+	--theme-gem-ruby: #ef4444;
+	--theme-gem-sapphire: #3b82f6;
+	--theme-gem-emerald: #10b981;
+	--theme-gem-amethyst: #a855f7;
+	--theme-gem-topaz: #facc15;
+
+	/* Text: Regal */
+	--theme-text-primary: #fefce8; /* Yellow-50 */
+	--theme-text-secondary: #fde047; /* Yellow-300 */
+	--theme-text-muted: #b45309;
+	--theme-text-inverted: #422006;
+
+	/* Shadows */
+	--theme-shadow: rgba(0, 0, 0, 0.7);
+	--theme-overlay-light: rgba(254, 240, 138, 0.1);
+	--theme-overlay-dark: rgba(0, 0, 0, 0.5);
+
+	/* Border: Polished Gold */
+	--theme-border: rgba(250, 204, 21, 0.25);
+	--theme-border-hover: rgba(250, 204, 21, 0.6);
+	--theme-effect-url: '';
+
+	/* Typography */
+	--theme-font-display: 'Cinzel', serif;
+	--theme-font-body: 'Lato', sans-serif;
+
+	/* Animation */
+	--theme-ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+	--theme-duration-fast: 200ms;
+	--theme-duration-slow: 500ms;
+
+	/* Visual Effects */
+	--theme-noise-opacity: 0.01; /* Very polished/clean */
+	--theme-border-separator: linear-gradient(90deg, transparent, var(--theme-accent), transparent);
+}
+/* Underdark - Deep Slate & Spore */
+[data-theme='underdark'] {
+	/* Canvas: Absolute Pitch Black/Slate */
+	--theme-bg-canvas: #020617;
+	/* Card: Heavy Slate Stone (High Opacity) */
+	--theme-bg-card: rgba(15, 23, 42, 0.85);
+	--theme-bg-overlay: rgba(2, 6, 23, 0.95);
+
+	/* Accent: Bioluminescent Indigo */
+	--theme-accent: #818cf8;
+	--theme-accent-rgb: 129, 140, 248; /* REQUIRED */
+	--theme-accent-glow: rgba(129, 140, 248, 0.4);
+
+	/* Overlay Tint: Dark Slate */
+	--theme-bg-overlay-rgb: 15, 23, 42;
+
+	/* Gems: Muted/Darker versions */
+	--theme-gem-ruby: #9f1239;
+	--theme-gem-sapphire: #1e3a8a;
+	--theme-gem-emerald: #064e3b;
+	--theme-gem-amethyst: #581c87;
+	--theme-gem-topaz: #78350f;
+
+	/* Text: Grey/Silver (Low contrast environment) */
+	--theme-text-primary: #e2e8f0;
+	--theme-text-secondary: #94a3b8;
+	--theme-text-muted: #475569;
+	--theme-text-inverted: #f8fafc;
+
+	/* Shadows */
+	--theme-shadow: rgba(0, 0, 0, 0.9);
+	--theme-overlay-light: rgba(255, 255, 255, 0.05);
+	--theme-overlay-dark: rgba(0, 0, 0, 0.8);
+
+	/* Border: Faint Phosphorescence */
+	--theme-border: rgba(129, 140, 248, 0.15);
+	--theme-border-hover: rgba(129, 140, 248, 0.4);
+	--theme-effect-url: '';
+
+	/* Typography */
+	--theme-font-display: 'Uncial Antiqua', cursive;
+	--theme-font-body: 'Inter', system-ui, sans-serif;
+
+	/* Animation */
+	--theme-ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+	--theme-duration-fast: 150ms;
+	--theme-duration-slow: 300ms;
+
+	/* Visual Effects */
+	--theme-noise-opacity: 0.05; /* Gritty stone texture */
+	--theme-border-separator: none;
 }
 
 /* ========================
@@ -638,14 +889,15 @@
 
 	/* The "Gem" Button */
 	.btn-gem {
-		@apply relative inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-full px-4 py-2 font-bold text-white transition-all duration-200;
+		@apply relative inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-full px-4 py-2 font-bold transition-all duration-200;
+		color: var(--color-text-inverted);
 		background: linear-gradient(
 			180deg,
 			var(--color-accent) 0%,
 			color-mix(in srgb, var(--color-accent) 70%, black) 100%
 		);
 		box-shadow:
-			inset 0 1px 0 color-mix(in srgb, white 40%, transparent),
+			inset 0 1px 0 color-mix(in srgb, var(--color-text-inverted) 40%, transparent),
 			0 2px 4px color-mix(in srgb, black 30%, transparent),
 			0 0 12px var(--color-accent-glow);
 		text-shadow: 0 -1px 0 color-mix(in srgb, black 50%, transparent);
@@ -655,7 +907,7 @@
 		@apply -translate-y-0.5;
 		filter: brightness(1.1);
 		box-shadow:
-			inset 0 1px 0 color-mix(in srgb, white 60%, transparent),
+			inset 0 1px 0 color-mix(in srgb, var(--color-text-inverted) 60%, transparent),
 			0 4px 12px color-mix(in srgb, black 40%, transparent),
 			0 0 20px var(--color-accent-glow);
 	}
@@ -1169,27 +1421,27 @@
 	}
 
 	.settings-group[data-accent='amethyst'] {
-		--group-accent: var(--gem-amethyst, #c084fc);
+		--group-accent: var(--color-gem-amethyst);
 	}
 
 	.settings-group[data-accent='emerald'] {
-		--group-accent: var(--gem-emerald, #4ade80);
+		--group-accent: var(--color-gem-emerald);
 	}
 
 	.settings-group[data-accent='sapphire'] {
-		--group-accent: var(--gem-sapphire, #38bdf8);
+		--group-accent: var(--color-gem-sapphire);
 	}
 
 	.settings-group[data-accent='topaz'] {
-		--group-accent: var(--gem-topaz, #fbbf24);
+		--group-accent: var(--color-gem-topaz);
 	}
 
 	.settings-group[data-accent='ruby'] {
-		--group-accent: var(--gem-ruby, #f472b6);
+		--group-accent: var(--color-gem-ruby);
 	}
 
 	.settings-group[data-accent='pearl'] {
-		--group-accent: #f8fafc;
+		--group-accent: var(--color-gem-pearl);
 	}
 
 	.settings-main {
