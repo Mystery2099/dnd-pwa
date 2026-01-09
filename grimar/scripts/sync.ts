@@ -19,6 +19,9 @@
  *   --help, -h        Show this help message
  */
 
+// Suppress winston console logs for cleaner output
+process.env.SUPPRESS_LOGS = 'true';
+
 import { Database } from 'bun:sqlite';
 import { drizzle } from 'drizzle-orm/bun-sqlite';
 import { migrate } from 'drizzle-orm/bun-sqlite/migrator';
@@ -32,11 +35,11 @@ import type {
 	SyncProgressCallback
 } from '../src/lib/server/services/sync/progress';
 import { applyPragmas } from '../src/lib/server/db/db-config';
-import { createModuleLogger } from '$lib/server/logger';
 import { $count } from 'drizzle-orm';
 import { compendiumItems } from '../src/lib/server/db/schema';
 
-const logger = createModuleLogger('SyncCLI');
+// Silence the winston logger during sync for cleaner output
+process.env.SUPPRESS_LOGS = 'true';
 
 // Valid compendium types
 const VALID_TYPES: CompendiumTypeName[] = [
@@ -598,7 +601,7 @@ async function main() {
 	} catch (error) {
 		progress.finish();
 		console.log(`\n${colors.red}✗ Sync failed: ${error}${colors.reset}`);
-		logger.error({ error }, 'Error during sync');
+		console.error(`Sync failed: ${error}`);
 		return 1;
 	}
 }
@@ -609,6 +612,6 @@ main()
 		process.exit(code);
 	})
 	.catch((error) => {
-		logger.error({ error }, 'Fatal error');
+		console.error(`Fatal error: ${error}`);
 		process.exit(1);
 	});
