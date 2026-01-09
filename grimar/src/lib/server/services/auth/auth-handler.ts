@@ -13,10 +13,24 @@ export { resolveUser } from './auth-utils';
 
 /** Authentication middleware hook */
 export const handleAuth: Handle = async ({ event, resolve }) => {
+	// Development mode: check for mock auth header from E2E tests
+	const isDevMode = import.meta.env.DEV;
+	const testUser = event.request.headers.get('X-Authentik-Username');
+
+	// Check for test user cookie (set by E2E tests)
+	const testUserCookie = event.cookies.get('test-user');
+
+	if (isDevMode && (testUser || testUserCookie)) {
+		event.locals.user = {
+			username: testUser || testUserCookie || 'test-dm',
+			settings: {}
+		};
+		return resolve(event);
+	}
+
 	// Skip auth for API endpoints in development mode
 	// This allows E2E tests to run without complex auth setup
 	const isApiEndpoint = event.url.pathname.startsWith('/api/');
-	const isDevMode = import.meta.env.DEV;
 
 	if (isApiEndpoint && isDevMode) {
 		// Set a mock user for API requests in development

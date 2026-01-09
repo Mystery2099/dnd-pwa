@@ -5,44 +5,36 @@ export { expect };
 /**
  * Custom test fixtures for Grimar E2E tests
  */
-export const test = base.extend({
+const test = base.extend({
 	/**
-	 * Mock user for development - bypasses auth by adding X-Authentik-Username header
-	 * This header is what Authentik would normally set via reverse proxy
+	 * Page with auth automatically configured for E2E tests
 	 */
-	authenticatedPage: async ({ page }, use) => {
-		// Intercept fetch requests to add auth header
-		await page.addInitScript(() => {
-			// Override fetch to add auth header
-			const originalFetch = window.fetch;
-			window.fetch = function (...args) {
-				const _url = args[0];
-				const options = args[1] || {};
+	page: [
+		async ({ page }, use) => {
+			// Set test user cookie before any navigation
+			await page
+				.context()
+				.addCookies([{ name: 'test-user', value: 'test-dm', url: 'http://localhost:5173' }]);
 
-				// Add header to outgoing requests
-				options.headers = {
-					...(options.headers || {}),
-					'X-Authentik-Username': 'test-dm'
+			// Also intercept fetch requests to add auth header
+			await page.addInitScript(() => {
+				const originalFetch = window.fetch;
+				window.fetch = function (...args) {
+					const options = args[1] || {};
+					options.headers = {
+						...(options.headers || {}),
+						'X-Authentik-Username': 'test-dm'
+					};
+					return originalFetch(args[0], options);
 				};
-
-				return originalFetch(args[0], options);
-			};
-		});
-		await use(page);
-	},
-
-	/**
-	 * Navigate to a page and wait for content to load
-	 */
-	loadPage: async ({ page }, use) => {
-		await use(async (url: string) => {
-			await page.goto(url);
-			await page.waitForLoadState('domcontentloaded');
-			// Wait for any loading states to resolve
-			await page.waitForTimeout(500);
-		});
-	}
+			});
+			await use(page);
+		},
+		{ scope: 'test' }
+	]
 });
+
+export { test };
 
 /**
  * Wait for a specific element to appear with retry logic
