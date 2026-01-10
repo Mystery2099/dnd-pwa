@@ -35,6 +35,10 @@ export interface TransformResult {
 	summary: string;
 	details: Record<string, unknown>;
 
+	// Source tracking
+	sourceBook?: string;
+	edition?: string;
+
 	// Spell-specific fields
 	spellLevel?: number;
 	spellSchool?: string;

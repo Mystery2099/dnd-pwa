@@ -9,7 +9,6 @@ import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import type { CompendiumProvider, ProviderHealthStatus } from './types';
 import { Open5eProvider } from './open5e';
-import { SrdProvider } from './srd';
 import { HomebrewProvider } from './homebrew';
 import { createModuleLogger } from '$lib/server/logger';
 
@@ -28,11 +27,6 @@ export interface ProviderDefinition {
 // Default provider configuration
 const DEFAULT_PROVIDERS: ProviderDefinition[] = [
 	{
-		id: 'srd',
-		enabled: true,
-		create: () => new SrdProvider()
-	},
-	{
 		id: 'open5e',
 		enabled: true,
 		create: () => new Open5eProvider()
@@ -46,10 +40,10 @@ const DEFAULT_PROVIDERS: ProviderDefinition[] = [
 
 export const PROVIDERS = DEFAULT_PROVIDERS;
 
-// Primary provider for fallback lookups
-export const PRIMARY_PROVIDER_ID = 'srd';
+// Primary provider for fallback lookups (now open5e since SRD is from GitHub)
+export const PRIMARY_PROVIDER_ID = 'open5e';
 
-// Sync configuration - now actually used instead of hardcoded defaults
+// Sync configuration
 export const SYNC_CONFIG = {
 	maxConcurrency: 3,
 	retryAttempts: 3,
