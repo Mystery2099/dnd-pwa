@@ -6,7 +6,7 @@ You can verify the exact slug by looking at the small "badge" next to the name i
 
 Append `?document__slug=[slug]` to your API request.
 
-* **Single Source:** `https://api.open5e.com/monsters/?document__slug=tob`
+*OC **Single Source:** `https://api.open5e.com/monsters/?document__slug=tob`
 * **Multiple Sources:** You can often chain them or make separate requests (depending on your implementation), but standard practice is one request per filter or filtering the results on your end.
 
 ### **Slug Mapping**

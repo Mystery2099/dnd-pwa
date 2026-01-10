@@ -14,7 +14,7 @@ export async function getLanguages(limit = 500): Promise<SrdLanguage[]> {
 	const query = `
         {
             languages(limit: ${limit}) {
-                index name typical_speakers script url
+                index name typical_speakers script
             }
         }`;
 

@@ -14,7 +14,7 @@ export async function getProficiencies(limit = 500): Promise<SrdProficiency[]> {
 	const query = `
         {
             proficiencies(limit: ${limit}) {
-                index name type url
+                index name type
             }
         }`;
 

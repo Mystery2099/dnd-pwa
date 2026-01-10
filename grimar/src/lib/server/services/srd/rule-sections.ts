@@ -14,7 +14,7 @@ export async function getRuleSections(limit = 500): Promise<SrdRuleSection[]> {
 	const query = `
         {
             rule-sections(limit: ${limit}) {
-                index name desc url
+                index name desc
             }
         }`;
 

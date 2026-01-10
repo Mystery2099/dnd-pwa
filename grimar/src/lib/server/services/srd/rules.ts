@@ -14,7 +14,7 @@ export async function getRules(limit = 500): Promise<SrdRule[]> {
 	const query = `
         {
             rules(limit: ${limit}) {
-                index name subsections { index name url } url
+                index name subsections { index name }
             }
         }`;
 

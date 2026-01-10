@@ -14,7 +14,7 @@ export async function getMagicSchools(limit = 500): Promise<SrdMagicSchool[]> {
 	const query = `
         {
             magic-schools(limit: ${limit}) {
-                index name desc url
+                index name desc
             }
         }`;
 

@@ -14,7 +14,7 @@ export async function getConditions(limit = 500): Promise<SrdCondition[]> {
 	const query = `
         {
             conditions(limit: ${limit}) {
-                index name desc url
+                index name desc
             }
         }`;
 

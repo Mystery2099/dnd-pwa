@@ -14,7 +14,7 @@ export async function getTraits(limit = 500): Promise<SrdTrait[]> {
 	const query = `
         {
             traits(limit: ${limit}) {
-                index name desc races { index name } url
+                index name desc races { index name }
             }
         }`;
 

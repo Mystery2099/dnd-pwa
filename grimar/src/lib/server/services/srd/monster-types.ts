@@ -14,7 +14,7 @@ export async function getMonsterTypes(limit = 500): Promise<SrdMonsterType[]> {
 	const query = `
         {
             monster-types(limit: ${limit}) {
-                index name desc symbol url
+                index name desc symbol
             }
         }`;
 

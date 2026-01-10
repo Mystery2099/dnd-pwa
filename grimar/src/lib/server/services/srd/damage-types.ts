@@ -14,7 +14,7 @@ export async function getDamageTypes(limit = 500): Promise<SrdDamageType[]> {
 	const query = `
         {
             damage-types(limit: ${limit}) {
-                index name desc url
+                index name desc
             }
         }`;
 

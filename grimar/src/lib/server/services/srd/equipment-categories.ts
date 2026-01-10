@@ -14,7 +14,7 @@ export async function getEquipmentCategories(limit = 500): Promise<SrdEquipmentC
 	const query = `
         {
             equipment-categories(limit: ${limit}) {
-                index name url
+                index name
             }
         }`;
 

@@ -14,7 +14,7 @@ export async function getSkills(limit = 500): Promise<SrdSkill[]> {
 	const query = `
         {
             skills(limit: ${limit}) {
-                index name ability_score { index name } desc url
+                index name ability_score { index name } desc
             }
         }`;
 

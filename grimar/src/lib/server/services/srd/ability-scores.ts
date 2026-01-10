@@ -14,7 +14,7 @@ export async function getAbilityScores(limit = 500): Promise<SrdAbilityScore[]> 
 	const query = `
         {
             ability-scores(limit: ${limit}) {
-                index name abbreviation desc full_name url
+                index name abbreviation desc full_name
             }
         }`;
 
