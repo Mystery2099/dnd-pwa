@@ -148,8 +148,12 @@ export const SPELLS_CONFIG: CompendiumTypeConfig = {
 		tags: (item) => {
 			const level = getSpellLevelText(item);
 			const school = getSpellSchool(item);
-			const classes = (item.details.classes as Array<{ name: string }>) || [];
-			return [school, level, ...classes.map((c) => c.name)];
+			const details = item.details;
+			const classes = (details &&
+				typeof details === 'object' &&
+				(details as Record<string, unknown>).classes) as Array<{ name: string }> | undefined;
+			const classNames = (Array.isArray(classes) ? classes : []).map((c) => c.name);
+			return [school, level, ...classNames];
 		},
 
 		listItemAccent: (item) => {

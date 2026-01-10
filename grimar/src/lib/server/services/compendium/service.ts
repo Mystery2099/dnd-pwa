@@ -12,6 +12,7 @@
  */
 
 import { getDb } from '$lib/server/db';
+import { createModuleLogger } from '$lib/server/logger';
 import { compendiumItems } from '$lib/server/db/schema';
 import { eq, like, and, desc, asc, sql, inArray } from 'drizzle-orm';
 import { searchFtsRanked } from '$lib/server/db/db-fts';
@@ -469,10 +470,13 @@ export const compendiumService: CompendiumServiceInterface = {
 
 	async getBySourceAndId(source: string, type: AnyCompendiumType, id: number | string) {
 		const db = await getDb();
+		const log = createModuleLogger('CompendiumService');
 
 		// Handle both numeric ID and slug (externalId)
 		const numericId = typeof id === 'number' ? id : parseInt(id);
 		const isNumeric = !Number.isNaN(numericId);
+
+		log.debug({ source, type, id, isNumeric }, 'Looking up item by source and ID');
 
 		let item;
 		if (isNumeric) {
@@ -492,6 +496,10 @@ export const compendiumService: CompendiumServiceInterface = {
 					eq(compendiumItems.source, source)
 				)
 			});
+		}
+
+		if (!item) {
+			log.debug({ source, type, id }, 'Item not found');
 		}
 
 		return item ? transformToUnified(item) : null;

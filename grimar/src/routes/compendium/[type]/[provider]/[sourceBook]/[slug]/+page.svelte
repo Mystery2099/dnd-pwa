@@ -37,7 +37,9 @@
 	const basePath = $derived(`/compendium/${pathType}/${provider}/${sourceBook}`);
 	const prevUrl = $derived(nav.prev ? `${basePath}/${nav.prev.slug}` : null);
 	const nextUrl = $derived(nav.next ? `${basePath}/${nav.next.slug}` : null);
-	const listUrl = $derived(basePath);
+	// URL for "All X" button - goes to full list without provider/sourceBook filter
+	const allUrl = $derived(`/compendium/${pathType}`);
+	const listUrl = $derived(allUrl);
 
 	// Keyboard navigation
 	$effect(() => {

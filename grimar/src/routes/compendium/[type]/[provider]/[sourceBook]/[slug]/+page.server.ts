@@ -8,7 +8,7 @@ import { createModuleLogger } from '$lib/server/logger';
 const log = createModuleLogger('CompendiumItemPage');
 
 export const load: PageServerLoad = async ({ locals, params }) => {
-	// Require authentication
+	// Require authentication - redirects to / if not authenticated
 	requireUser(locals);
 
 	const { type: pathType, provider, sourceBook, slug } = params;
@@ -17,15 +17,26 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		const config = getCompendiumConfig(pathType);
 		const dbType = getTypeFromPath(pathType);
 
+		log.info({ pathType, provider, sourceBook, slug }, 'Loading compendium item');
+
 		// Get the item by provider, sourceBook, and slug
-		const item = await compendiumService.getBySourceAndId(provider, dbType, parseInt(slug) || slug);
+		const item = await compendiumService.getBySourceAndId(provider, dbType, slug);
 
 		if (!item) {
+			log.warn({ provider, sourceBook, slug }, 'Item not found');
 			throw error(404, `${config.ui.displayName} not found`);
 		}
 
 		// Get navigation for prev/next (only if item has an id)
-		const navigation = item.id ? await compendiumService.getNavigation(dbType, item.id) : null;
+		let navigation = null;
+		if (item.id) {
+			try {
+				navigation = await compendiumService.getNavigation(dbType, item.id);
+			} catch (navError) {
+				log.warn({ error: navError, itemId: item.id }, 'Failed to load navigation');
+				navigation = null;
+			}
+		}
 
 		// Cast to legacy type for compatibility with existing components
 		return {
@@ -43,8 +54,14 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 			sourceBook
 		};
 	} catch (e) {
-		if (e instanceof Response) throw e; // Re-throw SvelteKit errors
-		log.error({ error: e, pathType, provider, sourceBook, slug }, 'Failed to load compendium item');
-		throw error(404, `Item not found`);
+		// Re-throw SvelteKit errors (they have 'status' property)
+		if (typeof e === 'object' && e !== null && 'status' in e) {
+			throw e;
+		}
+		// Log the actual error message and stack trace
+		const errorMessage = e instanceof Error ? e.message : String(e);
+		const errorStack = e instanceof Error ? e.stack : '';
+		log.error({ error: errorMessage, stack: errorStack, params }, 'Failed to load compendium item');
+		throw error(500, 'Internal server error');
 	}
 };
