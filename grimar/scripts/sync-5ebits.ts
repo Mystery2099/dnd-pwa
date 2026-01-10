@@ -24,7 +24,7 @@ const DATA_ROOT = 'data/compendium';
 // 5e-database configuration
 const REPO_OWNER = '5e-bits';
 const REPO_NAME = '5e-database';
-const SOURCE_NAME = 'srd';
+const SOURCE_NAME = '5ebits';
 
 /**
  * Ensure the data directory exists for a given type
