@@ -22,14 +22,14 @@
 	import { userSettingsStore } from '$lib/core/client/userSettingsStore.svelte';
 	import VirtualGrid from '$lib/components/ui/VirtualGrid.svelte';
 
-	// Detail Content Components
-	import SpellDetailContent from '$lib/features/compendium/components/detail/SpellDetailContent.svelte';
-	import MonsterDetailContent from '$lib/features/compendium/components/detail/MonsterDetailContent.svelte';
-	import FeatDetailContent from '$lib/features/compendium/components/detail/FeatDetailContent.svelte';
-	import BackgroundDetailContent from '$lib/features/compendium/components/detail/BackgroundDetailContent.svelte';
-	import RaceDetailContent from '$lib/features/compendium/components/detail/RaceDetailContent.svelte';
-	import ClassDetailContent from '$lib/features/compendium/components/detail/ClassDetailContent.svelte';
-	import ItemDetailContent from '$lib/features/compendium/components/detail/ItemDetailContent.svelte';
+	// Entry Content Components
+	import SpellEntryContent from '$lib/features/compendium/components/entry-content/SpellEntryContent.svelte';
+	import MonsterEntryContent from '$lib/features/compendium/components/entry-content/MonsterEntryContent.svelte';
+	import FeatEntryContent from '$lib/features/compendium/components/entry-content/FeatEntryContent.svelte';
+	import BackgroundEntryContent from '$lib/features/compendium/components/entry-content/BackgroundEntryContent.svelte';
+	import RaceEntryContent from '$lib/features/compendium/components/entry-content/RaceEntryContent.svelte';
+	import ClassEntryContent from '$lib/features/compendium/components/entry-content/ClassEntryContent.svelte';
+	import ItemEntryContent from '$lib/features/compendium/components/entry-content/ItemEntryContent.svelte';
 
 	let { data } = $props();
 
@@ -389,19 +389,19 @@
 				animate={false}
 			>
 				{#if dbType === 'spell'}
-					<SpellDetailContent spell={selectedItem.details} />
+					<SpellEntryContent spell={selectedItem.details} />
 				{:else if dbType === 'monster'}
-					<MonsterDetailContent monster={selectedItem.details} />
+					<MonsterEntryContent monster={selectedItem.details} />
 				{:else if dbType === 'feat'}
-					<FeatDetailContent feat={selectedItem.details} />
+					<FeatEntryContent feat={selectedItem.details} />
 				{:else if dbType === 'background'}
-					<BackgroundDetailContent background={selectedItem.details} />
+					<BackgroundEntryContent background={selectedItem.details} />
 				{:else if dbType === 'race'}
-					<RaceDetailContent race={selectedItem.details} />
+					<RaceEntryContent race={selectedItem.details} />
 				{:else if dbType === 'class'}
-					<ClassDetailContent classData={selectedItem.details} />
+					<ClassEntryContent classData={selectedItem.details} />
 				{:else if dbType === 'item'}
-					<ItemDetailContent item={selectedItem.details} />
+					<ItemEntryContent item={selectedItem.details} />
 				{:else}
 					<div class="space-y-4">
 						<div

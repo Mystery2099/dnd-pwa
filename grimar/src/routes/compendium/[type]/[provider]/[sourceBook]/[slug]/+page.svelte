@@ -7,14 +7,14 @@
 	import type { PageData } from './$types';
 	import type { CompendiumItem } from '$lib/core/types/compendium';
 
-	// Detail Content Components
-	import SpellDetailContent from '$lib/features/compendium/components/detail/SpellDetailContent.svelte';
-	import MonsterDetailContent from '$lib/features/compendium/components/detail/MonsterDetailContent.svelte';
-	import FeatDetailContent from '$lib/features/compendium/components/detail/FeatDetailContent.svelte';
-	import BackgroundDetailContent from '$lib/features/compendium/components/detail/BackgroundDetailContent.svelte';
-	import RaceDetailContent from '$lib/features/compendium/components/detail/RaceDetailContent.svelte';
-	import ClassDetailContent from '$lib/features/compendium/components/detail/ClassDetailContent.svelte';
-	import ItemDetailContent from '$lib/features/compendium/components/detail/ItemDetailContent.svelte';
+	// Entry Content Components
+	import SpellEntryContent from '$lib/features/compendium/components/entry-content/SpellEntryContent.svelte';
+	import MonsterEntryContent from '$lib/features/compendium/components/entry-content/MonsterEntryContent.svelte';
+	import FeatEntryContent from '$lib/features/compendium/components/entry-content/FeatEntryContent.svelte';
+	import BackgroundEntryContent from '$lib/features/compendium/components/entry-content/BackgroundEntryContent.svelte';
+	import RaceEntryContent from '$lib/features/compendium/components/entry-content/RaceEntryContent.svelte';
+	import ClassEntryContent from '$lib/features/compendium/components/entry-content/ClassEntryContent.svelte';
+	import ItemEntryContent from '$lib/features/compendium/components/entry-content/ItemEntryContent.svelte';
 
 	let { data }: { data: PageData } = $props();
 
@@ -81,19 +81,19 @@
 		{accentColor}
 	>
 		{#if dbType === 'spell'}
-			<SpellDetailContent spell={item.details ?? {}} />
+			<SpellEntryContent spell={item.details ?? {}} />
 		{:else if dbType === 'monster'}
-			<MonsterDetailContent monster={item.details ?? {}} />
+			<MonsterEntryContent monster={item.details ?? {}} />
 		{:else if dbType === 'feat'}
-			<FeatDetailContent feat={item.details ?? {}} />
+			<FeatEntryContent feat={item.details ?? {}} />
 		{:else if dbType === 'background'}
-			<BackgroundDetailContent background={item.details ?? {}} />
+			<BackgroundEntryContent background={item.details ?? {}} />
 		{:else if dbType === 'race'}
-			<RaceDetailContent race={item.details ?? {}} />
+			<RaceEntryContent race={item.details ?? {}} />
 		{:else if dbType === 'class'}
-			<ClassDetailContent classData={item.details ?? {}} />
+			<ClassEntryContent classData={item.details ?? {}} />
 		{:else if dbType === 'item'}
-			<ItemDetailContent item={item.details ?? {}} />
+			<ItemEntryContent item={item.details ?? {}} />
 		{:else}
 			<div class="space-y-4">
 				<div

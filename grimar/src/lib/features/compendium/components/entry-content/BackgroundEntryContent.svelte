@@ -41,7 +41,7 @@
 				Feature: {feature.name}
 			</div>
 			{#if SvelteMarkdown}
-				<div class="prose prose-sm max-w-none text-[var(--color-text-secondary)] prose-invert">
+				<div class="prose prose-sm prose-invert max-w-none text-[var(--color-text-secondary)]">
 					<SvelteMarkdown source={feature.description} />
 				</div>
 			{:else}
@@ -53,7 +53,7 @@
 
 <!-- Description (Markdown rendered) -->
 {#if descriptionMd && SvelteMarkdown}
-	<div class="prose prose-sm max-w-none text-[var(--color-text-secondary)] prose-invert">
+	<div class="prose prose-sm prose-invert max-w-none text-[var(--color-text-secondary)]">
 		<SvelteMarkdown source={descriptionMd} />
 	</div>
 {:else if descriptionMd}
