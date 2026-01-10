@@ -9,9 +9,9 @@
 	import CompendiumShell from '$lib/features/compendium/components/layout/CompendiumShell.svelte';
 	import CompendiumSidebar from '$lib/features/compendium/components/layout/CompendiumSidebar.svelte';
 	import FilterGroup from '$lib/features/compendium/components/layout/FilterGroup.svelte';
-	import CompendiumListItem from '$lib/features/compendium/components/CompendiumListItem.svelte';
-	import CompendiumCardItem from '$lib/features/compendium/components/CompendiumItem.svelte';
-	import CompendiumDetail from '$lib/features/compendium/components/CompendiumDetail.svelte';
+	import CompendiumListItem from '$lib/features/compendium/components/EntryListItem.svelte';
+	import CompendiumCardItem from '$lib/features/compendium/components/EntryCard.svelte';
+	import CompendiumEntryView from '$lib/features/compendium/components/CompendiumEntryView.svelte';
 	import VirtualList from '$lib/components/ui/VirtualList.svelte';
 	import { Download, RefreshCw } from 'lucide-svelte';
 	import { CompendiumFilterStore } from '$lib/features/compendium/stores/filter.svelte';
@@ -377,7 +377,7 @@
 		{@const provider = selectedItem.source || '5ebits'}
 		{@const sourceBook = selectedItem.sourceBook || 'SRD'}
 		<div class="absolute inset-0 z-50 p-2 lg:p-4" transition:fly={{ x: 20, duration: 300 }}>
-			<CompendiumDetail
+			<CompendiumEntryView
 				title={selectedItem.name}
 				type={config.ui.displayName}
 				source={selectedItem.source}
@@ -411,7 +411,7 @@
 						</div>
 					</div>
 				{/if}
-			</CompendiumDetail>
+			</CompendiumEntryView>
 		</div>
 	{/if}
 </CompendiumShell>

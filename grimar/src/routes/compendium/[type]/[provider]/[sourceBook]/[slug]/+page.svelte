@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { createKeyboardNav } from '$lib/core/utils/keyboardNav';
-	import CompendiumDetail from '$lib/features/compendium/components/CompendiumDetail.svelte';
-	import DetailNavigation from '$lib/features/compendium/components/DetailNavigation.svelte';
+	import CompendiumEntryView from '$lib/features/compendium/components/CompendiumEntryView.svelte';
+	import EntryViewNavigation from '$lib/features/compendium/components/EntryViewNavigation.svelte';
 	import { getCompendiumConfig } from '$lib/core/constants/compendium';
 	import type { PageData } from './$types';
 	import type { CompendiumItem } from '$lib/core/types/compendium';
@@ -68,9 +68,9 @@
 </svelte:head>
 
 <div class="mx-auto max-w-4xl p-4 md:p-6">
-	<DetailNavigation {prevUrl} {nextUrl} {listUrl} />
+	<EntryViewNavigation {prevUrl} {nextUrl} {listUrl} />
 
-	<CompendiumDetail
+	<CompendiumEntryView
 		title={item.name}
 		type={config.ui.displayName}
 		source={item.source}
@@ -103,7 +103,7 @@
 				</div>
 			</div>
 		{/if}
-	</CompendiumDetail>
+	</CompendiumEntryView>
 
 	<!-- Keyboard shortcuts hint -->
 	<div class="mt-6 text-center text-xs text-[var(--color-text-muted)]">
