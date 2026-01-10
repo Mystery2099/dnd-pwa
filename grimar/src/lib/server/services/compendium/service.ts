@@ -117,6 +117,11 @@ export interface CompendiumServiceInterface {
 		filters?: Record<string, unknown>
 	): Promise<UnifiedCompendiumItem[]>;
 	getById(type: AnyCompendiumType, id: number | string): Promise<UnifiedCompendiumItem | null>;
+	getBySourceAndId(
+		source: string,
+		type: AnyCompendiumType,
+		id: number | string
+	): Promise<UnifiedCompendiumItem | null>;
 
 	// Search
 	search(query: string, type?: CompendiumType, limit?: number): Promise<UnifiedCompendiumItem[]>;
@@ -456,6 +461,36 @@ export const compendiumService: CompendiumServiceInterface = {
 			// Look up by externalId (slug)
 			item = await db.query.compendiumItems.findFirst({
 				where: and(eq(compendiumItems.externalId, id as string), eq(compendiumItems.type, type))
+			});
+		}
+
+		return item ? transformToUnified(item) : null;
+	},
+
+	async getBySourceAndId(source: string, type: AnyCompendiumType, id: number | string) {
+		const db = await getDb();
+
+		// Handle both numeric ID and slug (externalId)
+		const numericId = typeof id === 'number' ? id : parseInt(id);
+		const isNumeric = !Number.isNaN(numericId);
+
+		let item;
+		if (isNumeric) {
+			item = await db.query.compendiumItems.findFirst({
+				where: and(
+					eq(compendiumItems.id, numericId),
+					eq(compendiumItems.type, type),
+					eq(compendiumItems.source, source)
+				)
+			});
+		} else {
+			// Look up by externalId (slug) and source
+			item = await db.query.compendiumItems.findFirst({
+				where: and(
+					eq(compendiumItems.externalId, id as string),
+					eq(compendiumItems.type, type),
+					eq(compendiumItems.source, source)
+				)
 			});
 		}
 
