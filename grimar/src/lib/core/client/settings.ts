@@ -18,7 +18,7 @@ export interface ServerSettings {
 	showA5eContent: boolean;
 	/** Default sort order for spells */
 	spellSortOrder: 'name' | 'level' | 'school';
-	/** Auto-expand spell/monster details panels */
+	/** Auto-expand spell/monster entry views */
 	autoExpandDetails: boolean;
 }
 

@@ -43,7 +43,7 @@ All authenticated pages render inside an app shell layout providing:
   - **Features:** Search, filters, infinite scroll.
 
 - `/compendium/[type]/[slug]`
-  - **Purpose:** Dedicated detail page for items.
+  - **Purpose:** Dedicated entry view for items.
   - **Examples:** `/compendium/spells/fireball`, `/compendium/monsters/balrog`.
   - **Behavior:** Overlay panel with full details.
 

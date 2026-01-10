@@ -80,7 +80,7 @@ These were documented but never implemented:
 - `Toggle`, `Tabs`, `Chip`, `Divider` - Not implemented
 - `IconButton`, `UserMenu` - Not implemented
 - `BookmarkToggle` - Not implemented
-- `CompendiumDetailModal` - Replaced with split detail page
+- `CompendiumDetailModal` - Replaced with split entry view
 - `CompendiumTabs`, `CompendiumGrid`, `CompendiumCard` - Reorganized
 
 ## Character Sheet Components (Planned)
