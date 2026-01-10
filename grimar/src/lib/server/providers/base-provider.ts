@@ -28,7 +28,11 @@ export abstract class BaseProvider implements CompendiumProvider {
 	abstract readonly id: string;
 	abstract readonly name: string;
 	abstract readonly baseUrl: string;
-	abstract readonly supportedTypes: readonly CompendiumTypeName[];
+	supportedTypes: readonly CompendiumTypeName[];
+
+	constructor(supportedTypes?: readonly CompendiumTypeName[]) {
+		this.supportedTypes = supportedTypes ?? [];
+	}
 
 	/**
 	 * Check provider health with timeout protection

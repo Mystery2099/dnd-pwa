@@ -17,6 +17,26 @@ import { ARMOR_CONFIG } from './armor';
 import { CONDITIONS_CONFIG } from './conditions';
 import { PLANES_CONFIG } from './planes';
 import { SECTIONS_CONFIG } from './sections';
+import { SUBCLASSES_CONFIG } from './subclasses';
+import { SUBRACES_CONFIG } from './subraces';
+import { TRAITS_CONFIG } from './traits';
+import {
+	SKILLS_CONFIG,
+	LANGUAGES_CONFIG,
+	ALIGNMENTS_CONFIG,
+	DAMAGE_TYPES_CONFIG,
+	MAGIC_SCHOOLS_CONFIG,
+	EQUIPMENT_CONFIG,
+	VEHICLES_CONFIG,
+	MONSTER_TYPES_CONFIG,
+	RULE_SECTIONS_CONFIG,
+	FEATURES_CONFIG,
+	PROFICIENCIES_CONFIG,
+	ABILITY_SCORES_CONFIG,
+	WEAPON_PROPERTIES_CONFIG,
+	EQUIPMENT_CATEGORIES_CONFIG,
+	RULES_CONFIG
+} from './reference';
 
 // Map database type names to their configuration objects
 const CONFIG_MAP: Record<CompendiumTypeName, CompendiumTypeConfig> = {
@@ -27,15 +47,32 @@ const CONFIG_MAP: Record<CompendiumTypeName, CompendiumTypeConfig> = {
 	race: RACES_CONFIG,
 	class: CLASSES_CONFIG,
 	item: ITEMS_CONFIG,
+	subclass: SUBCLASSES_CONFIG,
+	subrace: SUBRACES_CONFIG,
+	trait: TRAITS_CONFIG,
+	feature: FEATURES_CONFIG,
+	skill: SKILLS_CONFIG,
+	language: LANGUAGES_CONFIG,
+	alignment: ALIGNMENTS_CONFIG,
+	damageType: DAMAGE_TYPES_CONFIG,
+	magicSchool: MAGIC_SCHOOLS_CONFIG,
+	equipment: EQUIPMENT_CONFIG,
+	vehicle: VEHICLES_CONFIG,
+	monsterType: MONSTER_TYPES_CONFIG,
+	ruleSection: RULE_SECTIONS_CONFIG,
 	weapon: WEAPONS_CONFIG,
 	armor: ARMOR_CONFIG,
 	condition: CONDITIONS_CONFIG,
 	plane: PLANES_CONFIG,
-	section: SECTIONS_CONFIG
+	section: SECTIONS_CONFIG,
+	proficiency: PROFICIENCIES_CONFIG,
+	abilityScore: ABILITY_SCORES_CONFIG,
+	weaponProperty: WEAPON_PROPERTIES_CONFIG,
+	equipmentCategory: EQUIPMENT_CATEGORIES_CONFIG,
+	rule: RULES_CONFIG
 };
 
 // Map URL path segments to database types
-// Note: 'characters' is not included here - characters are stored in a separate table, not compendium_items
 const PATH_TO_TYPE: Record<string, CompendiumTypeName> = {
 	spells: 'spell',
 	monsters: 'monster',
@@ -44,22 +81,38 @@ const PATH_TO_TYPE: Record<string, CompendiumTypeName> = {
 	races: 'race',
 	classes: 'class',
 	magicitems: 'item',
+	subclasses: 'subclass',
+	subraces: 'subrace',
+	traits: 'trait',
+	features: 'feature',
+	skills: 'skill',
+	languages: 'language',
+	alignments: 'alignment',
+	'damage-types': 'damageType',
+	'magic-schools': 'magicSchool',
+	equipment: 'equipment',
+	vehicles: 'vehicle',
+	'monster-types': 'monsterType',
+	'rule-sections': 'ruleSection',
 	weapons: 'weapon',
 	armor: 'armor',
 	conditions: 'condition',
 	planes: 'plane',
-	sections: 'section'
+	sections: 'section',
+	proficiencies: 'proficiency',
+	'ability-scores': 'abilityScore',
+	'weapon-properties': 'weaponProperty',
+	'equipment-categories': 'equipmentCategory',
+	rules: 'rule'
 };
 
 /**
  * Get the configuration for a specific compendium type
  */
 export function getCompendiumConfig(type: CompendiumTypeName | string): CompendiumTypeConfig {
-	// Try direct lookup
 	if (type in CONFIG_MAP) {
 		return CONFIG_MAP[type as CompendiumTypeName];
 	}
-	// Try path lookup
 	if (type in PATH_TO_TYPE) {
 		return CONFIG_MAP[PATH_TO_TYPE[type]];
 	}
@@ -77,14 +130,6 @@ export function getTypeFromPath(path: string): CompendiumTypeName {
 	return type;
 }
 
-/**
- * Get all available compendium configurations
- */
-
-/**
- * Check if a compendium type or path is supported
- */
-
 export { SPELLS_CONFIG } from './spells';
 export { MONSTERS_CONFIG } from './monsters';
 export { FEATS_CONFIG } from './feats';
@@ -97,3 +142,23 @@ export { ARMOR_CONFIG } from './armor';
 export { CONDITIONS_CONFIG } from './conditions';
 export { PLANES_CONFIG } from './planes';
 export { SECTIONS_CONFIG } from './sections';
+export { SUBCLASSES_CONFIG } from './subclasses';
+export { SUBRACES_CONFIG } from './subraces';
+export { TRAITS_CONFIG } from './traits';
+export {
+	SKILLS_CONFIG,
+	LANGUAGES_CONFIG,
+	ALIGNMENTS_CONFIG,
+	DAMAGE_TYPES_CONFIG,
+	MAGIC_SCHOOLS_CONFIG,
+	EQUIPMENT_CONFIG,
+	VEHICLES_CONFIG,
+	MONSTER_TYPES_CONFIG,
+	RULE_SECTIONS_CONFIG,
+	FEATURES_CONFIG,
+	PROFICIENCIES_CONFIG,
+	ABILITY_SCORES_CONFIG,
+	WEAPON_PROPERTIES_CONFIG,
+	EQUIPMENT_CATEGORIES_CONFIG,
+	RULES_CONFIG
+} from './reference';

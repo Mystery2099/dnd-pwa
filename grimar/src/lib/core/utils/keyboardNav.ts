@@ -1,7 +1,7 @@
 /**
  * Keyboard Navigation Utility
  *
- * Provides keyboard navigation handlers for compendium detail pages.
+ * Provides keyboard navigation handlers for entry views.
  * Supports: ArrowLeft/ArrowRight for navigation, Escape to close.
  */
 

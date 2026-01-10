@@ -71,8 +71,41 @@ export const Open5eMonsterSchema = z.object({
 				name: z.string(),
 				desc: z.string(),
 				attack_bonus: z.number().optional(),
-				damage_dice: z.string().optional(),
-				damage: z.record(z.string(), z.string()).optional()
+				damage_dice: z.string().optional()
+			})
+		)
+		.nullable()
+		.optional(),
+	bonus_actions: z
+		.array(
+			z.object({
+				name: z.string(),
+				desc: z.string(),
+				attack_bonus: z.number().optional(),
+				damage_dice: z.string().optional()
+			})
+		)
+		.nullable()
+		.optional(),
+	reactions: z
+		.array(
+			z.object({
+				name: z.string(),
+				desc: z.string(),
+				attack_bonus: z.number().optional(),
+				damage_dice: z.string().optional()
+			})
+		)
+		.nullable()
+		.optional(),
+	legendary_desc: z.string().nullable().optional(),
+	legendary_actions: z
+		.array(
+			z.object({
+				name: z.string(),
+				desc: z.string(),
+				attack_bonus: z.number().optional(),
+				damage_dice: z.string().optional()
 			})
 		)
 		.nullable()
@@ -87,16 +120,14 @@ export const Open5eMonsterSchema = z.object({
 		)
 		.nullable()
 		.optional(),
-	legendary_actions: z
-		.array(
-			z.object({
-				name: z.string(),
-				desc: z.string(),
-				attack_bonus: z.number().optional()
-			})
-		)
-		.nullable()
-		.optional()
+	spell_list: z.array(z.string()).optional(),
+	page_no: z.number().optional(),
+	environments: z.array(z.string()).optional(),
+	img_main: z.string().nullable().optional(),
+	document__slug: z.string().optional(),
+	document__title: z.string().optional(),
+	document__license_url: z.string().optional(),
+	document__url: z.string().optional()
 });
 
 export const Open5eItemSchema = z.object({
@@ -170,7 +201,40 @@ export const SrdMonsterDetailSchema = SrdMonsterSummarySchema.extend({
 				name: z.string(),
 				desc: z.string(),
 				attack_bonus: z.number().optional(),
-				damage_dice: z.string().optional()
+				damage: z
+					.array(
+						z.object({
+							damage_type: z.object({
+								index: z.string(),
+								name: z.string(),
+								url: z.string().optional()
+							}),
+							damage_dice: z.string()
+						})
+					)
+					.optional(),
+				multiattack: z
+					.object({
+						action_name: z.string(),
+						count: z.number()
+					})
+					.optional(),
+				multiattack_type: z.string().optional(),
+				actions: z
+					.array(
+						z.object({
+							action_name: z.string(),
+							count: z.string(),
+							type: z.string().optional()
+						})
+					)
+					.optional(),
+				usage: z
+					.object({
+						type: z.string(),
+						times: z.number()
+					})
+					.optional()
 			})
 		)
 		.optional(),
@@ -179,7 +243,32 @@ export const SrdMonsterDetailSchema = SrdMonsterSummarySchema.extend({
 			z.object({
 				name: z.string(),
 				desc: z.string(),
-				attack_bonus: z.number().optional()
+				attack_bonus: z.number().optional(),
+				damage: z
+					.array(
+						z.object({
+							damage_type: z.object({
+								index: z.string(),
+								name: z.string(),
+								url: z.string().optional()
+							}),
+							damage_dice: z.string()
+						})
+					)
+					.optional(),
+				dc: z
+					.object({
+						dc_type: z.object({ index: z.string(), name: z.string(), url: z.string().optional() }),
+						dc_value: z.number(),
+						success_type: z.string()
+					})
+					.optional(),
+				usage: z
+					.object({
+						type: z.string(),
+						times: z.number()
+					})
+					.optional()
 			})
 		)
 		.optional(),
@@ -188,7 +277,39 @@ export const SrdMonsterDetailSchema = SrdMonsterSummarySchema.extend({
 			z.object({
 				name: z.string(),
 				desc: z.string(),
-				attack_bonus: z.number().optional()
+				attack_bonus: z.number().optional(),
+				damage: z
+					.array(
+						z.object({
+							damage_type: z.object({
+								index: z.string(),
+								name: z.string(),
+								url: z.string().optional()
+							}),
+							damage_dice: z.string()
+						})
+					)
+					.optional()
+			})
+		)
+		.optional(),
+	reactions: z
+		.array(
+			z.object({
+				name: z.string(),
+				desc: z.string(),
+				damage: z
+					.array(
+						z.object({
+							damage_type: z.object({
+								index: z.string(),
+								name: z.string(),
+								url: z.string().optional()
+							}),
+							damage_dice: z.string()
+						})
+					)
+					.optional()
 			})
 		)
 		.optional()
@@ -242,6 +363,176 @@ export function tryValidate<T>(schema: z.ZodType<T>, data: unknown, context: str
 }
 
 // ============================================================================
+// SRD Subclass Schema
+// ============================================================================
+
+export const SrdSubclassSchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	class: z.object({ index: z.string(), name: z.string() }),
+	subclass_flavor: z.string().optional(),
+	desc: z.array(z.string()),
+	features: z
+		.array(
+			z.object({
+				index: z.string(),
+				name: z.string(),
+				level: z.number(),
+				url: z.string().optional()
+			})
+		)
+		.optional()
+});
+
+// ============================================================================
+// SRD Subrace Schema
+// ============================================================================
+
+export const SrdSubraceSchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	race: z.object({ index: z.string(), name: z.string() }),
+	desc: z.string().optional(),
+	ability_bonuses: z
+		.array(
+			z.object({
+				ability_score: z.object({ index: z.string(), name: z.string() }),
+				bonus: z.number()
+			})
+		)
+		.optional(),
+	traits: z
+		.array(
+			z.object({
+				index: z.string(),
+				name: z.string(),
+				url: z.string().optional()
+			})
+		)
+		.optional(),
+	starting_proficiencies: z
+		.array(
+			z.object({
+				index: z.string(),
+				name: z.string(),
+				type: z.string()
+			})
+		)
+		.optional()
+});
+
+// ============================================================================
+// SRD Trait Schema
+// ============================================================================
+
+export const SrdTraitSchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	desc: z.string().optional(),
+	races: z
+		.array(
+			z.object({
+				index: z.string(),
+				name: z.string()
+			})
+		)
+		.optional(),
+	url: z.string().optional()
+});
+
+// ============================================================================
+// SRD Condition Schema
+// ============================================================================
+
+export const SrdConditionSchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	desc: z.array(z.string()),
+	url: z.string().optional()
+});
+
+// ============================================================================
+// SRD Skill Schema
+// ============================================================================
+
+export const SrdSkillSchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	ability_score: z.object({ index: z.string(), name: z.string() }),
+	desc: z.array(z.string()).optional(),
+	url: z.string().optional()
+});
+
+// ============================================================================
+// SRD Language Schema
+// ============================================================================
+
+export const SrdLanguageSchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	typical_speakers: z.array(z.string()).optional(),
+	script: z.string().optional(),
+	url: z.string().optional()
+});
+
+// ============================================================================
+// SRD Ability Score Schema
+// ============================================================================
+
+export const SrdAbilityScoreSchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	abbreviation: z.string(),
+	desc: z.array(z.string()).optional(),
+	full_name: z.string().optional(),
+	url: z.string().optional()
+});
+
+// ============================================================================
+// SRD Proficiency Schema
+// ============================================================================
+
+export const SrdProficiencySchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	type: z.string(),
+	url: z.string().optional()
+});
+
+// ============================================================================
+// SRD Damage Type Schema
+// ============================================================================
+
+export const SrdDamageTypeSchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	desc: z.array(z.string()).optional(),
+	url: z.string().optional()
+});
+
+// ============================================================================
+// SRD Magic School Schema
+// ============================================================================
+
+export const SrdMagicSchoolSchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	desc: z.array(z.string()).optional(),
+	url: z.string().optional()
+});
+
+// ============================================================================
+// Open5e Condition Schema (includes A5e conditions)
+// ============================================================================
+
+export const Open5eConditionSchema = z.object({
+	slug: z.string(),
+	name: z.string(),
+	description: z.array(z.string()).optional(),
+	srd_version: z.string().optional()
+});
+
+// ============================================================================
 // Type Exports (derived from Zod schemas)
 // These are the source of truth for TypeScript types
 // ============================================================================
@@ -253,4 +544,177 @@ export type Open5eListResponse = z.infer<typeof Open5eListResponseSchema>;
 export type SrdSpell = z.infer<typeof SrdSpellSchema>;
 export type SrdMonsterSummary = z.infer<typeof SrdMonsterSummarySchema>;
 export type SrdMonsterDetail = z.infer<typeof SrdMonsterDetailSchema>;
+export type SrdSubclass = z.infer<typeof SrdSubclassSchema>;
+export type SrdSubrace = z.infer<typeof SrdSubraceSchema>;
+export type SrdTrait = z.infer<typeof SrdTraitSchema>;
+export type SrdCondition = z.infer<typeof SrdConditionSchema>;
+export type SrdSkill = z.infer<typeof SrdSkillSchema>;
+export type SrdLanguage = z.infer<typeof SrdLanguageSchema>;
+export type SrdAbilityScore = z.infer<typeof SrdAbilityScoreSchema>;
+export type SrdProficiency = z.infer<typeof SrdProficiencySchema>;
+export type SrdDamageType = z.infer<typeof SrdDamageTypeSchema>;
+export type SrdMagicSchool = z.infer<typeof SrdMagicSchoolSchema>;
+export type Open5eCondition = z.infer<typeof Open5eConditionSchema>;
 export type HomebrewItem = z.infer<typeof HomebrewItemSchema>;
+
+// ============================================================================
+// SRD Feature Schema (Class Features)
+// ============================================================================
+
+export const SrdFeatureSchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	level: z.number(),
+	description: z.array(z.string()).optional(),
+	class: z.object({ index: z.string(), name: z.string() }).optional(),
+	subclass: z.object({ index: z.string(), name: z.string() }).optional(),
+	feature_flags: z.array(z.string()).optional(),
+	granters: z
+		.array(
+			z.object({
+				index: z.string(),
+				name: z.string(),
+				type: z.string()
+			})
+		)
+		.optional(),
+	media: z
+		.array(
+			z.object({
+				index: z.string(),
+				title: z.string(),
+				slug: z.string(),
+				url: z.string()
+			})
+		)
+		.optional()
+});
+
+// ============================================================================
+// SRD Alignment Schema
+// ============================================================================
+
+export const SrdAlignmentSchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	abbreviation: z.string(),
+	desc: z.string().optional()
+});
+
+// ============================================================================
+// SRD Equipment Schema
+// ============================================================================
+
+export const SrdEquipmentSchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	equipment_category: z.object({ index: z.string(), name: z.string() }),
+	cost: z.object({ quantity: z.number(), unit: z.string() }).optional(),
+	weight: z.number().optional(),
+	desc: z.array(z.string()).optional(),
+	rarity: z.object({ name: z.string() }).optional(),
+	requires_attunement: z.boolean().optional()
+});
+
+// ============================================================================
+// SRD Weapon Property Schema
+// ============================================================================
+
+export const SrdWeaponPropertySchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	desc: z.array(z.string()).optional(),
+	url: z.string().optional()
+});
+
+// ============================================================================
+// SRD Equipment Category Schema
+// ============================================================================
+
+export const SrdEquipmentCategorySchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	url: z.string().optional()
+});
+
+// ============================================================================
+// SRD Vehicle Schema
+// ============================================================================
+
+export const SrdVehicleSchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	vehicle_category: z.object({ index: z.string(), name: z.string() }),
+	capacity: z.string().optional(),
+	speed: z.object({ quantity: z.number(), unit: z.string() }).optional(),
+	desc: z.array(z.string()).optional(),
+	url: z.string().optional()
+});
+
+// ============================================================================
+// SRD Monster Type Schema
+// ============================================================================
+
+export const SrdMonsterTypeSchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	desc: z.string().optional(),
+	symbol: z.string().optional(),
+	url: z.string().optional()
+});
+
+// ============================================================================
+// SRD Rule Section Schema
+// ============================================================================
+
+export const SrdRuleSectionSchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	desc: z.string(),
+	url: z.string().optional()
+});
+
+// ============================================================================
+// SRD Rule Schema
+// ============================================================================
+
+export const SrdRuleSchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	subsections: z
+		.array(z.object({ index: z.string(), name: z.string(), url: z.string().optional() }))
+		.optional(),
+	url: z.string().optional()
+});
+
+// ============================================================================
+// Open5e Document Schema
+// ============================================================================
+
+export const Open5eDocumentSchema = z.object({
+	slug: z.string(),
+	title: z.string(),
+	author: z.string(),
+	organization: z.string().optional(),
+	version: z.string().optional(),
+	url: z.string(),
+	license: z.string(),
+	created_at: z.string().optional(),
+	updated_at: z.string().optional(),
+	description: z.string().optional()
+});
+
+// ============================================================================
+// Additional Type Exports
+// ============================================================================
+
+export type SrdFeature = z.infer<typeof SrdFeatureSchema>;
+export type SrdAlignment = z.infer<typeof SrdAlignmentSchema>;
+export type SrdEquipment = z.infer<typeof SrdEquipmentSchema>;
+export type SrdWeaponProperty = z.infer<typeof SrdWeaponPropertySchema>;
+export type SrdEquipmentCategory = z.infer<typeof SrdEquipmentCategorySchema>;
+export type SrdVehicle = z.infer<typeof SrdVehicleSchema>;
+export type SrdMonsterType = z.infer<typeof SrdMonsterTypeSchema>;
+export type SrdRuleSection = z.infer<typeof SrdRuleSectionSchema>;
+export type SrdRule = z.infer<typeof SrdRuleSchema>;
+export type Open5eDocument = z.infer<typeof Open5eDocumentSchema>;

@@ -99,13 +99,14 @@ const winstonLogger = winston.createLogger({
 // If we're not in production then log to the `console` with the format:
 // `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
 //
-if (process.env.NODE_ENV === 'development') {
+const shouldSuppress = process.env.SUPPRESS_LOGS === 'true';
+if (process.env.NODE_ENV === 'development' && !shouldSuppress) {
 	winstonLogger.add(
 		new winston.transports.Console({
 			format: combine(colorize(), devFormat)
 		})
 	);
-} else {
+} else if (!shouldSuppress) {
 	// In production, we still often want console logs (e.g. for Docker/Kubernetes)
 	// but typically in JSON format.
 	winstonLogger.add(

@@ -5,8 +5,12 @@
  */
 
 export * from './types';
-export { providerRegistry, ProviderRegistry } from './registry';
+export {
+	providerRegistry,
+	ProviderRegistry,
+	SYNC_CONFIG,
+	PROVIDERS,
+	PRIMARY_PROVIDER_ID
+} from './registry';
 export { Open5eProvider } from './open5e';
-export { FiveEBitsProvider } from './5ebits';
-export { SrdProvider } from './srd';
 export { HomebrewProvider } from './homebrew';

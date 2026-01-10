@@ -35,6 +35,10 @@ export interface TransformResult {
 	summary: string;
 	details: Record<string, unknown>;
 
+	// Source tracking
+	sourceBook?: string;
+	edition?: string;
+
 	// Spell-specific fields
 	spellLevel?: number;
 	spellSchool?: string;
@@ -61,6 +65,95 @@ export interface TransformResult {
 	classHitDie?: number;
 	classProficiencies?: string[];
 	classSpellcasting?: Record<string, unknown>;
+
+	// Subclass-specific fields
+	subclassName?: string;
+	className?: string;
+	subclassFlavor?: string;
+
+	// Subrace-specific fields
+	subraceName?: string;
+	raceName?: string;
+
+	// Trait-specific fields
+	traitName?: string;
+	traitRaces?: string;
+
+	// Condition-specific fields
+	conditionName?: string;
+
+	// Feature-specific fields
+	featureName?: string;
+	featureLevel?: number;
+
+	// Skill-specific fields
+	skillName?: string;
+	abilityScore?: string;
+
+	// Language-specific fields
+	languageName?: string;
+	typicalSpeakers?: string;
+
+	// Alignment-specific fields
+	alignmentName?: string;
+	alignmentAbbreviation?: string;
+
+	// Proficiency-specific fields
+	proficiencyName?: string;
+	proficiencyType?: string;
+
+	// Ability Score fields
+	abilityScoreName?: string;
+	abilityScoreAbbreviation?: string;
+
+	// Damage Type fields
+	damageTypeName?: string;
+
+	// Magic School fields
+	magicSchoolName?: string;
+
+	// Equipment fields
+	equipmentName?: string;
+	equipmentCategory?: string;
+
+	// Weapon Property fields
+	weaponPropertyName?: string;
+
+	// Equipment Category fields
+	equipmentCategoryName?: string;
+
+	// Vehicle fields
+	vehicleName?: string;
+	vehicleCategory?: string;
+
+	// Monster Type fields
+	monsterTypeName?: string;
+
+	// Rule fields
+	ruleName?: string;
+
+	// Rule Section fields
+	ruleSectionName?: string;
+}
+
+/**
+ * Core provider interface
+ */
+export interface CompendiumProvider {
+	readonly id: string;
+	readonly name: string;
+	readonly baseUrl: string;
+	readonly supportedTypes: readonly CompendiumTypeName[];
+
+	fetchList(type: CompendiumTypeName, options?: FetchOptions): Promise<ProviderListResponse>;
+
+	fetchDetail?(type: CompendiumTypeName, externalId: string): Promise<Record<string, unknown>>;
+
+	transformItem(rawItem: unknown, type: CompendiumTypeName): TransformResult;
+
+	healthCheck(): Promise<boolean>;
+
+	fetchAllPages?(type: CompendiumTypeName): Promise<unknown[]>;
 }
 
 /**
@@ -85,57 +178,30 @@ export interface ProviderSyncResult {
 	backgrounds: number;
 	races: number;
 	classes: number;
+	subclasses: number;
+	subraces: number;
+	traits: number;
+	conditions: number;
+	features: number;
+	skills: number;
+	languages: number;
+	alignments: number;
+	proficiencies: number;
+	abilityScores: number;
+	damageTypes: number;
+	magicSchools: number;
+	equipment: number;
+	weaponProperties: number;
+	equipmentCategories: number;
+	vehicles: number;
+	monsterTypes: number;
+	rules: number;
+	ruleSections: number;
+	weapons: number;
+	armor: number;
+	planes: number;
+	sections: number;
 	totalItems: number;
+	skipped: number;
 	errors: string[];
-}
-
-/**
- * Core provider interface
- */
-export interface CompendiumProvider {
-	readonly id: string;
-	readonly name: string;
-	readonly baseUrl: string;
-	readonly supportedTypes: readonly CompendiumTypeName[];
-
-	fetchList(type: CompendiumTypeName, options?: FetchOptions): Promise<ProviderListResponse>;
-
-	fetchDetail?(type: CompendiumTypeName, externalId: string): Promise<Record<string, unknown>>;
-
-	transformItem(rawItem: unknown, type: CompendiumTypeName): TransformResult;
-
-	healthCheck(): Promise<boolean>;
-
-	fetchAllPages?(type: CompendiumTypeName): Promise<unknown[]>;
-}
-
-/**
- * Provider configuration
- */
-export interface ProviderConfig {
-	primaryProvider?: string;
-	providers: ProviderSettings[];
-	sync?: SyncConfig;
-}
-
-/**
- * Settings for a single provider
- */
-export interface ProviderSettings {
-	id: string;
-	name: string;
-	enabled: boolean;
-	type: 'open5e' | '5e-bits' | 'srd' | 'homebrew' | 'custom';
-	baseUrl?: string;
-	supportedTypes?: CompendiumTypeName[];
-	options?: Record<string, unknown>;
-}
-
-/**
- * Sync configuration
- */
-export interface SyncConfig {
-	maxConcurrency?: number;
-	retryAttempts?: number;
-	retryDelayMs?: number;
 }

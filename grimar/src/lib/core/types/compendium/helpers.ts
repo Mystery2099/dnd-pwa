@@ -11,7 +11,9 @@ import { colorMap, getListItemColor, DEFAULT_COLOR } from '$lib/core/constants/c
  * Extract school name from spell details
  */
 export function getSpellSchool(item: CompendiumItem): string {
-	const school = item.details.school;
+	const details = item.details;
+	if (!details) return 'Unknown';
+	const school = (details as Record<string, unknown>).school;
 	if (typeof school === 'string') return school;
 	if (school && typeof school === 'object' && 'name' in school) {
 		return String(school.name);

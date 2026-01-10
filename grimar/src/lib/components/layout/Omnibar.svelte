@@ -30,6 +30,8 @@
 		slug: string;
 		summary: string | null;
 		source: string;
+		provider: string;
+		sourceBook: string;
 	}
 
 	let open = $state(false);
@@ -111,7 +113,7 @@
 
 	// Handle search result selection
 	function handleSearchSelect(result: SearchResult) {
-		const href = `/compendium/${result.typePath}/${result.slug}`;
+		const href = `/compendium/${result.typePath}/${result.provider}/${result.sourceBook}/${result.slug}`;
 		goto(href);
 		open = false;
 		inputValue = '';
@@ -240,12 +242,24 @@
 								class="text-theme-primary hover:bg-theme-overlay flex w-full cursor-pointer flex-col items-start gap-1 border-none bg-transparent p-[10px] text-left"
 								onclick={() => handleSearchSelect(result)}
 							>
-								<div class="flex w-full items-center gap-2">
+								<div class="flex w-full flex-wrap items-center gap-2">
 									<span class="text-sm font-medium">{result.name}</span>
 									<span
 										class="text-theme-muted bg-theme-card rounded px-1.5 py-0.5 text-[10px] uppercase"
 										>{result.type}</span
 									>
+									{#if result.sourceBook}
+										<span
+											class="text-theme-muted bg-theme-overlay rounded px-1.5 py-0.5 text-[10px]"
+											>{result.sourceBook}</span
+										>
+									{/if}
+									{#if result.provider}
+										<span
+											class="text-theme-muted bg-theme-card rounded px-1.5 py-0.5 text-[10px] font-medium"
+											>{result.provider === '5ebits' ? '5e-Bits' : result.provider}</span
+										>
+									{/if}
 								</div>
 								{#if result.summary}
 									<span class="text-theme-secondary w-full text-xs">{result.summary}</span>

@@ -1,0 +1,190 @@
+<script lang="ts">
+	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
+	import { browser } from '$app/environment';
+	import { open5eToInternalPath } from '$lib/core/utils/link-interceptor';
+
+	interface Props {
+		monster: Record<string, unknown> & { externalId?: string };
+	}
+
+	let { monster }: Props = $props();
+
+	// Helper to get ability modifier
+	function getMod(stat: unknown): string {
+		const numStat = typeof stat === 'number' ? stat : Number(stat) || 10;
+		const mod = Math.floor((numStat - 10) / 2);
+		return mod >= 0 ? `+${mod}` : String(mod);
+	}
+
+	// Safely access armor class
+	const armorClass = $derived(
+		monster.armor_class as number | { type: string; value: number }[] | undefined
+	);
+	const hitPoints = $derived(monster.hit_points as number);
+	const hitDice = $derived(monster.hit_dice as string | undefined);
+	const speed = $derived(monster.speed as Record<string, string> | undefined);
+	const actions = $derived(monster.actions as Array<Record<string, unknown>> | undefined);
+	const specialAbilities = $derived(
+		monster.special_abilities as Array<Record<string, unknown>> | undefined
+	);
+
+	// Lazy load svelte-markdown only when needed
+	let SvelteMarkdown: any = $state(null);
+	let hasMarkdown = $derived(
+		(actions?.some((a) => a.desc) ?? false) || (specialAbilities?.some((s) => s.desc) ?? false)
+	);
+
+	// Custom link renderer for svelte-markdown
+	const renderers = $derived({
+		link: {
+			component: 'a',
+			props: {
+				href: (props: { href: string }) => props.href,
+				onclick: (props: { href: string }) => {
+					return function handleClick(event: MouseEvent) {
+						event.preventDefault();
+						const href = props.href;
+						const internalPath = open5eToInternalPath(href);
+
+						if (internalPath && browser) {
+							goto(internalPath);
+						} else if (browser) {
+							window.open(href, '_blank', 'noopener,noreferrer');
+						}
+					};
+				}
+			}
+		}
+	});
+
+	onMount(async () => {
+		if (hasMarkdown) {
+			const module = await import('svelte-markdown');
+			SvelteMarkdown = module.default;
+		}
+	});
+</script>
+
+<!-- Monster Stats Header -->
+<div
+	class="mb-6 grid grid-cols-3 gap-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4"
+>
+	<div class="text-center">
+		<div class="text-xs font-bold text-[var(--color-text-muted)] uppercase">AC</div>
+		<div class="text-xl font-bold text-[var(--color-text-primary)]">
+			{Array.isArray(armorClass) ? armorClass[0]?.value : armorClass}
+		</div>
+		<div class="text-xs text-[var(--color-text-muted)]">
+			{Array.isArray(armorClass) ? armorClass[0]?.type : 'Natural'}
+		</div>
+	</div>
+	<div class="border-l border-[var(--color-border)] text-center">
+		<div class="text-xs font-bold text-[var(--color-text-muted)] uppercase">HP</div>
+		<div class="text-xl font-bold text-[var(--color-accent)]">{hitPoints}</div>
+		{#if hitDice}
+			<div class="text-xs text-[var(--color-text-muted)]">{hitDice}</div>
+		{/if}
+	</div>
+	<div class="border-l border-[var(--color-border)] text-center">
+		<div class="text-xs font-bold text-[var(--color-text-muted)] uppercase">Speed</div>
+		<div class="mt-1 text-sm font-medium text-[var(--color-text-primary)]">
+			{speed
+				? Object.entries(speed)
+						.map(([k, v]) => `${k} ${v}`)
+						.join(', ')
+				: 'N/A'}
+		</div>
+	</div>
+</div>
+
+<!-- Ability Scores -->
+<div class="mb-8 grid grid-cols-6 gap-2">
+	{#each ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'] as stat (stat)}
+		{@const value = monster[stat] as number}
+		<div
+			class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-overlay)] p-2 text-center"
+		>
+			<div class="text-[10px] font-bold text-[var(--color-text-muted)] uppercase">
+				{stat.slice(0, 3)}
+			</div>
+			<div class="text-sm font-bold text-[var(--color-text-primary)]">{value}</div>
+			<div class="text-[10px] text-[var(--color-text-secondary)]">{getMod(value)}</div>
+		</div>
+	{/each}
+</div>
+
+<!-- Actions -->
+{#if actions}
+	<h3
+		class="mb-4 border-b border-[var(--color-border)] pb-2 font-bold text-[var(--color-text-primary)]"
+	>
+		Actions
+	</h3>
+	<div class="space-y-6">
+		{#each actions as action (action.name)}
+			<div>
+				<div
+					class="mb-1 flex items-center gap-2 text-lg font-bold text-[var(--color-text-primary)]"
+				>
+					{action.name}
+					{#if action.attack_bonus}
+						<span
+							class="rounded bg-[var(--color-bg-card)] px-1.5 py-0.5 text-xs text-[var(--color-text-secondary)]"
+							>+{action.attack_bonus} to hit</span
+						>
+					{/if}
+				</div>
+				{#if action.desc}
+					{#if SvelteMarkdown}
+						<div class="prose prose-sm prose-invert max-w-none text-[var(--color-text-secondary)]">
+							<SvelteMarkdown source={action.desc as string} {renderers} />
+						</div>
+					{:else}
+						<div class="prose prose-sm prose-invert max-w-none text-[var(--color-text-secondary)]">
+							<p class="whitespace-pre-wrap">{action.desc}</p>
+						</div>
+					{/if}
+				{/if}
+				{#if action.damage}
+					<div class="mt-1 font-mono text-xs text-[var(--color-accent)]">
+						Damage:
+						{Array.isArray(action.damage)
+							? action.damage.map((d: Record<string, unknown>) => d.damage_dice).join(' + ')
+							: action.damage}
+					</div>
+				{/if}
+			</div>
+		{/each}
+	</div>
+{/if}
+
+{#if specialAbilities}
+	<h3
+		class="mt-8 mb-4 border-b border-[var(--color-border)] pb-2 font-bold text-[var(--color-text-primary)]"
+	>
+		Traits
+	</h3>
+	<div class="space-y-4">
+		{#each specialAbilities as trait (trait.name)}
+			<div>
+				<div class="mb-1 font-bold text-[var(--color-text-primary)]">{trait.name}</div>
+				{#if trait.desc}
+					{#if SvelteMarkdown}
+						<div class="prose prose-sm prose-invert max-w-none text-[var(--color-text-secondary)]">
+							<SvelteMarkdown source={trait.desc as string} {renderers} />
+						</div>
+					{:else}
+						<div class="prose prose-sm prose-invert max-w-none text-[var(--color-text-secondary)]">
+							<p class="whitespace-pre-wrap">{trait.desc}</p>
+						</div>
+					{/if}
+				{/if}
+			</div>
+		{/each}
+	</div>
+{/if}
+
+<div class="mt-8 font-mono text-xs text-[var(--color-text-muted)]">
+	ID: {monster.externalId ?? monster.id}
+</div>

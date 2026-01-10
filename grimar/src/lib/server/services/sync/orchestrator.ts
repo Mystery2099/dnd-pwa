@@ -5,8 +5,10 @@
  * Uses retry and metrics modules for reliability and monitoring.
  */
 
-import { providerRegistry } from '$lib/server/providers';
+import { providerRegistry, SYNC_CONFIG } from '$lib/server/providers';
 import { compendiumCache, compendiumItems } from '$lib/server/db/schema';
+import { eq, and } from 'drizzle-orm';
+import { syncItemToFts } from '$lib/server/db/db-fts';
 import type { Db } from '$lib/server/db';
 import type { CompendiumTypeName } from '$lib/core/types/compendium';
 import type {
@@ -14,6 +16,7 @@ import type {
 	ProviderSyncResult,
 	TransformResult
 } from '$lib/server/providers/types';
+import type { SyncProgressCallback } from './progress';
 import { withRetry } from './retry';
 import {
 	createSyncMetrics,
@@ -24,14 +27,6 @@ import {
 import { cleanupDisabledSources } from './sync-cleanup';
 import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import { join } from 'path';
-import {
-	logSyncStart,
-	logSyncEnd,
-	logItemStart,
-	logTransformSuccess,
-	logTransformFailed,
-	logInsertFailed
-} from './debug-sync';
 import { createModuleLogger } from '$lib/server/logger';
 
 const log = createModuleLogger('SyncOrchestrator');
@@ -47,13 +42,17 @@ interface SyncOptions {
 	maxRetries?: number;
 	/** Delay between retries in ms (exponential backoff applied) */
 	retryDelayMs?: number;
+	/** Progress callback for real-time updates */
+	onProgress?: SyncProgressCallback;
 }
 
-// Default retry configuration
-const DEFAULT_MAX_RETRIES = 3;
-const DEFAULT_RETRY_DELAY_MS = 1000;
+// Sync configuration from registry (code-driven, not hardcoded)
+const MAX_RETRIES = SYNC_CONFIG.retryAttempts;
+const RETRY_DELAY_MS = SYNC_CONFIG.retryDelayMs;
 // Batch size for transaction processing
 const BATCH_SIZE = 100;
+// Emit progress every N items during transformation
+const TRANSFORM_PROGRESS_INTERVAL = 50;
 
 // Type canonicalization mapping (handles singular/plural variations from different APIs)
 const TYPE_CANONICAL: Record<string, CompendiumTypeName> = {
@@ -70,11 +69,69 @@ const TYPE_CANONICAL: Record<string, CompendiumTypeName> = {
 	race: 'race',
 	races: 'race',
 	class: 'class',
-	classes: 'class'
+	classes: 'class',
+	subclass: 'subclass',
+	subclasses: 'subclass',
+	subrace: 'subrace',
+	subraces: 'subrace',
+	trait: 'trait',
+	traits: 'trait',
+	condition: 'condition',
+	conditions: 'condition',
+	feature: 'feature',
+	features: 'feature',
+	skill: 'skill',
+	skills: 'skill',
+	language: 'language',
+	languages: 'language',
+	alignment: 'alignment',
+	alignments: 'alignment',
+	proficiency: 'proficiency',
+	proficiencies: 'proficiency',
+	abilityScore: 'abilityScore',
+	abilityScores: 'abilityScore',
+	damageType: 'damageType',
+	damageTypes: 'damageType',
+	magicSchool: 'magicSchool',
+	magicSchools: 'magicSchool',
+	equipment: 'equipment',
+	equipmentCategory: 'equipmentCategory',
+	equipmentCategories: 'equipmentCategory',
+	weaponProperty: 'weaponProperty',
+	weaponProperties: 'weaponProperty',
+	vehicle: 'vehicle',
+	vehicles: 'vehicle',
+	monsterType: 'monsterType',
+	monsterTypes: 'monsterType',
+	rule: 'rule',
+	rules: 'rule',
+	ruleSection: 'ruleSection',
+	ruleSections: 'ruleSection',
+	weapon: 'weapon',
+	weapons: 'weapon',
+	armor: 'armor',
+	plane: 'plane',
+	planes: 'plane',
+	section: 'section',
+	sections: 'section'
 };
 
 function normalizeType(type: string): CompendiumTypeName | null {
 	return TYPE_CANONICAL[type.toLowerCase()] || null;
+}
+
+/**
+ * Emit a progress event safely (wraps errors to prevent sync failure)
+ */
+function emitProgress(
+	onProgress: SyncProgressCallback | undefined,
+	event: Parameters<SyncProgressCallback>[0]
+): void {
+	try {
+		onProgress?.(event);
+	} catch (error) {
+		log.warn({ error }, 'Progress callback error');
+	}
 }
 
 /**
@@ -96,11 +153,24 @@ export async function syncAllProviders(
 	// Build set of types to sync based on enabled providers' supportedTypes
 	const allProviderTypes = new Set<CompendiumTypeName>();
 	for (const provider of enabledProviders) {
+		log.debug(
+			{ providerId: provider.id, types: provider.supportedTypes },
+			'Provider supported types'
+		);
 		for (const t of provider.supportedTypes) {
 			const normalized = normalizeType(t);
 			if (normalized) allProviderTypes.add(normalized);
 		}
 	}
+
+	log.info(
+		{
+			enabledProviders: enabledProviders.length,
+			totalTypes: allProviderTypes.size,
+			types: Array.from(allProviderTypes)
+		},
+		'Types to sync'
+	);
 
 	// Use only types that at least one provider supports
 	const typesToSync = options?.types?.length
@@ -108,8 +178,9 @@ export async function syncAllProviders(
 		: Array.from(allProviderTypes);
 
 	const providerIds = options?.providerIds;
-	const maxRetries = options?.maxRetries ?? DEFAULT_MAX_RETRIES;
-	const retryDelayMs = options?.retryDelayMs ?? DEFAULT_RETRY_DELAY_MS;
+	const maxRetries = options?.maxRetries ?? MAX_RETRIES;
+	const retryDelayMs = options?.retryDelayMs ?? RETRY_DELAY_MS;
+	const onProgress = options?.onProgress;
 
 	log.info(
 		{
@@ -133,11 +204,29 @@ export async function syncAllProviders(
 			continue;
 		}
 
+		// Emit provider:start
+		emitProgress(onProgress, {
+			phase: 'provider:start',
+			providerId: provider.id,
+			providerName: provider.name,
+			timestamp: new Date()
+		});
+
 		// Use retry logic for provider sync
 		const providerResult = await withRetry(
-			async () => syncSingleProvider(db, provider.id, typesToSync, metrics),
+			async () => syncSingleProvider(db, provider.id, typesToSync, metrics, onProgress),
 			{ maxRetries, retryDelayMs, operationName: provider.name }
 		);
+
+		// Emit provider:complete
+		emitProgress(onProgress, {
+			phase: 'provider:complete',
+			providerId: provider.id,
+			providerName: provider.name,
+			total: providerResult.totalItems,
+			timestamp: new Date()
+		});
+
 		results.push(providerResult);
 	}
 
@@ -169,7 +258,8 @@ async function syncSingleProvider(
 	db: Db,
 	providerId: string,
 	types: CompendiumTypeName[],
-	metrics: ReturnType<typeof createSyncMetrics>
+	metrics: ReturnType<typeof createSyncMetrics>,
+	onProgress?: SyncProgressCallback
 ): Promise<ProviderSyncResult> {
 	const registry = providerRegistry;
 	const provider = registry.getProvider(providerId);
@@ -184,7 +274,31 @@ async function syncSingleProvider(
 			backgrounds: 0,
 			races: 0,
 			classes: 0,
+			subclasses: 0,
+			subraces: 0,
+			traits: 0,
+			conditions: 0,
+			features: 0,
+			skills: 0,
+			languages: 0,
+			alignments: 0,
+			proficiencies: 0,
+			abilityScores: 0,
+			damageTypes: 0,
+			magicSchools: 0,
+			equipment: 0,
+			weaponProperties: 0,
+			equipmentCategories: 0,
+			vehicles: 0,
+			monsterTypes: 0,
+			rules: 0,
+			ruleSections: 0,
+			weapons: 0,
+			armor: 0,
+			planes: 0,
+			sections: 0,
 			totalItems: 0,
+			skipped: 0,
 			errors: [`Provider not found: ${providerId}`]
 		};
 	}
@@ -198,11 +312,35 @@ async function syncSingleProvider(
 		backgrounds: 0,
 		races: 0,
 		classes: 0,
+		subclasses: 0,
+		subraces: 0,
+		traits: 0,
+		conditions: 0,
+		features: 0,
+		skills: 0,
+		languages: 0,
+		alignments: 0,
+		proficiencies: 0,
+		abilityScores: 0,
+		damageTypes: 0,
+		magicSchools: 0,
+		equipment: 0,
+		weaponProperties: 0,
+		equipmentCategories: 0,
+		vehicles: 0,
+		monsterTypes: 0,
+		rules: 0,
+		ruleSections: 0,
+		weapons: 0,
+		armor: 0,
+		planes: 0,
+		sections: 0,
 		totalItems: 0,
+		skipped: 0,
 		errors: []
 	};
 
-	log.info({ providerName: provider.name }, 'Syncing provider');
+	log.info({ providerName: provider.name, typesToSync: types.length }, 'Syncing provider');
 
 	for (const type of types) {
 		// Check if provider supports this type
@@ -214,10 +352,10 @@ async function syncSingleProvider(
 		try {
 			// Use retry logic for type sync
 			const itemCount = await withRetry(
-				async () => syncTypeFromProvider(db, provider.id, type, provider, metrics),
+				async () => syncTypeFromProvider(db, provider.id, type, provider, metrics, onProgress),
 				{
-					maxRetries: DEFAULT_MAX_RETRIES,
-					retryDelayMs: DEFAULT_RETRY_DELAY_MS,
+					maxRetries: MAX_RETRIES,
+					retryDelayMs: RETRY_DELAY_MS,
 					operationName: `${provider.name}/${type}`
 				}
 			);
@@ -245,12 +383,91 @@ async function syncSingleProvider(
 				case 'class':
 					result.classes = itemCount;
 					break;
+				case 'subclass':
+					result.subclasses = itemCount;
+					break;
+				case 'subrace':
+					result.subraces = itemCount;
+					break;
+				case 'trait':
+					result.traits = itemCount;
+					break;
+				case 'condition':
+					result.conditions = itemCount;
+					break;
+				case 'feature':
+					result.features = itemCount;
+					break;
+				case 'skill':
+					result.skills = itemCount;
+					break;
+				case 'language':
+					result.languages = itemCount;
+					break;
+				case 'alignment':
+					result.alignments = itemCount;
+					break;
+				case 'proficiency':
+					result.proficiencies = itemCount;
+					break;
+				case 'abilityScore':
+					result.abilityScores = itemCount;
+					break;
+				case 'damageType':
+					result.damageTypes = itemCount;
+					break;
+				case 'magicSchool':
+					result.magicSchools = itemCount;
+					break;
+				case 'equipment':
+					result.equipment = itemCount;
+					break;
+				case 'weaponProperty':
+					result.weaponProperties = itemCount;
+					break;
+				case 'equipmentCategory':
+					result.equipmentCategories = itemCount;
+					break;
+				case 'vehicle':
+					result.vehicles = itemCount;
+					break;
+				case 'monsterType':
+					result.monsterTypes = itemCount;
+					break;
+				case 'rule':
+					result.rules = itemCount;
+					break;
+				case 'ruleSection':
+					result.ruleSections = itemCount;
+					break;
+				case 'weapon':
+					result.weapons = itemCount;
+					break;
+				case 'armor':
+					result.armor = itemCount;
+					break;
+				case 'plane':
+					result.planes = itemCount;
+					break;
+				case 'section':
+					result.sections = itemCount;
+					break;
 			}
 		} catch (error) {
 			const errorMessage = error instanceof Error ? error.message : String(error);
 			result.errors.push(`Failed to sync ${type}: ${errorMessage}`);
 			recordError(metrics, provider.id, errorMessage);
 			log.error({ providerId: provider.id, type, error }, 'Error syncing type');
+
+			// Emit error event
+			emitProgress(onProgress, {
+				phase: 'error',
+				providerId: provider.id,
+				providerName: provider.name,
+				type,
+				error: errorMessage,
+				timestamp: new Date()
+			});
 		}
 	}
 
@@ -269,23 +486,55 @@ async function syncTypeFromProvider(
 	providerId: string,
 	type: CompendiumTypeName,
 	provider: CompendiumProvider,
-	metrics: ReturnType<typeof createSyncMetrics>
+	metrics: ReturnType<typeof createSyncMetrics>,
+	onProgress?: SyncProgressCallback
 ): Promise<number> {
 	// Fetch all items from provider
 	if (!provider.fetchAllPages) {
 		throw new Error(`Provider ${provider.id} does not support bulk fetch`);
 	}
 
+	// Emit fetch:start
+	emitProgress(onProgress, {
+		phase: 'fetch:start',
+		providerId,
+		providerName: provider.name,
+		type,
+		timestamp: new Date()
+	});
+
 	// Fetch with retry logic
 	const rawItems = await withRetry(async () => provider.fetchAllPages!(type), {
-		maxRetries: DEFAULT_MAX_RETRIES,
-		retryDelayMs: DEFAULT_RETRY_DELAY_MS,
+		maxRetries: MAX_RETRIES,
+		retryDelayMs: RETRY_DELAY_MS,
 		operationName: `${provider.id}/${type}/fetch`
 	});
 
-	logSyncStart(type, providerId, rawItems.length);
+	// Emit fetch:complete
+	emitProgress(onProgress, {
+		phase: 'fetch:complete',
+		providerId,
+		providerName: provider.name,
+		type,
+		current: rawItems.length,
+		total: rawItems.length,
+		timestamp: new Date()
+	});
+
+	log.info({ type, providerId, itemCount: rawItems.length }, 'Starting sync');
 
 	let count = 0;
+
+	// Emit transform:start
+	emitProgress(onProgress, {
+		phase: 'transform:start',
+		providerId,
+		providerName: provider.name,
+		type,
+		current: 0,
+		total: rawItems.length,
+		timestamp: new Date()
+	});
 
 	// Transform all items first (outside transaction)
 	const transformedItems: Array<{ raw: unknown; transformed: TransformResult }> = [];
@@ -293,7 +542,6 @@ async function syncTypeFromProvider(
 
 	for (let index = 0; index < rawItems.length; index++) {
 		const rawItem = rawItems[index];
-		logItemStart(index, rawItems.length);
 
 		try {
 			const transformed = await provider.transformItem(rawItem, type);
@@ -301,18 +549,45 @@ async function syncTypeFromProvider(
 			// Deduplicate: keep only the first occurrence of each (type, source, externalId)
 			const key = `${type}:${providerId}:${transformed.externalId}`;
 			if (seenExternalIds.has(key)) {
-				logTransformFailed(type, transformed.externalId, 'Duplicate item skipped', { index });
+				log.debug({ type, externalId: transformed.externalId, index }, 'Duplicate item skipped');
 				continue;
 			}
 			seenExternalIds.set(key, index);
 
-			logTransformSuccess(type, transformed.externalId, transformed.name);
+			log.debug(
+				{ type, externalId: transformed.externalId, name: transformed.name },
+				'Item transformed'
+			);
 			transformedItems.push({ raw: rawItem, transformed });
 		} catch (error) {
 			const errorMessage = error instanceof Error ? error.message : String(error);
-			logTransformFailed(type, 'unknown', errorMessage, { index });
+			log.warn({ type, index, error: errorMessage }, 'Item transform failed');
+		}
+
+		// Emit transform:progress every N items
+		if (index > 0 && index % TRANSFORM_PROGRESS_INTERVAL === 0) {
+			emitProgress(onProgress, {
+				phase: 'transform:progress',
+				providerId,
+				providerName: provider.name,
+				type,
+				current: index,
+				total: rawItems.length,
+				timestamp: new Date()
+			});
 		}
 	}
+
+	// Emit transform:complete
+	emitProgress(onProgress, {
+		phase: 'transform:complete',
+		providerId,
+		providerName: provider.name,
+		type,
+		current: transformedItems.length,
+		total: rawItems.length,
+		timestamp: new Date()
+	});
 
 	if (seenExternalIds.size < rawItems.length) {
 		log.info(
@@ -327,6 +602,17 @@ async function syncTypeFromProvider(
 	if (!existsSync(typeDir)) {
 		mkdirSync(typeDir, { recursive: true });
 	}
+
+	// Emit insert:start
+	emitProgress(onProgress, {
+		phase: 'insert:start',
+		providerId,
+		providerName: provider.name,
+		type,
+		current: 0,
+		total: transformedItems.length,
+		timestamp: new Date()
+	});
 
 	for (let batchIndex = 0; batchIndex < transformedItems.length; batchIndex += BATCH_SIZE) {
 		const batch = transformedItems.slice(batchIndex, batchIndex + BATCH_SIZE);
@@ -343,7 +629,6 @@ async function syncTypeFromProvider(
 						writeFileSync(fullPath, JSON.stringify(transformed.details, null, 2));
 					} catch (fsError) {
 						log.error({ filePath: fullPath, error: fsError }, 'Failed to write file');
-						// We continue with DB insert anyway, but jsonPath might be broken
 					}
 
 					// Store raw cache data
@@ -405,20 +690,76 @@ async function syncTypeFromProvider(
 							}
 						})
 						.execute();
+
+					// Sync to FTS index (after successful DB insert)
+					// Note: We need to get the ID of the inserted/updated item
+					const insertedItem = await tx.query.compendiumItems.findFirst({
+						where: and(
+							eq(compendiumItems.type, type),
+							eq(compendiumItems.source, providerId),
+							eq(compendiumItems.externalId, transformed.externalId)
+						)
+					});
+					if (insertedItem) {
+						await syncItemToFts(
+							insertedItem.id,
+							insertedItem.name,
+							insertedItem.summary,
+							insertedItem.details as Record<string, unknown>,
+							insertedItem.content as string | null
+						);
+					}
 				}
 			});
 
 			count += batch.length;
 			recordItemProcessed(metrics, { batchSize: batch.length });
+
+			// Emit insert:progress every batch
+			emitProgress(onProgress, {
+				phase: 'insert:progress',
+				providerId,
+				providerName: provider.name,
+				type,
+				current: count,
+				total: transformedItems.length,
+				timestamp: new Date()
+			});
 		} catch (error) {
 			const errorMessage = error instanceof Error ? error.message : String(error);
-			logInsertFailed(type, 'batch', errorMessage);
+			const errorDetails =
+				error instanceof Error
+					? {
+							message: error.message,
+							stack: error.stack,
+							cause: error.cause
+						}
+					: { details: error };
+
+			log.error(
+				{ type, error: errorDetails, batchIndex, batchSize: batch.length },
+				'Batch insert failed'
+			);
 			recordError(metrics, providerId, errorMessage);
-			// Continue with next batch
+
+			// Continue with next batch instead of failing entire type sync
+			// This allows partial success even if some batches fail
+			continue;
 		}
 	}
 
-	logSyncEnd(type, count, rawItems.length);
+	// Emit insert:complete
+	emitProgress(onProgress, {
+		phase: 'insert:complete',
+		providerId,
+		providerName: provider.name,
+		type,
+		current: count,
+		total: transformedItems.length,
+		timestamp: new Date()
+	});
+
+	log.info({ type, count, total: rawItems.length }, 'Sync ended');
 	return count;
 }
 
@@ -460,9 +801,32 @@ export async function syncProviderById(
 		'feat',
 		'background',
 		'race',
-		'class'
+		'class',
+		'subclass',
+		'subrace',
+		'trait',
+		'condition',
+		'feature',
+		'skill',
+		'language',
+		'alignment',
+		'proficiency',
+		'abilityScore',
+		'damageType',
+		'magicSchool',
+		'equipment',
+		'weaponProperty',
+		'equipmentCategory',
+		'vehicle',
+		'monsterType',
+		'rule',
+		'ruleSection',
+		'weapon',
+		'armor',
+		'plane',
+		'section'
 	];
 	const metrics = createSyncMetrics();
 
-	return syncSingleProvider(db, providerId, types, metrics);
+	return syncSingleProvider(db, providerId, types, metrics, options?.onProgress);
 }

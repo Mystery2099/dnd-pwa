@@ -1,7 +1,7 @@
 /**
  * Scheduling service for compendium sync operations
  */
-import { syncAllProviders } from '../multiProviderSync';
+import { syncAllProviders } from '../sync/orchestrator';
 import { getDb } from '$lib/server/db';
 import { createModuleLogger } from '$lib/server/logger';
 

@@ -9,9 +9,9 @@
 	import CompendiumShell from '$lib/features/compendium/components/layout/CompendiumShell.svelte';
 	import CompendiumSidebar from '$lib/features/compendium/components/layout/CompendiumSidebar.svelte';
 	import FilterGroup from '$lib/features/compendium/components/layout/FilterGroup.svelte';
-	import CompendiumListItem from '$lib/features/compendium/components/CompendiumListItem.svelte';
-	import CompendiumCardItem from '$lib/features/compendium/components/CompendiumItem.svelte';
-	import CompendiumDetail from '$lib/features/compendium/components/CompendiumDetail.svelte';
+	import CompendiumListItem from '$lib/features/compendium/components/EntryListItem.svelte';
+	import CompendiumCardItem from '$lib/features/compendium/components/EntryCard.svelte';
+	import CompendiumEntryView from '$lib/features/compendium/components/CompendiumEntryView.svelte';
 	import VirtualList from '$lib/components/ui/VirtualList.svelte';
 	import { Download, RefreshCw } from 'lucide-svelte';
 	import { CompendiumFilterStore } from '$lib/features/compendium/stores/filter.svelte';
@@ -22,14 +22,14 @@
 	import { userSettingsStore } from '$lib/core/client/userSettingsStore.svelte';
 	import VirtualGrid from '$lib/components/ui/VirtualGrid.svelte';
 
-	// Detail Content Components
-	import SpellDetailContent from '$lib/features/compendium/components/detail/SpellDetailContent.svelte';
-	import MonsterDetailContent from '$lib/features/compendium/components/detail/MonsterDetailContent.svelte';
-	import FeatDetailContent from '$lib/features/compendium/components/detail/FeatDetailContent.svelte';
-	import BackgroundDetailContent from '$lib/features/compendium/components/detail/BackgroundDetailContent.svelte';
-	import RaceDetailContent from '$lib/features/compendium/components/detail/RaceDetailContent.svelte';
-	import ClassDetailContent from '$lib/features/compendium/components/detail/ClassDetailContent.svelte';
-	import ItemDetailContent from '$lib/features/compendium/components/detail/ItemDetailContent.svelte';
+	// Entry Content Components
+	import SpellEntryContent from '$lib/features/compendium/components/entry-content/SpellEntryContent.svelte';
+	import MonsterEntryContent from '$lib/features/compendium/components/entry-content/MonsterEntryContent.svelte';
+	import FeatEntryContent from '$lib/features/compendium/components/entry-content/FeatEntryContent.svelte';
+	import BackgroundEntryContent from '$lib/features/compendium/components/entry-content/BackgroundEntryContent.svelte';
+	import RaceEntryContent from '$lib/features/compendium/components/entry-content/RaceEntryContent.svelte';
+	import ClassEntryContent from '$lib/features/compendium/components/entry-content/ClassEntryContent.svelte';
+	import ItemEntryContent from '$lib/features/compendium/components/entry-content/ItemEntryContent.svelte';
 
 	let { data } = $props();
 
@@ -103,7 +103,9 @@
 		selectedItem = item;
 		// Update URL to include item identifier for deep linking
 		const itemId = item.externalId || item.name?.toLowerCase().replace(/\s+/g, '-');
-		pushState(`/compendium/${pathType}/${itemId}`, {});
+		const provider = item.source || '5ebits';
+		const sourceBook = item.sourceBook || 'SRD';
+		pushState(`/compendium/${pathType}/${provider}/${sourceBook}/${itemId}`, {});
 	}
 
 	// Sync filters with URL state
@@ -372,30 +374,34 @@
 
 	<!-- Detail View Overlay -->
 	{#if selectedItem}
+		{@const provider = selectedItem.source || '5ebits'}
+		{@const sourceBook = selectedItem.sourceBook || 'SRD'}
 		<div class="absolute inset-0 z-50 p-2 lg:p-4" transition:fly={{ x: 20, duration: 300 }}>
-			<CompendiumDetail
+			<CompendiumEntryView
 				title={selectedItem.name}
 				type={config.ui.displayName}
 				source={selectedItem.source}
+				{provider}
+				{sourceBook}
 				tags={config.display.tags(selectedItem)}
 				onClose={closeOverlay}
 				accentColor={config.display.detailAccent(selectedItem)}
 				animate={false}
 			>
 				{#if dbType === 'spell'}
-					<SpellDetailContent spell={selectedItem.details} />
+					<SpellEntryContent spell={selectedItem.details} />
 				{:else if dbType === 'monster'}
-					<MonsterDetailContent monster={selectedItem.details} />
+					<MonsterEntryContent monster={selectedItem.details} />
 				{:else if dbType === 'feat'}
-					<FeatDetailContent feat={selectedItem.details} />
+					<FeatEntryContent feat={selectedItem.details} />
 				{:else if dbType === 'background'}
-					<BackgroundDetailContent background={selectedItem.details} />
+					<BackgroundEntryContent background={selectedItem.details} />
 				{:else if dbType === 'race'}
-					<RaceDetailContent race={selectedItem.details} />
+					<RaceEntryContent race={selectedItem.details} />
 				{:else if dbType === 'class'}
-					<ClassDetailContent classData={selectedItem.details} />
+					<ClassEntryContent classData={selectedItem.details} />
 				{:else if dbType === 'item'}
-					<ItemDetailContent item={selectedItem.details} />
+					<ItemEntryContent item={selectedItem.details} />
 				{:else}
 					<div class="space-y-4">
 						<div
@@ -405,7 +411,7 @@
 						</div>
 					</div>
 				{/if}
-			</CompendiumDetail>
+			</CompendiumEntryView>
 		</div>
 	{/if}
 </CompendiumShell>

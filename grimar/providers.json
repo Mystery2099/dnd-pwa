@@ -1,45 +1,8 @@
 {
-	"primaryProvider": "5e-bits",
-	"providers": [
-		{
-			"id": "5e-bits",
-			"name": "5e-bits",
-			"enabled": true,
-			"type": "5e-bits",
-			"baseUrl": "https://www.dnd5eapi.co/api/2014",
-			"supportedTypes": ["spell", "monster", "feat", "background", "race", "class"]
-		},
-		{
-			"id": "open5e",
-			"name": "Open5e",
-			"enabled": true,
-			"type": "open5e",
-			"baseUrl": "https://api.open5e.com",
-			"supportedTypes": ["spell", "monster", "item", "feat", "background", "race", "class"]
-		},
-		{
-			"id": "srd",
-			"name": "D&D 5e SRD",
-			"enabled": true,
-			"type": "srd",
-			"baseUrl": "https://www.dnd5eapi.co/api/2014",
-			"supportedTypes": ["spells", "monsters"]
-		},
-		{
-			"id": "homebrew",
-			"name": "Homebrew",
-			"enabled": false,
-			"type": "homebrew",
-			"baseUrl": "",
-			"supportedTypes": ["spell", "monsters", "item", "feat", "background", "race", "class"],
-			"options": {
-				"dataPath": "data/homebrew"
-			}
-		}
-	],
-	"sync": {
-		"maxConcurrency": 3,
-		"retryAttempts": 3,
-		"retryDelayMs": 1000
-	}
+	"enabled": {
+		"open5e": true,
+		"srd": true,
+		"homebrew": false
+	},
+	"primary": "srd"
 }
