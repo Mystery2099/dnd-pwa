@@ -7,7 +7,11 @@
 
 	let { race }: Props = $props();
 
-	const description = $derived(race.description as string[] | undefined);
+	// Handle both array and string descriptions defensively
+	const rawDescription = $derived(race.description as string[] | string | undefined);
+	const description = $derived(
+		Array.isArray(rawDescription) ? rawDescription : rawDescription ? [rawDescription] : undefined
+	);
 	const traits = $derived(race.traits as string[] | undefined);
 	const abilityBonuses = $derived(
 		race.ability_bonuses as Array<{ ability_score: { name: string }; bonus: number }> | undefined
@@ -72,7 +76,7 @@
 
 <!-- Description (Markdown rendered) -->
 {#if descriptionMd && SvelteMarkdown}
-	<div class="prose prose-sm max-w-none text-[var(--color-text-secondary)] prose-invert">
+	<div class="prose prose-sm prose-invert max-w-none text-[var(--color-text-secondary)]">
 		<SvelteMarkdown source={descriptionMd} />
 	</div>
 {:else if descriptionMd}

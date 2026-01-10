@@ -70,7 +70,15 @@ export const RACES_CONFIG: CompendiumTypeConfig = {
 		listItemAccent: () => 'hover:border-pink-500/50',
 		detailAccent: () => 'text-pink-400',
 		metaDescription: (item) => {
-			return `${item.name} is a character race in D&D 5e. ${item.summary || ''}`;
+			// Strip markdown and truncate if summary is too long
+			let desc = item.summary || '';
+			// Remove markdown headers
+			desc = desc.replace(/^#+ /gm, '');
+			// Truncate to ~150 chars
+			if (desc.length > 150) {
+				desc = desc.slice(0, 150).trim() + '...';
+			}
+			return `${item.name} is a character race in D&D 5e. ${desc}`;
 		}
 	}
 };

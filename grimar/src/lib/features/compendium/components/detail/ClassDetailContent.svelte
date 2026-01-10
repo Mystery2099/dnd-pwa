@@ -7,7 +7,11 @@
 
 	let { classData }: Props = $props();
 
-	const description = $derived(classData.description as string[] | undefined);
+	// Handle both array and string descriptions defensively
+	const rawDescription = $derived(classData.description as string[] | string | undefined);
+	const description = $derived(
+		Array.isArray(rawDescription) ? rawDescription : rawDescription ? [rawDescription] : undefined
+	);
 	const hitDie = $derived(classData.hit_die as number | undefined);
 	const proficiencies = $derived(
 		classData.proficiencies as Array<{ index: string; name: string }> | undefined
@@ -86,7 +90,7 @@
 
 <!-- Description (Markdown rendered) -->
 {#if descriptionMd && SvelteMarkdown}
-	<div class="prose prose-sm max-w-none text-[var(--color-text-secondary)] prose-invert">
+	<div class="prose prose-sm prose-invert max-w-none text-[var(--color-text-secondary)]">
 		<SvelteMarkdown source={descriptionMd} />
 	</div>
 {:else if descriptionMd}

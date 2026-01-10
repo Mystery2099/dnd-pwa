@@ -133,6 +133,26 @@ export interface TransformResult {
 }
 
 /**
+ * Core provider interface
+ */
+export interface CompendiumProvider {
+	readonly id: string;
+	readonly name: string;
+	readonly baseUrl: string;
+	readonly supportedTypes: readonly CompendiumTypeName[];
+
+	fetchList(type: CompendiumTypeName, options?: FetchOptions): Promise<ProviderListResponse>;
+
+	fetchDetail?(type: CompendiumTypeName, externalId: string): Promise<Record<string, unknown>>;
+
+	transformItem(rawItem: unknown, type: CompendiumTypeName): TransformResult;
+
+	healthCheck(): Promise<boolean>;
+
+	fetchAllPages?(type: CompendiumTypeName): Promise<unknown[]>;
+}
+
+/**
  * Health check result for a provider
  */
 export interface ProviderHealthStatus {
@@ -180,55 +200,4 @@ export interface ProviderSyncResult {
 	totalItems: number;
 	skipped: number;
 	errors: string[];
-}
-
-/**
- * Core provider interface
- */
-export interface CompendiumProvider {
-	readonly id: string;
-	readonly name: string;
-	readonly baseUrl: string;
-	readonly supportedTypes: readonly CompendiumTypeName[];
-
-	fetchList(type: CompendiumTypeName, options?: FetchOptions): Promise<ProviderListResponse>;
-
-	fetchDetail?(type: CompendiumTypeName, externalId: string): Promise<Record<string, unknown>>;
-
-	transformItem(rawItem: unknown, type: CompendiumTypeName): TransformResult;
-
-	healthCheck(): Promise<boolean>;
-
-	fetchAllPages?(type: CompendiumTypeName): Promise<unknown[]>;
-}
-
-/**
- * Provider configuration
- */
-export interface ProviderConfig {
-	primaryProvider?: string;
-	providers: ProviderSettings[];
-	sync?: SyncConfig;
-}
-
-/**
- * Settings for a single provider
- */
-export interface ProviderSettings {
-	id: string;
-	name: string;
-	enabled: boolean;
-	type: 'open5e' | 'srd' | 'homebrew' | 'custom';
-	baseUrl?: string;
-	supportedTypes?: CompendiumTypeName[];
-	options?: Record<string, unknown>;
-}
-
-/**
- * Sync configuration
- */
-export interface SyncConfig {
-	maxConcurrency?: number;
-	retryAttempts?: number;
-	retryDelayMs?: number;
 }

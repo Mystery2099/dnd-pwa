@@ -13,7 +13,6 @@ import {
 	Open5eSpellSchema,
 	Open5eMonsterSchema
 } from '$lib/core/types/compendium/schemas';
-import { logRawSample, logSpellFields } from '$lib/server/services/sync/debug-sync';
 import { createModuleLogger } from '$lib/server/logger';
 
 const log = createModuleLogger('Open5eProvider');
@@ -81,11 +80,6 @@ export class Open5eProvider extends BaseProvider {
 	async fetchAllPages(type: CompendiumTypeName): Promise<unknown[]> {
 		const endpoint = this.getEndpoint(type);
 		const allItems = await this.fetchAllPagesPaginated(endpoint, 200);
-
-		if (allItems.length > 0 && type === 'spell') {
-			logRawSample(type, JSON.stringify(allItems[0], null, 2).slice(0, 3000), allItems.length);
-		}
-
 		return allItems;
 	}
 
@@ -127,18 +121,6 @@ export class Open5eProvider extends BaseProvider {
 
 	private transformSpell(raw: unknown): TransformResult {
 		const spellObj = raw as Record<string, unknown>;
-
-		logSpellFields({
-			slug: spellObj.slug,
-			name: spellObj.name,
-			level: spellObj.level,
-			level_int: spellObj.level_int,
-			school: spellObj.school,
-			components: spellObj.components,
-			desc: Array.isArray(spellObj.desc) ? `${spellObj.desc.length} paragraphs` : spellObj.desc,
-			hasAllRequired: !!(spellObj.slug && spellObj.name)
-		});
-
 		const spell = validateData(Open5eSpellSchema, raw, 'spell');
 
 		// Normalize level

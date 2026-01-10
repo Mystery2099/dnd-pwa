@@ -5,7 +5,7 @@
  * Uses retry and metrics modules for reliability and monitoring.
  */
 
-import { providerRegistry } from '$lib/server/providers';
+import { providerRegistry, SYNC_CONFIG } from '$lib/server/providers';
 import { compendiumCache, compendiumItems } from '$lib/server/db/schema';
 import { eq, and } from 'drizzle-orm';
 import { syncItemToFts } from '$lib/server/db/db-fts';
@@ -27,14 +27,6 @@ import {
 import { cleanupDisabledSources } from './sync-cleanup';
 import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import { join } from 'path';
-import {
-	logSyncStart,
-	logSyncEnd,
-	logItemStart,
-	logTransformSuccess,
-	logTransformFailed,
-	logInsertFailed
-} from './debug-sync';
 import { createModuleLogger } from '$lib/server/logger';
 
 const log = createModuleLogger('SyncOrchestrator');
@@ -54,9 +46,9 @@ interface SyncOptions {
 	onProgress?: SyncProgressCallback;
 }
 
-// Default retry configuration
-const DEFAULT_MAX_RETRIES = 3;
-const DEFAULT_RETRY_DELAY_MS = 1000;
+// Sync configuration from registry (code-driven, not hardcoded)
+const MAX_RETRIES = SYNC_CONFIG.retryAttempts;
+const RETRY_DELAY_MS = SYNC_CONFIG.retryDelayMs;
 // Batch size for transaction processing
 const BATCH_SIZE = 100;
 // Emit progress every N items during transformation
@@ -173,8 +165,8 @@ export async function syncAllProviders(
 		: Array.from(allProviderTypes);
 
 	const providerIds = options?.providerIds;
-	const maxRetries = options?.maxRetries ?? DEFAULT_MAX_RETRIES;
-	const retryDelayMs = options?.retryDelayMs ?? DEFAULT_RETRY_DELAY_MS;
+	const maxRetries = options?.maxRetries ?? MAX_RETRIES;
+	const retryDelayMs = options?.retryDelayMs ?? RETRY_DELAY_MS;
 	const onProgress = options?.onProgress;
 
 	log.info(
@@ -349,8 +341,8 @@ async function syncSingleProvider(
 			const itemCount = await withRetry(
 				async () => syncTypeFromProvider(db, provider.id, type, provider, metrics, onProgress),
 				{
-					maxRetries: DEFAULT_MAX_RETRIES,
-					retryDelayMs: DEFAULT_RETRY_DELAY_MS,
+					maxRetries: MAX_RETRIES,
+					retryDelayMs: RETRY_DELAY_MS,
 					operationName: `${provider.name}/${type}`
 				}
 			);
@@ -500,8 +492,8 @@ async function syncTypeFromProvider(
 
 	// Fetch with retry logic
 	const rawItems = await withRetry(async () => provider.fetchAllPages!(type), {
-		maxRetries: DEFAULT_MAX_RETRIES,
-		retryDelayMs: DEFAULT_RETRY_DELAY_MS,
+		maxRetries: MAX_RETRIES,
+		retryDelayMs: RETRY_DELAY_MS,
 		operationName: `${provider.id}/${type}/fetch`
 	});
 
@@ -516,7 +508,7 @@ async function syncTypeFromProvider(
 		timestamp: new Date()
 	});
 
-	logSyncStart(type, providerId, rawItems.length);
+	log.info({ type, providerId, itemCount: rawItems.length }, 'Starting sync');
 
 	let count = 0;
 
@@ -537,7 +529,6 @@ async function syncTypeFromProvider(
 
 	for (let index = 0; index < rawItems.length; index++) {
 		const rawItem = rawItems[index];
-		logItemStart(index, rawItems.length);
 
 		try {
 			const transformed = await provider.transformItem(rawItem, type);
@@ -545,16 +536,19 @@ async function syncTypeFromProvider(
 			// Deduplicate: keep only the first occurrence of each (type, source, externalId)
 			const key = `${type}:${providerId}:${transformed.externalId}`;
 			if (seenExternalIds.has(key)) {
-				logTransformFailed(type, transformed.externalId, 'Duplicate item skipped', { index });
+				log.debug({ type, externalId: transformed.externalId, index }, 'Duplicate item skipped');
 				continue;
 			}
 			seenExternalIds.set(key, index);
 
-			logTransformSuccess(type, transformed.externalId, transformed.name);
+			log.debug(
+				{ type, externalId: transformed.externalId, name: transformed.name },
+				'Item transformed'
+			);
 			transformedItems.push({ raw: rawItem, transformed });
 		} catch (error) {
 			const errorMessage = error instanceof Error ? error.message : String(error);
-			logTransformFailed(type, 'unknown', errorMessage, { index });
+			log.warn({ type, index, error: errorMessage }, 'Item transform failed');
 		}
 
 		// Emit transform:progress every N items
@@ -720,7 +714,7 @@ async function syncTypeFromProvider(
 			});
 		} catch (error) {
 			const errorMessage = error instanceof Error ? error.message : String(error);
-			logInsertFailed(type, 'batch', errorMessage);
+			log.error({ type, error: errorMessage }, 'Batch insert failed');
 			recordError(metrics, providerId, errorMessage);
 		}
 	}
@@ -736,7 +730,7 @@ async function syncTypeFromProvider(
 		timestamp: new Date()
 	});
 
-	logSyncEnd(type, count, rawItems.length);
+	log.info({ type, count, total: rawItems.length }, 'Sync ended');
 	return count;
 }
 

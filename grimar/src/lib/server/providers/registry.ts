@@ -2,17 +2,12 @@
  * Provider Registry
  *
  * Central registry for managing compendium data providers.
- * Loads configuration from providers.json and provides access to enabled providers.
+ * Code-driven configuration with optional user overrides from providers.json.
  */
 
 import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
-import type {
-	CompendiumProvider,
-	ProviderConfig,
-	ProviderSettings,
-	ProviderHealthStatus
-} from './types';
+import type { CompendiumProvider, ProviderHealthStatus } from './types';
 import { Open5eProvider } from './open5e';
 import { SrdProvider } from './srd';
 import { HomebrewProvider } from './homebrew';
@@ -20,15 +15,84 @@ import { createModuleLogger } from '$lib/server/logger';
 
 const log = createModuleLogger('ProviderRegistry');
 
+// =============================================================================
+// Provider Definitions - Code-driven, type-safe
+// =============================================================================
+
+export interface ProviderDefinition {
+	id: string;
+	enabled: boolean;
+	create: () => CompendiumProvider;
+}
+
+// Default provider configuration
+const DEFAULT_PROVIDERS: ProviderDefinition[] = [
+	{
+		id: 'srd',
+		enabled: true,
+		create: () => new SrdProvider()
+	},
+	{
+		id: 'open5e',
+		enabled: true,
+		create: () => new Open5eProvider()
+	},
+	{
+		id: 'homebrew',
+		enabled: false,
+		create: () => new HomebrewProvider('data/homebrew')
+	}
+];
+
+export const PROVIDERS = DEFAULT_PROVIDERS;
+
+// Primary provider for fallback lookups
+export const PRIMARY_PROVIDER_ID = 'srd';
+
+// Sync configuration - now actually used instead of hardcoded defaults
+export const SYNC_CONFIG = {
+	maxConcurrency: 3,
+	retryAttempts: 3,
+	retryDelayMs: 1000
+} as const;
+
+// =============================================================================
+// User Configuration - Optional overrides from providers.json
+// =============================================================================
+
+interface UserConfig {
+	enabled?: Record<string, boolean>;
+	primary?: string;
+}
+
 /**
- * Provider Registry - Singleton pattern
- *
- * Manages provider lifecycle, configuration, and health status.
- * Follows existing codebase pattern (e.g., MemoryCache)
+ * Load user configuration from providers.json
+ * Only overrides enabled status and primary provider
  */
+function loadUserConfig(): UserConfig {
+	const configPath = join(process.cwd(), 'providers.json');
+
+	if (!existsSync(configPath)) {
+		return {};
+	}
+
+	try {
+		const content = readFileSync(configPath, 'utf-8');
+		const config = JSON.parse(content) as UserConfig;
+		log.info('Loaded user configuration from providers.json');
+		return config;
+	} catch (error) {
+		log.warn({ error }, 'Failed to load providers.json, using defaults');
+		return {};
+	}
+}
+
+// =============================================================================
+// Provider Registry - Singleton pattern
+// =============================================================================
+
 class ProviderRegistryClass {
 	private providers = new Map<string, CompendiumProvider>();
-	private config: ProviderConfig;
 	private initialized = false;
 
 	/**
@@ -42,117 +106,35 @@ class ProviderRegistryClass {
 	}
 
 	private constructor() {
-		this.config = this.loadConfig();
 		this.initializeProviders();
 	}
 
 	/**
-	 * Load provider configuration from providers.json
-	 * Falls back to default configuration if file doesn't exist
-	 */
-	private loadConfig(): ProviderConfig {
-		const configPath = join(process.cwd(), 'providers.json');
-
-		if (existsSync(configPath)) {
-			try {
-				const content = readFileSync(configPath, 'utf-8');
-				const config = JSON.parse(content) as ProviderConfig;
-				log.info('Loaded configuration from providers.json');
-				return config;
-			} catch (error) {
-				log.error({ error }, 'Failed to load providers.json');
-			}
-		}
-
-		// Default configuration
-		const defaultConfig: ProviderConfig = {
-			primaryProvider: 'open5e',
-			providers: [
-				{
-					id: 'open5e',
-					name: 'Open5e',
-					enabled: true,
-					type: 'open5e',
-					baseUrl: 'https://api.open5e.com',
-					supportedTypes: ['spell', 'monster', 'item']
-				},
-				{
-					id: 'srd',
-					name: 'D&D 5e SRD',
-					enabled: false,
-					type: 'srd',
-					baseUrl: 'https://www.dnd5eapi.co/api',
-					supportedTypes: ['spell', 'monster']
-				},
-				{
-					id: 'homebrew',
-					name: 'Homebrew',
-					enabled: true,
-					type: 'homebrew',
-					baseUrl: '',
-					supportedTypes: ['spell', 'monster'],
-					options: {
-						dataPath: 'data/homebrew'
-					}
-				}
-			],
-			sync: {
-				maxConcurrency: 3,
-				retryAttempts: 3,
-				retryDelayMs: 1000
-			}
-		};
-
-		log.info('Using default provider configuration');
-		return defaultConfig;
-	}
-
-	/**
-	 * Initialize provider instances from configuration
+	 * Initialize provider instances from static definitions with user overrides
 	 */
 	private initializeProviders(): void {
-		for (const settings of this.config.providers) {
-			if (!settings.enabled) continue;
+		const userConfig = loadUserConfig();
 
-			const provider = this.createProvider(settings);
-			if (provider) {
-				this.providers.set(settings.id, provider);
-				log.info({ providerId: settings.id, providerName: provider.name }, 'Registered provider');
+		for (const def of PROVIDERS) {
+			// Apply user override for enabled status
+			const isEnabled = userConfig.enabled?.[def.id] ?? def.enabled;
+
+			if (!isEnabled) {
+				log.debug({ providerId: def.id }, 'Provider disabled by user config');
+				continue;
+			}
+
+			try {
+				const provider = def.create();
+				this.providers.set(def.id, provider);
+				log.info({ providerId: def.id, providerName: provider.name }, 'Registered provider');
+			} catch (error) {
+				log.error({ providerId: def.id, error }, 'Failed to create provider');
 			}
 		}
 
 		this.initialized = true;
-	}
-
-	/**
-	 * Create a provider instance from settings
-	 */
-	private createProvider(settings: ProviderSettings): CompendiumProvider | null {
-		try {
-			switch (settings.type) {
-				case 'open5e':
-					return new Open5eProvider(
-						settings.baseUrl || 'https://api.open5e.com',
-						settings.supportedTypes
-					);
-
-				case 'srd':
-					return new SrdProvider(settings.supportedTypes);
-
-				case 'homebrew':
-					return new HomebrewProvider(
-						settings.options?.dataPath as string,
-						settings.supportedTypes
-					);
-
-				default:
-					log.warn({ providerType: settings.type }, 'Unknown provider type');
-					return null;
-			}
-		} catch (error) {
-			log.error({ providerId: settings.id, error }, 'Failed to create provider');
-			return null;
-		}
+		log.info({ count: this.providers.size }, 'Provider registry initialized');
 	}
 
 	/**
@@ -177,39 +159,20 @@ class ProviderRegistryClass {
 	}
 
 	/**
-	 * Get the primary provider (first enabled or configured primary)
+	 * Get the primary provider (user-configured or default)
 	 */
 	getPrimaryProvider(): CompendiumProvider | undefined {
-		// Try configured primary
-		if (this.config.primaryProvider) {
-			const primary = this.providers.get(this.config.primaryProvider);
+		// Try user-configured primary first
+		const userConfig = loadUserConfig();
+		if (userConfig.primary) {
+			const primary = this.providers.get(userConfig.primary);
 			if (primary) return primary;
 		}
-		// Fall back to first enabled
+		// Fall back to default primary
+		const primary = this.providers.get(PRIMARY_PROVIDER_ID);
+		if (primary) return primary;
+		// Last resort: first enabled
 		return this.getEnabledProviders()[0];
-	}
-
-	/**
-	 * Get sync configuration
-	 */
-	getSyncConfig() {
-		return (
-			this.config.sync || {
-				maxConcurrency: 3,
-				retryAttempts: 3,
-				retryDelayMs: 1000
-			}
-		);
-	}
-
-	/**
-	 * Reload configuration from file
-	 */
-	reloadConfig(): void {
-		this.providers.clear();
-		this.config = this.loadConfig();
-		this.initializeProviders();
-		log.info('Configuration reloaded');
 	}
 
 	/**

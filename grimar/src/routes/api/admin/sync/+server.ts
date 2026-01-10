@@ -1,7 +1,7 @@
 import { error, json } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 import { getDb } from '$lib/server/db';
-import { syncAllProviders } from '$lib/server/services/multiProviderSync';
+import { syncAllProviders } from '$lib/server/services/sync/orchestrator';
 import { invalidateAllCompendiumCache } from '$lib/server/repositories/compendium';
 import { createModuleLogger } from '$lib/server/logger';
 
