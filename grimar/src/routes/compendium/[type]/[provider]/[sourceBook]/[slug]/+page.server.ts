@@ -11,14 +11,14 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 	// Require authentication
 	requireUser(locals);
 
-	const { type: pathType, slug } = params;
+	const { type: pathType, provider, sourceBook, slug } = params;
 
 	try {
 		const config = getCompendiumConfig(pathType);
 		const dbType = getTypeFromPath(pathType);
 
-		// First, get the item to find its ID
-		const item = await compendiumService.getById(dbType, parseInt(slug) || slug);
+		// Get the item by provider, sourceBook, and slug
+		const item = await compendiumService.getBySourceAndId(provider, dbType, parseInt(slug) || slug);
 
 		if (!item) {
 			throw error(404, `${config.ui.displayName} not found`);
@@ -38,11 +38,13 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 					total: number;
 				}) || null,
 			dbType,
-			pathType
+			pathType,
+			provider,
+			sourceBook
 		};
 	} catch (e) {
 		if (e instanceof Response) throw e; // Re-throw SvelteKit errors
-		log.error({ error: e, pathType, slug }, 'Failed to load compendium item');
+		log.error({ error: e, pathType, provider, sourceBook, slug }, 'Failed to load compendium item');
 		throw error(404, `Item not found`);
 	}
 };

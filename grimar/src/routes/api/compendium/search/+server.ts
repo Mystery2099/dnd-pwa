@@ -49,6 +49,8 @@ interface SearchResult {
 	slug: string;
 	summary: string | null;
 	source: string;
+	provider: string;
+	sourceBook: string;
 }
 
 interface FilterParams {
@@ -206,7 +208,9 @@ export const GET: RequestHandler = async ({ url }) => {
 				name: item.name,
 				slug,
 				summary: item.summary,
-				source: item.source
+				source: item.source,
+				provider: item.source,
+				sourceBook: item.sourceBook || 'Unknown'
 			};
 		});
 

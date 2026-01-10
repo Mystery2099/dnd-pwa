@@ -22,6 +22,8 @@
 	const nav = $derived(data.navigation);
 	const dbType = $derived(data.dbType);
 	const pathType = $derived(data.pathType);
+	const provider = $derived(data.provider);
+	const sourceBook = $derived(data.sourceBook);
 	const config = $derived(getCompendiumConfig(pathType));
 
 	// Cast item to CompendiumItem for config functions that expect it
@@ -31,11 +33,17 @@
 	// Get accent color from config
 	const accentColor = $derived(config.display.detailAccent(itemForConfig));
 
+	// Build URLs with provider/sourceBook
+	const basePath = $derived(`/compendium/${pathType}/${provider}/${sourceBook}`);
+	const prevUrl = $derived(nav.prev ? `${basePath}/${nav.prev.slug}` : null);
+	const nextUrl = $derived(nav.next ? `${basePath}/${nav.next.slug}` : null);
+	const listUrl = $derived(basePath);
+
 	// Keyboard navigation
 	$effect(() => {
 		const cleanup = createKeyboardNav({
 			navigation: nav as { prev: CompendiumItem | null; next: CompendiumItem | null },
-			basePath: `/compendium/${pathType}`,
+			basePath,
 			onClose: handleClose,
 			listUrlKey: config.routes.storageKeyListUrl
 		});
@@ -44,8 +52,8 @@
 
 	// Close handler that preserves filters
 	function handleClose() {
-		const listUrl = sessionStorage.getItem(config.routes.storageKeyListUrl);
-		goto(listUrl || `/compendium/${pathType}`);
+		const savedListUrl = sessionStorage.getItem(config.routes.storageKeyListUrl);
+		goto(savedListUrl || listUrl);
 	}
 </script>
 
@@ -58,16 +66,14 @@
 </svelte:head>
 
 <div class="mx-auto max-w-4xl p-4 md:p-6">
-	<DetailNavigation
-		prevUrl={nav.prev ? `/compendium/${pathType}/${nav.prev.slug}` : null}
-		nextUrl={nav.next ? `/compendium/${pathType}/${nav.next.slug}` : null}
-		listUrl={`/compendium/${pathType}`}
-	/>
+	<DetailNavigation {prevUrl} {nextUrl} {listUrl} />
 
 	<CompendiumDetail
 		title={item.name}
 		type={config.ui.displayName}
 		source={item.source}
+		{sourceBook}
+		{provider}
 		tags={config.display.tags(itemForConfig)}
 		onClose={handleClose}
 		{accentColor}
