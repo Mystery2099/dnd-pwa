@@ -11,7 +11,9 @@
 		titleId?: string;
 		type: string; // "Spell", "Monster", etc.
 		tags?: string[]; // "Evocation", "Level 3"
-		source?: string; // "open5e", "homebrew", "srd"
+		source?: string; // "open5e", "5ebits"
+		provider?: string; // "open5e", "5ebits" (display name)
+		sourceBook?: string; // "PHB", "SRD", "XGE"
 		onClose?: () => void;
 		onBookmark?: () => void;
 		bookmarked?: boolean;
@@ -26,6 +28,8 @@
 		type,
 		tags = [],
 		source,
+		provider,
+		sourceBook,
 		onClose,
 		onBookmark,
 		bookmarked,
@@ -58,7 +62,16 @@
 						<Badge variant="outline">{tag}</Badge>
 					{/each}
 				{/if}
-				{#if source}
+				{#if sourceBook}
+					<Badge variant="outline">{sourceBook}</Badge>
+				{/if}
+				{#if provider}
+					<Badge color={getSourceBadgeClass(provider)}>
+						{provider === '5ebits'
+							? '5e-Bits'
+							: provider.charAt(0).toUpperCase() + provider.slice(1)}
+					</Badge>
+				{:else if source}
 					<Badge color={getSourceBadgeClass(source)}>
 						{source.charAt(0).toUpperCase() + source.slice(1)}
 					</Badge>
@@ -92,7 +105,7 @@
 	<!-- Content - scrolls with main container -->
 	<div class="flex-1 overflow-y-auto p-6">
 		<div
-			class="prose max-w-none prose-invert prose-headings:text-[var(--color-text-primary)] prose-p:text-[var(--color-text-secondary)] prose-a:text-[var(--color-accent)] prose-a:no-underline hover:prose-a:underline prose-strong:text-[var(--color-text-primary)]"
+			class="prose prose-invert prose-headings:text-[var(--color-text-primary)] prose-p:text-[var(--color-text-secondary)] prose-a:text-[var(--color-accent)] prose-a:no-underline hover:prose-a:underline prose-strong:text-[var(--color-text-primary)] max-w-none"
 		>
 			{@render children()}
 		</div>
