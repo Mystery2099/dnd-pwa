@@ -208,24 +208,6 @@ export const CARDS: CompendiumCard[] = [
 	},
 	// The Armory
 	{
-		title: 'Weapons',
-		description: 'Blades, bows, and axes.',
-		href: '/compendium/weapons',
-		icon: Sword,
-		gradient: 'from-slate-500/20 to-gray-500/20',
-		accent: 'text-slate-400',
-		categoryId: 'armory'
-	},
-	{
-		title: 'Armor',
-		description: 'Protection and shields.',
-		href: '/compendium/armor',
-		icon: Shirt,
-		gradient: 'from-zinc-500/20 to-slate-500/20',
-		accent: 'text-zinc-400',
-		categoryId: 'armory'
-	},
-	{
 		title: 'Equipment',
 		description: 'Gears and supplies.',
 		href: '/compendium/equipment',
@@ -260,15 +242,6 @@ export const CARDS: CompendiumCard[] = [
 		icon: Activity,
 		gradient: 'from-red-500/20 to-rose-500/20',
 		accent: 'text-red-400',
-		categoryId: 'rules'
-	},
-	{
-		title: 'Planes',
-		description: 'The multiverse.',
-		href: '/compendium/planes',
-		icon: Globe,
-		gradient: 'from-blue-500/20 to-cyan-500/20',
-		accent: 'text-blue-400',
 		categoryId: 'rules'
 	},
 	{
