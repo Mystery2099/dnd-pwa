@@ -135,10 +135,16 @@
 						>
 					{/if}
 				</div>
-				{#if action.desc && SvelteMarkdown}
-					<div class="prose prose-sm max-w-none text-[var(--color-text-secondary)] prose-invert">
-						<SvelteMarkdown source={action.desc as string} {renderers} />
-					</div>
+				{#if action.desc}
+					{#if SvelteMarkdown}
+						<div class="prose prose-sm prose-invert max-w-none text-[var(--color-text-secondary)]">
+							<SvelteMarkdown source={action.desc as string} {renderers} />
+						</div>
+					{:else}
+						<div class="prose prose-sm prose-invert max-w-none text-[var(--color-text-secondary)]">
+							<p class="whitespace-pre-wrap">{action.desc}</p>
+						</div>
+					{/if}
 				{/if}
 				{#if action.damage}
 					<div class="mt-1 font-mono text-xs text-[var(--color-accent)]">
@@ -163,10 +169,16 @@
 		{#each specialAbilities as trait (trait.name)}
 			<div>
 				<div class="mb-1 font-bold text-[var(--color-text-primary)]">{trait.name}</div>
-				{#if trait.desc && SvelteMarkdown}
-					<div class="prose prose-sm max-w-none text-[var(--color-text-secondary)] prose-invert">
-						<SvelteMarkdown source={trait.desc as string} {renderers} />
-					</div>
+				{#if trait.desc}
+					{#if SvelteMarkdown}
+						<div class="prose prose-sm prose-invert max-w-none text-[var(--color-text-secondary)]">
+							<SvelteMarkdown source={trait.desc as string} {renderers} />
+						</div>
+					{:else}
+						<div class="prose prose-sm prose-invert max-w-none text-[var(--color-text-secondary)]">
+							<p class="whitespace-pre-wrap">{trait.desc}</p>
+						</div>
+					{/if}
 				{/if}
 			</div>
 		{/each}

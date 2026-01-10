@@ -89,17 +89,29 @@
 </div>
 
 <!-- Description (Markdown rendered) -->
-{#if descriptionMd && SvelteMarkdown}
-	<div class="prose prose-sm max-w-none text-[var(--color-text-secondary)] prose-invert">
+{#if SvelteMarkdown}
+	<div class="prose prose-sm prose-invert max-w-none text-[var(--color-text-secondary)]">
 		<SvelteMarkdown source={descriptionMd} {renderers} />
+	</div>
+{:else if descriptionMd}
+	<!-- Static fallback for SSR -->
+	<div class="prose prose-sm prose-invert max-w-none text-[var(--color-text-secondary)]">
+		<p class="whitespace-pre-wrap">{descriptionMd}</p>
 	</div>
 {/if}
 
-{#if higherLevelMd && SvelteMarkdown}
+{#if SvelteMarkdown}
 	<div class="mt-6 border-t border-[var(--color-border)] pt-6">
 		<h4 class="mb-2 font-bold text-[var(--color-text-primary)]">At Higher Levels</h4>
-		<div class="prose prose-sm max-w-none text-[var(--color-text-secondary)] prose-invert">
+		<div class="prose prose-sm prose-invert max-w-none text-[var(--color-text-secondary)]">
 			<SvelteMarkdown source={higherLevelMd} {renderers} />
+		</div>
+	</div>
+{:else if higherLevelMd}
+	<div class="mt-6 border-t border-[var(--color-border)] pt-6">
+		<h4 class="mb-2 font-bold text-[var(--color-text-primary)]">At Higher Levels</h4>
+		<div class="prose prose-sm prose-invert max-w-none text-[var(--color-text-secondary)]">
+			<p class="whitespace-pre-wrap">{higherLevelMd}</p>
 		</div>
 	</div>
 {/if}
