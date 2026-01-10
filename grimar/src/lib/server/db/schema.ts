@@ -11,11 +11,11 @@ export const compendiumItems = sqliteTable(
 	'compendium_items',
 	{
 		id: integer('id').primaryKey({ autoIncrement: true }),
-		// Source of the data (e.g., open5e, homebrew)
+		// Source of the data (e.g., open5e, homebrew, github)
 		source: text('source').notNull(),
 		// Domain type: spell | monster | item | etc.
 		type: text('type').notNull(),
-		// Stable external identifier (e.g., open5e index)
+		// Stable external identifier (e.g., open5e index, github slug)
 		externalId: text('external_id'),
 		name: text('name').notNull(),
 		summary: text('summary'),
@@ -25,6 +25,12 @@ export const compendiumItems = sqliteTable(
 		details: text('details', { mode: 'json' }).notNull(),
 		// External JSON path (Option B: file-per-item)
 		jsonPath: text('json_path'),
+		// Edition: 2014 (5e 2014) | 2024 (5e 2024) | null (mixed/unknown)
+		edition: text('edition'),
+		// Source book: SRD | PHB | XGE | TCoE | VGM | etc.
+		sourceBook: text('source_book'),
+		// Data version from the import (e.g., 4.3.0)
+		dataVersion: text('data_version'),
 		// Spell sorting columns
 		spellLevel: integer('spell_level'),
 		spellSchool: text('spell_school'),
@@ -51,6 +57,9 @@ export const compendiumItems = sqliteTable(
 		traitRaces: text('trait_races'),
 		// Condition-specific columns
 		conditionName: text('condition_name'),
+		// Feature-specific columns
+		featureName: text('feature_name'),
+		featureLevel: integer('feature_level'),
 		createdBy: text('created_by').references(() => users.username)
 	},
 	(table) => ({
@@ -82,7 +91,11 @@ export const compendiumItems = sqliteTable(
 		),
 		featPrerequisitesIdx: index('compendium_items_feat_prerequisites_idx').on(
 			table.featPrerequisites
-		)
+		),
+		// Edition/source indexes
+		editionIdx: index('compendium_items_edition_idx').on(table.edition),
+		sourceBookIdx: index('compendium_items_source_book_idx').on(table.sourceBook),
+		dataVersionIdx: index('compendium_items_data_version_idx').on(table.dataVersion)
 	})
 );
 

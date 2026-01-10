@@ -19,6 +19,32 @@ import type { ComponentType } from 'svelte';
 export type { CompendiumFilterConfig } from './filter';
 export type { CompendiumCategory, CompendiumCard } from './categories';
 
+// Normalized types for provider data transformation
+export type {
+	NormalizedSpell,
+	NormalizedMonster,
+	NormalizedFeat,
+	NormalizedBackground,
+	NormalizedRace,
+	NormalizedClass,
+	NormalizedSubclass,
+	NormalizedSubrace,
+	NormalizedTrait,
+	NormalizedCondition,
+	NormalizedSkill,
+	NormalizedLanguage,
+	NormalizedAbilityScore,
+	NormalizedProficiency,
+	NormalizedDamageType,
+	NormalizedMagicSchool,
+	NormalizedEquipment,
+	NormalizedRule,
+	NormalizedRuleSection,
+	NormalizedCompendiumItem
+} from './normalized';
+
+export { slugify, createSlug } from './normalized';
+
 // All valid compendium type names as a tuple for runtime checks
 export const COMPENDIUM_TYPES = [
 	'spell',

@@ -1,6 +1,26 @@
 import type { PaginatedResult, PaginationOptions } from '$lib/server/repositories/compendium';
 import { getPaginatedCompendiumItems } from '$lib/server/repositories/compendium';
-import type { SrdSpell } from '$lib/server/services/compendium/srd';
+
+/**
+ * Spell type - represents a D&D 5e spell
+ * This is a local definition since SRD data now comes from GitHub JSON
+ */
+export interface SrdSpell {
+	index: string;
+	name: string;
+	level: number;
+	school: { name: string };
+	classes?: Array<{ name: string }>;
+	desc: string[];
+	higher_level: string[];
+	range: string;
+	components: string[];
+	material?: string;
+	ritual: boolean;
+	duration: string;
+	concentration: boolean;
+	casting_time: string;
+}
 
 export interface SpellSearchParams {
 	limit?: number;
