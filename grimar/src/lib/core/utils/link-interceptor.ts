@@ -24,9 +24,9 @@ const OPEN5E_PATTERNS: Record<string, string> = {
 /**
  * Parse an open5e URL and return an internal path if valid
  * @param url - The URL to parse (e.g., https://api.open5e.com/monsters/shroud)
- * @returns Internal path (e.g., /compendium/monsters/shroud) or null if not an open5e URL
+ * @returns Internal path (e.g., /compendium/monsters/open5e/{document}/shroud) or null if not an open5e URL
  */
-export function open5eToInternalPath(url: string): string | null {
+export function open5eToInternalPath(url: string, sourceBook: string = 'Unknown'): string | null {
 	try {
 		const urlObj = new URL(url);
 		const hostname = urlObj.hostname;
@@ -51,7 +51,7 @@ export function open5eToInternalPath(url: string): string | null {
 		}
 
 		const slug = slugParts.join('-');
-		return `/compendium/${compendiumType}/${slug}`;
+		return `/compendium/${compendiumType}/open5e/${sourceBook}/${slug}`;
 	} catch {
 		// Invalid URL
 		return null;

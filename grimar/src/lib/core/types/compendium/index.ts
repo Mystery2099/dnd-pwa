@@ -105,6 +105,7 @@ export type CompendiumTypeName =
 export interface CompendiumItem {
 	id: number;
 	source: string;
+	sourceBook: string | null;
 	type: string;
 	externalId: string | null;
 	name: string;

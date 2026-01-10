@@ -103,7 +103,9 @@
 		selectedItem = item;
 		// Update URL to include item identifier for deep linking
 		const itemId = item.externalId || item.name?.toLowerCase().replace(/\s+/g, '-');
-		pushState(`/compendium/${pathType}/${itemId}`, {});
+		const provider = item.source || '5ebits';
+		const sourceBook = item.sourceBook || 'SRD';
+		pushState(`/compendium/${pathType}/${provider}/${sourceBook}/${itemId}`, {});
 	}
 
 	// Sync filters with URL state
@@ -372,11 +374,15 @@
 
 	<!-- Detail View Overlay -->
 	{#if selectedItem}
+		{@const provider = selectedItem.source || '5ebits'}
+		{@const sourceBook = selectedItem.sourceBook || 'SRD'}
 		<div class="absolute inset-0 z-50 p-2 lg:p-4" transition:fly={{ x: 20, duration: 300 }}>
 			<CompendiumDetail
 				title={selectedItem.name}
 				type={config.ui.displayName}
 				source={selectedItem.source}
+				{provider}
+				{sourceBook}
 				tags={config.display.tags(selectedItem)}
 				onClose={closeOverlay}
 				accentColor={config.display.detailAccent(selectedItem)}
