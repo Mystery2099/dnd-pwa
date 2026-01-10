@@ -5,13 +5,21 @@
  */
 
 import * as schema from './schema';
-import { env } from '$env/dynamic/private';
 import { applyPragmas } from './db-config';
 
 import type { BunSQLiteDatabase } from 'drizzle-orm/bun-sqlite';
 import type { BetterSQLite3Database } from 'drizzle-orm/better-sqlite3';
 
-if (!env.DATABASE_URL) throw new Error('DATABASE_URL is not set');
+// Try to get env, but handle case where $env/dynamic/private isn't available
+let env: Record<string, string | undefined> = {};
+try {
+	const envModule = await import('$env/dynamic/private');
+	env = envModule.env as Record<string, string | undefined>;
+} catch {
+	// Standalone script - env will be undefined, use process.env directly
+}
+
+const DATABASE_URL = env.DATABASE_URL ?? process.env.DATABASE_URL ?? 'local.db';
 
 export type Db = BunSQLiteDatabase<typeof schema> | BetterSQLite3Database<typeof schema>;
 
@@ -27,7 +35,7 @@ export async function getDb(): Promise<Db> {
 			import('bun:sqlite'),
 			import('drizzle-orm/bun-sqlite')
 		]);
-		const client = new Database(env.DATABASE_URL);
+		const client = new Database(DATABASE_URL);
 		applyPragmas(client);
 		_db = drizzle(client, { schema });
 		return _db;
@@ -37,7 +45,7 @@ export async function getDb(): Promise<Db> {
 		import('better-sqlite3'),
 		import('drizzle-orm/better-sqlite3')
 	]);
-	const client = new BetterSqlite3Database(env.DATABASE_URL);
+	const client = new BetterSqlite3Database(DATABASE_URL);
 	applyPragmas(client);
 	_db = drizzle(client, { schema });
 	return _db;

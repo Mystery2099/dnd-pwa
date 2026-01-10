@@ -34,10 +34,25 @@ export async function fetchSrdDetail(
 	const log = createModuleLogger('SRDClient');
 	try {
 		const res = await fetch(`${BASE_URL}/${endpoint}/${index}`);
-		if (!res.ok) throw new Error(`Failed to fetch ${resourceType} detail`);
+		if (!res.ok)
+			throw new Error(
+				`Failed to fetch ${resourceType} detail for ${index}: ${res.status} ${res.statusText}`
+			);
 		return (await res.json()) as Record<string, unknown>;
 	} catch (e) {
-		log.error({ error: e, index, resourceType }, `SRD ${resourceType} Detail Error`);
+		const errorMessage = e instanceof Error ? e.message : String(e);
+		const errorDetails =
+			e instanceof Error
+				? {
+						message: e.message,
+						stack: e.stack,
+						cause: e.cause
+					}
+				: { details: e };
+		log.error(
+			{ error: errorDetails, index, resourceType },
+			`SRD ${resourceType} Detail Error: ${errorMessage}`
+		);
 		return null;
 	}
 }

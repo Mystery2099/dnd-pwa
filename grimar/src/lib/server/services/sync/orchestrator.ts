@@ -153,11 +153,24 @@ export async function syncAllProviders(
 	// Build set of types to sync based on enabled providers' supportedTypes
 	const allProviderTypes = new Set<CompendiumTypeName>();
 	for (const provider of enabledProviders) {
+		log.debug(
+			{ providerId: provider.id, types: provider.supportedTypes },
+			'Provider supported types'
+		);
 		for (const t of provider.supportedTypes) {
 			const normalized = normalizeType(t);
 			if (normalized) allProviderTypes.add(normalized);
 		}
 	}
+
+	log.info(
+		{
+			enabledProviders: enabledProviders.length,
+			totalTypes: allProviderTypes.size,
+			types: Array.from(allProviderTypes)
+		},
+		'Types to sync'
+	);
 
 	// Use only types that at least one provider supports
 	const typesToSync = options?.types?.length
@@ -327,7 +340,7 @@ async function syncSingleProvider(
 		errors: []
 	};
 
-	log.info({ providerName: provider.name }, 'Syncing provider');
+	log.info({ providerName: provider.name, typesToSync: types.length }, 'Syncing provider');
 
 	for (const type of types) {
 		// Check if provider supports this type
@@ -714,8 +727,24 @@ async function syncTypeFromProvider(
 			});
 		} catch (error) {
 			const errorMessage = error instanceof Error ? error.message : String(error);
-			log.error({ type, error: errorMessage }, 'Batch insert failed');
+			const errorDetails =
+				error instanceof Error
+					? {
+							message: error.message,
+							stack: error.stack,
+							cause: error.cause
+						}
+					: { details: error };
+
+			log.error(
+				{ type, error: errorDetails, batchIndex, batchSize: batch.length },
+				'Batch insert failed'
+			);
 			recordError(metrics, providerId, errorMessage);
+
+			// Continue with next batch instead of failing entire type sync
+			// This allows partial success even if some batches fail
+			continue;
 		}
 	}
 
