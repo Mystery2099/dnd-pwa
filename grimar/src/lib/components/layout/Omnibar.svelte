@@ -257,7 +257,7 @@
 									{#if result.provider}
 										<span
 											class="text-theme-muted bg-theme-card rounded px-1.5 py-0.5 text-[10px] font-medium"
-											>{result.provider === '5ebits' ? '5e-Bits' : result.provider}</span
+											>{result.provider}</span
 										>
 									{/if}
 								</div>

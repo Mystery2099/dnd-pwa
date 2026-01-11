@@ -103,7 +103,7 @@
 		selectedItem = item;
 		// Update URL to include item identifier for deep linking
 		const itemId = item.externalId || item.name?.toLowerCase().replace(/\s+/g, '-');
-		const provider = item.source || '5ebits';
+		const provider = item.source || 'open5e';
 		const sourceBook = item.sourceBook || 'SRD';
 		pushState(`/compendium/${pathType}/${provider}/${sourceBook}/${itemId}`, {});
 	}
@@ -374,7 +374,7 @@
 
 	<!-- Detail View Overlay -->
 	{#if selectedItem}
-		{@const provider = selectedItem.source || '5ebits'}
+		{@const provider = selectedItem.source || 'open5e'}
 		{@const sourceBook = selectedItem.sourceBook || 'SRD'}
 		<div class="absolute inset-0 z-50 p-2 lg:p-4" transition:fly={{ x: 20, duration: 300 }}>
 			<CompendiumEntryView

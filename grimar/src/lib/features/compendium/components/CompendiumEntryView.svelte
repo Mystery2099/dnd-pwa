@@ -67,9 +67,7 @@
 				{/if}
 				{#if provider}
 					<Badge color={getSourceBadgeClass(provider)}>
-						{provider === '5ebits'
-							? '5e-Bits'
-							: provider.charAt(0).toUpperCase() + provider.slice(1)}
+						{provider.charAt(0).toUpperCase() + provider.slice(1)}
 					</Badge>
 				{:else if source}
 					<Badge color={getSourceBadgeClass(source)}>

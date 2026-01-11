@@ -16,7 +16,7 @@
  *                     proficiency, abilityScore, damageType, magicSchool, equipment,
  *                     weaponProperty, equipmentCategory, vehicle, monsterType, rule,
  *                     ruleSection, weapon, armor, condition, plane, section
- *   --provider <id>   Provider ID to sync (e.g., open5e, 5e-bits, srd, homebrew)
+ *   --provider <id>   Provider ID to sync (e.g., open5e, homebrew)
  *   --full            Force full re-sync (vs incremental)
  *   --verbose, -v     Verbose output
  *   --quiet, -q       Minimal output (only summary)
@@ -317,7 +317,7 @@ ${colors.bright}Options:${colors.reset}
                                 ${colors.green}feat${colors.reset}, ${colors.green}background${colors.reset},
                                 ${colors.green}race${colors.reset}, ${colors.green}class${colors.reset}
   ${colors.cyan}--provider <id>${colors.reset}   Sync only a specific provider
-                        Values: ${colors.green}open5e${colors.reset}, ${colors.green}srd${colors.reset}, ${colors.green}homebrew${colors.reset}
+                        Values: ${colors.green}open5e${colors.reset}, ${colors.green}homebrew${colors.reset}
   ${colors.cyan}--full${colors.reset}             Force full re-sync (ignore incremental)
   ${colors.cyan}--verbose, -v${colors.reset}     Show detailed progress
   ${colors.cyan}--quiet, -q${colors.reset}       Minimal output (summary only)
@@ -326,7 +326,7 @@ ${colors.bright}Options:${colors.reset}
 ${colors.bright}Examples:${colors.reset}
   ${colors.cyan}bun run db:sync${colors.reset}                 # Sync everything
   ${colors.cyan}bun run db:sync --type spell${colors.reset}    # Sync spells only
-  ${colors.cyan}bun run db:sync --provider srd${colors.reset}  # Sync SRD content only
+  ${colors.cyan}bun run db:sync --provider open5e${colors.reset}  # Sync Open5e content only
   ${colors.cyan}bun run db:sync --full${colors.reset}          # Force full re-sync
 `;
 	console.log(help);

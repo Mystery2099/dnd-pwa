@@ -9,12 +9,6 @@ describe('sourceBadge utilities', () => {
 			expect(result).toContain('--color-gem-sapphire');
 		});
 
-		it('should return amber styling for srd source', () => {
-			const result = getSourceBadgeClass('srd');
-
-			expect(result).toContain('--color-gem-topaz');
-		});
-
 		it('should return purple styling for homebrew source', () => {
 			const result = getSourceBadgeClass('homebrew');
 
@@ -45,12 +39,6 @@ describe('sourceBadge utilities', () => {
 			const result = getSourceLabel('open5e');
 
 			expect(result).toBe('Open5e');
-		});
-
-		it('should return "SRD" for srd source', () => {
-			const result = getSourceLabel('srd');
-
-			expect(result).toBe('SRD');
 		});
 
 		it('should return "Homebrew" for homebrew source', () => {
