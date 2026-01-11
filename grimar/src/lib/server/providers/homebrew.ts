@@ -107,26 +107,31 @@ export class HomebrewProvider extends BaseProvider {
 	transformItem(rawItem: unknown, type: CompendiumTypeName): TransformResult {
 		const item = rawItem as HomebrewItem;
 		const externalId = item.slug || item.index || item.id || this.generateId();
+		const jsonData = JSON.stringify(item);
 
 		switch (type) {
 			case 'spell':
-				return this.transformSpell(item, externalId);
+				return this.transformSpell(item, externalId, jsonData);
 			case 'monster':
-				return this.transformMonster(item, externalId);
+				return this.transformMonster(item, externalId, jsonData);
 			case 'feat':
-				return this.transformFeat(item, externalId);
+				return this.transformFeat(item, externalId, jsonData);
 			case 'background':
-				return this.transformBackground(item, externalId);
+				return this.transformBackground(item, externalId, jsonData);
 			case 'race':
-				return this.transformRace(item, externalId);
+				return this.transformRace(item, externalId, jsonData);
 			case 'class':
-				return this.transformClass(item, externalId);
+				return this.transformClass(item, externalId, jsonData);
 			default:
-				return this.transformGeneric(item, externalId);
+				return this.transformGeneric(item, externalId, jsonData);
 		}
 	}
 
-	private transformSpell(item: HomebrewItem, externalId: string): TransformResult {
+	private transformSpell(
+		item: HomebrewItem,
+		externalId: string,
+		jsonData: string
+	): TransformResult {
 		let level = 0;
 		if (typeof item.level === 'number') {
 			level = item.level;
@@ -153,12 +158,18 @@ export class HomebrewProvider extends BaseProvider {
 			name: item.name,
 			summary,
 			details: item,
+			jsonData,
 			spellLevel: level,
-			spellSchool: schoolName
+			spellSchool: schoolName,
+			sourcePublisher: 'homebrew'
 		};
 	}
 
-	private transformMonster(item: HomebrewItem, externalId: string): TransformResult {
+	private transformMonster(
+		item: HomebrewItem,
+		externalId: string,
+		jsonData: string
+	): TransformResult {
 		const size = this.toTitleCase(item.size || 'Medium');
 		const typeName = this.toTitleCase(item.type || 'Humanoid');
 		const cr = String(item.challenge_rating || '0');
@@ -170,13 +181,15 @@ export class HomebrewProvider extends BaseProvider {
 			name: item.name,
 			summary,
 			details: item,
+			jsonData,
 			challengeRating: cr,
 			monsterSize: size,
-			monsterType: typeName
+			monsterType: typeName,
+			sourcePublisher: 'homebrew'
 		};
 	}
 
-	private transformFeat(item: HomebrewItem, externalId: string): TransformResult {
+	private transformFeat(item: HomebrewItem, externalId: string, jsonData: string): TransformResult {
 		const summary = item.feat?.prerequisites?.length
 			? `Prerequisite: ${item.feat.prerequisites.join(', ')}`
 			: 'Feat';
@@ -186,12 +199,18 @@ export class HomebrewProvider extends BaseProvider {
 			name: item.name,
 			summary,
 			details: item,
+			jsonData,
 			featPrerequisites: item.feat?.prerequisites?.join(', ') || '',
-			featBenefits: item.feat?.description || []
+			featBenefits: item.feat?.description || [],
+			sourcePublisher: 'homebrew'
 		};
 	}
 
-	private transformBackground(item: HomebrewItem, externalId: string): TransformResult {
+	private transformBackground(
+		item: HomebrewItem,
+		externalId: string,
+		jsonData: string
+	): TransformResult {
 		const summary = item.background?.feature
 			? `Feature: ${item.background.feature.name}`
 			: 'Background';
@@ -201,12 +220,14 @@ export class HomebrewProvider extends BaseProvider {
 			name: item.name,
 			summary,
 			details: item,
+			jsonData,
 			backgroundFeature: item.background?.feature?.name || '',
-			backgroundSkillProficiencies: item.background?.skill_proficiencies?.join(', ') || ''
+			backgroundSkillProficiencies: item.background?.skill_proficiencies?.join(', ') || '',
+			sourcePublisher: 'homebrew'
 		};
 	}
 
-	private transformRace(item: HomebrewItem, externalId: string): TransformResult {
+	private transformRace(item: HomebrewItem, externalId: string, jsonData: string): TransformResult {
 		const size = this.toTitleCase(item.race?.size || 'Medium');
 
 		const summary = `${size} | Speed ${item.race?.speed || 30}`;
@@ -216,13 +237,19 @@ export class HomebrewProvider extends BaseProvider {
 			name: item.name,
 			summary,
 			details: item,
+			jsonData,
 			raceSize: size,
 			raceSpeed: item.race?.speed || 30,
-			raceAbilityScores: item.race?.ability_bonuses || {}
+			raceAbilityScores: item.race?.ability_bonuses || {},
+			sourcePublisher: 'homebrew'
 		};
 	}
 
-	private transformClass(item: HomebrewItem, externalId: string): TransformResult {
+	private transformClass(
+		item: HomebrewItem,
+		externalId: string,
+		jsonData: string
+	): TransformResult {
 		const summary = `Hit Die: d${item.class?.hit_die || 8}`;
 
 		return {
@@ -230,16 +257,24 @@ export class HomebrewProvider extends BaseProvider {
 			name: item.name,
 			summary,
 			details: item,
-			classHitDie: item.class?.hit_die || 8
+			jsonData,
+			classHitDie: item.class?.hit_die || 8,
+			sourcePublisher: 'homebrew'
 		};
 	}
 
-	private transformGeneric(item: HomebrewItem, externalId: string): TransformResult {
+	private transformGeneric(
+		item: HomebrewItem,
+		externalId: string,
+		jsonData: string
+	): TransformResult {
 		return {
 			externalId,
 			name: item.name,
 			summary: `${item.name} (Homebrew)`,
-			details: item
+			details: item,
+			jsonData,
+			sourcePublisher: 'homebrew'
 		};
 	}
 
