@@ -151,8 +151,22 @@ export const SPELLS_CONFIG: CompendiumTypeConfig = {
 			const details = item.details;
 			const classes = (details &&
 				typeof details === 'object' &&
-				(details as Record<string, unknown>).classes) as Array<{ name: string }> | undefined;
-			const classNames = (Array.isArray(classes) ? classes : []).map((c) => c.name);
+				(details as Record<string, unknown>).classes) as unknown[] | undefined;
+
+			// Handle both v2 string[] format and v1 object { name: string }[] format
+			let classNames: string[] = [];
+			if (Array.isArray(classes)) {
+				classNames = classes
+					.map((c) => {
+						if (typeof c === 'string') return c;
+						if (c && typeof c === 'object' && 'name' in c) {
+							return String((c as { name: unknown }).name);
+						}
+						return '';
+					})
+					.filter(Boolean);
+			}
+
 			return [school, level, ...classNames];
 		},
 
