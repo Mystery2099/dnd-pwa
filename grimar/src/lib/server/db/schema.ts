@@ -23,12 +23,14 @@ export const compendiumItems = sqliteTable(
 		content: text('content'),
 		// Render-ready payload for list/detail views
 		details: text('details', { mode: 'json' }).notNull(),
-		// External JSON path (Option B: file-per-item)
-		jsonPath: text('json_path'),
+		// Full cleaned/transformed payload as JSON string (Hybrid SQLite approach)
+		jsonData: text('json_data'),
 		// Edition: 2014 (5e 2014) | 2024 (5e 2024) | null (mixed/unknown)
 		edition: text('edition'),
 		// Source book: SRD | PHB | XGE | TCoE | VGM | etc.
 		sourceBook: text('source_book'),
+		// Publisher: wizards-of-the-coast, kobold-press, en-publishing, etc.
+		sourcePublisher: text('source_publisher'),
 		// Data version from the import (e.g., 4.3.0)
 		dataVersion: text('data_version'),
 		// Spell sorting columns
@@ -95,6 +97,7 @@ export const compendiumItems = sqliteTable(
 		// Edition/source indexes
 		editionIdx: index('compendium_items_edition_idx').on(table.edition),
 		sourceBookIdx: index('compendium_items_source_book_idx').on(table.sourceBook),
+		sourcePublisherIdx: index('compendium_items_source_publisher_idx').on(table.sourcePublisher),
 		dataVersionIdx: index('compendium_items_data_version_idx').on(table.dataVersion)
 	})
 );
