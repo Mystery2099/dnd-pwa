@@ -35,8 +35,12 @@ export interface TransformResult {
 	summary: string;
 	details: Record<string, unknown>;
 
+	// Full cleaned/transformed payload as JSON string (Hybrid SQLite)
+	jsonData?: string;
+
 	// Source tracking
 	sourceBook?: string;
+	sourcePublisher?: string; // wizards-of-the-coast, kobold-press, en-publishing, etc.
 	edition?: string;
 
 	// Spell-specific fields

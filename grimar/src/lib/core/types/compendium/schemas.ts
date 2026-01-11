@@ -780,3 +780,91 @@ export type SrdVehicle = z.infer<typeof SrdVehicleSchema>;
 export type SrdMonsterType = z.infer<typeof SrdMonsterTypeSchema>;
 export type SrdRuleSection = z.infer<typeof SrdRuleSectionSchema>;
 export type SrdRule = z.infer<typeof SrdRuleSchema>;
+
+// ============================================================================
+// GitHub JSON Schemas (Open5e v2 data from GitHub releases)
+// Used for Hybrid SQLite approach - direct JSON ingestion
+// ============================================================================
+
+export const GithubSpellSchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	level: z.number(),
+	school: z.object({ name: z.string() }).optional(),
+	classes: z.array(z.object({ name: z.string() })).optional(),
+	desc: z.array(z.string()),
+	higher_level: z.array(z.string()).nullable().optional(),
+	range: z.string(),
+	components: z.array(z.string()).optional(),
+	material: z.string().nullable().optional(),
+	ritual: z.boolean(),
+	duration: z.string(),
+	concentration: z.boolean(),
+	casting_time: z.string()
+});
+
+export const GithubCreatureSchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	size: z.string().optional(),
+	type: z.string().optional(),
+	subtype: z.string().nullable().optional(),
+	challenge_rating: z.number().optional(),
+	armor_class: z.number().optional(),
+	hit_points: z.number().optional(),
+	speed: z.record(z.string(), z.union([z.string(), z.number()])).optional(),
+	strength: z.number().optional(),
+	dexterity: z.number().optional(),
+	constitution: z.number().optional(),
+	intelligence: z.number().optional(),
+	wisdom: z.number().optional(),
+	charisma: z.number().optional(),
+	actions: z.array(z.object({ name: z.string(), desc: z.string() })).optional()
+});
+
+export const GithubMagicItemSchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	rarity: z.object({ name: z.string() }).optional(),
+	type: z.string().optional(),
+	description: z.array(z.string()).optional()
+});
+
+export const GithubFeatSchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	prerequisites: z.array(z.string()).optional(),
+	description: z.array(z.string()).optional()
+});
+
+export const GithubBackgroundSchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	feature: z.object({ name: z.string(), desc: z.string() }).optional()
+});
+
+export const GithubSpeciesSchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	desc: z.string().optional(),
+	traits: z.array(z.object({ name: z.string(), desc: z.string() })).optional(),
+	is_subspecies: z.boolean().optional()
+});
+
+export const GithubClassSchema = z.object({
+	index: z.string(),
+	name: z.string(),
+	hit_die: z.number()
+});
+
+// ============================================================================
+// GitHub Type Exports
+// ============================================================================
+
+export type GithubSpell = z.infer<typeof GithubSpellSchema>;
+export type GithubCreature = z.infer<typeof GithubCreatureSchema>;
+export type GithubMagicItem = z.infer<typeof GithubMagicItemSchema>;
+export type GithubFeat = z.infer<typeof GithubFeatSchema>;
+export type GithubBackground = z.infer<typeof GithubBackgroundSchema>;
+export type GithubSpecies = z.infer<typeof GithubSpeciesSchema>;
+export type GithubClass = z.infer<typeof GithubClassSchema>;

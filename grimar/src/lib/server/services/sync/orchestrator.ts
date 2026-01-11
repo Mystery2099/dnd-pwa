@@ -6,7 +6,7 @@
  */
 
 import { providerRegistry, SYNC_CONFIG } from '$lib/server/providers';
-import { compendiumCache, compendiumItems } from '$lib/server/db/schema';
+import { compendiumItems } from '$lib/server/db/schema';
 import { eq, and } from 'drizzle-orm';
 import { syncItemToFts } from '$lib/server/db/db-fts';
 import type { Db } from '$lib/server/db';
@@ -25,8 +25,6 @@ import {
 	getSyncSummary
 } from './sync-metrics';
 import { cleanupDisabledSources } from './sync-cleanup';
-import { writeFileSync, mkdirSync, existsSync } from 'fs';
-import { join } from 'path';
 import { createModuleLogger } from '$lib/server/logger';
 
 const log = createModuleLogger('SyncOrchestrator');
@@ -597,11 +595,7 @@ async function syncTypeFromProvider(
 	}
 
 	// Process in batches
-	const DATA_ROOT = 'data/compendium';
-	const typeDir = join(process.cwd(), DATA_ROOT, type);
-	if (!existsSync(typeDir)) {
-		mkdirSync(typeDir, { recursive: true });
-	}
+	// Note: Disk file writes removed - data now stored in json_data column
 
 	// Emit insert:start
 	emitProgress(onProgress, {
@@ -620,33 +614,7 @@ async function syncTypeFromProvider(
 		try {
 			await db.transaction(async (tx) => {
 				for (const { transformed } of batch) {
-					// Save to external JSON file
-					const fileName = `${transformed.externalId}.json`;
-					const relativePath = join(DATA_ROOT, type, fileName);
-					const fullPath = join(process.cwd(), relativePath);
-
-					try {
-						writeFileSync(fullPath, JSON.stringify(transformed.details, null, 2));
-					} catch (fsError) {
-						log.error({ filePath: fullPath, error: fsError }, 'Failed to write file');
-					}
-
-					// Store raw cache data
-					const cacheId = `${providerId}:${type}:${transformed.externalId}`;
-					await tx
-						.insert(compendiumCache)
-						.values({
-							id: cacheId,
-							type,
-							data: transformed.details
-						})
-						.onConflictDoUpdate({
-							target: compendiumCache.id,
-							set: { data: transformed.details }
-						})
-						.execute();
-
-					// Store processed item
+					// Store processed item with json_data column (Hybrid SQLite)
 					await tx
 						.insert(compendiumItems)
 						.values({
@@ -656,7 +624,10 @@ async function syncTypeFromProvider(
 							name: transformed.name,
 							summary: transformed.summary,
 							details: transformed.details,
-							jsonPath: relativePath,
+							jsonData: transformed.jsonData,
+							edition: transformed.edition,
+							sourceBook: transformed.sourceBook,
+							sourcePublisher: transformed.sourcePublisher,
 							spellLevel: transformed.spellLevel,
 							spellSchool: transformed.spellSchool,
 							challengeRating: transformed.challengeRating,
@@ -675,7 +646,10 @@ async function syncTypeFromProvider(
 								name: transformed.name,
 								summary: transformed.summary,
 								details: transformed.details,
-								jsonPath: relativePath,
+								jsonData: transformed.jsonData,
+								edition: transformed.edition,
+								sourceBook: transformed.sourceBook,
+								sourcePublisher: transformed.sourcePublisher,
 								spellLevel: transformed.spellLevel,
 								spellSchool: transformed.spellSchool,
 								challengeRating: transformed.challengeRating,
@@ -701,11 +675,15 @@ async function syncTypeFromProvider(
 						)
 					});
 					if (insertedItem) {
+						// Extract searchable content from jsonData if available, fallback to details
+						const payload = transformed.jsonData
+							? JSON.parse(transformed.jsonData)
+							: transformed.details;
 						await syncItemToFts(
 							insertedItem.id,
 							insertedItem.name,
 							insertedItem.summary,
-							insertedItem.details as Record<string, unknown>,
+							payload,
 							insertedItem.content as string | null
 						);
 					}

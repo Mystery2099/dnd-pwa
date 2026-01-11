@@ -1,42 +1,227 @@
 /**
  * Open5e Provider
  *
- * Adapter for the Open5e API v2 (https://api.open5e.com/v2)
+ * Adapter for Open5e GitHub releases (Hybrid SQLite approach).
+ * Fetches raw JSON directly from GitHub for all publishers/sources.
  */
 
 import { BaseProvider } from './base-provider';
-import type { FetchOptions, ProviderListResponse, TransformResult } from './types';
+import type { ProviderListResponse, TransformResult } from './types';
 import type { CompendiumTypeName } from '$lib/core/types/compendium';
 import { z } from 'zod';
-import {
-	Open5eListResponseSchema,
-	Open5eSpellSchema,
-	Open5eCreatureSchema,
-	Open5eSpeciesSchema
-} from '$lib/core/types/compendium/schemas';
 import { createModuleLogger } from '$lib/server/logger';
 
 const log = createModuleLogger('Open5eProvider');
 
-/**
- * Validate data with Zod schema
- */
-function validateData<T>(schema: z.ZodType<T>, data: unknown, context: string): T {
-	const result = schema.safeParse(data);
-	if (!result.success) {
-		log.error({ context, issues: result.error.issues }, 'Validation failed');
-		throw new Error(`Invalid ${context} data from Open5e API`);
-	}
-	return result.data;
+// GitHub configuration
+const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/open5e/open5e-api';
+const GITHUB_API_BASE = 'https://api.github.com/repos/open5e/open5e-api';
+const VERSION = 'v1.12.0';
+
+// Publishers and their sources (from data/v2/)
+const PUBLISHERS = {
+	'en-publishing': ['a5e-ag', 'a5e-ddg', 'a5e-gpg', 'a5e-mm'],
+	'green-ronin': ['tdcs'],
+	'kobold-press': [
+		'bfrd',
+		'ccdx',
+		'deepm',
+		'deepmx',
+		'kp',
+		'tob',
+		'tob-2023',
+		'tob2',
+		'tob3',
+		'toh',
+		'vom',
+		'wz'
+	],
+	open5e: ['core', 'elderberry-inn-icons', 'open5e', 'open5e-2024'],
+	somanyrobots: ['spells-that-dont-suck'],
+	'wizards-of-the-coast': ['srd-2014', 'srd-2024']
+} as const;
+
+// Type mapping: compendium type -> v2 JSON filename
+const TYPE_FILES: Record<CompendiumTypeName, string> = {
+	spell: 'Spell.json',
+	monster: 'Creature.json',
+	item: 'Item.json',
+	feat: 'Feat.json',
+	background: 'Background.json',
+	race: 'Species.json',
+	class: 'CharacterClass.json',
+	subclass: 'Subclass.json',
+	subrace: 'Subrace.json',
+	trait: 'SpeciesTrait.json',
+	condition: 'Condition.json',
+	feature: 'ClassFeature.json',
+	skill: 'Skill.json',
+	language: 'Language.json',
+	alignment: 'Alignment.json',
+	proficiency: 'Proficiency.json',
+	abilityScore: 'Ability.json',
+	damageType: 'DamageType.json',
+	magicSchool: 'SpellSchool.json',
+	equipment: 'Item.json',
+	weaponProperty: 'WeaponProperty.json',
+	equipmentCategory: 'ItemCategory.json',
+	vehicle: 'Vehicle.json',
+	monsterType: 'CreatureType.json',
+	rule: 'Rule.json',
+	ruleSection: 'RuleSection.json',
+	weapon: 'Weapon.json',
+	armor: 'Armor.json',
+	plane: 'Environment.json',
+	section: 'RuleSection.json'
+};
+
+// ============================================================================
+// Zod Schemas for v2 API format
+// ============================================================================
+
+export const GithubDocumentSchema = z.object({
+	fields: z.object({
+		name: z.string(),
+		display_name: z.string().nullable().optional(),
+		publisher: z.string(),
+		gamesystem: z.string().optional(),
+		desc: z.string().optional()
+	}),
+	model: z.string(),
+	pk: z.string()
+});
+
+export const GithubSpellSchema = z.object({
+	fields: z.object({
+		name: z.string(),
+		desc: z.array(z.string()).optional(),
+		higher_level: z.array(z.string()).optional(),
+		level: z.number(),
+		school: z.string().optional(),
+		classes: z.array(z.string()).optional(),
+		range: z.string().optional(),
+		range_text: z.string().optional(),
+		components: z.array(z.string()).optional(),
+		material: z.string().optional(),
+		ritual: z.boolean(),
+		duration: z.string().optional(),
+		concentration: z.boolean(),
+		casting_time: z.string().optional()
+	}),
+	model: z.string(),
+	pk: z.string(),
+	document: z.string()
+});
+
+export const GithubCreatureSchema = z.object({
+	fields: z.object({
+		name: z.string(),
+		size: z.string().optional(),
+		type: z.string().optional(),
+		subtype: z.string().optional(),
+		challenge_rating: z.union([z.number(), z.string()]).optional(),
+		armor_class: z.number().optional(),
+		hit_points: z.number().optional(),
+		speed: z.record(z.string(), z.union([z.string(), z.number()])).optional()
+	}),
+	model: z.string(),
+	pk: z.string(),
+	document: z.string()
+});
+
+export const GithubItemSchema = z.object({
+	fields: z.object({
+		name: z.string(),
+		rarity: z.string().optional(),
+		type: z.string().optional(),
+		desc: z.array(z.string()).optional()
+	}),
+	model: z.string(),
+	pk: z.string(),
+	document: z.string()
+});
+
+export const GithubFeatSchema = z.object({
+	fields: z.object({
+		name: z.string(),
+		prerequisites: z.array(z.string()).optional(),
+		description: z.array(z.string()).optional()
+	}),
+	model: z.string(),
+	pk: z.string(),
+	document: z.string()
+});
+
+export const GithubBackgroundSchema = z.object({
+	fields: z.object({
+		name: z.string(),
+		feature: z.object({ name: z.string() }).optional()
+	}),
+	model: z.string(),
+	pk: z.string(),
+	document: z.string()
+});
+
+export const GithubSpeciesSchema = z.object({
+	fields: z.object({
+		name: z.string(),
+		desc: z.string().optional(),
+		traits: z.array(z.object({ name: z.string() })).optional()
+	}),
+	model: z.string(),
+	pk: z.string(),
+	document: z.string()
+});
+
+export const GithubCharacterClassSchema = z.object({
+	fields: z.object({
+		name: z.string(),
+		hit_die: z.number().optional()
+	}),
+	model: z.string(),
+	pk: z.string(),
+	document: z.string()
+});
+
+export const GithubGenericSchema = z.object({
+	fields: z.record(z.string(), z.any()),
+	model: z.string(),
+	pk: z.string(),
+	document: z.string()
+});
+
+// ============================================================================
+// Type exports
+// ============================================================================
+
+export type GithubDocument = z.infer<typeof GithubDocumentSchema>;
+export type GithubSpell = z.infer<typeof GithubSpellSchema>;
+export type GithubCreature = z.infer<typeof GithubCreatureSchema>;
+export type GithubItem = z.infer<typeof GithubItemSchema>;
+export type GithubFeat = z.infer<typeof GithubFeatSchema>;
+export type GithubBackground = z.infer<typeof GithubBackgroundSchema>;
+export type GithubSpecies = z.infer<typeof GithubSpeciesSchema>;
+export type GithubCharacterClass = z.infer<typeof GithubCharacterClassSchema>;
+export type GithubGeneric = z.infer<typeof GithubGenericSchema>;
+
+// ============================================================================
+// Provider Implementation
+// ============================================================================
+
+interface SourceInfo {
+	publisher: string;
+	source: string;
+	displayName: string;
+	gamesystem?: string;
 }
 
-/**
- * Open5e Provider Implementation
- */
 export class Open5eProvider extends BaseProvider {
 	readonly id = 'open5e';
 	readonly name = 'Open5e';
 	readonly baseUrl: string;
+
+	private sources: Map<string, SourceInfo> = new Map();
+	private sourcesLoaded = false;
 
 	private static readonly DEFAULT_TYPES = [
 		'spell',
@@ -48,267 +233,369 @@ export class Open5eProvider extends BaseProvider {
 		'class'
 	] as const satisfies readonly CompendiumTypeName[];
 
-	constructor(
-		baseUrl: string = 'https://api.open5e.com/v2',
-		supportedTypes?: readonly CompendiumTypeName[]
-	) {
+	constructor(baseUrl: string = GITHUB_RAW_BASE, supportedTypes?: readonly CompendiumTypeName[]) {
 		super(supportedTypes ?? Open5eProvider.DEFAULT_TYPES);
 		this.baseUrl = baseUrl;
 	}
 
-	async fetchList(type: CompendiumTypeName, options?: FetchOptions): Promise<ProviderListResponse> {
-		const endpoint = this.getEndpoint(type);
-		const limit = options?.limit || 200;
+	/**
+	 * Load all sources from GitHub
+	 * Fetches Document.json for each publisher/source to get metadata
+	 */
+	async loadSources(): Promise<void> {
+		if (this.sourcesLoaded) return;
 
-		const url = new URL(`${this.baseUrl}${endpoint}`);
-		url.searchParams.set('limit', String(limit));
-		url.searchParams.set('format', 'json');
+		log.info('Loading sources from GitHub...');
 
-		const response = await fetch(url.toString());
-		if (!response.ok) {
-			throw new Error(`Open5e API error: ${response.status} ${response.statusText}`);
+		for (const [publisher, sources] of Object.entries(PUBLISHERS)) {
+			for (const source of sources) {
+				try {
+					const url = `${this.baseUrl}/${VERSION}/data/v2/${publisher}/${source}/Document.json`;
+					const response = await fetch(url);
+
+					if (!response.ok) {
+						log.warn({ url, status: response.status }, 'Failed to fetch Document.json');
+						continue;
+					}
+
+					const data = await response.json();
+
+					// Handle array response - Document.json returns arrays
+					const docs = Array.isArray(data) ? data : [data];
+
+					for (const d of docs) {
+						// Parse each document individually
+						const parsed = GithubDocumentSchema.parse(d);
+						const sourceInfo: SourceInfo = {
+							publisher,
+							source: parsed.pk,
+							displayName: parsed.fields.display_name || parsed.fields.name,
+							gamesystem: parsed.fields.gamesystem
+						};
+						this.sources.set(parsed.pk, sourceInfo);
+					}
+
+					log.debug({ publisher, source, docCount: docs.length }, 'Loaded source');
+				} catch (error) {
+					log.warn({ publisher, source, error }, 'Failed to load source');
+				}
+			}
 		}
 
-		const rawData = await response.json();
-		const data = validateData(Open5eListResponseSchema, rawData, 'list response');
+		this.sourcesLoaded = true;
+		log.info({ sourceCount: this.sources.size }, 'Sources loaded');
+	}
+
+	/**
+	 * Get all sources as an array
+	 */
+	async getSources(): Promise<SourceInfo[]> {
+		await this.loadSources();
+		return Array.from(this.sources.values());
+	}
+
+	/**
+	 * Get sources for a specific type
+	 */
+	async getSourcesForType(type: CompendiumTypeName): Promise<SourceInfo[]> {
+		await this.loadSources();
+		const fileName = TYPE_FILES[type];
+		if (!fileName) return [];
+
+		const validSources: SourceInfo[] = [];
+
+		for (const sourceInfo of this.sources.values()) {
+			try {
+				const url = `${this.baseUrl}/${VERSION}/data/v2/${sourceInfo.publisher}/${sourceInfo.source}/${fileName}`;
+				const response = await fetch(url, { method: 'HEAD' });
+				if (response.ok) {
+					validSources.push(sourceInfo);
+				}
+			} catch {
+				// Source doesn't have this type
+			}
+		}
+
+		return validSources;
+	}
+
+	async fetchList(type: CompendiumTypeName): Promise<ProviderListResponse> {
+		const sources = await this.getSourcesForType(type);
+		const fileName = TYPE_FILES[type];
+
+		if (!fileName || sources.length === 0) {
+			return { items: [], hasMore: false };
+		}
+
+		const allItems: unknown[] = [];
+
+		for (const sourceInfo of sources) {
+			try {
+				const url = `${this.baseUrl}/${VERSION}/data/v2/${sourceInfo.publisher}/${sourceInfo.source}/${fileName}`;
+				const response = await fetch(url);
+
+				if (!response.ok) {
+					log.warn({ url, status: response.status }, 'Failed to fetch type file');
+					continue;
+				}
+
+				const data = await response.json();
+				const items = Array.isArray(data) ? data : [data];
+
+				// Tag items with source info
+				for (const item of items) {
+					(item as Record<string, unknown>)._sourceInfo = sourceInfo;
+				}
+
+				allItems.push(...items);
+			} catch (error) {
+				log.warn({ source: sourceInfo.source, type, error }, 'Failed to fetch type');
+			}
+		}
 
 		return {
-			items: data.results,
-			hasMore: data.next !== null,
-			nextUrl: data.next || undefined
+			items: allItems,
+			hasMore: false
 		};
 	}
 
 	async fetchAllPages(type: CompendiumTypeName): Promise<unknown[]> {
-		const endpoint = this.getEndpoint(type);
-		const allItems = await this.fetchAllPagesPaginated(endpoint, 200);
-		return allItems;
+		const response = await this.fetchList(type);
+		return response.items;
 	}
 
 	async fetchDetail(
 		type: CompendiumTypeName,
 		externalId: string
 	): Promise<Record<string, unknown>> {
-		const endpoint = this.getEndpoint(type);
-		const url = `${this.baseUrl}${endpoint}${externalId}/`;
+		const allItems = await this.fetchAllPages(type);
+		const item = allItems.find((i) => {
+			const raw = i as Record<string, unknown>;
+			return raw.pk === externalId;
+		});
 
-		const response = await fetch(url);
-		if (!response.ok) {
-			throw new Error(`Open5e API error: ${response.status} ${response.statusText}`);
+		if (!item) {
+			throw new Error(`Item not found: ${externalId}`);
 		}
 
-		return (await response.json()) as Record<string, unknown>;
+		return item as Record<string, unknown>;
 	}
 
 	transformItem(rawItem: unknown, type: CompendiumTypeName): TransformResult {
 		const raw = rawItem as Record<string, unknown>;
-		const sourceBook = this.extractSourceBook(raw);
+		const sourceInfo = raw._sourceInfo as SourceInfo | undefined;
+		const sourceBook = sourceInfo?.source || 'unknown';
+		const sourcePublisher = sourceInfo?.publisher || 'unknown';
+		const edition = this.extractEdition(sourceInfo?.gamesystem);
+
+		// Build jsonData from fields
+		const fields = raw.fields as Record<string, unknown>;
+		const jsonData = JSON.stringify(fields);
+
+		const result = this.transformFields(raw, type, sourceBook, sourcePublisher, edition);
+
+		return {
+			...result,
+			jsonData,
+			sourceBook,
+			sourcePublisher
+		};
+	}
+
+	private extractEdition(gamesystem?: string): string | undefined {
+		if (!gamesystem) return undefined;
+		if (gamesystem.includes('2024')) return '2024';
+		if (gamesystem.includes('2014')) return '2014';
+		return undefined;
+	}
+
+	private transformFields(
+		raw: Record<string, unknown>,
+		type: CompendiumTypeName,
+		sourceBook: string,
+		sourcePublisher: string,
+		edition?: string
+	): TransformResult {
+		const fields = raw.fields as Record<string, unknown>;
+		const pk = raw.pk as string;
 
 		switch (type) {
 			case 'spell':
-				return this.transformSpell(rawItem, sourceBook);
+				return this.transformSpell(fields, pk, sourceBook, edition);
 			case 'monster':
-				return this.transformCreature(rawItem, sourceBook);
+				return this.transformCreature(fields, pk, sourceBook);
 			case 'item':
-				return this.transformItemGeneric(rawItem, sourceBook);
+				return this.transformItemRecord(fields, pk, sourceBook);
 			case 'feat':
-				return this.transformFeat(rawItem, sourceBook);
+				return this.transformFeat(fields, pk, sourceBook);
 			case 'background':
-				return this.transformBackground(rawItem, sourceBook);
+				return this.transformBackground(fields, pk, sourceBook);
 			case 'race':
-				return this.transformSpecies(rawItem, sourceBook);
+				return this.transformSpecies(fields, pk, sourceBook);
 			case 'class':
-				return this.transformClass(rawItem, sourceBook);
+				return this.transformClass(fields, pk, sourceBook);
 			default:
-				throw new Error(`Open5e does not support type: ${type}`);
+				return this.transformGeneric(fields, pk, sourceBook);
 		}
 	}
 
-	/**
-	 * Extract source book from Open5e v2 item
-	 * V2 uses nested document object with name property
-	 */
-	private extractSourceBook(raw: Record<string, unknown>): string {
-		const document = raw.document as Record<string, unknown> | undefined;
-		const documentTitle = document?.name as string | undefined;
-
-		if (!documentTitle) return 'Unknown';
-
-		// Normalize common source names
-		const sources: Record<string, string> = {
-			srd: 'SRD',
-			"player's handbook": 'PHB',
-			'players handbook': 'PHB',
-			'dungeon masters guide': 'DMG',
-			'dm guide': 'DMG',
-			'monster manual': 'MM',
-			'xanathars guide to everything': 'XGE',
-			xanathar: 'XGE',
-			'tashas cauldron of everything': 'TCoE',
-			tashas: 'TCoE',
-			'volos guide to monsters': 'VGM',
-			volo: 'VGM',
-			'mordenkainens tome of foes': 'MTF',
-			mordenkainen: 'MTF',
-			'sage advice compendium': 'SAC',
-			'guildmasters guide to ravnica': 'GGR',
-			ravnica: 'GGR',
-			' acquisitions incorporated': 'AI',
-			'eberron: rising from the last war': 'ERLW',
-			eberron: 'ERLR',
-			witchlight: 'WL',
-			'fizbans treasury of dragons': 'FTD',
-			'monsters of the multiverse': 'MOTM'
-		};
-
-		const normalized = documentTitle.toLowerCase();
-		for (const [key, value] of Object.entries(sources)) {
-			if (normalized.includes(key)) {
-				return value;
-			}
-		}
-
-		return documentTitle;
-	}
-
-	private transformSpell(raw: unknown, sourceBook: string): TransformResult {
-		const spell = validateData(Open5eSpellSchema, raw, 'spell');
-
-		// V2 uses boolean flags for components
-		const components: string[] = [];
-		if (spell.verbal) components.push('V');
-		if (spell.somatic) components.push('S');
-		if (spell.material) components.push('M');
-
-		// V2 uses level directly as number
-		const level = spell.level;
-		const schoolName = spell.school?.name || 'Unknown';
-
-		const summary = level === 0 ? `Cantrip ${schoolName}` : `Level ${level} ${schoolName}`;
+	private transformSpell(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string,
+		edition?: string
+	): TransformResult {
+		const name = String(fields.name || 'Unknown');
+		const level = Number(fields.level) || 0;
+		const school = String(fields.school || 'Unknown');
+		const summary = level === 0 ? `Cantrip ${school}` : `Level ${level} ${school}`;
 
 		return {
-			externalId: spell.key,
-			name: spell.name,
+			externalId,
+			name,
 			summary,
-			details: spell as unknown as Record<string, unknown>,
+			details: fields,
 			spellLevel: level,
-			spellSchool: schoolName,
-			sourceBook
+			spellSchool: school,
+			sourceBook,
+			edition
 		};
 	}
 
-	private transformCreature(raw: unknown, sourceBook: string): TransformResult {
-		const creature = validateData(Open5eCreatureSchema, raw, 'creature');
-
-		const sizeName = creature.size?.name || 'Medium';
-		const typeName = creature.type?.name || 'Unknown';
-		const cr = creature.challenge_rating_text || creature.challenge_rating_decimal || 'Unknown';
-
-		const summary = `${sizeName} ${typeName}, CR ${cr}`;
+	private transformCreature(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Unknown');
+		const size = String(fields.size || 'Medium');
+		const typeName = String(fields.type || 'Unknown');
+		const cr = String(fields.challenge_rating || 'Unknown');
+		const summary = `${size} ${typeName}, CR ${cr}`;
 
 		return {
-			externalId: creature.key,
-			name: creature.name,
+			externalId,
+			name,
 			summary,
-			details: creature as unknown as Record<string, unknown>,
+			details: fields,
 			challengeRating: cr,
-			monsterSize: sizeName,
+			monsterSize: size,
 			monsterType: typeName,
 			sourceBook
 		};
 	}
 
-	private transformSpecies(raw: unknown, sourceBook: string): TransformResult {
-		const species = validateData(Open5eSpeciesSchema, raw, 'species');
+	private transformItemRecord(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Unknown');
+		const rarity = String(fields.rarity || 'Unknown');
+		const itemType = String(fields.type || 'Item');
+		const summary = `${rarity} ${itemType}`;
 
 		return {
-			externalId: species.key,
-			name: species.name,
-			summary: species.name,
-			details: species as unknown as Record<string, unknown>,
-			sourceBook
-		};
-	}
-
-	private transformItemGeneric(raw: unknown, sourceBook: string): TransformResult {
-		const item = raw as Record<string, unknown>;
-		return {
-			externalId: String(item.key || item.slug || item.index || ''),
-			name: String(item.name || 'Unknown'),
-			summary: String(item.name || 'Unknown item'),
-			details: item,
-			sourceBook
-		};
-	}
-
-	private transformFeat(raw: unknown, sourceBook: string): TransformResult {
-		const feat = raw as Record<string, unknown>;
-		const prerequisites = feat.prerequisites as string[] | undefined;
-		const description = feat.description as string | undefined;
-
-		const summary = prerequisites?.length ? `Prerequisite: ${prerequisites.join(', ')}` : 'Feat';
-
-		return {
-			externalId: String(feat.key || feat.slug || feat.index || ''),
-			name: String(feat.name || 'Unknown'),
+			externalId,
+			name,
 			summary,
-			details: feat,
-			featPrerequisites: prerequisites?.join(', ') || '',
-			featBenefits: description ? [description] : [],
+			details: fields,
 			sourceBook
 		};
 	}
 
-	private transformBackground(raw: unknown, sourceBook: string): TransformResult {
-		const bg = raw as Record<string, unknown>;
-		const feature = bg.feature as Record<string, string> | undefined;
+	private transformFeat(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Unknown');
+		const prereqs = fields.prerequisites as string[] | undefined;
+		const summary = prereqs?.length ? `Prerequisite: ${prereqs.join(', ')}` : 'Feat';
 
+		return {
+			externalId,
+			name,
+			summary,
+			details: fields,
+			featPrerequisites: prereqs?.join(', ') || '',
+			sourceBook
+		};
+	}
+
+	private transformBackground(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Unknown');
+		const feature = fields.feature as { name?: string } | undefined;
 		const summary = feature?.name ? `Feature: ${feature.name}` : 'Background';
 
 		return {
-			externalId: String(bg.key || bg.slug || bg.index || ''),
-			name: String(bg.name || 'Unknown'),
+			externalId,
+			name,
 			summary,
-			details: bg,
+			details: fields,
 			backgroundFeature: feature?.name || '',
-			backgroundSkillProficiencies: '',
 			sourceBook
 		};
 	}
 
-	private transformClass(raw: unknown, sourceBook: string): TransformResult {
-		const cls = raw as Record<string, unknown>;
-
-		const summary = `Hit Die: d${cls.hit_die || 8}`;
+	private transformSpecies(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Unknown');
+		const summary = name;
 
 		return {
-			externalId: String(cls.key || cls.slug || cls.index || ''),
-			name: String(cls.name || 'Unknown'),
+			externalId,
+			name,
 			summary,
-			details: cls,
-			classHitDie: Number(cls.hit_die) || 8,
+			details: fields,
+			sourceBook
+		};
+	}
+
+	private transformClass(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Unknown');
+		const hitDie = Number(fields.hit_die) || 8;
+		const summary = `Hit Die: d${hitDie}`;
+
+		return {
+			externalId,
+			name,
+			summary,
+			details: fields,
+			classHitDie: hitDie,
+			sourceBook
+		};
+	}
+
+	private transformGeneric(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Unknown');
+
+		return {
+			externalId,
+			name,
+			summary: name,
+			details: fields,
 			sourceBook
 		};
 	}
 
 	protected getEndpoint(type: CompendiumTypeName): string {
-		switch (type) {
-			case 'spell':
-				return '/spells/';
-			case 'monster':
-				return '/creatures/';
-			case 'item':
-				return '/magicitems/';
-			case 'feat':
-				return '/feats/';
-			case 'background':
-				return '/backgrounds/';
-			case 'race':
-				return '/species/';
-			case 'class':
-				return '/classes/';
-			default:
-				throw new Error(`Open5e does not support type: ${type}`);
-		}
+		const fileName = TYPE_FILES[type];
+		return `${this.baseUrl}/${VERSION}/data/v2/{publisher}/{source}/${fileName}`;
 	}
 }
