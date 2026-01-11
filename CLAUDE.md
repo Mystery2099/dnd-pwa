@@ -69,12 +69,17 @@ grimar/
 
 ## More Info
 
-See **`AGENTS.md`** for:
-- Complete testing patterns and coverage targets
-- VirtualList/VirtualGrid usage with `{#snippet children(...)}` syntax
-- Design system ("Arcane Aero") with spell school colors
-- Database patterns, logging conventions, naming conventions
-- Commit message format (`<type>(<scope>): <description>`)
+See the **`docs/`** directory for detailed documentation:
+
+| File | Purpose |
+|------|---------|
+| `STYLE_GUIDE.md` | "Arcane Aero" design system and visual guidelines |
+| `COMPONENTS.md` | UI component inventory and patterns |
+| `ROUTES.md` | Route structure and API endpoints |
+| `architecture-doc.md` | Technical architecture and system design |
+| `COMPENDIUM_PAGES.md` | Compendium specifications |
+
+**Commit format**: `<type>(<scope>): <description>`
 
 ## MCP Tools
 
