@@ -10,6 +10,7 @@ import { browser } from '$app/environment';
 
 /**
  * URL patterns to intercept and their corresponding compendium types
+ * Supports both v1 and v2 Open5e API URL patterns
  */
 const OPEN5E_PATTERNS: Record<string, string> = {
 	monsters: 'monster',
@@ -18,7 +19,10 @@ const OPEN5E_PATTERNS: Record<string, string> = {
 	feats: 'feat',
 	backgrounds: 'background',
 	races: 'race',
-	classes: 'class'
+	classes: 'class',
+	// v2 patterns
+	creatures: 'monster',
+	species: 'race'
 };
 
 /**

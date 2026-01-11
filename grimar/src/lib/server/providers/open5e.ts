@@ -1,7 +1,7 @@
 /**
  * Open5e Provider
  *
- * Adapter for the Open5e API (https://api.open5e.com)
+ * Adapter for the Open5e API v2 (https://api.open5e.com/v2)
  */
 
 import { BaseProvider } from './base-provider';
@@ -11,7 +11,8 @@ import { z } from 'zod';
 import {
 	Open5eListResponseSchema,
 	Open5eSpellSchema,
-	Open5eMonsterSchema
+	Open5eCreatureSchema,
+	Open5eSpeciesSchema
 } from '$lib/core/types/compendium/schemas';
 import { createModuleLogger } from '$lib/server/logger';
 
@@ -48,7 +49,7 @@ export class Open5eProvider extends BaseProvider {
 	] as const satisfies readonly CompendiumTypeName[];
 
 	constructor(
-		baseUrl: string = 'https://api.open5e.com',
+		baseUrl: string = 'https://api.open5e.com/v2',
 		supportedTypes?: readonly CompendiumTypeName[]
 	) {
 		super(supportedTypes ?? Open5eProvider.DEFAULT_TYPES);
@@ -61,6 +62,7 @@ export class Open5eProvider extends BaseProvider {
 
 		const url = new URL(`${this.baseUrl}${endpoint}`);
 		url.searchParams.set('limit', String(limit));
+		url.searchParams.set('format', 'json');
 
 		const response = await fetch(url.toString());
 		if (!response.ok) {
@@ -99,7 +101,6 @@ export class Open5eProvider extends BaseProvider {
 	}
 
 	transformItem(rawItem: unknown, type: CompendiumTypeName): TransformResult {
-		// Extract source book from document__title if present
 		const raw = rawItem as Record<string, unknown>;
 		const sourceBook = this.extractSourceBook(raw);
 
@@ -107,7 +108,7 @@ export class Open5eProvider extends BaseProvider {
 			case 'spell':
 				return this.transformSpell(rawItem, sourceBook);
 			case 'monster':
-				return this.transformMonster(rawItem, sourceBook);
+				return this.transformCreature(rawItem, sourceBook);
 			case 'item':
 				return this.transformItemGeneric(rawItem, sourceBook);
 			case 'feat':
@@ -115,7 +116,7 @@ export class Open5eProvider extends BaseProvider {
 			case 'background':
 				return this.transformBackground(rawItem, sourceBook);
 			case 'race':
-				return this.transformRace(rawItem, sourceBook);
+				return this.transformSpecies(rawItem, sourceBook);
 			case 'class':
 				return this.transformClass(rawItem, sourceBook);
 			default:
@@ -124,11 +125,13 @@ export class Open5eProvider extends BaseProvider {
 	}
 
 	/**
-	 * Extract source book from Open5e item
-	 * Open5e includes document__title which tells us the source
+	 * Extract source book from Open5e v2 item
+	 * V2 uses nested document object with name property
 	 */
 	private extractSourceBook(raw: Record<string, unknown>): string {
-		const documentTitle = raw.document__title as string | undefined;
+		const document = raw.document as Record<string, unknown> | undefined;
+		const documentTitle = document?.name as string | undefined;
+
 		if (!documentTitle) return 'Unknown';
 
 		// Normalize common source names
@@ -169,28 +172,22 @@ export class Open5eProvider extends BaseProvider {
 	}
 
 	private transformSpell(raw: unknown, sourceBook: string): TransformResult {
-		const spellObj = raw as Record<string, unknown>;
 		const spell = validateData(Open5eSpellSchema, raw, 'spell');
 
-		// Normalize level
-		let level = spell.level_int;
-		if (level === undefined || level === null) {
-			if (String(spell.level) === 'Cantrip') {
-				level = 0;
-			} else {
-				level = parseInt(String(spell.level)) || 0;
-			}
-		}
+		// V2 uses boolean flags for components
+		const components: string[] = [];
+		if (spell.verbal) components.push('V');
+		if (spell.somatic) components.push('S');
+		if (spell.material) components.push('M');
 
-		// Normalize school
-		let schoolName =
-			typeof spell.school === 'string' ? spell.school : spell.school?.name || 'Unknown';
-		schoolName = this.toTitleCase(schoolName);
+		// V2 uses level directly as number
+		const level = spell.level;
+		const schoolName = spell.school?.name || 'Unknown';
 
 		const summary = level === 0 ? `Cantrip ${schoolName}` : `Level ${level} ${schoolName}`;
 
 		return {
-			externalId: spell.slug,
+			externalId: spell.key,
 			name: spell.name,
 			summary,
 			details: spell as unknown as Record<string, unknown>,
@@ -200,23 +197,35 @@ export class Open5eProvider extends BaseProvider {
 		};
 	}
 
-	private transformMonster(raw: unknown, sourceBook: string): TransformResult {
-		const monster = validateData(Open5eMonsterSchema, raw, 'monster');
+	private transformCreature(raw: unknown, sourceBook: string): TransformResult {
+		const creature = validateData(Open5eCreatureSchema, raw, 'creature');
 
-		const size = this.toTitleCase(monster.size);
-		const typeName = this.toTitleCase(monster.type);
-		const cr = String(monster.challenge_rating);
+		const sizeName = creature.size?.name || 'Medium';
+		const typeName = creature.type?.name || 'Unknown';
+		const cr = creature.challenge_rating_text || creature.challenge_rating_decimal || 'Unknown';
 
-		const summary = `${size} ${typeName}, CR ${cr}`;
+		const summary = `${sizeName} ${typeName}, CR ${cr}`;
 
 		return {
-			externalId: monster.slug,
-			name: monster.name,
+			externalId: creature.key,
+			name: creature.name,
 			summary,
-			details: monster as unknown as Record<string, unknown>,
+			details: creature as unknown as Record<string, unknown>,
 			challengeRating: cr,
-			monsterSize: size,
+			monsterSize: sizeName,
 			monsterType: typeName,
+			sourceBook
+		};
+	}
+
+	private transformSpecies(raw: unknown, sourceBook: string): TransformResult {
+		const species = validateData(Open5eSpeciesSchema, raw, 'species');
+
+		return {
+			externalId: species.key,
+			name: species.name,
+			summary: species.name,
+			details: species as unknown as Record<string, unknown>,
 			sourceBook
 		};
 	}
@@ -224,7 +233,7 @@ export class Open5eProvider extends BaseProvider {
 	private transformItemGeneric(raw: unknown, sourceBook: string): TransformResult {
 		const item = raw as Record<string, unknown>;
 		return {
-			externalId: String(item.slug || item.index || ''),
+			externalId: String(item.key || item.slug || item.index || ''),
 			name: String(item.name || 'Unknown'),
 			summary: String(item.name || 'Unknown item'),
 			details: item,
@@ -234,51 +243,35 @@ export class Open5eProvider extends BaseProvider {
 
 	private transformFeat(raw: unknown, sourceBook: string): TransformResult {
 		const feat = raw as Record<string, unknown>;
-		const summary = (feat.prerequisites as string[])?.length
-			? `Prerequisite: ${(feat.prerequisites as string[]).join(', ')}`
-			: 'Feat';
+		const prerequisites = feat.prerequisites as string[] | undefined;
+		const description = feat.description as string | undefined;
+
+		const summary = prerequisites?.length ? `Prerequisite: ${prerequisites.join(', ')}` : 'Feat';
 
 		return {
-			externalId: String(feat.slug || feat.index || ''),
+			externalId: String(feat.key || feat.slug || feat.index || ''),
 			name: String(feat.name || 'Unknown'),
 			summary,
 			details: feat,
-			featPrerequisites: (feat.prerequisites as string[])?.join(', ') || '',
-			featBenefits: (feat.description as string[]) || [],
+			featPrerequisites: prerequisites?.join(', ') || '',
+			featBenefits: description ? [description] : [],
 			sourceBook
 		};
 	}
 
 	private transformBackground(raw: unknown, sourceBook: string): TransformResult {
 		const bg = raw as Record<string, unknown>;
-		const summary = (bg.feature as Record<string, string>)?.name
-			? `Feature: ${(bg.feature as Record<string, string>).name}`
-			: 'Background';
+		const feature = bg.feature as Record<string, string> | undefined;
+
+		const summary = feature?.name ? `Feature: ${feature.name}` : 'Background';
 
 		return {
-			externalId: String(bg.slug || bg.index || ''),
+			externalId: String(bg.key || bg.slug || bg.index || ''),
 			name: String(bg.name || 'Unknown'),
 			summary,
 			details: bg,
-			backgroundFeature: (bg.feature as Record<string, string>)?.name || '',
-			backgroundSkillProficiencies: (bg.skill_proficiencies as string[])?.join(', ') || '',
-			sourceBook
-		};
-	}
-
-	private transformRace(raw: unknown, sourceBook: string): TransformResult {
-		const race = raw as Record<string, unknown>;
-		const size = this.toTitleCase(String(race.size || 'Medium'));
-
-		const summary = `${size} | Speed ${race.speed}`;
-
-		return {
-			externalId: String(race.slug || race.index || ''),
-			name: String(race.name || 'Unknown'),
-			summary,
-			details: race,
-			raceSize: size,
-			raceSpeed: Number(race.speed) || 0,
+			backgroundFeature: feature?.name || '',
+			backgroundSkillProficiencies: '',
 			sourceBook
 		};
 	}
@@ -286,14 +279,14 @@ export class Open5eProvider extends BaseProvider {
 	private transformClass(raw: unknown, sourceBook: string): TransformResult {
 		const cls = raw as Record<string, unknown>;
 
-		const summary = `Hit Die: d${cls.hit_die}`;
+		const summary = `Hit Die: d${cls.hit_die || 8}`;
 
 		return {
-			externalId: String(cls.slug || cls.index || ''),
+			externalId: String(cls.key || cls.slug || cls.index || ''),
 			name: String(cls.name || 'Unknown'),
 			summary,
 			details: cls,
-			classHitDie: Number(cls.hit_die) || 0,
+			classHitDie: Number(cls.hit_die) || 8,
 			sourceBook
 		};
 	}
@@ -303,7 +296,7 @@ export class Open5eProvider extends BaseProvider {
 			case 'spell':
 				return '/spells/';
 			case 'monster':
-				return '/monsters/';
+				return '/creatures/';
 			case 'item':
 				return '/magicitems/';
 			case 'feat':
@@ -311,7 +304,7 @@ export class Open5eProvider extends BaseProvider {
 			case 'background':
 				return '/backgrounds/';
 			case 'race':
-				return '/races/';
+				return '/species/';
 			case 'class':
 				return '/classes/';
 			default:

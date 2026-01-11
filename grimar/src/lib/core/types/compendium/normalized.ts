@@ -15,7 +15,7 @@
  * @module normalized
  */
 
-import type { Open5eSpell, Open5eMonster, Open5eItem } from './schemas';
+import type { Open5eSpell, Open5eCreature as Open5eMonster, Open5eItem } from './schemas';
 import type {
 	SrdSpell,
 	SrdMonsterDetail,
@@ -122,44 +122,46 @@ export interface NormalizedSpell extends BaseNormalizedItem {
 }
 
 /**
- * Normalize an Open5e spell to the canonical format
+ * Normalize an Open5e v2 spell to the canonical format
  */
 export function normalizeOpen5eSpell(spell: Open5eSpell, source: string): NormalizedSpell {
-	const desc = Array.isArray(spell.desc) ? spell.desc : spell.desc ? [spell.desc] : [];
-	const higherLevel = Array.isArray(spell.higher_level)
-		? spell.higher_level.join('\n')
-		: spell.higher_level || null;
-	const components = Array.isArray(spell.components)
-		? spell.components
-		: spell.components
-			? spell.components.split(',').map((c) => c.trim())
-			: [];
+	const desc = spell.desc ? [spell.desc] : [];
+	const higherLevel = spell.higher_level || null;
+
+	// V2 uses boolean flags for components
+	const components: string[] = [];
+	if (spell.verbal) components.push('V');
+	if (spell.somatic) components.push('S');
+	if (spell.material) components.push('M');
 
 	const schoolName =
 		typeof spell.school === 'string' ? spell.school : spell.school?.name || 'Unknown';
 
+	// V2 uses classes array instead of dnd_class string
+	const classes = spell.classes?.map((c) => c.name) || [];
+
 	return {
 		type: 'spell',
-		externalId: spell.slug,
+		externalId: spell.key,
 		name: spell.name,
-		slug: spell.slug,
+		slug: spell.key,
 		summary: desc[0] || '',
 		description: desc,
 		source,
 		edition: null,
 		sourceBook: null,
-		spellLevel: spell.level_int ?? (typeof spell.level === 'number' ? spell.level : 0),
+		spellLevel: spell.level,
 		spellSchool: schoolName,
 		castingTime: spell.casting_time || '1 action',
-		range: spell.range || 'Self',
+		range: spell.range_text || 'Self',
 		components,
-		material: spell.material || null,
+		material: spell.material_specified || null,
 		duration: spell.duration || 'Instantaneous',
-		concentration: Boolean(spell.requires_concentration ?? spell.concentration),
-		ritual: Boolean(spell.can_be_cast_as_ritual ?? spell.ritual),
+		concentration: Boolean(spell.concentration),
+		ritual: Boolean(spell.ritual),
 		higherLevel,
-		classes: spell.dnd_class ? spell.dnd_class.split(',').map((c) => c.trim()) : [],
-		subclasses: spell.spell_lists?.filter((s) => !s.includes(' ')) || []
+		classes,
+		subclasses: []
 	};
 }
 
@@ -219,33 +221,36 @@ export interface NormalizedMonster extends BaseNormalizedItem {
 }
 
 /**
- * Normalize an Open5e monster to the canonical format
+ * Normalize an Open5e v2 creature to the canonical format
  */
 export function normalizeOpen5eMonster(monster: Open5eMonster, source: string): NormalizedMonster {
-	const cr = monster.challenge_rating ?? monster.cr;
-	const crString = typeof cr === 'number' ? String(cr) : cr || '0';
+	const cr = monster.challenge_rating_text || monster.challenge_rating_decimal || '0';
+
+	// V2 uses nested objects for type and size
+	const sizeName =
+		typeof monster.size === 'string' ? monster.size : (monster.size?.name ?? 'Medium');
+	const typeName =
+		typeof monster.type === 'string' ? monster.type : (monster.type?.name ?? 'Unknown');
 
 	return {
 		type: 'monster',
-		externalId: monster.slug,
+		externalId: monster.key,
 		name: monster.name,
-		slug: monster.slug,
-		summary: `${monster.size} ${monster.type}`,
+		slug: monster.key,
+		summary: `${sizeName} ${typeName}`,
 		description: [],
 		source,
 		edition: null,
 		sourceBook: null,
-		monsterSize: normalizeSize(monster.size),
-		monsterType: monster.type,
-		subtype: monster.subtype || null,
+		monsterSize: normalizeSize(sizeName),
+		monsterType: typeName,
+		subtype: null,
 		alignment: monster.alignment || null,
-		armorClass: Array.isArray(monster.armor_class)
-			? monster.armor_class[0]?.value || 10
-			: monster.armor_class || 10,
-		hitPoints: monster.hit_points,
-		hitDice: monster.hit_dice,
-		challengeRating: crString,
-		xp: crToXp(crString)
+		armorClass: monster.armor_class || 10,
+		hitPoints: monster.hit_points ?? 0,
+		hitDice: monster.hit_dice || '1d8',
+		challengeRating: cr,
+		xp: crToXp(cr)
 	};
 }
 

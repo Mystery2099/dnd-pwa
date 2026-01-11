@@ -50,6 +50,17 @@ describe('link-interceptor', () => {
 			const result = open5eToInternalPath('https://api.open5e.com/spells/fireball/');
 			expect(result).toBe('/compendium/spell/fireball');
 		});
+
+		// v2 URL tests
+		it('should convert api.open5e.com/v2 creature URL to internal path', () => {
+			const result = open5eToInternalPath('https://api.open5e.com/v2/creatures/ancient-red-dragon');
+			expect(result).toBe('/compendium/monster/ancient-red-dragon');
+		});
+
+		it('should convert api.open5e.com/v2 species URL to internal path', () => {
+			const result = open5eToInternalPath('https://api.open5e.com/v2/species/elf');
+			expect(result).toBe('/compendium/race/elf');
+		});
 	});
 
 	describe('createLinkInterceptor', () => {

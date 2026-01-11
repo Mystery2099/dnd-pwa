@@ -11,7 +11,7 @@
 
 export type {
 	Open5eSpell,
-	Open5eMonster,
+	Open5eCreature as Open5eMonster,
 	Open5eItem,
 	Open5eListResponse,
 	SrdSpell,

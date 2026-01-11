@@ -8,126 +8,210 @@
 import { z } from 'zod';
 
 // ============================================================================
-// Open5e API Schemas
+// Open5e API v2 Schemas
 // ============================================================================
 
-export const Open5eSpellSchema = z.object({
-	slug: z.string(),
+export const Open5eDocumentSchema = z.object({
 	name: z.string(),
-	desc: z.union([z.string(), z.array(z.string())]).optional(),
-	higher_level: z.union([z.string(), z.array(z.string())]).optional(),
-	level: z.union([z.number(), z.string()]).optional(),
-	level_int: z.number().optional(),
-	school: z.union([z.string(), z.object({ name: z.string() })]).optional(),
-	components: z.union([z.array(z.string()), z.string()]).optional(),
-	requires_verbal_components: z.boolean().optional(),
-	requires_somatic_components: z.boolean().optional(),
-	requires_material_components: z.boolean().optional(),
-	material: z.string().optional(),
-	can_be_cast_as_ritual: z.boolean().optional(),
-	ritual: z.union([z.boolean(), z.string()]).optional(),
-	duration: z.string().optional(),
-	concentration: z.union([z.boolean(), z.string()]).optional(),
-	requires_concentration: z.union([z.boolean(), z.string()]).optional(),
-	casting_time: z.string().optional(),
-	range: z.string().optional(),
-	target_range_sort: z.number().optional(),
-	spell_level: z.number().optional(),
-	dnd_class: z.string().optional(),
-	spell_lists: z.array(z.string()).optional()
+	key: z.string(),
+	type: z.string().optional(),
+	display_name: z.string().optional(),
+	publisher: z
+		.object({
+			name: z.string(),
+			key: z.string(),
+			url: z.string().optional()
+		})
+		.optional(),
+	gamesystem: z
+		.object({
+			name: z.string(),
+			key: z.string(),
+			url: z.string().optional()
+		})
+		.optional(),
+	permalink: z.string().optional()
 });
 
-export const Open5eMonsterSchema = z.object({
-	slug: z.string(),
+export const Open5eSchoolSchema = z.object({
 	name: z.string(),
-	size: z.string(),
-	type: z.string(),
-	subtype: z.string().optional(),
-	group: z.string().nullable().optional(),
+	key: z.string(),
+	url: z.string().optional()
+});
+
+export const Open5eSpellSchema = z.object({
+	url: z.string().optional(),
+	document: Open5eDocumentSchema.optional(),
+	key: z.string(),
+	name: z.string(),
+	desc: z.string().optional(),
+	higher_level: z.string().optional(),
+	level: z.number(),
+	casting_options: z
+		.array(
+			z.object({
+				name: z.string(),
+				order: z.number().optional()
+			})
+		)
+		.optional(),
+	school: Open5eSchoolSchema.optional(),
+	classes: z
+		.array(
+			z.object({
+				name: z.string(),
+				key: z.string(),
+				url: z.string().optional()
+			})
+		)
+		.optional(),
+	range_unit: z.string().optional(),
+	shape_size_unit: z.string().optional(),
+	target_type: z.string().optional(),
+	range_text: z.string().optional(),
+	range: z.number().nullable().optional(),
+	ritual: z.boolean(),
+	casting_time: z.string(),
+	reaction_condition: z.string().nullable().optional(),
+	verbal: z.boolean(),
+	somatic: z.boolean(),
+	material: z.boolean(),
+	material_specified: z.string().optional(),
+	material_cost: z.string().nullable().optional(),
+	material_consumed: z.boolean(),
+	target_count: z.number().nullable().optional(),
+	saving_throw_ability: z.string().nullable().optional(),
+	attack_roll: z.boolean(),
+	damage_roll: z.string().optional(),
+	damage_types: z.array(z.string()).optional(),
+	duration: z.string(),
+	shape_type: z.string().nullable().optional(),
+	shape_size: z.number().nullable().optional(),
+	concentration: z.boolean()
+});
+
+export const Open5eCreatureSchema = z.object({
+	url: z.string().optional(),
+	document: Open5eDocumentSchema.optional(),
+	key: z.string(),
+	name: z.string(),
+	type: z
+		.object({
+			name: z.string(),
+			key: z.string(),
+			url: z.string().optional()
+		})
+		.optional(),
+	size: z
+		.object({
+			name: z.string(),
+			key: z.string(),
+			url: z.string().optional()
+		})
+		.optional(),
+	challenge_rating_decimal: z.string().optional(),
+	challenge_rating_text: z.string().optional(),
+	proficiency_bonus: z.number().nullable().optional(),
+	speed: z
+		.object({
+			walk: z.number().optional(),
+			unit: z.string().optional(),
+			swim: z.number().optional()
+		})
+		.optional(),
+	speed_all: z.record(z.string(), z.boolean()).optional(),
+	category: z.string().optional(),
+	subcategory: z.string().nullable().optional(),
 	alignment: z.string().optional(),
-	armor_class: z.union([z.number(), z.array(z.object({ type: z.string(), value: z.number() }))]),
-	armor_desc: z.string().nullable().optional(),
-	hit_points: z.number(),
-	hit_dice: z.string(),
-	speed: z.record(z.string(), z.union([z.string(), z.number(), z.boolean()])),
-	strength: z.number(),
-	dexterity: z.number(),
-	constitution: z.number(),
-	intelligence: z.number(),
-	wisdom: z.number(),
-	charisma: z.number(),
-	skills: z.record(z.string(), z.number()).optional(),
-	damage_vulnerabilities: z.string().optional(),
-	damage_resistances: z.string().optional(),
-	damage_immunities: z.string().optional(),
-	condition_immunities: z.string().optional(),
-	senses: z.string().optional(),
-	languages: z.string().optional(),
-	cr: z.number().optional(),
-	challenge_rating: z.union([z.number(), z.string()]).optional(),
+	languages: z
+		.object({
+			data: z.array(z.string()).optional()
+		})
+		.optional(),
+	armor_class: z.number().optional(),
+	armor_detail: z.string().optional(),
+	hit_points: z.number().optional(),
+	hit_dice: z.string().optional(),
+	experience_points: z.number().optional(),
+	ability_scores: z
+		.object({
+			strength: z.number().optional(),
+			dexterity: z.number().optional(),
+			constitution: z.number().optional(),
+			intelligence: z.number().optional(),
+			wisdom: z.number().optional(),
+			charisma: z.number().optional()
+		})
+		.optional(),
+	modifiers: z.record(z.string(), z.number()).optional(),
+	initiative_bonus: z.number().optional(),
+	saving_throws: z.record(z.string(), z.number()).optional(),
+	skill_bonuses: z.record(z.string(), z.number()).optional(),
+	passive_perception: z.number().optional(),
+	resistances_and_immunities: z
+		.object({
+			damage: z.array(z.string()).optional(),
+			condition: z.array(z.string()).optional()
+		})
+		.optional(),
+	normal_sight_range: z.number().optional(),
+	darkvision_range: z.number().optional(),
+	blindsight_range: z.number().optional(),
+	tremorsense_range: z.number().nullable().optional(),
+	truesight_range: z.number().nullable().optional(),
 	actions: z
 		.array(
 			z.object({
 				name: z.string(),
 				desc: z.string(),
+				action_type: z.string().optional(),
 				attack_bonus: z.number().optional(),
-				damage_dice: z.string().optional()
+				damage: z
+					.object({
+						dice: z.string().optional(),
+						type: z.string().optional()
+					})
+					.optional()
 			})
 		)
-		.nullable()
 		.optional(),
-	bonus_actions: z
+	traits: z
 		.array(
 			z.object({
 				name: z.string(),
-				desc: z.string(),
-				attack_bonus: z.number().optional(),
-				damage_dice: z.string().optional()
+				desc: z.string()
 			})
 		)
-		.nullable()
 		.optional(),
-	reactions: z
-		.array(
-			z.object({
-				name: z.string(),
-				desc: z.string(),
-				attack_bonus: z.number().optional(),
-				damage_dice: z.string().optional()
-			})
-		)
-		.nullable()
-		.optional(),
-	legendary_desc: z.string().nullable().optional(),
-	legendary_actions: z
-		.array(
-			z.object({
-				name: z.string(),
-				desc: z.string(),
-				attack_bonus: z.number().optional(),
-				damage_dice: z.string().optional()
-			})
-		)
-		.nullable()
-		.optional(),
-	special_abilities: z
-		.array(
-			z.object({
-				name: z.string(),
-				desc: z.string(),
-				attack_bonus: z.number().optional()
-			})
-		)
-		.nullable()
-		.optional(),
-	spell_list: z.array(z.string()).optional(),
-	page_no: z.number().optional(),
 	environments: z.array(z.string()).optional(),
-	img_main: z.string().nullable().optional(),
-	document__slug: z.string().optional(),
-	document__title: z.string().optional(),
-	document__license_url: z.string().optional(),
-	document__url: z.string().optional()
+	illustration: z.string().nullable().optional()
+});
+
+export const Open5eSpeciesSchema = z.object({
+	url: z.string().optional(),
+	document: Open5eDocumentSchema.optional(),
+	key: z.string(),
+	name: z.string(),
+	desc: z.string().optional(),
+	is_subspecies: z.boolean().optional(),
+	subspecies_of: z.string().nullable().optional(),
+	traits: z
+		.array(
+			z.object({
+				name: z.string(),
+				desc: z.string(),
+				type: z.string().optional(),
+				order: z.number().optional()
+			})
+		)
+		.optional()
+});
+
+export const Open5eListResponseSchema = z.object({
+	count: z.number().optional(),
+	next: z.string().nullable(),
+	previous: z.string().nullable(),
+	results: z.array(z.unknown())
 });
 
 export const Open5eItemSchema = z.object({
@@ -136,11 +220,6 @@ export const Open5eItemSchema = z.object({
 	type: z.string().optional(),
 	rarity: z.string().optional(),
 	description: z.string().optional()
-});
-
-export const Open5eListResponseSchema = z.object({
-	results: z.array(z.unknown()),
-	next: z.string().nullable()
 });
 
 // ============================================================================
@@ -538,7 +617,8 @@ export const Open5eConditionSchema = z.object({
 // ============================================================================
 
 export type Open5eSpell = z.infer<typeof Open5eSpellSchema>;
-export type Open5eMonster = z.infer<typeof Open5eMonsterSchema>;
+export type Open5eCreature = z.infer<typeof Open5eCreatureSchema>;
+export type Open5eSpecies = z.infer<typeof Open5eSpeciesSchema>;
 export type Open5eItem = z.infer<typeof Open5eItemSchema>;
 export type Open5eListResponse = z.infer<typeof Open5eListResponseSchema>;
 export type SrdSpell = z.infer<typeof SrdSpellSchema>;
@@ -688,23 +768,6 @@ export const SrdRuleSchema = z.object({
 });
 
 // ============================================================================
-// Open5e Document Schema
-// ============================================================================
-
-export const Open5eDocumentSchema = z.object({
-	slug: z.string(),
-	title: z.string(),
-	author: z.string(),
-	organization: z.string().optional(),
-	version: z.string().optional(),
-	url: z.string(),
-	license: z.string(),
-	created_at: z.string().optional(),
-	updated_at: z.string().optional(),
-	description: z.string().optional()
-});
-
-// ============================================================================
 // Additional Type Exports
 // ============================================================================
 
@@ -717,4 +780,3 @@ export type SrdVehicle = z.infer<typeof SrdVehicleSchema>;
 export type SrdMonsterType = z.infer<typeof SrdMonsterTypeSchema>;
 export type SrdRuleSection = z.infer<typeof SrdRuleSectionSchema>;
 export type SrdRule = z.infer<typeof SrdRuleSchema>;
-export type Open5eDocument = z.infer<typeof Open5eDocumentSchema>;

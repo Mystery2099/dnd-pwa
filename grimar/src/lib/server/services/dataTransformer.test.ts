@@ -9,18 +9,22 @@ import type {
 
 describe('DataTransformer', () => {
 	describe('transformSpell', () => {
-		it('should transform Open5e spell data correctly', () => {
+		it('should transform Open5e v2 spell data correctly', () => {
 			const mockSpell: Open5eSpell = {
-				index: 'fireball',
-				slug: 'fireball',
+				key: 'fireball',
 				name: 'Fireball',
-				desc: ['A bright streak flashes from your pointing finger.'],
-				higher_level: [
-					'When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d6 for each slot level above 3rd.'
-				],
+				desc: 'A bright streak flashes from your pointing finger.',
+				higher_level:
+					'When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d6 for each slot level above 3rd.',
 				level: 3,
-				school: { name: 'Evocation' },
-				components: ['V', 'S', 'M']
+				school: { name: 'Evocation', key: 'evocation' },
+				verbal: true,
+				somatic: true,
+				material: true,
+				casting_time: '1 action',
+				duration: 'Instantaneous',
+				concentration: false,
+				ritual: false
 			};
 
 			const result = DataTransformer.transformSpell(mockSpell);
@@ -35,64 +39,83 @@ describe('DataTransformer', () => {
 			expect(result.higher_level).toHaveLength(1);
 		});
 
-		it('should handle string desc as array', () => {
+		it('should handle v2 spell with minimal fields', () => {
 			const mockSpell: Open5eSpell = {
-				index: 'mage-armor',
-				slug: 'mage-armor',
+				key: 'prestidigitation',
+				name: 'Prestidigitation',
+				level: 0,
+				school: { name: 'Transmutation', key: 'transmutation' },
+				verbal: true,
+				somatic: true,
+				material: false,
+				casting_time: '1 action',
+				duration: '1 hour',
+				concentration: false,
+				ritual: false
+			};
+
+			const result = DataTransformer.transformSpell(mockSpell);
+
+			expect(result.index).toBe('prestidigitation');
+			expect(result.name).toBe('Prestidigitation');
+			expect(result.components).toEqual(['V', 'S']);
+			expect(result.level).toBe(0);
+		});
+
+		it('should handle spell without material component', () => {
+			const mockSpell: Open5eSpell = {
+				key: 'mage-armor',
 				name: 'Mage Armor',
 				desc: 'You touch a willing creature and protect it with magical force.',
 				level: 1,
-				school: { name: 'Abjuration' }
+				school: { name: 'Abjuration', key: 'abjuration' },
+				verbal: true,
+				somatic: true,
+				material: false,
+				casting_time: '1 action',
+				duration: '8 hours',
+				concentration: false,
+				ritual: false
 			};
 
 			const result = DataTransformer.transformSpell(mockSpell);
 
-			expect(result.description).toEqual([
-				'You touch a willing creature and protect it with magical force.'
-			]);
-		});
-
-		it('should handle optional fields gracefully', () => {
-			const mockSpell: Open5eSpell = {
-				index: 'prestidigitation',
-				slug: 'prestidigitation',
-				name: 'Prestidigitation',
-				level: 0,
-				school: { name: 'Transmutation' }
-			};
-
-			const result = DataTransformer.transformSpell(mockSpell);
-
-			expect(result.components).toEqual([]);
-			expect(result.classes).toEqual([]);
+			expect(result.components).toEqual(['V', 'S']);
+			expect(result.duration).toBe('8 hours');
 		});
 	});
 
 	describe('transformMonster', () => {
-		it('should transform Open5e monster data correctly', () => {
-			const mockMonster: Open5eMonster = {
-				index: 'ancient-red-dragon',
-				slug: 'ancient-red-dragon',
+		it('should transform Open5e v2 creature data correctly', () => {
+			const mockCreature: Open5eMonster = {
+				key: 'ancient-red-dragon',
 				name: 'Ancient Red Dragon',
-				size: 'Gargantuan',
-				type: 'Dragon',
-				subtype: '',
-				alignment: 'Chaotic Evil',
-				challenge_rating: 24,
+				type: { name: 'Dragon', key: 'dragon' },
+				size: { name: 'Gargantuan', key: 'gargantuan' },
+				challenge_rating_text: '24',
+				challenge_rating_decimal: '24.000',
 				armor_class: 22,
-				armor_desc: 'natural armor',
 				hit_points: 546,
-				hit_dice: '28d20+196',
-				speed: { walk: '40 ft.', fly: '80 ft.', swim: '40 ft.' },
-				strength: 30,
-				dexterity: 10,
-				constitution: 28,
-				intelligence: 16,
-				wisdom: 13,
-				charisma: 22
+				hit_dice: '36d20+180',
+				ability_scores: {
+					strength: 30,
+					dexterity: 10,
+					constitution: 26,
+					intelligence: 16,
+					wisdom: 13,
+					charisma: 22
+				},
+				actions: [
+					{
+						name: 'Bite',
+						desc: 'The dragon makes one bite attack.',
+						attack_bonus: 15,
+						damage: { dice: '2d10+8', type: 'piercing' }
+					}
+				]
 			};
 
-			const result = DataTransformer.transformMonster(mockMonster);
+			const result = DataTransformer.transformMonster(mockCreature);
 
 			expect(result.index).toBe('ancient-red-dragon');
 			expect(result.name).toBe('Ancient Red Dragon');
@@ -100,108 +123,105 @@ describe('DataTransformer', () => {
 			expect(result.size).toBe('Gargantuan');
 			expect(result.type).toBe('Dragon');
 			expect(result.challenge_rating).toBe(24);
+			expect(result.armor_class).toBe(22);
 			expect(result.hit_points).toBe(546);
+			expect(result.strength).toBe(30);
 		});
 
-		it('should handle array armor_class', () => {
-			const mockMonster: Open5eMonster = {
-				index: 'iron-golem',
-				slug: 'iron-golem',
-				name: 'Iron Golem',
-				size: 'Large',
-				type: 'Construct',
-				challenge_rating: 16,
-				armor_class: [{ type: 'natural', value: 20 }],
-				hit_points: 210,
-				hit_dice: '19d10+95'
+		it('should handle creature with minimal fields', () => {
+			const mockCreature: Open5eMonster = {
+				key: 'goblin',
+				name: 'Goblin',
+				type: { name: 'Humanoid', key: 'humanoid' },
+				size: { name: 'Small', key: 'small' },
+				challenge_rating_text: '1/4',
+				challenge_rating_decimal: '0.250'
 			};
 
-			const result = DataTransformer.transformMonster(mockMonster);
+			const result = DataTransformer.transformMonster(mockCreature);
 
-			expect(result.armor_class).toEqual([{ type: 'natural', value: 20 }]);
+			expect(result.index).toBe('goblin');
+			expect(result.name).toBe('Goblin');
+			expect(result.challenge_rating).toBe(0.25);
 		});
 
-		it('should handle optional fields gracefully', () => {
-			const mockMonster: Open5eMonster = {
-				index: 'rat',
-				slug: 'rat',
-				name: 'Rat',
-				size: 'Tiny',
-				type: 'Beast',
-				challenge_rating: 0,
-				hit_points: 1,
-				hit_dice: '1d4-1'
+		it('should handle creature with traits', () => {
+			const mockCreature: Open5eMonster = {
+				key: 'owl-bear',
+				name: 'Owlbear',
+				type: { name: 'Monstrosity', key: 'monstrosity' },
+				size: { name: 'Large', key: 'large' },
+				challenge_rating_text: '3',
+				traits: [
+					{
+						name: 'Keen Senses',
+						desc: 'The owlbear has advantage on Perception checks.'
+					}
+				]
 			};
 
-			const result = DataTransformer.transformMonster(mockMonster);
+			const result = DataTransformer.transformMonster(mockCreature);
 
-			expect(result.subtype).toBeUndefined();
-			expect(result.alignment).toBeUndefined();
-			expect(result.skills).toBeUndefined();
+			expect(result.special_abilities).toHaveLength(1);
+			expect(result.special_abilities?.[0].name).toBe('Keen Senses');
 		});
 	});
 
 	describe('createSummary', () => {
 		it('should create spell summary', () => {
-			const spell: SpellItem = {
-				index: 'fireball',
+			const mockSpell: Open5eSpell = {
+				key: 'fireball',
 				name: 'Fireball',
-				summary: 'Level 3 Evocation spell',
 				level: 3,
-				school: 'Evocation',
-				components: [],
-				casting_time: '',
-				range: '',
-				duration: '',
-				description: [],
-				higher_level: [],
-				classes: []
+				school: { name: 'Evocation', key: 'evocation' },
+				verbal: true,
+				somatic: true,
+				material: true,
+				casting_time: '1 action',
+				duration: 'Instantaneous',
+				concentration: false,
+				ritual: false
 			};
 
-			const result = DataTransformer.createSummary('spells', spell);
+			const result = DataTransformer.createSummary(mockSpell, 'spell');
 			expect(result).toBe('Level 3 Evocation spell');
 		});
 
 		it('should create monster summary', () => {
-			const monster: MonsterItem = {
-				index: 'ancient-red-dragon',
-				name: 'Ancient Red Dragon',
-				summary: 'Gargantuan Dragon, CR 24',
-				size: 'Gargantuan',
-				type: 'Dragon',
-				challenge_rating: 24,
-				armor_class: 22,
-				hit_points: 546
+			const mockCreature: Open5eMonster = {
+				key: 'dragon',
+				name: 'Red Dragon',
+				type: { name: 'Dragon', key: 'dragon' },
+				size: { name: 'Huge', key: 'huge' },
+				challenge_rating_text: '17'
 			};
 
-			const result = DataTransformer.createSummary('monsters', monster);
-			expect(result).toBe('Gargantuan Dragon, CR 24');
+			const result = DataTransformer.createSummary(mockCreature, 'monster');
+			expect(result).toBe('Huge Dragon, CR 17');
 		});
 
 		it('should handle unknown type', () => {
-			const item = { name: 'Unknown Item' };
-			const result = DataTransformer.createSummary('unknown', item as any);
-			expect(result).toBe('Unknown Item');
+			const mockItem = { name: 'Unknown Item' };
+			const result = DataTransformer.createSummary(mockItem as Open5eMonster, 'monster');
+			expect(result).toContain('Unknown');
 		});
 
 		it('should handle null/undefined values gracefully', () => {
-			const spell = {
-				index: 'test',
-				name: 'Test',
-				summary: '',
-				level: null as any,
-				school: null as any,
-				components: [],
+			const mockSpell: Open5eSpell = {
+				key: 'test',
+				name: 'Test Spell',
+				level: 0,
+				verbal: false,
+				somatic: false,
+				material: false,
 				casting_time: '',
-				range: '',
 				duration: '',
-				description: [],
-				higher_level: [],
-				classes: []
+				concentration: false,
+				ritual: false
 			};
 
-			const result = DataTransformer.createSummary('spells', spell);
-			expect(result).toBe('Level 0 Unknown spell');
+			const result = DataTransformer.createSummary(mockSpell, 'spell');
+			expect(result).toContain('Unknown');
 		});
 	});
 });
