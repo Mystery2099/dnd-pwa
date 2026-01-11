@@ -28,9 +28,9 @@ const OPEN5E_PATTERNS: Record<string, string> = {
 /**
  * Parse an open5e URL and return an internal path if valid
  * @param url - The URL to parse (e.g., https://api.open5e.com/monsters/shroud)
- * @returns Internal path (e.g., /compendium/monsters/open5e/{document}/shroud) or null if not an open5e URL
+ * @returns Internal path (e.g., /compendium/monster/ancient-red-dragon) or null if not an open5e URL
  */
-export function open5eToInternalPath(url: string, sourceBook: string = 'Unknown'): string | null {
+export function open5eToInternalPath(url: string, _sourceBook: string = 'Unknown'): string | null {
 	try {
 		const urlObj = new URL(url);
 		const hostname = urlObj.hostname;
@@ -40,13 +40,24 @@ export function open5eToInternalPath(url: string, sourceBook: string = 'Unknown'
 			return null;
 		}
 
-		// Parse the path: /monsters/shroud -> ["monsters", "shroud"]
+		// Parse the path: /v2/creatures/ancient-red-dragon -> ["v2", "creatures", "ancient-red-dragon"]
 		const pathParts = urlObj.pathname.split('/').filter(Boolean);
 		if (pathParts.length < 2) {
 			return null;
 		}
 
-		const [type, ...slugParts] = pathParts;
+		// Handle v2 prefix
+		let type: string;
+		let slugParts: string[];
+		if (pathParts[0] === 'v2') {
+			if (pathParts.length < 3) return null;
+			type = pathParts[1];
+			slugParts = pathParts.slice(2);
+		} else {
+			type = pathParts[0];
+			slugParts = pathParts.slice(1);
+		}
+
 		const compendiumType = OPEN5E_PATTERNS[type];
 
 		if (!compendiumType) {
@@ -55,7 +66,7 @@ export function open5eToInternalPath(url: string, sourceBook: string = 'Unknown'
 		}
 
 		const slug = slugParts.join('-');
-		return `/compendium/${compendiumType}/open5e/${sourceBook}/${slug}`;
+		return `/compendium/${compendiumType}/${slug}`;
 	} catch {
 		// Invalid URL
 		return null;
