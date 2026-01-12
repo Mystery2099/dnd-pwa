@@ -80,19 +80,19 @@
 		onClose={handleClose}
 		{accentColor}
 	>
-		{#if dbType === 'spell'}
+		{#if dbType === 'spells'}
 			<SpellEntryContent spell={item.details ?? {}} />
-		{:else if dbType === 'monster'}
+		{:else if dbType === 'creatures'}
 			<MonsterEntryContent monster={item.details ?? {}} />
-		{:else if dbType === 'feat'}
+		{:else if dbType === 'feats'}
 			<FeatEntryContent feat={item.details ?? {}} />
-		{:else if dbType === 'background'}
+		{:else if dbType === 'backgrounds'}
 			<BackgroundEntryContent background={item.details ?? {}} />
-		{:else if dbType === 'race'}
+		{:else if dbType === 'species'}
 			<RaceEntryContent race={item.details ?? {}} />
-		{:else if dbType === 'class'}
+		{:else if dbType === 'classes'}
 			<ClassEntryContent classData={item.details ?? {}} />
-		{:else if dbType === 'item'}
+		{:else if dbType === 'magicitems'}
 			<ItemEntryContent item={item.details ?? {}} />
 		{:else}
 			<div class="space-y-4">

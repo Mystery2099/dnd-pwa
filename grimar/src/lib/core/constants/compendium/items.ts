@@ -8,7 +8,7 @@ import type { CompendiumTypeConfig } from '$lib/core/types/compendium';
 export const ITEMS_CONFIG: CompendiumTypeConfig = {
 	routes: {
 		basePath: '/compendium/magicitems',
-		dbType: 'item',
+		dbType: 'magicitems',
 		storageKeyFilters: 'item-filters',
 		storageKeyListUrl: 'item-list-url'
 	},

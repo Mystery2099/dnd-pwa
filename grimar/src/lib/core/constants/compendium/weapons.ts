@@ -11,7 +11,7 @@ import { colorMap } from '$lib/core/constants/colors';
 export const WEAPONS_CONFIG: CompendiumTypeConfig = {
 	routes: {
 		basePath: '/compendium/weapons',
-		dbType: 'weapon',
+		dbType: 'weapons',
 		storageKeyFilters: 'weapon-filters',
 		storageKeyListUrl: 'weapon-list-url'
 	},

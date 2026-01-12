@@ -40,11 +40,6 @@ export const Open5eSchoolSchema = z.object({
 });
 
 export const Open5eSpellSchema = z.object({
-	url: z.string().optional(),
-	document: Open5eDocumentSchema.optional(),
-	key: z.string(),
-	name: z.string(),
-	desc: z.string().optional(),
 	higher_level: z.string().optional(),
 	level: z.number(),
 	casting_options: z
@@ -782,11 +777,11 @@ export type SrdRuleSection = z.infer<typeof SrdRuleSectionSchema>;
 export type SrdRule = z.infer<typeof SrdRuleSchema>;
 
 // ============================================================================
-// GitHub JSON Schemas (Open5e v2 data from GitHub releases)
+// Open5e v2 JSON Schemas (raw GitHub releases)
 // Used for Hybrid SQLite approach - direct JSON ingestion
 // ============================================================================
 
-export const GithubSpellSchema = z.object({
+export const Open5eV2SpellSchema = z.object({
 	index: z.string(),
 	name: z.string(),
 	level: z.number(),
@@ -803,15 +798,17 @@ export const GithubSpellSchema = z.object({
 	casting_time: z.string()
 });
 
-export const GithubCreatureSchema = z.object({
+export const Open5eV2CreatureSchema = z.object({
 	index: z.string(),
 	name: z.string(),
 	size: z.string().optional(),
 	type: z.string().optional(),
 	subtype: z.string().nullable().optional(),
+	alignment: z.string().optional(),
 	challenge_rating: z.number().optional(),
 	armor_class: z.number().optional(),
 	hit_points: z.number().optional(),
+	hit_dice: z.string().optional(),
 	speed: z.record(z.string(), z.union([z.string(), z.number()])).optional(),
 	strength: z.number().optional(),
 	dexterity: z.number().optional(),
@@ -822,7 +819,7 @@ export const GithubCreatureSchema = z.object({
 	actions: z.array(z.object({ name: z.string(), desc: z.string() })).optional()
 });
 
-export const GithubMagicItemSchema = z.object({
+export const Open5eV2MagicItemSchema = z.object({
 	index: z.string(),
 	name: z.string(),
 	rarity: z.object({ name: z.string() }).optional(),
@@ -830,20 +827,20 @@ export const GithubMagicItemSchema = z.object({
 	description: z.array(z.string()).optional()
 });
 
-export const GithubFeatSchema = z.object({
+export const Open5eV2FeatSchema = z.object({
 	index: z.string(),
 	name: z.string(),
 	prerequisites: z.array(z.string()).optional(),
 	description: z.array(z.string()).optional()
 });
 
-export const GithubBackgroundSchema = z.object({
+export const Open5eV2BackgroundSchema = z.object({
 	index: z.string(),
 	name: z.string(),
 	feature: z.object({ name: z.string(), desc: z.string() }).optional()
 });
 
-export const GithubSpeciesSchema = z.object({
+export const Open5eV2SpeciesSchema = z.object({
 	index: z.string(),
 	name: z.string(),
 	desc: z.string().optional(),
@@ -851,20 +848,20 @@ export const GithubSpeciesSchema = z.object({
 	is_subspecies: z.boolean().optional()
 });
 
-export const GithubClassSchema = z.object({
+export const Open5eV2ClassSchema = z.object({
 	index: z.string(),
 	name: z.string(),
 	hit_die: z.number()
 });
 
 // ============================================================================
-// GitHub Type Exports
+// Open5e v2 Type Exports
 // ============================================================================
 
-export type GithubSpell = z.infer<typeof GithubSpellSchema>;
-export type GithubCreature = z.infer<typeof GithubCreatureSchema>;
-export type GithubMagicItem = z.infer<typeof GithubMagicItemSchema>;
-export type GithubFeat = z.infer<typeof GithubFeatSchema>;
-export type GithubBackground = z.infer<typeof GithubBackgroundSchema>;
-export type GithubSpecies = z.infer<typeof GithubSpeciesSchema>;
-export type GithubClass = z.infer<typeof GithubClassSchema>;
+export type Open5eV2Spell = z.infer<typeof Open5eV2SpellSchema>;
+export type Open5eV2Creature = z.infer<typeof Open5eV2CreatureSchema>;
+export type Open5eV2MagicItem = z.infer<typeof Open5eV2MagicItemSchema>;
+export type Open5eV2Feat = z.infer<typeof Open5eV2FeatSchema>;
+export type Open5eV2Background = z.infer<typeof Open5eV2BackgroundSchema>;
+export type Open5eV2Species = z.infer<typeof Open5eV2SpeciesSchema>;
+export type Open5eV2Class = z.infer<typeof Open5eV2ClassSchema>;

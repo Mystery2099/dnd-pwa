@@ -10,8 +10,8 @@
  */
 
 export type {
-	Open5eSpell,
-	Open5eCreature as Open5eMonster,
+	Open5eV2Spell as Open5eSpell,
+	Open5eV2Creature as Open5eMonster,
 	Open5eItem,
 	Open5eListResponse,
 	SrdSpell,

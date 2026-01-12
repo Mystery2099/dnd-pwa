@@ -8,7 +8,7 @@ import type { CompendiumTypeConfig } from '$lib/core/types/compendium';
 export const SKILLS_CONFIG: CompendiumTypeConfig = {
 	routes: {
 		basePath: '/compendium/skills',
-		dbType: 'skill',
+		dbType: 'skills',
 		storageKeyFilters: 'skill-filters',
 		storageKeyListUrl: 'skill-list-url'
 	},

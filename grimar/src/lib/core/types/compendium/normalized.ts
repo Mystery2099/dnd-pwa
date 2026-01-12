@@ -15,7 +15,7 @@
  * @module normalized
  */
 
-import type { Open5eSpell, Open5eCreature as Open5eMonster, Open5eItem } from './schemas';
+import type { Open5eV2Spell, Open5eV2Creature, Open5eItem } from './schemas';
 import type {
 	SrdSpell,
 	SrdMonsterDetail,
@@ -124,27 +124,23 @@ export interface NormalizedSpell extends BaseNormalizedItem {
 /**
  * Normalize an Open5e v2 spell to the canonical format
  */
-export function normalizeOpen5eSpell(spell: Open5eSpell, source: string): NormalizedSpell {
-	const desc = spell.desc ? [spell.desc] : [];
-	const higherLevel = spell.higher_level || null;
+export function normalizeOpen5eSpell(spell: Open5eV2Spell, source: string): NormalizedSpell {
+	const desc = spell.desc ? [...spell.desc] : [];
+	const higherLevel = spell.higher_level?.join('\n') || null;
 
-	// V2 uses boolean flags for components
-	const components: string[] = [];
-	if (spell.verbal) components.push('V');
-	if (spell.somatic) components.push('S');
-	if (spell.material) components.push('M');
+	// V2 uses components array directly
+	const components = spell.components || [];
 
-	const schoolName =
-		typeof spell.school === 'string' ? spell.school : spell.school?.name || 'Unknown';
+	const schoolName = spell.school?.name || 'Unknown';
 
-	// V2 uses classes array instead of dnd_class string
+	// V2 uses classes array of objects with name property
 	const classes = spell.classes?.map((c) => c.name) || [];
 
 	return {
 		type: 'spell',
-		externalId: spell.key,
+		externalId: spell.index,
 		name: spell.name,
-		slug: spell.key,
+		slug: spell.index,
 		summary: desc[0] || '',
 		description: desc,
 		source,
@@ -153,9 +149,9 @@ export function normalizeOpen5eSpell(spell: Open5eSpell, source: string): Normal
 		spellLevel: spell.level,
 		spellSchool: schoolName,
 		castingTime: spell.casting_time || '1 action',
-		range: spell.range_text || 'Self',
+		range: spell.range || 'Self',
 		components,
-		material: spell.material_specified || null,
+		material: spell.material || null,
 		duration: spell.duration || 'Instantaneous',
 		concentration: Boolean(spell.concentration),
 		ritual: Boolean(spell.ritual),
@@ -223,20 +219,21 @@ export interface NormalizedMonster extends BaseNormalizedItem {
 /**
  * Normalize an Open5e v2 creature to the canonical format
  */
-export function normalizeOpen5eMonster(monster: Open5eMonster, source: string): NormalizedMonster {
-	const cr = monster.challenge_rating_text || monster.challenge_rating_decimal || '0';
+export function normalizeOpen5eMonster(
+	monster: Open5eV2Creature,
+	source: string
+): NormalizedMonster {
+	const cr = String(monster.challenge_rating ?? '0');
 
-	// V2 uses nested objects for type and size
-	const sizeName =
-		typeof monster.size === 'string' ? monster.size : (monster.size?.name ?? 'Medium');
-	const typeName =
-		typeof monster.type === 'string' ? monster.type : (monster.type?.name ?? 'Unknown');
+	// V2 uses flat strings for size and type
+	const sizeName = monster.size || 'Medium';
+	const typeName = monster.type || 'Unknown';
 
 	return {
 		type: 'monster',
-		externalId: monster.key,
+		externalId: monster.index,
 		name: monster.name,
-		slug: monster.key,
+		slug: monster.index,
 		summary: `${sizeName} ${typeName}`,
 		description: [],
 		source,

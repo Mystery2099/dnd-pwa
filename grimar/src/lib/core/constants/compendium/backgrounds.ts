@@ -8,7 +8,7 @@ import type { CompendiumTypeConfig } from '$lib/core/types/compendium';
 export const BACKGROUNDS_CONFIG: CompendiumTypeConfig = {
 	routes: {
 		basePath: '/compendium/backgrounds',
-		dbType: 'background',
+		dbType: 'backgrounds',
 		storageKeyFilters: 'background-filters',
 		storageKeyListUrl: 'background-list-url'
 	},

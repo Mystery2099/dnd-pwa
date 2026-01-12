@@ -8,7 +8,7 @@ import type { CompendiumTypeConfig } from '$lib/core/types/compendium';
 export const LANGUAGES_CONFIG: CompendiumTypeConfig = {
 	routes: {
 		basePath: '/compendium/languages',
-		dbType: 'language',
+		dbType: 'languages',
 		storageKeyFilters: 'language-filters',
 		storageKeyListUrl: 'language-list-url'
 	},

@@ -57,13 +57,13 @@ export class HomebrewProvider extends BaseProvider {
 	readonly baseUrl = '';
 
 	private static readonly DEFAULT_TYPES = [
-		'spell',
-		'monster',
-		'item',
-		'feat',
-		'background',
-		'race',
-		'class'
+		'spells',
+		'creatures',
+		'magicitems',
+		'feats',
+		'backgrounds',
+		'species',
+		'classes'
 	] as const satisfies readonly CompendiumTypeName[];
 
 	private dataPath: string;
@@ -110,17 +110,17 @@ export class HomebrewProvider extends BaseProvider {
 		const jsonData = JSON.stringify(item);
 
 		switch (type) {
-			case 'spell':
+			case 'spells':
 				return this.transformSpell(item, externalId, jsonData);
-			case 'monster':
+			case 'creatures':
 				return this.transformMonster(item, externalId, jsonData);
-			case 'feat':
+			case 'feats':
 				return this.transformFeat(item, externalId, jsonData);
-			case 'background':
+			case 'backgrounds':
 				return this.transformBackground(item, externalId, jsonData);
-			case 'race':
+			case 'species':
 				return this.transformRace(item, externalId, jsonData);
-			case 'class':
+			case 'classes':
 				return this.transformClass(item, externalId, jsonData);
 			default:
 				return this.transformGeneric(item, externalId, jsonData);
@@ -279,7 +279,41 @@ export class HomebrewProvider extends BaseProvider {
 	}
 
 	private loadFromFile(type: CompendiumTypeName): unknown[] {
-		const fileName = type === 'spell' ? 'spells.json' : `${type}s.json`;
+		// Map compendium type to filename (Open5e v2 format)
+		const fileMap: Record<string, string> = {
+			spells: 'spells.json',
+			creatures: 'creatures.json',
+			magicitems: 'magicitems.json',
+			feats: 'feats.json',
+			backgrounds: 'backgrounds.json',
+			species: 'species.json',
+			classes: 'classes.json',
+			subclasses: 'subclasses.json',
+			subraces: 'subraces.json',
+			traits: 'traits.json',
+			features: 'features.json',
+			skills: 'skills.json',
+			languages: 'languages.json',
+			alignments: 'alignments.json',
+			damagetypes: 'damagetypes.json',
+			spellschools: 'spellschools.json',
+			equipment: 'equipment.json',
+			weaponproperties: 'weaponproperties.json',
+			itemcategories: 'itemcategories.json',
+			vehicles: 'vehicles.json',
+			creaturetypes: 'creaturetypes.json',
+			rules: 'rules.json',
+			rulesections: 'rulesections.json',
+			weapons: 'weapons.json',
+			armor: 'armor.json',
+			conditions: 'conditions.json',
+			environments: 'environments.json',
+			sections: 'sections.json',
+			proficiencies: 'proficiencies.json',
+			abilities: 'abilities.json'
+		};
+
+		const fileName = fileMap[type] || `${type}.json`;
 		const filePath = join(process.cwd(), this.dataPath, fileName);
 
 		if (!existsSync(filePath)) {

@@ -11,7 +11,7 @@ import { colorMap } from '$lib/core/constants/colors';
 export const CONDITIONS_CONFIG: CompendiumTypeConfig = {
 	routes: {
 		basePath: '/compendium/conditions',
-		dbType: 'condition',
+		dbType: 'conditions',
 		storageKeyFilters: 'condition-filters',
 		storageKeyListUrl: 'condition-list-url'
 	},

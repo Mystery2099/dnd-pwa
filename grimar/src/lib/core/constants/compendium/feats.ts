@@ -8,7 +8,7 @@ import type { CompendiumTypeConfig } from '$lib/core/types/compendium';
 export const FEATS_CONFIG: CompendiumTypeConfig = {
 	routes: {
 		basePath: '/compendium/feats',
-		dbType: 'feat',
+		dbType: 'feats',
 		storageKeyFilters: 'feat-filters',
 		storageKeyListUrl: 'feat-list-url'
 	},

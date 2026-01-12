@@ -388,19 +388,19 @@
 				accentColor={config.display.detailAccent(selectedItem)}
 				animate={false}
 			>
-				{#if dbType === 'spell'}
+				{#if dbType === 'spells'}
 					<SpellEntryContent spell={selectedItem.details} />
-				{:else if dbType === 'monster'}
+				{:else if dbType === 'creatures'}
 					<MonsterEntryContent monster={selectedItem.details} />
-				{:else if dbType === 'feat'}
+				{:else if dbType === 'feats'}
 					<FeatEntryContent feat={selectedItem.details} />
-				{:else if dbType === 'background'}
+				{:else if dbType === 'backgrounds'}
 					<BackgroundEntryContent background={selectedItem.details} />
-				{:else if dbType === 'race'}
+				{:else if dbType === 'species'}
 					<RaceEntryContent race={selectedItem.details} />
-				{:else if dbType === 'class'}
+				{:else if dbType === 'classes'}
 					<ClassEntryContent classData={selectedItem.details} />
-				{:else if dbType === 'item'}
+				{:else if dbType === 'magicitems'}
 					<ItemEntryContent item={selectedItem.details} />
 				{:else}
 					<div class="space-y-4">

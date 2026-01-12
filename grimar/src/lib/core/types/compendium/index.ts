@@ -46,57 +46,83 @@ export type {
 export { slugify, createSlug } from './normalized';
 
 // All valid compendium type names as a tuple for runtime checks
+// Aligned with Open5e API v2 endpoints
 export const COMPENDIUM_TYPES = [
-	'spell',
-	'monster',
-	'item',
-	'feat',
-	'background',
-	'race',
-	'class',
-	'weapon',
+	'spells',
+	'creatures',
+	'magicitems',
+	'itemsets',
+	'itemcategories',
+	'documents',
+	'licenses',
+	'publishers',
+	'weapons',
 	'armor',
-	'condition',
-	'plane',
-	'section'
+	'gamesystems',
+	'backgrounds',
+	'feats',
+	'species',
+	'creaturetypes',
+	'creaturesets',
+	'damagetypes',
+	'languages',
+	'alignments',
+	'conditions',
+	'spellschools',
+	'classes',
+	'sizes',
+	'itemrarities',
+	'environments',
+	'abilities',
+	'skills',
+	'rules',
+	'rulesections',
+	'rulesets',
+	'images',
+	'weaponproperties',
+	'services'
 ] as const;
 
 //#region Core Types
 
 /**
  * The database type stored in compendium_items.type
+ * Aligned with Open5e API v2 endpoint names
  */
 export type CompendiumTypeName =
-	| 'spell'
-	| 'monster'
-	| 'item'
-	| 'feat'
-	| 'background'
-	| 'race'
-	| 'class'
-	| 'subclass'
-	| 'subrace'
-	| 'trait'
-	| 'feature'
-	| 'skill'
-	| 'language'
-	| 'alignment'
-	| 'proficiency'
-	| 'abilityScore'
-	| 'damageType'
-	| 'magicSchool'
-	| 'equipment'
-	| 'weaponProperty'
-	| 'equipmentCategory'
-	| 'vehicle'
-	| 'monsterType'
-	| 'rule'
-	| 'ruleSection'
-	| 'weapon'
+	| 'spells'
+	| 'creatures'
+	| 'magicitems'
+	| 'itemsets'
+	| 'itemcategories'
+	| 'documents'
+	| 'licenses'
+	| 'publishers'
+	| 'weapons'
 	| 'armor'
-	| 'condition'
-	| 'plane'
-	| 'section';
+	| 'gamesystems'
+	| 'backgrounds'
+	| 'feats'
+	| 'species'
+	| 'creaturetypes'
+	| 'creaturesets'
+	| 'damagetypes'
+	| 'languages'
+	| 'alignments'
+	| 'conditions'
+	| 'spellschools'
+	| 'classes'
+	| 'sizes'
+	| 'itemrarities'
+	| 'environments'
+	| 'abilities'
+	| 'skills'
+	| 'rules'
+	| 'rulesections'
+	| 'rulesets'
+	| 'images'
+	| 'weaponproperties'
+	| 'services';
 
 /**
  * Raw compendium item from database

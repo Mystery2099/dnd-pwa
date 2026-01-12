@@ -9,7 +9,7 @@ import { colorMap } from '$lib/core/constants/colors';
 export const CLASSES_CONFIG: CompendiumTypeConfig = {
 	routes: {
 		basePath: '/compendium/classes',
-		dbType: 'class',
+		dbType: 'classes',
 		storageKeyFilters: 'class-filters',
 		storageKeyListUrl: 'class-list-url'
 	},

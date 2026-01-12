@@ -8,7 +8,7 @@ import type { CompendiumTypeConfig } from '$lib/core/types/compendium';
 export const ALIGNMENTS_CONFIG: CompendiumTypeConfig = {
 	routes: {
 		basePath: '/compendium/alignments',
-		dbType: 'alignment',
+		dbType: 'alignments',
 		storageKeyFilters: 'alignment-filters',
 		storageKeyListUrl: 'alignment-list-url'
 	},

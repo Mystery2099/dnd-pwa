@@ -9,7 +9,7 @@ import { colorMap } from '$lib/core/constants/colors';
 export const RACES_CONFIG: CompendiumTypeConfig = {
 	routes: {
 		basePath: '/compendium/races',
-		dbType: 'race',
+		dbType: 'species',
 		storageKeyFilters: 'race-filters',
 		storageKeyListUrl: 'race-list-url'
 	},

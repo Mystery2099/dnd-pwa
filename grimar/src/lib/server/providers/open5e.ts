@@ -14,8 +14,8 @@ import { createModuleLogger } from '$lib/server/logger';
 const log = createModuleLogger('Open5eProvider');
 
 // GitHub configuration
-const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/open5e/open5e-api';
-const GITHUB_API_BASE = 'https://api.github.com/repos/open5e/open5e-api';
+const OPEN5E_RAW_BASE = 'https://raw.githubusercontent.com/open5e/open5e-api';
+const OPEN5E_API_BASE = 'https://api.github.com/repos/open5e/open5e-api';
 const VERSION = 'v1.12.0';
 
 // Publishers and their sources (from data/v2/)
@@ -41,45 +41,48 @@ const PUBLISHERS = {
 	'wizards-of-the-coast': ['srd-2014', 'srd-2024']
 } as const;
 
-// Type mapping: compendium type -> v2 JSON filename
+// Type mapping: compendium type (Open5e v2) -> v2 JSON filename
 const TYPE_FILES: Record<CompendiumTypeName, string> = {
-	spell: 'Spell.json',
-	monster: 'Creature.json',
-	item: 'Item.json',
-	feat: 'Feat.json',
-	background: 'Background.json',
-	race: 'Species.json',
-	class: 'CharacterClass.json',
-	subclass: 'Subclass.json',
-	subrace: 'Subrace.json',
-	trait: 'SpeciesTrait.json',
-	condition: 'Condition.json',
-	feature: 'ClassFeature.json',
-	skill: 'Skill.json',
-	language: 'Language.json',
-	alignment: 'Alignment.json',
-	proficiency: 'Proficiency.json',
-	abilityScore: 'Ability.json',
-	damageType: 'DamageType.json',
-	magicSchool: 'SpellSchool.json',
-	equipment: 'Item.json',
-	weaponProperty: 'WeaponProperty.json',
-	equipmentCategory: 'ItemCategory.json',
-	vehicle: 'Vehicle.json',
-	monsterType: 'CreatureType.json',
-	rule: 'Rule.json',
-	ruleSection: 'RuleSection.json',
-	weapon: 'Weapon.json',
+	spells: 'Spell.json',
+	creatures: 'Creature.json',
+	magicitems: 'Item.json',
+	itemsets: 'ItemSet.json',
+	itemcategories: 'ItemCategory.json',
+	documents: 'Document.json',
+	licenses: 'License.json',
+	publishers: 'Publisher.json',
+	weapons: 'Weapon.json',
 	armor: 'Armor.json',
-	plane: 'Environment.json',
-	section: 'RuleSection.json'
+	gamesystems: 'GameSystem.json',
+	backgrounds: 'Background.json',
+	feats: 'Feat.json',
+	species: 'Species.json',
+	creaturetypes: 'CreatureType.json',
+	creaturesets: 'CreatureSet.json',
+	damagetypes: 'DamageType.json',
+	languages: 'Language.json',
+	alignments: 'Alignment.json',
+	conditions: 'Condition.json',
+	spellschools: 'SpellSchool.json',
+	classes: 'CharacterClass.json',
+	sizes: 'Size.json',
+	itemrarities: 'ItemRarity.json',
+	environments: 'Environment.json',
+	abilities: 'Ability.json',
+	skills: 'Skill.json',
+	rules: 'Rule.json',
+	rulesections: 'RuleSection.json',
+	rulesets: 'RuleSet.json',
+	images: 'Image.json',
+	weaponproperties: 'WeaponProperty.json',
+	services: 'Service.json'
 };
 
 // ============================================================================
 // Zod Schemas for v2 API format
 // ============================================================================
 
-export const GithubDocumentSchema = z.object({
+export const Open5eDocumentSchema = z.object({
 	fields: z.object({
 		name: z.string(),
 		display_name: z.string().nullable().optional(),
@@ -91,7 +94,7 @@ export const GithubDocumentSchema = z.object({
 	pk: z.string()
 });
 
-export const GithubSpellSchema = z.object({
+export const Open5eSpellSchema = z.object({
 	fields: z.object({
 		name: z.string(),
 		desc: z.array(z.string()).optional(),
@@ -113,7 +116,7 @@ export const GithubSpellSchema = z.object({
 	document: z.string()
 });
 
-export const GithubCreatureSchema = z.object({
+export const Open5eCreatureSchema = z.object({
 	fields: z.object({
 		name: z.string(),
 		size: z.string().optional(),
@@ -129,7 +132,7 @@ export const GithubCreatureSchema = z.object({
 	document: z.string()
 });
 
-export const GithubItemSchema = z.object({
+export const Open5eItemSchema = z.object({
 	fields: z.object({
 		name: z.string(),
 		rarity: z.string().optional(),
@@ -141,7 +144,7 @@ export const GithubItemSchema = z.object({
 	document: z.string()
 });
 
-export const GithubFeatSchema = z.object({
+export const Open5eFeatSchema = z.object({
 	fields: z.object({
 		name: z.string(),
 		prerequisites: z.array(z.string()).optional(),
@@ -152,7 +155,7 @@ export const GithubFeatSchema = z.object({
 	document: z.string()
 });
 
-export const GithubBackgroundSchema = z.object({
+export const Open5eBackgroundSchema = z.object({
 	fields: z.object({
 		name: z.string(),
 		feature: z.object({ name: z.string() }).optional()
@@ -162,7 +165,7 @@ export const GithubBackgroundSchema = z.object({
 	document: z.string()
 });
 
-export const GithubSpeciesSchema = z.object({
+export const Open5eSpeciesSchema = z.object({
 	fields: z.object({
 		name: z.string(),
 		desc: z.string().optional(),
@@ -173,7 +176,7 @@ export const GithubSpeciesSchema = z.object({
 	document: z.string()
 });
 
-export const GithubCharacterClassSchema = z.object({
+export const Open5eCharacterClassSchema = z.object({
 	fields: z.object({
 		name: z.string(),
 		hit_die: z.number().optional()
@@ -183,7 +186,7 @@ export const GithubCharacterClassSchema = z.object({
 	document: z.string()
 });
 
-export const GithubGenericSchema = z.object({
+export const Open5eGenericSchema = z.object({
 	fields: z.record(z.string(), z.any()),
 	model: z.string(),
 	pk: z.string(),
@@ -194,15 +197,15 @@ export const GithubGenericSchema = z.object({
 // Type exports
 // ============================================================================
 
-export type GithubDocument = z.infer<typeof GithubDocumentSchema>;
-export type GithubSpell = z.infer<typeof GithubSpellSchema>;
-export type GithubCreature = z.infer<typeof GithubCreatureSchema>;
-export type GithubItem = z.infer<typeof GithubItemSchema>;
-export type GithubFeat = z.infer<typeof GithubFeatSchema>;
-export type GithubBackground = z.infer<typeof GithubBackgroundSchema>;
-export type GithubSpecies = z.infer<typeof GithubSpeciesSchema>;
-export type GithubCharacterClass = z.infer<typeof GithubCharacterClassSchema>;
-export type GithubGeneric = z.infer<typeof GithubGenericSchema>;
+export type Open5eDocument = z.infer<typeof Open5eDocumentSchema>;
+export type Open5eSpell = z.infer<typeof Open5eSpellSchema>;
+export type Open5eCreature = z.infer<typeof Open5eCreatureSchema>;
+export type Open5eItem = z.infer<typeof Open5eItemSchema>;
+export type Open5eFeat = z.infer<typeof Open5eFeatSchema>;
+export type Open5eBackground = z.infer<typeof Open5eBackgroundSchema>;
+export type Open5eSpecies = z.infer<typeof Open5eSpeciesSchema>;
+export type Open5eCharacterClass = z.infer<typeof Open5eCharacterClassSchema>;
+export type Open5eGeneric = z.infer<typeof Open5eGenericSchema>;
 
 // ============================================================================
 // Provider Implementation
@@ -224,16 +227,16 @@ export class Open5eProvider extends BaseProvider {
 	private sourcesLoaded = false;
 
 	private static readonly DEFAULT_TYPES = [
-		'spell',
-		'monster',
-		'item',
-		'feat',
-		'background',
-		'race',
-		'class'
+		'spells',
+		'creatures',
+		'magicitems',
+		'feats',
+		'backgrounds',
+		'species',
+		'classes'
 	] as const satisfies readonly CompendiumTypeName[];
 
-	constructor(baseUrl: string = GITHUB_RAW_BASE, supportedTypes?: readonly CompendiumTypeName[]) {
+	constructor(baseUrl: string = OPEN5E_RAW_BASE, supportedTypes?: readonly CompendiumTypeName[]) {
 		super(supportedTypes ?? Open5eProvider.DEFAULT_TYPES);
 		this.baseUrl = baseUrl;
 	}
@@ -265,7 +268,7 @@ export class Open5eProvider extends BaseProvider {
 
 					for (const d of docs) {
 						// Parse each document individually
-						const parsed = GithubDocumentSchema.parse(d);
+						const parsed = Open5eDocumentSchema.parse(d);
 						const sourceInfo: SourceInfo = {
 							publisher,
 							source: parsed.pk,
@@ -420,19 +423,19 @@ export class Open5eProvider extends BaseProvider {
 		const pk = raw.pk as string;
 
 		switch (type) {
-			case 'spell':
+			case 'spells':
 				return this.transformSpell(fields, pk, sourceBook, edition);
-			case 'monster':
+			case 'creatures':
 				return this.transformCreature(fields, pk, sourceBook);
-			case 'item':
+			case 'magicitems':
 				return this.transformItemRecord(fields, pk, sourceBook);
-			case 'feat':
+			case 'feats':
 				return this.transformFeat(fields, pk, sourceBook);
-			case 'background':
+			case 'backgrounds':
 				return this.transformBackground(fields, pk, sourceBook);
-			case 'race':
+			case 'species':
 				return this.transformSpecies(fields, pk, sourceBook);
-			case 'class':
+			case 'classes':
 				return this.transformClass(fields, pk, sourceBook);
 			default:
 				return this.transformGeneric(fields, pk, sourceBook);

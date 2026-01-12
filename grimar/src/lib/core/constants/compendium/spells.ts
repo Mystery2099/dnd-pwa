@@ -56,7 +56,7 @@ const SPELL_SCHOOL_TO_GEM: Record<string, string> = {
 export const SPELLS_CONFIG: CompendiumTypeConfig = {
 	routes: {
 		basePath: '/compendium/spells',
-		dbType: 'spell',
+		dbType: 'spells',
 		storageKeyFilters: 'spell-filters',
 		storageKeyListUrl: 'spell-list-url'
 	},

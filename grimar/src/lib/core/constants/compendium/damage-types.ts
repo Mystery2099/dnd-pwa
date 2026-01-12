@@ -8,7 +8,7 @@ import type { CompendiumTypeConfig } from '$lib/core/types/compendium';
 export const DAMAGE_TYPES_CONFIG: CompendiumTypeConfig = {
 	routes: {
 		basePath: '/compendium/damage-types',
-		dbType: 'damageType',
+		dbType: 'damagetypes',
 		storageKeyFilters: 'damage-type-filters',
 		storageKeyListUrl: 'damage-type-list-url'
 	},

@@ -54,64 +54,49 @@ const TRANSFORM_PROGRESS_INTERVAL = 50;
 
 // Type canonicalization mapping (handles singular/plural variations from different APIs)
 const TYPE_CANONICAL: Record<string, CompendiumTypeName> = {
-	spell: 'spell',
-	spells: 'spell',
-	monster: 'monster',
-	monsters: 'monster',
-	item: 'item',
-	items: 'item',
-	feat: 'feat',
-	feats: 'feat',
-	background: 'background',
-	backgrounds: 'background',
-	race: 'race',
-	races: 'race',
-	class: 'class',
-	classes: 'class',
-	subclass: 'subclass',
-	subclasses: 'subclass',
-	subrace: 'subrace',
-	subraces: 'subrace',
-	trait: 'trait',
-	traits: 'trait',
-	condition: 'condition',
-	conditions: 'condition',
-	feature: 'feature',
-	features: 'feature',
-	skill: 'skill',
-	skills: 'skill',
-	language: 'language',
-	languages: 'language',
-	alignment: 'alignment',
-	alignments: 'alignment',
-	proficiency: 'proficiency',
-	proficiencies: 'proficiency',
-	abilityScore: 'abilityScore',
-	abilityScores: 'abilityScore',
-	damageType: 'damageType',
-	damageTypes: 'damageType',
-	magicSchool: 'magicSchool',
-	magicSchools: 'magicSchool',
-	equipment: 'equipment',
-	equipmentCategory: 'equipmentCategory',
-	equipmentCategories: 'equipmentCategory',
-	weaponProperty: 'weaponProperty',
-	weaponProperties: 'weaponProperty',
-	vehicle: 'vehicle',
-	vehicles: 'vehicle',
-	monsterType: 'monsterType',
-	monsterTypes: 'monsterType',
-	rule: 'rule',
-	rules: 'rule',
-	ruleSection: 'ruleSection',
-	ruleSections: 'ruleSection',
-	weapon: 'weapon',
-	weapons: 'weapon',
+	spell: 'spells',
+	spells: 'spells',
+	monster: 'creatures',
+	monsters: 'creatures',
+	item: 'magicitems',
+	items: 'magicitems',
+	feat: 'feats',
+	feats: 'feats',
+	background: 'backgrounds',
+	backgrounds: 'backgrounds',
+	race: 'species',
+	races: 'species',
+	class: 'classes',
+	classes: 'classes',
+	condition: 'conditions',
+	conditions: 'conditions',
+	skill: 'skills',
+	skills: 'skills',
+	language: 'languages',
+	languages: 'languages',
+	alignment: 'alignments',
+	alignments: 'alignments',
+	abilityScore: 'abilities',
+	abilityScores: 'abilities',
+	damageType: 'damagetypes',
+	damageTypes: 'damagetypes',
+	magicSchool: 'spellschools',
+	magicSchools: 'spellschools',
+	equipmentCategory: 'itemcategories',
+	equipmentCategories: 'itemcategories',
+	weaponProperty: 'weaponproperties',
+	weaponProperties: 'weaponproperties',
+	monsterType: 'creaturetypes',
+	monsterTypes: 'creaturetypes',
+	rule: 'rules',
+	rules: 'rules',
+	ruleSection: 'rulesections',
+	ruleSections: 'rulesections',
+	weapon: 'weapons',
+	weapons: 'weapons',
 	armor: 'armor',
-	plane: 'plane',
-	planes: 'plane',
-	section: 'section',
-	sections: 'section'
+	plane: 'environments',
+	planes: 'environments'
 };
 
 function normalizeType(type: string): CompendiumTypeName | null {
@@ -360,95 +345,71 @@ async function syncSingleProvider(
 			result.totalItems += itemCount;
 
 			switch (type) {
-				case 'spell':
+				case 'spells':
 					result.spells = itemCount;
 					break;
-				case 'monster':
+				case 'creatures':
 					result.monsters = itemCount;
 					break;
-				case 'item':
+				case 'magicitems':
 					result.items = itemCount;
 					break;
-				case 'feat':
+				case 'feats':
 					result.feats = itemCount;
 					break;
-				case 'background':
+				case 'backgrounds':
 					result.backgrounds = itemCount;
 					break;
-				case 'race':
+				case 'species':
 					result.races = itemCount;
 					break;
-				case 'class':
+				case 'classes':
 					result.classes = itemCount;
 					break;
-				case 'subclass':
-					result.subclasses = itemCount;
-					break;
-				case 'subrace':
-					result.subraces = itemCount;
-					break;
-				case 'trait':
-					result.traits = itemCount;
-					break;
-				case 'condition':
+				case 'conditions':
 					result.conditions = itemCount;
 					break;
-				case 'feature':
-					result.features = itemCount;
-					break;
-				case 'skill':
+				case 'skills':
 					result.skills = itemCount;
 					break;
-				case 'language':
+				case 'languages':
 					result.languages = itemCount;
 					break;
-				case 'alignment':
+				case 'alignments':
 					result.alignments = itemCount;
 					break;
-				case 'proficiency':
-					result.proficiencies = itemCount;
-					break;
-				case 'abilityScore':
+				case 'abilities':
 					result.abilityScores = itemCount;
 					break;
-				case 'damageType':
+				case 'damagetypes':
 					result.damageTypes = itemCount;
 					break;
-				case 'magicSchool':
+				case 'spellschools':
 					result.magicSchools = itemCount;
 					break;
-				case 'equipment':
-					result.equipment = itemCount;
-					break;
-				case 'weaponProperty':
-					result.weaponProperties = itemCount;
-					break;
-				case 'equipmentCategory':
+				case 'itemcategories':
 					result.equipmentCategories = itemCount;
 					break;
-				case 'vehicle':
-					result.vehicles = itemCount;
+				case 'weaponproperties':
+					result.weaponProperties = itemCount;
 					break;
-				case 'monsterType':
+				case 'creaturetypes':
 					result.monsterTypes = itemCount;
 					break;
-				case 'rule':
+				case 'rules':
 					result.rules = itemCount;
 					break;
-				case 'ruleSection':
+				case 'rulesections':
 					result.ruleSections = itemCount;
 					break;
-				case 'weapon':
+				case 'weapons':
 					result.weapons = itemCount;
 					break;
 				case 'armor':
 					result.armor = itemCount;
 					break;
-				case 'plane':
+				case 'environments':
 					result.planes = itemCount;
-					break;
-				case 'section':
-					result.sections = itemCount;
 					break;
 			}
 		} catch (error) {
@@ -773,36 +734,28 @@ export async function syncProviderById(
 	options?: SyncOptions
 ): Promise<ProviderSyncResult> {
 	const types = options?.types || [
-		'spell',
-		'monster',
-		'item',
-		'feat',
-		'background',
-		'race',
-		'class',
-		'subclass',
-		'subrace',
-		'trait',
-		'condition',
-		'feature',
-		'skill',
-		'language',
-		'alignment',
-		'proficiency',
-		'abilityScore',
-		'damageType',
-		'magicSchool',
-		'equipment',
-		'weaponProperty',
-		'equipmentCategory',
-		'vehicle',
-		'monsterType',
-		'rule',
-		'ruleSection',
-		'weapon',
+		'spells',
+		'creatures',
+		'magicitems',
+		'feats',
+		'backgrounds',
+		'species',
+		'classes',
+		'conditions',
+		'skills',
+		'languages',
+		'alignments',
+		'abilities',
+		'damagetypes',
+		'spellschools',
+		'itemcategories',
+		'weaponproperties',
+		'creaturetypes',
+		'rules',
+		'rulesections',
+		'weapons',
 		'armor',
-		'plane',
-		'section'
+		'environments'
 	];
 	const metrics = createSyncMetrics();
 

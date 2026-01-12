@@ -43,7 +43,7 @@ const MONSTER_TYPES = [
 export const MONSTERS_CONFIG: CompendiumTypeConfig = {
 	routes: {
 		basePath: '/compendium/monsters',
-		dbType: 'monster',
+		dbType: 'creatures',
 		storageKeyFilters: 'monster-filters',
 		storageKeyListUrl: 'monster-list-url'
 	},

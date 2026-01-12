@@ -16,94 +16,147 @@ import { WEAPONS_CONFIG } from './weapons';
 import { ARMOR_CONFIG } from './armor';
 import { CONDITIONS_CONFIG } from './conditions';
 import { PLANES_CONFIG } from './planes';
-import { SECTIONS_CONFIG } from './sections';
-import { SUBCLASSES_CONFIG } from './subclasses';
-import { SUBRACES_CONFIG } from './subraces';
-import { TRAITS_CONFIG } from './traits';
 import {
 	SKILLS_CONFIG,
 	LANGUAGES_CONFIG,
 	ALIGNMENTS_CONFIG,
 	DAMAGE_TYPES_CONFIG,
 	MAGIC_SCHOOLS_CONFIG,
-	EQUIPMENT_CONFIG,
-	VEHICLES_CONFIG,
 	MONSTER_TYPES_CONFIG,
 	RULE_SECTIONS_CONFIG,
-	FEATURES_CONFIG,
-	PROFICIENCIES_CONFIG,
 	ABILITY_SCORES_CONFIG,
 	WEAPON_PROPERTIES_CONFIG,
 	EQUIPMENT_CATEGORIES_CONFIG,
 	RULES_CONFIG
 } from './reference';
 
+import { BookOpen } from 'lucide-svelte';
+
+// Helper to create generic configs for new types
+function createGenericConfig(
+	type: string,
+	displayName: string,
+	color: string
+): CompendiumTypeConfig {
+	return {
+		routes: {
+			basePath: `/compendium/${type}`,
+			dbType: type as CompendiumTypeName,
+			storageKeyFilters: `${type}-filters`,
+			storageKeyListUrl: `${type}-list-url`
+		},
+		filters: [],
+		sorting: {
+			default: {
+				label: 'Name (A-Z)',
+				value: 'name-asc',
+				column: 'name',
+				direction: 'asc'
+			},
+			options: [
+				{ label: 'Name (A-Z)', value: 'name-asc', column: 'name', direction: 'asc' },
+				{ label: 'Name (Z-A)', value: 'name-desc', column: 'name', direction: 'desc' }
+			]
+		},
+		ui: {
+			displayName,
+			displayNamePlural: displayName + 's',
+			icon: BookOpen,
+			categoryGradient: `from-${color}-500/20 to-${color}-600/20`,
+			categoryAccent: `text-${color}-400`,
+			emptyState: {
+				title: `No ${displayName.toLowerCase()}s found`,
+				description: 'Try adjusting your filters to find what you are looking for.'
+			},
+			databaseEmptyState: {
+				title: `No ${displayName}s in Compendium`,
+				description: `The ${displayName.toLowerCase()} database appears to be empty.`,
+				ctaText: `Sync ${displayName}s`,
+				ctaLink: '/compendium/sync'
+			}
+		},
+		display: {
+			subtitle: () => displayName,
+			tags: () => [],
+			listItemAccent: () => `text-${color}-400`,
+			detailAccent: () => `text-${color}-400`,
+			metaDescription: () => ''
+		}
+	};
+}
+
 // Map database type names to their configuration objects
 const CONFIG_MAP: Record<CompendiumTypeName, CompendiumTypeConfig> = {
-	spell: SPELLS_CONFIG,
-	monster: MONSTERS_CONFIG,
-	feat: FEATS_CONFIG,
-	background: BACKGROUNDS_CONFIG,
-	race: RACES_CONFIG,
-	class: CLASSES_CONFIG,
-	item: ITEMS_CONFIG,
-	subclass: SUBCLASSES_CONFIG,
-	subrace: SUBRACES_CONFIG,
-	trait: TRAITS_CONFIG,
-	feature: FEATURES_CONFIG,
-	skill: SKILLS_CONFIG,
-	language: LANGUAGES_CONFIG,
-	alignment: ALIGNMENTS_CONFIG,
-	damageType: DAMAGE_TYPES_CONFIG,
-	magicSchool: MAGIC_SCHOOLS_CONFIG,
-	equipment: EQUIPMENT_CONFIG,
-	vehicle: VEHICLES_CONFIG,
-	monsterType: MONSTER_TYPES_CONFIG,
-	ruleSection: RULE_SECTIONS_CONFIG,
-	weapon: WEAPONS_CONFIG,
+	spells: SPELLS_CONFIG,
+	creatures: MONSTERS_CONFIG,
+	magicitems: ITEMS_CONFIG,
+	itemsets: createGenericConfig('itemsets', 'Item Set', 'amber'),
+	itemcategories: EQUIPMENT_CATEGORIES_CONFIG,
+	documents: createGenericConfig('documents', 'Document', 'gray'),
+	licenses: createGenericConfig('licenses', 'License', 'blue'),
+	publishers: createGenericConfig('publishers', 'Publisher', 'indigo'),
+	weapons: WEAPONS_CONFIG,
 	armor: ARMOR_CONFIG,
-	condition: CONDITIONS_CONFIG,
-	plane: PLANES_CONFIG,
-	section: SECTIONS_CONFIG,
-	proficiency: PROFICIENCIES_CONFIG,
-	abilityScore: ABILITY_SCORES_CONFIG,
-	weaponProperty: WEAPON_PROPERTIES_CONFIG,
-	equipmentCategory: EQUIPMENT_CATEGORIES_CONFIG,
-	rule: RULES_CONFIG
+	gamesystems: createGenericConfig('gamesystems', 'Game System', 'purple'),
+	backgrounds: BACKGROUNDS_CONFIG,
+	feats: FEATS_CONFIG,
+	species: RACES_CONFIG,
+	creaturetypes: MONSTER_TYPES_CONFIG,
+	creaturesets: createGenericConfig('creaturesets', 'Creature Set', 'green'),
+	damagetypes: DAMAGE_TYPES_CONFIG,
+	languages: LANGUAGES_CONFIG,
+	alignments: ALIGNMENTS_CONFIG,
+	conditions: CONDITIONS_CONFIG,
+	spellschools: MAGIC_SCHOOLS_CONFIG,
+	classes: CLASSES_CONFIG,
+	sizes: createGenericConfig('sizes', 'Size', 'cyan'),
+	itemrarities: createGenericConfig('itemrarities', 'Item Rarity', 'yellow'),
+	environments: PLANES_CONFIG,
+	abilities: ABILITY_SCORES_CONFIG,
+	skills: SKILLS_CONFIG,
+	rules: RULES_CONFIG,
+	rulesections: RULE_SECTIONS_CONFIG,
+	rulesets: createGenericConfig('rulesets', 'Rule Set', 'rose'),
+	images: createGenericConfig('images', 'Image', 'pink'),
+	weaponproperties: WEAPON_PROPERTIES_CONFIG,
+	services: createGenericConfig('services', 'Service', 'orange')
 };
 
-// Map URL path segments to database types
+// Map URL path segments to database types (aligned with Open5e API v2)
 const PATH_TO_TYPE: Record<string, CompendiumTypeName> = {
-	spells: 'spell',
-	monsters: 'monster',
-	feats: 'feat',
-	backgrounds: 'background',
-	races: 'race',
-	classes: 'class',
-	magicitems: 'item',
-	subclasses: 'subclass',
-	subraces: 'subrace',
-	traits: 'trait',
-	features: 'feature',
-	skills: 'skill',
-	languages: 'language',
-	alignments: 'alignment',
-	'damage-types': 'damageType',
-	'magic-schools': 'magicSchool',
-	equipment: 'equipment',
-	vehicles: 'vehicle',
-	'monster-types': 'monsterType',
-	'rule-sections': 'ruleSection',
-	weapons: 'weapon',
+	spells: 'spells',
+	creatures: 'creatures',
+	magicitems: 'magicitems',
+	itemsets: 'itemsets',
+	itemcategories: 'itemcategories',
+	documents: 'documents',
+	licenses: 'licenses',
+	publishers: 'publishers',
+	weapons: 'weapons',
 	armor: 'armor',
-	conditions: 'condition',
-	planes: 'plane',
-	sections: 'section',
-	proficiencies: 'proficiency',
-	'ability-scores': 'abilityScore',
-	'weapon-properties': 'weaponProperty',
-	'equipment-categories': 'equipmentCategory',
-	rules: 'rule'
+	gamesystems: 'gamesystems',
+	backgrounds: 'backgrounds',
+	feats: 'feats',
+	species: 'species',
+	creaturetypes: 'creaturetypes',
+	creaturesets: 'creaturesets',
+	damagetypes: 'damagetypes',
+	languages: 'languages',
+	alignments: 'alignments',
+	conditions: 'conditions',
+	spellschools: 'spellschools',
+	classes: 'classes',
+	sizes: 'sizes',
+	itemrarities: 'itemrarities',
+	environments: 'environments',
+	abilities: 'abilities',
+	skills: 'skills',
+	rules: 'rules',
+	rulesections: 'rulesections',
+	rulesets: 'rulesets',
+	images: 'images',
+	weaponproperties: 'weaponproperties',
+	services: 'services'
 };
 
 /**
@@ -141,22 +194,14 @@ export { WEAPONS_CONFIG } from './weapons';
 export { ARMOR_CONFIG } from './armor';
 export { CONDITIONS_CONFIG } from './conditions';
 export { PLANES_CONFIG } from './planes';
-export { SECTIONS_CONFIG } from './sections';
-export { SUBCLASSES_CONFIG } from './subclasses';
-export { SUBRACES_CONFIG } from './subraces';
-export { TRAITS_CONFIG } from './traits';
 export {
 	SKILLS_CONFIG,
 	LANGUAGES_CONFIG,
 	ALIGNMENTS_CONFIG,
 	DAMAGE_TYPES_CONFIG,
 	MAGIC_SCHOOLS_CONFIG,
-	EQUIPMENT_CONFIG,
-	VEHICLES_CONFIG,
 	MONSTER_TYPES_CONFIG,
 	RULE_SECTIONS_CONFIG,
-	FEATURES_CONFIG,
-	PROFICIENCIES_CONFIG,
 	ABILITY_SCORES_CONFIG,
 	WEAPON_PROPERTIES_CONFIG,
 	EQUIPMENT_CATEGORIES_CONFIG,

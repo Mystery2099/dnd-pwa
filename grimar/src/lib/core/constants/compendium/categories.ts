@@ -7,24 +7,28 @@ import {
 	Users,
 	Scroll,
 	Medal,
-	Sword,
-	Shirt,
-	Activity,
-	Globe,
-	BookOpen,
-	GitBranch,
-	GitFork,
 	Dumbbell,
 	Trophy,
-	Award,
+	Activity,
+	Globe,
 	Scale,
 	Wand,
-	Backpack,
 	Layers,
 	Crosshair,
-	Zap,
-	Ship,
-	Bone
+	BookOpen,
+	Bone,
+	Box,
+	Gem,
+	Book,
+	ArrowUpDown,
+	FileText,
+	Copyright,
+	Building,
+	Gamepad2,
+	Library,
+	ShoppingCart,
+	Map,
+	Image
 } from 'lucide-svelte';
 
 export const CATEGORIES: CompendiumCategory[] = [
@@ -62,7 +66,7 @@ export const CARDS: CompendiumCard[] = [
 	{
 		title: 'Monsters',
 		description: 'Beasts and planar entities.',
-		href: '/compendium/monsters',
+		href: '/compendium/creatures',
 		icon: Skull,
 		gradient: 'from-emerald-500/20 to-teal-500/20',
 		accent: 'text-emerald-400',
@@ -90,7 +94,7 @@ export const CARDS: CompendiumCard[] = [
 	{
 		title: 'Races',
 		description: 'Lineages and origins.',
-		href: '/compendium/races',
+		href: '/compendium/species',
 		icon: Users,
 		gradient: 'from-pink-500/20 to-rose-500/20',
 		accent: 'text-pink-400',
@@ -114,38 +118,11 @@ export const CARDS: CompendiumCard[] = [
 		accent: 'text-yellow-400',
 		categoryId: 'character'
 	},
-	{
-		title: 'Subclasses',
-		description: 'Specializations and traditions.',
-		href: '/compendium/subclasses',
-		icon: GitBranch,
-		gradient: 'from-cyan-500/20 to-sky-500/20',
-		accent: 'text-cyan-400',
-		categoryId: 'character'
-	},
-	{
-		title: 'Subraces',
-		description: 'Variants and ethnic ties.',
-		href: '/compendium/subraces',
-		icon: GitFork,
-		gradient: 'from-teal-500/20 to-emerald-500/20',
-		accent: 'text-teal-400',
-		categoryId: 'character'
-	},
-	{
-		title: 'Traits',
-		description: 'Racial abilities and gifts.',
-		href: '/compendium/traits',
-		icon: Sparkles,
-		gradient: 'from-violet-500/20 to-purple-500/20',
-		accent: 'text-violet-400',
-		categoryId: 'character'
-	},
 	// Abilities & Proficiencies
 	{
 		title: 'Ability Scores',
 		description: 'Core statistics.',
-		href: '/compendium/ability-scores',
+		href: '/compendium/abilities',
 		icon: Dumbbell,
 		gradient: 'from-orange-500/20 to-red-500/20',
 		accent: 'text-orange-400',
@@ -170,15 +147,6 @@ export const CARDS: CompendiumCard[] = [
 		categoryId: 'abilities'
 	},
 	{
-		title: 'Proficiencies',
-		description: 'Weapon and armor skills.',
-		href: '/compendium/proficiencies',
-		icon: Award,
-		gradient: 'from-emerald-500/20 to-green-500/20',
-		accent: 'text-emerald-400',
-		categoryId: 'abilities'
-	},
-	{
 		title: 'Alignments',
 		description: 'Moral and ethical codes.',
 		href: '/compendium/alignments',
@@ -191,7 +159,7 @@ export const CARDS: CompendiumCard[] = [
 	{
 		title: 'Magic Schools',
 		description: 'Arcane disciplines.',
-		href: '/compendium/magic-schools',
+		href: '/compendium/spellschools',
 		icon: Wand,
 		gradient: 'from-fuchsia-500/20 to-pink-500/20',
 		accent: 'text-fuchsia-400',
@@ -200,7 +168,7 @@ export const CARDS: CompendiumCard[] = [
 	{
 		title: 'Damage Types',
 		description: 'Elemental forces.',
-		href: '/compendium/damage-types',
+		href: '/compendium/damagetypes',
 		icon: Flame,
 		gradient: 'from-orange-500/20 to-red-500/20',
 		accent: 'text-orange-400',
@@ -208,30 +176,39 @@ export const CARDS: CompendiumCard[] = [
 	},
 	// The Armory
 	{
-		title: 'Equipment',
-		description: 'Gears and supplies.',
-		href: '/compendium/equipment',
-		icon: Backpack,
-		gradient: 'from-amber-500/20 to-yellow-500/20',
-		accent: 'text-amber-400',
-		categoryId: 'armory'
-	},
-	{
 		title: 'Equipment Categories',
 		description: 'Item classifications.',
-		href: '/compendium/equipment-categories',
+		href: '/compendium/itemcategories',
 		icon: Layers,
 		gradient: 'from-stone-500/20 to-warm-gray-500/20',
 		accent: 'text-stone-400',
 		categoryId: 'armory'
 	},
 	{
+		title: 'Item Sets',
+		description: 'Collectible groupings.',
+		href: '/compendium/itemsets',
+		icon: Box,
+		gradient: 'from-amber-500/20 to-yellow-500/20',
+		accent: 'text-amber-400',
+		categoryId: 'armory'
+	},
+	{
 		title: 'Weapon Properties',
 		description: 'Weapon traits.',
-		href: '/compendium/weapon-properties',
+		href: '/compendium/weaponproperties',
 		icon: Crosshair,
 		gradient: 'from-red-500/20 to-orange-500/20',
 		accent: 'text-red-400',
+		categoryId: 'armory'
+	},
+	{
+		title: 'Rarities',
+		description: 'Item rarity tiers.',
+		href: '/compendium/itemrarities',
+		icon: Gem,
+		gradient: 'from-purple-500/20 to-fuchsia-500/20',
+		accent: 'text-purple-400',
 		categoryId: 'armory'
 	},
 	// Rules & Reference
@@ -247,38 +224,120 @@ export const CARDS: CompendiumCard[] = [
 	{
 		title: 'Rules',
 		description: 'SRD Reference.',
-		href: '/compendium/sections',
+		href: '/compendium/rules',
 		icon: BookOpen,
 		gradient: 'from-purple-500/20 to-fuchsia-500/20',
 		accent: 'text-purple-400',
 		categoryId: 'rules'
 	},
 	{
-		title: 'Features',
-		description: 'Class features.',
-		href: '/compendium/features',
-		icon: Zap,
-		gradient: 'from-yellow-500/20 to-amber-500/20',
-		accent: 'text-yellow-400',
-		categoryId: 'rules'
-	},
-	{
-		title: 'Vehicles',
-		description: 'Mounts and transports.',
-		href: '/compendium/vehicles',
-		icon: Ship,
-		gradient: 'from-cyan-500/20 to-blue-500/20',
-		accent: 'text-cyan-400',
+		title: 'Rule Sections',
+		description: 'Rule subdivisions.',
+		href: '/compendium/rulesections',
+		icon: Book,
+		gradient: 'from-violet-500/20 to-purple-500/20',
+		accent: 'text-violet-400',
 		categoryId: 'rules'
 	},
 	{
 		title: 'Monster Types',
 		description: 'Creature classifications.',
-		href: '/compendium/monster-types',
+		href: '/compendium/creaturetypes',
 		icon: Bone,
 		gradient: 'from-green-500/20 to-emerald-500/20',
 		accent: 'text-green-400',
 		categoryId: 'rules'
+	},
+	{
+		title: 'Planes',
+		description: 'Environments and realms.',
+		href: '/compendium/environments',
+		icon: Map,
+		gradient: 'from-cyan-500/20 to-sky-500/20',
+		accent: 'text-cyan-400',
+		categoryId: 'rules'
+	},
+	{
+		title: 'Sizes',
+		description: 'Creature size categories.',
+		href: '/compendium/sizes',
+		icon: ArrowUpDown,
+		gradient: 'from-slate-500/20 to-gray-500/20',
+		accent: 'text-slate-400',
+		categoryId: 'rules'
+	},
+	// Open5e Data
+	{
+		title: 'Documents',
+		description: 'Source documents.',
+		href: '/compendium/documents',
+		icon: FileText,
+		gradient: 'from-amber-500/20 to-orange-500/20',
+		accent: 'text-amber-400',
+		categoryId: 'data'
+	},
+	{
+		title: 'Licenses',
+		description: 'Content licenses.',
+		href: '/compendium/licenses',
+		icon: Copyright,
+		gradient: 'from-gray-500/20 to-slate-500/20',
+		accent: 'text-gray-400',
+		categoryId: 'data'
+	},
+	{
+		title: 'Publishers',
+		description: 'Content publishers.',
+		href: '/compendium/publishers',
+		icon: Building,
+		gradient: 'from-emerald-500/20 to-green-500/20',
+		accent: 'text-emerald-400',
+		categoryId: 'data'
+	},
+	{
+		title: 'Game Systems',
+		description: 'Rule system variants.',
+		href: '/compendium/gamesystems',
+		icon: Gamepad2,
+		gradient: 'from-blue-500/20 to-indigo-500/20',
+		accent: 'text-blue-400',
+		categoryId: 'data'
+	},
+	{
+		title: 'Rule Sets',
+		description: 'Rule groupings.',
+		href: '/compendium/rulesets',
+		icon: Library,
+		gradient: 'from-rose-500/20 to-pink-500/20',
+		accent: 'text-rose-400',
+		categoryId: 'data'
+	},
+	{
+		title: 'Creature Sets',
+		description: 'Monster groupings.',
+		href: '/compendium/creaturesets',
+		icon: Users,
+		gradient: 'from-teal-500/20 to-cyan-500/20',
+		accent: 'text-teal-400',
+		categoryId: 'data'
+	},
+	{
+		title: 'Images',
+		description: 'Visual references.',
+		href: '/compendium/images',
+		icon: Image,
+		gradient: 'from-pink-500/20 to-rose-500/20',
+		accent: 'text-pink-400',
+		categoryId: 'data'
+	},
+	{
+		title: 'Services',
+		description: 'Commodities and services.',
+		href: '/compendium/services',
+		icon: ShoppingCart,
+		gradient: 'from-yellow-500/20 to-amber-500/20',
+		accent: 'text-yellow-400',
+		categoryId: 'data'
 	}
 ];
 

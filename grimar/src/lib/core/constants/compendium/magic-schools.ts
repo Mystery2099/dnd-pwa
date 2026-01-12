@@ -8,7 +8,7 @@ import type { CompendiumTypeConfig } from '$lib/core/types/compendium';
 export const MAGIC_SCHOOLS_CONFIG: CompendiumTypeConfig = {
 	routes: {
 		basePath: '/compendium/magic-schools',
-		dbType: 'magicSchool',
+		dbType: 'spellschools',
 		storageKeyFilters: 'magic-school-filters',
 		storageKeyListUrl: 'magic-school-list-url'
 	},

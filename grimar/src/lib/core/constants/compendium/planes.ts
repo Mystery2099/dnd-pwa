@@ -11,7 +11,7 @@ import { colorMap } from '$lib/core/constants/colors';
 export const PLANES_CONFIG: CompendiumTypeConfig = {
 	routes: {
 		basePath: '/compendium/planes',
-		dbType: 'plane',
+		dbType: 'environments',
 		storageKeyFilters: 'plane-filters',
 		storageKeyListUrl: 'plane-list-url'
 	},
