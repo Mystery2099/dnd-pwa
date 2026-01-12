@@ -11,12 +11,9 @@
  */
 
 import { getDb } from '$lib/server/db';
+import type { Db } from '$lib/server/db';
 import { compendiumItems } from '$lib/server/db/schema';
 import { sql } from 'drizzle-orm';
-import type { BunSQLiteDatabase } from 'drizzle-orm/bun-sqlite';
-import type { BetterSQLite3Database } from 'drizzle-orm/better-sqlite3';
-
-type Db = BunSQLiteDatabase | BetterSQLite3Database;
 import { createModuleLogger } from '$lib/server/logger';
 
 const log = createModuleLogger('FtsService');
@@ -166,7 +163,7 @@ export async function syncItemToFts(
 	name: string,
 	summary: string | null,
 	details: Record<string, unknown>,
-	content?: string | null,
+	content: string | null,
 	db?: Db
 ): Promise<void> {
 	const database = db ?? (await getDb());

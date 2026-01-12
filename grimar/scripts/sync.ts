@@ -80,7 +80,7 @@ const VALID_TYPES: CompendiumTypeName[] = [
 	'rulesets',
 	'images',
 	'services'
-];;
+];
 
 // Type labels for display
 const TYPE_LABELS: Record<CompendiumTypeName, string> = {
@@ -117,7 +117,7 @@ const TYPE_LABELS: Record<CompendiumTypeName, string> = {
 	rulesets: 'Rule Sets',
 	images: 'Images',
 	services: 'Services'
-};;
+};
 
 // Colors for terminal output
 const colors = {
@@ -216,7 +216,7 @@ class ProgressHandler {
 
 		const { phase, providerName, type, current, total } = event;
 		const percent = total && total > 0 ? Math.round(((current || 0) / total) * 100) : 0;
-		const typeLabel = type ? TYPE_LABELS[type] : '';
+		const typeLabel = type && TYPE_LABELS[type] ? TYPE_LABELS[type] : 'Items';
 
 		switch (phase) {
 			case 'provider:start':

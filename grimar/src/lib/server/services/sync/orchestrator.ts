@@ -573,15 +573,37 @@ async function syncTypeFromProvider(
 		const batch = transformedItems.slice(batchIndex, batchIndex + BATCH_SIZE);
 
 		try {
-			await db.transaction(async (tx) => {
-				for (const { transformed } of batch) {
-					// Store processed item with json_data column (Hybrid SQLite)
-					await tx
-						.insert(compendiumItems)
-						.values({
-							source: providerId,
-							type,
-							externalId: transformed.externalId,
+			// Process each item in the batch
+			for (const { transformed } of batch) {
+				// Store processed item with json_data column (Hybrid SQLite)
+				await db
+					.insert(compendiumItems)
+					.values({
+						source: providerId,
+						type,
+						externalId: transformed.externalId,
+						name: transformed.name,
+						summary: transformed.summary,
+						details: transformed.details,
+						jsonData: transformed.jsonData,
+						edition: transformed.edition,
+						sourceBook: transformed.sourceBook,
+						sourcePublisher: transformed.sourcePublisher,
+						spellLevel: transformed.spellLevel,
+						spellSchool: transformed.spellSchool,
+						challengeRating: transformed.challengeRating,
+						monsterSize: transformed.monsterSize,
+						monsterType: transformed.monsterType,
+						classHitDie: transformed.classHitDie,
+						raceSize: transformed.raceSize,
+						raceSpeed: transformed.raceSpeed,
+						backgroundFeature: transformed.backgroundFeature,
+						backgroundSkillProficiencies: transformed.backgroundSkillProficiencies,
+						featPrerequisites: transformed.featPrerequisites
+					})
+					.onConflictDoUpdate({
+						target: [compendiumItems.type, compendiumItems.source, compendiumItems.externalId],
+						set: {
 							name: transformed.name,
 							summary: transformed.summary,
 							details: transformed.details,
@@ -600,56 +622,23 @@ async function syncTypeFromProvider(
 							backgroundFeature: transformed.backgroundFeature,
 							backgroundSkillProficiencies: transformed.backgroundSkillProficiencies,
 							featPrerequisites: transformed.featPrerequisites
-						})
-						.onConflictDoUpdate({
-							target: [compendiumItems.type, compendiumItems.source, compendiumItems.externalId],
-							set: {
-								name: transformed.name,
-								summary: transformed.summary,
-								details: transformed.details,
-								jsonData: transformed.jsonData,
-								edition: transformed.edition,
-								sourceBook: transformed.sourceBook,
-								sourcePublisher: transformed.sourcePublisher,
-								spellLevel: transformed.spellLevel,
-								spellSchool: transformed.spellSchool,
-								challengeRating: transformed.challengeRating,
-								monsterSize: transformed.monsterSize,
-								monsterType: transformed.monsterType,
-								classHitDie: transformed.classHitDie,
-								raceSize: transformed.raceSize,
-								raceSpeed: transformed.raceSpeed,
-								backgroundFeature: transformed.backgroundFeature,
-								backgroundSkillProficiencies: transformed.backgroundSkillProficiencies,
-								featPrerequisites: transformed.featPrerequisites
-							}
-						})
-						.execute();
+						}
+					})
+					.execute();
 
-					// Sync to FTS index (after successful DB insert)
-					// Note: We need to get the ID of the inserted/updated item
-					const insertedItem = await tx.query.compendiumItems.findFirst({
-						where: and(
-							eq(compendiumItems.type, type),
-							eq(compendiumItems.source, providerId),
-							eq(compendiumItems.externalId, transformed.externalId)
-						)
-					});
-					if (insertedItem) {
-						// Extract searchable content from jsonData if available, fallback to details
-						const payload = transformed.jsonData
-							? JSON.parse(transformed.jsonData)
-							: transformed.details;
-						await syncItemToFts(
-							insertedItem.id,
-							insertedItem.name,
-							insertedItem.summary,
-							payload,
-							insertedItem.content as string | null
-						);
-					}
-				}
-			});
+				// Sync to FTS after successful DB insert
+				const payload = transformed.jsonData
+					? JSON.parse(transformed.jsonData)
+					: transformed.details;
+				await syncItemToFts(
+					0, // ID will be looked up from DB
+					transformed.name,
+					transformed.summary,
+					payload,
+					null, // content
+					db
+				);
+			}
 
 			count += batch.length;
 			recordItemProcessed(metrics, { batchSize: batch.length });
@@ -677,7 +666,7 @@ async function syncTypeFromProvider(
 
 			log.error(
 				{ type, error: errorDetails, batchIndex, batchSize: batch.length },
-				'Batch insert failed'
+				`Batch insert failed: ${errorMessage}`
 			);
 			recordError(metrics, providerId, errorMessage);
 
