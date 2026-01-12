@@ -3,14 +3,15 @@
  *
  * Server-first architecture with offline support.
  * - Server is single source of truth
- * - IndexedDB persistence for offline access
+ * - IndexedDB persistence via idb-keyval for offline access
  * - Hybrid sync (SSE + pull on reconnect)
  */
 
 import { QueryClient } from '@tanstack/svelte-query';
-import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
-import { persistQueryClient } from '@tanstack/query-persist-client-core';
+import { persistQueryClient } from '@tanstack/svelte-query-persist-client';
+import type { Persister, PersistedClient } from '@tanstack/query-persist-client-core';
 import { browser } from '$app/environment';
+import { get, set, del, clear } from 'idb-keyval';
 import { getCachedVersion, setCachedVersion } from './cache-version';
 import type { CacheVersion } from './cache-version';
 import { settingsStore } from './settingsStore.svelte';
@@ -19,7 +20,7 @@ import { userSettingsStore } from './userSettingsStore.svelte';
 // Cache configuration
 const CACHE_KEY = 'grimar-query-cache';
 const CACHE_MAX_AGE = 7 * 24 * 60 * 60 * 1000; // 7 days
-const BUSIER = 'v1'; // Change to invalidate all cached data
+const BUSIER = 'v2'; // Change to invalidate all cached data
 
 /**
  * Query client instance (set during initialization).
@@ -31,6 +32,41 @@ export let queryClient: QueryClient | null = null;
  */
 export function setQueryClient(client: QueryClient) {
 	queryClient = client;
+}
+
+/**
+ * Create an async storage persister using idb-keyval.
+ * This provides better performance than localStorage (async, larger storage).
+ */
+function createIdbPersister(): Persister | null {
+	if (!browser) return null;
+
+	return {
+		persistClient: async (client: PersistedClient) => {
+			await set(CACHE_KEY, JSON.stringify(client));
+		},
+		restoreClient: async () => {
+			const data = await get<string>(CACHE_KEY);
+			if (!data) return undefined;
+			try {
+				return JSON.parse(data);
+			} catch {
+				return undefined;
+			}
+		},
+		removeClient: async () => {
+			await del(CACHE_KEY);
+		}
+	};
+}
+
+/**
+ * Clear all query cache from IndexedDB.
+ */
+export async function clearQueryCache(): Promise<void> {
+	if (!browser) return;
+	await clear();
+	console.log('[QueryClient] Cache cleared');
 }
 
 /**
@@ -54,25 +90,16 @@ export function createQueryClient(): QueryClient {
 				refetchOnWindowFocus: browser ? () => navigator.onLine : false,
 
 				// Don't refetch on reconnect automatically (let SSE handle it)
-				refetchOnReconnect: false
+				refetchOnReconnect: false,
+
+				// Network mode for offline-first behavior
+				networkMode: 'offlineFirst'
 			},
 			mutations: {
-				retry: 1
+				retry: 1,
+				networkMode: 'offlineFirst'
 			}
 		}
-	});
-}
-
-/**
- * Create an async storage persister for IndexedDB.
- */
-function createPersister() {
-	if (!browser) return null;
-
-	return createAsyncStoragePersister({
-		storage: window.localStorage,
-		key: CACHE_KEY,
-		throttleTime: 1000
 	});
 }
 
@@ -89,7 +116,7 @@ export async function initializePersistence(client: QueryClient): Promise<void> 
 		return;
 	}
 
-	const persister = createPersister();
+	const persister = createIdbPersister();
 	if (!persister) return;
 
 	// Setup persistence
@@ -100,7 +127,7 @@ export async function initializePersistence(client: QueryClient): Promise<void> 
 		buster: BUSIER
 	});
 
-	console.log('[QueryClient] Persistence enabled');
+	console.log('[QueryClient] Persistence enabled with idb-keyval');
 
 	// Validate cache version on startup
 	try {

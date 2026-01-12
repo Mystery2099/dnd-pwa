@@ -136,13 +136,15 @@ export async function fetchCacheVersion(): Promise<{ version: string; timestamp:
 
 /**
  * Create a compendium list query.
- * Cached for offline access, refetched after 5 minutes staleTime.
+ * Cached for offline access, refetched after 10 minutes staleTime.
  */
 export function createCompendiumQuery(type: string) {
 	return createQuery(() => ({
 		queryKey: queryKeys.compendium.list(type),
 		queryFn: () => fetchCompendiumList(type),
-		staleTime: 5 * 60 * 1000 // 5 minutes
+		staleTime: 10 * 60 * 1000, // 10 minutes
+		gcTime: 30 * 60 * 1000, // 30 minutes in cache
+		networkMode: 'offlineFirst'
 	}));
 }
 
@@ -154,7 +156,9 @@ export function createCompendiumAllQuery(type: string) {
 	return createQuery(() => ({
 		queryKey: [...queryKeys.compendium.list(type), 'all'],
 		queryFn: () => fetchCompendiumAll(type),
-		staleTime: 30 * 60 * 1000 // 30 minutes (less frequent updates)
+		staleTime: 30 * 60 * 1000, // 30 minutes (less frequent updates)
+		gcTime: 60 * 60 * 1000, // 1 hour in cache
+		networkMode: 'offlineFirst'
 	}));
 }
 
@@ -166,7 +170,9 @@ export function createCompendiumDetailQuery(type: string, slug: string) {
 	return createQuery(() => ({
 		queryKey: queryKeys.compendium.detail(type, slug),
 		queryFn: () => fetchCompendiumDetail(type, slug),
-		staleTime: 10 * 60 * 1000 // 10 minutes
+		staleTime: 30 * 60 * 1000, // 30 minutes
+		gcTime: 60 * 60 * 1000, // 1 hour in cache
+		networkMode: 'offlineFirst'
 	}));
 }
 
@@ -178,7 +184,9 @@ export function createCharactersQuery() {
 	return createQuery(() => ({
 		queryKey: queryKeys.characters.list,
 		queryFn: fetchCharacters,
-		staleTime: 2 * 60 * 1000 // 2 minutes
+		staleTime: 2 * 60 * 1000, // 2 minutes
+		gcTime: 10 * 60 * 1000, // 10 minutes in cache
+		networkMode: 'offlineFirst'
 	}));
 }
 
@@ -189,7 +197,9 @@ export function createCharacterQuery(id: string) {
 	return createQuery(() => ({
 		queryKey: queryKeys.characters.detail(id),
 		queryFn: () => fetchCharacter(id),
-		staleTime: 2 * 60 * 1000 // 2 minutes
+		staleTime: 5 * 60 * 1000, // 5 minutes
+		gcTime: 10 * 60 * 1000, // 10 minutes in cache
+		networkMode: 'offlineFirst'
 	}));
 }
 
