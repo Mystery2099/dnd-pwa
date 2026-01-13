@@ -53,53 +53,34 @@ export type CompendiumType =
 	| 'tool'
 	| 'vehicle';
 
-export function isSpell(item: UnifiedCompendiumItem): item is UnifiedSpell {
-	return item.type === 'spell';
+// ============================================================================
+// Type Guard Factory
+// ============================================================================
+
+/**
+ * Factory function for creating type guard functions.
+ * Generates a type guard that checks if an item matches the given type.
+ */
+function createTypeGuard<T extends UnifiedCompendiumItem>(type: T['type']) {
+	return (item: UnifiedCompendiumItem): item is T => item.type === type;
 }
 
-export function isMonster(item: UnifiedCompendiumItem): item is UnifiedMonster {
-	return item.type === 'monster';
-}
+// ============================================================================
+// Type Guards
+// ============================================================================
 
-export function isFeat(item: UnifiedCompendiumItem): item is UnifiedFeat {
-	return item.type === 'feat';
-}
-
-export function isBackground(item: UnifiedCompendiumItem): item is UnifiedBackground {
-	return item.type === 'background';
-}
-
-export function isRace(item: UnifiedCompendiumItem): item is UnifiedRace {
-	return item.type === 'race';
-}
-
-export function isClass(item: UnifiedCompendiumItem): item is UnifiedClass {
-	return item.type === 'class';
-}
-
-export function isItem(item: UnifiedCompendiumItem): item is UnifiedItem {
-	return item.type === 'item';
-}
-
-export function isSubclass(item: UnifiedCompendiumItem): item is UnifiedSubclass {
-	return item.type === 'subclass';
-}
-
-export function isSubrace(item: UnifiedCompendiumItem): item is UnifiedSubrace {
-	return item.type === 'subrace';
-}
-
-export function isTrait(item: UnifiedCompendiumItem): item is UnifiedTrait {
-	return item.type === 'trait';
-}
-
-export function isCondition(item: UnifiedCompendiumItem): item is UnifiedCondition {
-	return item.type === 'condition';
-}
-
-export function isSkill(item: UnifiedCompendiumItem): item is UnifiedSkill {
-	return item.type === 'skill';
-}
+export const isSpell = createTypeGuard<UnifiedSpell>('spell');
+export const isMonster = createTypeGuard<UnifiedMonster>('monster');
+export const isFeat = createTypeGuard<UnifiedFeat>('feat');
+export const isBackground = createTypeGuard<UnifiedBackground>('background');
+export const isRace = createTypeGuard<UnifiedRace>('race');
+export const isClass = createTypeGuard<UnifiedClass>('class');
+export const isItem = createTypeGuard<UnifiedItem>('item');
+export const isSubclass = createTypeGuard<UnifiedSubclass>('subclass');
+export const isSubrace = createTypeGuard<UnifiedSubrace>('subrace');
+export const isTrait = createTypeGuard<UnifiedTrait>('trait');
+export const isCondition = createTypeGuard<UnifiedCondition>('condition');
+export const isSkill = createTypeGuard<UnifiedSkill>('skill');
 
 // ============================================================================
 // Spell

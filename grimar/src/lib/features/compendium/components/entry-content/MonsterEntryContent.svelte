@@ -1,8 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
-	import { browser } from '$app/environment';
-	import { open5eToInternalPath } from '$lib/core/utils/link-interceptor';
+	import { markdownRenderers, useLazyMarkdown } from '$lib/features/compendium/utils/markdown';
 
 	interface Props {
 		monster: Record<string, unknown> & { externalId?: string };
@@ -29,41 +26,13 @@
 		monster.special_abilities as Array<Record<string, unknown>> | undefined
 	);
 
-	// Lazy load svelte-markdown only when needed
-	let SvelteMarkdown: any = $state(null);
-	let hasMarkdown = $derived(
+	// Check if any content needs markdown rendering
+	const hasMarkdown = $derived(
 		(actions?.some((a) => a.desc) ?? false) || (specialAbilities?.some((s) => s.desc) ?? false)
 	);
 
-	// Custom link renderer for svelte-markdown
-	const renderers = $derived({
-		link: {
-			component: 'a',
-			props: {
-				href: (props: { href: string }) => props.href,
-				onclick: (props: { href: string }) => {
-					return function handleClick(event: MouseEvent) {
-						event.preventDefault();
-						const href = props.href;
-						const internalPath = open5eToInternalPath(href);
-
-						if (internalPath && browser) {
-							goto(internalPath);
-						} else if (browser) {
-							window.open(href, '_blank', 'noopener,noreferrer');
-						}
-					};
-				}
-			}
-		}
-	});
-
-	onMount(async () => {
-		if (hasMarkdown) {
-			const module = await import('svelte-markdown');
-			SvelteMarkdown = module.default;
-		}
-	});
+	// Lazy load markdown rendering
+	const { SvelteMarkdown } = useLazyMarkdown(() => (hasMarkdown ? 'true' : ''));
 </script>
 
 <!-- Monster Stats Header -->
@@ -138,7 +107,7 @@
 				{#if action.desc}
 					{#if SvelteMarkdown}
 						<div class="prose prose-sm prose-invert max-w-none text-[var(--color-text-secondary)]">
-							<SvelteMarkdown source={action.desc as string} {renderers} />
+							<SvelteMarkdown source={action.desc as string} renderers={markdownRenderers} />
 						</div>
 					{:else}
 						<div class="prose prose-sm prose-invert max-w-none text-[var(--color-text-secondary)]">
@@ -172,7 +141,7 @@
 				{#if trait.desc}
 					{#if SvelteMarkdown}
 						<div class="prose prose-sm prose-invert max-w-none text-[var(--color-text-secondary)]">
-							<SvelteMarkdown source={trait.desc as string} {renderers} />
+							<SvelteMarkdown source={trait.desc as string} renderers={markdownRenderers} />
 						</div>
 					{:else}
 						<div class="prose prose-sm prose-invert max-w-none text-[var(--color-text-secondary)]">

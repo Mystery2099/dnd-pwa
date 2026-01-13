@@ -45,8 +45,8 @@ export async function withRetry<T>(
 			lastError = error instanceof Error ? error : new Error(String(error));
 
 			if (attempt <= maxRetries) {
-				// Exponential backoff: 1x, 2x, 4x, etc.
-				const delay = retryDelayMs * Math.pow(2, attempt - 1);
+				// Exponential backoff: 1x, 2x, 4x, etc. (using bit shift for powers of 2)
+				const delay = retryDelayMs * (1 << (attempt - 1));
 				log.warn(
 					{ operationName, attempt, maxRetries: maxRetries + 1, delay, error: lastError.message },
 					'Operation failed, retrying'

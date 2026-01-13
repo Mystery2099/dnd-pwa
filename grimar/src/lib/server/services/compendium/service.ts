@@ -90,6 +90,27 @@ type CompendiumType =
 	| 'classes';
 
 // ============================================================================
+// Search Helper
+// ============================================================================
+
+/**
+ * Apply FTS5 search with LIKE fallback to conditions array.
+ * FTS5 is tried first for full-text search; if no results, falls back to LIKE.
+ */
+async function applySearchFilter(
+	searchQuery: string,
+	conditions: Array<ReturnType<typeof eq> | ReturnType<typeof like> | ReturnType<typeof sql>>
+): Promise<void> {
+	const ftsResults = await searchFtsRanked(searchQuery, 50);
+	if (ftsResults.length > 0) {
+		const rowids = ftsResults.map((r) => r.rowid);
+		conditions.push(inArray(compendiumItems.id, rowids));
+	} else {
+		conditions.push(like(compendiumItems.name, `%${searchQuery}%`));
+	}
+}
+
+// ============================================================================
 // Service Interface
 // ============================================================================
 
@@ -161,16 +182,7 @@ export const compendiumService: CompendiumServiceInterface = {
 			conditions.push(eq(compendiumItems.spellSchool, filters.school));
 		}
 		if (filters.search) {
-			// Use FTS5 for full-text search across name, summary, and content
-			const ftsResults = await searchFtsRanked(filters.search, 50);
-			if (ftsResults.length > 0) {
-				const rowids = ftsResults.map((r) => r.rowid);
-				conditions.push(inArray(compendiumItems.id, rowids));
-			} else {
-				// Fallback to name-only LIKE if FTS finds nothing
-				const pattern = `%${filters.search}%`;
-				conditions.push(like(compendiumItems.name, pattern));
-			}
+			await applySearchFilter(filters.search, conditions);
 		}
 
 		const items = await db
@@ -208,16 +220,7 @@ export const compendiumService: CompendiumServiceInterface = {
 			conditions.push(eq(compendiumItems.challengeRating, filters.cr));
 		}
 		if (filters.search) {
-			// Use FTS5 for full-text search across name, summary, and content (actions, abilities, etc.)
-			const ftsResults = await searchFtsRanked(filters.search, 50);
-			if (ftsResults.length > 0) {
-				const rowids = ftsResults.map((r) => r.rowid);
-				conditions.push(inArray(compendiumItems.id, rowids));
-			} else {
-				// Fallback to name-only LIKE if FTS finds nothing
-				const pattern = `%${filters.search}%`;
-				conditions.push(like(compendiumItems.name, pattern));
-			}
+			await applySearchFilter(filters.search, conditions);
 		}
 
 		const items = await db
@@ -246,15 +249,7 @@ export const compendiumService: CompendiumServiceInterface = {
 		const conditions = [eq(compendiumItems.type, 'feat')];
 
 		if (filters.search) {
-			// Use FTS5 for full-text search
-			const ftsResults = await searchFtsRanked(filters.search, 50);
-			if (ftsResults.length > 0) {
-				const rowids = ftsResults.map((r) => r.rowid);
-				conditions.push(inArray(compendiumItems.id, rowids));
-			} else {
-				const pattern = `%${filters.search}%`;
-				conditions.push(like(compendiumItems.name, pattern));
-			}
+			await applySearchFilter(filters.search, conditions);
 		}
 
 		const items = await db
@@ -283,15 +278,7 @@ export const compendiumService: CompendiumServiceInterface = {
 		const conditions = [eq(compendiumItems.type, 'background')];
 
 		if (filters.search) {
-			// Use FTS5 for full-text search
-			const ftsResults = await searchFtsRanked(filters.search, 50);
-			if (ftsResults.length > 0) {
-				const rowids = ftsResults.map((r) => r.rowid);
-				conditions.push(inArray(compendiumItems.id, rowids));
-			} else {
-				const pattern = `%${filters.search}%`;
-				conditions.push(like(compendiumItems.name, pattern));
-			}
+			await applySearchFilter(filters.search, conditions);
 		}
 
 		const items = await db
@@ -320,15 +307,7 @@ export const compendiumService: CompendiumServiceInterface = {
 		const conditions = [eq(compendiumItems.type, 'race')];
 
 		if (filters.search) {
-			// Use FTS5 for full-text search
-			const ftsResults = await searchFtsRanked(filters.search, 50);
-			if (ftsResults.length > 0) {
-				const rowids = ftsResults.map((r) => r.rowid);
-				conditions.push(inArray(compendiumItems.id, rowids));
-			} else {
-				const pattern = `%${filters.search}%`;
-				conditions.push(like(compendiumItems.name, pattern));
-			}
+			await applySearchFilter(filters.search, conditions);
 		}
 
 		const items = await db
@@ -357,15 +336,7 @@ export const compendiumService: CompendiumServiceInterface = {
 		const conditions = [eq(compendiumItems.type, 'class')];
 
 		if (filters.search) {
-			// Use FTS5 for full-text search
-			const ftsResults = await searchFtsRanked(filters.search, 50);
-			if (ftsResults.length > 0) {
-				const rowids = ftsResults.map((r) => r.rowid);
-				conditions.push(inArray(compendiumItems.id, rowids));
-			} else {
-				const pattern = `%${filters.search}%`;
-				conditions.push(like(compendiumItems.name, pattern));
-			}
+			await applySearchFilter(filters.search, conditions);
 		}
 
 		const items = await db
@@ -394,15 +365,7 @@ export const compendiumService: CompendiumServiceInterface = {
 		const conditions = [eq(compendiumItems.type, 'item')];
 
 		if (filters.search) {
-			// Use FTS5 for full-text search across name, summary, and content (properties, descriptions)
-			const ftsResults = await searchFtsRanked(filters.search, 50);
-			if (ftsResults.length > 0) {
-				const rowids = ftsResults.map((r) => r.rowid);
-				conditions.push(inArray(compendiumItems.id, rowids));
-			} else {
-				const pattern = `%${filters.search}%`;
-				conditions.push(like(compendiumItems.name, pattern));
-			}
+			await applySearchFilter(filters.search, conditions);
 		}
 		if (filters.rarity) {
 			// Filter by rarity using JSON extraction
@@ -436,15 +399,7 @@ export const compendiumService: CompendiumServiceInterface = {
 
 		const searchQuery = filters.search as string | undefined;
 		if (searchQuery) {
-			// Use FTS5 for full-text search across name, summary, and content
-			const ftsResults = await searchFtsRanked(searchQuery, 50);
-			if (ftsResults.length > 0) {
-				const rowids = ftsResults.map((r) => r.rowid);
-				conditions.push(inArray(compendiumItems.id, rowids));
-			} else {
-				const pattern = `%${searchQuery}%`;
-				conditions.push(like(compendiumItems.name, pattern));
-			}
+			await applySearchFilter(searchQuery, conditions);
 		}
 
 		const items = await db

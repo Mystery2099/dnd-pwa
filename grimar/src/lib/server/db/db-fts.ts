@@ -18,88 +18,93 @@ import { createModuleLogger } from '$lib/server/logger';
 
 const log = createModuleLogger('FtsService');
 
+// ============================================================================
+// Query Parsing
+// ============================================================================
+
+/**
+ * Parse FTS5 query: trim, split on whitespace, join with AND, add wildcard
+ */
+function parseFtsQuery(query: string): string {
+	return query.trim().split(/\s+/).join(' ') + '*';
+}
+
+// ============================================================================
+// Content Extraction
+// ============================================================================
+
+/**
+ * Extract searchable strings from a value (string or array of strings)
+ */
+function extractStrings(value: unknown): string[] {
+	if (typeof value === 'string') return [value];
+	if (Array.isArray(value)) {
+		return value.flatMap((item) => (typeof item === 'string' ? item : ''));
+	}
+	return [];
+}
+
+/**
+ * Extract description strings from action-like objects
+ */
+function extractActionStrings(value: unknown): string[] {
+	if (!Array.isArray(value)) return [];
+	return value
+		.flatMap((item) => {
+			if (typeof item === 'object' && item && 'desc' in item) {
+				const desc = (item as { desc: unknown }).desc;
+				return typeof desc === 'string' ? desc : '';
+			}
+			return '';
+		})
+		.filter(Boolean);
+}
+
 /**
  * Extract searchable content from details JSON
- * Collects all descriptive text from various item types
  */
 export function extractSearchableContent(details: Record<string, unknown>): string {
 	const parts: string[] = [];
 
-	// Helper to safely get string arrays
-	const addStrings = (arr: unknown) => {
-		if (Array.isArray(arr)) {
-			for (const item of arr) {
-				if (typeof item === 'string') {
-					parts.push(item);
-				} else if (item && typeof item === 'object') {
-					// Handle objects with desc field (like MonsterAction)
-					const obj = item as Record<string, unknown>;
-					if (obj.desc && typeof obj.desc === 'string') {
-						parts.push(obj.desc);
-					}
-					if (obj.description && typeof obj.description === 'string') {
-						parts.push(obj.description);
-					}
-				}
-			}
-		}
-	};
+	// Generic description fields
+	parts.push(...extractStrings(details.description));
 
-	// Helper to safely get string fields
-	const addString = (value: unknown) => {
-		if (typeof value === 'string') {
-			parts.push(value);
-		}
-	};
+	// Action-like fields (contain desc property)
+	parts.push(
+		...extractActionStrings(details.actions),
+		...extractActionStrings(details.specialAbilities),
+		...extractActionStrings(details.reactions),
+		...extractActionStrings(details.legendaryActions),
+		...extractActionStrings(details.lairActions),
+		...extractActionStrings(details.regionalEffects),
+		...extractActionStrings(details.mythicEncounter)
+	);
 
-	// Generic description field (BaseCompendiumItem)
-	addString(details.description);
-	if (details.description && Array.isArray(details.description)) {
-		addStrings(details.description);
-	}
+	// Simple string fields
+	parts.push(
+		...extractStrings(details.higherLevel),
+		...extractStrings(details.material),
+		...extractStrings(details.properties),
+		...extractStrings(details.desc),
+		...extractStrings(details.subclassFlavor),
+		...extractStrings(details.traits),
+		...extractStrings(details.bond),
+		...extractStrings(details.flaws),
+		...extractStrings(details.ideals),
+		...extractStrings(details.personalityTraits)
+	);
 
-	// Monster-specific fields
-	if (details.actions) addStrings(details.actions);
-	if (details.specialAbilities) addStrings(details.specialAbilities);
-	if (details.reactions) addStrings(details.reactions);
-	if (details.legendaryActions) addStrings(details.legendaryActions);
-	if (details.lairActions) addStrings(details.lairActions);
-	if (details.regionalEffects) addStrings(details.regionalEffects);
-	if (details.mythicEncounter) addStrings(details.mythicEncounter);
-
-	// Spell-specific fields
-	addString(details.higherLevel);
-	addString(details.material);
-	addString(details.ritual);
-	addString(details.concentration);
-
-	// Item-specific fields
-	addString(details.properties);
-	addString(details.desc);
-	addString(details.description);
-	if (details.grants) {
-		// Item grants like "grants darkvision 60ft"
-		addStrings(details.grants);
-	}
-
-	// Class/subclass-specific
-	addString(details.subclassFlavor);
-	addString(details.features);
+	// Features and grants arrays
 	if (Array.isArray(details.features)) {
-		addStrings(details.features);
+		parts.push(
+			...details.features.flatMap((f: unknown) =>
+				extractStrings((f as { description?: unknown }).description)
+			)
+		);
 	}
-
-	// Race-specific
-	addString(details.traits);
-	if (Array.isArray(details.traits)) {
-		addStrings(details.traits);
+	if (Array.isArray(details.grants)) {
+		parts.push(...extractStrings(details.grants));
 	}
-
-	// Background-specific
-	addString(details.bond);
-	addString(details.flaws);
-	addString(details.ideals);
-	addString(details.personalityTraits);
 
 	return parts.join(' ');
 }
@@ -196,10 +201,7 @@ export async function removeItemFromFts(id: number, db?: Db): Promise<void> {
  */
 export async function searchFts(query: string, limit: number = 50, db?: Db): Promise<number[]> {
 	const database = db ?? (await getDb());
-
-	// FTS5 query syntax: terms separated by space = AND matching
-	// Use * prefix for prefix matching
-	const ftsQuery = query.trim().split(/\s+/).join(' ') + '*';
+	const ftsQuery = parseFtsQuery(query);
 
 	log.debug({ query: ftsQuery, limit }, 'FTS search executed');
 	const results = await database.all<{ rowid: number }>(
@@ -219,8 +221,7 @@ export async function searchFtsRanked(
 	db?: Db
 ): Promise<{ rowid: number; rank: number }[]> {
 	const database = db ?? (await getDb());
-
-	const ftsQuery = query.trim().split(/\s+/).join(' ') + '*';
+	const ftsQuery = parseFtsQuery(query);
 
 	log.debug({ query: ftsQuery, limit }, 'FTS ranked search executed');
 	const results = await database.all<{ rowid: number; rank: number }>(

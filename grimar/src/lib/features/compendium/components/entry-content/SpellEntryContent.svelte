@@ -1,8 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
-	import { browser } from '$app/environment';
-	import { open5eToInternalPath } from '$lib/core/utils/link-interceptor';
+	import { markdownRenderers, useLazyMarkdown } from '$lib/features/compendium/utils/markdown';
 
 	interface Props {
 		spell: Record<string, unknown> & { externalId?: string };
@@ -26,38 +23,8 @@
 	const descriptionMd = $derived(descriptionArray.join('\n\n'));
 	const higherLevelMd = $derived(higherLevelArray.join('\n\n'));
 
-	// Lazy load svelte-markdown only when needed
-	let SvelteMarkdown: any = $state(null);
-
-	// Custom link renderer for svelte-markdown
-	const renderers = $derived({
-		link: {
-			component: 'a',
-			props: {
-				href: (props: { href: string }) => props.href,
-				onclick: (props: { href: string }) => {
-					return function handleClick(event: MouseEvent) {
-						event.preventDefault();
-						const href = props.href;
-						const internalPath = open5eToInternalPath(href);
-
-						if (internalPath && browser) {
-							goto(internalPath);
-						} else if (browser) {
-							window.open(href, '_blank', 'noopener,noreferrer');
-						}
-					};
-				}
-			}
-		}
-	});
-
-	onMount(async () => {
-		if (descriptionMd || higherLevelMd) {
-			const module = await import('svelte-markdown');
-			SvelteMarkdown = module.default;
-		}
-	});
+	// Lazy load markdown rendering
+	const { SvelteMarkdown } = useLazyMarkdown(() => descriptionMd || higherLevelMd);
 </script>
 
 <!-- Spell Details Table -->
@@ -91,7 +58,7 @@
 <!-- Description (Markdown rendered) -->
 {#if SvelteMarkdown}
 	<div class="prose prose-sm prose-invert max-w-none text-[var(--color-text-secondary)]">
-		<SvelteMarkdown source={descriptionMd} {renderers} />
+		<SvelteMarkdown source={descriptionMd} renderers={markdownRenderers} />
 	</div>
 {:else if descriptionMd}
 	<!-- Static fallback for SSR -->
@@ -104,7 +71,7 @@
 	<div class="mt-6 border-t border-[var(--color-border)] pt-6">
 		<h4 class="mb-2 font-bold text-[var(--color-text-primary)]">At Higher Levels</h4>
 		<div class="prose prose-sm prose-invert max-w-none text-[var(--color-text-secondary)]">
-			<SvelteMarkdown source={higherLevelMd} {renderers} />
+			<SvelteMarkdown source={higherLevelMd} renderers={markdownRenderers} />
 		</div>
 	</div>
 {:else if higherLevelMd}
