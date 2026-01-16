@@ -11,6 +11,8 @@
  */
 
 import { createQuery } from '@tanstack/svelte-query';
+import type { QueryClient } from '@tanstack/svelte-query';
+import { ApiError, type ApiErrorCode } from './errors';
 
 // ============================================================================
 // Query Keys - Centralized for type safety and easy invalidation
@@ -34,6 +36,51 @@ export const queryKeys = {
 } as const;
 
 // ============================================================================
+// API Fetch Wrapper with Standardized Error Handling
+// ============================================================================
+
+/**
+ * Unified API fetch function with standardized error handling.
+ * Throws ApiError on failure with consistent error codes.
+ */
+export async function apiFetch<T>(url: string, init?: RequestInit): Promise<T> {
+	// Check offline status first
+	if (typeof navigator !== 'undefined' && !navigator.onLine) {
+		throw ApiError.offline();
+	}
+
+	try {
+		const response = await fetch(url, {
+			...init,
+			headers: {
+				'Content-Type': 'application/json',
+				...init?.headers
+			}
+		});
+
+		if (!response.ok) {
+			const body = await response.text().catch(() => undefined);
+			throw ApiError.fromResponse(response, body);
+		}
+
+		// Handle empty responses
+		const contentType = response.headers.get('content-type');
+		if (contentType?.includes('application/json')) {
+			return response.json() as Promise<T>;
+		}
+		return undefined as T;
+	} catch (error) {
+		if (ApiError.isApiError(error)) {
+			throw error;
+		}
+		if (error instanceof TypeError || error instanceof DOMException) {
+			throw ApiError.networkError(error.message);
+		}
+		throw ApiError.networkError('An unexpected error occurred');
+	}
+}
+
+// ============================================================================
 // API Fetch Functions
 // ============================================================================
 
@@ -45,10 +92,10 @@ export async function fetchCompendiumList(pathType: string): Promise<any> {
 	const params = new URLSearchParams({ type: pathType });
 
 	// Read filter params from current URL and pass to API
-	// This enables filtering by monsterType, spellLevel, spellSchool, challengeRating, etc.
+	// This enables filtering by creatureType, spellLevel, spellSchool, challengeRating, etc.
 	if (typeof window !== 'undefined') {
 		const url = new URL(window.location.href);
-		const filterKeys = ['monsterType', 'spellLevel', 'spellSchool', 'challengeRating', 'search'];
+		const filterKeys = ['creatureType', 'spellLevel', 'spellSchool', 'challengeRating', 'search'];
 		for (const key of filterKeys) {
 			const value = url.searchParams.get(key);
 			if (value) {
@@ -67,11 +114,7 @@ export async function fetchCompendiumList(pathType: string): Promise<any> {
 		if (sortOrder) params.set('sortOrder', sortOrder);
 	}
 
-	const response = await fetch(`/api/compendium/items?${params}`);
-	if (!response.ok) {
-		throw new Error(`Failed to fetch ${pathType}: ${response.statusText}`);
-	}
-	return response.json();
+	return apiFetch(`/api/compendium/items?${params}`);
 }
 
 /**
@@ -79,55 +122,35 @@ export async function fetchCompendiumList(pathType: string): Promise<any> {
  */
 export async function fetchCompendiumAll(pathType: string): Promise<any> {
 	const params = new URLSearchParams({ type: pathType, all: 'true' });
-	const response = await fetch(`/api/compendium/items?${params}`);
-	if (!response.ok) {
-		throw new Error(`Failed to fetch all ${pathType}: ${response.statusText}`);
-	}
-	return response.json();
+	return apiFetch(`/api/compendium/items?${params}`);
 }
 
 /**
  * Fetch a single compendium item by type and slug.
  */
 export async function fetchCompendiumDetail(type: string, slug: string): Promise<any> {
-	const response = await fetch(`/api/${type}/${slug}`);
-	if (!response.ok) {
-		throw new Error(`Failed to fetch ${type}/${slug}: ${response.statusText}`);
-	}
-	return response.json();
+	return apiFetch(`/api/compendium/${type}/${slug}`);
 }
 
 /**
  * Fetch all characters for the current user.
  */
 export async function fetchCharacters(): Promise<any[]> {
-	const response = await fetch('/api/characters');
-	if (!response.ok) {
-		throw new Error(`Failed to fetch characters: ${response.statusText}`);
-	}
-	return response.json();
+	return apiFetch('/api/characters');
 }
 
 /**
  * Fetch a single character by ID.
  */
 export async function fetchCharacter(id: string): Promise<any> {
-	const response = await fetch(`/api/characters/${id}`);
-	if (!response.ok) {
-		throw new Error(`Failed to fetch character ${id}: ${response.statusText}`);
-	}
-	return response.json();
+	return apiFetch(`/api/characters/${id}`);
 }
 
 /**
  * Fetch the current cache version from server.
  */
 export async function fetchCacheVersion(): Promise<{ version: string; timestamp: number }> {
-	const response = await fetch('/api/cache/version');
-	if (!response.ok) {
-		throw new Error(`Failed to fetch cache version: ${response.statusText}`);
-	}
-	return response.json();
+	return apiFetch('/api/cache/version');
 }
 
 // ============================================================================
@@ -216,3 +239,163 @@ export function createCacheVersionQuery() {
 		retry: 1
 	}));
 }
+
+// ============================================================================
+// Prefetch Helpers
+// ============================================================================
+
+/**
+ * Prefetch compendium detail on hover or navigation.
+ */
+export function prefetchCompendiumDetail(
+	queryClient: QueryClient,
+	type: string,
+	slug: string
+): void {
+	queryClient.prefetchQuery({
+		queryKey: queryKeys.compendium.detail(type, slug),
+		queryFn: () => fetchCompendiumDetail(type, slug),
+		staleTime: 30 * 60 * 1000
+	});
+}
+
+/**
+ * Prefetch character detail.
+ */
+export function prefetchCharacter(queryClient: QueryClient, id: string): void {
+	queryClient.prefetchQuery({
+		queryKey: queryKeys.characters.detail(id),
+		queryFn: () => fetchCharacter(id),
+		staleTime: 5 * 60 * 1000
+	});
+}
+
+/**
+ * Prefetch characters list.
+ */
+export function prefetchCharacters(queryClient: QueryClient): void {
+	queryClient.prefetchQuery({
+		queryKey: queryKeys.characters.list,
+		queryFn: fetchCharacters,
+		staleTime: 2 * 60 * 1000
+	});
+}
+
+// ============================================================================
+// Optimistic Update Helpers
+// ============================================================================
+
+/**
+ * Create an optimistic updater for a query.
+ * Returns functions for applying and rolling back optimistic updates.
+ */
+export function createOptimisticUpdater<T>(queryClient: QueryClient, queryKey: readonly unknown[]) {
+	return {
+		/**
+		 * Apply an optimistic update.
+		 * Returns the previous value for potential rollback.
+		 */
+		async update(updater: (old: T | undefined) => T): Promise<T | undefined> {
+			await queryClient.cancelQueries({ queryKey });
+			const previous = queryClient.getQueryData<T>(queryKey);
+			queryClient.setQueryData<T>(queryKey, (old) => updater(old));
+			return previous;
+		},
+
+		/**
+		 * Rollback to the previous value.
+		 */
+		rollback(previous: T | undefined): void {
+			queryClient.setQueryData(queryKey, previous);
+		}
+	};
+}
+
+/**
+ * Common optimistic update patterns for lists.
+ */
+export const optimisticPatterns = {
+	/**
+	 * Create an add-to-list optimistic update.
+	 */
+	addToList: <T extends { id: string | number }>(
+		queryClient: QueryClient,
+		queryKey: readonly [...unknown[]]
+	) => {
+		return {
+			async apply(newItem: T): Promise<T[] | undefined> {
+				await queryClient.cancelQueries({ queryKey });
+				const previous = queryClient.getQueryData<T[]>(queryKey);
+				queryClient.setQueryData<T[]>(queryKey, (old) => [...(old ?? []), newItem]);
+				return previous;
+			},
+			rollback(previous: T[] | undefined): void {
+				queryClient.setQueryData(queryKey, previous);
+			}
+		};
+	},
+
+	/**
+	 * Create a remove-from-list optimistic update.
+	 */
+	removeFromList: <T extends { id: string | number }>(
+		queryClient: QueryClient,
+		queryKey: readonly [...unknown[]]
+	) => {
+		return {
+			async apply(itemId: string | number): Promise<T[] | undefined> {
+				await queryClient.cancelQueries({ queryKey });
+				const previous = queryClient.getQueryData<T[]>(queryKey);
+				queryClient.setQueryData<T[]>(queryKey, (old) =>
+					(old ?? []).filter((item) => item.id !== itemId)
+				);
+				return previous;
+			},
+			rollback(previous: T[] | undefined): void {
+				queryClient.setQueryData(queryKey, previous);
+			}
+		};
+	},
+
+	/**
+	 * Create an update-in-list optimistic update.
+	 */
+	updateInList: <T extends { id: string | number }>(
+		queryClient: QueryClient,
+		queryKey: readonly [...unknown[]]
+	) => {
+		return {
+			async apply(updated: T): Promise<T[] | undefined> {
+				await queryClient.cancelQueries({ queryKey });
+				const previous = queryClient.getQueryData<T[]>(queryKey);
+				queryClient.setQueryData<T[]>(queryKey, (old) =>
+					(old ?? []).map((item) => (item.id === updated.id ? updated : item))
+				);
+				return previous;
+			},
+			rollback(previous: T[] | undefined): void {
+				queryClient.setQueryData(queryKey, previous);
+			}
+		};
+	},
+
+	/**
+	 * Create an update-in-object optimistic update.
+	 */
+	updateObject: <T extends Record<string, unknown>>(
+		queryClient: QueryClient,
+		queryKey: readonly [...unknown[]]
+	) => {
+		return {
+			async apply(updates: Partial<T>): Promise<T | undefined> {
+				await queryClient.cancelQueries({ queryKey });
+				const previous = queryClient.getQueryData<T>(queryKey);
+				queryClient.setQueryData<T>(queryKey, (old) => (old ? { ...old, ...updates } : old));
+				return previous;
+			},
+			rollback(previous: T | undefined): void {
+				queryClient.setQueryData(queryKey, previous);
+			}
+		};
+	}
+};
