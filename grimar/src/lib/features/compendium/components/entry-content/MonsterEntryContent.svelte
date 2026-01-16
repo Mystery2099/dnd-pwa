@@ -1,5 +1,8 @@
 <script lang="ts">
-	import { markdownRenderers, useLazyMarkdown } from '$lib/features/compendium/utils/markdown';
+	import {
+		markdownRenderers,
+		useLazyMarkdown
+	} from '$lib/features/compendium/utils/markdown.svelte';
 
 	interface Props {
 		monster: Record<string, unknown> & { externalId?: string };

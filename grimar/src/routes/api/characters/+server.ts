@@ -7,7 +7,7 @@
 
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { requireUser } from '$lib/server/services/auth/auth-service';
+import { requireUser } from '$lib/server/services/auth';
 import { characterRepository } from '$lib/server/repositories/characters';
 import { createModuleLogger } from '$lib/server/logger';
 

@@ -11,12 +11,12 @@
 
 export type {
 	Open5eV2Spell as Open5eSpell,
-	Open5eV2Creature as Open5eMonster,
+	Open5eV2Creature as Open5eCreature,
 	Open5eItem,
 	Open5eListResponse,
 	SrdSpell,
-	SrdMonsterSummary,
-	SrdMonsterDetail,
+	SrdCreatureSummary,
+	SrdCreatureDetail,
 	HomebrewItem
 } from '$lib/core/types/compendium/schemas';
 
@@ -36,7 +36,7 @@ export interface SpellItem {
 	classes: string[];
 }
 
-export interface MonsterItem {
+export interface CreatureItem {
 	index: string;
 	name: string;
 	summary: string;

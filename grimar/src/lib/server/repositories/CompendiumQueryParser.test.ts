@@ -79,7 +79,7 @@ describe('CompendiumQueryParser', () => {
 
 			expect(result.filters?.spellSchool).toEqual(['Evocation', 'Abjuration']);
 			expect(result.filters?.type).toEqual(['Dragon', 'Beast']);
-			expect(result.filters?.monsterSize).toEqual(['Huge', 'Gargantuan']);
+			expect(result.filters?.creatureSize).toEqual(['Huge', 'Gargantuan']);
 		});
 
 		it('should merge with default options', () => {

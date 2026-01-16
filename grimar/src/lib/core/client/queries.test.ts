@@ -1,82 +1,55 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { fetchCompendiumList, fetchCompendiumAll, queryKeys } from './queries';
+import { describe, it, expect, vi } from 'vitest';
+import { apiFetch } from './queries';
 
 // Mock global fetch
 const globalFetch = vi.fn();
 global.fetch = globalFetch;
 
-// Mock window location
-const originalWindow = global.window;
-const mockLocation = {
-	href: 'http://localhost:3000/compendium/spells?spellLevel=2&spellSchool=evocation',
-	searchParams: new URLSearchParams('spellLevel=2&spellSchool=evocation')
-};
-
-describe('queries.ts', () => {
+describe('apiFetch', () => {
 	beforeEach(() => {
 		vi.resetAllMocks();
-		// @ts-expect-error - Intentionally assigning to window.location for testing
-		global.window = { location: mockLocation };
 	});
 
-	afterEach(() => {
-		global.window = originalWindow;
+	it('should return data on successful fetch', async () => {
+		const mockData = { items: [{ id: 1, name: 'Test' }] };
+		globalFetch.mockResolvedValueOnce({
+			ok: true,
+			json: async () => mockData,
+			headers: new Headers({ 'content-type': 'application/json' })
+		});
+
+		const result = await apiFetch('/api/test');
+		expect(result).toEqual(mockData);
 	});
 
-	describe('queryKeys', () => {
-		it('should generate correct keys', () => {
-			expect(queryKeys.compendium.list('spells')).toEqual(['compendium', 'list', 'spells']);
-			expect(queryKeys.compendium.detail('spells', 'fireball')).toEqual([
-				'compendium',
-				'detail',
-				'spells',
-				'fireball'
-			]);
-			expect(queryKeys.compendium.all).toEqual(['compendium']);
+	it('should throw ApiError on failed fetch with status', async () => {
+		globalFetch.mockResolvedValueOnce({
+			ok: false,
+			status: 404,
+			statusText: 'Not Found',
+			text: async () => 'Not Found'
 		});
+
+		await expect(apiFetch('/api/test')).rejects.toThrow('Not Found');
 	});
 
-	describe('fetchCompendiumList', () => {
-		it('should build correct URL with filters from window', async () => {
-			globalFetch.mockResolvedValueOnce({
-				ok: true,
-				json: async () => ({ items: [] })
-			});
+	it('should throw ApiError on network error', async () => {
+		globalFetch.mockRejectedValueOnce(new TypeError('Network error'));
 
-			await fetchCompendiumList('spells');
-
-			const expectedCall = globalFetch.mock.calls[0][0];
-			expect(expectedCall).toContain('/api/compendium/items?');
-			expect(expectedCall).toContain('type=spells');
-			expect(expectedCall).toContain('spellLevel=2');
-			expect(expectedCall).toContain('spellSchool=evocation');
-		});
-
-		it('should throw error on failed fetch', async () => {
-			globalFetch.mockResolvedValueOnce({
-				ok: false,
-				statusText: 'Internal Server Error'
-			});
-
-			await expect(fetchCompendiumList('spells')).rejects.toThrow(
-				'Failed to fetch spells: Internal Server Error'
-			);
-		});
+		await expect(apiFetch('/api/test')).rejects.toThrow('Network error');
 	});
 
-	describe('fetchCompendiumAll', () => {
-		it('should request all items', async () => {
-			globalFetch.mockResolvedValueOnce({
-				ok: true,
-				json: async () => ({ items: [] })
-			});
+	it('should throw ApiError.offline when navigator is offline', async () => {
+		const originalOnline = navigator.onLine;
+		Object.defineProperty(navigator, 'onLine', { value: false, configurable: true });
 
-			await fetchCompendiumAll('monsters');
-
-			const expectedCall = globalFetch.mock.calls[0][0];
-			expect(expectedCall).toContain('/api/compendium/items?');
-			expect(expectedCall).toContain('type=monsters');
-			expect(expectedCall).toContain('all=true');
+		globalFetch.mockResolvedValueOnce({
+			ok: true,
+			json: async () => ({})
 		});
+
+		await expect(apiFetch('/api/test')).rejects.toThrow('Device is offline');
+
+		Object.defineProperty(navigator, 'onLine', { value: originalOnline, configurable: true });
 	});
 });

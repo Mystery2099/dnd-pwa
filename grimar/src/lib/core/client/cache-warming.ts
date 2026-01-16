@@ -14,7 +14,7 @@ import { fetchCompendiumList } from './queries';
  */
 const WARM_COMENDIUM_TYPES = [
 	'spells',
-	'monsters',
+	'creatures',
 	'items',
 	'backgrounds',
 	'classes',

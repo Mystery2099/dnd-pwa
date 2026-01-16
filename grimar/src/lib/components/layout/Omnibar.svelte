@@ -303,13 +303,13 @@
 					<span class="text-theme-muted text-xs">spells</span>
 				</CommandItem>
 				<CommandItem
-					value="search-monsters"
-					onclick={() => performSearch('monsters')}
+					value="search-creatures"
+					onclick={() => performSearch('creatures')}
 					class="flex items-center gap-3 px-4 py-2.5"
 				>
 					<Database class="size-5 text-red-500" />
-					<span class="flex-1">Search Monsters</span>
-					<span class="text-theme-muted text-xs">monsters</span>
+					<span class="flex-1">Search Creatures</span>
+					<span class="text-theme-muted text-xs">creatures</span>
 				</CommandItem>
 				<CommandItem
 					value="search-items"
@@ -344,12 +344,12 @@
 					<span class="flex-1">Go to Spells</span>
 				</CommandItem>
 				<CommandItem
-					value="goto-monsters"
-					onclick={() => navigate('/compendium/monsters')}
+					value="goto-creatures"
+					onclick={() => navigate('/compendium/creatures')}
 					class="flex items-center gap-3 px-4 py-2.5"
 				>
 					<Database class="size-5 text-red-500" />
-					<span class="flex-1">Go to Monsters</span>
+					<span class="flex-1">Go to Creatures</span>
 				</CommandItem>
 				<CommandItem
 					value="goto-characters"

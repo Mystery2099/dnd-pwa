@@ -1,7 +1,7 @@
 /**
  * Unified Color Constants
  *
- * Centralized color mappings for compendium types (spells, monsters, items).
+ * Centralized color mappings for compendium types (spells, creatures, items).
  * Consolidates previously scattered color definitions.
  */
 
@@ -34,10 +34,10 @@ export const SPELL_SCHOOL_TEXT_COLORS = {
 } as const;
 
 // ============================================================================
-// Monster Type Colors
+// Creature Type Colors
 // ============================================================================
 
-export const MONSTER_TYPE_COLORS = {
+export const CREATURE_TYPE_COLORS = {
 	Dragon: 'text-rose-400 group-hover:border-rose-500/50',
 	Undead: 'text-emerald-400 group-hover:border-emerald-500/50',
 	Fiend: 'text-red-400 group-hover:border-red-500/50',
@@ -55,7 +55,7 @@ export const MONSTER_TYPE_COLORS = {
 	default: 'text-gray-400 group-hover:border-gray-500/50'
 } as const;
 
-export const MONSTER_TYPE_TEXT_COLORS = {
+export const CREATURE_TYPE_TEXT_COLORS = {
 	Dragon: 'text-rose-400',
 	Undead: 'text-emerald-400',
 	Fiend: 'text-red-400',
@@ -72,6 +72,10 @@ export const MONSTER_TYPE_TEXT_COLORS = {
 	Plant: 'text-green-400',
 	default: 'text-gray-400'
 } as const;
+
+// Legacy exports for backward compatibility
+export const MONSTER_TYPE_COLORS = CREATURE_TYPE_COLORS;
+export const MONSTER_TYPE_TEXT_COLORS = CREATURE_TYPE_TEXT_COLORS;
 
 // ============================================================================
 // Default Colors

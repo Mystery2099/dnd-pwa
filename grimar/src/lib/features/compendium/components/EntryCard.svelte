@@ -15,6 +15,8 @@
 		icon?: ComponentType;
 		variant?: ItemVariant;
 		school?: string; // Simplified school name for gem colors (evocation, abjuration, etc.) or any string
+		type?: string; // Compendium type (e.g., 'spells', 'monsters')
+		slug?: string; // Item slug for URL generation
 		onclick?: () => void;
 	}
 
@@ -26,6 +28,8 @@
 		icon: Icon,
 		variant = 'list',
 		school,
+		type,
+		slug,
 		onclick
 	}: Props = $props();
 

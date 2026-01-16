@@ -13,7 +13,7 @@ import { browser } from '$app/environment';
  * Supports both v1 and v2 Open5e API URL patterns
  */
 const OPEN5E_PATTERNS: Record<string, string> = {
-	monsters: 'monster',
+	monsters: 'creature',
 	spells: 'spell',
 	items: 'item',
 	feats: 'feat',
@@ -21,14 +21,14 @@ const OPEN5E_PATTERNS: Record<string, string> = {
 	races: 'race',
 	classes: 'class',
 	// v2 patterns
-	creatures: 'monster',
+	creatures: 'creature',
 	species: 'race'
 };
 
 /**
  * Parse an open5e URL and return an internal path if valid
- * @param url - The URL to parse (e.g., https://api.open5e.com/monsters/shroud)
- * @returns Internal path (e.g., /compendium/monster/ancient-red-dragon) or null if not an open5e URL
+ * @param url - The URL to parse (e.g., https://api.open5e.com/creatures/ancient-red-dragon)
+ * @returns Internal path (e.g., /compendium/creature/ancient-red-dragon) or null if not an open5e URL
  */
 export function open5eToInternalPath(url: string, _sourceBook: string = 'Unknown'): string | null {
 	try {

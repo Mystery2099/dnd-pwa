@@ -2,9 +2,9 @@ import { describe, it, expect } from 'vitest';
 import { DataTransformer } from './dataTransformer';
 import type {
 	Open5eSpell,
-	Open5eMonster,
+	Open5eCreature,
 	SpellItem,
-	MonsterItem
+	CreatureItem
 } from '$lib/core/types/compendium/transformers';
 
 describe('DataTransformer', () => {
@@ -85,9 +85,9 @@ describe('DataTransformer', () => {
 		});
 	});
 
-	describe('transformMonster', () => {
+	describe('transformCreature', () => {
 		it('should transform Open5e v2 creature data correctly', () => {
-			const mockCreature: Open5eMonster = {
+			const mockCreature: Open5eCreature = {
 				key: 'ancient-red-dragon',
 				name: 'Ancient Red Dragon',
 				type: { name: 'Dragon', key: 'dragon' },
@@ -115,7 +115,7 @@ describe('DataTransformer', () => {
 				]
 			};
 
-			const result = DataTransformer.transformMonster(mockCreature);
+			const result = DataTransformer.transformCreature(mockCreature);
 
 			expect(result.index).toBe('ancient-red-dragon');
 			expect(result.name).toBe('Ancient Red Dragon');
@@ -129,7 +129,7 @@ describe('DataTransformer', () => {
 		});
 
 		it('should handle creature with minimal fields', () => {
-			const mockCreature: Open5eMonster = {
+			const mockCreature: Open5eCreature = {
 				key: 'goblin',
 				name: 'Goblin',
 				type: { name: 'Humanoid', key: 'humanoid' },
@@ -138,7 +138,7 @@ describe('DataTransformer', () => {
 				challenge_rating_decimal: '0.250'
 			};
 
-			const result = DataTransformer.transformMonster(mockCreature);
+			const result = DataTransformer.transformCreature(mockCreature);
 
 			expect(result.index).toBe('goblin');
 			expect(result.name).toBe('Goblin');
@@ -146,7 +146,7 @@ describe('DataTransformer', () => {
 		});
 
 		it('should handle creature with traits', () => {
-			const mockCreature: Open5eMonster = {
+			const mockCreature: Open5eCreature = {
 				key: 'owl-bear',
 				name: 'Owlbear',
 				type: { name: 'Monstrosity', key: 'monstrosity' },
@@ -160,7 +160,7 @@ describe('DataTransformer', () => {
 				]
 			};
 
-			const result = DataTransformer.transformMonster(mockCreature);
+			const result = DataTransformer.transformCreature(mockCreature);
 
 			expect(result.special_abilities).toHaveLength(1);
 			expect(result.special_abilities?.[0].name).toBe('Keen Senses');
@@ -187,8 +187,8 @@ describe('DataTransformer', () => {
 			expect(result).toBe('Level 3 Evocation spell');
 		});
 
-		it('should create monster summary', () => {
-			const mockCreature: Open5eMonster = {
+		it('should create creature summary', () => {
+			const mockCreature: Open5eCreature = {
 				key: 'dragon',
 				name: 'Red Dragon',
 				type: { name: 'Dragon', key: 'dragon' },
@@ -196,13 +196,13 @@ describe('DataTransformer', () => {
 				challenge_rating_text: '17'
 			};
 
-			const result = DataTransformer.createSummary(mockCreature, 'monster');
+			const result = DataTransformer.createSummary(mockCreature, 'creature');
 			expect(result).toBe('Huge Dragon, CR 17');
 		});
 
 		it('should handle unknown type', () => {
 			const mockItem = { name: 'Unknown Item' };
-			const result = DataTransformer.createSummary(mockItem as Open5eMonster, 'monster');
+			const result = DataTransformer.createSummary(mockItem as Open5eCreature, 'creature');
 			expect(result).toContain('Unknown');
 		});
 

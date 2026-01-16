@@ -40,7 +40,7 @@ export const POST = async ({ request }: { request: Request }) => {
 
 	// Aggregate results for response
 	const totalSpells = results.reduce((sum, r) => sum + r.spells, 0);
-	const totalMonsters = results.reduce((sum, r) => sum + r.monsters, 0);
+	const totalCreatures = results.reduce((sum, r) => sum + r.creatures, 0);
 	const totalItems = results.reduce((sum, r) => sum + r.items, 0);
 	const totalErrors = results.reduce((sum, r) => sum + r.errors.length, 0);
 	const providersWithErrors = results.filter((r) => r.errors.length > 0).length;
@@ -50,9 +50,9 @@ export const POST = async ({ request }: { request: Request }) => {
 			duration,
 			summary: {
 				spells: totalSpells,
-				monsters: totalMonsters,
+				creatures: totalCreatures,
 				items: totalItems,
-				totalItems: totalSpells + totalMonsters + totalItems,
+				totalItems: totalSpells + totalCreatures + totalItems,
 				providersSynced: results.length,
 				providersWithErrors,
 				totalErrors
@@ -70,9 +70,9 @@ export const POST = async ({ request }: { request: Request }) => {
 		providers: results,
 		summary: {
 			spells: totalSpells,
-			monsters: totalMonsters,
+			creatures: totalCreatures,
 			items: totalItems,
-			totalItems: totalSpells + totalMonsters + totalItems,
+			totalItems: totalSpells + totalCreatures + totalItems,
 			providersSynced: results.length,
 			providersWithErrors,
 			totalErrors

@@ -47,10 +47,10 @@ export interface TransformResult {
 	spellLevel?: number;
 	spellSchool?: string;
 
-	// Monster-specific fields
+	// Creature-specific fields
 	challengeRating?: string;
-	monsterSize?: string;
-	monsterType?: string;
+	creatureSize?: string;
+	creatureType?: string;
 
 	// Feat-specific fields
 	featPrerequisites?: string;
@@ -131,7 +131,7 @@ export interface TransformResult {
 	vehicleCategory?: string;
 
 	// Monster Type fields
-	monsterTypeName?: string;
+	creatureTypeName?: string;
 
 	// Rule fields
 	ruleName?: string;
@@ -176,7 +176,7 @@ export interface ProviderHealthStatus {
 export interface ProviderSyncResult {
 	providerId: string;
 	spells: number;
-	monsters: number;
+	creatures: number;
 	items: number;
 	feats: number;
 	backgrounds: number;
@@ -198,7 +198,7 @@ export interface ProviderSyncResult {
 	weaponProperties: number;
 	equipmentCategories: number;
 	vehicles: number;
-	monsterTypes: number;
+	creatureTypes: number;
 	rules: number;
 	ruleSections: number;
 	weapons: number;

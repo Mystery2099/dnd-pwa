@@ -1,6 +1,6 @@
 import type { Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
-import { handleAuth } from '$lib/server/services/auth/auth-service';
+import { handleAuth } from '$lib/server/services/auth';
 import { startCacheCleanup } from '$lib/server/utils/cache';
 import { createRequestLogger } from '$lib/server/utils/monitoring';
 

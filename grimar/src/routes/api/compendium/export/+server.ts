@@ -45,15 +45,15 @@ export const GET: RequestHandler = async ({ url, request }) => {
 				spellLevel: item.spellLevel,
 				spellSchool: item.spellSchool,
 				challengeRating: item.challengeRating,
-				monsterSize: item.monsterSize,
-				monsterType: item.monsterType
+				creatureSize: item.creatureSize,
+				creatureType: item.creatureType
 			}));
 		} else {
 			// Counts only: use query API for efficiency
 			const spells = await db.$count(compendiumItems, undefined);
-			const monsters = await db.$count(compendiumItems, undefined);
-			typeCounts = { spell: spells, monster: monsters };
-			totalCount = spells + monsters;
+			const creatures = await db.$count(compendiumItems, undefined);
+			typeCounts = { spell: spells, creature: creatures };
+			totalCount = spells + creatures;
 		}
 
 		const currentChecksum = nanoid(12);

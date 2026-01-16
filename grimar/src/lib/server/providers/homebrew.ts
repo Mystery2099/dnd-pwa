@@ -183,8 +183,8 @@ export class HomebrewProvider extends BaseProvider {
 			details: item,
 			jsonData,
 			challengeRating: cr,
-			monsterSize: size,
-			monsterType: typeName,
+			creatureSize: size,
+			creatureType: typeName,
 			sourcePublisher: 'homebrew'
 		};
 	}

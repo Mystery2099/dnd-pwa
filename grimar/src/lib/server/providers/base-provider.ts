@@ -63,47 +63,6 @@ export abstract class BaseProvider implements CompendiumProvider {
 	}
 
 	/**
-	 * Fetch all items from an endpoint with automatic pagination
-	 * Common implementation for providers with paginated APIs
-	 */
-	protected async fetchAllPagesPaginated(
-		endpoint: string,
-		limit: number = 100,
-		responseKey: string = 'results',
-		nextKey: string = 'next'
-	): Promise<unknown[]> {
-		let nextUrl: string | null = `${this.baseUrl}${endpoint}?limit=${limit}`;
-		const allItems: unknown[] = [];
-
-		while (nextUrl) {
-			log.debug({ providerId: this.id, url: nextUrl }, 'Fetching page');
-
-			const response = await fetch(nextUrl);
-			if (!response.ok) {
-				const text = await response.text();
-				throw new Error(
-					`${this.name} API error: ${response.status} ${response.statusText} - ${text.slice(0, 200)}`
-				);
-			}
-
-			const rawData = await response.json();
-			const data = rawData as Record<string, unknown>;
-			const results = data[responseKey] as unknown[];
-			const next = data[nextKey] as string | null;
-
-			log.debug(
-				{ providerId: this.id, itemCount: results.length, hasMore: next !== null },
-				'Received items'
-			);
-			allItems.push(...results);
-			nextUrl = next;
-		}
-
-		log.info({ providerId: this.id, totalItems: allItems.length }, 'Total items fetched');
-		return allItems;
-	}
-
-	/**
 	 * Abstract method - subclasses must implement
 	 * Get the API endpoint for a given type
 	 */

@@ -238,7 +238,7 @@ export const SrdSpellSchema = z.object({
 	casting_time: z.string()
 });
 
-export const SrdMonsterSummarySchema = z.object({
+export const SrdCreatureSummarySchema = z.object({
 	index: z.string(),
 	name: z.string(),
 	type: z.string(),
@@ -246,7 +246,7 @@ export const SrdMonsterSummarySchema = z.object({
 	challenge_rating: z.number()
 });
 
-export const SrdMonsterDetailSchema = SrdMonsterSummarySchema.extend({
+export const SrdCreatureDetailSchema = SrdCreatureSummarySchema.extend({
 	alignment: z.string().optional(),
 	subtype: z.string().optional(),
 	armor_class: z
@@ -617,8 +617,8 @@ export type Open5eSpecies = z.infer<typeof Open5eSpeciesSchema>;
 export type Open5eItem = z.infer<typeof Open5eItemSchema>;
 export type Open5eListResponse = z.infer<typeof Open5eListResponseSchema>;
 export type SrdSpell = z.infer<typeof SrdSpellSchema>;
-export type SrdMonsterSummary = z.infer<typeof SrdMonsterSummarySchema>;
-export type SrdMonsterDetail = z.infer<typeof SrdMonsterDetailSchema>;
+export type SrdCreatureSummary = z.infer<typeof SrdCreatureSummarySchema>;
+export type SrdCreatureDetail = z.infer<typeof SrdCreatureDetailSchema>;
 export type SrdSubclass = z.infer<typeof SrdSubclassSchema>;
 export type SrdSubrace = z.infer<typeof SrdSubraceSchema>;
 export type SrdTrait = z.infer<typeof SrdTraitSchema>;

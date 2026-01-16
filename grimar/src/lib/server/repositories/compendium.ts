@@ -296,14 +296,14 @@ export class CompendiumRepository {
 			filterConditions.push(inArray(compendiumItems.spellSchool, options.filters.spellSchool));
 		}
 
-		// Monster type filter
+		// Creature type filter
 		if (options.filters?.type && options.filters.type.length > 0) {
-			filterConditions.push(inArray(compendiumItems.monsterType, options.filters.type));
+			filterConditions.push(inArray(compendiumItems.creatureType, options.filters.type));
 		}
 
-		// Monster size filter
-		if (options.filters?.monsterSize && options.filters.monsterSize.length > 0) {
-			filterConditions.push(inArray(compendiumItems.monsterSize, options.filters.monsterSize));
+		// Creature size filter
+		if (options.filters?.creatureSize && options.filters.creatureSize.length > 0) {
+			filterConditions.push(inArray(compendiumItems.creatureSize, options.filters.creatureSize));
 		}
 
 		// Apply filter logic (AND/OR) between categories
@@ -363,14 +363,14 @@ export class CompendiumRepository {
 				return sortOrder === 'desc'
 					? desc(compendiumItems.spellSchool)
 					: sql`${compendiumItems.spellSchool} COLLATE NOCASE`;
-			case 'monsterSize':
+			case 'creatureSize':
 				return sortOrder === 'desc'
-					? desc(compendiumItems.monsterSize)
-					: sql`${compendiumItems.monsterSize} COLLATE NOCASE`;
-			case 'monsterType':
+					? desc(compendiumItems.creatureSize)
+					: sql`${compendiumItems.creatureSize} COLLATE NOCASE`;
+			case 'creatureType':
 				return sortOrder === 'desc'
-					? desc(compendiumItems.monsterType)
-					: sql`${compendiumItems.monsterType} COLLATE NOCASE`;
+					? desc(compendiumItems.creatureType)
+					: sql`${compendiumItems.creatureType} COLLATE NOCASE`;
 			case 'name':
 			default:
 				return sortOrder === 'desc'

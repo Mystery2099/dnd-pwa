@@ -1,5 +1,5 @@
 import type { PageServerLoad } from './$types';
-import { requireUser } from '$lib/server/services/auth/auth-service';
+import { requireUser } from '$lib/server/services/auth';
 import { listUserCharacters } from '$lib/server/services/characters/service';
 
 export const load: PageServerLoad = async ({ locals }) => {

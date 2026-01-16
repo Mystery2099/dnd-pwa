@@ -5,6 +5,7 @@
  */
 
 import type { BunSQLiteDatabase } from 'drizzle-orm/bun-sqlite';
+import type { Database } from 'bun:sqlite';
 import * as schema from './schema';
 
 type Db = BunSQLiteDatabase<typeof schema>;
@@ -31,7 +32,7 @@ export async function getDbDirect(): Promise<Db> {
 /**
  * Get raw SQLite client for raw queries
  */
-export async function getRawDbDirect(): Promise<ReturnType<typeof Database>> {
+export async function getRawDbDirect(): Promise<Database> {
 	const { Database } = await import('bun:sqlite');
 	const url = process.env.DATABASE_URL || 'file:./local.db';
 	return new Database(url);

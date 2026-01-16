@@ -11,10 +11,10 @@
  *   bun run db:sync --full          # Force full re-sync
  *
  * Options:
- *   --type <type>     Compendium type: spell, monster, item, feat, background, race, class,
+ *   --type <type>     Compendium type: spell, creature, item, feat, background, race, class,
  *                     subclass, subrace, trait, feature, skill, language, alignment,
  *                     proficiency, abilityScore, damageType, magicSchool, equipment,
- *                     weaponProperty, equipmentCategory, vehicle, monsterType, rule,
+ *                     weaponProperty, equipmentCategory, vehicle, creatureType, rule,
  *                     ruleSection, weapon, armor, condition, plane, section
  *   --provider <id>   Provider ID to sync (e.g., open5e, homebrew)
  *   --full            Force full re-sync (vs incremental)
@@ -319,7 +319,7 @@ ${colors.bright}Usage:${colors.reset}
 
 ${colors.bright}Options:${colors.reset}
   ${colors.cyan}--type <type>${colors.reset}       Compendium type to sync
-                        Values: ${colors.green}spell${colors.reset}, ${colors.green}monster${colors.reset}, ${colors.green}item${colors.reset},
+                        Values: ${colors.green}spell${colors.reset}, ${colors.green}creature${colors.reset}, ${colors.green}item${colors.reset},
                                 ${colors.green}feat${colors.reset}, ${colors.green}background${colors.reset},
                                 ${colors.green}race${colors.reset}, ${colors.green}class${colors.reset}
   ${colors.cyan}--provider <id>${colors.reset}   Sync only a specific provider

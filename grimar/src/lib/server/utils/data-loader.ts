@@ -38,7 +38,7 @@ export async function loadDetails(jsonPath: string): Promise<Record<string, unkn
 /**
  * Load all detailed data for a specific compendium type
  * Useful for exports or bulk processing.
- * @param type The compendium type (e.g., 'spell', 'monster')
+ * @param type The compendium type (e.g., 'spell', 'creature')
  * @param dataRoot Optional custom root directory
  */
 export async function loadAllDetails(

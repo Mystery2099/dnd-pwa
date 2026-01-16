@@ -25,14 +25,14 @@ export const GET: RequestHandler = async ({ url }) => {
 		const spellLevel = url.searchParams.get('spellLevel');
 		const spellSchool = url.searchParams.get('spellSchool');
 		const challengeRating = url.searchParams.get('challengeRating');
-		const monsterType = url.searchParams.get('monsterType');
+		const creatureType = url.searchParams.get('creatureType');
 
 		if (!pathType) {
 			return json({ error: 'Missing type parameter' }, { status: 400 });
 		}
 
 		const db = await getDb();
-		// Convert URL path type (e.g., 'monsters') to database type (e.g., 'monster')
+		// Convert URL path type (e.g., 'creatures') to database type (e.g., 'creature')
 		const dbType = getTypeFromPath(pathType);
 
 		// Build where clause
@@ -56,8 +56,8 @@ export const GET: RequestHandler = async ({ url }) => {
 			conditions.push(eq(compendiumItems.challengeRating, challengeRating));
 		}
 
-		if (monsterType) {
-			conditions.push(eq(compendiumItems.monsterType, monsterType));
+		if (creatureType) {
+			conditions.push(eq(compendiumItems.creatureType, creatureType));
 		}
 
 		// Use and() for combining conditions

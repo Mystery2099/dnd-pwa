@@ -3,9 +3,9 @@ import { open5eToInternalPath, createLinkInterceptor } from './link-interceptor'
 
 describe('link-interceptor', () => {
 	describe('open5eToInternalPath', () => {
-		it('should convert api.open5e.com monster URL to internal path', () => {
+		it('should convert api.open5e.com creature URL to internal path', () => {
 			const result = open5eToInternalPath('https://api.open5e.com/monsters/ancient-red-dragon');
-			expect(result).toBe('/compendium/monster/ancient-red-dragon');
+			expect(result).toBe('/compendium/creature/ancient-red-dragon');
 		});
 
 		it('should convert api.open5e.com spell URL to internal path', () => {
@@ -15,7 +15,7 @@ describe('link-interceptor', () => {
 
 		it('should convert open5e.com URL to internal path', () => {
 			const result = open5eToInternalPath('https://open5e.com/monsters/shadow');
-			expect(result).toBe('/compendium/monster/shadow');
+			expect(result).toBe('/compendium/creature/shadow');
 		});
 
 		it('should handle multi-part slugs', () => {
@@ -54,7 +54,7 @@ describe('link-interceptor', () => {
 		// v2 URL tests
 		it('should convert api.open5e.com/v2 creature URL to internal path', () => {
 			const result = open5eToInternalPath('https://api.open5e.com/v2/creatures/ancient-red-dragon');
-			expect(result).toBe('/compendium/monster/ancient-red-dragon');
+			expect(result).toBe('/compendium/creature/ancient-red-dragon');
 		});
 
 		it('should convert api.open5e.com/v2 species URL to internal path', () => {

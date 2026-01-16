@@ -98,11 +98,11 @@ describe('Open5eProvider', () => {
 				}
 			};
 
-			const result = provider.transformItem(validCreature, 'monster');
+			const result = provider.transformItem(validCreature, 'creature');
 			expect(result.externalId).toBe('srd_ancient-red-dragon');
 			expect(result.name).toBe('Ancient Red Dragon');
-			expect(result.monsterSize).toBe('Gargantuan');
-			expect(result.monsterType).toBe('Dragon');
+			expect(result.creatureSize).toBe('Gargantuan');
+			expect(result.creatureType).toBe('Dragon');
 			expect(result.challengeRating).toBe('24');
 			expect(result.jsonData).toBeDefined();
 			expect(result.sourceBook).toBe('srd-2014');

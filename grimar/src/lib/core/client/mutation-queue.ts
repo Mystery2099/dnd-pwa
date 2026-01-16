@@ -7,6 +7,7 @@
 
 import { browser } from '$app/environment';
 import { get, set, clear } from 'idb-keyval';
+import { ApiError, isRetryableError } from './errors';
 
 // Mutation queue key
 const MUTATION_QUEUE_KEY = 'mutation-queue';
@@ -23,12 +24,13 @@ export interface QueuedMutation<T = unknown> {
 }
 
 class MutationQueueState {
-	pending = $state<QueuedMutation[]>([]);
-	syncing = $state(false);
-	online = $state(browser ? navigator.onLine : true);
+	pending: QueuedMutation[] = [];
+	syncing = false;
+	online = true;
 
 	constructor() {
 		if (browser) {
+			this.online = navigator.onLine;
 			this.loadQueue();
 			this.setupListeners();
 		}
@@ -70,9 +72,10 @@ class MutationQueueState {
 					await executeMutation(mutation);
 				} catch (error) {
 					mutation.retries++;
-					mutation.lastError = error instanceof Error ? error.message : 'Unknown error';
+					mutation.lastError = ApiError.isApiError(error) ? error.message : 'Unknown error';
 
-					if (mutation.retries < 3) {
+					// Only retry if error is retryable
+					if (isRetryableError(error) && mutation.retries < 3) {
 						failed.push(mutation);
 					} else {
 						failed.push(mutation);
@@ -94,14 +97,26 @@ export const mutationQueue = new MutationQueueState();
  * Execute a single mutation against the server.
  */
 async function executeMutation<T>(mutation: QueuedMutation<T>): Promise<void> {
-	const response = await fetch(mutation.endpoint, {
-		method: mutation.type === 'delete' ? 'DELETE' : mutation.type === 'create' ? 'POST' : 'PUT',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify(mutation.payload)
-	});
+	try {
+		const response = await fetch(mutation.endpoint, {
+			method: mutation.type === 'delete' ? 'DELETE' : mutation.type === 'create' ? 'POST' : 'PUT',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(mutation.payload)
+		});
 
-	if (!response.ok) {
-		throw new Error(`Mutation failed: ${response.statusText}`);
+		if (!response.ok) {
+			const text = await response.text().catch(() => undefined);
+			throw ApiError.fromResponse(response, text);
+		}
+	} catch (error) {
+		// Convert to ApiError if not already
+		if (!ApiError.isApiError(error)) {
+			if (error instanceof TypeError || error instanceof DOMException) {
+				throw ApiError.networkError(error.message);
+			}
+			throw ApiError.networkError('Mutation failed');
+		}
+		throw error;
 	}
 }
 

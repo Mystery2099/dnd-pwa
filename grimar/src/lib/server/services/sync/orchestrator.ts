@@ -56,8 +56,8 @@ const TRANSFORM_PROGRESS_INTERVAL = 50;
 const TYPE_CANONICAL: Record<string, CompendiumTypeName> = {
 	spell: 'spells',
 	spells: 'spells',
-	monster: 'creatures',
-	monsters: 'creatures',
+	creature: 'creatures',
+	creatures: 'creatures',
 	item: 'magicitems',
 	items: 'magicitems',
 	feat: 'feats',
@@ -86,8 +86,8 @@ const TYPE_CANONICAL: Record<string, CompendiumTypeName> = {
 	equipmentCategories: 'itemcategories',
 	weaponProperty: 'weaponproperties',
 	weaponProperties: 'weaponproperties',
-	monsterType: 'creaturetypes',
-	monsterTypes: 'creaturetypes',
+	creatureType: 'creaturetypes',
+	creatureTypes: 'creaturetypes',
 	rule: 'rules',
 	rules: 'rules',
 	ruleSection: 'rulesections',
@@ -251,7 +251,7 @@ async function syncSingleProvider(
 		return {
 			providerId,
 			spells: 0,
-			monsters: 0,
+			creatures: 0,
 			items: 0,
 			feats: 0,
 			backgrounds: 0,
@@ -273,7 +273,7 @@ async function syncSingleProvider(
 			weaponProperties: 0,
 			equipmentCategories: 0,
 			vehicles: 0,
-			monsterTypes: 0,
+			creatureTypes: 0,
 			rules: 0,
 			ruleSections: 0,
 			weapons: 0,
@@ -289,7 +289,7 @@ async function syncSingleProvider(
 	const result: ProviderSyncResult = {
 		providerId,
 		spells: 0,
-		monsters: 0,
+		creatures: 0,
 		items: 0,
 		feats: 0,
 		backgrounds: 0,
@@ -311,7 +311,7 @@ async function syncSingleProvider(
 		weaponProperties: 0,
 		equipmentCategories: 0,
 		vehicles: 0,
-		monsterTypes: 0,
+		creatureTypes: 0,
 		rules: 0,
 		ruleSections: 0,
 		weapons: 0,
@@ -349,7 +349,7 @@ async function syncSingleProvider(
 					result.spells = itemCount;
 					break;
 				case 'creatures':
-					result.monsters = itemCount;
+					result.creatures = itemCount;
 					break;
 				case 'magicitems':
 					result.items = itemCount;
@@ -394,7 +394,7 @@ async function syncSingleProvider(
 					result.weaponProperties = itemCount;
 					break;
 				case 'creaturetypes':
-					result.monsterTypes = itemCount;
+					result.creatureTypes = itemCount;
 					break;
 				case 'rules':
 					result.rules = itemCount;
@@ -592,8 +592,8 @@ async function syncTypeFromProvider(
 						spellLevel: transformed.spellLevel,
 						spellSchool: transformed.spellSchool,
 						challengeRating: transformed.challengeRating,
-						monsterSize: transformed.monsterSize,
-						monsterType: transformed.monsterType,
+						creatureSize: transformed.creatureSize,
+						creatureType: transformed.creatureType,
 						classHitDie: transformed.classHitDie,
 						raceSize: transformed.raceSize,
 						raceSpeed: transformed.raceSpeed,
@@ -614,8 +614,8 @@ async function syncTypeFromProvider(
 							spellLevel: transformed.spellLevel,
 							spellSchool: transformed.spellSchool,
 							challengeRating: transformed.challengeRating,
-							monsterSize: transformed.monsterSize,
-							monsterType: transformed.monsterType,
+							creatureSize: transformed.creatureSize,
+							creatureType: transformed.creatureType,
 							classHitDie: transformed.classHitDie,
 							raceSize: transformed.raceSize,
 							raceSpeed: transformed.raceSpeed,

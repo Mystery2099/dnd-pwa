@@ -34,10 +34,6 @@ class TestProvider extends BaseProvider {
 	public publicToTitleCase(str: string): string {
 		return this.toTitleCase(str);
 	}
-
-	public async publicFetchAllPagesPaginated(endpoint: string, limit?: number): Promise<unknown[]> {
-		return this.fetchAllPagesPaginated(endpoint, limit);
-	}
 }
 
 describe('BaseProvider', () => {
@@ -92,29 +88,6 @@ describe('BaseProvider', () => {
 
 			const result = await provider.healthCheck();
 			expect(result).toBe(false);
-		});
-	});
-
-	describe('fetchAllPagesPaginated', () => {
-		it('should fetch all pages until next is null', async () => {
-			const page1 = { results: [{ id: 1 }], next: 'https://api.test.com/next' };
-			const page2 = { results: [{ id: 2 }], next: null };
-
-			(global.fetch as any)
-				.mockResolvedValueOnce({
-					ok: true,
-					json: async () => page1
-				})
-				.mockResolvedValueOnce({
-					ok: true,
-					json: async () => page2
-				});
-
-			const results = await provider.publicFetchAllPagesPaginated('/items');
-
-			expect(results).toHaveLength(2);
-			expect(results).toEqual([{ id: 1 }, { id: 2 }]);
-			expect(global.fetch).toHaveBeenCalledTimes(2);
 		});
 	});
 });

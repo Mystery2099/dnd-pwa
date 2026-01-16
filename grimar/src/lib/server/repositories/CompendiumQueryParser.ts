@@ -12,7 +12,7 @@ export interface QueryFilters {
 	spellSchool?: string[];
 	source?: string[];
 	type?: string[];
-	monsterSize?: string[];
+	creatureSize?: string[];
 }
 
 /**
@@ -29,8 +29,8 @@ export interface QueryOptions {
 		| 'spellLevel'
 		| 'spellSchool'
 		| 'challengeRating'
-		| 'monsterSize'
-		| 'monsterType';
+		| 'creatureSize'
+		| 'creatureType';
 	sortOrder?: 'asc' | 'desc';
 	filterLogic?: 'and' | 'or';
 	filters?: QueryFilters;
@@ -90,7 +90,7 @@ export class CompendiumQueryParser {
 			spellSchool: this.parseCSV(params.get('schools') || undefined),
 			source: this.parseCSV(params.get('sources') || undefined),
 			type: this.parseCSV(params.get('types') || undefined),
-			monsterSize: this.parseCSV(params.get('sizes') || undefined)
+			creatureSize: this.parseCSV(params.get('sizes') || undefined)
 		};
 
 		const result = {
@@ -205,8 +205,8 @@ export class CompendiumQueryParser {
 			params.set('types', options.filters.type.join(','));
 		}
 
-		if (options.filters?.monsterSize && options.filters.monsterSize.length > 0) {
-			params.set('sizes', options.filters.monsterSize.join(','));
+		if (options.filters?.creatureSize && options.filters.creatureSize.length > 0) {
+			params.set('sizes', options.filters.creatureSize.join(','));
 		}
 
 		log.debug({ params: params.toString() }, 'URL params generated');
