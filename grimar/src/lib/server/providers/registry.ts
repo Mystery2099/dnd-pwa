@@ -59,25 +59,35 @@ interface UserConfig {
 	primary?: string;
 }
 
+// Cached user config to avoid repeated file reads
+let cachedUserConfig: UserConfig | null = null;
+
 /**
  * Load user configuration from providers.json
  * Only overrides enabled status and primary provider
  */
 function loadUserConfig(): UserConfig {
+	if (cachedUserConfig !== null) {
+		return cachedUserConfig;
+	}
+
 	const configPath = join(process.cwd(), 'providers.json');
 
 	if (!existsSync(configPath)) {
-		return {};
+		cachedUserConfig = {};
+		return cachedUserConfig;
 	}
 
 	try {
 		const content = readFileSync(configPath, 'utf-8');
 		const config = JSON.parse(content) as UserConfig;
 		log.info('Loaded user configuration from providers.json');
+		cachedUserConfig = config;
 		return config;
 	} catch (error) {
 		log.warn({ error }, 'Failed to load providers.json, using defaults');
-		return {};
+		cachedUserConfig = {};
+		return cachedUserConfig;
 	}
 }
 
