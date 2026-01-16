@@ -9,60 +9,36 @@ import { type Handle } from '@sveltejs/kit';
 import { resolveUser } from './auth-utils';
 import { getSession } from '$lib/server/auth/session';
 
-export { resolveUser } from './auth-utils';
-
 /** Authentication middleware hook */
 export const handleAuth: Handle = async ({ event, resolve }) => {
-	// Development mode: check for mock auth header from E2E tests
 	const isDevMode = import.meta.env.DEV;
-	const testUser = event.request.headers.get('X-Authentik-Username');
+	const path = event.url.pathname;
 
-	// Check for test user cookie (set by E2E tests)
-	const testUserCookie = event.cookies.get('test-user');
-
-	if (isDevMode && (testUser || testUserCookie)) {
-		event.locals.user = {
-			username: testUser || testUserCookie || 'test-dm',
-			settings: {}
-		};
-		return resolve(event);
+	// Development: E2E test authentication via header or cookie
+	if (isDevMode) {
+		const testUser =
+			event.request.headers.get('X-Authentik-Username') || event.cookies.get('test-user');
+		if (testUser || path.startsWith('/api/')) {
+			event.locals.user = { username: testUser || 'test-dm', settings: {} };
+			return resolve(event);
+		}
 	}
 
-	// Skip auth for API endpoints in development mode
-	// This allows E2E tests to run without complex auth setup
-	const isApiEndpoint = event.url.pathname.startsWith('/api/');
-
-	if (isApiEndpoint && isDevMode) {
-		// Set a mock user for API requests in development
-		event.locals.user = {
-			username: 'test-dm',
-			settings: {}
-		};
-		return resolve(event);
-	}
-
-	// Try session-based auth first (OAuth2)
+	// Session-based auth (OAuth2)
 	const session = getSession(event.cookies);
 	if (session) {
-		event.locals.user = {
-			username: session.username,
-			settings: {}
-		};
+		event.locals.user = { username: session.username, settings: {} };
 		return resolve(event);
 	}
 
-	// Fall back to proxy header auth (Traefik → Authentik)
+	// Proxy header auth (Traefik → Authentik)
 	const result = await resolveUser(event);
 	if (result.user) {
 		event.locals.user = result.user;
 	}
 
-	// Public paths that don't require authentication
-	const isPublicPath =
-		event.url.pathname === '/login' ||
-		event.url.pathname.startsWith('/auth/') ||
-		event.url.pathname.startsWith('/api/');
-
+	// Redirect unauthenticated requests to non-public paths
+	const isPublicPath = path === '/login' || path.startsWith('/auth/') || path.startsWith('/api/');
 	if (!event.locals.user && !isPublicPath) {
 		return new Response(null, { status: 302, headers: { Location: '/login' } });
 	}
