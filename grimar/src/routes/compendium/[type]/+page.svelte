@@ -341,6 +341,13 @@
 							minCardWidth={220}
 						>
 							{#snippet children(item: CompendiumItem, _index: number)}
+								{@const sourcePrefix = item.externalId?.includes('_')
+									? item.externalId.split('_', 2)[0]
+									: ''}
+								{@const itemId = item.externalId?.includes('_')
+									? item.externalId.split('_', 2)[1]
+									: item.externalId}
+								{@const slug = `providers/${sourcePrefix}/${itemId}`}
 								<CompendiumCardItem
 									title={item.name}
 									subtitle={config.display.subtitle(item)}
@@ -348,6 +355,8 @@
 									icon={config.ui.icon}
 									school={config.display.cardSchool?.(item)}
 									variant="grid"
+									type={pathType}
+									{slug}
 									onclick={() => selectItem(item)}
 								/>
 							{/snippet}
@@ -355,12 +364,21 @@
 					{:else}
 						<VirtualList items={filteredItems} class="glass-scroll p-1">
 							{#snippet children(item: CompendiumItem, _index: number)}
+								{@const sourcePrefix = item.externalId?.includes('_')
+									? item.externalId.split('_', 2)[0]
+									: ''}
+								{@const itemId = item.externalId?.includes('_')
+									? item.externalId.split('_', 2)[1]
+									: item.externalId}
+								{@const slug = `providers/${sourcePrefix}/${itemId}`}
 								<div class="p-1">
 									<CompendiumListItem
 										title={item.name}
 										subtitle={config.display.subtitle(item)}
 										source={item.source}
 										icon={config.ui.icon}
+										type={pathType}
+										{slug}
 										onclick={() => selectItem(item)}
 									/>
 								</div>
