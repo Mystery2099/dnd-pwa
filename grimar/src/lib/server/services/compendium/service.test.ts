@@ -51,8 +51,8 @@ const mockSpellItem = {
 	spellLevel: 3,
 	spellSchool: 'Evocation',
 	challengeRating: null,
-	monsterSize: null,
-	monsterType: null,
+	creatureSize: null,
+	creatureType: null,
 	classHitDie: null,
 	raceSize: null,
 	raceSpeed: null,
@@ -61,11 +61,11 @@ const mockSpellItem = {
 	featPrerequisites: null
 };
 
-const mockMonsterItem = {
+const mockCreatureItem = {
 	id: 2,
 	name: 'Goblin',
 	source: 'open5e',
-	type: 'monster' as const,
+	type: 'creature' as const,
 	externalId: 'goblin',
 	summary: 'Small humanoid creature.',
 	details: {
@@ -95,8 +95,8 @@ const mockMonsterItem = {
 	spellLevel: null,
 	spellSchool: null,
 	challengeRating: '1/4',
-	monsterSize: 'Small',
-	monsterType: 'humanoid',
+	creatureSize: 'Small',
+	creatureType: 'humanoid',
 	classHitDie: null,
 	raceSize: null,
 	raceSpeed: null,
@@ -156,22 +156,22 @@ describe('CompendiumService', () => {
 		});
 	});
 
-	describe('getMonsters', () => {
-		it('should return monsters as array without filters', async () => {
-			const result = await compendiumService.getMonsters();
+	describe('getCreatures', () => {
+		it('should return creatures as array without filters', async () => {
+			const result = await compendiumService.getCreatures();
 
 			expect(Array.isArray(result)).toBe(true);
 			expect(result).toHaveLength(1);
 		});
 
 		it('should filter by size', async () => {
-			const result = await compendiumService.getMonsters({ size: 'Small' });
+			const result = await compendiumService.getCreatures({ size: 'Small' });
 
 			expect(result).toHaveLength(1);
 		});
 
 		it('should filter by challenge rating', async () => {
-			const result = await compendiumService.getMonsters({ cr: '1/4' });
+			const result = await compendiumService.getCreatures({ cr: '1/4' });
 
 			expect(result).toHaveLength(1);
 		});
@@ -197,21 +197,21 @@ describe('CompendiumService', () => {
 		});
 	});
 
-	describe('getMonsterById', () => {
-		it('should return a monster by id', async () => {
-			mockDb.query.compendiumItems.findFirst.mockResolvedValue(mockMonsterItem);
+	describe('getCreatureById', () => {
+		it('should return a creature by id', async () => {
+			mockDb.query.compendiumItems.findFirst.mockResolvedValue(mockCreatureItem);
 
-			const result = await compendiumService.getMonsterById(2);
+			const result = await compendiumService.getCreatureById(2);
 
 			expect(result).not.toBeNull();
 			expect(result?.name).toBe('Goblin');
-			expect(result?.type).toBe('monster');
+			expect(result?.type).toBe('creature');
 		});
 
-		it('should return null for non-existent monster', async () => {
+		it('should return null for non-existent creature', async () => {
 			mockDb.query.compendiumItems.findFirst.mockResolvedValue(null);
 
-			const result = await compendiumService.getMonsterById(999);
+			const result = await compendiumService.getCreatureById(999);
 
 			expect(result).toBeNull();
 		});

@@ -64,7 +64,7 @@ export const CARDS: CompendiumCard[] = [
 		categoryId: 'primary'
 	},
 	{
-		title: 'Monsters',
+		title: 'Creatures',
 		description: 'Beasts and planar entities.',
 		href: '/compendium/creatures',
 		icon: Skull,

@@ -25,17 +25,17 @@ export const POST = async () => {
 
 		// Aggregate results for response
 		const totalSpells = results.reduce((sum, r) => sum + r.spells, 0);
-		const totalMonsters = results.reduce((sum, r) => sum + r.monsters, 0);
+		const totalCreatures = results.reduce((sum, r) => sum + r.creatures, 0);
 		const totalErrors = results.reduce((sum, r) => sum + r.errors.length, 0);
 
 		log.info(
 			{
 				spells: totalSpells,
-				monsters: totalMonsters,
+				creatures: totalCreatures,
 				providers: results.map((r) => ({
 					id: r.providerId,
 					spells: r.spells,
-					monsters: r.monsters,
+					creatures: r.creatures,
 					errors: r.errors
 				}))
 			},
@@ -46,7 +46,7 @@ export const POST = async () => {
 			ok: totalErrors === 0,
 			summary: {
 				spells: totalSpells,
-				monsters: totalMonsters
+				creatures: totalCreatures
 			},
 			errors: totalErrors > 0 ? results.flatMap((r) => r.errors) : undefined
 		});

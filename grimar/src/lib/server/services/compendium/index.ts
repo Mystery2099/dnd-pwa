@@ -5,7 +5,7 @@ export { compendiumService, type CompendiumServiceInterface } from './service';
 export {
 	transformToUnified,
 	transformToUnifiedSpell,
-	transformToUnifiedMonster,
+	transformToUnifiedCreature,
 	transformToUnifiedFeat,
 	transformToUnifiedBackground,
 	transformToUnifiedRace,
@@ -15,7 +15,7 @@ export {
 export type {
 	UnifiedCompendiumItem,
 	UnifiedSpell,
-	UnifiedMonster,
+	UnifiedCreature,
 	UnifiedFeat,
 	UnifiedBackground,
 	UnifiedRace,
@@ -24,6 +24,6 @@ export type {
 	PaginatedUnifiedResult,
 	NavigationResult,
 	SpellFilters,
-	MonsterFilters,
+	CreatureFilters,
 	CompendiumFilters
 } from '$lib/core/types/compendium/unified';

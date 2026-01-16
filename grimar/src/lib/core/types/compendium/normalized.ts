@@ -18,7 +18,7 @@
 import type { Open5eV2Spell, Open5eV2Creature, Open5eItem } from './schemas';
 import type {
 	SrdSpell,
-	SrdMonsterDetail,
+	SrdCreatureDetail,
 	SrdCondition,
 	SrdSkill,
 	SrdLanguage,
@@ -191,15 +191,15 @@ export function normalizeSrdSpell(spell: SrdSpell, source: string): NormalizedSp
 }
 
 // ============================================================================
-// Monster
+// Creature
 // ============================================================================
 
-export interface NormalizedMonster extends BaseNormalizedItem {
-	type: 'monster';
+export interface NormalizedCreature extends BaseNormalizedItem {
+	type: 'creature';
 	/** Size category */
-	monsterSize: 'Tiny' | 'Small' | 'Medium' | 'Large' | 'Huge' | 'Gargantuan';
-	/** Monster type (e.g., 'humanoid', 'dragon') */
-	monsterType: string;
+	creatureSize: 'Tiny' | 'Small' | 'Medium' | 'Large' | 'Huge' | 'Gargantuan';
+	/** Creature type (e.g., 'humanoid', 'dragon') */
+	creatureType: string;
 	/** Optional subtype */
 	subtype: string | null;
 	/** Alignment (e.g., 'lawful evil') */
@@ -219,64 +219,67 @@ export interface NormalizedMonster extends BaseNormalizedItem {
 /**
  * Normalize an Open5e v2 creature to the canonical format
  */
-export function normalizeOpen5eMonster(
-	monster: Open5eV2Creature,
+export function normalizeOpen5eCreature(
+	creature: Open5eV2Creature,
 	source: string
-): NormalizedMonster {
-	const cr = String(monster.challenge_rating ?? '0');
+): NormalizedCreature {
+	const cr = String(creature.challenge_rating ?? '0');
 
 	// V2 uses flat strings for size and type
-	const sizeName = monster.size || 'Medium';
-	const typeName = monster.type || 'Unknown';
+	const sizeName = creature.size || 'Medium';
+	const typeName = creature.type || 'Unknown';
 
 	return {
-		type: 'monster',
-		externalId: monster.index,
-		name: monster.name,
-		slug: monster.index,
+		type: 'creature',
+		externalId: creature.index,
+		name: creature.name,
+		slug: creature.index,
 		summary: `${sizeName} ${typeName}`,
 		description: [],
 		source,
 		edition: null,
 		sourceBook: null,
-		monsterSize: normalizeSize(sizeName),
-		monsterType: typeName,
+		creatureSize: normalizeSize(sizeName),
+		creatureType: typeName,
 		subtype: null,
-		alignment: monster.alignment || null,
-		armorClass: monster.armor_class || 10,
-		hitPoints: monster.hit_points ?? 0,
-		hitDice: monster.hit_dice || '1d8',
+		alignment: creature.alignment || null,
+		armorClass: creature.armor_class || 10,
+		hitPoints: creature.hit_points ?? 0,
+		hitDice: creature.hit_dice || '1d8',
 		challengeRating: cr,
 		xp: crToXp(cr)
 	};
 }
 
 /**
- * Normalize an SRD monster to the canonical format
+ * Normalize an SRD creature to the canonical format
  */
-export function normalizeSrdMonster(monster: SrdMonsterDetail, source: string): NormalizedMonster {
-	const cr = monster.challenge_rating ?? 0;
+export function normalizeSrdCreature(
+	creature: SrdCreatureDetail,
+	source: string
+): NormalizedCreature {
+	const cr = creature.challenge_rating ?? 0;
 	const crString = typeof cr === 'number' ? String(cr) : cr || '0';
 
 	return {
-		type: 'monster',
-		externalId: monster.index,
-		name: monster.name,
-		slug: monster.index,
-		summary: `${monster.size} ${monster.type}`,
+		type: 'creature',
+		externalId: creature.index,
+		name: creature.name,
+		slug: creature.index,
+		summary: `${creature.size} ${creature.type}`,
 		description: [],
 		source,
 		edition: '2014',
 		sourceBook: 'SRD',
-		monsterSize: normalizeSize(monster.size),
-		monsterType: monster.type,
-		subtype: monster.subtype || null,
-		alignment: monster.alignment || null,
-		armorClass: Array.isArray(monster.armor_class)
-			? monster.armor_class[0]?.value || 10
-			: monster.armor_class || 10,
-		hitPoints: monster.hit_points || 10,
-		hitDice: monster.hit_dice || '1d8',
+		creatureSize: normalizeSize(creature.size),
+		creatureType: creature.type,
+		subtype: creature.subtype || null,
+		alignment: creature.alignment || null,
+		armorClass: Array.isArray(creature.armor_class)
+			? creature.armor_class[0]?.value || 10
+			: creature.armor_class || 10,
+		hitPoints: creature.hit_points || 10,
+		hitDice: creature.hit_dice || '1d8',
 		challengeRating: crString,
 		xp: crToXp(crString)
 	};
@@ -911,7 +914,7 @@ export function normalizeRuleSection(
 
 export type NormalizedCompendiumItem =
 	| NormalizedSpell
-	| NormalizedMonster
+	| NormalizedCreature
 	| NormalizedFeat
 	| NormalizedBackground
 	| NormalizedRace
@@ -997,8 +1000,8 @@ export function isNormalizedSpell(item: NormalizedCompendiumItem): item is Norma
 	return item.type === 'spell';
 }
 
-export function isNormalizedMonster(item: NormalizedCompendiumItem): item is NormalizedMonster {
-	return item.type === 'monster';
+export function isNormalizedCreature(item: NormalizedCompendiumItem): item is NormalizedCreature {
+	return item.type === 'creature';
 }
 
 export function isNormalizedFeat(item: NormalizedCompendiumItem): item is NormalizedFeat {

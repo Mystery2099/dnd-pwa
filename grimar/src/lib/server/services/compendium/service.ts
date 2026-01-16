@@ -18,7 +18,7 @@ import { eq, like, and, desc, asc, sql, inArray } from 'drizzle-orm';
 import { searchFtsRanked } from '$lib/server/db/db-fts';
 import type {
 	UnifiedSpell,
-	UnifiedMonster,
+	UnifiedCreature,
 	UnifiedFeat,
 	UnifiedBackground,
 	UnifiedRace,
@@ -26,12 +26,12 @@ import type {
 	UnifiedItem,
 	UnifiedCompendiumItem,
 	SpellFilters,
-	MonsterFilters,
+	CreatureFilters,
 	NavigationResult
 } from '$lib/core/types/compendium/unified';
 import {
 	transformToUnifiedSpell,
-	transformToUnifiedMonster,
+	transformToUnifiedCreature,
 	transformToUnifiedFeat,
 	transformToUnifiedBackground,
 	transformToUnifiedRace,
@@ -119,9 +119,9 @@ export interface CompendiumServiceInterface {
 	getSpells(filters?: SpellFilters): Promise<UnifiedSpell[]>;
 	getSpellById(id: number): Promise<UnifiedSpell | null>;
 
-	// Monsters
-	getMonsters(filters?: MonsterFilters): Promise<UnifiedMonster[]>;
-	getMonsterById(id: number): Promise<UnifiedMonster | null>;
+	// Creatures
+	getCreatures(filters?: CreatureFilters): Promise<UnifiedCreature[]>;
+	getCreatureById(id: number): Promise<UnifiedCreature | null>;
 
 	// Feats
 	getFeats(filters?: { search?: string }): Promise<UnifiedFeat[]>;
@@ -203,18 +203,18 @@ export const compendiumService: CompendiumServiceInterface = {
 	},
 
 	// ========================================================================
-	// Monsters
+	// Creatures
 	// ========================================================================
 
-	async getMonsters(filters = {}) {
+	async getCreatures(filters = {}) {
 		const db = await getDb();
-		const conditions = [eq(compendiumItems.type, 'monster')];
+		const conditions = [eq(compendiumItems.type, 'creature')];
 
 		if (filters.size) {
-			conditions.push(eq(compendiumItems.monsterSize, filters.size));
+			conditions.push(eq(compendiumItems.creatureSize, filters.size));
 		}
 		if (filters.type) {
-			conditions.push(eq(compendiumItems.monsterType, filters.type));
+			conditions.push(eq(compendiumItems.creatureType, filters.type));
 		}
 		if (filters.cr) {
 			conditions.push(eq(compendiumItems.challengeRating, filters.cr));
@@ -229,15 +229,15 @@ export const compendiumService: CompendiumServiceInterface = {
 			.where(and(...conditions))
 			.orderBy(asc(compendiumItems.name));
 
-		return items.map(transformToUnifiedMonster);
+		return items.map(transformToUnifiedCreature);
 	},
 
-	async getMonsterById(id) {
+	async getCreatureById(id) {
 		const db = await getDb();
 		const item = await db.query.compendiumItems.findFirst({
-			where: and(eq(compendiumItems.type, 'monster'), sql`${compendiumItems.id} = ${id}`)
+			where: and(eq(compendiumItems.type, 'creature'), sql`${compendiumItems.id} = ${id}`)
 		});
-		return item ? transformToUnifiedMonster(item) : null;
+		return item ? transformToUnifiedCreature(item) : null;
 	},
 
 	// ========================================================================

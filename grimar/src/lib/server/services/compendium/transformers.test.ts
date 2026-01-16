@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
 	transformToUnifiedSpell,
-	transformToUnifiedMonster,
+	transformToUnifiedCreature,
 	transformToUnifiedFeat,
 	transformToUnifiedBackground,
 	transformToUnifiedRace,
@@ -27,8 +27,8 @@ function createMockItem(overrides: Record<string, unknown> = {}) {
 		spellLevel: 1,
 		spellSchool: 'Evocation',
 		challengeRating: null,
-		monsterSize: null,
-		monsterType: null,
+		creatureSize: null,
+		creatureType: null,
 		classHitDie: null,
 		raceSize: null,
 		raceSpeed: null,
@@ -144,16 +144,16 @@ describe('transformToUnifiedSpell', () => {
 });
 
 // ============================================================================
-// Monster Transformer Tests
+// Creature Transformer Tests
 // ============================================================================
 
-describe('transformToUnifiedMonster', () => {
-	it('should transform a basic monster', () => {
+describe('transformToUnifiedCreature', () => {
+	it('should transform a basic creature', () => {
 		const item = createMockItem({
-			type: 'monster',
+			type: 'creature',
 			name: 'Goblin',
-			monsterSize: 'Small',
-			monsterType: 'humanoid',
+			creatureSize: 'Small',
+			creatureType: 'humanoid',
 			challengeRating: '1/4',
 			details: {
 				desc: ['The goblin sneers at the intruders.'],
@@ -193,12 +193,12 @@ describe('transformToUnifiedMonster', () => {
 			}
 		});
 
-		const result = transformToUnifiedMonster(item);
+		const result = transformToUnifiedCreature(item);
 
-		expect(result.type).toBe('monster');
+		expect(result.type).toBe('creature');
 		expect(result.name).toBe('Goblin');
 		expect(result.size).toBe('Small');
-		expect(result.monsterType).toBe('humanoid');
+		expect(result.creatureType).toBe('humanoid');
 		expect(result.challengeRating).toBe('1/4');
 		expect(result.armorClass).toBe(15);
 		expect(result.hitPoints).toBe(7);
@@ -211,10 +211,10 @@ describe('transformToUnifiedMonster', () => {
 
 	it('should handle multiattack action', () => {
 		const item = createMockItem({
-			type: 'monster',
+			type: 'creature',
 			name: 'Ancient Dragon',
-			monsterSize: 'Huge',
-			monsterType: 'dragon',
+			creatureSize: 'Huge',
+			creatureType: 'dragon',
 			challengeRating: '17',
 			details: {
 				desc: ['An ancient dragon.'],
@@ -239,16 +239,16 @@ describe('transformToUnifiedMonster', () => {
 			}
 		});
 
-		const result = transformToUnifiedMonster(item);
+		const result = transformToUnifiedCreature(item);
 		expect(result.actions[0].multiattack).toEqual({ actionName: 'Bite', count: 1 });
 	});
 
 	it('should handle legendary actions', () => {
 		const item = createMockItem({
-			type: 'monster',
+			type: 'creature',
 			name: 'Ancient White Dragon',
-			monsterSize: 'Huge',
-			monsterType: 'dragon',
+			creatureSize: 'Huge',
+			creatureType: 'dragon',
 			challengeRating: '20',
 			details: {
 				desc: ['An ancient dragon.'],
@@ -269,7 +269,7 @@ describe('transformToUnifiedMonster', () => {
 			}
 		});
 
-		const result = transformToUnifiedMonster(item);
+		const result = transformToUnifiedCreature(item);
 		expect(result.legendaryActions).toHaveLength(1);
 		expect(result.legendaryActions![0].name).toBe('Wing Buffet');
 		expect(result.reactions).toHaveLength(1);
@@ -516,10 +516,10 @@ describe('transformToUnified', () => {
 		expect((result as any).level).toBe(1);
 	});
 
-	it('should dispatch monster type correctly', () => {
-		const item = createMockItem({ type: 'monster', name: 'Dragon', monsterSize: 'Huge' });
+	it('should dispatch creature type correctly', () => {
+		const item = createMockItem({ type: 'creature', name: 'Dragon', creatureSize: 'Huge' });
 		const result = transformToUnified(item);
-		expect(result.type).toBe('monster');
+		expect(result.type).toBe('creature');
 		expect('size' in result).toBe(true);
 		expect((result as any).size).toBe('Huge');
 	});

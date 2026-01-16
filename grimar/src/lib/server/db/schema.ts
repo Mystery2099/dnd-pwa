@@ -36,10 +36,10 @@ export const compendiumItems = sqliteTable(
 		// Spell sorting columns
 		spellLevel: integer('spell_level'),
 		spellSchool: text('spell_school'),
-		// Monster sorting columns
+		// Creature sorting columns
 		challengeRating: text('challenge_rating'),
-		monsterSize: text('monster_size'),
-		monsterType: text('monster_type'),
+		creatureSize: text('creature_size'),
+		creatureType: text('creature_type'),
 		// New type-specific columns for filtering/sorting
 		classHitDie: integer('class_hit_die'),
 		raceSize: text('race_size'),
@@ -81,10 +81,10 @@ export const compendiumItems = sqliteTable(
 			table.spellLevel,
 			table.spellSchool
 		),
-		// Monster sorting indexes
+		// Creature sorting indexes
 		challengeRatingIdx: index('compendium_items_challenge_rating_idx').on(table.challengeRating),
-		monsterSizeIdx: index('compendium_items_monster_size_idx').on(table.monsterSize),
-		monsterTypeIdx: index('compendium_items_monster_type_idx').on(table.monsterType),
+		creatureSizeIdx: index('compendium_items_creature_size_idx').on(table.creatureSize),
+		creatureTypeIdx: index('compendium_items_creature_type_idx').on(table.creatureType),
 		// New type-specific indexes
 		classHitDieIdx: index('compendium_items_class_hit_die_idx').on(table.classHitDie),
 		raceSizeIdx: index('compendium_items_race_size_idx').on(table.raceSize),

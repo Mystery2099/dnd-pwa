@@ -289,44 +289,28 @@ export class Open5eProvider extends BaseProvider {
 		log.info({ sourceCount: this.sources.size }, 'Sources loaded');
 	}
 
-	/**
-	 * Get all sources as an array
-	 */
-	async getSources(): Promise<SourceInfo[]> {
-		await this.loadSources();
-		return Array.from(this.sources.values());
-	}
-
-	/**
-	 * Get sources for a specific type
-	 */
-	async getSourcesForType(type: CompendiumTypeName): Promise<SourceInfo[]> {
+	async fetchList(type: CompendiumTypeName): Promise<ProviderListResponse> {
 		await this.loadSources();
 		const fileName = TYPE_FILES[type];
-		if (!fileName) return [];
+		if (!fileName) {
+			return { items: [], hasMore: false };
+		}
 
-		const validSources: SourceInfo[] = [];
-
+		// Collect sources that have this type file
+		const sources: SourceInfo[] = [];
 		for (const sourceInfo of this.sources.values()) {
 			try {
 				const url = `${this.baseUrl}/${VERSION}/data/v2/${sourceInfo.publisher}/${sourceInfo.source}/${fileName}`;
 				const response = await fetch(url, { method: 'HEAD' });
 				if (response.ok) {
-					validSources.push(sourceInfo);
+					sources.push(sourceInfo);
 				}
 			} catch {
 				// Source doesn't have this type
 			}
 		}
 
-		return validSources;
-	}
-
-	async fetchList(type: CompendiumTypeName): Promise<ProviderListResponse> {
-		const sources = await this.getSourcesForType(type);
-		const fileName = TYPE_FILES[type];
-
-		if (!fileName || sources.length === 0) {
+		if (sources.length === 0) {
 			return { items: [], hasMore: false };
 		}
 
@@ -482,8 +466,8 @@ export class Open5eProvider extends BaseProvider {
 			summary,
 			details: fields,
 			challengeRating: cr,
-			monsterSize: size,
-			monsterType: typeName,
+			creatureSize: size,
+			creatureType: typeName,
 			sourceBook
 		};
 	}

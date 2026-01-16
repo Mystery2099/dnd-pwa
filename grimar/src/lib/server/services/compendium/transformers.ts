@@ -13,14 +13,14 @@
 
 import type {
 	UnifiedSpell,
-	UnifiedMonster,
+	UnifiedCreature,
 	UnifiedFeat,
 	UnifiedBackground,
 	UnifiedRace,
 	UnifiedClass,
 	UnifiedItem,
-	MonsterAction,
-	MonsterSpecialAbility
+	CreatureAction,
+	CreatureSpecialAbility
 } from '$lib/core/types/compendium/unified';
 import { compendiumItems } from '$lib/server/db/schema';
 import logger from '$lib/server/logger';
@@ -131,12 +131,12 @@ function toClassNamesArray(classes: unknown): string[] {
 }
 
 // ============================================================================
-// Monster Transformer
+// Creature Transformer
 // ============================================================================
 
-export function transformToUnifiedMonster(
+export function transformToUnifiedCreature(
 	item: typeof compendiumItems.$inferSelect
-): UnifiedMonster {
+): UnifiedCreature {
 	const details = (item.details ?? {}) as Record<string, unknown>;
 	const summary = toString(details.summary) || item.summary || '';
 
@@ -147,9 +147,9 @@ export function transformToUnifiedMonster(
 		source: item.source,
 		description: toStringArray(details.desc),
 		slug: item.externalId ?? String(item.id),
-		type: 'monster',
-		size: toMonsterSize(item.monsterSize),
-		monsterType: toString(item.monsterType) || 'Unknown',
+		type: 'creature',
+		size: toCreatureSize(item.creatureSize),
+		creatureType: toString(item.creatureType) || 'Unknown',
 		subtype: toString(details.subtype) || undefined,
 		alignment: toString(details.alignment) || 'Unaligned',
 		armorClass: toArmorClass(details.armor_class),
@@ -180,7 +180,7 @@ export function transformToUnifiedMonster(
 	};
 }
 
-function toMonsterSize(size: unknown): UnifiedMonster['size'] {
+function toCreatureSize(size: unknown): UnifiedCreature['size'] {
 	const s = toString(size).toLowerCase();
 	switch (s) {
 		case 'tiny':
@@ -212,7 +212,7 @@ function toArmorClass(ac: unknown): number {
 	return 10;
 }
 
-function toSpeed(speed: unknown): UnifiedMonster['speed'] {
+function toSpeed(speed: unknown): UnifiedCreature['speed'] {
 	if (typeof speed === 'object' && speed !== null) {
 		const result: Record<string, string> = {};
 		for (const [key, value] of Object.entries(speed as Record<string, unknown>)) {
@@ -223,7 +223,7 @@ function toSpeed(speed: unknown): UnifiedMonster['speed'] {
 	return { walk: '30 ft.' };
 }
 
-function toProficiencies(profs: unknown): UnifiedMonster['proficiencies'] {
+function toProficiencies(profs: unknown): UnifiedCreature['proficiencies'] {
 	if (!profs || !Array.isArray(profs)) return [];
 	return profs
 		.map((p: unknown) => {
@@ -250,10 +250,10 @@ function toSenses(senses: unknown): Record<string, string> {
 	return {};
 }
 
-function toSpecialAbilities(ab: unknown): MonsterSpecialAbility[] {
+function toSpecialAbilities(ab: unknown): CreatureSpecialAbility[] {
 	if (!ab || !Array.isArray(ab)) return [];
 	return ab
-		.map((a: unknown): MonsterSpecialAbility | null => {
+		.map((a: unknown): CreatureSpecialAbility | null => {
 			if (typeof a !== 'object' || a === null) {
 				return null;
 			}
@@ -268,13 +268,13 @@ function toSpecialAbilities(ab: unknown): MonsterSpecialAbility[] {
 				damage: ability.damage ? toDamageArray(ability.damage) : undefined
 			};
 		})
-		.filter((a): a is MonsterSpecialAbility => a !== null);
+		.filter((a): a is CreatureSpecialAbility => a !== null);
 }
 
-function toActions(actions: unknown): MonsterAction[] {
+function toActions(actions: unknown): CreatureAction[] {
 	if (!actions || !Array.isArray(actions)) return [];
 	return actions
-		.map((a: unknown): MonsterAction | null => {
+		.map((a: unknown): CreatureAction | null => {
 			if (typeof a !== 'object' || a === null) {
 				return null;
 			}
@@ -295,7 +295,7 @@ function toActions(actions: unknown): MonsterAction[] {
 					: undefined
 			};
 		})
-		.filter((a): a is MonsterAction => a !== null);
+		.filter((a): a is CreatureAction => a !== null);
 }
 
 function toDamage(damage: unknown): { dice: string; type: string } {
@@ -439,7 +439,7 @@ export function transformToUnifiedRace(item: typeof compendiumItems.$inferSelect
 		description: toStringArray(details.description),
 		slug: item.externalId ?? String(item.id),
 		type: 'race',
-		size: toMonsterSize(item.raceSize),
+		size: toCreatureSize(item.raceSize),
 		speed: toNumber(item.raceSpeed) || 30,
 		abilityBonuses: bonuses,
 		traits: traits,
@@ -577,7 +577,7 @@ export function transformToUnified(
 	item: typeof compendiumItems.$inferSelect
 ):
 	| UnifiedSpell
-	| UnifiedMonster
+	| UnifiedCreature
 	| UnifiedFeat
 	| UnifiedBackground
 	| UnifiedRace
@@ -586,8 +586,8 @@ export function transformToUnified(
 	switch (item.type) {
 		case 'spell':
 			return transformToUnifiedSpell(item);
-		case 'monster':
-			return transformToUnifiedMonster(item);
+		case 'creature':
+			return transformToUnifiedCreature(item);
 		case 'feat':
 			return transformToUnifiedFeat(item);
 		case 'background':

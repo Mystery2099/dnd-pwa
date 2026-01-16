@@ -1,19 +1,19 @@
 /**
- * Monsters Compendium Configuration
+ * Creatures Compendium Configuration
  *
- * This configuration object drives the entire monsters compendium page behavior.
+ * This configuration object drives the entire creatures compendium page behavior.
  */
 
 import { Skull } from 'lucide-svelte';
 import type { CompendiumTypeConfig } from '$lib/core/types/compendium';
 import {
 	colorMap,
-	MONSTER_TYPE_COLORS,
-	MONSTER_TYPE_TEXT_COLORS
+	CREATURE_TYPE_COLORS,
+	CREATURE_TYPE_TEXT_COLORS
 } from '$lib/core/constants/colors';
 
-// Monster size options
-const MONSTER_SIZES = [
+// Creature size options
+const CREATURE_SIZES = [
 	{ label: 'Tiny', value: 'Tiny', order: 0 },
 	{ label: 'Small', value: 'Small', order: 1 },
 	{ label: 'Medium', value: 'Medium', order: 2 },
@@ -22,8 +22,8 @@ const MONSTER_SIZES = [
 	{ label: 'Gargantuan', value: 'Gargantuan', order: 5 }
 ];
 
-// Monster type options with colors
-const MONSTER_TYPES = [
+// Creature type options with colors
+const CREATURE_TYPES = [
 	{ label: 'Aberration', value: 'Aberration', color: colorMap('purple') },
 	{ label: 'Beast', value: 'Beast', color: colorMap('orange') },
 	{ label: 'Celestial', value: 'Celestial', color: colorMap('amber') },
@@ -40,12 +40,12 @@ const MONSTER_TYPES = [
 	{ label: 'Undead', value: 'Undead', color: colorMap('emerald') }
 ];
 
-export const MONSTERS_CONFIG: CompendiumTypeConfig = {
+export const CREATURES_CONFIG: CompendiumTypeConfig = {
 	routes: {
-		basePath: '/compendium/monsters',
+		basePath: '/compendium/creatures',
 		dbType: 'creatures',
-		storageKeyFilters: 'monster-filters',
-		storageKeyListUrl: 'monster-list-url'
+		storageKeyFilters: 'creature-filters',
+		storageKeyListUrl: 'creature-list-url'
 	},
 
 	filters: [
@@ -53,7 +53,7 @@ export const MONSTERS_CONFIG: CompendiumTypeConfig = {
 			title: 'Size',
 			key: 'size',
 			urlParam: 'sizes',
-			values: MONSTER_SIZES,
+			values: CREATURE_SIZES,
 			defaultColor: colorMap('gray'),
 			layout: 'chips',
 			openByDefault: false
@@ -62,7 +62,7 @@ export const MONSTERS_CONFIG: CompendiumTypeConfig = {
 			title: 'Type',
 			key: 'type',
 			urlParam: 'types',
-			values: MONSTER_TYPES,
+			values: CREATURE_TYPES,
 			defaultColor: colorMap('gray'),
 			layout: 'chips',
 			openByDefault: true
@@ -105,18 +105,18 @@ export const MONSTERS_CONFIG: CompendiumTypeConfig = {
 	},
 
 	ui: {
-		displayName: 'Monster',
-		displayNamePlural: 'Monsters',
+		displayName: 'Creature',
+		displayNamePlural: 'Creatures',
 		icon: Skull,
 		categoryGradient: 'from-emerald-500/20 to-rose-500/20',
 		categoryAccent: 'text-emerald-400',
 		emptyState: {
-			title: 'No monsters found',
+			title: 'No creatures found',
 			description: 'Try adjusting your filters to find what you are looking for.'
 		},
 		databaseEmptyState: {
-			title: 'No monsters available',
-			description: 'The compendium is empty. Run a sync to populate monsters from Open5e API.',
+			title: 'No creatures available',
+			description: 'The compendium is empty. Run a sync to populate creatures from Open5e.',
 			ctaText: 'Sync Compendium',
 			ctaLink: '/dashboard'
 		}
@@ -125,33 +125,34 @@ export const MONSTERS_CONFIG: CompendiumTypeConfig = {
 	display: {
 		subtitle: (item) => {
 			const cr = item.details.challenge_rating || 'Unknown';
-			const type = item.monsterType || 'Unknown';
-			const size = item.monsterSize || 'Medium';
+			const type = item.creatureType || 'Unknown';
+			const size = item.creatureSize || 'Medium';
 			return `${size} ${type} • CR ${cr}`;
 		},
 		tags: (item) => {
-			const type = item.monsterType || 'Unknown';
-			const size = item.monsterSize || 'Medium';
+			const type = item.creatureType || 'Unknown';
+			const size = item.creatureSize || 'Medium';
 			const cr = item.details.challenge_rating || '0';
 			return [type, size, `CR ${cr}`];
 		},
 		listItemAccent: (item) => {
-			const type = item.monsterType || 'Unknown';
+			const type = item.creatureType || 'Unknown';
 			return (
-				MONSTER_TYPE_COLORS[type as keyof typeof MONSTER_TYPE_COLORS] || MONSTER_TYPE_COLORS.default
+				CREATURE_TYPE_COLORS[type as keyof typeof CREATURE_TYPE_COLORS] ||
+				CREATURE_TYPE_COLORS.default
 			);
 		},
 		detailAccent: (item) => {
-			const type = item.monsterType || 'Unknown';
+			const type = item.creatureType || 'Unknown';
 			return (
-				MONSTER_TYPE_TEXT_COLORS[type as keyof typeof MONSTER_TYPE_TEXT_COLORS] ||
+				CREATURE_TYPE_TEXT_COLORS[type as keyof typeof CREATURE_TYPE_TEXT_COLORS] ||
 				colorMap('gray').base
 			);
 		},
 		metaDescription: (item) => {
 			const cr = item.details.challenge_rating || 'Unknown';
-			const type = item.monsterType || 'creature';
-			const size = item.monsterSize || 'Medium';
+			const type = item.creatureType || 'creature';
+			const size = item.creatureSize || 'Medium';
 			return `${item.name} is a ${size} ${type} with Challenge Rating ${cr} in D&D 5e. ${item.summary || ''}`;
 		}
 	}

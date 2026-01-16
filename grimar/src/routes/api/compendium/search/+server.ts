@@ -12,7 +12,7 @@ const log = createModuleLogger('CompendiumSearchAPI');
 // Reverse map: db type -> URL path
 const TYPE_TO_PATH: Record<string, string> = {
 	spell: 'spells',
-	monster: 'monsters',
+	creature: 'creatures',
 	feat: 'feats',
 	background: 'backgrounds',
 	race: 'races',
@@ -28,7 +28,7 @@ const TYPE_TO_PATH: Record<string, string> = {
 // Section to compendium type mapping (singular to plural path)
 const SECTION_TO_TYPE: Record<string, string> = {
 	spells: 'spell',
-	monsters: 'monster',
+	creatures: 'creature',
 	feats: 'feat',
 	backgrounds: 'background',
 	races: 'race',
@@ -59,7 +59,7 @@ interface FilterParams {
 	level?: string;
 	cr?: string;
 	size?: string;
-	monsterType?: string;
+	creatureType?: string;
 	source?: string;
 }
 
@@ -158,7 +158,7 @@ export const GET: RequestHandler = async ({ url }) => {
 			}
 		}
 
-		// Apply monster filters
+		// Apply creature filters
 		if (filters.cr) {
 			const range = parseRange(filters.cr);
 			if (range) {
@@ -176,11 +176,11 @@ export const GET: RequestHandler = async ({ url }) => {
 		}
 
 		if (filters.size) {
-			conditions.push(eq(compendiumItems.monsterSize, filters.size.toLowerCase()));
+			conditions.push(eq(compendiumItems.creatureSize, filters.size.toLowerCase()));
 		}
 
-		if (filters.monsterType) {
-			conditions.push(eq(compendiumItems.monsterType, filters.monsterType.toLowerCase()));
+		if (filters.creatureType) {
+			conditions.push(eq(compendiumItems.creatureType, filters.creatureType.toLowerCase()));
 		}
 
 		// Apply source filter

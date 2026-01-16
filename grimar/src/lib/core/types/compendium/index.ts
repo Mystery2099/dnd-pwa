@@ -22,7 +22,7 @@ export type { CompendiumCategory, CompendiumCard } from './categories';
 // Normalized types for provider data transformation
 export type {
 	NormalizedSpell,
-	NormalizedMonster,
+	NormalizedCreature,
 	NormalizedFeat,
 	NormalizedBackground,
 	NormalizedRace,
@@ -140,10 +140,10 @@ export interface CompendiumItem {
 	// Spell-specific columns
 	spellLevel: number | null;
 	spellSchool: string | null;
-	// Monster-specific columns
+	// Creature-specific columns
 	challengeRating: string | null;
-	monsterSize: string | null;
-	monsterType: string | null;
+	creatureSize: string | null;
+	creatureType: string | null;
 	// Feat-specific columns
 	featPrerequisites?: string | null;
 	featBenefits?: string[] | null;
@@ -199,8 +199,8 @@ export interface CompendiumItem {
 	// Vehicle columns
 	vehicleName?: string | null;
 	vehicleCategory?: string | null;
-	// Monster Type columns
-	monsterTypeName?: string | null;
+	// Creature Type columns
+	creatureTypeName?: string | null;
 	// Rule columns
 	ruleName?: string | null;
 	// Rule Section columns

@@ -31,7 +31,7 @@ export interface BaseCompendiumItem {
 
 export type CompendiumType =
 	| 'spell'
-	| 'monster'
+	| 'creature'
 	| 'feat'
 	| 'background'
 	| 'race'
@@ -70,7 +70,7 @@ function createTypeGuard<T extends UnifiedCompendiumItem>(type: T['type']) {
 // ============================================================================
 
 export const isSpell = createTypeGuard<UnifiedSpell>('spell');
-export const isMonster = createTypeGuard<UnifiedMonster>('monster');
+export const isCreature = createTypeGuard<UnifiedCreature>('creature');
 export const isFeat = createTypeGuard<UnifiedFeat>('feat');
 export const isBackground = createTypeGuard<UnifiedBackground>('background');
 export const isRace = createTypeGuard<UnifiedRace>('race');
@@ -115,7 +115,7 @@ export interface UnifiedSpell extends BaseCompendiumItem {
 }
 
 // ============================================================================
-// Monster
+// Creature
 // ============================================================================
 
 export interface AbilityScore {
@@ -123,7 +123,7 @@ export interface AbilityScore {
 	modifier?: number;
 }
 
-export interface MonsterAction {
+export interface CreatureAction {
 	name: string;
 	description: string;
 	/** Optional attack bonus */
@@ -145,7 +145,7 @@ export interface MonsterAction {
 	};
 }
 
-export interface MonsterSpecialAbility {
+export interface CreatureSpecialAbility {
 	name: string;
 	description: string;
 	/** Optional attack bonus for the ability */
@@ -157,12 +157,12 @@ export interface MonsterSpecialAbility {
 	}>;
 }
 
-export interface UnifiedMonster extends BaseCompendiumItem {
-	type: 'monster';
+export interface UnifiedCreature extends BaseCompendiumItem {
+	type: 'creature';
 	/** Size category */
 	size: 'Tiny' | 'Small' | 'Medium' | 'Large' | 'Huge' | 'Gargantuan';
-	/** Monster type (e.g., 'humanoid', 'dragon', 'undead') */
-	monsterType: string;
+	/** Creature type (e.g., 'humanoid', 'dragon', 'undead') */
+	creatureType: string;
 	/** Optional subtype (e.g., 'goblinoid', 'shapechanger') */
 	subtype?: string;
 	/** Alignment (e.g., 'lawful evil', 'unaligned') */
@@ -213,11 +213,11 @@ export interface UnifiedMonster extends BaseCompendiumItem {
 	/** Languages spoken */
 	languages: string;
 	/** Special abilities (not actions) */
-	specialAbilities: MonsterSpecialAbility[];
+	specialAbilities: CreatureSpecialAbility[];
 	/** Actions */
-	actions: MonsterAction[];
+	actions: CreatureAction[];
 	/** Legendary actions (optional) */
-	legendaryActions?: MonsterAction[];
+	legendaryActions?: CreatureAction[];
 	/** Reactions (optional) */
 	reactions?: Array<{
 		name: string;
@@ -764,7 +764,7 @@ export interface UnifiedVehicle {
 
 export type UnifiedCompendiumItem =
 	| UnifiedSpell
-	| UnifiedMonster
+	| UnifiedCreature
 	| UnifiedFeat
 	| UnifiedBackground
 	| UnifiedRace
@@ -799,7 +799,7 @@ export interface SpellFilters {
 	ritual?: boolean;
 }
 
-export interface MonsterFilters {
+export interface CreatureFilters {
 	size?: string;
 	type?: string;
 	cr?: string;
@@ -808,7 +808,7 @@ export interface MonsterFilters {
 
 export interface CompendiumFilters {
 	spell?: SpellFilters;
-	monster?: MonsterFilters;
+	creature?: CreatureFilters;
 }
 
 // ============================================================================

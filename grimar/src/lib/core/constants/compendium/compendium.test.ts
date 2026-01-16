@@ -3,8 +3,8 @@ import { getTypeFromPath } from '$lib/core/constants/compendium';
 
 describe('Compendium Constants', () => {
 	describe('getTypeFromPath', () => {
-		it('should convert "monsters" to "monster"', () => {
-			expect(getTypeFromPath('monsters')).toBe('monster');
+		it('should convert "creatures" to "creature"', () => {
+			expect(getTypeFromPath('creatures')).toBe('creature');
 		});
 
 		it('should convert "spells" to "spell"', () => {
@@ -58,7 +58,7 @@ describe('Compendium Constants', () => {
 
 	describe('type mappings are bidirectional', () => {
 		const pathTypes = [
-			['monsters', 'monster'],
+			['creatures', 'creature'],
 			['spells', 'spell'],
 			['feats', 'feat'],
 			['backgrounds', 'background'],
