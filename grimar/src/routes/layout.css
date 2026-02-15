@@ -173,15 +173,12 @@
    ========================
 
    NOTE: Theme definitions are now maintained in:
-   /src/lib/core/client/themes.ts
+   /src/lib/core/client/builtinThemes.ts
 
-   This file (layout.css) should be kept in sync with themes.ts.
-   When adding a new theme, update both files.
+   Built-in themes are defined in builtinThemes.ts and injected at runtime.
+   For built-in themes, CSS is already defined below for instant loading.
+   User-imported and user-created themes are injected via JavaScript.
 
-   The themes.ts file generates:
-   - CSS custom properties (via generateThemeCSS)
-   - Theme metadata for ThemeCardSelector
-   - Theme store arrays (THEMES, THEME_OPTIONS)
    ======================================= */
 
 /* Amethyst - Deep mystical purple (default) */
