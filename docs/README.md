@@ -133,10 +133,30 @@ docs/
 
 ## 🔗 Related Resources
 
-- **Codebase**: `/src` directory for implementation
-- **AGENTS.md**: Development guide for AI agents and contributors
-- **Package Configuration**: `../package.json` for dependencies
+- **Codebase**: `grimar/src` directory for implementation
+- **CLAUDE.md**: Development guide for AI agents and contributors (root directory)
+- **AGENTS.md**: Additional agent guidelines (root directory)
+- **Package Configuration**: `../grimar/package.json` for dependencies
 - **Docker Configuration**: `../Dockerfile` for deployment
+
+## 🛠️ Development Commands
+
+All commands are run from the **project root** - the workspace proxies to `grimar/` automatically:
+
+```bash
+# Development
+bun run dev              # Start dev server (localhost:5173)
+bun run check            # TypeScript validation
+bun run build            # Production build
+
+# Testing
+bun run test:run         # Run tests (CI mode)
+bun run test:e2e         # Playwright E2E tests
+
+# Database
+bun run db:studio        # Drizzle Studio
+bun run db:sync          # Sync compendium data
+```
 
 ---
 
