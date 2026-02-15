@@ -1,3 +1,5 @@
+import type { ThemeConfig } from '$lib/core/types/theme';
+
 /**
  * Server-Side User Settings
  *
@@ -6,6 +8,8 @@
  */
 
 export interface ServerSettings {
+	/** User-created themes (synced to server) */
+	userThemes: ThemeConfig[];
 	/** Whether to sync compendium on page load */
 	syncOnLoad: boolean;
 	/** Enable offline mode with local cache */
@@ -23,6 +27,7 @@ export interface ServerSettings {
 }
 
 export const DEFAULT_SERVER_SETTINGS: ServerSettings = {
+	userThemes: [],
 	syncOnLoad: false,
 	offlineEnabled: true,
 	autoSyncInterval: 'never',

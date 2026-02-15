@@ -37,8 +37,79 @@
 		SPELL_SORT_OPTIONS
 	} from '$lib/core/client/settingsStore.svelte';
 	import { userSettingsStore } from '$lib/core/client/userSettingsStore.svelte';
+	import { getImportedThemes, importTheme, exportTheme, deleteImportedTheme, getAllThemes } from '$lib/core/client/themeRegistry';
+	import { setTheme } from '$lib/core/client/themeStore.svelte';
+	import type { ThemeConfig } from '$lib/core/types/theme';
 
 	let { data } = $props();
+
+	// Theme import/export state
+	let showImportDialog = $state(false);
+	let importText = $state('');
+	let importError = $state('');
+	let importingTheme = $state(false);
+	let importedThemes = $state<ThemeConfig[]>([]);
+
+	// Load imported themes
+	$effect(() => {
+		if (showImportDialog) {
+			importedThemes = getImportedThemes();
+		}
+	});
+
+	// Import theme functions
+	function handleImportFromText() {
+		importError = '';
+		if (!importText.trim()) {
+			importError = 'Please enter a theme JSON';
+			return;
+		}
+		importingTheme = true;
+		const result = importTheme(importText);
+		importingTheme = false;
+		if (result.success) {
+			importText = '';
+			importedThemes = getImportedThemes();
+			showImportDialog = false;
+		} else {
+			importError = result.error || 'Failed to import theme';
+		}
+	}
+
+	async function handleImportFromFile() {
+		const input = document.createElement('input');
+		input.type = 'file';
+		input.accept = '.json';
+		input.onchange = async (e) => {
+			const file = (e.target as HTMLInputElement).files?.[0];
+			if (!file) return;
+			const text = await file.text();
+			importText = text;
+			handleImportFromText();
+		};
+		input.click();
+	}
+
+	function handleExportTheme(themeId: string) {
+		const json = exportTheme(themeId);
+		if (!json) return;
+		const blob = new Blob([json], { type: 'application/json' });
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = `grimar-theme-${themeId}.json`;
+		a.click();
+		URL.revokeObjectURL(url);
+	}
+
+	function handleDeleteImportedTheme(themeId: string) {
+		deleteImportedTheme(themeId);
+		importedThemes = getImportedThemes();
+	}
+
+	function handleApplyTheme(themeId: string) {
+		setTheme(themeId);
+	}
 
 	// Local reference for TypeScript null tracking
 	let user = $derived(data.user ?? null);
@@ -286,6 +357,56 @@
 							<div class="w-full py-4">
 								<ThemeCardSelector />
 							</div>
+
+							<!-- Theme Import/Export -->
+							<SettingsItem
+								label="Import Theme"
+								description="Import a custom theme from a JSON file"
+							>
+								{#snippet control()}
+									<Button variant="outline" size="sm" onclick={() => (showImportDialog = true)}>
+										<Upload class="size-4" />
+										Import
+									</Button>
+								{/snippet}
+							</SettingsItem>
+
+							{#if importedThemes.length > 0}
+								<SettingsItem label="Imported Themes" description="Manage your imported themes" divider={false}>
+									{#snippet control()}
+										<div class="flex flex-wrap gap-2">
+											{#each importedThemes as theme}
+												<div
+													class="flex items-center gap-1 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] px-2 py-1"
+												>
+													<span class="text-xs text-[var(--color-text-secondary)]">{theme.name}</span>
+													<button
+														class="rounded p-0.5 text-[var(--color-text-muted)] hover:bg-[var(--color-bg-overlay)] hover:text-[var(--color-text-primary)]"
+														onclick={() => handleApplyTheme(theme.id)}
+														title="Apply theme"
+													>
+														<Palette class="size-3" />
+													</button>
+													<button
+														class="rounded p-0.5 text-[var(--color-text-muted)] hover:bg-[var(--color-bg-overlay)] hover:text-[var(--color-text-primary)]"
+														onclick={() => handleExportTheme(theme.id)}
+														title="Export theme"
+													>
+														<Download class="size-3" />
+													</button>
+													<button
+														class="rounded p-0.5 text-[var(--color-text-muted)] hover:bg-[var(--color-bg-overlay)] hover:text-red-400"
+														onclick={() => handleDeleteImportedTheme(theme.id)}
+														title="Delete theme"
+													>
+														<Trash2 class="size-3" />
+													</button>
+												</div>
+											{/each}
+										</div>
+									{/snippet}
+								</SettingsItem>
+							{/if}
 
 							<SettingsItem label="Font Size" description="Adjust text size for readability">
 								{#snippet control()}
@@ -795,6 +916,42 @@
 			</Tabs.Root>
 		</main>
 	</div>
+
+	<!-- Theme Import Dialog -->
+	<Dialog.Root bind:open={showImportDialog}>
+		<Dialog.Content class="sm:max-w-[500px]">
+			<Dialog.Header>
+				<Dialog.Title>Import Theme</Dialog.Title>
+				<Dialog.Description>
+					Paste a theme JSON below or upload a file. Imported themes are stored locally in your browser.
+				</Dialog.Description>
+			</Dialog.Header>
+			<div class="py-4">
+				<textarea
+					bind:value={importText}
+					placeholder={"{\"id\": \"my-theme\", \"name\": \"My Theme\", \"colors\": {...}, ...}"}
+					class="min-h-[200px] w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-3 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]"
+				></textarea>
+				{#if importError}
+					<p class="mt-2 text-sm text-red-400">{importError}</p>
+				{/if}
+			</div>
+			<Dialog.Footer>
+				<Button variant="outline" onclick={handleImportFromFile}>
+					<Upload class="size-4" />
+					Upload File
+				</Button>
+				<Button variant="gem" disabled={importingTheme} onclick={handleImportFromText}>
+					{#if importingTheme}
+						<RefreshCw class="size-4 animate-spin" />
+						Importing...
+					{:else}
+						Import
+					{/if}
+				</Button>
+			</Dialog.Footer>
+		</Dialog.Content>
+	</Dialog.Root>
 
 	<!-- Confirmation Dialogs -->
 	<Dialog.Confirm

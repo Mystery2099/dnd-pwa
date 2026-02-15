@@ -1,23 +1,26 @@
 <script lang="ts">
-	import { setTheme, THEMES } from '$lib/core/client/themeStore.svelte';
+	import { getAllThemes, getCurrentTheme, setTheme, type ThemeConfig } from '$lib/core/client/themeStore.svelte';
+	import { getThemeGradient, getThemeAccentClass } from '$lib/core/client/themeCSS';
 	import { Palette } from 'lucide-svelte';
-	import { THEME_GRADIENTS, getThemeAccentClass } from '$lib/core/client/themes';
 
-	import { getTheme } from '$lib/core/client/themeStore.svelte';
+	const currentTheme = $derived(getCurrentTheme());
+	const themes = $derived(getAllThemes());
 
-	const currentTheme = $derived(getTheme());
+	function handleSetTheme(themeId: string) {
+		setTheme(themeId);
+	}
 </script>
 
 <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-	{#each THEMES as theme (theme.id)}
-		{@const isSelected = currentTheme === theme.id}
-		{@const gradient = THEME_GRADIENTS[theme.id]}
-		{@const accentClass = getThemeAccentClass(theme.id)}
-		{@const Icon = theme.icon}
+	{#each themes as theme (theme.id)}
+		{@const isSelected = currentTheme?.id === theme.id}
+		{@const gradient = getThemeGradient(theme)}
+		{@const accentClass = getThemeAccentClass(theme)}
+		{@const Icon = theme.icon || Palette}
 
 		<button
 			type="button"
-			onclick={() => setTheme(theme.id)}
+			onclick={() => handleSetTheme(theme.id)}
 			class="group relative h-full w-full rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-card)] p-6 text-left transition-all hover:scale-[1.02] hover:border-[var(--color-accent)]/30 focus:ring-2 focus:ring-[var(--color-accent)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg-canvas)] focus:outline-none {isSelected
 				? 'border-[var(--theme-accent)] bg-[color-mix(in_srgb,var(--theme-accent)_10%,var(--color-bg-card))] shadow-[var(--color-accent-glow)]'
 				: ''}"
