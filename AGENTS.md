@@ -5,22 +5,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Critical Rules
 
 1. **Root workspace**: Run bun commands from project root - they proxy to `grimar/` automatically
-2. **Prefer Serena MCP Server** for code operations when activated on grimar project
-3. **Prefer Context7 MCP** for library documentation before web search
-4. **Schema changes**: `bun run db:push` (dev) or `db:generate && db:migrate` (prod)
-5. **After config changes**: run `bun run prepare`
-6. **Before committing**: Run `bun run check` and `CI=true bun run test:run`
-7. **Zod validation**: All provider data must be validated before database insert
-8. **Cache invalidation**: Call `invalidateCache()` after data mutations
-9. **VirtualList**: Use for 50+ items (import from `$lib/components/ui/VirtualList`)
-10. **Database retries**: Use `getDbWithRetry()` wrapper for flaky connections
-11. **Logging**: Use child loggers from `$lib/server/logger` - NEVER `console.error` directly
-12. **Test location**: `*.test.ts` alongside source files (co-located in `grimar/src/`)
-13. **Auth**: Only `/` is public; all other routes redirect to `/`
-14. **Adapter**: `svelte-adapter-bun` (not node)
-15. **Feature flags**: Check `providers.json` for enabled data sources
-16. **Naming**: Use `_` prefix for intentionally unused variables (both args and vars)
-17. **Navigation**: `svelte/no-navigation-without-resolve` is disabled - pushState is used correctly
+2. **Prefer Context7 MCP** for library documentation before web search
+3. **Schema changes**: `bun run db:push` (dev) or `db:generate && db:migrate` (prod)
+4. **After config changes**: run `bun run prepare`
+5. **Before committing**: Run `bun run check` and `CI=true bun run test:run`
+6. **Zod validation**: All provider data must be validated before database insert
+7. **Cache invalidation**: Call `invalidateCache()` after data mutations
+8. **VirtualList**: Use for 50+ items (import from `$lib/components/ui/VirtualList`)
+9. **Database retries**: Use `getDbWithRetry()` wrapper for flaky connections
+10. **Logging**: Use child loggers from `$lib/server/logger` - NEVER `console.error` directly
+11. **Test location**: `*.test.ts` alongside source files (co-located in `grimar/src/`)
+12. **Auth**: Only `/` is public; all other routes redirect to `/`
+13. **Adapter**: `svelte-adapter-bun` (not node)
+14. **Feature flags**: Check `providers.json` for enabled data sources
+15. **Naming**: Use `_` prefix for intentionally unused variables (both args and vars)
+16. **Navigation**: `svelte/no-navigation-without-resolve` is disabled - pushState is used correctly
 
 ## Code Style
 
@@ -150,14 +149,6 @@ See the **`docs/`** directory for detailed documentation:
 - `misc`: Miscellaneous changes
 
 ## MCP Tools
-
-**Serena MCP** (when activated):
-```typescript
-mcp__serena__read_file({ relative_path: 'src/app.css' })
-mcp__serena__find_symbol({ name_path: 'AuthService', relative_path: 'src/lib/server/services/auth' })
-mcp__serena__replace_symbol_body({ name_path: 'AuthService.login', body: '...' })
-mcp__serena__insert_after_symbol({ name_path: 'AuthService', body: '...' })
-```
 
 **Context7 MCP** (for library docs):
 ```typescript
