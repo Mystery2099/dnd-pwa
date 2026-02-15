@@ -7,7 +7,7 @@
 	import GlobalHeader from '$lib/components/layout/GlobalHeader.svelte';
 	import OfflineIndicator from '$lib/components/ui/OfflineIndicator.svelte';
 	import { page } from '$app/state';
-	import { initThemeSync, initTheme, logThemesToConsole } from '$lib/core/client/themeStore.svelte';
+	import { initThemeSync, initTheme } from '$lib/core/client/themeStore.svelte';
 	import { QueryClientProvider } from '@tanstack/svelte-query';
 	import { createQueryClient, setQueryClient } from '$lib/core/client/query-client';
 	import { startCacheSync } from '$lib/core/client/cache-sync';
@@ -46,10 +46,6 @@
 		// Initialize theme from localStorage
 		initTheme();
 
-		// Dev-only: Log theme options to console
-		if (import.meta.env.DEV) {
-			logThemesToConsole();
-		}
 	});
 
 	// Simple active link helper

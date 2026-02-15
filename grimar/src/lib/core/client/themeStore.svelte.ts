@@ -251,10 +251,6 @@ export type { ThemeConfig } from './themeRegistry';
 export const THEMES: ThemeConfig[] = registryGetBuiltinThemes();
 export const THEME_OPTIONS = THEMES.map((t: ThemeConfig) => ({ value: t.id, label: t.name }));
 
-export function logThemesToConsole(): void {
-	console.table(getAllThemes().map((t) => ({ id: t.id, name: t.name, source: t.source })));
-}
-
 export function getThemeAccentClassOld(themeId: string): string {
 	const theme = registryGetThemeById(themeId);
 	if (!theme) return '';

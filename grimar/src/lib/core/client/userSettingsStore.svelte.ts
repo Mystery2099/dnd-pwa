@@ -60,9 +60,17 @@ function createUserSettingsStore() {
 	let loading = false;
 	let error = false;
 
+	// Reactive state for Svelte 5 bindings
+	let reactiveData = $state<ServerSettings>(cached ?? DEFAULT_SERVER_SETTINGS);
+
 	return {
 		get data(): ServerSettings {
-			return get(settingsStore$);
+			return reactiveData;
+		},
+		set data(value: ServerSettings) {
+			reactiveData = value;
+			settingsStore$.set(value);
+			cacheSettings(value);
 		},
 		get isLoading(): boolean {
 			return loading;
@@ -84,6 +92,7 @@ function createUserSettingsStore() {
 			try {
 				const serverSettings = await fetchSettings();
 				settingsStore$.set(serverSettings);
+				reactiveData = serverSettings;
 				cacheSettings(serverSettings);
 			} catch (err) {
 				console.error('[UserSettingsStore] Failed to fetch settings:', err);
@@ -105,6 +114,7 @@ function createUserSettingsStore() {
 			const current = get(settingsStore$);
 			const newData = { ...current, [key]: value };
 			settingsStore$.set(newData);
+			reactiveData = newData;
 			cacheSettings(newData);
 
 			// Server sync
