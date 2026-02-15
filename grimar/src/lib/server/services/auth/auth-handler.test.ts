@@ -8,10 +8,11 @@ const { mockDb } = vi.hoisted(() => {
 		mockDb: {
 			getDb: vi.fn(),
 			select: vi.fn(),
-			insert: vi.fn(),
-			values: vi.fn(),
-			onConflictDoUpdate: vi.fn(),
-			onConflictDoNothing: vi.fn(),
+			insert: vi.fn().mockReturnThis(),
+			values: vi.fn().mockReturnThis(),
+			onConflictDoUpdate: vi.fn().mockReturnThis(),
+			onConflictDoNothing: vi.fn().mockReturnThis(),
+			all: vi.fn(),
 			// Mock query builder chain
 			from: vi.fn(),
 			where: vi.fn(),
@@ -57,6 +58,9 @@ describe('AuthHandler', () => {
 	beforeEach(async () => {
 		vi.resetAllMocks();
 
+		// Mock development mode to be false for this test
+		vi.stubEnv('NODE_ENV', 'production');
+
 		const { getDb } = await import('$lib/server/db');
 		(getDb as any).mockResolvedValue(mockDb);
 
@@ -99,7 +103,9 @@ describe('AuthHandler', () => {
 
 			expect(event.locals.user).toBeDefined();
 			expect(event.locals.user.username).toBe('newuser');
+			// Check that the insert was called as part of the ensureUser process
 			expect(mockDb.insert).toHaveBeenCalled();
+			console.log('Mock calls:', mockDb.insert.mock.calls);
 		});
 	});
 

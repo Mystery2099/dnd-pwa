@@ -15,6 +15,7 @@ const { mockDb } = vi.hoisted(() => {
 			orderBy: vi.fn().mockReturnThis(),
 			limit: vi.fn().mockReturnThis(),
 			offset: vi.fn().mockReturnThis(),
+			all: vi.fn(),
 			query: {
 				compendiumItems: {
 					findFirst: vi.fn()
@@ -115,6 +116,7 @@ describe('CompendiumService', () => {
 		mockDb.orderBy.mockReset();
 		mockDb.limit.mockReset();
 		mockDb.offset.mockReset();
+		mockDb.all.mockReset();
 		mockDb.query.compendiumItems.findFirst.mockReset();
 
 		// Set up default mock chain to return data (simplified - no pagination)
@@ -125,6 +127,28 @@ describe('CompendiumService', () => {
 				})
 			})
 		}));
+
+		// Set up FTS mock returns
+		mockDb.all.mockImplementation((query: any) => {
+			// Mock FTS search results
+			if (query.sql && query.sql.includes('compendium_items_fts')) {
+				if (query.sql.includes('bm25')) {
+					// Ranked search
+					return Promise.resolve([{ rowid: 1, rank: 0.5 }]);
+				} else {
+					// Regular search
+					return Promise.resolve([{ rowid: 1 }]);
+				}
+			}
+			// Mock stats queries
+			if (query.sql && query.sql.includes('count(*)')) {
+				return Promise.resolve([{ count: 1 }]);
+			}
+			if (query.sql && query.sql.includes('pg_size_approx')) {
+				return Promise.resolve([{ size: '1MB' }]);
+			}
+			return Promise.resolve([]);
+		});
 	});
 
 	describe('getSpells', () => {
