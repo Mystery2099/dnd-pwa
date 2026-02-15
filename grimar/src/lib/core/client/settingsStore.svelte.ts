@@ -16,7 +16,8 @@ const DEFAULT_DEVICE_SETTINGS = {
 	gridMaxColumns: 4,
 	reducedMotion: false,
 	highContrast: false,
-	keyboardShortcuts: true
+	keyboardShortcuts: true,
+	use3DDice: true
 };
 
 type FontSize = 'sm' | 'md' | 'lg' | 'xl';
@@ -32,6 +33,7 @@ export interface DeviceSettings {
 	reducedMotion: boolean;
 	highContrast: boolean;
 	keyboardShortcuts: boolean;
+	use3DDice: boolean;
 }
 
 interface _DeviceSettingsActions {
@@ -43,6 +45,7 @@ interface _DeviceSettingsActions {
 	setReducedMotion: (value: boolean) => void;
 	setHighContrast: (value: boolean) => void;
 	setKeyboardShortcuts: (value: boolean) => void;
+	setUse3DDice: (value: boolean) => void;
 	reset: () => void;
 }
 
@@ -112,6 +115,11 @@ function createDeviceSettingsStore() {
 		save();
 	}
 
+	function setUse3DDice(value: boolean) {
+		settings.use3DDice = value;
+		save();
+	}
+
 	function reset() {
 		settings = { ...DEFAULT_DEVICE_SETTINGS };
 		save();
@@ -134,6 +142,7 @@ function createDeviceSettingsStore() {
 		setReducedMotion,
 		setHighContrast,
 		setKeyboardShortcuts,
+		setUse3DDice,
 		reset,
 		load
 	};

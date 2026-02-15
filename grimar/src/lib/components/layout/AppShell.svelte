@@ -1,6 +1,8 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
+	import DiceTray from '$lib/features/dice/components/DiceTray.svelte';
+	import DiceCanvas from '$lib/features/dice/components/DiceCanvas.svelte';
 
 	type Props = {
 		header?: Snippet;
@@ -71,4 +73,8 @@
 			</main>
 		</div>
 	</div>
+
+	<!-- Global Dice Components -->
+	<DiceCanvas />
+	<DiceTray />
 </div>

@@ -1,3 +1,150 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /**
  * Open5e Provider
  *
@@ -498,6 +645,7 @@ export class Open5eProvider extends BaseProvider {
 	): TransformResult {
 		const name = String(fields.name || 'Unknown');
 		const prereqs = fields.prerequisites as string[] | undefined;
+		const benefits = fields.description as string[] | undefined;
 		const summary = prereqs?.length ? `Prerequisite: ${prereqs.join(', ')}` : 'Feat';
 
 		return {
@@ -506,7 +654,8 @@ export class Open5eProvider extends BaseProvider {
 			summary,
 			details: fields,
 			featPrerequisites: prereqs?.join(', ') || '',
-			sourceBook
+			featBenefits: benefits || [],
+		sourceBook
 		};
 	}
 

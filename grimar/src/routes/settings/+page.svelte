@@ -16,7 +16,8 @@
 		Clock,
 		Upload,
 		RotateCcw,
-		Sword
+		Sword,
+		Dices
 	} from 'lucide-svelte';
 	import ThemeCardSelector from '$lib/components/ui/ThemeCardSelector.svelte';
 	import Toggle from '$lib/components/ui/Toggle.svelte';
@@ -309,8 +310,20 @@
 							</SettingsItem>
 
 							<SettingsItem
+								label="3D Dice Animation"
+								description="Enable 3D physics-based dice rolling animations"
+							>
+								{#snippet control()}
+									<Toggle
+										checked={settingsStore.settings.use3DDice}
+										onchange={(v: boolean) => settingsStore.setUse3DDice(v)}
+									/>
+								{/snippet}
+							</SettingsItem>
+
+							<SettingsItem
 								label="Animation Level"
-								description="Control the intensity of animations"
+								description="Control intensity of animations"
 								divider={false}
 							>
 								{#snippet control()}
