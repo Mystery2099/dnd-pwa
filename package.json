@@ -1,0 +1,33 @@
+{
+	"name": "dnd-pwa",
+	"private": true,
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"dev": "cd grimar && bun run dev",
+		"build": "cd grimar && bun run build",
+		"preview": "cd grimar && bun run preview",
+		"start": "cd grimar && bun run start",
+		"prepare": "cd grimar && bun run prepare",
+		"check": "cd grimar && bun run check",
+		"check:watch": "cd grimar && bun run check:watch",
+		"format": "cd grimar && bun run format",
+		"lint": "cd grimar && bun run lint",
+		"test": "cd grimar && bun run test",
+		"test:ui": "cd grimar && bun run test:ui",
+		"test:run": "cd grimar && bun run test:run",
+		"test:e2e": "cd grimar && bun run test:e2e",
+		"test:e2e:ui": "cd grimar && bun run test:e2e:ui",
+		"test:e2e:debug": "cd grimar && bun run test:e2e:debug",
+		"test:all": "cd grimar && bun run test:all",
+		"db:push": "cd grimar && bun run db:push",
+		"db:generate": "cd grimar && bun run db:generate",
+		"db:migrate": "cd grimar && bun run db:migrate",
+		"db:studio": "cd grimar && bun run db:studio",
+		"db:sync": "cd grimar && bun run db:sync",
+		"reindex-fts": "cd grimar && bun run reindex-fts"
+	},
+	"workspaces": [
+		"grimar"
+	]
+}
