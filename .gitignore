@@ -27,6 +27,10 @@ opencode.json
 # Logs
 *.log
 npm-debug.log*
+logs/
+
+# IDE / Editor
+.serena/
 
 # Test
 coverage/
