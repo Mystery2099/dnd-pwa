@@ -58,13 +58,15 @@ describe('db-retry', () => {
 
 			const resultPromise = getDbWithRetry(3).catch((e) => e);
 
-			// Advance through both retry delays
+			// Advance through all retry delays (100 + 200 + 400 = 700ms)
 			await vi.advanceTimersByTimeAsync(100);
 			await vi.advanceTimersByTimeAsync(200);
+			await vi.advanceTimersByTimeAsync(400);
 
 			const result = await resultPromise;
 			expect(result).toBe(testError);
-			expect(mockGetDb).toHaveBeenCalledTimes(3);
+			// maxRetries=3 means initial attempt + 3 retries = 4 calls
+			expect(mockGetDb).toHaveBeenCalledTimes(4);
 		});
 
 		it('should use exponential backoff', async () => {

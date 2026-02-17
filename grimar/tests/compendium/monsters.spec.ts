@@ -7,8 +7,8 @@ test.describe('Compendium Monsters - Smoke Tests', () => {
 	});
 
 	test('loads the monsters page', async ({ page }) => {
-		await expect(page).toHaveTitle(/Monsters/i);
-		await expect(page.locator('h1')).toContainText('Monsters');
+		await expect(page).toHaveTitle(/Creatures/i);
+		await expect(page.locator('h1')).toContainText('Creatures');
 	});
 
 	test('displays monster list', async ({ page }) => {
