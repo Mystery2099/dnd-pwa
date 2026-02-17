@@ -9,6 +9,7 @@ import { providerRegistry } from '$lib/server/providers';
 import { compendiumCache, compendiumItems } from '$lib/server/db/schema';
 import { eq, like } from 'drizzle-orm';
 import type { Db } from '$lib/server/db';
+import { removeItemFromFts } from '$lib/server/db/db-fts';
 import { createModuleLogger } from '$lib/server/logger';
 
 const log = createModuleLogger('SyncCleanup');
@@ -71,6 +72,12 @@ export async function cleanupDisabledSources(db: Db): Promise<CleanupResult> {
 
 	// Delete items and cache for each disabled source
 	for (const source of disabledSources) {
+		// Get all item IDs before deletion so we can clean up FTS
+		const itemsToDelete = await db
+			.select({ id: compendiumItems.id })
+			.from(compendiumItems)
+			.where(eq(compendiumItems.source, source));
+
 		// Count items before deletion using $count
 		const itemsCount = await db.$count(compendiumItems, eq(compendiumItems.source, source));
 
@@ -78,6 +85,15 @@ export async function cleanupDisabledSources(db: Db): Promise<CleanupResult> {
 		await db.delete(compendiumItems).where(eq(compendiumItems.source, source)).execute();
 		result.itemsRemoved += itemsCount;
 		result.disabledSources.push(source);
+
+		// Remove items from FTS index
+		for (const item of itemsToDelete) {
+			try {
+				await removeItemFromFts(item.id, db);
+			} catch (ftsError) {
+				log.warn({ itemId: item.id, error: ftsError }, 'Failed to remove item from FTS');
+			}
+		}
 
 		log.info({ source, itemsCount }, 'Removed items from disabled source');
 

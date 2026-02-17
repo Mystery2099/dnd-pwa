@@ -20,6 +20,7 @@ import { sql } from 'drizzle-orm';
 import * as schema from '../src/lib/server/db/schema';
 import { applyPragmas } from '../src/lib/server/db/db-config';
 import { createModuleLogger } from '../src/lib/server/logger';
+import { extractSearchableContent } from '../src/lib/server/db/fts-utils';
 
 const log = createModuleLogger('ReindexFts');
 
@@ -43,66 +44,6 @@ Options:
   --help, -h        Show this help message
 `);
 	process.exit(0);
-}
-
-/**
- * Extract searchable content from details JSON
- */
-function extractSearchableContent(details: Record<string, unknown>): string {
-	const parts: string[] = [];
-
-	const addStrings = (arr: unknown) => {
-		if (Array.isArray(arr)) {
-			for (const item of arr) {
-				if (typeof item === 'string') {
-					parts.push(item);
-				} else if (item && typeof item === 'object') {
-					const obj = item as Record<string, unknown>;
-					if (obj.desc && typeof obj.desc === 'string') parts.push(obj.desc);
-					if (obj.description && typeof obj.description === 'string') parts.push(obj.description);
-				}
-			}
-		}
-	};
-
-	const addString = (value: unknown) => {
-		if (typeof value === 'string') parts.push(value);
-	};
-
-	addString(details.description);
-	if (details.description && Array.isArray(details.description)) addStrings(details.description);
-
-	if (details.actions) addStrings(details.actions);
-	if (details.specialAbilities) addStrings(details.specialAbilities);
-	if (details.reactions) addStrings(details.reactions);
-	if (details.legendaryActions) addStrings(details.legendaryActions);
-	if (details.lairActions) addStrings(details.lairActions);
-	if (details.regionalEffects) addStrings(details.regionalEffects);
-	if (details.mythicEncounter) addStrings(details.mythicEncounter);
-
-	addString(details.higherLevel);
-	addString(details.material);
-	addString(details.ritual);
-	addString(details.concentration);
-
-	addString(details.properties);
-	addString(details.desc);
-	addString(details.description);
-	if (details.grants) addStrings(details.grants);
-
-	addString(details.subclassFlavor);
-	addString(details.features);
-	if (Array.isArray(details.features)) addStrings(details.features);
-
-	addString(details.traits);
-	if (Array.isArray(details.traits)) addStrings(details.traits);
-
-	addString(details.bond);
-	addString(details.flaws);
-	addString(details.ideals);
-	addString(details.personalityTraits);
-
-	return parts.join(' ');
 }
 
 async function main() {

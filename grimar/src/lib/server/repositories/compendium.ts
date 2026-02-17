@@ -224,13 +224,11 @@ export class CompendiumRepository {
 
 			if (ftsIds.length > 0) {
 				log.debug({ query, ftsResultCount: ftsIds.length }, 'FTS search successful');
-				// Fetch items by FTS rowids, filtered by type
+				// Fetch items by FTS rowids, filtered by type - use inArray for type safety
 				items = await db
 					.select()
 					.from(compendiumItems)
-					.where(
-						and(eq(compendiumItems.type, type), sql`${compendiumItems.id} IN (${ftsIds.join(',')})`)
-					);
+					.where(and(eq(compendiumItems.type, type), inArray(compendiumItems.id, ftsIds)));
 			} else {
 				// Fallback to LIKE if FTS finds nothing
 				log.info({ query }, 'FTS returned no results, falling back to LIKE');
@@ -283,8 +281,8 @@ export class CompendiumRepository {
 		// Base condition: always filter by type
 		const baseCondition = eq(compendiumItems.type, type);
 
-		// Collect filter conditions
-		const filterConditions = [];
+		// Collect filter conditions - properly typed for Drizzle
+		const filterConditions: ReturnType<typeof and>[] = [];
 
 		// Spell level filter
 		if (options.filters?.spellLevel && options.filters.spellLevel.length > 0) {
@@ -307,14 +305,14 @@ export class CompendiumRepository {
 		}
 
 		// Apply filter logic (AND/OR) between categories
-		let filterClause = undefined;
+		let filterClause: ReturnType<typeof and> | undefined = undefined;
 		if (filterConditions.length > 0) {
 			filterClause =
 				options.filterLogic === 'or' ? or(...filterConditions) : and(...filterConditions);
 		}
 
 		// Apply Search (always AND)
-		let searchClause = undefined;
+		let searchClause: ReturnType<typeof or> | undefined = undefined;
 		if (options.search) {
 			const searchTerm = `%${options.search}%`;
 			searchClause = or(
@@ -324,11 +322,11 @@ export class CompendiumRepository {
 		}
 
 		// Combine all parts: Type AND (Filters) AND (Search)
-		const whereParts = [baseCondition];
+		const whereParts: ReturnType<typeof and>[] = [baseCondition];
 		if (filterClause) whereParts.push(filterClause);
-		if (searchClause) whereParts.push(searchClause);
+		if (searchClause) whereParts.push(and(baseCondition, searchClause));
 
-		return and(...whereParts) as any;
+		return and(...whereParts);
 	}
 
 	/**

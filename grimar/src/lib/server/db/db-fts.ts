@@ -15,6 +15,7 @@ import type { Db } from '$lib/server/db';
 import { compendiumItems } from '$lib/server/db/schema';
 import { sql } from 'drizzle-orm';
 import { createModuleLogger } from '$lib/server/logger';
+import { extractSearchableContent } from './fts-utils';
 
 const log = createModuleLogger('FtsService');
 
@@ -27,86 +28,6 @@ const log = createModuleLogger('FtsService');
  */
 function parseFtsQuery(query: string): string {
 	return query.trim().split(/\s+/).join(' ') + '*';
-}
-
-// ============================================================================
-// Content Extraction
-// ============================================================================
-
-/**
- * Extract searchable strings from a value (string or array of strings)
- */
-function extractStrings(value: unknown): string[] {
-	if (typeof value === 'string') return [value];
-	if (Array.isArray(value)) {
-		return value.flatMap((item) => (typeof item === 'string' ? item : ''));
-	}
-	return [];
-}
-
-/**
- * Extract description strings from action-like objects
- */
-function extractActionStrings(value: unknown): string[] {
-	if (!Array.isArray(value)) return [];
-	return value
-		.flatMap((item) => {
-			if (typeof item === 'object' && item && 'desc' in item) {
-				const desc = (item as { desc: unknown }).desc;
-				return typeof desc === 'string' ? desc : '';
-			}
-			return '';
-		})
-		.filter(Boolean);
-}
-
-/**
- * Extract searchable content from details JSON
- */
-export function extractSearchableContent(details: Record<string, unknown>): string {
-	const parts: string[] = [];
-
-	// Generic description fields
-	parts.push(...extractStrings(details.description));
-
-	// Action-like fields (contain desc property)
-	parts.push(
-		...extractActionStrings(details.actions),
-		...extractActionStrings(details.specialAbilities),
-		...extractActionStrings(details.reactions),
-		...extractActionStrings(details.legendaryActions),
-		...extractActionStrings(details.lairActions),
-		...extractActionStrings(details.regionalEffects),
-		...extractActionStrings(details.mythicEncounter)
-	);
-
-	// Simple string fields
-	parts.push(
-		...extractStrings(details.higherLevel),
-		...extractStrings(details.material),
-		...extractStrings(details.properties),
-		...extractStrings(details.desc),
-		...extractStrings(details.subclassFlavor),
-		...extractStrings(details.traits),
-		...extractStrings(details.bond),
-		...extractStrings(details.flaws),
-		...extractStrings(details.ideals),
-		...extractStrings(details.personalityTraits)
-	);
-
-	// Features and grants arrays
-	if (Array.isArray(details.features)) {
-		parts.push(
-			...details.features.flatMap((f: unknown) =>
-				extractStrings((f as { description?: unknown }).description)
-			)
-		);
-	}
-	if (Array.isArray(details.grants)) {
-		parts.push(...extractStrings(details.grants));
-	}
-
-	return parts.join(' ');
 }
 
 /**
