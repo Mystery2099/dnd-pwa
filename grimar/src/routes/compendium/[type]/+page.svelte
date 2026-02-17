@@ -37,7 +37,10 @@
 	const pathType = $derived(data.pathType);
 	const dbType = $derived(data.dbType);
 	// Load config client-side to avoid SSR serialization issues with Svelte components
-	const config = $derived(getCompendiumConfig(pathType));
+	// Use non-null assertion since pathType should always be defined when page renders
+	const config = $derived(pathType ? getCompendiumConfig(pathType) : {
+		ui: { displayNamePlural: 'Loading...' }
+	} as ReturnType<typeof getCompendiumConfig>);
 
 	// Page title
 	const pageTitle = $derived(`${config.ui.displayNamePlural} - Grimar Compendium`);

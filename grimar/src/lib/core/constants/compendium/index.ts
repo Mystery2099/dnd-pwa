@@ -173,8 +173,11 @@ for (const dbType of Object.keys(CONFIG_MAP)) {
  * Get the configuration for a specific compendium type
  */
 export function getCompendiumConfig(type: CompendiumTypeName | string): CompendiumTypeConfig {
-	if (type in CONFIG_MAP) {
-		return CONFIG_MAP[type as CompendiumTypeName];
+	// Handle backward compatibility: 'creature' or 'monsters' -> 'creatures'
+	const normalizedType =
+		type === 'creature' || type === 'monsters' ? 'creatures' : type;
+	if (normalizedType in CONFIG_MAP) {
+		return CONFIG_MAP[normalizedType as CompendiumTypeName];
 	}
 	if (type in PATH_TO_TYPE) {
 		return CONFIG_MAP[PATH_TO_TYPE[type]];
