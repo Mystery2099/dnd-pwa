@@ -198,7 +198,7 @@
 	--theme-gem-topaz: #fbbf24;
 	--theme-text-primary: #f8fafc;
 	--theme-text-secondary: #94a3b8;
-	--theme-text-muted: #64748b;
+	--theme-text-muted: #94a3b8;
 	--theme-text-inverted: #ffffff;
 	--theme-shadow: rgba(0, 0, 0, 0.5);
 	--theme-overlay-light: rgba(255, 255, 255, 0.1);
@@ -236,7 +236,7 @@
 	/* Text: Parchment/Papyrus */
 	--theme-text-primary: #fef3c7; /* Amber-100 */
 	--theme-text-secondary: #fcd34d; /* Amber-300 */
-	--theme-text-muted: #d97706;
+	--theme-text-muted: #fbbf24;
 	--theme-text-inverted: #fef3c7;
 	--theme-shadow: rgba(0, 0, 0, 0.6);
 	--theme-overlay-light: rgba(254, 243, 199, 0.08);
@@ -275,7 +275,7 @@
 	/* Text: Pale Mint */
 	--theme-text-primary: #f0fdf4;
 	--theme-text-secondary: #86efac;
-	--theme-text-muted: #34d399;
+	--theme-text-muted: #6ee7b7;
 	--theme-text-inverted: #f0fdf4;
 	--theme-shadow: rgba(0, 0, 0, 0.5);
 	--theme-overlay-light: rgba(255, 255, 255, 0.08);
@@ -314,7 +314,7 @@
 	/* Text: Hot White/Peach */
 	--theme-text-primary: #fff7ed;
 	--theme-text-secondary: #fdba74; /* Orange-300 */
-	--theme-text-muted: #a8a29e;
+	--theme-text-muted: #d6d3d1;
 	--theme-text-inverted: #fff7ed;
 	--theme-shadow: rgba(0, 0, 0, 0.5);
 	--theme-overlay-light: rgba(255, 255, 255, 0.08);
@@ -431,7 +431,7 @@
 	/* Text: Pale Aqua */
 	--theme-text-primary: #f0fdfa;
 	--theme-text-secondary: #5eead4;
-	--theme-text-muted: #0f766e;
+	--theme-text-muted: #14b8a6;
 	--theme-text-inverted: #f0fdfa;
 	--theme-shadow: rgba(0, 0, 0, 0.5);
 	--theme-overlay-light: rgba(255, 255, 255, 0.06);
@@ -528,7 +528,7 @@
 	/* Text: Old Bone */
 	--theme-text-primary: #e5e5e5;
 	--theme-text-secondary: #a3a3a3;
-	--theme-text-muted: #525252;
+	--theme-text-muted: #a3a3a3;
 	--theme-text-inverted: #e5e5e5;
 	--theme-shadow: rgba(0, 0, 0, 0.6);
 	--theme-overlay-light: rgba(255, 255, 255, 0.05);
@@ -578,7 +578,7 @@
 	/* Text: Soft Pink/White */
 	--theme-text-primary: #fff1f2;
 	--theme-text-secondary: #fda4af;
-	--theme-text-muted: #be123c;
+	--theme-text-muted: #f472b6;
 	--theme-text-inverted: #fff1f2;
 
 	/* Shadows */
@@ -631,7 +631,7 @@
 	/* Text: Regal */
 	--theme-text-primary: #fefce8; /* Yellow-50 */
 	--theme-text-secondary: #fde047; /* Yellow-300 */
-	--theme-text-muted: #b45309;
+	--theme-text-muted: #fbbf24;
 	--theme-text-inverted: #422006;
 
 	/* Shadows */
@@ -683,7 +683,7 @@
 	/* Text: Grey/Silver (Low contrast environment) */
 	--theme-text-primary: #e2e8f0;
 	--theme-text-secondary: #94a3b8;
-	--theme-text-muted: #475569;
+	--theme-text-muted: #818cf8;
 	--theme-text-inverted: #f8fafc;
 
 	/* Shadows */
