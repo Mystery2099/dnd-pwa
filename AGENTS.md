@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to AI coding agents working in this repository.
 
 ## Critical Rules
 
@@ -18,140 +18,161 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 12. **Auth**: Only `/` is public; all other routes redirect to `/`
 13. **Adapter**: `svelte-adapter-bun` (not node)
 14. **Feature flags**: Check `providers.json` for enabled data sources
-15. **Naming**: Use `_` prefix for intentionally unused variables (both args and vars)
-16. **Navigation**: `svelte/no-navigation-without-resolve` is disabled - pushState is used correctly
-
-## Code Style
-
-- **Tabs, not spaces** with **single quotes** and **no trailing commas**
-- **Named exports only** (no default exports except Svelte components)
-- **Strict equality**: Use `===` and `!==`
-- **Semicolons**: Always use semicolons
-- **Event handlers**: Use `onclick={...}` NOT `on:click={...}` (Svelte 5)
-- **Svelte 5**: Use `$state()`, `$derived()`, `$effect()` runes
 
 ## Essential Commands
 
-All commands can be run from the project root - they automatically proxy to the `grimar/` workspace.
+All commands run from project root (they proxy to `grimar/` workspace):
 
 ```bash
 # Development
 bun run dev              # Dev server (localhost:5173)
-bun run check            # TypeScript check
+bun run check            # TypeScript check (svelte-check)
 bun run build            # Build for production
 bun run start            # Production server
-bun run format           # Format with Prettier
-bun run lint             # Lint and format check
+
+# Linting & Formatting
+bun run format           # Format with Prettier (write)
+bun run lint             # Check format + lint
 
 # Testing
 bun run test:run         # CI mode (run before commit)
-bun run test -- <pattern>  # Match tests by pattern
+bun run test             # Watch mode
+bun run test -- <file>   # Run single test file
 bun run test:ui          # Vitest UI mode
 bun run test:e2e         # Playwright E2E tests
-bun run test:e2e:ui      # Playwright UI mode
-bun run test:e2e:debug   # Playwright debug mode
-bun run test:all         # Run all tests (unit + E2E)
+bun run test:all         # All tests (unit + E2E)
 
 # Database
-bun run db:push          # Push schema changes (dev only)
-bun run db:generate      # Generate migration files
+bun run db:push          # Push schema (dev)
+bun run db:generate      # Generate migration
 bun run db:migrate       # Run migrations (prod)
-bun run db:studio        # Open Drizzle Studio UI
-bun run db:sync          # Sync compendium from providers
-bun run reindex-fts      # Rebuild full-text search index
+bun run db:studio        # Drizzle Studio UI
+bun run db:sync          # Sync compendium
+bun run reindex-fts      # Rebuild FTS index
+```
+
+## Code Style
+
+### Formatting
+- **Tabs** (not spaces) with **single quotes** and **no trailing commas**
+- **Semicolons**: Always use semicolons
+- **Strict equality**: Use `===` and `!==`
+
+### Svelte 5
+- Use `$state()`, `$derived()`, `$effect()` runes
+- Use `onclick={...}` NOT `on:click={...}`
+- Props interface pattern:
+  ```typescript
+  interface Props {
+    title: string;
+    active?: boolean;
+    onclick?: () => void;
+  }
+  let { title, active = false, onclick }: Props = $props();
+  ```
+
+### Exports
+- **Named exports only** (no default exports except Svelte components)
+- Use barrel files (index.ts) for re-exports
+
+### Imports
+- Use `$lib` alias for library code: `import { getDb } from '$lib/server/db'`
+- Use relative imports for same-directory files: `./types`
+- Use named imports for utilities, default for Svelte components
+
+### Naming Conventions
+- **Files**: kebab-case (`my-file.ts`), PascalCase for Svelte components (`MyComponent.svelte`)
+- **Types/Interfaces**: PascalCase (`CompendiumItem`, `AuthUser`)
+- **Zod schemas**: `*Schema` suffix, export inferred types without suffix
+- **Constants**: UPPER_SNAKE_CASE (`DEFAULT_MAX_RETRIES`)
+- **Database**: snake_case tables (`compendium_items`), camelCase columns (`spell_level`)
+- **Unused variables**: Prefix with `_` (`let { _, ...rest }`)
+
+### Error Handling
+- All error logging must include `[context]` prefix:
+  ```typescript
+  // ✅ Correct
+  logger.error('[auth] Failed to resolve user:', error);
+  
+  // ❌ Incorrect  
+  console.error('Failed to resolve user:', error);
+  ```
+
+### Constants & Enums
+Use object-based const patterns:
+```typescript
+export const COMPENDIUM_TYPES = {
+  SPELL: 'spell',
+  MONSTER: 'monster',
+} as const;
+export type CompendiumType = (typeof COMPENDIUM_TYPES)[keyof typeof COMPENDIUM_TYPES];
 ```
 
 ## Architecture
 
-**Grimar** - Self-hosted D&D 5e PWA (SvelteKit 2 + Svelte 5 Runes, Bun, SQLite/Drizzle, TanStack Query)
+**Grimar** - Self-hosted D&D 5e PWA (SvelteKit 2 + Svelte 5, Bun, SQLite/Drizzle, TanStack Query)
 
 ```
 grimar/
 ├── src/
 │   ├── lib/
-│   │   ├── core/           # Client utilities, types, constants
-│   │   │   ├── client/     # Theme store, query client, query-persist
-│   │   │   ├── types/      # Global TypeScript interfaces
-│   │   │   └── constants/  # Spell levels, schools, etc.
-│   │   ├── server/         # Server-only code
-│   │   │   ├── auth/       # Auth hook and user service
-│   │   │   ├── db/         # Drizzle schema and connection
-│   │   │   ├── providers/  # Data providers (Open5e, SRD, Homebrew, 5e-bits)
-│   │   │   ├── repositories/# Database access layer
-│   │   │   ├── services/   # Business logic (sync, auth, cache)
-│   │   │   └── api/        # Internal API utilities
-│   │   ├── components/     # UI Components
-│   │   │   ├── ui/         # Atomic primitives (Button, Input, Card, Badge)
-│   │   │   ├── layout/     # AppShell, GlobalHeader, Omnibar
-│   │   │   └── features/   # Feature-specific components
-│   │   └── features/       # Feature modules with colocated logic
-│   ├── routes/             # SvelteKit routes (pages + API)
-│   ├── hooks.server.ts     # Auth hook (header-based auth)
-│   └── app.css             # Arcane Aero design system
-├── tests/                  # Playwright E2E tests
-├── drizzle/                # Database migrations
-├── scripts/                # Sync and reindex scripts
-└── data/compendium/        # Large JSON payloads
+│   │   ├── core/         # Client: types, constants, query client
+│   │   ├── server/       # Server-only: db, auth, providers, services
+│   │   ├── components/   # UI: ui/, layout/, features/
+│   │   └── features/     # Feature modules
+│   ├── routes/           # SvelteKit pages + API
+│   ├── hooks.server.ts   # Auth hook
+│   └── app.css           # Design system
+├── tests/                # Playwright E2E tests
+└── drizzle/              # Migrations
 ```
 
-### Authentication (Header-Based)
-
-The app uses **Trust-on-First-Use** via reverse proxy headers:
-- `X-Authentik-Username` header from Traefik/Authentik
-- Dev mode: Check `VITE_MUX_USER` env var for mock authentication
-- Auto-creates user record on first visit
+### Authentication
+- Header-based (Trust-on-First-Use): `X-Authentik-Username` header
+- Dev mode: `VITE_MUX_USER` env var for mock auth
 
 ### Multi-Provider System
+- Registry: `providers.json` enables data sources
+- All provider data validated via Zod before insert
+- Source tracking: items tagged with source (`open5e`, `srd`, `homebrew`)
 
-Content is aggregated from multiple sources:
-- **Registry**: `providers.json` manages enabled providers
-- **BaseProvider**: Abstract class ensuring consistent data fetching
-- **Validation**: All provider data validated via Zod schemas before insert
-- **Sync**: Concurrent sync with exponential backoff retry logic
-- **Source tracking**: Every item tagged with source (`open5e`, `srd`, `homebrew`)
+## Testing
 
-### Testing Strategy
+**Unit tests**: `*.test.ts` alongside source files in `grimar/src/`
+**E2E tests**: `tests/` directory with Playwright fixtures
 
-- **Unit tests**: Co-located `*.test.ts` files alongside source code
-- **E2E tests**: Playwright tests in `tests/` directory
-- **Test environment**: Happy DOM for unit, Playwright for E2E
-- **Mocking**: SvelteKit modules mocked in `src/test/mocks/`
-- **Coverage**: Excludes types, constants, and test files
-- **CI mode**: Use `CI=true bun run test:run` for automated testing
+### Test Patterns
+```typescript
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-### Drizzle Configuration
+describe('ModuleName', () => {
+  beforeEach(() => { vi.clearAllMocks(); });
+  
+  it('should do expected behavior', () => {
+    expect(true).toBe(true);
+  });
+});
+```
 
-- **Dialect**: SQLite with `bun:sqlite` driver
-- **Schema location**: `src/lib/server/db/schema.ts`
-- **FTS tables excluded**: Full-text search virtual tables filtered from Drizzle management
-- **Migrations**: Generated in `drizzle/` directory
+### Mocking
+```typescript
+// Database
+vi.mock('$lib/server/db', () => ({
+  getDb: vi.fn().mockResolvedValue(mockDb)
+}));
 
-## More Info
+// SvelteKit
+vi.mock('$app/stores', () => ({
+  page: { get: vi.fn().mockReturnValue({ data: {} }) }
+}));
+```
 
-See the **`docs/`** directory for detailed documentation:
+## Commit Format
 
-| File | Purpose |
-|------|---------|
-| `STYLE_GUIDE.md` | "Arcane Aero" design system and visual guidelines |
-| `COMPONENTS.md` | UI component inventory and patterns |
-| `ROUTES.md` | Route structure and API endpoints |
-| `architecture-doc.md` | Technical architecture and system design |
-| `COMPENDIUM_PAGES.md` | Compendium specifications |
+`<type>(<scope>): <description>`
 
-**Commit format**: `<type>(<scope>): <description>`
-
-**Commit types**:
 - `feat`: New feature
 - `fix`: Bug fix
-- `refactor`: Code restructuring without behavior change
+- `refactor`: Code restructuring
 - `perf`: Performance improvement
 - `chore`: Maintenance tasks
-- `misc`: Miscellaneous changes
-
-## MCP Tools
-
-**Context7 MCP** (for library docs):
-```typescript
-mcp__plugin_context7_context7__resolve-library-id({ libraryName: 'svelte', query: '...' })
-mcp__plugin_context7_context7__query-docs({ libraryId: '/sveltejs/svelte', query: '...' })
-```
