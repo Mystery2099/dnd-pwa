@@ -1,17 +1,16 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 
-	type Props = {
+	interface Props {
 		href?: string;
 		class?: string;
 		padding?: string;
 		children?: Snippet;
-	};
+	}
 
-	const props = $props();
-	const { href, class: className = '', padding = 'p-0', children, ...rest } = props satisfies Props;
+	let { href = '', class: className = '', padding = 'p-0', children, ...rest }: Props = $props();
 
-	const tag: 'a' | 'div' = href ? 'a' : 'div';
+	const tag = $derived< 'a' | 'div'>(href ? 'a' : 'div');
 </script>
 
 <svelte:element

@@ -46,11 +46,13 @@
 	const pageTitle = $derived(`${config.ui.displayNamePlural} - Grimar Compendium`);
 
 	// TanStack Query for compendium data - only available on client
+	// Use onMount to avoid hydration mismatch (effects run during hydration)
 	let query = $state<ReturnType<typeof createCompendiumAllQuery> | null>(null);
+	let mounted = $state(false);
 
-	// Initialize query on client only
-	$effect(() => {
-		if (browser && pathType) {
+	onMount(() => {
+		mounted = true;
+		if (pathType) {
 			query = createCompendiumAllQuery(pathType);
 		}
 	});
@@ -261,26 +263,24 @@
 
 	<!-- Scrollable entries container -->
 	<div class="relative flex min-h-0 flex-1 flex-col {selectedItem ? 'lg:flex' : 'flex'}">
-		{#if !query}
-			<!-- Loading state while query initializes on client -->
+		{#if !mounted}
+			<!-- Loading state during hydration - use default to avoid SSR/client mismatch -->
+			<CompendiumSkeleton variant="grid" count={8} />
+		{:else if query?.isPending}
 			{#if settingsStore.settings.defaultCompendiumView === 'grid'}
 				<CompendiumSkeleton variant="grid" count={8} />
 			{:else}
 				<CompendiumSkeleton variant="list" count={8} />
 			{/if}
-		{:else if query.isPending}
-			{#if settingsStore.settings.defaultCompendiumView === 'grid'}
-				<CompendiumSkeleton variant="grid" count={8} />
-			{:else}
-				<CompendiumSkeleton variant="list" count={8} />
-			{/if}
+		{:else if !query}
+			<CompendiumError message="Failed to initialize query" />
 		{:else if query.isError}
 			<CompendiumError
 				message={query.error instanceof Error ? query.error.message : 'Unknown error'}
 			/>
 		{:else}
 			{@const resolved = query.data}
-			{#if !resolved.hasAnyItems}
+			{#if !resolved?.hasAnyItems}
 				<div class="z-50 flex h-full items-center justify-center p-8">
 					<div class="max-w-md text-center">
 						<div class="mb-6 text-6xl">

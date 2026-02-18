@@ -19,10 +19,10 @@
 		class: className = ''
 	}: Props = $props();
 
-	// Track changes to call onchange callback
-	$effect(() => {
-		onchange?.(checked);
-	});
+	function handleCheckedChange(newChecked: boolean) {
+		checked = newChecked;
+		onchange?.(newChecked);
+	}
 </script>
 
 <Switch
@@ -31,4 +31,5 @@
 	{label}
 	{description}
 	class={className}
+	onCheckedChange={handleCheckedChange}
 />
