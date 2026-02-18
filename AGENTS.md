@@ -1,6 +1,14 @@
 # AGENTS.md
 
-This file provides guidance to AI coding agents working in this repository.
+This file provides guidance to AI coding agents working in this D&D 5e PWA repository.
+
+## Project Overview
+
+- **Framework**: SvelteKit 2 + Svelte 5 Runes
+- **Runtime**: Bun
+- **Database**: SQLite via Drizzle ORM
+- **Testing**: Vitest (unit) + Playwright (E2E)
+- **Styling**: Tailwind CSS v4
 
 ## Critical Rules
 
@@ -35,20 +43,20 @@ bun run format           # Format with Prettier (write)
 bun run lint             # Check format + lint
 
 # Testing
-bun run test:run         # CI mode (run before commit)
 bun run test             # Watch mode
-bun run test -- <file>   # Run single test file
-bun run test:ui          # Vitest UI mode
-bun run test:e2e         # Playwright E2E tests
-bun run test:all         # All tests (unit + E2E)
+bun run test:run        # CI mode (run before commit)
+bun run test -- <file>  # Run single test file
+bun run test:ui         # Vitest UI mode
+bun run test:e2e        # Playwright E2E tests
+bun run test:all        # All tests (unit + E2E)
 
 # Database
-bun run db:push          # Push schema (dev)
-bun run db:generate      # Generate migration
-bun run db:migrate       # Run migrations (prod)
-bun run db:studio        # Drizzle Studio UI
-bun run db:sync          # Sync compendium
-bun run reindex-fts      # Rebuild FTS index
+bun run db:push         # Push schema (dev)
+bun run db:generate     # Generate migration
+bun run db:migrate      # Run migrations (prod)
+bun run db:studio       # Drizzle Studio UI
+bun run db:sync         # Sync compendium
+bun run reindex-fts     # Rebuild FTS index
 ```
 
 ## Code Style
@@ -71,11 +79,9 @@ bun run reindex-fts      # Rebuild FTS index
   let { title, active = false, onclick }: Props = $props();
   ```
 
-### Exports
+### Exports & Imports
 - **Named exports only** (no default exports except Svelte components)
 - Use barrel files (index.ts) for re-exports
-
-### Imports
 - Use `$lib` alias for library code: `import { getDb } from '$lib/server/db'`
 - Use relative imports for same-directory files: `./types`
 - Use named imports for utilities, default for Svelte components
@@ -88,15 +94,24 @@ bun run reindex-fts      # Rebuild FTS index
 - **Database**: snake_case tables (`compendium_items`), camelCase columns (`spell_level`)
 - **Unused variables**: Prefix with `_` (`let { _, ...rest }`)
 
+### Directory-Specific Patterns
+| Directory | Pattern | Example |
+|-----------|---------|---------|
+| `db/` | `db-*` prefix | `db-connection.ts` |
+| `auth/` | `auth-*` prefix | `auth-handler.ts` |
+| `sync/` | `sync-*` prefix | `sync-cleanup.ts` |
+| Svelte components | PascalCase | `Button.svelte` |
+| Test files | `*.test.ts` | `service.test.ts` |
+
 ### Error Handling
-- All error logging must include `[context]` prefix:
-  ```typescript
-  // ✅ Correct
-  logger.error('[auth] Failed to resolve user:', error);
-  
-  // ❌ Incorrect  
-  console.error('Failed to resolve user:', error);
-  ```
+All error logging must include `[context]` prefix:
+```typescript
+// ✅ Correct
+logger.error('[auth] Failed to resolve user:', error);
+
+// ❌ Incorrect  
+console.error('Failed to resolve user:', error);
+```
 
 ### Constants & Enums
 Use object-based const patterns:
@@ -109,8 +124,6 @@ export type CompendiumType = (typeof COMPENDIUM_TYPES)[keyof typeof COMPENDIUM_T
 ```
 
 ## Architecture
-
-**Grimar** - Self-hosted D&D 5e PWA (SvelteKit 2 + Svelte 5, Bun, SQLite/Drizzle, TanStack Query)
 
 ```
 grimar/
@@ -165,7 +178,22 @@ vi.mock('$lib/server/db', () => ({
 vi.mock('$app/stores', () => ({
   page: { get: vi.fn().mockReturnValue({ data: {} }) }
 }));
+
+// Environment
+vi.mock('$app/environment', () => ({
+  browser: true,
+  building: false,
+  dev: true
+}));
 ```
+
+### Coverage Expectations
+| Module Type | Minimum |
+|-------------|---------|
+| Services | 70% |
+| Providers | 85% |
+| Utilities | 70% |
+| Transformers | 80% |
 
 ## Commit Format
 
