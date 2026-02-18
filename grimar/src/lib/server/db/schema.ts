@@ -7,6 +7,9 @@ export const users = sqliteTable('users', {
 		.$defaultFn(() => ({}))
 });
 
+export type CompendiumItem = typeof compendiumItems.$inferSelect;
+export type NewCompendiumItem = typeof compendiumItems.$inferInsert;
+
 export const compendiumItems = sqliteTable(
 	'compendium_items',
 	{
