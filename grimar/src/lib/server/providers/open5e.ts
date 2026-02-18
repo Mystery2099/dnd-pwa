@@ -374,13 +374,25 @@ export class Open5eProvider extends BaseProvider {
 	private sourcesLoaded = false;
 
 	private static readonly DEFAULT_TYPES = [
+		// Core content types
 		'spells',
 		'creatures',
 		'magicitems',
 		'feats',
 		'backgrounds',
 		'species',
-		'classes'
+		'classes',
+		// Lookup types
+		'abilities',
+		'alignments',
+		'conditions',
+		'damagetypes',
+		'languages',
+		'skills',
+		'spellschools',
+		'creaturetypes',
+		'sizes',
+		'environments'
 	] as const satisfies readonly CompendiumTypeName[];
 
 	constructor(baseUrl: string = OPEN5E_RAW_BASE, supportedTypes?: readonly CompendiumTypeName[]) {
@@ -568,6 +580,27 @@ export class Open5eProvider extends BaseProvider {
 				return this.transformSpecies(fields, pk, sourceBook);
 			case 'classes':
 				return this.transformClass(fields, pk, sourceBook);
+			// Lookup types
+			case 'abilities':
+				return this.transformAbility(fields, pk, sourceBook);
+			case 'alignments':
+				return this.transformAlignment(fields, pk, sourceBook);
+			case 'conditions':
+				return this.transformCondition(fields, pk, sourceBook);
+			case 'damagetypes':
+				return this.transformDamageType(fields, pk, sourceBook);
+			case 'languages':
+				return this.transformLanguage(fields, pk, sourceBook);
+			case 'skills':
+				return this.transformSkill(fields, pk, sourceBook);
+			case 'spellschools':
+				return this.transformSpellSchool(fields, pk, sourceBook);
+			case 'creaturetypes':
+				return this.transformCreatureType(fields, pk, sourceBook);
+			case 'sizes':
+				return this.transformSize(fields, pk, sourceBook);
+			case 'environments':
+				return this.transformEnvironment(fields, pk, sourceBook);
 			default:
 				return this.transformGeneric(fields, pk, sourceBook);
 		}
@@ -710,6 +743,193 @@ export class Open5eProvider extends BaseProvider {
 			summary,
 			details: fields,
 			classHitDie: hitDie,
+			sourceBook
+		};
+	}
+
+	// ============================================================================
+	// Lookup Type Transformers
+	// ============================================================================
+
+	private transformAbility(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Unknown');
+		const fullName = String(fields.full_name || fields.name || '');
+		const summary = fullName || name;
+
+		return {
+			externalId,
+			name,
+			summary,
+			details: fields,
+			sourceBook
+		};
+	}
+
+	private transformAlignment(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Unknown');
+		const abbreviation = String(fields.abbreviation || '');
+		const summary = abbreviation || name;
+
+		return {
+			externalId,
+			name,
+			summary,
+			details: fields,
+			sourceBook
+		};
+	}
+
+	private transformCondition(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Unknown');
+		const desc = fields.desc as string | string[] | undefined;
+		const summary = Array.isArray(desc) ? desc[0]?.slice(0, 100) : String(desc || '').slice(0, 100);
+
+		return {
+			externalId,
+			name,
+			summary,
+			details: fields,
+			sourceBook
+		};
+	}
+
+	private transformDamageType(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Unknown');
+		const desc = fields.desc as string | undefined;
+		const summary = desc || name;
+
+		return {
+			externalId,
+			name,
+			summary,
+			details: fields,
+			sourceBook
+		};
+	}
+
+	private transformLanguage(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Unknown');
+		const type = String(fields.type || 'Standard');
+		const typicalSpeakers = fields.typical_speakers as string[] | undefined;
+		const summary = type + (typicalSpeakers?.length ? `: ${typicalSpeakers.join(', ')}` : '');
+
+		return {
+			externalId,
+			name,
+			summary,
+			details: fields,
+			sourceBook
+		};
+	}
+
+	private transformSkill(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Unknown');
+		const abilityScore = fields.ability_score as Record<string, unknown> | undefined;
+		const ability = String(abilityScore?.name || fields.ability_score || '');
+		const desc = fields.desc as string | undefined;
+		const summary = ability ? `${name} (${ability})` : name;
+
+		return {
+			externalId,
+			name,
+			summary,
+			details: fields,
+			sourceBook
+		};
+	}
+
+	private transformSpellSchool(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Unknown');
+		const desc = fields.desc as string | undefined;
+		const summary = desc || name;
+
+		return {
+			externalId,
+			name,
+			summary,
+			details: fields,
+			sourceBook
+		};
+	}
+
+	private transformCreatureType(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Unknown');
+		const desc = fields.desc as string | undefined;
+		const summary = desc || name;
+
+		return {
+			externalId,
+			name,
+			summary,
+			details: fields,
+			sourceBook
+		};
+	}
+
+	private transformSize(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Unknown');
+		const space = fields.space?.toString() || '';
+		const summary = space ? `${name} (${space} ft.)` : name;
+
+		return {
+			externalId,
+			name,
+			summary,
+			details: fields,
+			sourceBook
+		};
+	}
+
+	private transformEnvironment(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Unknown');
+		const desc = fields.desc as string | undefined;
+		const summary = desc || name;
+
+		return {
+			externalId,
+			name,
+			summary,
+			details: fields,
 			sourceBook
 		};
 	}
