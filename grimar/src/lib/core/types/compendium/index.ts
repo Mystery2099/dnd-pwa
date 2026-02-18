@@ -18,6 +18,7 @@ import type { ComponentType } from 'svelte';
 
 export type { CompendiumFilterConfig } from './filter';
 export type { CompendiumCategory, CompendiumCard } from './categories';
+export type { CompendiumType } from './unified';
 
 // Normalized types for provider data transformation
 export type {

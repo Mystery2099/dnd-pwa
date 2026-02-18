@@ -4,7 +4,7 @@
  * Centralizes all compendium type-specific configurations.
  */
 
-import type { CompendiumTypeConfig, CompendiumTypeName } from '$lib/core/types/compendium';
+import type { CompendiumTypeConfig, CompendiumTypeName, CompendiumType } from '$lib/core/types/compendium';
 import { SPELLS_CONFIG } from './spells';
 import { CREATURES_CONFIG } from './creatures';
 import { FEATS_CONFIG } from './feats';
@@ -125,31 +125,34 @@ const CONFIG_MAP: Record<CompendiumTypeName, CompendiumTypeConfig> = {
 // Derive URL path mapping from config keys
 // Maps URL path segment → DB type (override where path differs from DB type name)
 const PATH_TO_DB_TYPE: Record<string, string> = {
-	// Main compendium types - URL path (plural) → DB type (singular)
-	spells: 'spell',
-	creatures: 'creature',
-	feats: 'feat',
-	backgrounds: 'background',
-	races: 'race',
-	classes: 'class',
-	items: 'item',
-	weapons: 'weapon',
-	conditions: 'condition',
-	planes: 'plane',
-	sections: 'section',
-	// Override types where path differs from DB type name
-	species: 'races',
-	magicitems: 'item',
-	spellschools: 'magic-schools',
-	damagetypes: 'damage-types',
-	weaponproperties: 'weapon-properties',
-	creaturetypes: 'creature-types',
-	rulesections: 'rule-sections',
-	itemcategories: 'item-categories',
-	equipmentcategories: 'equipment-categories',
-	itemrarities: 'item-rarities',
+	// Main compendium types - URL path → DB type (matches actual DB values)
+	spells: 'spells',
+	creatures: 'creatures',
+	feats: 'feats',
+	backgrounds: 'backgrounds',
+	races: 'races',
+	classes: 'classes',
+	items: 'items',
+	weapons: 'weapons',
+	conditions: 'conditions',
+	languages: 'languages',
+	alignments: 'alignments',
+	skills: 'skills',
+	planes: 'planes',
+	species: 'species',
+	magicitems: 'magicitems',
+	spellschools: 'spellschools',
+	damagetypes: 'damagetypes',
+	weaponproperties: 'weaponproperties',
+	creaturetypes: 'creaturetypes',
+	rulesections: 'rulesections',
+	itemcategories: 'itemcategories',
+	equipmentcategories: 'equipmentcategories',
+	itemrarities: 'itemrarities',
 	environments: 'environments',
-	abilities: 'ability-scores',
+	abilities: 'abilities',
+	armor: 'armor',
+	sections: 'sections',
 	// Backward compatibility: old 'monsters' URL path maps to new 'creature' DB type
 	monsters: 'creature'
 };
@@ -186,14 +189,26 @@ export function getCompendiumConfig(type: CompendiumTypeName | string): Compendi
 }
 
 /**
- * Get the database type from a URL path segment
+ * Get the unified type from a URL path segment (singular form)
  */
-export function getTypeFromPath(path: string): CompendiumTypeName {
-	const type = PATH_TO_TYPE[path];
-	if (!type) {
+export function getTypeFromPath(path: string): CompendiumType {
+	const dbType = PATH_TO_TYPE[path];
+	if (!dbType) {
 		throw new Error(`Unknown compendium path: ${path}`);
 	}
-	return type;
+	const singularType = HOMEBREW_TYPE_TO_DB_TYPE[dbType] || dbType.slice(0, -1);
+	return singularType as CompendiumType;
+}
+
+/**
+ * Get the DB type from a URL path segment (plural form)
+ */
+export function getDbTypeFromPath(path: string): CompendiumTypeName {
+	const dbType = PATH_TO_TYPE[path];
+	if (!dbType) {
+		throw new Error(`Unknown compendium path: ${path}`);
+	}
+	return dbType;
 }
 
 /**
@@ -209,7 +224,15 @@ export const HOMEBREW_TYPE_TO_DB_TYPE: Record<string, string> = {
 	species: 'races',
 	classes: 'class',
 	subclasses: 'subclass',
-	subraces: 'subrace'
+	subraces: 'subrace',
+	weapons: 'weapon',
+	armor: 'armor',
+	sections: 'section',
+	planes: 'plane',
+	conditions: 'condition',
+	skills: 'skill',
+	languages: 'language',
+	alignments: 'alignment'
 };
 
 export { SPELLS_CONFIG } from './spells';
