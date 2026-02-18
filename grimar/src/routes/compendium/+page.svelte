@@ -1,7 +1,50 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { Search } from 'lucide-svelte';
 	import CategoryCard from '$lib/features/compendium/components/CategoryCard.svelte';
+	import QuickReference from '$lib/features/compendium/components/QuickReference.svelte';
 	import { CATEGORIES, getCardsByCategory } from '$lib/core/constants/compendium/categories';
+
+	let itemCounts = $state<Record<string, number>>({});
+	let lookupData = $state<Record<string, { name: string; desc: string; details: Record<string, unknown> }[]>>({});
+	let loading = $state(true);
+
+	const LOOKUP_TYPES = ['skills', 'conditions', 'languages', 'alignments'] as const;
+
+	onMount(async () => {
+		try {
+			const countsRes = await fetch('/api/compendium/counts');
+			if (countsRes.ok) {
+				itemCounts = await countsRes.json();
+			}
+
+			// Fetch each lookup type separately
+			for (const lookupType of LOOKUP_TYPES) {
+				const lookupsRes = await fetch(`/api/compendium/items?type=${lookupType}&limit=100`);
+				if (lookupsRes.ok) {
+					const data = await lookupsRes.json();
+					if (data.items?.length > 0) {
+						lookupData[lookupType] = data.items.map((item: { name: string; desc: string; details: Record<string, unknown> }) => ({
+							name: item.name,
+							desc: item.desc || '',
+							details: item.details || {}
+						}));
+					}
+				}
+			}
+		} catch (e) {
+			console.error('Failed to load compendium data:', e);
+		} finally {
+			loading = false;
+		}
+	});
+
+	const lookupConfigs = [
+		{ type: 'skills', title: 'Skills', color: 'text-emerald-400', keyField: 'name', descField: 'desc' },
+		{ type: 'conditions', title: 'Conditions', color: 'text-amber-400', keyField: 'name', descField: 'desc' },
+		{ type: 'languages', title: 'Languages', color: 'text-cyan-400', keyField: 'name', descField: 'desc' },
+		{ type: 'alignments', title: 'Alignments', color: 'text-violet-400', keyField: 'name', descField: 'desc' }
+	] as const;
 </script>
 
 <div class="relative flex min-h-[calc(100vh-6rem)] animate-enter flex-col items-center py-12 pb-24">
@@ -40,11 +83,39 @@
 	</button>
 
 	<div class="flex w-full max-w-6xl flex-col gap-16 px-4">
+		<!-- Quick Reference Section -->
+		{#if !loading && lookupData && Object.keys(lookupData).length > 0}
+			<section class="animate-fade-in">
+				<h2
+					class="mb-6 flex items-center gap-3 text-xl font-bold text-[var(--color-text-primary)]"
+				>
+					<span class="inline-block h-px w-8 bg-[var(--color-accent)]"></span>
+					Quick Reference
+				</h2>
+				<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+					{#each lookupConfigs as config}
+						{#if lookupData[config.type]}
+							<QuickReference
+								items={lookupData}
+								title={config.title}
+								icon=""
+								type={config.type}
+								accentColor={config.color}
+								keyField={config.keyField}
+								descriptionField={config.descField}
+							/>
+						{/if}
+					{/each}
+				</div>
+			</section>
+		{/if}
+
 		{#each CATEGORIES as category (category.id)}
 			<section>
 				<h2
-					class="mb-6 inline-block border-b border-[var(--color-border)] pb-2 text-xl font-bold text-[var(--color-text-primary)]"
+					class="mb-6 flex items-center gap-3 text-xl font-bold text-[var(--color-text-primary)]"
 				>
+					<span class="inline-block h-px w-8 bg-[var(--color-accent)]"></span>
 					{category.title}
 				</h2>
 				<div class="grid {category.gridCols} gap-6">
@@ -56,6 +127,7 @@
 							icon={card.icon}
 							gradient={card.gradient}
 							accent={card.accent}
+							count={itemCounts[card.href]}
 						/>
 					{/each}
 				</div>
