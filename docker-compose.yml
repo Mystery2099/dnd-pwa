@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  grimar:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: grimar
+    restart: unless-stopped
+    volumes:
+      - grimar-data:/app/data
+    environment:
+      - DATABASE_URL=/app/data/grimar.db
+      - NODE_ENV=production
+      - PORT=3000
+      - HOST=0.0.0.0
+      # Set your public URL
+      - ORIGIN=${ORIGIN:-http://localhost:3000}
+    networks:
+      - internal
+    ports:
+      - "${PORT:-3000}:3000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    networks:
+      - internal
+    depends_on:
+      grimar:
+        condition: service_healthy
+    profiles:
+      - tunnel
+
+networks:
+  internal:
+
+volumes:
+  grimar-data:

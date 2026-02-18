@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build output
+grimar/build/
+grimar/.svelte-kit/
+grimar/dist/
+
+# Development files
+.env
+.env.*
+!.env.example
+*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Documentation
+*.md
+!grimar/README.md
+docs/
+
+# Tests
+grimar/tests/
+grimar/**/*.test.ts
+grimar/**/*.spec.ts
+playwright-report/
+test-results/
+
+# Misc
+.DS_Store
+Thumbs.db
+*.log
