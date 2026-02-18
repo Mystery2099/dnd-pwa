@@ -1,12 +1,10 @@
 /**
  * Provider Registry
  *
- * Central registry for managing compendium data providers.
- * Code-driven configuration with optional user overrides from providers.json.
+ * Manages compendium data providers.
+ * Currently supports Open5e (main data source) and Homebrew (user content).
  */
 
-import { readFileSync, existsSync } from 'fs';
-import { join } from 'path';
 import type { CompendiumProvider, ProviderHealthStatus } from './types';
 import { Open5eProvider } from './open5e';
 import { HomebrewProvider } from './homebrew';
@@ -15,32 +13,26 @@ import { createModuleLogger } from '$lib/server/logger';
 const log = createModuleLogger('ProviderRegistry');
 
 // =============================================================================
-// Provider Definitions - Code-driven, type-safe
+// Provider Definitions
 // =============================================================================
 
 export interface ProviderDefinition {
 	id: string;
-	enabled: boolean;
 	create: () => CompendiumProvider;
 }
 
-// Default provider configuration
-const DEFAULT_PROVIDERS: ProviderDefinition[] = [
+const PROVIDER_DEFINITIONS: ProviderDefinition[] = [
 	{
 		id: 'open5e',
-		enabled: true,
 		create: () => new Open5eProvider()
 	},
 	{
 		id: 'homebrew',
-		enabled: false,
 		create: () => new HomebrewProvider('data/homebrew')
 	}
 ];
 
-export const PROVIDERS = DEFAULT_PROVIDERS;
-
-// Primary provider for fallback lookups (now open5e since SRD is from GitHub)
+// Primary provider for fallback lookups
 export const PRIMARY_PROVIDER_ID = 'open5e';
 
 // Sync configuration
@@ -49,47 +41,6 @@ export const SYNC_CONFIG = {
 	retryAttempts: 3,
 	retryDelayMs: 1000
 } as const;
-
-// =============================================================================
-// User Configuration - Optional overrides from providers.json
-// =============================================================================
-
-interface UserConfig {
-	enabled?: Record<string, boolean>;
-	primary?: string;
-}
-
-// Cached user config to avoid repeated file reads
-let cachedUserConfig: UserConfig | null = null;
-
-/**
- * Load user configuration from providers.json
- * Only overrides enabled status and primary provider
- */
-function loadUserConfig(): UserConfig {
-	if (cachedUserConfig !== null) {
-		return cachedUserConfig;
-	}
-
-	const configPath = join(process.cwd(), 'providers.json');
-
-	if (!existsSync(configPath)) {
-		cachedUserConfig = {};
-		return cachedUserConfig;
-	}
-
-	try {
-		const content = readFileSync(configPath, 'utf-8');
-		const config = JSON.parse(content) as UserConfig;
-		log.info('Loaded user configuration from providers.json');
-		cachedUserConfig = config;
-		return config;
-	} catch (error) {
-		log.warn({ error }, 'Failed to load providers.json, using defaults');
-		cachedUserConfig = {};
-		return cachedUserConfig;
-	}
-}
 
 // =============================================================================
 // Provider Registry - Singleton pattern
@@ -114,20 +65,10 @@ class ProviderRegistryClass {
 	}
 
 	/**
-	 * Initialize provider instances from static definitions with user overrides
+	 * Initialize provider instances
 	 */
 	private initializeProviders(): void {
-		const userConfig = loadUserConfig();
-
-		for (const def of PROVIDERS) {
-			// Apply user override for enabled status
-			const isEnabled = userConfig.enabled?.[def.id] ?? def.enabled;
-
-			if (!isEnabled) {
-				log.debug({ providerId: def.id }, 'Provider disabled by user config');
-				continue;
-			}
-
+		for (const def of PROVIDER_DEFINITIONS) {
 			try {
 				const provider = def.create();
 				this.providers.set(def.id, provider);
@@ -163,20 +104,10 @@ class ProviderRegistryClass {
 	}
 
 	/**
-	 * Get the primary provider (user-configured or default)
+	 * Get the primary provider
 	 */
 	getPrimaryProvider(): CompendiumProvider | undefined {
-		// Try user-configured primary first
-		const userConfig = loadUserConfig();
-		if (userConfig.primary) {
-			const primary = this.providers.get(userConfig.primary);
-			if (primary) return primary;
-		}
-		// Fall back to default primary
-		const primary = this.providers.get(PRIMARY_PROVIDER_ID);
-		if (primary) return primary;
-		// Last resort: first enabled
-		return this.getEnabledProviders()[0];
+		return this.providers.get(PRIMARY_PROVIDER_ID) ?? this.getEnabledProviders()[0];
 	}
 
 	/**

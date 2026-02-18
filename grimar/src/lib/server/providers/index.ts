@@ -9,7 +9,6 @@ export {
 	providerRegistry,
 	ProviderRegistry,
 	SYNC_CONFIG,
-	PROVIDERS,
 	PRIMARY_PROVIDER_ID
 } from './registry';
 export { Open5eProvider } from './open5e';
