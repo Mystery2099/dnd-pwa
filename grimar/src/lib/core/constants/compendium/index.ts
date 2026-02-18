@@ -196,6 +196,22 @@ export function getTypeFromPath(path: string): CompendiumTypeName {
 	return type;
 }
 
+/**
+ * Mapping from plural form (used in forms/API) to singular DB type
+ * Used by homebrew to convert user-facing types to DB types
+ */
+export const HOMEBREW_TYPE_TO_DB_TYPE: Record<string, string> = {
+	spells: 'spell',
+	creatures: 'creature',
+	magicitems: 'item',
+	feats: 'feat',
+	backgrounds: 'background',
+	species: 'races',
+	classes: 'class',
+	subclasses: 'subclass',
+	subraces: 'subrace'
+};
+
 export { SPELLS_CONFIG } from './spells';
 export { CREATURES_CONFIG } from './creatures';
 export { FEATS_CONFIG } from './feats';

@@ -17,6 +17,7 @@
 		items = [
 			{ href: '/dashboard', label: 'Dashboard' },
 			{ href: '/compendium', label: 'Compendium' },
+			{ href: '/homebrew', label: 'Homebrew' },
 			{ href: '/settings', label: 'Settings' }
 		],
 		open = $bindable(false)

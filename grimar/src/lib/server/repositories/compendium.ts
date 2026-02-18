@@ -397,6 +397,240 @@ export class CompendiumRepository {
 		this.cache.invalidatePattern('compendium:search:.*');
 		this.cache.invalidatePattern('compendium:count:.*');
 	}
+
+	/**
+	 * Create a new homebrew item
+	 * @param data The homebrew item data
+	 * @param username The creator's username
+	 * @returns The ID of the created item
+	 */
+	async createHomebrewItem(
+		data: {
+			type: string;
+			name: string;
+			summary: string;
+			details: Record<string, unknown>;
+			jsonData: string;
+			externalId?: string;
+			spellLevel?: number;
+			spellSchool?: string;
+			challengeRating?: string;
+			creatureSize?: string;
+			creatureType?: string;
+			classHitDie?: number;
+			raceSize?: string;
+			raceSpeed?: number;
+			backgroundFeature?: string;
+			backgroundSkillProficiencies?: string;
+			featPrerequisites?: string;
+		},
+		username: string
+	): Promise<number> {
+		const db = await getDb();
+		const result = await db.insert(compendiumItems).values({
+			source: 'homebrew',
+			type: data.type,
+			externalId: data.externalId || `homebrew_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`,
+			name: data.name,
+			summary: data.summary,
+			details: data.details,
+			jsonData: data.jsonData,
+			sourcePublisher: 'homebrew',
+			sourceBook: username,
+			spellLevel: data.spellLevel,
+			spellSchool: data.spellSchool,
+			challengeRating: data.challengeRating,
+			creatureSize: data.creatureSize,
+			creatureType: data.creatureType,
+			classHitDie: data.classHitDie,
+			raceSize: data.raceSize,
+			raceSpeed: data.raceSpeed,
+			backgroundFeature: data.backgroundFeature,
+			backgroundSkillProficiencies: data.backgroundSkillProficiencies,
+			featPrerequisites: data.featPrerequisites,
+			createdBy: username
+		}).returning({ id: compendiumItems.id });
+
+		this.invalidateCache(data.type);
+		log.info({ itemId: result[0].id, username, type: data.type }, 'Created homebrew item');
+		return result[0].id;
+	}
+
+	/**
+	 * Update a homebrew item (ownership or admin check required)
+	 * @param id The item ID
+	 * @param data The updated data
+	 * @param username The user's username
+	 * @param role The user's role
+	 * @returns True if updated, false if not authorized or not found
+	 */
+	async updateHomebrewItem(
+		id: number,
+		data: Partial<{
+			name: string;
+			summary: string;
+			details: Record<string, unknown>;
+			jsonData: string;
+			spellLevel: number;
+			spellSchool: string;
+			challengeRating: string;
+			creatureSize: string;
+			creatureType: string;
+			classHitDie: number;
+			raceSize: string;
+			raceSpeed: number;
+			backgroundFeature: string;
+			backgroundSkillProficiencies: string;
+			featPrerequisites: string;
+		}>,
+		username: string,
+		role: 'user' | 'admin'
+	): Promise<boolean> {
+		const db = await getDb();
+
+		// Check ownership or admin
+		const item = await db
+			.select()
+			.from(compendiumItems)
+			.where(eq(compendiumItems.id, id))
+			.limit(1);
+
+		if (item.length === 0) {
+			log.warn({ id }, 'Homebrew item not found');
+			return false;
+		}
+
+		const existingItem = item[0];
+		if (existingItem.source !== 'homebrew') {
+			log.warn({ id }, 'Item is not a homebrew item');
+			return false;
+		}
+
+		if (role !== 'admin' && existingItem.createdBy !== username) {
+			log.warn({ id, username, role }, 'Not authorized to update this item');
+			return false;
+		}
+
+		// Build update values
+		const updateData: Record<string, unknown> = {};
+		if (data.name !== undefined) updateData.name = data.name;
+		if (data.summary !== undefined) updateData.summary = data.summary;
+		if (data.details !== undefined) updateData.details = data.details;
+		if (data.jsonData !== undefined) updateData.jsonData = data.jsonData;
+		if (data.spellLevel !== undefined) updateData.spellLevel = data.spellLevel;
+		if (data.spellSchool !== undefined) updateData.spellSchool = data.spellSchool;
+		if (data.challengeRating !== undefined) updateData.challengeRating = data.challengeRating;
+		if (data.creatureSize !== undefined) updateData.creatureSize = data.creatureSize;
+		if (data.creatureType !== undefined) updateData.creatureType = data.creatureType;
+		if (data.classHitDie !== undefined) updateData.classHitDie = data.classHitDie;
+		if (data.raceSize !== undefined) updateData.raceSize = data.raceSize;
+		if (data.raceSpeed !== undefined) updateData.raceSpeed = data.raceSpeed;
+		if (data.backgroundFeature !== undefined) updateData.backgroundFeature = data.backgroundFeature;
+		if (data.backgroundSkillProficiencies !== undefined) {
+			updateData.backgroundSkillProficiencies = data.backgroundSkillProficiencies;
+		}
+		if (data.featPrerequisites !== undefined) updateData.featPrerequisites = data.featPrerequisites;
+
+		await db
+			.update(compendiumItems)
+			.set(updateData)
+			.where(eq(compendiumItems.id, id));
+
+		this.invalidateCache(existingItem.type);
+		log.info({ itemId: id, username }, 'Updated homebrew item');
+		return true;
+	}
+
+	/**
+	 * Delete a homebrew item (ownership or admin check required)
+	 * @param id The item ID
+	 * @param username The user's username
+	 * @param role The user's role
+	 * @returns True if deleted, false if not authorized or not found
+	 */
+	async deleteHomebrewItem(
+		id: number,
+		username: string,
+		role: 'user' | 'admin'
+	): Promise<boolean> {
+		const db = await getDb();
+
+		// Check ownership or admin
+		const item = await db
+			.select()
+			.from(compendiumItems)
+			.where(eq(compendiumItems.id, id))
+			.limit(1);
+
+		if (item.length === 0) {
+			log.warn({ id }, 'Homebrew item not found');
+			return false;
+		}
+
+		const existingItem = item[0];
+		if (existingItem.source !== 'homebrew') {
+			log.warn({ id }, 'Item is not a homebrew item');
+			return false;
+		}
+
+		if (role !== 'admin' && existingItem.createdBy !== username) {
+			log.warn({ id, username, role }, 'Not authorized to delete this item');
+			return false;
+		}
+
+		await db.delete(compendiumItems).where(eq(compendiumItems.id, id));
+
+		this.invalidateCache(existingItem.type);
+		log.info({ itemId: id, username }, 'Deleted homebrew item');
+		return true;
+	}
+
+	/**
+	 * Get user's homebrew items
+	 * @param username The user's username
+	 * @returns Array of homebrew items
+	 */
+	async getUserHomebrewItems(username: string): Promise<typeof compendiumItems.$inferSelect[]> {
+		const db = await getDb();
+		return db
+			.select()
+			.from(compendiumItems)
+			.where(
+				and(
+					eq(compendiumItems.source, 'homebrew'),
+					eq(compendiumItems.createdBy, username)
+				)
+			)
+			.orderBy(desc(compendiumItems.id));
+	}
+
+	/**
+	 * Get all homebrew items (visible to all users)
+	 * @returns Array of all homebrew items
+	 */
+	async getAllHomebrewItems(): Promise<typeof compendiumItems.$inferSelect[]> {
+		const db = await getDb();
+		return db
+			.select()
+			.from(compendiumItems)
+			.where(eq(compendiumItems.source, 'homebrew'))
+			.orderBy(desc(compendiumItems.id));
+	}
+
+	/**
+	 * Get homebrew item by internal ID
+	 * @param id The item ID
+	 * @returns The item or null if not found
+	 */
+	async getHomebrewItemById(id: number): Promise<typeof compendiumItems.$inferSelect | null> {
+		const db = await getDb();
+		const items = await db
+			.select()
+			.from(compendiumItems)
+			.where(and(eq(compendiumItems.id, id), eq(compendiumItems.source, 'homebrew')))
+			.limit(1);
+		return items.length > 0 ? items[0] : null;
+	}
 }
 
 // Export a singleton instance
@@ -412,3 +646,10 @@ export const invalidateCompendiumCache = (type: string) =>
 	compendiumRepository.invalidateCache(type);
 
 export const invalidateAllCompendiumCache = () => compendiumRepository.invalidateAllCache();
+
+export const createHomebrewItem = compendiumRepository.createHomebrewItem.bind(compendiumRepository);
+export const updateHomebrewItem = compendiumRepository.updateHomebrewItem.bind(compendiumRepository);
+export const deleteHomebrewItem = compendiumRepository.deleteHomebrewItem.bind(compendiumRepository);
+export const getUserHomebrewItems = compendiumRepository.getUserHomebrewItems.bind(compendiumRepository);
+export const getAllHomebrewItems = compendiumRepository.getAllHomebrewItems.bind(compendiumRepository);
+export const getHomebrewItemById = compendiumRepository.getHomebrewItemById.bind(compendiumRepository);
