@@ -2,9 +2,9 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { getDb } from '$lib/server/db';
 import { compendiumItems } from '$lib/server/db/schema';
-import { like, or, desc, eq, and, gte, lte } from 'drizzle-orm';
+import { like, or, desc, eq, and, gte, lte, sql } from 'drizzle-orm';
 import { createModuleLogger } from '$lib/server/logger';
-import { getCompendiumConfig, getTypeFromPath } from '$lib/core/constants/compendium';
+import { getCompendiumConfig, getDbTypeFromPath } from '$lib/core/constants/compendium';
 import { COMPENDIUM_TYPES } from '$lib/core/types/compendium';
 
 const log = createModuleLogger('CompendiumSearchAPI');
@@ -139,22 +139,19 @@ export const GET: RequestHandler = async ({ url }) => {
 
 		// Apply type filter
 		if (filters.type) {
-			// Skip getTypeFromPath if already a valid compendium type (singular form)
-			const dbType = COMPENDIUM_TYPES.includes(filters.type as any)
-				? (filters.type as any)
-				: getTypeFromPath(filters.type);
+			const dbType = getDbTypeFromPath(filters.type);
 			conditions.push(eq(compendiumItems.type, dbType));
 		}
 
 		// Apply spell filters
 		if (filters.school) {
-			conditions.push(eq(compendiumItems.spellSchool, filters.school.toLowerCase()));
+			conditions.push(eq(sql`lower(json_extract(${compendiumItems.details}, '$.school'))`, filters.school.toLowerCase()));
 		}
 
 		if (filters.level) {
 			const level = parseInt(filters.level);
 			if (!isNaN(level)) {
-				conditions.push(eq(compendiumItems.spellLevel, level));
+				conditions.push(eq(sql<number>`json_extract(${compendiumItems.details}, '$.level')`, level));
 			}
 		}
 
@@ -165,22 +162,22 @@ export const GET: RequestHandler = async ({ url }) => {
 				if (range.min !== undefined && range.max !== undefined) {
 					conditions.push(
 						and(
-							gte(compendiumItems.challengeRating, range.min.toString()),
-							lte(compendiumItems.challengeRating, range.max.toString())
+							gte(sql`json_extract(${compendiumItems.details}, '$.challenge_rating')`, range.min.toString()),
+							lte(sql`json_extract(${compendiumItems.details}, '$.challenge_rating')`, range.max.toString())
 						)
 					);
 				} else if (range.min !== undefined) {
-					conditions.push(eq(compendiumItems.challengeRating, range.min.toString()));
+					conditions.push(eq(sql`json_extract(${compendiumItems.details}, '$.challenge_rating')`, range.min.toString()));
 				}
 			}
 		}
 
 		if (filters.size) {
-			conditions.push(eq(compendiumItems.creatureSize, filters.size.toLowerCase()));
+			conditions.push(eq(sql`lower(json_extract(${compendiumItems.details}, '$.size'))`, filters.size.toLowerCase()));
 		}
 
 		if (filters.creatureType) {
-			conditions.push(eq(compendiumItems.creatureType, filters.creatureType.toLowerCase()));
+			conditions.push(eq(sql`lower(json_extract(${compendiumItems.details}, '$.type'))`, filters.creatureType.toLowerCase()));
 		}
 
 		// Apply source filter

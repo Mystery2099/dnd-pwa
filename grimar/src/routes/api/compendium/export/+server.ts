@@ -41,12 +41,7 @@ export const GET: RequestHandler = async ({ url, request }) => {
 				externalId: item.externalId,
 				name: item.name,
 				summary: item.summary,
-				details: item.details,
-				spellLevel: item.spellLevel,
-				spellSchool: item.spellSchool,
-				challengeRating: item.challengeRating,
-				creatureSize: item.creatureSize,
-				creatureType: item.creatureType
+				details: item.details
 			}));
 		} else {
 			// Counts only: use query API for efficiency

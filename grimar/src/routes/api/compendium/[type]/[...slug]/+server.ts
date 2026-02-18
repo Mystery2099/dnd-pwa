@@ -3,7 +3,7 @@ import type { RequestHandler } from './$types';
 import { getDb } from '$lib/server/db';
 import { compendiumItems } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
-import { getTypeFromPath } from '$lib/core/constants/compendium';
+import { getDbTypeFromPath } from '$lib/core/constants/compendium';
 import { createModuleLogger } from '$lib/server/logger';
 
 const log = createModuleLogger('CompendiumDetailAPI');
@@ -37,8 +37,8 @@ export const GET: RequestHandler = async ({ params }) => {
 		// Reconstruct the full externalId
 		const externalId = `${source}_${id}`;
 
-		// Convert URL path type (e.g., 'spells') to database type (e.g., 'spell')
-		const dbType = getTypeFromPath(type);
+		// Convert URL path type to database type
+		const dbType = getDbTypeFromPath(type);
 		log.info(
 			{ type, dbType, source, id, externalId },
 			'Converted type and reconstructed externalId'

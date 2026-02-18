@@ -2,8 +2,8 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { getDb } from '$lib/server/db';
 import { compendiumItems } from '$lib/server/db/schema';
-import { eq, like, and, desc, asc } from 'drizzle-orm';
-import { getTypeFromPath } from '$lib/core/constants/compendium';
+import { eq, like, and, desc, asc, sql } from 'drizzle-orm';
+import { getDbTypeFromPath } from '$lib/core/constants/compendium';
 import { createModuleLogger } from '$lib/server/logger';
 
 const log = createModuleLogger('CompendiumItemsAPI');
@@ -32,8 +32,8 @@ export const GET: RequestHandler = async ({ url }) => {
 		}
 
 		const db = await getDb();
-		// Convert URL path type (e.g., 'creatures') to database type (e.g., 'creature')
-		const dbType = getTypeFromPath(pathType);
+		// Convert URL path type to database type
+		const dbType = getDbTypeFromPath(pathType);
 
 		// Build where clause
 		const conditions = [eq(compendiumItems.type, dbType)];
@@ -45,19 +45,19 @@ export const GET: RequestHandler = async ({ url }) => {
 		}
 
 		if (spellLevel != null && spellLevel !== '') {
-			conditions.push(eq(compendiumItems.spellLevel, parseInt(spellLevel)));
+			conditions.push(eq(sql<number>`json_extract(${compendiumItems.details}, '$.level')`, parseInt(spellLevel)));
 		}
 
 		if (spellSchool) {
-			conditions.push(eq(compendiumItems.spellSchool, spellSchool));
+			conditions.push(eq(sql`lower(json_extract(${compendiumItems.details}, '$.school'))`, spellSchool.toLowerCase()));
 		}
 
 		if (challengeRating != null && challengeRating !== '') {
-			conditions.push(eq(compendiumItems.challengeRating, challengeRating));
+			conditions.push(eq(sql`json_extract(${compendiumItems.details}, '$.challenge_rating')`, challengeRating));
 		}
 
 		if (creatureType) {
-			conditions.push(eq(compendiumItems.creatureType, creatureType));
+			conditions.push(eq(sql`lower(json_extract(${compendiumItems.details}, '$.type'))`, creatureType.toLowerCase()));
 		}
 
 		// Use and() for combining conditions
