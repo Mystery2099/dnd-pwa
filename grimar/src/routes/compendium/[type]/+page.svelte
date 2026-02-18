@@ -30,6 +30,10 @@
 	import RaceEntryContent from '$lib/features/compendium/components/entry-content/RaceEntryContent.svelte';
 	import ClassEntryContent from '$lib/features/compendium/components/entry-content/ClassEntryContent.svelte';
 	import ItemEntryContent from '$lib/features/compendium/components/entry-content/ItemEntryContent.svelte';
+	import LookupEntryContent from '$lib/features/compendium/components/entry-content/LookupEntryContent.svelte';
+
+	// Lookup types that use the simple reference view
+	const LOOKUP_TYPES = ['skills', 'conditions', 'languages', 'alignments'] as const;
 
 	let { data } = $props();
 
@@ -423,6 +427,8 @@
 					<ClassEntryContent classData={selectedItem.details} />
 				{:else if dbType === 'magicitems'}
 					<ItemEntryContent item={selectedItem.details} />
+				{:else if LOOKUP_TYPES.includes(dbType as typeof LOOKUP_TYPES[number])}
+					<LookupEntryContent details={selectedItem.details} type={dbType as 'skills' | 'conditions' | 'languages' | 'alignments'} />
 				{:else}
 					<div class="space-y-4">
 						<div

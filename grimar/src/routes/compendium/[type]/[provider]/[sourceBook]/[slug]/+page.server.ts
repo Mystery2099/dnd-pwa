@@ -1,6 +1,6 @@
 import type { PageServerLoad } from './$types';
 import { compendiumService } from '$lib/server/services/compendium';
-import { getCompendiumConfig, getTypeFromPath } from '$lib/core/constants/compendium';
+import { getCompendiumConfig, getDbTypeFromPath } from '$lib/core/constants/compendium';
 import { error } from '@sveltejs/kit';
 import { requireUser } from '$lib/server/services/auth';
 import { createModuleLogger } from '$lib/server/logger';
@@ -15,7 +15,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 
 	try {
 		const config = getCompendiumConfig(pathType);
-		const dbType = getTypeFromPath(pathType);
+		const dbType = getDbTypeFromPath(pathType);
 
 		log.info({ pathType, provider, sourceBook, slug }, 'Loading compendium item');
 
