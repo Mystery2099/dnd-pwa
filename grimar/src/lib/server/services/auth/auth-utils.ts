@@ -35,7 +35,12 @@ export async function upsertAndLoadUser(username: string): Promise<AuthUser | nu
 		log.warn({ username }, 'Failed to load user after upsert');
 		return null;
 	}
-	return { username: userRow.username, settings: userRow.settings };
+	return {
+		username: userRow.username,
+		settings: userRow.settings,
+		role: 'user',
+		groups: []
+	};
 }
 
 /** Resolve user from request */
@@ -52,4 +57,14 @@ export async function resolveUser(event: RequestEvent): Promise<AuthResult> {
 	}
 	log.info({ username }, 'User resolved');
 	return { user };
+}
+
+/** Check if user can edit an item (owner or admin) */
+export function canEdit(item: { createdBy: string | null }, user: AuthUser): boolean {
+	return user.role === 'admin' || item.createdBy === user.username;
+}
+
+/** Check if user can delete an item (owner or admin) */
+export function canDelete(item: { createdBy: string | null }, user: AuthUser): boolean {
+	return canEdit(item, user);
 }

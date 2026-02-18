@@ -8,6 +8,34 @@
 import { type Handle } from '@sveltejs/kit';
 import { resolveUser } from './auth-utils';
 import { getSession } from '$lib/server/auth/session';
+import type { AuthUser } from './auth-types';
+
+const ADMIN_GROUPS = (import.meta.env.ADMIN_GROUPS || '')
+	.split(',')
+	.map((g) => g.trim().toLowerCase())
+	.filter(Boolean);
+
+function getUserRole(groups: string[]): 'user' | 'admin' {
+	if (groups.length === 0) return 'user';
+	const lowerGroups = groups.map((g) => g.toLowerCase());
+	return lowerGroups.some((g) => ADMIN_GROUPS.includes(g)) ? 'admin' : 'user';
+}
+
+function createAuthUser(username: string, groups: string[] = []): AuthUser {
+	return {
+		username,
+		settings: {},
+		role: getUserRole(groups),
+		groups
+	};
+}
+
+/** Extract groups from Authentik headers */
+function getAuthentikGroups(headers: Headers): string[] {
+	const groupsHeader = headers.get('x-authentik-groups');
+	if (!groupsHeader) return [];
+	return groupsHeader.split('|').map((g) => g.trim()).filter(Boolean);
+}
 
 /** Authentication middleware hook */
 export const handleAuth: Handle = async ({ event, resolve }) => {
@@ -19,7 +47,8 @@ export const handleAuth: Handle = async ({ event, resolve }) => {
 		const testUser =
 			event.request.headers.get('X-Authentik-Username') || event.cookies.get('test-user');
 		if (testUser || path.startsWith('/api/')) {
-			event.locals.user = { username: testUser || 'test-dm', settings: {} };
+			const groups = getAuthentikGroups(event.request.headers);
+			event.locals.user = createAuthUser(testUser || 'test-dm', groups);
 			return resolve(event);
 		}
 	}
@@ -27,14 +56,16 @@ export const handleAuth: Handle = async ({ event, resolve }) => {
 	// Session-based auth (OAuth2)
 	const session = getSession(event.cookies);
 	if (session) {
-		event.locals.user = { username: session.username, settings: {} };
+		const groups = getAuthentikGroups(event.request.headers);
+		event.locals.user = createAuthUser(session.username, groups);
 		return resolve(event);
 	}
 
 	// Proxy header auth (Traefik → Authentik)
 	const result = await resolveUser(event);
 	if (result.user) {
-		event.locals.user = result.user;
+		const groups = getAuthentikGroups(event.request.headers);
+		event.locals.user = createAuthUser(result.user.username, groups);
 	}
 
 	// Redirect unauthenticated requests to non-public paths
