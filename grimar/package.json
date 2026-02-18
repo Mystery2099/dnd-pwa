@@ -86,7 +86,7 @@
 		"fuse.js": "^7.1.0",
 		"idb-keyval": "^6.2.2",
 		"lucide-react": "^0.562.0",
-		"lucide-svelte": "^0.561.0",
+		"lucide-svelte": "^0.574.0",
 		"nanoid": "^5.1.6",
 		"svelte-markdown": "^0.4.1",
 		"tailwind-merge": "^3.4.1",
