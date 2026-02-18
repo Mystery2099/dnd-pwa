@@ -591,18 +591,7 @@ async function syncTypeFromProvider(
 							jsonData: transformed.jsonData,
 							edition: transformed.edition,
 							sourceBook: transformed.sourceBook,
-							sourcePublisher: transformed.sourcePublisher,
-							spellLevel: transformed.spellLevel,
-							spellSchool: transformed.spellSchool,
-							challengeRating: transformed.challengeRating,
-							creatureSize: transformed.creatureSize,
-							creatureType: transformed.creatureType,
-							classHitDie: transformed.classHitDie,
-							raceSize: transformed.raceSize,
-							raceSpeed: transformed.raceSpeed,
-							backgroundFeature: transformed.backgroundFeature,
-							backgroundSkillProficiencies: transformed.backgroundSkillProficiencies,
-							featPrerequisites: transformed.featPrerequisites
+							sourcePublisher: transformed.sourcePublisher
 						})
 						.onConflictDoUpdate({
 							target: [compendiumItems.type, compendiumItems.source, compendiumItems.externalId],
@@ -613,18 +602,7 @@ async function syncTypeFromProvider(
 								jsonData: transformed.jsonData,
 								edition: transformed.edition,
 								sourceBook: transformed.sourceBook,
-								sourcePublisher: transformed.sourcePublisher,
-								spellLevel: transformed.spellLevel,
-								spellSchool: transformed.spellSchool,
-								challengeRating: transformed.challengeRating,
-								creatureSize: transformed.creatureSize,
-								creatureType: transformed.creatureType,
-								classHitDie: transformed.classHitDie,
-								raceSize: transformed.raceSize,
-								raceSpeed: transformed.raceSpeed,
-								backgroundFeature: transformed.backgroundFeature,
-								backgroundSkillProficiencies: transformed.backgroundSkillProficiencies,
-								featPrerequisites: transformed.featPrerequisites
+								sourcePublisher: transformed.sourcePublisher
 							}
 						})
 						.execute();
