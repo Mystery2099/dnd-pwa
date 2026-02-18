@@ -273,6 +273,7 @@ export class CompendiumRepository {
 
 	/**
 	 * Build WHERE clause from query options
+	 * Uses JSON extraction from the details column for type-specific filters
 	 * @param type The type of items
 	 * @param options Query options
 	 * @returns WHERE clause
@@ -284,24 +285,36 @@ export class CompendiumRepository {
 		// Collect filter conditions - properly typed for Drizzle
 		const filterConditions: ReturnType<typeof and>[] = [];
 
-		// Spell level filter
+		// Spell level filter (from details JSON)
 		if (options.filters?.spellLevel && options.filters.spellLevel.length > 0) {
-			filterConditions.push(inArray(compendiumItems.spellLevel, options.filters.spellLevel));
+			const levelConditions = options.filters.spellLevel.map((level) =>
+				sql`json_extract(${compendiumItems.details}, '$.level') = ${level}`
+			);
+			filterConditions.push(or(...levelConditions));
 		}
 
-		// Spell school filter
+		// Spell school filter (from details JSON)
 		if (options.filters?.spellSchool && options.filters.spellSchool.length > 0) {
-			filterConditions.push(inArray(compendiumItems.spellSchool, options.filters.spellSchool));
+			const schoolConditions = options.filters.spellSchool.map((school) =>
+				sql`json_extract(${compendiumItems.details}, '$.school') = ${school}`
+			);
+			filterConditions.push(or(...schoolConditions));
 		}
 
-		// Creature type filter
+		// Creature type filter (from details JSON)
 		if (options.filters?.type && options.filters.type.length > 0) {
-			filterConditions.push(inArray(compendiumItems.creatureType, options.filters.type));
+			const typeConditions = options.filters.type.map((t) =>
+				sql`json_extract(${compendiumItems.details}, '$.type') = ${t}`
+			);
+			filterConditions.push(or(...typeConditions));
 		}
 
-		// Creature size filter
+		// Creature size filter (from details JSON)
 		if (options.filters?.creatureSize && options.filters.creatureSize.length > 0) {
-			filterConditions.push(inArray(compendiumItems.creatureSize, options.filters.creatureSize));
+			const sizeConditions = options.filters.creatureSize.map((size) =>
+				sql`json_extract(${compendiumItems.details}, '$.size') = ${size}`
+			);
+			filterConditions.push(or(...sizeConditions));
 		}
 
 		// Apply filter logic (AND/OR) between categories
@@ -331,6 +344,7 @@ export class CompendiumRepository {
 
 	/**
 	 * Build ORDER BY clause from query options
+	 * Uses JSON extraction from the details column for type-specific sorting
 	 * @param options Query options
 	 * @returns ORDER BY clause
 	 */
@@ -340,14 +354,14 @@ export class CompendiumRepository {
 
 		// Handle challenge rating special sorting (fractional values like "1/2", "1/4")
 		if (sortBy === 'challengeRating') {
-			// Use a custom sort order that properly handles CR fractions
+			// Use a custom sort order that properly handles CR fractions from JSON
 			return sql`
 				CASE
-					WHEN ${compendiumItems.challengeRating} = '0' THEN 0
-					WHEN ${compendiumItems.challengeRating} = '1/8' THEN 1
-					WHEN ${compendiumItems.challengeRating} = '1/4' THEN 2
-					WHEN ${compendiumItems.challengeRating} = '1/2' THEN 3
-					ELSE CAST(${compendiumItems.challengeRating} AS REAL)
+					WHEN json_extract(${compendiumItems.details}, '$.challenge_rating') = '0' THEN 0
+					WHEN json_extract(${compendiumItems.details}, '$.challenge_rating') = '1/8' THEN 1
+					WHEN json_extract(${compendiumItems.details}, '$.challenge_rating') = '1/4' THEN 2
+					WHEN json_extract(${compendiumItems.details}, '$.challenge_rating') = '1/2' THEN 3
+					ELSE CAST(json_extract(${compendiumItems.details}, '$.challenge_rating') AS REAL)
 				END ${sortOrder === 'desc' ? sql`DESC` : sql`ASC`}
 			`;
 		}
@@ -356,19 +370,21 @@ export class CompendiumRepository {
 		// Use proper Drizzle column references for type safety
 		switch (sortBy) {
 			case 'spellLevel':
-				return sortOrder === 'desc' ? desc(compendiumItems.spellLevel) : compendiumItems.spellLevel;
+				return sortOrder === 'desc'
+					? desc(sql`json_extract(${compendiumItems.details}, '$.level')`)
+					: sql`json_extract(${compendiumItems.details}, '$.level')`;
 			case 'spellSchool':
 				return sortOrder === 'desc'
-					? desc(compendiumItems.spellSchool)
-					: sql`${compendiumItems.spellSchool} COLLATE NOCASE`;
+					? desc(sql`json_extract(${compendiumItems.details}, '$.school')`)
+					: sql`json_extract(${compendiumItems.details}, '$.school') COLLATE NOCASE`;
 			case 'creatureSize':
 				return sortOrder === 'desc'
-					? desc(compendiumItems.creatureSize)
-					: sql`${compendiumItems.creatureSize} COLLATE NOCASE`;
+					? desc(sql`json_extract(${compendiumItems.details}, '$.size')`)
+					: sql`json_extract(${compendiumItems.details}, '$.size') COLLATE NOCASE`;
 			case 'creatureType':
 				return sortOrder === 'desc'
-					? desc(compendiumItems.creatureType)
-					: sql`${compendiumItems.creatureType} COLLATE NOCASE`;
+					? desc(sql`json_extract(${compendiumItems.details}, '$.type')`)
+					: sql`json_extract(${compendiumItems.details}, '$.type') COLLATE NOCASE`;
 			case 'name':
 			default:
 				return sortOrder === 'desc'
@@ -412,17 +428,6 @@ export class CompendiumRepository {
 			details: Record<string, unknown>;
 			jsonData: string;
 			externalId?: string;
-			spellLevel?: number;
-			spellSchool?: string;
-			challengeRating?: string;
-			creatureSize?: string;
-			creatureType?: string;
-			classHitDie?: number;
-			raceSize?: string;
-			raceSpeed?: number;
-			backgroundFeature?: string;
-			backgroundSkillProficiencies?: string;
-			featPrerequisites?: string;
 		},
 		username: string
 	): Promise<number> {
@@ -437,17 +442,6 @@ export class CompendiumRepository {
 			jsonData: data.jsonData,
 			sourcePublisher: 'homebrew',
 			sourceBook: username,
-			spellLevel: data.spellLevel,
-			spellSchool: data.spellSchool,
-			challengeRating: data.challengeRating,
-			creatureSize: data.creatureSize,
-			creatureType: data.creatureType,
-			classHitDie: data.classHitDie,
-			raceSize: data.raceSize,
-			raceSpeed: data.raceSpeed,
-			backgroundFeature: data.backgroundFeature,
-			backgroundSkillProficiencies: data.backgroundSkillProficiencies,
-			featPrerequisites: data.featPrerequisites,
 			createdBy: username
 		}).returning({ id: compendiumItems.id });
 
@@ -471,17 +465,6 @@ export class CompendiumRepository {
 			summary: string;
 			details: Record<string, unknown>;
 			jsonData: string;
-			spellLevel: number;
-			spellSchool: string;
-			challengeRating: string;
-			creatureSize: string;
-			creatureType: string;
-			classHitDie: number;
-			raceSize: string;
-			raceSpeed: number;
-			backgroundFeature: string;
-			backgroundSkillProficiencies: string;
-			featPrerequisites: string;
 		}>,
 		username: string,
 		role: 'user' | 'admin'
@@ -517,19 +500,6 @@ export class CompendiumRepository {
 		if (data.summary !== undefined) updateData.summary = data.summary;
 		if (data.details !== undefined) updateData.details = data.details;
 		if (data.jsonData !== undefined) updateData.jsonData = data.jsonData;
-		if (data.spellLevel !== undefined) updateData.spellLevel = data.spellLevel;
-		if (data.spellSchool !== undefined) updateData.spellSchool = data.spellSchool;
-		if (data.challengeRating !== undefined) updateData.challengeRating = data.challengeRating;
-		if (data.creatureSize !== undefined) updateData.creatureSize = data.creatureSize;
-		if (data.creatureType !== undefined) updateData.creatureType = data.creatureType;
-		if (data.classHitDie !== undefined) updateData.classHitDie = data.classHitDie;
-		if (data.raceSize !== undefined) updateData.raceSize = data.raceSize;
-		if (data.raceSpeed !== undefined) updateData.raceSpeed = data.raceSpeed;
-		if (data.backgroundFeature !== undefined) updateData.backgroundFeature = data.backgroundFeature;
-		if (data.backgroundSkillProficiencies !== undefined) {
-			updateData.backgroundSkillProficiencies = data.backgroundSkillProficiencies;
-		}
-		if (data.featPrerequisites !== undefined) updateData.featPrerequisites = data.featPrerequisites;
 
 		await db
 			.update(compendiumItems)

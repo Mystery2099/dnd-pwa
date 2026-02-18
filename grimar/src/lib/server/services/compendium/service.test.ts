@@ -34,7 +34,7 @@ const mockSpellItem = {
 	id: 1,
 	name: 'Fireball',
 	source: 'open5e',
-	type: 'spell' as const,
+	type: 'spells' as const,
 	externalId: 'fireball',
 	summary: 'A bright streak flashes from your pointing finger.',
 	details: {
@@ -47,7 +47,8 @@ const mockSpellItem = {
 		concentration: false,
 		ritual: false,
 		classes: ['Wizard', 'Sorcerer'],
-		school: 'Evocation'
+		school: 'Evocation',
+		level: 3
 	},
 	spellLevel: 3,
 	spellSchool: 'Evocation',
@@ -66,7 +67,7 @@ const mockCreatureItem = {
 	id: 2,
 	name: 'Goblin',
 	source: 'open5e',
-	type: 'creature' as const,
+	type: 'creatures' as const,
 	externalId: 'goblin',
 	summary: 'Small humanoid creature.',
 	details: {
@@ -245,7 +246,7 @@ describe('CompendiumService', () => {
 		it('should return a unified item by type and numeric id', async () => {
 			mockDb.query.compendiumItems.findFirst.mockResolvedValue(mockSpellItem);
 
-			const result = await compendiumService.getById('spell', 1);
+			const result = await compendiumService.getById('spells', 1);
 
 			expect(result).not.toBeNull();
 			expect(result?.name).toBe('Fireball');
@@ -254,7 +255,7 @@ describe('CompendiumService', () => {
 		it('should return a unified item by type and slug', async () => {
 			mockDb.query.compendiumItems.findFirst.mockResolvedValue(mockSpellItem);
 
-			const result = await compendiumService.getById('spell', 'fireball');
+			const result = await compendiumService.getById('spells', 'fireball');
 
 			expect(result).not.toBeNull();
 			expect(result?.name).toBe('Fireball');
@@ -263,7 +264,7 @@ describe('CompendiumService', () => {
 		it('should return null for non-existent item', async () => {
 			mockDb.query.compendiumItems.findFirst.mockResolvedValue(null);
 
-			const result = await compendiumService.getById('spell', 999);
+			const result = await compendiumService.getById('spells', 999);
 
 			expect(result).toBeNull();
 		});
@@ -323,7 +324,7 @@ describe('CompendiumService', () => {
 
 	describe('getByType', () => {
 		it('should return items of specified type', async () => {
-			const result = await compendiumService.getByType('spell');
+			const result = await compendiumService.getByType('spells');
 
 			expect(Array.isArray(result)).toBe(true);
 			expect(result[0].type).toBe('spell');
@@ -356,7 +357,7 @@ describe('CompendiumService', () => {
 				})
 			}));
 
-			const result = await compendiumService.search('fire', 'spell', 5);
+			const result = await compendiumService.search('fire', 'spells', 5);
 
 			expect(Array.isArray(result)).toBe(true);
 		});
@@ -378,7 +379,7 @@ describe('CompendiumService', () => {
 				})
 			}));
 
-			const result = await compendiumService.getNavigation('spell', 1);
+			const result = await compendiumService.getNavigation('spells', 1);
 
 			expect(result.prev).toBeNull();
 			expect(result.next).toBeNull();

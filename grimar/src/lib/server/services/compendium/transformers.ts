@@ -19,6 +19,10 @@ import type {
 	UnifiedRace,
 	UnifiedClass,
 	UnifiedItem,
+	UnifiedCondition,
+	UnifiedLanguage,
+	UnifiedSkill,
+	UnifiedAbilityScore,
 	CreatureAction,
 	CreatureSpecialAbility
 } from '$lib/core/types/compendium/unified';
@@ -104,7 +108,7 @@ export function transformToUnifiedSpell(item: typeof compendiumItems.$inferSelec
 		description: toStringArray(details.desc),
 		slug: item.externalId ?? String(item.id),
 		type: 'spell',
-		level: item.spellLevel ?? 0,
+	level: toNumber(details.level) ?? 0,
 		school: toSchoolName(details.school),
 		castingTime: toString(details.casting_time),
 		range: toString(details.range),
@@ -148,8 +152,8 @@ export function transformToUnifiedCreature(
 		description: toStringArray(details.desc),
 		slug: item.externalId ?? String(item.id),
 		type: 'creature',
-		size: toCreatureSize(item.creatureSize),
-		creatureType: toString(item.creatureType) || 'Unknown',
+		size: toCreatureSize(details.size),
+		creatureType: toString(details.type) || 'Unknown',
 		subtype: toString(details.subtype) || undefined,
 		alignment: toString(details.alignment) || 'Unaligned',
 		armorClass: toArmorClass(details.armor_class),
@@ -164,7 +168,7 @@ export function transformToUnifiedCreature(
 			wisdom: toNumber(details.wisdom),
 			charisma: toNumber(details.charisma)
 		},
-		challengeRating: toString(item.challengeRating) || '0',
+		challengeRating: toString(details.challenge_rating) || '0',
 		xp: toNumber(details.xp),
 		proficiencies: toProficiencies(details.proficiencies),
 		damageVulnerabilities: toStringArray(details.damage_vulnerabilities),
@@ -439,8 +443,8 @@ export function transformToUnifiedRace(item: typeof compendiumItems.$inferSelect
 		description: toStringArray(details.description),
 		slug: item.externalId ?? String(item.id),
 		type: 'race',
-		size: toCreatureSize(item.raceSize),
-		speed: toNumber(item.raceSpeed) || 30,
+		size: toCreatureSize(details.size),
+		speed: toNumber(details.speed) || 30,
 		abilityBonuses: bonuses,
 		traits: traits,
 		proficiencies: {
@@ -519,7 +523,7 @@ export function transformToUnifiedClass(item: typeof compendiumItems.$inferSelec
 		description: toStringArray(details.description),
 		slug: item.externalId ?? String(item.id),
 		type: 'class',
-		hitDie: item.classHitDie ?? 8,
+		hitDie: toNumber(details.hit_die) ?? 8,
 		proficiencies,
 		spellcasting,
 		features,
@@ -582,28 +586,41 @@ export function transformToUnified(
 	| UnifiedBackground
 	| UnifiedRace
 	| UnifiedClass
-	| UnifiedItem {
+	| UnifiedItem
+	| UnifiedCondition
+	| UnifiedLanguage
+	| UnifiedSkill
+	| UnifiedAbilityScore {
 	switch (item.type) {
-		case 'spell':
+		case 'spells':
 			return transformToUnifiedSpell(item);
-		case 'creature':
+		case 'creatures':
 			return transformToUnifiedCreature(item);
-		case 'feat':
+		case 'feats':
 			return transformToUnifiedFeat(item);
-		case 'background':
+		case 'backgrounds':
 			return transformToUnifiedBackground(item);
-		case 'race':
+		case 'species':
 			return transformToUnifiedRace(item);
-		case 'class':
+		case 'classes':
 			return transformToUnifiedClass(item);
-		case 'item':
+		case 'magicitems':
 			return transformToUnifiedItem(item);
+		case 'conditions':
+		case 'languages':
+		case 'alignments':
+		case 'skills':
+			return {
+				id: item.id,
+				name: item.name,
+				type: item.type as any,
+				summary: item.summary || '',
+				description: [] as string[],
+				source: item.source,
+				slug: item.name.toLowerCase().replace(/\s+/g, '-'),
+				details: item.details as Record<string, unknown> | undefined
+			};
 		default:
-			// Fallback: log warning and return as a basic item
-			logwarn().warn(
-				{ type: item.type, id: item.id, name: item.name },
-				'Unknown compendium type, using fallback'
-			);
 			return {
 				id: item.id,
 				name: item.name,

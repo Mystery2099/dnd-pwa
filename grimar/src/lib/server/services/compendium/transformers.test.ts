@@ -16,6 +16,18 @@ import {
 
 /** Create a minimal mock compendium item */
 function createMockItem(overrides: Record<string, unknown> = {}) {
+	const { details: overrideDetails, raceSize, raceSpeed, classHitDie, creatureSize, creatureType, challengeRating, spellLevel, spellSchool, ...restOverrides } = overrides as Record<string, unknown> & { details?: Record<string, unknown> };
+	
+	const mappedDetails: Record<string, unknown> = {};
+	if (raceSize !== undefined) mappedDetails.size = raceSize;
+	if (raceSpeed !== undefined) mappedDetails.speed = raceSpeed;
+	if (classHitDie !== undefined) mappedDetails.hit_die = classHitDie;
+	if (creatureSize !== undefined) mappedDetails.size = creatureSize;
+	if (creatureType !== undefined) mappedDetails.type = creatureType;
+	if (challengeRating !== undefined) mappedDetails.challenge_rating = challengeRating;
+	if (spellLevel !== undefined) mappedDetails.level = spellLevel;
+	if (spellSchool !== undefined) mappedDetails.school = spellSchool;
+	
 	return {
 		id: 1,
 		name: 'Test Item',
@@ -23,19 +35,21 @@ function createMockItem(overrides: Record<string, unknown> = {}) {
 		type: 'spell',
 		externalId: 'test-1',
 		summary: 'Test summary',
-		details: {},
-		spellLevel: 1,
-		spellSchool: 'Evocation',
-		challengeRating: null,
-		creatureSize: null,
-		creatureType: null,
-		classHitDie: null,
-		raceSize: null,
-		raceSpeed: null,
-		backgroundFeature: null,
-		backgroundSkillProficiencies: null,
-		featPrerequisites: null,
-		...overrides
+		details: {
+			level: 1,
+			school: 'Evocation',
+			challenge_rating: null,
+			size: null,
+			type: null,
+			hit_dice: null,
+			speed: null,
+			feature: null,
+			skill_proficiencies: null,
+			prerequisites: null,
+			...mappedDetails,
+			...(overrideDetails || {})
+		},
+		...restOverrides
 	};
 }
 
@@ -509,7 +523,7 @@ describe('transformToUnifiedItem', () => {
 
 describe('transformToUnified', () => {
 	it('should dispatch spell type correctly', () => {
-		const item = createMockItem({ type: 'spell', name: 'Magic Missile' });
+		const item = createMockItem({ type: 'spells', name: 'Magic Missile' });
 		const result = transformToUnified(item);
 		expect(result.type).toBe('spell');
 		expect('level' in result).toBe(true);
@@ -517,7 +531,7 @@ describe('transformToUnified', () => {
 	});
 
 	it('should dispatch creature type correctly', () => {
-		const item = createMockItem({ type: 'creature', name: 'Dragon', creatureSize: 'Huge' });
+		const item = createMockItem({ type: 'creatures', name: 'Dragon', creatureSize: 'Huge' });
 		const result = transformToUnified(item);
 		expect(result.type).toBe('creature');
 		expect('size' in result).toBe(true);
@@ -525,35 +539,35 @@ describe('transformToUnified', () => {
 	});
 
 	it('should dispatch feat type correctly', () => {
-		const item = createMockItem({ type: 'feat', name: 'Alert' });
+		const item = createMockItem({ type: 'feats', name: 'Alert' });
 		const result = transformToUnified(item);
 		expect(result.type).toBe('feat');
 		expect('prerequisites' in result).toBe(true);
 	});
 
 	it('should dispatch background type correctly', () => {
-		const item = createMockItem({ type: 'background', name: 'Noble' });
+		const item = createMockItem({ type: 'backgrounds', name: 'Noble' });
 		const result = transformToUnified(item);
 		expect(result.type).toBe('background');
 		expect('skillProficiencies' in result).toBe(true);
 	});
 
 	it('should dispatch race type correctly', () => {
-		const item = createMockItem({ type: 'race', name: 'Elf' });
+		const item = createMockItem({ type: 'species', name: 'Elf' });
 		const result = transformToUnified(item);
 		expect(result.type).toBe('race');
 		expect('speed' in result).toBe(true);
 	});
 
 	it('should dispatch class type correctly', () => {
-		const item = createMockItem({ type: 'class', name: 'Wizard' });
+		const item = createMockItem({ type: 'classes', name: 'Wizard' });
 		const result = transformToUnified(item);
 		expect(result.type).toBe('class');
 		expect('hitDie' in result).toBe(true);
 	});
 
 	it('should dispatch item type correctly', () => {
-		const item = createMockItem({ type: 'item', name: 'Sword' });
+		const item = createMockItem({ type: 'magicitems', name: 'Sword' });
 		const result = transformToUnified(item);
 		expect(result.type).toBe('item');
 		expect('rarity' in result).toBe(true);

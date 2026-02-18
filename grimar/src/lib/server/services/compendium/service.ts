@@ -173,13 +173,13 @@ export const compendiumService: CompendiumServiceInterface = {
 
 	async getSpells(filters = {}) {
 		const db = await getDb();
-		const conditions = [eq(compendiumItems.type, 'spell')];
+		const conditions = [eq(compendiumItems.type, 'spells')];
 
 		if (filters.level !== undefined) {
-			conditions.push(eq(compendiumItems.spellLevel, filters.level));
+			conditions.push(eq(sql<number>`json_extract(${compendiumItems.details}, '$.level')`, filters.level));
 		}
 		if (filters.school) {
-			conditions.push(eq(compendiumItems.spellSchool, filters.school));
+			conditions.push(eq(sql`lower(json_extract(${compendiumItems.details}, '$.school'))`, filters.school.toLowerCase()));
 		}
 		if (filters.search) {
 			await applySearchFilter(filters.search, conditions);
@@ -197,7 +197,7 @@ export const compendiumService: CompendiumServiceInterface = {
 	async getSpellById(id) {
 		const db = await getDb();
 		const item = await db.query.compendiumItems.findFirst({
-			where: and(eq(compendiumItems.type, 'spell'), sql`${compendiumItems.id} = ${id}`)
+			where: and(eq(compendiumItems.type, 'spells'), sql`${compendiumItems.id} = ${id}`)
 		});
 		return item ? transformToUnifiedSpell(item) : null;
 	},
@@ -208,16 +208,16 @@ export const compendiumService: CompendiumServiceInterface = {
 
 	async getCreatures(filters = {}) {
 		const db = await getDb();
-		const conditions = [eq(compendiumItems.type, 'creature')];
+		const conditions = [eq(compendiumItems.type, 'creatures')];
 
 		if (filters.size) {
-			conditions.push(eq(compendiumItems.creatureSize, filters.size));
+			conditions.push(eq(sql`lower(json_extract(${compendiumItems.details}, '$.size'))`, filters.size.toLowerCase()));
 		}
 		if (filters.type) {
-			conditions.push(eq(compendiumItems.creatureType, filters.type));
+			conditions.push(eq(sql`lower(json_extract(${compendiumItems.details}, '$.type'))`, filters.type.toLowerCase()));
 		}
 		if (filters.cr) {
-			conditions.push(eq(compendiumItems.challengeRating, filters.cr));
+			conditions.push(eq(sql`json_extract(${compendiumItems.details}, '$.challenge_rating')`, filters.cr));
 		}
 		if (filters.search) {
 			await applySearchFilter(filters.search, conditions);
@@ -235,7 +235,7 @@ export const compendiumService: CompendiumServiceInterface = {
 	async getCreatureById(id) {
 		const db = await getDb();
 		const item = await db.query.compendiumItems.findFirst({
-			where: and(eq(compendiumItems.type, 'creature'), sql`${compendiumItems.id} = ${id}`)
+			where: and(eq(compendiumItems.type, 'creatures'), sql`${compendiumItems.id} = ${id}`)
 		});
 		return item ? transformToUnifiedCreature(item) : null;
 	},
@@ -246,7 +246,7 @@ export const compendiumService: CompendiumServiceInterface = {
 
 	async getFeats(filters = {}) {
 		const db = await getDb();
-		const conditions = [eq(compendiumItems.type, 'feat')];
+		const conditions = [eq(compendiumItems.type, 'feats')];
 
 		if (filters.search) {
 			await applySearchFilter(filters.search, conditions);
@@ -264,7 +264,7 @@ export const compendiumService: CompendiumServiceInterface = {
 	async getFeatById(id) {
 		const db = await getDb();
 		const item = await db.query.compendiumItems.findFirst({
-			where: and(eq(compendiumItems.type, 'feat'), sql`${compendiumItems.id} = ${id}`)
+			where: and(eq(compendiumItems.type, 'feats'), sql`${compendiumItems.id} = ${id}`)
 		});
 		return item ? transformToUnifiedFeat(item) : null;
 	},
@@ -275,7 +275,7 @@ export const compendiumService: CompendiumServiceInterface = {
 
 	async getBackgrounds(filters = {}) {
 		const db = await getDb();
-		const conditions = [eq(compendiumItems.type, 'background')];
+		const conditions = [eq(compendiumItems.type, 'backgrounds')];
 
 		if (filters.search) {
 			await applySearchFilter(filters.search, conditions);
@@ -293,7 +293,7 @@ export const compendiumService: CompendiumServiceInterface = {
 	async getBackgroundById(id) {
 		const db = await getDb();
 		const item = await db.query.compendiumItems.findFirst({
-			where: and(eq(compendiumItems.type, 'background'), sql`${compendiumItems.id} = ${id}`)
+			where: and(eq(compendiumItems.type, 'backgrounds'), sql`${compendiumItems.id} = ${id}`)
 		});
 		return item ? transformToUnifiedBackground(item) : null;
 	},
@@ -304,7 +304,7 @@ export const compendiumService: CompendiumServiceInterface = {
 
 	async getRaces(filters = {}) {
 		const db = await getDb();
-		const conditions = [eq(compendiumItems.type, 'race')];
+		const conditions = [eq(compendiumItems.type, 'races')];
 
 		if (filters.search) {
 			await applySearchFilter(filters.search, conditions);
@@ -322,7 +322,7 @@ export const compendiumService: CompendiumServiceInterface = {
 	async getRaceById(id) {
 		const db = await getDb();
 		const item = await db.query.compendiumItems.findFirst({
-			where: and(eq(compendiumItems.type, 'race'), sql`${compendiumItems.id} = ${id}`)
+			where: and(eq(compendiumItems.type, 'races'), sql`${compendiumItems.id} = ${id}`)
 		});
 		return item ? transformToUnifiedRace(item) : null;
 	},
@@ -333,7 +333,7 @@ export const compendiumService: CompendiumServiceInterface = {
 
 	async getClasses(filters = {}) {
 		const db = await getDb();
-		const conditions = [eq(compendiumItems.type, 'class')];
+		const conditions = [eq(compendiumItems.type, 'classes')];
 
 		if (filters.search) {
 			await applySearchFilter(filters.search, conditions);
@@ -351,7 +351,7 @@ export const compendiumService: CompendiumServiceInterface = {
 	async getClassById(id) {
 		const db = await getDb();
 		const item = await db.query.compendiumItems.findFirst({
-			where: and(eq(compendiumItems.type, 'class'), sql`${compendiumItems.id} = ${id}`)
+			where: and(eq(compendiumItems.type, 'classes'), sql`${compendiumItems.id} = ${id}`)
 		});
 		return item ? transformToUnifiedClass(item) : null;
 	},
@@ -362,7 +362,7 @@ export const compendiumService: CompendiumServiceInterface = {
 
 	async getItems(filters = {}) {
 		const db = await getDb();
-		const conditions = [eq(compendiumItems.type, 'item')];
+		const conditions = [eq(compendiumItems.type, 'items')];
 
 		if (filters.search) {
 			await applySearchFilter(filters.search, conditions);
@@ -384,7 +384,7 @@ export const compendiumService: CompendiumServiceInterface = {
 	async getItemById(id) {
 		const db = await getDb();
 		const item = await db.query.compendiumItems.findFirst({
-			where: and(eq(compendiumItems.type, 'item'), sql`${compendiumItems.id} = ${id}`)
+			where: and(eq(compendiumItems.type, 'items'), sql`${compendiumItems.id} = ${id}`)
 		});
 		return item ? transformToUnifiedItem(item) : null;
 	},
