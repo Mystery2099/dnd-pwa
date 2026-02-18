@@ -8,34 +8,6 @@
       "when": 1766978462951,
       "tag": "0000_handy_stepford_cuckoos",
       "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1767655464964,
-      "tag": "0001_pretty_caretaker",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1768072298278,
-      "tag": "0002_square_elektra",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1768072380977,
-      "tag": "0003_public_deathbird",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "6",
-      "when": 1768167879928,
-      "tag": "0004_foamy_changeling",
-      "breakpoints": true
     }
   ]
 }
