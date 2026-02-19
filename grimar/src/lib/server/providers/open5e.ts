@@ -222,7 +222,17 @@ const TYPE_FILES: Record<CompendiumTypeName, string> = {
 	rulesets: 'RuleSet.json',
 	images: 'Image.json',
 	weaponproperties: 'WeaponProperty.json',
-	services: 'Service.json'
+	services: 'Service.json',
+	classfeatures: 'ClassFeature.json',
+	classfeatureitems: 'ClassFeatureItem.json',
+	creatureactions: 'CreatureAction.json',
+	creatureactionattacks: 'CreatureActionAttack.json',
+	creaturetraits: 'CreatureTrait.json',
+	speciestraits: 'SpeciesTrait.json',
+	backgroundbenefits: 'BackgroundBenefit.json',
+	featbenefits: 'FeatBenefit.json',
+	spellcastingoptions: 'SpellCastingOption.json',
+	weaponpropertyassignments: 'WeaponPropertyAssignment.json'
 };
 
 // ============================================================================
@@ -340,6 +350,129 @@ export const Open5eGenericSchema = z.object({
 	document: z.string()
 });
 
+// New type schemas for additional open5e data
+export const Open5eClassFeatureSchema = z.object({
+	fields: z.object({
+		name: z.string(),
+		desc: z.string().optional(),
+		document: z.string().optional(),
+		parent: z.string().optional(),
+		feature_type: z.string().nullable().optional()
+	}),
+	model: z.string(),
+	pk: z.string()
+});
+
+export const Open5eClassFeatureItemSchema = z.object({
+	fields: z.object({
+		name: z.string().optional(),
+		desc: z.string().optional(),
+		parent: z.string().optional(),
+		type: z.string().nullable().optional()
+	}),
+	model: z.string(),
+	pk: z.string()
+});
+
+export const Open5eCreatureActionSchema = z.object({
+	fields: z.object({
+		name: z.string(),
+		desc: z.string().optional(),
+		action_type: z.string().optional(),
+		parent: z.string().optional(),
+		order: z.number().optional(),
+		legendary_cost: z.number().optional(),
+		uses_type: z.string().nullable().optional(),
+		uses_param: z.number().nullable().optional(),
+		form_condition: z.string().nullable().optional()
+	}),
+	model: z.string(),
+	pk: z.string()
+});
+
+export const Open5eCreatureActionAttackSchema = z.object({
+	fields: z.object({
+		name: z.string().optional(),
+		attack_type: z.string().optional(),
+		parent: z.string().optional(),
+		damage_type: z.string().nullable().optional(),
+		damage_dice: z.string().nullable().optional(),
+		to_hit: z.number().nullable().optional(),
+		reach: z.number().nullable().optional(),
+		range: z.number().nullable().optional(),
+		long_range: z.number().nullable().optional(),
+		targets: z.number().nullable().optional()
+	}),
+	model: z.string(),
+	pk: z.string()
+});
+
+export const Open5eCreatureTraitSchema = z.object({
+	fields: z.object({
+		name: z.string(),
+		desc: z.string().optional(),
+		parent: z.string().optional(),
+		type: z.string().nullable().optional()
+	}),
+	model: z.string(),
+	pk: z.string()
+});
+
+export const Open5eSpeciesTraitSchema = z.object({
+	fields: z.object({
+		name: z.string(),
+		desc: z.string().optional(),
+		parent: z.string().optional(),
+		type: z.string().nullable().optional()
+	}),
+	model: z.string(),
+	pk: z.string()
+});
+
+export const Open5eBackgroundBenefitSchema = z.object({
+	fields: z.object({
+		name: z.string().optional(),
+		desc: z.string().optional(),
+		parent: z.string().optional(),
+		type: z.string().nullable().optional()
+	}),
+	model: z.string(),
+	pk: z.string()
+});
+
+export const Open5eFeatBenefitSchema = z.object({
+	fields: z.object({
+		name: z.string().optional(),
+		desc: z.string().optional(),
+		parent: z.string().optional(),
+		type: z.string().nullable().optional()
+	}),
+	model: z.string(),
+	pk: z.string()
+});
+
+export const Open5eSpellCastingOptionSchema = z.object({
+	fields: z.object({
+		name: z.string().optional(),
+		desc: z.string().optional(),
+		parent: z.string().optional(),
+		level: z.number().optional(),
+		count: z.number().optional()
+	}),
+	model: z.string(),
+	pk: z.string()
+});
+
+export const Open5eWeaponPropertyAssignmentSchema = z.object({
+	fields: z.object({
+		weapon: z.string().optional(),
+		property: z.string().optional(),
+		document: z.string().optional()
+	}),
+	model: z.string(),
+	pk: z.string()
+});
+
 // ============================================================================
 // Type exports
 // ============================================================================
@@ -353,6 +486,16 @@ export type Open5eBackground = z.infer<typeof Open5eBackgroundSchema>;
 export type Open5eSpecies = z.infer<typeof Open5eSpeciesSchema>;
 export type Open5eCharacterClass = z.infer<typeof Open5eCharacterClassSchema>;
 export type Open5eGeneric = z.infer<typeof Open5eGenericSchema>;
+export type Open5eClassFeature = z.infer<typeof Open5eClassFeatureSchema>;
+export type Open5eClassFeatureItem = z.infer<typeof Open5eClassFeatureItemSchema>;
+export type Open5eCreatureAction = z.infer<typeof Open5eCreatureActionSchema>;
+export type Open5eCreatureActionAttack = z.infer<typeof Open5eCreatureActionAttackSchema>;
+export type Open5eCreatureTrait = z.infer<typeof Open5eCreatureTraitSchema>;
+export type Open5eSpeciesTrait = z.infer<typeof Open5eSpeciesTraitSchema>;
+export type Open5eBackgroundBenefit = z.infer<typeof Open5eBackgroundBenefitSchema>;
+export type Open5eFeatBenefit = z.infer<typeof Open5eFeatBenefitSchema>;
+export type Open5eSpellCastingOption = z.infer<typeof Open5eSpellCastingOptionSchema>;
+export type Open5eWeaponPropertyAssignment = z.infer<typeof Open5eWeaponPropertyAssignmentSchema>;
 
 // ============================================================================
 // Provider Implementation
@@ -382,6 +525,17 @@ export class Open5eProvider extends BaseProvider {
 		'backgrounds',
 		'species',
 		'classes',
+		// Sub-item types (features, traits, actions)
+		'classfeatures',
+		'classfeatureitems',
+		'creatureactions',
+		'creatureactionattacks',
+		'creaturetraits',
+		'speciestraits',
+		'backgroundbenefits',
+		'featbenefits',
+		'spellcastingoptions',
+		'weaponpropertyassignments',
 		// Lookup types
 		'abilities',
 		'alignments',
@@ -580,6 +734,27 @@ export class Open5eProvider extends BaseProvider {
 				return this.transformSpecies(fields, pk, sourceBook);
 			case 'classes':
 				return this.transformClass(fields, pk, sourceBook);
+			// Sub-item types
+			case 'classfeatures':
+				return this.transformClassFeature(fields, pk, sourceBook);
+			case 'classfeatureitems':
+				return this.transformClassFeatureItem(fields, pk, sourceBook);
+			case 'creatureactions':
+				return this.transformCreatureAction(fields, pk, sourceBook);
+			case 'creatureactionattacks':
+				return this.transformCreatureActionAttack(fields, pk, sourceBook);
+			case 'creaturetraits':
+				return this.transformCreatureTrait(fields, pk, sourceBook);
+			case 'speciestraits':
+				return this.transformSpeciesTrait(fields, pk, sourceBook);
+			case 'backgroundbenefits':
+				return this.transformBackgroundBenefit(fields, pk, sourceBook);
+			case 'featbenefits':
+				return this.transformFeatBenefit(fields, pk, sourceBook);
+			case 'spellcastingoptions':
+				return this.transformSpellCastingOption(fields, pk, sourceBook);
+			case 'weaponpropertyassignments':
+				return this.transformWeaponPropertyAssignment(fields, pk, sourceBook);
 			// Lookup types
 			case 'abilities':
 				return this.transformAbility(fields, pk, sourceBook);
@@ -924,6 +1099,213 @@ export class Open5eProvider extends BaseProvider {
 		const name = String(fields.name || 'Unknown');
 		const desc = fields.desc as string | undefined;
 		const summary = desc || name;
+
+		return {
+			externalId,
+			name,
+			summary,
+			details: fields,
+			sourceBook
+		};
+	}
+
+	// ============================================================================
+	// Sub-Item Type Transformers
+	// ============================================================================
+
+	private transformClassFeature(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Unknown');
+		const parent = String(fields.parent || '');
+		const featureType = String(fields.feature_type || '');
+		const desc = String(fields.desc || '');
+		const summary = parent ? `${parent}: ${name}` : name;
+
+		return {
+			externalId,
+			name,
+			summary,
+			details: fields,
+			sourceBook
+		};
+	}
+
+	private transformClassFeatureItem(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Unknown');
+		const parent = String(fields.parent || '');
+		const desc = String(fields.desc || '');
+		const summary = parent ? `${parent}: ${name}` : name;
+
+		return {
+			externalId,
+			name,
+			summary,
+			details: fields,
+			sourceBook
+		};
+	}
+
+	private transformCreatureAction(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Unknown');
+		const parent = String(fields.parent || '');
+		const actionType = String(fields.action_type || 'Action');
+		const desc = String(fields.desc || '');
+		const legendaryCost = Number(fields.legendary_cost) || 1;
+		const summary = parent
+			? `${parent}: ${name} (${actionType}${actionType === 'LEGENDARY_ACTION' ? ` ${legendaryCost}` : ''})`
+			: name;
+
+		return {
+			externalId,
+			name,
+			summary,
+			details: fields,
+			sourceBook
+		};
+	}
+
+	private transformCreatureActionAttack(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Unknown');
+		const parent = String(fields.parent || '');
+		const attackType = String(fields.attack_type || 'Melee');
+		const damageDice = String(fields.damage_dice || '');
+		const damageType = String(fields.damage_type || '');
+		const toHit = Number(fields.to_hit) || 0;
+		const summary = parent
+			? `${parent}: ${name} (${attackType}, +${toHit} to hit${damageDice ? `, ${damageDice} ${damageType}` : ''})`
+			: name;
+
+		return {
+			externalId,
+			name,
+			summary,
+			details: fields,
+			sourceBook
+		};
+	}
+
+	private transformCreatureTrait(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Unknown');
+		const parent = String(fields.parent || '');
+		const desc = String(fields.desc || '');
+		const summary = parent ? `${parent}: ${name}` : name;
+
+		return {
+			externalId,
+			name,
+			summary,
+			details: fields,
+			sourceBook
+		};
+	}
+
+	private transformSpeciesTrait(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Unknown');
+		const parent = String(fields.parent || '');
+		const desc = String(fields.desc || '');
+		const summary = parent ? `${parent}: ${name}` : name;
+
+		return {
+			externalId,
+			name,
+			summary,
+			details: fields,
+			sourceBook
+		};
+	}
+
+	private transformBackgroundBenefit(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Benefit');
+		const parent = String(fields.parent || '');
+		const desc = String(fields.desc || '');
+		const summary = parent ? `${parent}: ${name}` : name;
+
+		return {
+			externalId,
+			name,
+			summary,
+			details: fields,
+			sourceBook
+		};
+	}
+
+	private transformFeatBenefit(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Benefit');
+		const parent = String(fields.parent || '');
+		const desc = String(fields.desc || '');
+		const summary = parent ? `${parent}: ${name}` : name;
+
+		return {
+			externalId,
+			name,
+			summary,
+			details: fields,
+			sourceBook
+		};
+	}
+
+	private transformSpellCastingOption(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const name = String(fields.name || 'Unknown');
+		const parent = String(fields.parent || '');
+		const level = Number(fields.level) || 0;
+		const count = Number(fields.count) || 0;
+		const summary = parent
+			? `${parent}: Level ${level}${count ? ` (${count})` : ''}`
+			: name;
+
+		return {
+			externalId,
+			name,
+			summary,
+			details: fields,
+			sourceBook
+		};
+	}
+
+	private transformWeaponPropertyAssignment(
+		fields: Record<string, unknown>,
+		externalId: string,
+		sourceBook: string
+	): TransformResult {
+		const weapon = String(fields.weapon || 'Unknown');
+		const property = String(fields.property || 'Unknown');
+		const name = `${weapon} - ${property}`;
+		const summary = `${weapon}: ${property}`;
 
 		return {
 			externalId,

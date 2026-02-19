@@ -33,13 +33,13 @@ import * as schema from '../src/lib/server/db/schema';
 import { syncAllProviders } from '../src/lib/server/services/sync/orchestrator';
 import { providerRegistry } from '../src/lib/server/providers';
 import type { ProviderSyncResult } from '../src/lib/server/providers/types';
-import type { CompendiumTypeName } from '../src/lib/types/compendium';
+import type { CompendiumTypeName } from '../src/lib/core/types/compendium';
 import type {
 	SyncProgressEvent,
 	SyncProgressCallback
 } from '../src/lib/server/services/sync/progress';
 import { applyPragmas } from '../src/lib/server/db/db-config';
-import { $count } from 'drizzle-orm';
+import { count } from 'drizzle-orm';
 import { compendiumItems } from '../src/lib/server/db/schema';
 
 // Silence the winston logger during sync for cleaner output
@@ -79,7 +79,17 @@ const VALID_TYPES: CompendiumTypeName[] = [
 	'itemrarities',
 	'rulesets',
 	'images',
-	'services'
+	'services',
+	'classfeatures',
+	'classfeatureitems',
+	'creatureactions',
+	'creatureactionattacks',
+	'creaturetraits',
+	'speciestraits',
+	'backgroundbenefits',
+	'featbenefits',
+	'spellcastingoptions',
+	'weaponpropertyassignments'
 ];
 
 // Type labels for display
@@ -116,7 +126,17 @@ const TYPE_LABELS: Record<CompendiumTypeName, string> = {
 	itemrarities: 'Rarities',
 	rulesets: 'Rule Sets',
 	images: 'Images',
-	services: 'Services'
+	services: 'Services',
+	classfeatures: 'Class Features',
+	classfeatureitems: 'Class Feature Items',
+	creatureactions: 'Creature Actions',
+	creatureactionattacks: 'Creature Attacks',
+	creaturetraits: 'Creature Traits',
+	speciestraits: 'Species Traits',
+	backgroundbenefits: 'Background Benefits',
+	featbenefits: 'Feat Benefits',
+	spellcastingoptions: 'Spellcasting Options',
+	weaponpropertyassignments: 'Weapon Properties'
 };
 
 // Colors for terminal output

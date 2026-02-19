@@ -205,6 +205,16 @@ export interface ProviderSyncResult {
 	armor: number;
 	planes: number;
 	sections: number;
+	classfeatures: number;
+	classfeatureitems: number;
+	creatureactions: number;
+	creatureactionattacks: number;
+	creaturetraits: number;
+	speciestraits: number;
+	backgroundbenefits: number;
+	featbenefits: number;
+	spellcastingoptions: number;
+	weaponpropertyassignments: number;
 	totalItems: number;
 	skipped: number;
 	errors: string[];

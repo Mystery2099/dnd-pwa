@@ -109,7 +109,17 @@ export const PATH_TO_DB_TYPE: Record<string, DbType> = {
 	sizes: DB_TYPES.SIZES,
 	abilities: DB_TYPES.ABILITIES,
 	rules: DB_TYPES.RULES,
-	rulesections: DB_TYPES.RULE_SECTIONS
+	rulesections: DB_TYPES.RULE_SECTIONS,
+	classfeatures: 'classfeatures' as DbType,
+	classfeatureitems: 'classfeatureitems' as DbType,
+	creatureactions: 'creatureactions' as DbType,
+	creatureactionattacks: 'creatureactionattacks' as DbType,
+	creaturetraits: 'creaturetraits' as DbType,
+	speciestraits: 'speciestraits' as DbType,
+	backgroundbenefits: 'backgroundbenefits' as DbType,
+	featbenefits: 'featbenefits' as DbType,
+	spellcastingoptions: 'spellcastingoptions' as DbType,
+	weaponpropertyassignments: 'weaponpropertyassignments' as DbType
 };
 
 export const DB_TYPE_TO_PATH: Record<string, string> = Object.fromEntries(

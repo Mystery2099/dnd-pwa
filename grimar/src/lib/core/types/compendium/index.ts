@@ -81,7 +81,17 @@ export const COMPENDIUM_TYPES = [
 	'rulesets',
 	'images',
 	'weaponproperties',
-	'services'
+	'services',
+	'classfeatures',
+	'classfeatureitems',
+	'creatureactions',
+	'creatureactionattacks',
+	'creaturetraits',
+	'speciestraits',
+	'backgroundbenefits',
+	'featbenefits',
+	'spellcastingoptions',
+	'weaponpropertyassignments'
 ] as const;
 
 //#region Core Types
@@ -123,7 +133,17 @@ export type CompendiumTypeName =
 	| 'rulesets'
 	| 'images'
 	| 'weaponproperties'
-	| 'services';
+	| 'services'
+	| 'classfeatures'
+	| 'classfeatureitems'
+	| 'creatureactions'
+	| 'creatureactionattacks'
+	| 'creaturetraits'
+	| 'speciestraits'
+	| 'backgroundbenefits'
+	| 'featbenefits'
+	| 'spellcastingoptions'
+	| 'weaponpropertyassignments';
 
 /**
  * Raw compendium item from database

@@ -127,7 +127,17 @@ const CONFIG_MAP: Record<CompendiumTypeName, CompendiumTypeConfig> = {
 	rulesets: createGenericConfig('rulesets', 'Rule Set', 'rose'),
 	images: createGenericConfig('images', 'Image', 'pink'),
 	weaponproperties: WEAPON_PROPERTIES_CONFIG,
-	services: createGenericConfig('services', 'Service', 'orange')
+	services: createGenericConfig('services', 'Service', 'orange'),
+	classfeatures: createGenericConfig('classfeatures', 'Class Feature', 'blue'),
+	classfeatureitems: createGenericConfig('classfeatureitems', 'Class Feature Item', 'indigo'),
+	creatureactions: createGenericConfig('creatureactions', 'Creature Action', 'red'),
+	creatureactionattacks: createGenericConfig('creatureactionattacks', 'Creature Attack', 'rose'),
+	creaturetraits: createGenericConfig('creaturetraits', 'Creature Trait', 'orange'),
+	speciestraits: createGenericConfig('speciestraits', 'Species Trait', 'emerald'),
+	backgroundbenefits: createGenericConfig('backgroundbenefits', 'Background Benefit', 'cyan'),
+	featbenefits: createGenericConfig('featbenefits', 'Feat Benefit', 'amber'),
+	spellcastingoptions: createGenericConfig('spellcastingoptions', 'Spellcasting Option', 'violet'),
+	weaponpropertyassignments: createGenericConfig('weaponpropertyassignments', 'Weapon Property', 'slate')
 };
 
 // URL path to DB type mapping - re-exported from shared module for use in client code

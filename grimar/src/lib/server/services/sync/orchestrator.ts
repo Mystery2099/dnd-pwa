@@ -97,7 +97,30 @@ const TYPE_CANONICAL: Record<string, CompendiumTypeName> = {
 	weapons: 'weapons',
 	armor: 'armor',
 	plane: 'environments',
-	planes: 'environments'
+	planes: 'environments',
+	// Sub-item types
+	classFeature: 'classfeatures',
+	classFeatures: 'classfeatures',
+	classfeature: 'classfeatures',
+	classfeatures: 'classfeatures',
+	classFeatureItem: 'classfeatureitems',
+	classFeatureItems: 'classfeatureitems',
+	creatureAction: 'creatureactions',
+	creatureActions: 'creatureactions',
+	creatureActionAttack: 'creatureactionattacks',
+	creatureActionAttacks: 'creatureactionattacks',
+	creatureTrait: 'creaturetraits',
+	creatureTraits: 'creaturetraits',
+	speciesTrait: 'speciestraits',
+	speciesTraits: 'speciestraits',
+	backgroundBenefit: 'backgroundbenefits',
+	backgroundBenefits: 'backgroundbenefits',
+	featBenefit: 'featbenefits',
+	featBenefits: 'featbenefits',
+	spellCastingOption: 'spellcastingoptions',
+	spellCastingOptions: 'spellcastingoptions',
+	weaponPropertyAssignment: 'weaponpropertyassignments',
+	weaponPropertyAssignments: 'weaponpropertyassignments'
 };
 
 function normalizeType(type: string): CompendiumTypeName | null {
@@ -281,6 +304,16 @@ async function syncSingleProvider(
 			armor: 0,
 			planes: 0,
 			sections: 0,
+			classfeatures: 0,
+			classfeatureitems: 0,
+			creatureactions: 0,
+			creatureactionattacks: 0,
+			creaturetraits: 0,
+			speciestraits: 0,
+			backgroundbenefits: 0,
+			featbenefits: 0,
+			spellcastingoptions: 0,
+			weaponpropertyassignments: 0,
 			totalItems: 0,
 			skipped: 0,
 			errors: [`Provider not found: ${providerId}`]
@@ -319,6 +352,16 @@ async function syncSingleProvider(
 		armor: 0,
 		planes: 0,
 		sections: 0,
+		classfeatures: 0,
+		classfeatureitems: 0,
+		creatureactions: 0,
+		creatureactionattacks: 0,
+		creaturetraits: 0,
+		speciestraits: 0,
+		backgroundbenefits: 0,
+		featbenefits: 0,
+		spellcastingoptions: 0,
+		weaponpropertyassignments: 0,
 		totalItems: 0,
 		skipped: 0,
 		errors: []
@@ -411,6 +454,36 @@ async function syncSingleProvider(
 					break;
 				case 'environments':
 					result.planes = itemCount;
+					break;
+				case 'classfeatures':
+					result.classfeatures = itemCount;
+					break;
+				case 'classfeatureitems':
+					result.classfeatureitems = itemCount;
+					break;
+				case 'creatureactions':
+					result.creatureactions = itemCount;
+					break;
+				case 'creatureactionattacks':
+					result.creatureactionattacks = itemCount;
+					break;
+				case 'creaturetraits':
+					result.creaturetraits = itemCount;
+					break;
+				case 'speciestraits':
+					result.speciestraits = itemCount;
+					break;
+				case 'backgroundbenefits':
+					result.backgroundbenefits = itemCount;
+					break;
+				case 'featbenefits':
+					result.featbenefits = itemCount;
+					break;
+				case 'spellcastingoptions':
+					result.spellcastingoptions = itemCount;
+					break;
+				case 'weaponpropertyassignments':
+					result.weaponpropertyassignments = itemCount;
 					break;
 			}
 		} catch (error) {
