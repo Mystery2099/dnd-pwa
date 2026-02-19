@@ -15,7 +15,9 @@
 
 	let { dbType, details }: Props = $props();
 
-	const LOOKUP_TYPES = ['skills', 'conditions', 'languages', 'alignments'] as const;
+	const LOOKUP_TYPES = new Set(['skills', 'conditions', 'languages', 'alignments']);
+
+	const isLookupType = $derived(LOOKUP_TYPES.has(dbType));
 </script>
 
 {#if dbType === 'spells'}
@@ -30,18 +32,13 @@
 	<RaceEntryContent race={details} />
 {:else if dbType === 'classes'}
 	<ClassEntryContent classData={details} />
-{:else if dbType === 'magicitems'}
+{:else if dbType === 'magicitems' || dbType === 'weapons' || dbType === 'armor'}
 	<ItemEntryContent item={details} />
-{:else if LOOKUP_TYPES.includes(dbType as typeof LOOKUP_TYPES[number])}
-	<LookupEntryContent
-		details={details}
-		type={dbType as 'skills' | 'conditions' | 'languages' | 'alignments'}
-	/>
+{:else if isLookupType}
+	<LookupEntryContent details={details} type={dbType as 'skills' | 'conditions' | 'languages' | 'alignments'} />
 {:else}
 	<div class="space-y-4">
-		<div
-			class="rounded-lg border border-[var(--color-border)] bg-black/20 p-4 font-mono text-xs"
-		>
+		<div class="rounded-lg border border-[var(--color-border)] bg-black/20 p-4 font-mono text-xs">
 			<pre>{JSON.stringify(details, null, 2)}</pre>
 		</div>
 	</div>
