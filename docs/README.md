@@ -36,6 +36,20 @@ accessibility rules
 - **[COMPENDIUM_PAGES.md](./COMPENDIUM_PAGES.md)** - Compendium specifications
 and interactions
 
+### 🎨 **Theming**
+
+- **[THEMING_USER.md](./THEMING_USER.md)** - User guide for theme customization
+- **[THEMING_DEV.md](./THEMING_DEV.md)** - Developer guide for theme system
+
+### 🚀 **Deployment & Operations**
+
+- **[SELF_HOSTING.md](./SELF_HOSTING.md)** - Self-hosting deployment guide
+
+### 📖 **Reference**
+
+- **[glossary.md](./glossary.md)** - Terms and definitions
+- **[refactor-proposal.md](./refactor-proposal.md)** - Architecture refactoring notes
+
 ---
 
 ## 🚀 Getting Started
@@ -95,13 +109,18 @@ system design
 ```sh
 docs/
 ├── SPECIFICATIONS.md      # Complete MVP specifications
-├── architecture-doc.md   # Technical architecture
-├── STYLE_GUIDE.md        # Visual design guidelines
-├── COMPONENTS.md         # UI component inventory
-├── ROUTES.md            # Route and API structure
-├── COMPENDIUM_PAGES.md  # Compendium specifications
+├── architecture-doc.md    # Technical architecture
+├── STYLE_GUIDE.md         # Visual design guidelines
+├── COMPONENTS.md          # UI component inventory
+├── ROUTES.md              # Route and API structure
+├── COMPENDIUM_PAGES.md    # Compendium specifications
 ├── arcane-design-sysem.md # Design tokens & accessibility
-└── README.md             # This file
+├── THEMING_USER.md        # User theme guide
+├── THEMING_DEV.md         # Developer theme guide
+├── SELF_HOSTING.md        # Deployment guide
+├── glossary.md            # Terms and definitions
+├── refactor-proposal.md   # Architecture refactoring notes
+└── README.md              # This file
 ```
 
 ---
@@ -171,5 +190,5 @@ When updating documentation:
 
 ---
 
-**Last Updated**: v1.0.0  
+**Last Updated**: v0.1.0-alpha  
 **Maintainer**: The Grimar Development Team

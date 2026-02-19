@@ -97,4 +97,4 @@ bun run start            # Run production server
 
 ## 📄 License
 
-[Your License Here]
+[MIT](./LICENSE)

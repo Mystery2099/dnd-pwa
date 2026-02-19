@@ -66,6 +66,12 @@ bun run reindex-fts     # Rebuild FTS index
 - **Tabs** (not spaces), **single quotes**, **no trailing commas**, **printWidth: 100**
 - **Semicolons**: Always use semicolons
 - **Strict equality**: Use `===` and `!==`
+- Run `bun run format` before committing
+
+### ESLint Rules
+- Unused vars must be prefixed with `_` (e.g., `let { _id, ...rest }`)
+- `@typescript-eslint/no-explicit-any`: warn
+- `@typescript-eslint/no-unused-vars`: error
 
 ### Svelte 5
 - Use `$state()`, `$derived()`, `$effect()` runes
@@ -73,9 +79,9 @@ bun run reindex-fts     # Rebuild FTS index
 - Props interface pattern:
   ```typescript
   interface Props {
-    title: string;
-    active?: boolean;
-    onclick?: () => void;
+  	title: string;
+  	active?: boolean;
+  	onclick?: () => void;
   }
   let { title, active = false, onclick }: Props = $props();
   ```
@@ -110,6 +116,7 @@ const logger = createModuleLogger('auth');
 
 // ✅ Correct - structured logging with context
 logger.error({ err }, '[auth] Failed to resolve user');
+logger.info({ userId, action: 'login' }, '[auth] User logged in');
 
 // ❌ Incorrect
 console.error('Failed to resolve user:', err);
@@ -119,11 +126,17 @@ console.error('Failed to resolve user:', err);
 Use `as const` objects instead of enums:
 ```typescript
 export const COMPENDIUM_TYPES = {
-  SPELL: 'spell',
-  MONSTER: 'monster',
+	SPELL: 'spell',
+	MONSTER: 'monster'
 } as const;
 export type CompendiumType = (typeof COMPENDIUM_TYPES)[keyof typeof COMPENDIUM_TYPES];
 ```
+
+### Type Patterns
+- Prefer `interface` for object shapes that can be extended
+- Use `type` for unions, intersections, and utility types
+- Export inferred types from Zod schemas: `export type MyType = z.infer<typeof mySchema>`
+- Avoid `any`; use `unknown` when type is truly unknown
 
 ## Architecture
 
@@ -155,19 +168,42 @@ grimar/
 
 **Unit tests**: `*.test.ts` alongside source files in `grimar/src/`
 **E2E tests**: `tests/` directory with Playwright fixtures
+**Environment**: happy-dom, Vitest globals enabled
 
 ### Test Pattern
 ```typescript
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { myFunction } from './my-module';
 
-describe('ModuleName', () => {
+describe('MyModule', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 	});
 
-	it('should do expected behavior', () => {
-		expect(true).toBe(true);
+	afterEach(() => {
+		vi.restoreAllMocks();
 	});
+
+	it('should do expected behavior', () => {
+		expect(myFunction()).toBe(true);
+	});
+});
+```
+
+### Advanced Mocking
+```typescript
+// Hoisted mock setup (for mocks needed at module load time)
+const mockGetDb = vi.hoisted(() => vi.fn());
+vi.mock('$lib/server/db', () => ({ getDb: mockGetDb }));
+
+// Timer mocking
+beforeEach(() => vi.useFakeTimers());
+afterEach(() => vi.useRealTimers());
+
+it('retries with delay', async () => {
+	const promise = retryOperation();
+	await vi.advanceTimersByTimeAsync(100);
+	await expect(promise).resolves.toBe(true);
 });
 ```
 
@@ -188,6 +224,11 @@ vi.mock('$app/environment', () => ({
 // SvelteKit navigation
 vi.mock('$app/navigation', () => ({
 	goto: vi.fn()
+}));
+
+// Logger
+vi.mock('$lib/server/logger', () => ({
+	createModuleLogger: () => ({ info: vi.fn(), error: vi.fn(), warn: vi.fn() })
 }));
 ```
 
