@@ -1,113 +1,102 @@
 # Compendium Development Guide
 
-This directory contains the configurations that drive the generic compendium system. The system is designed to be **configuration-first**, meaning you can add support for a new D&D entity type (e.g., "Vehicles" or "Deities") primarily by defining a JSON-like configuration object.
+This directory contains the configurations that drive the generic compendium system. The system is **registry-first**, meaning you can add support for a new D&D entity type (e.g., "Vehicles" or "Deities") by adding a single entry to the registry.
 
 ## How to Add a New Compendium Type
 
-### 1. Define the Configuration
+### 1. Add Entry to Registry
 
-Create a new file in this directory (e.g., `src/lib/constants/compendium/vehicles.ts`). Use the `CompendiumTypeConfig` interface.
+Edit `registry.ts` and add a new entry to `COMPENDIUM_TYPE_REGISTRY`:
 
 ```typescript
-import { Car } from 'lucide-svelte';
-import type { CompendiumTypeConfig } from '$lib/types/compendium';
-
-export const VEHICLES_CONFIG: CompendiumTypeConfig = {
-    routes: {
-        basePath: '/compendium/vehicles',
-        dbType: 'vehicle', // Must match the 'type' column in the database
-        storageKeyFilters: 'vehicle-filters',
-        storageKeyListUrl: 'vehicle-list-url'
-    },
-    filters: [
-        {
-            title: 'Speed',
-            key: 'speed',
-            urlParam: 'speed',
-            values: [{ label: 'Fast', value: 'fast' }],
-            layout: 'chips'
-        }
-    ],
-    sorting: {
-        default: { label: 'Name', value: 'name-asc', column: 'name', direction: 'asc' },
-        options: [...]
-    },
-    ui: {
-        displayName: 'Vehicle',
-        displayNamePlural: 'Vehicles',
-        icon: Car,
-        categoryAccent: 'text-amber-400',
-        categoryGradient: 'from-amber-500/20 to-orange-500/20',
-        emptyState: { ... },
-        databaseEmptyState: { ... }
-    },
-    display: {
-        subtitle: (item) => `${item.details.speed} speed`,
-        tags: (item) => [item.details.type],
-        listItemAccent: () => 'hover:border-amber-500/50',
-        detailAccent: () => 'text-amber-400',
-        metaDescription: (item) => `${item.name} is a vehicle...`
-    }
-};
+vehicles: {
+	dbType: 'vehicles',
+	displayName: 'Vehicles',
+	description: 'Mounts and machines for travel',
+	icon: Car,
+	color: 'amber',
+	category: 'equipment',
+	showOnDashboard: true,
+	showInSidebar: true,
+	aliases: ['vehicle'],
+	urlPath: 'vehicles',
+	configSource: 'vehicles',
+	entryComponent: 'vehicles',
+},
 ```
 
-### 2. Register the Configuration
+That's it! The system will auto-generate:
+- PATH_TO_DB_TYPE mapping
+- DB_TYPE_TO_PATH mapping
+- Default config (via `createGenericConfig`)
+- Dashboard card
+- Sidebar entry
 
-Add your new configuration to the registry in `src/lib/constants/compendium/index.ts`.
+### 2. (Optional) Custom Configuration
+
+For types needing custom filters, sorting, or display logic:
+
+1. Create `src/lib/core/constants/compendium/vehicles.ts` with `VEHICLES_CONFIG`
+2. Set `configSource: 'vehicles'` in registry entry
+3. Import and register in `index.ts`:
 
 ```typescript
-// 1. Import your config
 import { VEHICLES_CONFIG } from './vehicles';
 
-// 2. Add to CONFIG_MAP
-const CONFIG_MAP: Record<CompendiumTypeName, CompendiumTypeConfig> = {
-    ...,
-    vehicle: VEHICLES_CONFIG
-};
+CONFIG_MAP.vehicles = VEHICLES_CONFIG;
+```
 
-// 3. Add to PATH_TO_TYPE (maps URL segment to DB type)
-const PATH_TO_TYPE: Record<string, CompendiumTypeName> = {
-    ...,
-    vehicles: 'vehicle'
+### 3. (Optional) Custom Detail Component
+
+For types needing special layouts:
+
+1. Create `src/lib/features/compendium/components/entry-content/VehiclesEntryContent.svelte`
+2. The component name must follow pattern: `{dbType}EntryContent.svelte`
+3. Register in `EntryContentRenderer.svelte`:
+
+```typescript
+import VehiclesEntryContent from './VehiclesEntryContent.svelte';
+
+const COMPONENT_MAP: ComponentMap = {
+	...,
+	vehicles: VehiclesEntryContent,
 };
 ```
 
-### 3. (Optional) Create a Detail Component
+## Architecture Overview
 
-If the new type requires a special layout (beyond the default JSON preview), create a new component in `src/lib/components/compendium/detail/`.
-
-Then, update the component switchers in:
-
-- `src/routes/compendium/[type]/+page.svelte` (The detail overlay)
-- `src/routes/compendium/[type]/[slug]/+page.svelte` (The full detail page)
-
-```svelte
-{#if dbType === 'vehicle'}
-    <VehicleDetailContent item={selectedItem} />
-{:else ...}
 ```
-
-### 4. Update the Dashboard
-
-Finally, add a `CategoryCard` for your new type in `src/routes/compendium/+page.svelte`.
-
-```svelte
-<CategoryCard
-	title="Vehicles"
-	description="Mounts and machines."
-	href="/compendium/vehicles"
-	icon={Car}
-	gradient="from-amber-500/20 to-orange-500/20"
-	accent="text-amber-400"
-/>
+registry.ts          ← Single source of truth
+    ↓
+┌───────────────────────────────────────────┐
+│ Auto-generates:                           │
+│ • DB_TYPES enum                           │
+│ • PATH_TO_DB_TYPE / DB_TYPE_TO_PATH       │
+│ • getDashboardCards()                     │
+│ • getSidebarItems()                       │
+└───────────────────────────────────────────┘
+    ↓
+index.ts              ← Config registration (auto + custom)
+    ↓
+categories.ts         ← Dashboard cards (auto-generated)
+    ↓
+EntryContentRenderer  ← Component map (convention-based)
 ```
 
 ## Key Concepts
 
-- **Generic Routing:** The routes `[type]` and `[type]/[slug]` handle data
-  fetching, filtering, and state management automatically using the registry.
-- **Shallow Routing:** Clicking a list item uses `pushState` to open an overlay
-  without a full page reload, while maintaining a shareable URL.
-- **External Storage:** Detailed JSON payloads are stored in
-  `data/compendium/[type]/[id].json` to keep the SQLite database fast and small.
-  Only metadata needed for filtering/sorting is kept in DB columns.
+- **Registry-First:** Define once in `COMPENDIUM_TYPE_REGISTRY`, everything else derives from it
+- **Convention over Configuration:** Default configs and components work for simple types
+- **Generic Routing:** Routes `[type]` and `[type]/[slug]` handle fetching, filtering, state automatically
+- **Shallow Routing:** List items use `pushState` for overlay without full page reload
+- **External Storage:** Detailed JSON payloads in `data/compendium/[type]/[id].json`
+
+## Files Reference
+
+| File | Purpose |
+|------|---------|
+| `registry.ts` | Single source of truth for all compendium types |
+| `index.ts` | Config registration, exports `getCompendiumConfig()` |
+| `categories.ts` | Dashboard categories and auto-generated cards |
+| `type-mappings.ts` | Re-exports from registry + filter utilities |
+| `spells.ts`, `creatures.ts` | Custom configs for complex types |

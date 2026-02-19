@@ -3,24 +3,23 @@ import { getTypeFromPath, getCompendiumConfig, getDbTypeFromPath, getUrlPathFrom
 
 describe('Compendium Constants', () => {
 	describe('getTypeFromPath', () => {
-		it('should convert "creatures" to "creature"', () => {
-			expect(getTypeFromPath('creatures')).toBe('creature');
+		it('should convert "creatures" to "creatures"', () => {
+			expect(getTypeFromPath('creatures')).toBe('creatures');
 		});
 
-		it('should convert "spells" to "spell"', () => {
-			expect(getTypeFromPath('spells')).toBe('spell');
+		it('should convert "spells" to "spells"', () => {
+			expect(getTypeFromPath('spells')).toBe('spells');
 		});
 
-		it('should convert "feats" to "feat"', () => {
-			expect(getTypeFromPath('feats')).toBe('feat');
+		it('should convert "feats" to "feats"', () => {
+			expect(getTypeFromPath('feats')).toBe('feats');
 		});
 
-		it('should convert "backgrounds" to "background"', () => {
-			expect(getTypeFromPath('backgrounds')).toBe('background');
+		it('should convert "backgrounds" to "backgrounds"', () => {
+			expect(getTypeFromPath('backgrounds')).toBe('backgrounds');
 		});
 
-		it('should convert "races" to "species" (standardized type)', () => {
-			// URL path 'races' maps to DB type 'species', singular form is 'species'
+		it('should convert "races" to "species"', () => {
 			expect(getTypeFromPath('races')).toBe('species');
 		});
 
@@ -28,28 +27,32 @@ describe('Compendium Constants', () => {
 			expect(getTypeFromPath('species')).toBe('species');
 		});
 
-		it('should convert "classes" to "class"', () => {
-			expect(getTypeFromPath('classes')).toBe('class');
+		it('should convert "classes" to "classes"', () => {
+			expect(getTypeFromPath('classes')).toBe('classes');
 		});
 
-		it('should convert "magicitems" to "item"', () => {
-			expect(getTypeFromPath('magicitems')).toBe('item');
+		it('should convert "magicitems" to "magic_items"', () => {
+			expect(getTypeFromPath('magicitems')).toBe('magic_items');
 		});
 
-		it('should convert "weapons" to "weapon"', () => {
-			expect(getTypeFromPath('weapons')).toBe('weapon');
+		it('should convert "items" to "magic_items"', () => {
+			expect(getTypeFromPath('items')).toBe('magic_items');
+		});
+
+		it('should convert "weapons" to "weapons"', () => {
+			expect(getTypeFromPath('weapons')).toBe('weapons');
 		});
 
 		it('should convert "armor" to "armor"', () => {
 			expect(getTypeFromPath('armor')).toBe('armor');
 		});
 
-		it('should convert "conditions" to "condition"', () => {
-			expect(getTypeFromPath('conditions')).toBe('condition');
+		it('should convert "conditions" to "conditions"', () => {
+			expect(getTypeFromPath('conditions')).toBe('conditions');
 		});
 
-		it('should convert "planes" to "plane"', () => {
-			expect(getTypeFromPath('planes')).toBe('plane');
+		it('should convert "planes" to "planes"', () => {
+			expect(getTypeFromPath('planes')).toBe('planes');
 		});
 
 		it('should throw error for unknown path', () => {
@@ -65,6 +68,10 @@ describe('Compendium Constants', () => {
 		it('should return "creatures" for "monsters" URL path (backward compat)', () => {
 			expect(getDbTypeFromPath('monsters')).toBe('creatures');
 		});
+
+		it('should return "magicitems" for "items" URL path', () => {
+			expect(getDbTypeFromPath('items')).toBe('magicitems');
+		});
 	});
 
 	describe('getUrlPathFromDbType', () => {
@@ -78,19 +85,18 @@ describe('Compendium Constants', () => {
 	});
 
 	describe('type mappings are bidirectional', () => {
-		// Note: 'races' and 'species' both map to singular 'species', so we test them separately
 		const pathTypes = [
-			['creatures', 'creature'],
-			['spells', 'spell'],
-			['feats', 'feat'],
-			['backgrounds', 'background'],
+			['creatures', 'creatures'],
+			['spells', 'spells'],
+			['feats', 'feats'],
+			['backgrounds', 'backgrounds'],
 			['species', 'species'],
-			['classes', 'class'],
-			['magicitems', 'item'],
-			['weapons', 'weapon'],
+			['classes', 'classes'],
+			['magicitems', 'magic_items'],
+			['weapons', 'weapons'],
 			['armor', 'armor'],
-			['conditions', 'condition'],
-			['planes', 'plane']
+			['conditions', 'conditions'],
+			['planes', 'planes']
 		];
 
 		it('should have valid mappings for all types', () => {
@@ -99,10 +105,10 @@ describe('Compendium Constants', () => {
 			}
 		});
 
-		it('should have unique singular types in pathTypes array', () => {
-			const singularTypes = pathTypes.map(([, type]) => type);
-			const uniqueTypes = new Set(singularTypes);
-			expect(uniqueTypes.size).toBe(singularTypes.length);
+		it('should have unique types in pathTypes array', () => {
+			const types = pathTypes.map(([, type]) => type);
+			const uniqueTypes = new Set(types);
+			expect(uniqueTypes.size).toBe(types.length);
 		});
 	});
 
