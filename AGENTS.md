@@ -5,7 +5,7 @@ This file provides guidance to AI coding agents working in this D&D 5e PWA repos
 ## Project Overview
 
 - **Framework**: SvelteKit 2 + Svelte 5 Runes
-- **Runtime**: Bun
+- **Runtime**: Bun (NOT Node)
 - **Database**: SQLite via Drizzle ORM
 - **Testing**: Vitest (unit) + Playwright (E2E)
 - **Styling**: Tailwind CSS v4
@@ -21,7 +21,7 @@ This file provides guidance to AI coding agents working in this D&D 5e PWA repos
 7. **Cache invalidation**: Call `invalidateCache()` after data mutations
 8. **VirtualList**: Use for 50+ items (import from `$lib/components/ui/VirtualList`)
 9. **Database retries**: Use `getDbWithRetry()` wrapper for flaky connections
-10. **Logging**: Use child loggers from `$lib/server/logger` - NEVER `console.error` directly
+10. **Logging**: Use `createModuleLogger()` from `$lib/server/logger` - NEVER `console.error`
 11. **Test location**: `*.test.ts` alongside source files (co-located in `grimar/src/`)
 12. **Auth**: Only `/` is public; all other routes redirect to `/`
 13. **Adapter**: `svelte-adapter-bun` (not node)
@@ -43,12 +43,13 @@ bun run format           # Format with Prettier (write)
 bun run lint             # Check format + lint
 
 # Testing
-bun run test             # Watch mode
-bun run test:run        # CI mode (run before commit)
-bun run test -- <file>  # Run single test file
-bun run test:ui         # Vitest UI mode
-bun run test:e2e        # Playwright E2E tests
-bun run test:all        # All tests (unit + E2E)
+bun run test                          # Watch mode
+bun run test:run                      # CI mode (run before commit)
+bun run test grimar/src/foo.test.ts   # Run single test file
+bun run test -- --reporter=verbose    # Verbose output
+bun run test:ui                       # Vitest UI mode
+bun run test:e2e                      # Playwright E2E tests
+bun run test:all                      # All tests (unit + E2E)
 
 # Database
 bun run db:push         # Push schema (dev)
@@ -61,8 +62,8 @@ bun run reindex-fts     # Rebuild FTS index
 
 ## Code Style
 
-### Formatting
-- **Tabs** (not spaces) with **single quotes** and **no trailing commas**
+### Formatting (Prettier)
+- **Tabs** (not spaces), **single quotes**, **no trailing commas**, **printWidth: 100**
 - **Semicolons**: Always use semicolons
 - **Strict equality**: Use `===` and `!==`
 
@@ -84,37 +85,38 @@ bun run reindex-fts     # Rebuild FTS index
 - Use barrel files (index.ts) for re-exports
 - Use `$lib` alias for library code: `import { getDb } from '$lib/server/db'`
 - Use relative imports for same-directory files: `./types`
-- Use named imports for utilities, default for Svelte components
+- Named imports for utilities, default for Svelte components
 
 ### Naming Conventions
 - **Files**: kebab-case (`my-file.ts`), PascalCase for Svelte components (`MyComponent.svelte`)
 - **Types/Interfaces**: PascalCase (`CompendiumItem`, `AuthUser`)
 - **Zod schemas**: `*Schema` suffix, export inferred types without suffix
 - **Constants**: UPPER_SNAKE_CASE (`DEFAULT_MAX_RETRIES`)
-- **Database**: snake_case tables (`compendium_items`), camelCase columns (`spell_level`)
+- **Database**: snake_case tables (`compendium_items`), camelCase columns (`spellLevel`)
 - **Unused variables**: Prefix with `_` (`let { _, ...rest }`)
 
-### Directory-Specific Patterns
-| Directory | Pattern | Example |
-|-----------|---------|---------|
-| `db/` | `db-*` prefix | `db-connection.ts` |
-| `auth/` | `auth-*` prefix | `auth-handler.ts` |
-| `sync/` | `sync-*` prefix | `sync-cleanup.ts` |
-| Svelte components | PascalCase | `Button.svelte` |
-| Test files | `*.test.ts` | `service.test.ts` |
+### Directory-Specific Prefixes
+| Directory | Prefix | Example |
+|-----------|--------|---------|
+| `db/` | `db-*` | `db-connection.ts` |
+| `auth/` | `auth-*` | `auth-handler.ts` |
+| `sync/` | `sync-*` | `sync-cleanup.ts` |
 
-### Error Handling
-All error logging must include `[context]` prefix:
+### Error Handling & Logging
+Use `createModuleLogger` for structured logging with context:
 ```typescript
-// ✅ Correct
-logger.error('[auth] Failed to resolve user:', error);
+import { createModuleLogger } from '$lib/server/logger';
+const logger = createModuleLogger('auth');
 
-// ❌ Incorrect  
-console.error('Failed to resolve user:', error);
+// ✅ Correct - structured logging with context
+logger.error({ err }, '[auth] Failed to resolve user');
+
+// ❌ Incorrect
+console.error('Failed to resolve user:', err);
 ```
 
-### Constants & Enums
-Use object-based const patterns:
+### Constants Pattern
+Use `as const` objects instead of enums:
 ```typescript
 export const COMPENDIUM_TYPES = {
   SPELL: 'spell',
@@ -154,42 +156,44 @@ grimar/
 **Unit tests**: `*.test.ts` alongside source files in `grimar/src/`
 **E2E tests**: `tests/` directory with Playwright fixtures
 
-### Test Patterns
+### Test Pattern
 ```typescript
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 describe('ModuleName', () => {
-  beforeEach(() => { vi.clearAllMocks(); });
-  
-  it('should do expected behavior', () => {
-    expect(true).toBe(true);
-  });
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
+
+	it('should do expected behavior', () => {
+		expect(true).toBe(true);
+	});
 });
 ```
 
-### Mocking
+### Common Mocks
 ```typescript
 // Database
 vi.mock('$lib/server/db', () => ({
-  getDb: vi.fn().mockResolvedValue(mockDb)
+	getDb: vi.fn().mockResolvedValue(mockDb)
 }));
 
-// SvelteKit
-vi.mock('$app/stores', () => ({
-  page: { get: vi.fn().mockReturnValue({ data: {} }) }
-}));
-
-// Environment
+// SvelteKit environment
 vi.mock('$app/environment', () => ({
-  browser: true,
-  building: false,
-  dev: true
+	browser: true,
+	building: false,
+	dev: true
+}));
+
+// SvelteKit navigation
+vi.mock('$app/navigation', () => ({
+	goto: vi.fn()
 }));
 ```
 
-### Coverage Expectations
-| Module Type | Minimum |
-|-------------|---------|
+### Coverage Minimums
+| Module Type | Coverage |
+|-------------|----------|
 | Services | 70% |
 | Providers | 85% |
 | Utilities | 70% |
@@ -199,8 +203,4 @@ vi.mock('$app/environment', () => ({
 
 `<type>(<scope>): <description>`
 
-- `feat`: New feature
-- `fix`: Bug fix
-- `refactor`: Code restructuring
-- `perf`: Performance improvement
-- `chore`: Maintenance tasks
+Types: `feat`, `fix`, `refactor`, `perf`, `chore`, `docs`, `test`
