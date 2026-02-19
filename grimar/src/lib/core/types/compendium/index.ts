@@ -320,7 +320,6 @@ export interface EmptyStateConfig {
 
 export interface UIConfig {
 	displayName: string;
-	displayNamePlural: string;
 	icon: CompendiumIcon;
 	categoryGradient: string;
 	categoryAccent: string;
