@@ -51,7 +51,7 @@
 
 <div class="container mx-auto p-4">
 	<div class="mb-6 flex items-center justify-between">
-		<h1 class="text-3xl font-bold text-[var(--color-text-primary)]">Homebrew Content</h1>
+		<h1 class="text-3xl font-bold text-[var(--color-text-primary)]">My Homebrew</h1>
 		<div class="flex gap-2">
 			<a href="/api/homebrew/export/all" class="btn-ghost px-4 py-2" download="homebrew-all.json">
 				Export All
@@ -63,15 +63,12 @@
 
 	{#if data.items.length === 0}
 		<SurfaceCard class="bg-[var(--color-bg-card)] p-8 text-center">
-			<p class="mb-4 text-[var(--color-text-secondary)]">No homebrew content has been created yet.</p>
+			<p class="mb-4 text-[var(--color-text-secondary)]">You haven't created any homebrew content yet.</p>
 			<a href="/homebrew/new" class="btn-gem px-6 py-3 inline-block">Create the First Item</a>
 		</SurfaceCard>
 	{:else}
 		<div class="mb-4 text-sm text-[var(--color-text-secondary)]">
-			Showing {data.items.length} item{data.items.length !== 1 ? 's' : ''} from all users.
-			{#if data.user.role === 'admin'}
-				<span class="ml-2 text-[var(--color-accent)]">(Admin: you can edit/delete any item)</span>
-			{/if}
+			{data.items.length} item{data.items.length !== 1 ? 's' : ''}
 		</div>
 		<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
 			{#each Object.entries(data.itemsByType) as [type, items]}

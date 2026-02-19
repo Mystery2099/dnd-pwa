@@ -1,12 +1,12 @@
 import type { PageServerLoad } from './$types';
 import { requireUser } from '$lib/server/services/auth';
-import { getAllHomebrewItems } from '$lib/server/repositories/compendium';
+import { getUserHomebrewItems } from '$lib/server/repositories/compendium';
 import type { CompendiumItem } from '$lib/server/db/schema';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const user = requireUser(locals);
 
-	const items = await getAllHomebrewItems();
+	const items = await getUserHomebrewItems(user.username);
 
 	const itemsByType: Record<string, CompendiumItem[]> = {};
 	for (const item of items) {
