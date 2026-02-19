@@ -1,8 +1,8 @@
 /**
  * Compendium Configuration Registry
  *
- * Centralizes all compendium type-specific configurations.
- * Uses shared type mappings from compendium-filters.ts for consistency.
+ * Auto-generates CONFIG_MAP from COMPENDIUM_TYPE_REGISTRY.
+ * Custom configs are linked via configSource in registry entries.
  */
 
 import type { CompendiumTypeConfig, CompendiumTypeName, CompendiumType } from '$lib/core/types/compendium';
@@ -30,27 +30,51 @@ import {
 	EQUIPMENT_CATEGORIES_CONFIG,
 	RULES_CONFIG
 } from './reference';
-
 import { BookOpen } from 'lucide-svelte';
 import {
+	COMPENDIUM_TYPE_REGISTRY,
 	DB_TYPES,
-	PATH_TO_DB_TYPE as SHARED_PATH_TO_DB_TYPE,
-	DB_TYPE_TO_PATH as SHARED_DB_TYPE_TO_PATH,
+	PATH_TO_DB_TYPE,
+	DB_TYPE_TO_PATH,
 	type DbType
-} from './type-mappings';
+} from './registry';
 
-// Helper to create generic configs for new types
+const CUSTOM_CONFIGS: Record<string, CompendiumTypeConfig> = {
+	spells: SPELLS_CONFIG,
+	creatures: CREATURES_CONFIG,
+	magicitems: ITEMS_CONFIG,
+	weapons: WEAPONS_CONFIG,
+	armor: ARMOR_CONFIG,
+	backgrounds: BACKGROUNDS_CONFIG,
+	feats: FEATS_CONFIG,
+	species: RACES_CONFIG,
+	classes: CLASSES_CONFIG,
+	conditions: CONDITIONS_CONFIG,
+	environments: PLANES_CONFIG,
+	damagetypes: DAMAGE_TYPES_CONFIG,
+	languages: LANGUAGES_CONFIG,
+	alignments: ALIGNMENTS_CONFIG,
+	spellschools: MAGIC_SCHOOLS_CONFIG,
+	creaturetypes: MONSTER_TYPES_CONFIG,
+	abilities: ABILITY_SCORES_CONFIG,
+	skills: SKILLS_CONFIG,
+	rules: RULES_CONFIG,
+	rulesections: RULE_SECTIONS_CONFIG,
+	weaponproperties: WEAPON_PROPERTIES_CONFIG,
+	itemcategories: EQUIPMENT_CATEGORIES_CONFIG
+};
+
 function createGenericConfig(
-	type: string,
+	dbType: string,
 	displayName: string,
 	color: string
 ): CompendiumTypeConfig {
 	return {
 		routes: {
-			basePath: `/compendium/${type}`,
-			dbType: type as CompendiumTypeName,
-			storageKeyFilters: `${type}-filters`,
-			storageKeyListUrl: `${type}-list-url`
+			basePath: `/compendium/${dbType}`,
+			dbType: dbType as CompendiumTypeName,
+			storageKeyFilters: `${dbType}-filters`,
+			storageKeyListUrl: `${dbType}-list-url`
 		},
 		filters: [],
 		sorting: {
@@ -67,7 +91,6 @@ function createGenericConfig(
 		},
 		ui: {
 			displayName,
-			displayNamePlural: displayName + 's',
 			icon: BookOpen,
 			categoryGradient: `from-${color}-500/20 to-${color}-600/20`,
 			categoryAccent: `text-${color}-400`,
@@ -92,80 +115,50 @@ function createGenericConfig(
 	};
 }
 
-// Map database type names to their configuration objects
-// Note: 'species' is the DB type, 'races' is the URL path
-const CONFIG_MAP: Record<CompendiumTypeName, CompendiumTypeConfig> = {
-	spells: SPELLS_CONFIG,
-	creatures: CREATURES_CONFIG,
-	magicitems: ITEMS_CONFIG,
-	itemsets: createGenericConfig('itemsets', 'Item Set', 'amber'),
-	itemcategories: EQUIPMENT_CATEGORIES_CONFIG,
-	documents: createGenericConfig('documents', 'Document', 'gray'),
-	licenses: createGenericConfig('licenses', 'License', 'blue'),
-	publishers: createGenericConfig('publishers', 'Publisher', 'indigo'),
-	weapons: WEAPONS_CONFIG,
-	armor: ARMOR_CONFIG,
-	gamesystems: createGenericConfig('gamesystems', 'Game System', 'purple'),
-	backgrounds: BACKGROUNDS_CONFIG,
-	feats: FEATS_CONFIG,
-	species: RACES_CONFIG,  // DB stores 'species', URL shows 'races'
-	creaturetypes: MONSTER_TYPES_CONFIG,
-	creaturesets: createGenericConfig('creaturesets', 'Creature Set', 'green'),
-	damagetypes: DAMAGE_TYPES_CONFIG,
-	languages: LANGUAGES_CONFIG,
-	alignments: ALIGNMENTS_CONFIG,
-	conditions: CONDITIONS_CONFIG,
-	spellschools: MAGIC_SCHOOLS_CONFIG,
-	classes: CLASSES_CONFIG,
-	sizes: createGenericConfig('sizes', 'Size', 'cyan'),
-	itemrarities: createGenericConfig('itemrarities', 'Item Rarity', 'yellow'),
-	environments: PLANES_CONFIG,
-	abilities: ABILITY_SCORES_CONFIG,
-	skills: SKILLS_CONFIG,
-	rules: RULES_CONFIG,
-	rulesections: RULE_SECTIONS_CONFIG,
-	rulesets: createGenericConfig('rulesets', 'Rule Set', 'rose'),
-	images: createGenericConfig('images', 'Image', 'pink'),
-	weaponproperties: WEAPON_PROPERTIES_CONFIG,
-	services: createGenericConfig('services', 'Service', 'orange'),
-	classfeatures: createGenericConfig('classfeatures', 'Class Feature', 'blue'),
-	classfeatureitems: createGenericConfig('classfeatureitems', 'Class Feature Item', 'indigo'),
-	creatureactions: createGenericConfig('creatureactions', 'Creature Action', 'red'),
-	creatureactionattacks: createGenericConfig('creatureactionattacks', 'Creature Attack', 'rose'),
-	creaturetraits: createGenericConfig('creaturetraits', 'Creature Trait', 'orange'),
-	speciestraits: createGenericConfig('speciestraits', 'Species Trait', 'emerald'),
-	backgroundbenefits: createGenericConfig('backgroundbenefits', 'Background Benefit', 'cyan'),
-	featbenefits: createGenericConfig('featbenefits', 'Feat Benefit', 'amber'),
-	spellcastingoptions: createGenericConfig('spellcastingoptions', 'Spellcasting Option', 'violet'),
-	weaponpropertyassignments: createGenericConfig('weaponpropertyassignments', 'Weapon Property', 'slate')
-};
+function buildConfigMap(): Record<CompendiumTypeName, CompendiumTypeConfig> {
+	const configMap: Record<string, CompendiumTypeConfig> = {};
 
-// URL path to DB type mapping - re-exported from shared module for use in client code
-// Maps URL path segment → DB type
-export const PATH_TO_DB_TYPE: Record<string, string> = {
-	...SHARED_PATH_TO_DB_TYPE
-};
+	for (const [registryKey, entry] of Object.entries(COMPENDIUM_TYPE_REGISTRY)) {
+		if (entry.configSource && CUSTOM_CONFIGS[entry.configSource]) {
+			configMap[registryKey] = CUSTOM_CONFIGS[entry.configSource];
+		} else if (CUSTOM_CONFIGS[registryKey]) {
+			configMap[registryKey] = CUSTOM_CONFIGS[registryKey];
+		} else {
+			configMap[registryKey] = createGenericConfig(
+				entry.dbType,
+				entry.displayName,
+				entry.color
+			);
+		}
+	}
 
-// Build PATH_TO_TYPE: maps URL path → DB type
-const PATH_TO_TYPE: Record<string, CompendiumTypeName> = { ...PATH_TO_DB_TYPE } as Record<
+	return configMap as Record<CompendiumTypeName, CompendiumTypeConfig>;
+}
+
+const CONFIG_MAP = buildConfigMap();
+
+export { PATH_TO_DB_TYPE, DB_TYPE_TO_PATH };
+
+const PATH_TO_TYPE: Record<string, CompendiumTypeName> = {} as Record<
 	string,
 	CompendiumTypeName
 >;
 
-// Add entries for CONFIG_MAP keys that don't have explicit mappings
-for (const dbType of Object.keys(CONFIG_MAP)) {
-	if (!(dbType in PATH_TO_TYPE)) {
-		PATH_TO_TYPE[dbType] = dbType as CompendiumTypeName;
+for (const [registryKey, entry] of Object.entries(COMPENDIUM_TYPE_REGISTRY)) {
+	const urlPath = entry.urlPath || registryKey;
+	PATH_TO_TYPE[urlPath] = registryKey as CompendiumTypeName;
+	PATH_TO_TYPE[registryKey] = registryKey as CompendiumTypeName;
+	PATH_TO_TYPE[entry.dbType] = registryKey as CompendiumTypeName;
+	if (entry.aliases) {
+		for (const alias of entry.aliases) {
+			PATH_TO_TYPE[alias] = registryKey as CompendiumTypeName;
+		}
 	}
 }
 
-/**
- * Get the configuration for a specific compendium type
- */
 export function getCompendiumConfig(type: CompendiumTypeName | string): CompendiumTypeConfig {
-	// Handle backward compatibility and normalization
 	const normalizedType = normalizeTypeName(type);
-	
+
 	if (normalizedType in CONFIG_MAP) {
 		return CONFIG_MAP[normalizedType as CompendiumTypeName];
 	}
@@ -175,10 +168,6 @@ export function getCompendiumConfig(type: CompendiumTypeName | string): Compendi
 	throw new Error(`No compendium configuration found for type: ${type}`);
 }
 
-/**
- * Normalize type names to canonical DB type
- * Handles: creature/monsters → creatures, race → species, item → magicitems
- */
 function normalizeTypeName(type: string): string {
 	switch (type) {
 		case 'creature':
@@ -187,7 +176,7 @@ function normalizeTypeName(type: string): string {
 			return DB_TYPES.CREATURES;
 		case 'race':
 		case 'races':
-			return DB_TYPES.SPECIES;  // URL 'races' maps to DB 'species'
+			return DB_TYPES.SPECIES;
 		case 'item':
 		case 'items':
 			return DB_TYPES.MAGIC_ITEMS;
@@ -196,48 +185,34 @@ function normalizeTypeName(type: string): string {
 	}
 }
 
-/**
- * Get the unified type from a URL path segment (singular form)
- */
 export function getTypeFromPath(path: string): CompendiumType {
 	const dbType = PATH_TO_TYPE[path];
 	if (!dbType) {
 		throw new Error(`Unknown compendium path: ${path}`);
 	}
-	const singularType = HOMEBREW_TYPE_TO_DB_TYPE[dbType] || dbType.slice(0, -1);
-	return singularType as CompendiumType;
+	return dbType as CompendiumType;
 }
 
-/**
- * Get the DB type from a URL path segment (plural form)
- */
-export function getDbTypeFromPath(path: string): CompendiumTypeName {
-	const dbType = PATH_TO_TYPE[path];
+export function getDbTypeFromPath(path: string): DbType {
+	const dbType = PATH_TO_DB_TYPE[path];
 	if (!dbType) {
 		throw new Error(`Unknown compendium path: ${path}`);
 	}
 	return dbType;
 }
 
-/**
- * Get the URL path for a DB type
- */
 export function getUrlPathFromDbType(dbType: string): string {
-	return SHARED_DB_TYPE_TO_PATH[dbType] || dbType;
+	return DB_TYPE_TO_PATH[dbType] || dbType;
 }
 
-/**
- * Mapping from plural form (used in forms/API) to singular type name
- * Used by homebrew to convert user-facing types to unified type names
- */
 export const HOMEBREW_TYPE_TO_DB_TYPE: Record<string, string> = {
 	spells: 'spell',
 	creatures: 'creature',
 	magicitems: 'item',
 	feats: 'feat',
 	backgrounds: 'background',
-	species: 'species',  // Changed: now singular form matches DB type
-	races: 'species',    // Legacy: 'races' also maps to 'species'
+	species: 'species',
+	races: 'species',
 	classes: 'class',
 	subclasses: 'subclass',
 	subraces: 'subrace',
@@ -251,9 +226,8 @@ export const HOMEBREW_TYPE_TO_DB_TYPE: Record<string, string> = {
 	alignments: 'alignment'
 };
 
-// Re-export DB_TYPES for use in other modules
-export { DB_TYPES } from './type-mappings';
-
+export { DB_TYPES } from './registry';
+export { getDashboardCards, getSidebarItems } from './registry';
 export { SPELLS_CONFIG } from './spells';
 export { CREATURES_CONFIG } from './creatures';
 export { FEATS_CONFIG } from './feats';
