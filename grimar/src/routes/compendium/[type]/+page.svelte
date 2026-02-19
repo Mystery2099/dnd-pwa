@@ -36,11 +36,11 @@
 	// Load config client-side to avoid SSR serialization issues with Svelte components
 	// Use non-null assertion since pathType should always be defined when page renders
 	const config = $derived(pathType ? getCompendiumConfig(pathType) : {
-		ui: { displayNamePlural: 'Loading...' }
+		ui: { displayName: 'Loading...' }
 	} as ReturnType<typeof getCompendiumConfig>);
 
 	// Page title
-	const pageTitle = $derived(`${config.ui.displayNamePlural} - Grimar Compendium`);
+	const pageTitle = $derived(`${config.ui.displayName} - Grimar Compendium`);
 
 	// TanStack Query for compendium data - only available on client
 	// Use onMount to avoid hydration mismatch (effects run during hydration)
@@ -254,7 +254,7 @@
 	<!-- Fixed header -->
 	<header class="mb-4 shrink-0 border-b border-[var(--color-border)] pb-4">
 		<h1 class="text-2xl font-bold text-[var(--color-text-primary)]">
-			{config.ui.displayNamePlural}
+			{config.ui.displayName}
 		</h1>
 	</header>
 

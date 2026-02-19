@@ -79,7 +79,7 @@
 
 	<!-- Keyboard shortcuts hint -->
 	<div class="mt-6 text-center text-xs text-[var(--color-text-muted)]">
-		<span class="mr-4">← → Navigate {config.ui.displayNamePlural.toLowerCase()}</span>
+		<span class="mr-4">← → Navigate {config.ui.displayName.toLowerCase()}</span>
 		<span>Esc Close</span>
 	</div>
 </div>
