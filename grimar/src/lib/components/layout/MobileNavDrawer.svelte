@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { fade, fly } from 'svelte/transition';
 	import { Menu, X } from 'lucide-svelte';
+	import logoUrl from '$lib/assets/grimar-hermetica-title.png';
 
 	type NavItem = {
 		href: string;
@@ -17,7 +18,7 @@
 		items = [
 			{ href: '/dashboard', label: 'Dashboard' },
 			{ href: '/compendium', label: 'Compendium' },
-			{ href: '/homebrew', label: 'Homebrew' },
+			{ href: '/homebrew', label: 'My Homebrew' },
 			{ href: '/settings', label: 'Settings' }
 		],
 		open = $bindable(false)
@@ -75,11 +76,7 @@
 				<div
 					class="mt-safe-top relative flex items-center justify-between border-b border-[var(--color-border)] p-4"
 				>
-					<div
-						class="text-lg font-bold tracking-tight text-[var(--color-text-primary)] drop-shadow-[0_0_10px_var(--color-accent-glow)]"
-					>
-						Grimar
-					</div>
+					<img src={logoUrl} alt="Grimar" class="h-7 w-auto" />
 					<button
 						type="button"
 						class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-bg-card)] text-[var(--color-text-primary)] transition-all duration-200 ease-out hover:border-[var(--color-accent)]/20 hover:bg-[var(--color-bg-card)] active:scale-95"

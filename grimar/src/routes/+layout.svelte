@@ -9,6 +9,7 @@
 	import { page } from '$app/state';
 	import { initThemeSync, initTheme } from '$lib/core/client/themeStore.svelte';
 	import { QueryClientProvider } from '@tanstack/svelte-query';
+	import ClientQueryProvider from '$lib/components/ui/ClientQueryProvider.svelte';
 	import { createQueryClient, setQueryClient } from '$lib/core/client/query-client';
 	import { startCacheSync } from '$lib/core/client/cache-sync';
 	import { browser } from '$app/environment';
@@ -89,7 +90,7 @@
 ></div>
 
 {#snippet header()}
-	<GlobalHeader title="Grimar" homeHref="/dashboard" />
+	<GlobalHeader homeHref="/dashboard" />
 {/snippet}
 
 {#snippet nav()}
@@ -134,7 +135,7 @@
 {/snippet}
 
 <AppShell {header} {nav}>
-	<QueryClientProvider client={queryClient}>
+	<ClientQueryProvider client={queryClient}>
 		{@render children()}
-	</QueryClientProvider>
+	</ClientQueryProvider>
 </AppShell>

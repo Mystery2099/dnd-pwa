@@ -14,7 +14,7 @@
 		items = [
 			{ href: '/dashboard', label: 'Dashboard' },
 			{ href: '/compendium', label: 'Compendium' },
-			{ href: '/homebrew', label: 'Homebrew' },
+			{ href: '/homebrew', label: 'My Homebrew' },
 			{ href: '/settings', label: 'Settings' }
 		]
 	}: Props = $props();
