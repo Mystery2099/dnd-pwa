@@ -22,15 +22,8 @@
 	import { userSettingsStore } from '$lib/core/client/userSettingsStore.svelte';
 	import VirtualGrid from '$lib/components/ui/VirtualGrid.svelte';
 
-	// Entry Content Components
-	import SpellEntryContent from '$lib/features/compendium/components/entry-content/SpellEntryContent.svelte';
-	import MonsterEntryContent from '$lib/features/compendium/components/entry-content/MonsterEntryContent.svelte';
-	import FeatEntryContent from '$lib/features/compendium/components/entry-content/FeatEntryContent.svelte';
-	import BackgroundEntryContent from '$lib/features/compendium/components/entry-content/BackgroundEntryContent.svelte';
-	import RaceEntryContent from '$lib/features/compendium/components/entry-content/RaceEntryContent.svelte';
-	import ClassEntryContent from '$lib/features/compendium/components/entry-content/ClassEntryContent.svelte';
-	import ItemEntryContent from '$lib/features/compendium/components/entry-content/ItemEntryContent.svelte';
-	import LookupEntryContent from '$lib/features/compendium/components/entry-content/LookupEntryContent.svelte';
+	// Entry Content Component
+	import EntryContentRenderer from '$lib/features/compendium/components/entry-content/EntryContentRenderer.svelte';
 
 	// Lookup types that use the simple reference view
 	const LOOKUP_TYPES = ['skills', 'conditions', 'languages', 'alignments'] as const;
@@ -413,31 +406,7 @@
 				accentColor={config.display.detailAccent(selectedItem)}
 				animate={false}
 			>
-				{#if dbType === 'spells'}
-					<SpellEntryContent spell={selectedItem.details} />
-				{:else if dbType === 'creatures'}
-					<MonsterEntryContent monster={selectedItem.details} />
-				{:else if dbType === 'feats'}
-					<FeatEntryContent feat={selectedItem.details} />
-				{:else if dbType === 'backgrounds'}
-					<BackgroundEntryContent background={selectedItem.details} />
-				{:else if dbType === 'species'}
-					<RaceEntryContent race={selectedItem.details} />
-				{:else if dbType === 'classes'}
-					<ClassEntryContent classData={selectedItem.details} />
-				{:else if dbType === 'magicitems'}
-					<ItemEntryContent item={selectedItem.details} />
-				{:else if LOOKUP_TYPES.includes(dbType as typeof LOOKUP_TYPES[number])}
-					<LookupEntryContent details={selectedItem.details} type={dbType as 'skills' | 'conditions' | 'languages' | 'alignments'} />
-				{:else}
-					<div class="space-y-4">
-						<div
-							class="rounded-lg border border-[var(--color-border)] bg-black/20 p-4 font-mono text-xs"
-						>
-							<pre>{JSON.stringify(selectedItem.details, null, 2)}</pre>
-						</div>
-					</div>
-				{/if}
+				<EntryContentRenderer dbType={dbType} details={selectedItem.details ?? {}} />
 			</CompendiumEntryView>
 		</div>
 	{/if}

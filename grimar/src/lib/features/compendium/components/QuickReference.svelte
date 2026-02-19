@@ -18,7 +18,7 @@
 	let { items, title, icon, type, accentColor, keyField = 'name', descriptionField = 'desc' }: Props =
 		$props();
 
-	const displayItems = $derived(items[type] || []);
+	const displayItems = $derived(items?.[type] ?? []);
 </script>
 
 <a

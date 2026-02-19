@@ -7,14 +7,8 @@
 	import type { PageData } from './$types';
 	import type { CompendiumItem } from '$lib/core/types/compendium';
 
-	// Entry Content Components
-	import SpellEntryContent from '$lib/features/compendium/components/entry-content/SpellEntryContent.svelte';
-	import MonsterEntryContent from '$lib/features/compendium/components/entry-content/MonsterEntryContent.svelte';
-	import FeatEntryContent from '$lib/features/compendium/components/entry-content/FeatEntryContent.svelte';
-	import BackgroundEntryContent from '$lib/features/compendium/components/entry-content/BackgroundEntryContent.svelte';
-	import RaceEntryContent from '$lib/features/compendium/components/entry-content/RaceEntryContent.svelte';
-	import ClassEntryContent from '$lib/features/compendium/components/entry-content/ClassEntryContent.svelte';
-	import ItemEntryContent from '$lib/features/compendium/components/entry-content/ItemEntryContent.svelte';
+	// Entry Content Component
+	import EntryContentRenderer from '$lib/features/compendium/components/entry-content/EntryContentRenderer.svelte';
 
 	let { data }: { data: PageData } = $props();
 
@@ -80,29 +74,7 @@
 		onClose={handleClose}
 		{accentColor}
 	>
-		{#if dbType === 'spells'}
-			<SpellEntryContent spell={item.details ?? {}} />
-		{:else if dbType === 'creatures'}
-			<MonsterEntryContent monster={item.details ?? {}} />
-		{:else if dbType === 'feats'}
-			<FeatEntryContent feat={item.details ?? {}} />
-		{:else if dbType === 'backgrounds'}
-			<BackgroundEntryContent background={item.details ?? {}} />
-		{:else if dbType === 'species'}
-			<RaceEntryContent race={item.details ?? {}} />
-		{:else if dbType === 'classes'}
-			<ClassEntryContent classData={item.details ?? {}} />
-		{:else if dbType === 'magicitems'}
-			<ItemEntryContent item={item.details ?? {}} />
-		{:else}
-			<div class="space-y-4">
-				<div
-					class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-overlay)] p-4 font-mono text-xs"
-				>
-					<pre>{JSON.stringify(item.details, null, 2)}</pre>
-				</div>
-			</div>
-		{/if}
+		<EntryContentRenderer dbType={dbType} details={item.details ?? {}} />
 	</CompendiumEntryView>
 
 	<!-- Keyboard shortcuts hint -->
