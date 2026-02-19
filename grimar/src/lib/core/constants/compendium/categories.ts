@@ -14,6 +14,7 @@ import {
 	Swords,
 	Package
 } from 'lucide-svelte';
+import { COMPENDIUM_TYPE_REGISTRY, type DbType } from './registry';
 
 export const CATEGORIES: CompendiumCategory[] = [
 	{ id: 'primary', title: 'Primary Archives', gridCols: 'grid-cols-1 md:grid-cols-2' },
@@ -35,170 +36,65 @@ export const CATEGORIES: CompendiumCategory[] = [
 	{ id: 'rules', title: 'Rules & Reference', gridCols: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4' }
 ];
 
-export const CARDS: CompendiumCard[] = [
-	{
-		title: 'Spells',
-		description: 'Incantations and rituals.',
-		href: '/compendium/spells',
-		icon: Flame,
-		gradient: 'from-rose-500/20 to-orange-500/20',
-		accent: 'text-rose-400',
-		categoryId: 'primary'
-	},
-	{
-		title: 'Creatures',
-		description: 'Beasts and planar entities.',
-		href: '/compendium/creatures',
-		icon: Skull,
-		gradient: 'from-emerald-500/20 to-teal-500/20',
-		accent: 'text-emerald-400',
-		categoryId: 'primary'
-	},
-	{
-		title: 'Classes',
-		description: 'Paths of power.',
-		href: '/compendium/classes',
-		icon: Shield,
-		gradient: 'from-amber-500/20 to-orange-500/20',
-		accent: 'text-amber-400',
-		categoryId: 'character'
-	},
-	{
-		title: 'Class Features',
-		description: 'Class abilities and features.',
-		href: '/compendium/classfeatures',
-		icon: Sparkles,
-		gradient: 'from-blue-500/20 to-indigo-500/20',
-		accent: 'text-blue-400',
-		categoryId: 'character'
-	},
-	{
-		title: 'Backgrounds',
-		description: 'History and lore.',
-		href: '/compendium/backgrounds',
-		icon: Scroll,
-		gradient: 'from-indigo-500/20 to-violet-500/20',
-		accent: 'text-indigo-400',
-		categoryId: 'character'
-	},
-	{
-		title: 'Feats',
-		description: 'Specialized talents.',
-		href: '/compendium/feats',
-		icon: Medal,
-		gradient: 'from-yellow-500/20 to-amber-500/20',
-		accent: 'text-yellow-400',
-		categoryId: 'character'
-	},
-	{
-		title: 'Races',
-		description: 'Species and lineages.',
-		href: '/compendium/races',
-		icon: Users,
-		gradient: 'from-lime-500/20 to-green-500/20',
-		accent: 'text-lime-400',
-		categoryId: 'character'
-	},
-	{
-		title: 'Magic Items',
-		description: 'Enchanted objects.',
-		href: '/compendium/items',
-		icon: Package,
-		gradient: 'from-purple-500/20 to-pink-500/20',
-		accent: 'text-purple-400',
-		categoryId: 'equipment'
-	},
-	{
-		title: 'Weapons',
-		description: 'Arms for combat.',
-		href: '/compendium/weapons',
-		icon: Swords,
-		gradient: 'from-slate-500/20 to-gray-500/20',
-		accent: 'text-slate-400',
-		categoryId: 'equipment'
-	},
-	{
-		title: 'Armor',
-		description: 'Protective gear.',
-		href: '/compendium/armor',
-		icon: Shield,
-		gradient: 'from-cyan-500/20 to-blue-500/20',
-		accent: 'text-cyan-400',
-		categoryId: 'equipment'
-	},
-	{
-		title: 'Skills',
-		description: 'Proficiency areas.',
-		href: '/compendium/skills',
-		icon: Trophy,
-		gradient: 'from-amber-500/20 to-yellow-500/20',
-		accent: 'text-amber-400',
-		categoryId: 'abilities'
-	},
-	{
-		title: 'Languages',
-		description: 'Known tongues.',
-		href: '/compendium/languages',
-		icon: Globe,
-		gradient: 'from-cyan-500/20 to-teal-500/20',
-		accent: 'text-cyan-400',
-		categoryId: 'abilities'
-	},
-	{
-		title: 'Alignments',
-		description: 'Moral and ethical codes.',
-		href: '/compendium/alignments',
-		icon: Scale,
-		gradient: 'from-indigo-500/20 to-violet-500/20',
-		accent: 'text-indigo-400',
-		categoryId: 'abilities'
-	},
-	{
-		title: 'Conditions',
-		description: 'Afflictions and states.',
-		href: '/compendium/conditions',
-		icon: Activity,
-		gradient: 'from-red-500/20 to-rose-500/20',
-		accent: 'text-red-400',
-		categoryId: 'rules'
-	},
-	{
-		title: 'Damage Types',
-		description: 'Forms of harm.',
-		href: '/compendium/damagetypes',
-		icon: Flame,
-		gradient: 'from-orange-500/20 to-red-500/20',
-		accent: 'text-orange-400',
-		categoryId: 'rules'
-	},
-	{
-		title: 'Spell Schools',
-		description: 'Schools of magic.',
-		href: '/compendium/spellschools',
-		icon: Sparkles,
-		gradient: 'from-violet-500/20 to-purple-500/20',
-		accent: 'text-violet-400',
-		categoryId: 'rules'
-	},
-	{
-		title: 'Creature Types',
-		description: 'Monster classifications.',
-		href: '/compendium/creaturetypes',
-		icon: Skull,
-		gradient: 'from-emerald-500/20 to-green-500/20',
-		accent: 'text-emerald-400',
-		categoryId: 'rules'
-	},
-	{
-		title: 'Rules',
-		description: 'Game mechanics.',
-		href: '/compendium/rules',
-		icon: Scroll,
-		gradient: 'from-gray-500/20 to-slate-500/20',
-		accent: 'text-gray-400',
-		categoryId: 'rules'
+const HREF_ALIASES: Partial<Record<DbType, string>> = {
+	species: 'races',
+	magicitems: 'items'
+};
+
+const COLOR_GRADIENTS: Record<string, string> = {
+	rose: 'from-rose-500/20 to-pink-500/20',
+	emerald: 'from-emerald-500/20 to-green-500/20',
+	amber: 'from-amber-500/20 to-yellow-500/20',
+	sky: 'from-sky-500/20 to-blue-500/20',
+	violet: 'from-violet-500/20 to-purple-500/20',
+	orange: 'from-orange-500/20 to-amber-500/20',
+	teal: 'from-teal-500/20 to-cyan-500/20',
+	stone: 'from-stone-500/20 to-neutral-500/20',
+	indigo: 'from-indigo-500/20 to-violet-500/20',
+	fuchsia: 'from-fuchsia-500/20 to-pink-500/20',
+	red: 'from-red-500/20 to-rose-500/20',
+	slate: 'from-slate-500/20 to-gray-500/20'
+};
+
+const COLOR_ACCENTS: Record<string, string> = {
+	rose: 'text-rose-400',
+	emerald: 'text-emerald-400',
+	amber: 'text-amber-400',
+	sky: 'text-sky-400',
+	violet: 'text-violet-400',
+	orange: 'text-orange-400',
+	teal: 'text-teal-400',
+	stone: 'text-stone-400',
+	indigo: 'text-indigo-400',
+	fuchsia: 'text-fuchsia-400',
+	red: 'text-red-400',
+	slate: 'text-slate-400'
+};
+
+function generateCardsFromRegistry(): CompendiumCard[] {
+	const cards: CompendiumCard[] = [];
+
+	for (const [dbType, entry] of Object.entries(COMPENDIUM_TYPE_REGISTRY)) {
+		if (!entry.showOnDashboard) continue;
+
+		const hrefPath = HREF_ALIASES[dbType as DbType] || entry.urlPath || dbType;
+		const colorName = entry.color || 'slate';
+
+		cards.push({
+			title: entry.displayName,
+			description: entry.description,
+			href: `/compendium/${hrefPath}`,
+			icon: entry.icon || Scroll,
+			gradient: COLOR_GRADIENTS[colorName] || 'from-gray-500/20 to-slate-500/20',
+			accent: COLOR_ACCENTS[colorName] || 'text-gray-400',
+			categoryId: entry.category || 'rules'
+		});
 	}
-];
+
+	return cards;
+}
+
+export const CARDS: CompendiumCard[] = generateCardsFromRegistry();
 
 export function getCardsByCategory(categoryId: string): CompendiumCard[] {
 	return CARDS.filter((card) => card.categoryId === categoryId);
