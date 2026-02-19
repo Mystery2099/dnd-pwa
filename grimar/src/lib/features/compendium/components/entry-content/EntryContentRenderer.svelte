@@ -1,45 +1,40 @@
 <script lang="ts">
-	import SpellEntryContent from './SpellEntryContent.svelte';
+	import type { UnifiedCompendiumItem, CompendiumType } from '$lib/core/types/compendium/unified';
 	import MonsterEntryContent from './MonsterEntryContent.svelte';
+	import SpellEntryContent from './SpellEntryContent.svelte';
 	import FeatEntryContent from './FeatEntryContent.svelte';
 	import BackgroundEntryContent from './BackgroundEntryContent.svelte';
 	import RaceEntryContent from './RaceEntryContent.svelte';
 	import ClassEntryContent from './ClassEntryContent.svelte';
 	import ItemEntryContent from './ItemEntryContent.svelte';
-	import LookupEntryContent from './LookupEntryContent.svelte';
 
 	interface Props {
-		dbType: string;
-		details: Record<string, unknown>;
+		dbType: CompendiumType;
+		item?: UnifiedCompendiumItem;
+		details?: Record<string, unknown>;
 	}
 
-	let { dbType, details }: Props = $props();
+	let { dbType, item, details }: Props = $props();
 
-	const LOOKUP_TYPES = new Set(['skills', 'conditions', 'languages', 'alignments']);
-
-	const isLookupType = $derived(LOOKUP_TYPES.has(dbType));
+	const data = $derived(item?.details ?? details ?? {});
 </script>
 
-{#if dbType === 'spells'}
-	<SpellEntryContent spell={details} />
-{:else if dbType === 'creatures'}
-	<MonsterEntryContent monster={details} />
-{:else if dbType === 'feats'}
-	<FeatEntryContent feat={details} />
-{:else if dbType === 'backgrounds'}
-	<BackgroundEntryContent background={details} />
-{:else if dbType === 'species'}
-	<RaceEntryContent race={details} />
-{:else if dbType === 'classes'}
-	<ClassEntryContent classData={details} />
-{:else if dbType === 'magicitems' || dbType === 'weapons' || dbType === 'armor'}
-	<ItemEntryContent item={details} />
-{:else if isLookupType}
-	<LookupEntryContent details={details} type={dbType as 'skills' | 'conditions' | 'languages' | 'alignments'} />
+{#if dbType === 'creature'}
+	<MonsterEntryContent details={data} />
+{:else if dbType === 'spell'}
+	<SpellEntryContent details={data} />
+{:else if dbType === 'feat'}
+	<FeatEntryContent details={data} />
+{:else if dbType === 'background'}
+	<BackgroundEntryContent details={data} />
+{:else if dbType === 'race'}
+	<RaceEntryContent details={data} />
+{:else if dbType === 'class'}
+	<ClassEntryContent details={data} />
+{:else if dbType === 'item'}
+	<ItemEntryContent details={data} />
 {:else}
-	<div class="space-y-4">
-		<div class="rounded-lg border border-[var(--color-border)] bg-black/20 p-4 font-mono text-xs">
-			<pre>{JSON.stringify(details, null, 2)}</pre>
-		</div>
+	<div class="prose prose-invert max-w-none">
+		<p class="text-[var(--color-text-muted)]">No content renderer for {dbType}</p>
 	</div>
 {/if}

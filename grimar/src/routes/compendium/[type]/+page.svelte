@@ -15,7 +15,7 @@
 	import VirtualList from '$lib/components/ui/VirtualList.svelte';
 	import { Download, RefreshCw } from 'lucide-svelte';
 	import { CompendiumFilterStore } from '$lib/features/compendium/stores/filter.svelte';
-	import type { CompendiumItem } from '$lib/core/types/compendium';
+	import type { CompendiumItem, CompendiumType } from '$lib/core/types/compendium';
 	import CompendiumSkeleton from '$lib/features/compendium/components/ui/CompendiumSkeleton.svelte';
 	import CompendiumError from '$lib/features/compendium/components/ui/CompendiumError.svelte';
 	import { settingsStore } from '$lib/core/client/settingsStore.svelte';
@@ -406,7 +406,7 @@
 				accentColor={config.display.detailAccent(selectedItem)}
 				animate={false}
 			>
-				<EntryContentRenderer dbType={dbType} details={selectedItem.details ?? {}} />
+				<EntryContentRenderer dbType={dbType as CompendiumType} details={selectedItem.details ?? {}} />
 			</CompendiumEntryView>
 		</div>
 	{/if}

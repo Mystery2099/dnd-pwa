@@ -2,29 +2,35 @@
 	import { onMount } from 'svelte';
 
 	interface Props {
-		classData: Record<string, unknown> & { externalId?: string };
+		details: Record<string, unknown>;
 	}
 
-	let { classData }: Props = $props();
+	let { details }: Props = $props();
 
-	// Handle both array and string descriptions defensively
-	const rawDescription = $derived(classData.description as string[] | string | undefined);
-	const description = $derived(
-		Array.isArray(rawDescription) ? rawDescription : rawDescription ? [rawDescription] : undefined
-	);
-	const hitDie = $derived(classData.hit_die as number | undefined);
-	const proficiencies = $derived(
-		classData.proficiencies as Array<{ index: string; name: string }> | undefined
-	);
-	const savingThrows = $derived(
-		classData.saving_throws as Array<{ index: string; name: string }> | undefined
-	);
-	const spellcasting = $derived(classData.spellcasting as Record<string, unknown> | undefined);
+	const desc = details.desc as string[] | string | undefined;
+	const descriptionMd = $derived(Array.isArray(desc) ? desc.join('\n\n') : desc || '');
 
-	// Combine paragraphs into markdown format
-	const descriptionMd = $derived(description ? description.join('\n\n') : '');
+	interface Proficiency {
+		name?: string;
+	}
 
-	// Lazy load svelte-markdown only when needed
+	interface Feature {
+		name?: string;
+		level?: number;
+		desc?: string;
+	}
+
+	const profArmor = details.prof_armor as string | undefined;
+	const profWeapons = details.prof_weapons as string | undefined;
+	const profTools = (details.prof_tools as string | string[] | undefined) ?? [];
+	const profSkills = (details.prof_skills as Proficiency[] | string[] | undefined) ?? [];
+	const profSaves = (details.prof_saving_throws as string[] | undefined) ?? [];
+
+	const features = details.features as Feature[] | undefined;
+	const spellcasting = details.spellcasting as
+		| { ability?: string; dc?: number; attack_modifier?: number }
+		| undefined;
+
 	let SvelteMarkdown: any = $state(null);
 
 	onMount(async () => {
@@ -40,28 +46,52 @@
 		class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4 text-center"
 	>
 		<div class="text-xs font-bold text-[var(--color-text-muted)] uppercase">Hit Die</div>
-		<div class="mt-1 text-2xl font-bold text-[var(--color-text-primary)]">d{hitDie || 8}</div>
+		<div class="mt-1 text-2xl font-bold text-[var(--color-text-primary)]">
+			d{details.hit_dice ?? 8}
+		</div>
 	</div>
 
 	<div
 		class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4 md:col-span-2"
 	>
-		<div class="mb-1 text-xs font-bold text-[var(--color-text-muted)] uppercase">Proficiencies</div>
+		<div class="mb-1 text-xs font-bold text-[var(--color-text-muted)] uppercase">
+			Proficiencies
+		</div>
 		<div class="flex flex-wrap gap-2 pt-1">
-			{#if proficiencies}
-				{#each proficiencies as p (p.index)}
+			{#if profArmor}
+				<span
+					class="rounded bg-[var(--color-bg-card)] px-2 py-0.5 text-xs text-[var(--color-text-primary)]"
+					>{profArmor}</span
+				>
+			{/if}
+			{#if profWeapons}
+				<span
+					class="rounded bg-[var(--color-bg-card)] px-2 py-0.5 text-xs text-[var(--color-text-primary)]"
+					>{profWeapons}</span
+				>
+			{/if}
+			{#if Array.isArray(profTools)}
+				{#each profTools as tool (tool)}
 					<span
 						class="rounded bg-[var(--color-bg-card)] px-2 py-0.5 text-xs text-[var(--color-text-primary)]"
-						>{p.name}</span
+						>{tool}</span
+					>
+				{/each}
+			{/if}
+			{#if Array.isArray(profSkills)}
+				{#each profSkills as skill (typeof skill === 'string' ? skill : skill.name ?? 'unknown')}
+					<span
+						class="rounded bg-[var(--color-bg-card)] px-2 py-0.5 text-xs text-[var(--color-text-primary)]"
+						>{typeof skill === 'string' ? skill : skill.name}</span
 					>
 				{/each}
 			{/if}
 		</div>
-		{#if savingThrows}
+		{#if profSaves.length > 0}
 			<div class="mt-3 flex items-center gap-2">
 				<span class="text-xs font-bold text-[var(--color-text-muted)] uppercase">Saves:</span>
-				{#each savingThrows as s (s.index)}
-					<span class="text-xs font-medium text-[var(--color-accent)]">{s.name}</span>
+				{#each profSaves as save (save)}
+					<span class="text-xs font-medium text-[var(--color-accent)]">{save}</span>
 				{/each}
 			</div>
 		{/if}
@@ -74,21 +104,40 @@
 	>
 		<div class="mb-2 flex items-center gap-2">
 			<span class="text-xs font-bold text-[var(--color-accent)] uppercase">Spellcasting</span>
-			<span class="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]"></span>
-			<span class="text-xs text-[var(--color-text-secondary)]">Level {spellcasting.level}</span>
 		</div>
 		<div class="text-sm text-[var(--color-text-secondary)]">
 			Uses <span class="font-bold text-[var(--color-text-primary)]"
-				>{(spellcasting.ability as any)?.name}</span
+				>{spellcasting.ability ?? 'Unknown'}</span
 			>
 			as spellcasting ability. DC
-			<span class="font-bold text-[var(--color-text-primary)]">{spellcasting.dc}</span>, Modifier
-			<span class="font-bold text-[var(--color-text-primary)]">+{spellcasting.mod}</span>.
+			<span class="font-bold text-[var(--color-text-primary)]">{spellcasting.dc ?? 0}</span
+			>, Modifier
+			<span class="font-bold text-[var(--color-text-primary)]"
+				>+{spellcasting.attack_modifier ?? 0}</span
+			>.
 		</div>
 	</div>
 {/if}
 
-<!-- Description (Markdown rendered) -->
+{#if features && features.length > 0}
+	<div class="mb-8">
+		<h3 class="mb-4 font-bold text-[var(--color-text-primary)]">Class Features</h3>
+		<div class="space-y-4">
+			{#each features as feature, i (i)}
+				<div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4">
+					<div class="mb-1 flex items-center justify-between">
+						<span class="font-bold text-[var(--color-text-primary)]">{feature.name ?? 'Unknown'}</span>
+						<span class="text-xs text-[var(--color-text-muted)]">Level {feature.level ?? 1}</span>
+					</div>
+					{#if feature.desc}
+						<div class="text-sm text-[var(--color-text-secondary)]">{feature.desc}</div>
+					{/if}
+				</div>
+			{/each}
+		</div>
+	</div>
+{/if}
+
 {#if descriptionMd && SvelteMarkdown}
 	<div class="prose prose-sm prose-invert max-w-none text-[var(--color-text-secondary)]">
 		<SvelteMarkdown source={descriptionMd} />
@@ -100,5 +149,5 @@
 {/if}
 
 <div class="mt-8 font-mono text-xs text-[var(--color-text-muted)]">
-	ID: {classData.externalId ?? classData.id ?? classData.index}
+	ID: {details.slug ?? details.id ?? 'Unknown'}
 </div>

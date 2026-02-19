@@ -6,6 +6,7 @@
 	import { getCompendiumConfig } from '$lib/core/constants/compendium';
 	import type { PageData } from './$types';
 	import type { CompendiumItem } from '$lib/core/types/compendium';
+	import type { CompendiumType } from '$lib/core/types/compendium/unified';
 
 	// Entry Content Component
 	import EntryContentRenderer from '$lib/features/compendium/components/entry-content/EntryContentRenderer.svelte';
@@ -74,7 +75,7 @@
 		onClose={handleClose}
 		{accentColor}
 	>
-		<EntryContentRenderer dbType={dbType} details={item.details ?? {}} />
+		<EntryContentRenderer dbType={dbType as CompendiumType} item={item} />
 	</CompendiumEntryView>
 
 	<!-- Keyboard shortcuts hint -->

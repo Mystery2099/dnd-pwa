@@ -121,7 +121,8 @@ export function transformToUnifiedSpell(item: typeof compendiumItems.$inferSelec
 			? toStringArray(details.higher_level).join('\n\n')
 			: undefined,
 		classes: toClassNamesArray(details.classes),
-		subclasses: toClassNamesArray(details.subclasses)
+		subclasses: toClassNamesArray(details.subclasses),
+		details: item.details as Record<string, unknown> | undefined
 	};
 }
 
@@ -180,7 +181,8 @@ export function transformToUnifiedCreature(
 		specialAbilities: toSpecialAbilities(details.special_abilities),
 		actions: toActions(details.actions),
 		legendaryActions: details.legendary_actions ? toActions(details.legendary_actions) : undefined,
-		reactions: toReactions(details.reactions)
+		reactions: toReactions(details.reactions),
+		details: item.details as Record<string, unknown> | undefined
 	};
 }
 
@@ -352,7 +354,8 @@ export function transformToUnifiedFeat(item: typeof compendiumItems.$inferSelect
 		slug: item.externalId ?? String(item.id),
 		type: 'feat',
 		prerequisites: toStringArray(details.prerequisites),
-		benefits: toStringArray(details.benefits)
+		benefits: toStringArray(details.benefits),
+		details: item.details as Record<string, unknown> | undefined
 	};
 }
 
@@ -387,7 +390,8 @@ export function transformToUnifiedBackground(
 		skillProficiencies: toStringArray(details.skill_proficiencies),
 		toolProficiencies: toStringArray(details.tool_proficiencies),
 		languages: toString(details.languages),
-		equipment: toStringArray(details.equipment)
+		equipment: toStringArray(details.equipment),
+		details: item.details as Record<string, unknown> | undefined
 	};
 }
 
@@ -453,7 +457,8 @@ export function transformToUnifiedRace(item: typeof compendiumItems.$inferSelect
 		},
 		age: toString(details.age),
 		alignment: toString(details.alignment),
-		sizeDescription: toString(details.size_description)
+		sizeDescription: toString(details.size_description),
+		details: item.details as Record<string, unknown> | undefined
 	};
 }
 
@@ -527,7 +532,8 @@ export function transformToUnifiedClass(item: typeof compendiumItems.$inferSelec
 		proficiencies,
 		spellcasting,
 		features,
-		subclasses
+		subclasses,
+		details: item.details as Record<string, unknown> | undefined
 	};
 }
 
@@ -566,7 +572,8 @@ export function transformToUnifiedItem(item: typeof compendiumItems.$inferSelect
 						strengthRequirement: toNumber(details.strength_requirement),
 						stealthPenalty: Boolean(details.stealth_penalty)
 					}
-				: undefined
+				: undefined,
+		details: item.details as Record<string, unknown> | undefined
 	};
 }
 

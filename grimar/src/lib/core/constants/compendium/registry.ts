@@ -532,6 +532,7 @@ function createPathMappings() {
 	for (const [registryKey, entry] of Object.entries(COMPENDIUM_TYPE_REGISTRY)) {
 		const urlPath = entry.urlPath || registryKey;
 		pathToDb[urlPath] = entry.dbType as DbType;
+		pathToDb[registryKey] = entry.dbType as DbType;
 		dbToPath[entry.dbType] = urlPath;
 
 		if (entry.aliases) {
