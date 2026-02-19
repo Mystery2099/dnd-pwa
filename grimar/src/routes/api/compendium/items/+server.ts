@@ -2,8 +2,16 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { getDb } from '$lib/server/db';
 import { compendiumItems } from '$lib/server/db/schema';
-import { eq, like, and, desc, asc, sql } from 'drizzle-orm';
-import { getDbTypeFromPath } from '$lib/core/constants/compendium';
+import { eq, like, and, or, desc, asc, inArray, type SQL } from 'drizzle-orm';
+import { getDbTypeFromPath, DB_TYPES } from '$lib/core/constants/compendium';
+import {
+	JSON_PATHS,
+	FILTER_PARAMS,
+	jsonExtract,
+	jsonExtractLower,
+	normalizeDbType
+} from '$lib/server/db/compendium-filters';
+import { searchFtsRanked } from '$lib/server/db/db-fts';
 import { createModuleLogger } from '$lib/server/logger';
 
 const log = createModuleLogger('CompendiumItemsAPI');
@@ -19,49 +27,79 @@ export const GET: RequestHandler = async ({ url }) => {
 		const all = url.searchParams.get('all') === 'true';
 		const page = parseInt(url.searchParams.get('page') || '1');
 		const limit = all ? 10000 : Math.min(parseInt(url.searchParams.get('limit') || '50'), 100);
-		const search = url.searchParams.get('search') || '';
-		const sortBy = url.searchParams.get('sortBy') || 'name';
-		const sortOrder = url.searchParams.get('sortOrder') || 'asc';
-		const spellLevel = url.searchParams.get('spellLevel');
-		const spellSchool = url.searchParams.get('spellSchool');
-		const challengeRating = url.searchParams.get('challengeRating');
-		const creatureType = url.searchParams.get('creatureType');
+		const search = url.searchParams.get(FILTER_PARAMS.SEARCH) || '';
+		const sortBy = url.searchParams.get(FILTER_PARAMS.SORT_BY) || 'name';
+		const sortOrder = url.searchParams.get(FILTER_PARAMS.SORT_ORDER) || 'asc';
+		const spellLevel = url.searchParams.get(FILTER_PARAMS.SPELL_LEVEL);
+		const spellSchool = url.searchParams.get(FILTER_PARAMS.SPELL_SCHOOL);
+		const challengeRating = url.searchParams.get(FILTER_PARAMS.CHALLENGE_RATING);
+		const creatureType = url.searchParams.get(FILTER_PARAMS.CREATURE_TYPE);
 
 		if (!pathType) {
 			return json({ error: 'Missing type parameter' }, { status: 400 });
 		}
 
 		const db = await getDb();
-		// Convert URL path type to database type
 		const dbType = getDbTypeFromPath(pathType);
+		const normalizedType = normalizeDbType(dbType);
 
-		// Build where clause
-		const conditions = [eq(compendiumItems.type, dbType)];
+		const conditions: (SQL | undefined)[] = [];
 
-		if (search) {
-			const searchPattern = `%${search}%`;
-			conditions.push(like(compendiumItems.name, searchPattern));
-			conditions.push(like(compendiumItems.summary, searchPattern));
+		// Handle items/magicitems as a combined type
+		if (normalizedType === DB_TYPES.ITEMS || normalizedType === DB_TYPES.MAGIC_ITEMS) {
+			conditions.push(or(
+				eq(compendiumItems.type, DB_TYPES.ITEMS),
+				eq(compendiumItems.type, DB_TYPES.MAGIC_ITEMS)
+			));
+		} else {
+			conditions.push(eq(compendiumItems.type, normalizedType));
 		}
 
+		// Search with FTS + LIKE fallback
+		if (search) {
+			try {
+				const ftsResults = await searchFtsRanked(search, 100);
+				if (ftsResults.length > 0) {
+					const rowids = ftsResults.map((r) => r.rowid);
+					conditions.push(inArray(compendiumItems.id, rowids));
+				} else {
+					const searchPattern = `%${search}%`;
+					conditions.push(or(
+						like(compendiumItems.name, searchPattern),
+						like(compendiumItems.summary, searchPattern)
+					));
+				}
+			} catch {
+				// FTS not available, fallback to LIKE
+				const searchPattern = `%${search}%`;
+				conditions.push(or(
+					like(compendiumItems.name, searchPattern),
+					like(compendiumItems.summary, searchPattern)
+				));
+			}
+		}
+
+		// Spell filters using shared constants
 		if (spellLevel != null && spellLevel !== '') {
-			conditions.push(eq(sql<number>`json_extract(${compendiumItems.details}, '$.level')`, parseInt(spellLevel)));
+			conditions.push(eq(jsonExtract(JSON_PATHS.SPELL_LEVEL), parseInt(spellLevel)));
 		}
 
 		if (spellSchool) {
-			conditions.push(eq(sql`lower(json_extract(${compendiumItems.details}, '$.school'))`, spellSchool.toLowerCase()));
+			conditions.push(eq(jsonExtractLower(JSON_PATHS.SPELL_SCHOOL), spellSchool.toLowerCase()));
 		}
 
+		// Creature filters using shared constants
 		if (challengeRating != null && challengeRating !== '') {
-			conditions.push(eq(sql`json_extract(${compendiumItems.details}, '$.challenge_rating')`, challengeRating));
+			conditions.push(eq(jsonExtract(JSON_PATHS.CREATURE_CR), challengeRating));
 		}
 
 		if (creatureType) {
-			conditions.push(eq(sql`lower(json_extract(${compendiumItems.details}, '$.type'))`, creatureType.toLowerCase()));
+			conditions.push(eq(jsonExtractLower(JSON_PATHS.CREATURE_TYPE), creatureType.toLowerCase()));
 		}
 
-		// Use and() for combining conditions
-		const whereClause = and(...conditions);
+		// Filter out undefined values and build where clause
+		const validConditions = conditions.filter((c): c is SQL => c !== undefined);
+		const whereClause = and(...validConditions);
 
 		// Get total count
 		const totalCount = await db.$count(compendiumItems, whereClause);
@@ -74,7 +112,7 @@ export const GET: RequestHandler = async ({ url }) => {
 			compendiumItems[sortBy as keyof typeof compendiumItems] || compendiumItems.name;
 		const orderFn = sortOrder === 'asc' ? asc : desc;
 
-		// Fetch items using correct Drizzle pattern
+		// Fetch items
 		const items = await db
 			.select()
 			.from(compendiumItems)

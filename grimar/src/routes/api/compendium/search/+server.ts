@@ -2,45 +2,24 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { getDb } from '$lib/server/db';
 import { compendiumItems } from '$lib/server/db/schema';
-import { like, or, desc, eq, and, gte, lte, sql } from 'drizzle-orm';
+import { like, or, desc, eq, and, gte, lte, inArray, sql, type SQL } from 'drizzle-orm';
 import { createModuleLogger } from '$lib/server/logger';
-import { getCompendiumConfig, getDbTypeFromPath } from '$lib/core/constants/compendium';
-import { COMPENDIUM_TYPES } from '$lib/core/types/compendium';
+import {
+	getCompendiumConfig,
+	getDbTypeFromPath,
+	getUrlPathFromDbType,
+	DB_TYPES
+} from '$lib/core/constants/compendium';
+import {
+	JSON_PATHS,
+	normalizeDbType,
+	jsonExtract,
+	jsonExtractLower,
+	SECTION_TO_TYPE_FILTER
+} from '$lib/server/db/compendium-filters';
+import { searchFtsRanked } from '$lib/server/db/db-fts';
 
 const log = createModuleLogger('CompendiumSearchAPI');
-
-// Reverse map: db type -> URL path
-const TYPE_TO_PATH: Record<string, string> = {
-	spell: 'spells',
-	creature: 'creatures',
-	feat: 'feats',
-	background: 'backgrounds',
-	race: 'races',
-	class: 'classes',
-	item: 'items',
-	weapon: 'weapons',
-	armor: 'armor',
-	condition: 'conditions',
-	plane: 'planes',
-	section: 'sections'
-};
-
-// Section to compendium type mapping (singular to plural path)
-const SECTION_TO_TYPE: Record<string, string> = {
-	spells: 'spell',
-	creatures: 'creature',
-	feats: 'feat',
-	backgrounds: 'background',
-	races: 'race',
-	classes: 'class',
-	items: 'item',
-	weapons: 'weapon',
-	armor: 'armor',
-	conditions: 'condition',
-	planes: 'plane',
-	sections: 'section',
-	characters: 'character'
-};
 
 interface SearchResult {
 	type: string;
@@ -99,13 +78,13 @@ function parseFilters(filterStr: string): FilterParams {
  */
 export const GET: RequestHandler = async ({ url }) => {
 	const query = url.searchParams.get('q') || '';
-	const typeFilter = url.searchParams.get('type'); // Optional: filter by type (singular)
-	const section = url.searchParams.get('section'); // Optional: filter by section (plural)
-	const filtersParam = url.searchParams.get('filters') || ''; // Comma-separated key:value
+	const typeFilter = url.searchParams.get('type');
+	const section = url.searchParams.get('section');
+	const filtersParam = url.searchParams.get('filters') || '';
 	const limitParam = parseInt(url.searchParams.get('limit') || '10');
 
-	// Handle section param - convert to type filter
-	const effectiveType = section ? SECTION_TO_TYPE[section] || section : typeFilter;
+	// Handle section param - convert to type filter using shared mapping
+	const effectiveType = section || typeFilter;
 
 	// If query is just "*", return all items of the section/type
 	const isWildcard = query.trim() === '*';
@@ -114,10 +93,10 @@ export const GET: RequestHandler = async ({ url }) => {
 		return json({ results: [] });
 	}
 
-	// Parse inline filters (e.g., "type:spell school:evocation")
+	// Parse inline filters
 	const inlineFilters = parseFilters(filtersParam);
 
-	// Merge inline filters with typeFilter (inline filters take precedence)
+	// Merge inline filters with typeFilter
 	const filters: FilterParams = {
 		...inlineFilters,
 		...(effectiveType && !inlineFilters.type ? { type: effectiveType } : {})
@@ -126,58 +105,83 @@ export const GET: RequestHandler = async ({ url }) => {
 	try {
 		const db = await getDb();
 
-		// Build conditions array
-		const conditions = [];
+		const conditions: (SQL | undefined)[] = [];
 
-		// For wildcard queries, just filter by type without name/summary search
+		// Search with FTS + LIKE fallback
 		if (!isWildcard) {
-			const searchPattern = `%${query}%`;
-			const nameCondition = like(compendiumItems.name, searchPattern);
-			const summaryCondition = like(compendiumItems.summary, searchPattern);
-			conditions.push(or(nameCondition, summaryCondition));
+			try {
+				const ftsResults = await searchFtsRanked(query, 50);
+				if (ftsResults.length > 0) {
+					const rowids = ftsResults.map((r) => r.rowid);
+					conditions.push(inArray(compendiumItems.id, rowids));
+				} else {
+					const searchPattern = `%${query}%`;
+					conditions.push(or(
+						like(compendiumItems.name, searchPattern),
+						like(compendiumItems.summary, searchPattern)
+					));
+				}
+			} catch {
+				// FTS not available, fallback to LIKE
+				const searchPattern = `%${query}%`;
+				conditions.push(or(
+					like(compendiumItems.name, searchPattern),
+					like(compendiumItems.summary, searchPattern)
+				));
+			}
 		}
 
-		// Apply type filter
+		// Apply type filter using shared normalization
 		if (filters.type) {
 			const dbType = getDbTypeFromPath(filters.type);
-			conditions.push(eq(compendiumItems.type, dbType));
+			const normalizedType = normalizeDbType(dbType);
+
+			// Handle items/magicitems as combined type
+			if (normalizedType === DB_TYPES.ITEMS || normalizedType === DB_TYPES.MAGIC_ITEMS) {
+				conditions.push(or(
+					eq(compendiumItems.type, DB_TYPES.ITEMS),
+					eq(compendiumItems.type, DB_TYPES.MAGIC_ITEMS)
+				));
+			} else {
+				conditions.push(eq(compendiumItems.type, normalizedType));
+			}
 		}
 
-		// Apply spell filters
+		// Apply spell filters using shared constants
 		if (filters.school) {
-			conditions.push(eq(sql`lower(json_extract(${compendiumItems.details}, '$.school'))`, filters.school.toLowerCase()));
+			conditions.push(eq(jsonExtractLower(JSON_PATHS.SPELL_SCHOOL), filters.school.toLowerCase()));
 		}
 
 		if (filters.level) {
 			const level = parseInt(filters.level);
 			if (!isNaN(level)) {
-				conditions.push(eq(sql<number>`json_extract(${compendiumItems.details}, '$.level')`, level));
+				conditions.push(eq(jsonExtract(JSON_PATHS.SPELL_LEVEL), level));
 			}
 		}
 
-		// Apply creature filters
+		// Apply creature filters using shared constants
 		if (filters.cr) {
 			const range = parseRange(filters.cr);
 			if (range) {
 				if (range.min !== undefined && range.max !== undefined) {
 					conditions.push(
 						and(
-							gte(sql`json_extract(${compendiumItems.details}, '$.challenge_rating')`, range.min.toString()),
-							lte(sql`json_extract(${compendiumItems.details}, '$.challenge_rating')`, range.max.toString())
+							gte(jsonExtract(JSON_PATHS.CREATURE_CR), range.min.toString()),
+							lte(jsonExtract(JSON_PATHS.CREATURE_CR), range.max.toString())
 						)
 					);
 				} else if (range.min !== undefined) {
-					conditions.push(eq(sql`json_extract(${compendiumItems.details}, '$.challenge_rating')`, range.min.toString()));
+					conditions.push(eq(jsonExtract(JSON_PATHS.CREATURE_CR), range.min.toString()));
 				}
 			}
 		}
 
 		if (filters.size) {
-			conditions.push(eq(sql`lower(json_extract(${compendiumItems.details}, '$.size'))`, filters.size.toLowerCase()));
+			conditions.push(eq(jsonExtractLower(JSON_PATHS.CREATURE_SIZE), filters.size.toLowerCase()));
 		}
 
 		if (filters.creatureType) {
-			conditions.push(eq(sql`lower(json_extract(${compendiumItems.details}, '$.type'))`, filters.creatureType.toLowerCase()));
+			conditions.push(eq(jsonExtractLower(JSON_PATHS.CREATURE_TYPE), filters.creatureType.toLowerCase()));
 		}
 
 		// Apply source filter
@@ -185,23 +189,27 @@ export const GET: RequestHandler = async ({ url }) => {
 			conditions.push(eq(compendiumItems.source, filters.source.toLowerCase()));
 		}
 
+		// Filter out undefined values and build where clause
+		const validConditions = conditions.filter((c): c is SQL => c !== undefined);
+		const whereClause = validConditions.length > 0 ? and(...validConditions) : undefined;
+
 		// Execute query
 		const items = await db
 			.select()
 			.from(compendiumItems)
-			.where(and(...conditions))
+			.where(whereClause)
 			.orderBy(desc(compendiumItems.name))
 			.limit(limitParam);
 
-		// Transform to search results
+		// Transform to search results using shared URL path mapping
 		const results: SearchResult[] = items.map((item) => {
 			const config = getCompendiumConfig(item.type);
-			const typePath = TYPE_TO_PATH[item.type] || item.type;
+			const typePath = getUrlPathFromDbType(item.type);
 			const slug = item.externalId || item.name.toLowerCase().replace(/\s+/g, '-');
 
 			return {
 				type: config.ui.displayName,
-				typePath: typePath,
+				typePath,
 				name: item.name,
 				slug,
 				summary: item.summary,

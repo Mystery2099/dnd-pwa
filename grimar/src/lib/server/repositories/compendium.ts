@@ -5,6 +5,7 @@ import { MemoryCache, CacheKeys, getCacheTTL } from '$lib/server/utils/cache';
 import { measureDb } from '$lib/server/utils/monitoring';
 import { CompendiumQueryParser, type QueryOptions } from './CompendiumQueryParser';
 import { createModuleLogger } from '$lib/server/logger';
+import { JSON_PATHS, jsonExtract } from '$lib/server/db/compendium-filters';
 
 const log = createModuleLogger('CompendiumRepository');
 
@@ -273,58 +274,53 @@ export class CompendiumRepository {
 
 	/**
 	 * Build WHERE clause from query options
-	 * Uses JSON extraction from the details column for type-specific filters
+	 * Uses shared JSON paths for consistency
 	 * @param type The type of items
 	 * @param options Query options
 	 * @returns WHERE clause
 	 */
 	private buildWhereClause(type: string, options: QueryOptions) {
-		// Base condition: always filter by type
 		const baseCondition = eq(compendiumItems.type, type);
-
-		// Collect filter conditions - properly typed for Drizzle
 		const filterConditions: ReturnType<typeof and>[] = [];
 
-		// Spell level filter (from details JSON)
+		// Spell level filter
 		if (options.filters?.spellLevel && options.filters.spellLevel.length > 0) {
 			const levelConditions = options.filters.spellLevel.map((level) =>
-				sql`json_extract(${compendiumItems.details}, '$.level') = ${level}`
+				eq(jsonExtract(JSON_PATHS.SPELL_LEVEL), level)
 			);
 			filterConditions.push(or(...levelConditions));
 		}
 
-		// Spell school filter (from details JSON)
+		// Spell school filter
 		if (options.filters?.spellSchool && options.filters.spellSchool.length > 0) {
 			const schoolConditions = options.filters.spellSchool.map((school) =>
-				sql`json_extract(${compendiumItems.details}, '$.school') = ${school}`
+				eq(jsonExtract(JSON_PATHS.SPELL_SCHOOL), school)
 			);
 			filterConditions.push(or(...schoolConditions));
 		}
 
-		// Creature type filter (from details JSON)
+		// Creature type filter
 		if (options.filters?.type && options.filters.type.length > 0) {
 			const typeConditions = options.filters.type.map((t) =>
-				sql`json_extract(${compendiumItems.details}, '$.type') = ${t}`
+				eq(jsonExtract(JSON_PATHS.CREATURE_TYPE), t)
 			);
 			filterConditions.push(or(...typeConditions));
 		}
 
-		// Creature size filter (from details JSON)
+		// Creature size filter
 		if (options.filters?.creatureSize && options.filters.creatureSize.length > 0) {
 			const sizeConditions = options.filters.creatureSize.map((size) =>
-				sql`json_extract(${compendiumItems.details}, '$.size') = ${size}`
+				eq(jsonExtract(JSON_PATHS.CREATURE_SIZE), size)
 			);
 			filterConditions.push(or(...sizeConditions));
 		}
 
-		// Apply filter logic (AND/OR) between categories
 		let filterClause: ReturnType<typeof and> | undefined = undefined;
 		if (filterConditions.length > 0) {
 			filterClause =
 				options.filterLogic === 'or' ? or(...filterConditions) : and(...filterConditions);
 		}
 
-		// Apply Search (always AND)
 		let searchClause: ReturnType<typeof or> | undefined = undefined;
 		if (options.search) {
 			const searchTerm = `%${options.search}%`;
@@ -334,7 +330,6 @@ export class CompendiumRepository {
 			);
 		}
 
-		// Combine all parts: Type AND (Filters) AND (Search)
 		const whereParts: ReturnType<typeof and>[] = [baseCondition];
 		if (filterClause) whereParts.push(filterClause);
 		if (searchClause) whereParts.push(and(baseCondition, searchClause));
@@ -344,7 +339,7 @@ export class CompendiumRepository {
 
 	/**
 	 * Build ORDER BY clause from query options
-	 * Uses JSON extraction from the details column for type-specific sorting
+	 * Uses shared JSON paths for consistency
 	 * @param options Query options
 	 * @returns ORDER BY clause
 	 */
@@ -352,39 +347,36 @@ export class CompendiumRepository {
 		const sortBy = options.sortBy || 'name';
 		const sortOrder = options.sortOrder || 'asc';
 
-		// Handle challenge rating special sorting (fractional values like "1/2", "1/4")
+		// Handle challenge rating special sorting
 		if (sortBy === 'challengeRating') {
-			// Use a custom sort order that properly handles CR fractions from JSON
 			return sql`
 				CASE
-					WHEN json_extract(${compendiumItems.details}, '$.challenge_rating') = '0' THEN 0
-					WHEN json_extract(${compendiumItems.details}, '$.challenge_rating') = '1/8' THEN 1
-					WHEN json_extract(${compendiumItems.details}, '$.challenge_rating') = '1/4' THEN 2
-					WHEN json_extract(${compendiumItems.details}, '$.challenge_rating') = '1/2' THEN 3
-					ELSE CAST(json_extract(${compendiumItems.details}, '$.challenge_rating') AS REAL)
+					WHEN ${jsonExtract(JSON_PATHS.CREATURE_CR)} = '0' THEN 0
+					WHEN ${jsonExtract(JSON_PATHS.CREATURE_CR)} = '1/8' THEN 1
+					WHEN ${jsonExtract(JSON_PATHS.CREATURE_CR)} = '1/4' THEN 2
+					WHEN ${jsonExtract(JSON_PATHS.CREATURE_CR)} = '1/2' THEN 3
+					ELSE CAST(${jsonExtract(JSON_PATHS.CREATURE_CR)} AS REAL)
 				END ${sortOrder === 'desc' ? sql`DESC` : sql`ASC`}
 			`;
 		}
 
-		// Map sortBy to column references
-		// Use proper Drizzle column references for type safety
 		switch (sortBy) {
 			case 'spellLevel':
 				return sortOrder === 'desc'
-					? desc(sql`json_extract(${compendiumItems.details}, '$.level')`)
-					: sql`json_extract(${compendiumItems.details}, '$.level')`;
+					? desc(jsonExtract(JSON_PATHS.SPELL_LEVEL))
+					: sql`${jsonExtract(JSON_PATHS.SPELL_LEVEL)}`;
 			case 'spellSchool':
 				return sortOrder === 'desc'
-					? desc(sql`json_extract(${compendiumItems.details}, '$.school')`)
-					: sql`json_extract(${compendiumItems.details}, '$.school') COLLATE NOCASE`;
+					? desc(jsonExtract(JSON_PATHS.SPELL_SCHOOL))
+					: sql`${jsonExtract(JSON_PATHS.SPELL_SCHOOL)} COLLATE NOCASE`;
 			case 'creatureSize':
 				return sortOrder === 'desc'
-					? desc(sql`json_extract(${compendiumItems.details}, '$.size')`)
-					: sql`json_extract(${compendiumItems.details}, '$.size') COLLATE NOCASE`;
+					? desc(jsonExtract(JSON_PATHS.CREATURE_SIZE))
+					: sql`${jsonExtract(JSON_PATHS.CREATURE_SIZE)} COLLATE NOCASE`;
 			case 'creatureType':
 				return sortOrder === 'desc'
-					? desc(sql`json_extract(${compendiumItems.details}, '$.type')`)
-					: sql`json_extract(${compendiumItems.details}, '$.type') COLLATE NOCASE`;
+					? desc(jsonExtract(JSON_PATHS.CREATURE_TYPE))
+					: sql`${jsonExtract(JSON_PATHS.CREATURE_TYPE)} COLLATE NOCASE`;
 			case 'name':
 			default:
 				return sortOrder === 'desc'
