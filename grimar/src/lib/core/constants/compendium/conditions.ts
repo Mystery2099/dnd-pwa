@@ -42,8 +42,7 @@ export const CONDITIONS_CONFIG: CompendiumTypeConfig = {
 	},
 
 	ui: {
-		displayName: 'Condition',
-		displayNamePlural: 'Conditions',
+		displayName: 'Conditions',
 		icon: Activity,
 		categoryGradient: 'from-red-500/20 to-rose-500/20',
 		categoryAccent: 'text-red-400',

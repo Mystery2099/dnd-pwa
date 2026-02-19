@@ -29,8 +29,7 @@ export const FEATS_CONFIG: CompendiumTypeConfig = {
 	},
 
 	ui: {
-		displayName: 'Feat',
-		displayNamePlural: 'Feats',
+		displayName: 'Feats',
 		icon: Medal,
 		categoryGradient: 'from-yellow-500/20 to-amber-500/20',
 		categoryAccent: 'text-yellow-400',

@@ -43,8 +43,7 @@ export const RACES_CONFIG: CompendiumTypeConfig = {
 	},
 
 	ui: {
-		displayName: 'Race',
-		displayNamePlural: 'Races',
+		displayName: 'Races',
 		icon: Users,
 		categoryGradient: 'from-pink-500/20 to-rose-500/20',
 		categoryAccent: 'text-pink-400',

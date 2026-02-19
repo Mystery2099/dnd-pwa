@@ -70,7 +70,6 @@ export const ARMOR_CONFIG: CompendiumTypeConfig = {
 
 	ui: {
 		displayName: 'Armor',
-		displayNamePlural: 'Armor',
 		icon: Shirt,
 		categoryGradient: 'from-zinc-500/20 to-slate-500/20',
 		categoryAccent: 'text-zinc-400',

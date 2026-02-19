@@ -57,8 +57,7 @@ export const PLANES_CONFIG: CompendiumTypeConfig = {
 	},
 
 	ui: {
-		displayName: 'Plane',
-		displayNamePlural: 'Planes',
+		displayName: 'Planes',
 		icon: Globe,
 		categoryGradient: 'from-blue-500/20 to-cyan-500/20',
 		categoryAccent: 'text-blue-400',

@@ -29,8 +29,7 @@ export const MAGIC_SCHOOLS_CONFIG: CompendiumTypeConfig = {
 	},
 
 	ui: {
-		displayName: 'Magic School',
-		displayNamePlural: 'Magic Schools',
+		displayName: 'Magic Schools',
 		icon: Wand2,
 		categoryGradient: 'from-purple-500/20 to-pink-500/20',
 		categoryAccent: 'text-purple-400',

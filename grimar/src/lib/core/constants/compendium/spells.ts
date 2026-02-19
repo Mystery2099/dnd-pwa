@@ -120,8 +120,7 @@ export const SPELLS_CONFIG: CompendiumTypeConfig = {
 	},
 
 	ui: {
-		displayName: 'Spell',
-		displayNamePlural: 'Spells',
+		displayName: 'Spells',
 		icon: Flame,
 		categoryGradient: 'from-rose-500/20 to-purple-500/20',
 		categoryAccent: 'text-rose-400',

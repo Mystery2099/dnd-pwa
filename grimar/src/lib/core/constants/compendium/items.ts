@@ -29,8 +29,7 @@ export const ITEMS_CONFIG: CompendiumTypeConfig = {
 	},
 
 	ui: {
-		displayName: 'Magic Item',
-		displayNamePlural: 'Magic Items',
+		displayName: 'Magic Items',
 		icon: Sparkles,
 		categoryGradient: 'from-sky-500/20 to-indigo-500/20',
 		categoryAccent: 'text-sky-400',

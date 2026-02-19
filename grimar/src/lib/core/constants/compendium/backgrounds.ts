@@ -29,8 +29,7 @@ export const BACKGROUNDS_CONFIG: CompendiumTypeConfig = {
 	},
 
 	ui: {
-		displayName: 'Background',
-		displayNamePlural: 'Backgrounds',
+		displayName: 'Backgrounds',
 		icon: Scroll,
 		categoryGradient: 'from-indigo-500/20 to-violet-500/20',
 		categoryAccent: 'text-indigo-400',

@@ -45,8 +45,7 @@ export const CLASSES_CONFIG: CompendiumTypeConfig = {
 	},
 
 	ui: {
-		displayName: 'Class',
-		displayNamePlural: 'Classes',
+		displayName: 'Classes',
 		icon: Shield,
 		categoryGradient: 'from-amber-500/20 to-orange-500/20',
 		categoryAccent: 'text-amber-400',

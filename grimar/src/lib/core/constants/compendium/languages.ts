@@ -29,8 +29,7 @@ export const LANGUAGES_CONFIG: CompendiumTypeConfig = {
 	},
 
 	ui: {
-		displayName: 'Language',
-		displayNamePlural: 'Languages',
+		displayName: 'Languages',
 		icon: MessageSquare,
 		categoryGradient: 'from-yellow-500/20 to-orange-500/20',
 		categoryAccent: 'text-yellow-400',

@@ -34,7 +34,6 @@ function createGenericConfig(
 		},
 		ui: {
 			displayName,
-			displayNamePlural: displayName + 's',
 			icon: BookOpen,
 			categoryGradient: `from-${color}-500/20 to-${color}-600/20`,
 			categoryAccent: `text-${color}-400`,

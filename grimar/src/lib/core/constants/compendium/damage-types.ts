@@ -29,8 +29,7 @@ export const DAMAGE_TYPES_CONFIG: CompendiumTypeConfig = {
 	},
 
 	ui: {
-		displayName: 'Damage Type',
-		displayNamePlural: 'Damage Types',
+		displayName: 'Damage Types',
 		icon: Flame,
 		categoryGradient: 'from-red-500/20 to-orange-500/20',
 		categoryAccent: 'text-red-400',

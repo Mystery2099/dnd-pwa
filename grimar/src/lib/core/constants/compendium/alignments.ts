@@ -29,8 +29,7 @@ export const ALIGNMENTS_CONFIG: CompendiumTypeConfig = {
 	},
 
 	ui: {
-		displayName: 'Alignment',
-		displayNamePlural: 'Alignments',
+		displayName: 'Alignments',
 		icon: Scale,
 		categoryGradient: 'from-violet-500/20 to-purple-500/20',
 		categoryAccent: 'text-violet-400',

@@ -46,8 +46,7 @@ export const SKILLS_CONFIG: CompendiumTypeConfig = {
 	},
 
 	ui: {
-		displayName: 'Skill',
-		displayNamePlural: 'Skills',
+		displayName: 'Skills',
 		icon: Brain,
 		categoryGradient: 'from-cyan-500/20 to-teal-500/20',
 		categoryAccent: 'text-cyan-400',

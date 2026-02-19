@@ -87,8 +87,7 @@ export const WEAPONS_CONFIG: CompendiumTypeConfig = {
 	},
 
 	ui: {
-		displayName: 'Weapon',
-		displayNamePlural: 'Weapons',
+		displayName: 'Weapons',
 		icon: Sword,
 		categoryGradient: 'from-slate-500/20 to-gray-500/20',
 		categoryAccent: 'text-slate-400',

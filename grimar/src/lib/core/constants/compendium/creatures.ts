@@ -105,8 +105,7 @@ export const CREATURES_CONFIG: CompendiumTypeConfig = {
 	},
 
 	ui: {
-		displayName: 'Creature',
-		displayNamePlural: 'Creatures',
+		displayName: 'Creatures',
 		icon: Skull,
 		categoryGradient: 'from-emerald-500/20 to-rose-500/20',
 		categoryAccent: 'text-emerald-400',
