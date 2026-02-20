@@ -109,6 +109,4 @@
 	{/if}
 {/if}
 
-<div class="mt-8 font-mono text-xs text-[var(--color-text-muted)]">
-	ID: {details.slug ?? details.id ?? 'Unknown'}
-</div>
+

@@ -2,14 +2,14 @@
 	import type { UnifiedCompendiumItem, CompendiumType } from '$lib/core/types/compendium/unified';
 	import MonsterEntryContent from './MonsterEntryContent.svelte';
 	import SpellEntryContent from './SpellEntryContent.svelte';
-	import FeatEntryContent from './FeatEntryContent.svelte';
-	import BackgroundEntryContent from './BackgroundEntryContent.svelte';
 	import RaceEntryContent from './RaceEntryContent.svelte';
 	import ClassEntryContent from './ClassEntryContent.svelte';
 	import ItemEntryContent from './ItemEntryContent.svelte';
+	import GenericEntryContent from './GenericEntryContent.svelte';
+	import { getConfigForType } from './entryConfigs';
 
 	interface Props {
-		dbType: CompendiumType;
+		dbType: CompendiumType | string;
 		item?: UnifiedCompendiumItem;
 		details?: Record<string, unknown>;
 	}
@@ -17,22 +17,21 @@
 	let { dbType, item, details }: Props = $props();
 
 	const data = $derived(item?.details ?? details ?? {});
+	const genericConfig = $derived(getConfigForType(dbType));
 </script>
 
-{#if dbType === 'creature'}
+{#if dbType === 'creatures' || dbType === 'creature'}
 	<MonsterEntryContent details={data} />
-{:else if dbType === 'spell'}
+{:else if dbType === 'spells' || dbType === 'spell'}
 	<SpellEntryContent details={data} />
-{:else if dbType === 'feat'}
-	<FeatEntryContent details={data} />
-{:else if dbType === 'background'}
-	<BackgroundEntryContent details={data} />
-{:else if dbType === 'race'}
+{:else if dbType === 'species' || dbType === 'race' || dbType === 'races'}
 	<RaceEntryContent details={data} />
-{:else if dbType === 'class'}
+{:else if dbType === 'classes' || dbType === 'class'}
 	<ClassEntryContent details={data} />
-{:else if dbType === 'item'}
+{:else if dbType === 'magicitems' || dbType === 'item' || dbType === 'items'}
 	<ItemEntryContent details={data} />
+{:else if genericConfig}
+	<GenericEntryContent details={data} sections={genericConfig} />
 {:else}
 	<div class="prose prose-invert max-w-none">
 		<p class="text-[var(--color-text-muted)]">No content renderer for {dbType}</p>

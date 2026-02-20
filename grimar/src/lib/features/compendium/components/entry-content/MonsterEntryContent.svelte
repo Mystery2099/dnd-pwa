@@ -37,7 +37,6 @@
 	const damageResistances = $derived(details.damage_resistances as string[] | undefined);
 	const damageImmunities = $derived(details.damage_immunities as string[] | undefined);
 	const conditionImmunities = $derived(details.condition_immunities as string[] | undefined);
-	const id = $derived(details.id as string | undefined);
 
 	const hasMarkdown = $derived(
 		(actions?.some((a) => a.desc) ?? false) ||
@@ -289,8 +288,4 @@
 	</div>
 {/if}
 
-{#if id}
-	<div class="mt-8 font-mono text-xs text-[var(--color-text-muted)]">
-		ID: {id}
-	</div>
-{/if}
+
