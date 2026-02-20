@@ -98,56 +98,14 @@ export const COMPENDIUM_TYPES = [
 
 /**
  * The database type stored in compendium_items.type
- * Aligned with Open5e API v2 endpoint names
+ * Derived from COMPENDIUM_TYPES array for single source of truth
  */
-export type CompendiumTypeName =
-	| 'spells'
-	| 'creatures'
-	| 'magicitems'
-	| 'itemsets'
-	| 'itemcategories'
-	| 'documents'
-	| 'licenses'
-	| 'publishers'
-	| 'weapons'
-	| 'armor'
-	| 'gamesystems'
-	| 'backgrounds'
-	| 'feats'
-	| 'species'
-	| 'creaturetypes'
-	| 'creaturesets'
-	| 'damagetypes'
-	| 'languages'
-	| 'alignments'
-	| 'conditions'
-	| 'spellschools'
-	| 'classes'
-	| 'sizes'
-	| 'itemrarities'
-	| 'environments'
-	| 'abilities'
-	| 'skills'
-	| 'rules'
-	| 'rulesections'
-	| 'rulesets'
-	| 'images'
-	| 'weaponproperties'
-	| 'services'
-	| 'classfeatures'
-	| 'classfeatureitems'
-	| 'creatureactions'
-	| 'creatureactionattacks'
-	| 'creaturetraits'
-	| 'speciestraits'
-	| 'backgroundbenefits'
-	| 'featbenefits'
-	| 'spellcastingoptions'
-	| 'weaponpropertyassignments';
+export type CompendiumTypeName = (typeof COMPENDIUM_TYPES)[number];
 
 /**
  * Raw compendium item from database
  * This represents a row from compendium_items table
+ * Type-specific data is stored in the `details` JSON field
  */
 export interface CompendiumItem {
 	id: number;
@@ -158,74 +116,6 @@ export interface CompendiumItem {
 	name: string;
 	summary: string | null;
 	details: Record<string, unknown>;
-	// Spell-specific columns
-	spellLevel: number | null;
-	spellSchool: string | null;
-	// Creature-specific columns
-	challengeRating: string | null;
-	creatureSize: string | null;
-	creatureType: string | null;
-	// Feat-specific columns
-	featPrerequisites?: string | null;
-	featBenefits?: string[] | null;
-	// Background-specific columns
-	backgroundFeature?: string | null;
-	backgroundSkillProficiencies?: string | null;
-	// Race-specific columns
-	raceSize?: string | null;
-	raceSpeed?: number | null;
-	// Class-specific columns
-	classHitDie?: number | null;
-	// Subclass-specific columns
-	subclassName?: string | null;
-	className?: string | null;
-	subclassFlavor?: string | null;
-	// Subrace-specific columns
-	subraceName?: string | null;
-	raceName?: string | null;
-	// Trait-specific columns
-	traitName?: string | null;
-	traitRaces?: string | null;
-	// Condition-specific columns
-	conditionName?: string | null;
-	// Feature-specific columns
-	featureName?: string | null;
-	featureLevel?: number | null;
-	// Skill-specific columns
-	skillName?: string | null;
-	abilityScore?: string | null;
-	// Language-specific columns
-	languageName?: string | null;
-	typicalSpeakers?: string | null;
-	// Alignment-specific columns
-	alignmentName?: string | null;
-	alignmentAbbreviation?: string | null;
-	// Proficiency-specific columns
-	proficiencyName?: string | null;
-	proficiencyType?: string | null;
-	// Ability Score columns
-	abilityScoreName?: string | null;
-	abilityScoreAbbreviation?: string | null;
-	// Damage Type columns
-	damageTypeName?: string | null;
-	// Magic School columns
-	magicSchoolName?: string | null;
-	// Equipment columns
-	equipmentName?: string | null;
-	equipmentCategory?: string | null;
-	// Weapon Property columns
-	weaponPropertyName?: string | null;
-	// Equipment Category columns
-	equipmentCategoryName?: string | null;
-	// Vehicle columns
-	vehicleName?: string | null;
-	vehicleCategory?: string | null;
-	// Creature Type columns
-	creatureTypeName?: string | null;
-	// Rule columns
-	ruleName?: string | null;
-	// Rule Section columns
-	ruleSectionName?: string | null;
 	createdBy: string | null;
 }
 

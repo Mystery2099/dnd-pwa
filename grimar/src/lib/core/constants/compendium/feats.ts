@@ -47,10 +47,12 @@ export const FEATS_CONFIG: CompendiumTypeConfig = {
 
 	display: {
 		subtitle: (item) => {
-			return item.featPrerequisites ? `Prerequisite: ${item.featPrerequisites}` : 'Feat';
+			const prereq = item.details.prerequisites as string | undefined;
+			return prereq ? `Prerequisite: ${prereq}` : 'Feat';
 		},
 		tags: (item) => {
-			return item.featPrerequisites ? [item.featPrerequisites] : [];
+			const prereq = item.details.prerequisites as string | undefined;
+			return prereq ? [prereq] : [];
 		},
 		listItemAccent: () => 'hover:border-yellow-500/50',
 		detailAccent: () => 'text-yellow-400',

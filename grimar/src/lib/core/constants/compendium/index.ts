@@ -28,9 +28,9 @@ import {
 	ABILITY_SCORES_CONFIG,
 	WEAPON_PROPERTIES_CONFIG,
 	EQUIPMENT_CATEGORIES_CONFIG,
-	RULES_CONFIG
+	RULES_CONFIG,
+	createGenericConfig
 } from './reference';
-import { BookOpen } from 'lucide-svelte';
 import {
 	COMPENDIUM_TYPE_REGISTRY,
 	DB_TYPES,
@@ -63,57 +63,6 @@ const CUSTOM_CONFIGS: Record<string, CompendiumTypeConfig> = {
 	weaponproperties: WEAPON_PROPERTIES_CONFIG,
 	itemcategories: EQUIPMENT_CATEGORIES_CONFIG
 };
-
-function createGenericConfig(
-	dbType: string,
-	displayName: string,
-	color: string
-): CompendiumTypeConfig {
-	return {
-		routes: {
-			basePath: `/compendium/${dbType}`,
-			dbType: dbType as CompendiumTypeName,
-			storageKeyFilters: `${dbType}-filters`,
-			storageKeyListUrl: `${dbType}-list-url`
-		},
-		filters: [],
-		sorting: {
-			default: {
-				label: 'Name (A-Z)',
-				value: 'name-asc',
-				column: 'name',
-				direction: 'asc'
-			},
-			options: [
-				{ label: 'Name (A-Z)', value: 'name-asc', column: 'name', direction: 'asc' },
-				{ label: 'Name (Z-A)', value: 'name-desc', column: 'name', direction: 'desc' }
-			]
-		},
-		ui: {
-			displayName,
-			icon: BookOpen,
-			categoryGradient: `from-${color}-500/20 to-${color}-600/20`,
-			categoryAccent: `text-${color}-400`,
-			emptyState: {
-				title: `No ${displayName.toLowerCase()}s found`,
-				description: 'Try adjusting your filters to find what you are looking for.'
-			},
-			databaseEmptyState: {
-				title: `No ${displayName}s in Compendium`,
-				description: `The ${displayName.toLowerCase()} database appears to be empty.`,
-				ctaText: `Sync ${displayName}s`,
-				ctaLink: '/compendium/sync'
-			}
-		},
-		display: {
-			subtitle: () => displayName,
-			tags: () => [],
-			listItemAccent: () => `text-${color}-400`,
-			detailAccent: () => `text-${color}-400`,
-			metaDescription: () => ''
-		}
-	};
-}
 
 function buildConfigMap(): Record<CompendiumTypeName, CompendiumTypeConfig> {
 	const configMap: Record<string, CompendiumTypeConfig> = {};

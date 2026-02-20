@@ -25,7 +25,8 @@ export function getSpellSchool(item: CompendiumItem): string {
  * Get spell level formatted as text
  */
 export function getSpellLevelText(item: CompendiumItem): string {
-	return item.spellLevel === 0 ? 'Cantrip' : `Level ${item.spellLevel}`;
+	const level = (item.details?.level as number | undefined) ?? 0;
+	return level === 0 ? 'Cantrip' : `Level ${level}`;
 }
 
 // Re-export color utilities

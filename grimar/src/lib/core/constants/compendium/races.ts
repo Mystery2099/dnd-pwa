@@ -61,10 +61,12 @@ export const RACES_CONFIG: CompendiumTypeConfig = {
 
 	display: {
 		subtitle: (item) => {
-			return `${item.raceSize || 'Medium'} | Speed ${item.raceSpeed || 30}ft`;
+			const size = (item.details.size as string) || 'Medium';
+			const speed = (item.details.speed as number) || 30;
+			return `${size} | Speed ${speed}ft`;
 		},
 		tags: (item) => {
-			return [item.raceSize || 'Medium'];
+			return [(item.details.size as string) || 'Medium'];
 		},
 		listItemAccent: () => 'hover:border-pink-500/50',
 		detailAccent: () => 'text-pink-400',

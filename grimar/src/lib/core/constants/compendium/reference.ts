@@ -2,12 +2,13 @@
  * Generic Reference Config
  *
  * Minimal configuration for reference data types that don't need complex UI.
+ * Also exports createGenericConfig for reuse across compendium configs.
  */
 
 import { BookOpen } from 'lucide-svelte';
-import type { CompendiumTypeConfig } from '$lib/core/types/compendium';
+import type { CompendiumTypeConfig, CompendiumTypeName } from '$lib/core/types/compendium';
 
-function createGenericConfig(
+export function createGenericConfig(
 	type: string,
 	displayName: string,
 	color: string
@@ -15,7 +16,7 @@ function createGenericConfig(
 	return {
 		routes: {
 			basePath: `/compendium/${type}`,
-			dbType: type as any,
+			dbType: type as CompendiumTypeName,
 			storageKeyFilters: `${type}-filters`,
 			storageKeyListUrl: `${type}-list-url`
 		},

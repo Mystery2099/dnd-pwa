@@ -48,7 +48,7 @@ export const LANGUAGES_CONFIG: CompendiumTypeConfig = {
 
 	display: {
 		subtitle: (item) => {
-			return item.typicalSpeakers || '';
+			return (item.details.typical_speakers as string) || '';
 		},
 		tags: () => [],
 		listItemAccent: () => 'text-yellow-400',

@@ -123,35 +123,40 @@ export const CREATURES_CONFIG: CompendiumTypeConfig = {
 
 	display: {
 		subtitle: (item) => {
-			const cr = item.details.challenge_rating || 'Unknown';
-			const type = item.creatureType || 'Unknown';
-			const size = item.creatureSize || 'Medium';
+			const details = item.details as Record<string, unknown>;
+			const cr = details.challenge_rating || 'Unknown';
+			const type = (details.type as string) || 'Unknown';
+			const size = (details.size as string) || 'Medium';
 			return `${size} ${type} • CR ${cr}`;
 		},
 		tags: (item) => {
-			const type = item.creatureType || 'Unknown';
-			const size = item.creatureSize || 'Medium';
-			const cr = item.details.challenge_rating || '0';
+			const details = item.details as Record<string, unknown>;
+			const type = (details.type as string) || 'Unknown';
+			const size = (details.size as string) || 'Medium';
+			const cr = details.challenge_rating || '0';
 			return [type, size, `CR ${cr}`];
 		},
 		listItemAccent: (item) => {
-			const type = item.creatureType || 'Unknown';
+			const details = item.details as Record<string, unknown>;
+			const type = (details.type as string) || 'Unknown';
 			return (
 				CREATURE_TYPE_COLORS[type as keyof typeof CREATURE_TYPE_COLORS] ||
 				CREATURE_TYPE_COLORS.default
 			);
 		},
 		detailAccent: (item) => {
-			const type = item.creatureType || 'Unknown';
+			const details = item.details as Record<string, unknown>;
+			const type = (details.type as string) || 'Unknown';
 			return (
 				CREATURE_TYPE_TEXT_COLORS[type as keyof typeof CREATURE_TYPE_TEXT_COLORS] ||
 				colorMap('gray').base
 			);
 		},
 		metaDescription: (item) => {
-			const cr = item.details.challenge_rating || 'Unknown';
-			const type = item.creatureType || 'creature';
-			const size = item.creatureSize || 'Medium';
+			const details = item.details as Record<string, unknown>;
+			const cr = details.challenge_rating || 'Unknown';
+			const type = (details.type as string) || 'creature';
+			const size = (details.size as string) || 'Medium';
 			return `${item.name} is a ${size} ${type} with Challenge Rating ${cr} in D&D 5e. ${item.summary || ''}`;
 		}
 	}

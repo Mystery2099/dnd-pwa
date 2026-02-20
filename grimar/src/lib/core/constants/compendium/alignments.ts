@@ -48,10 +48,10 @@ export const ALIGNMENTS_CONFIG: CompendiumTypeConfig = {
 
 	display: {
 		subtitle: (item) => {
-			return item.alignmentAbbreviation || '';
+			return (item.details.abbreviation as string) || '';
 		},
 		tags: (item) => {
-			return item.alignmentAbbreviation ? [item.alignmentAbbreviation] : [];
+			return item.details.abbreviation ? [item.details.abbreviation as string] : [];
 		},
 		listItemAccent: () => 'text-violet-400',
 		detailAccent: () => 'text-violet-400',

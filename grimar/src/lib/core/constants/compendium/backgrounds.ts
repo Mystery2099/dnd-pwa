@@ -47,12 +47,12 @@ export const BACKGROUNDS_CONFIG: CompendiumTypeConfig = {
 
 	display: {
 		subtitle: (item) => {
-			return item.backgroundSkillProficiencies
-				? `Skills: ${item.backgroundSkillProficiencies}`
-				: 'Background';
+			const skills = item.details.skill_proficiencies as string | undefined;
+			return skills ? `Skills: ${skills}` : 'Background';
 		},
 		tags: (item) => {
-			return item.backgroundSkillProficiencies ? item.backgroundSkillProficiencies.split(', ') : [];
+			const skills = item.details.skill_proficiencies as string | undefined;
+			return skills ? skills.split(', ') : [];
 		},
 		listItemAccent: () => 'hover:border-indigo-500/50',
 		detailAccent: () => 'text-indigo-400',

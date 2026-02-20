@@ -65,10 +65,12 @@ export const SKILLS_CONFIG: CompendiumTypeConfig = {
 
 	display: {
 		subtitle: (item) => {
-			return item.abilityScore ? `${item.abilityScore} skill` : '';
+			const ability = item.details.ability_score as { name?: string } | undefined;
+			return ability?.name ? `${ability.name} skill` : '';
 		},
 		tags: (item) => {
-			return item.abilityScore ? [item.abilityScore] : [];
+			const ability = item.details.ability_score as { name?: string } | undefined;
+			return ability?.name ? [ability.name] : [];
 		},
 		listItemAccent: () => 'text-cyan-400',
 		detailAccent: () => 'text-cyan-400',

@@ -63,10 +63,12 @@ export const CLASSES_CONFIG: CompendiumTypeConfig = {
 
 	display: {
 		subtitle: (item) => {
-			return `Hit Die: d${item.classHitDie || 8}`;
+			const hitDie = (item.details.hit_die as number) || 8;
+			return `Hit Die: d${hitDie}`;
 		},
 		tags: (item) => {
-			return [`d${item.classHitDie || 8}`];
+			const hitDie = (item.details.hit_die as number) || 8;
+			return [`d${hitDie}`];
 		},
 		listItemAccent: () => 'hover:border-amber-500/50',
 		detailAccent: () => 'text-amber-400',
