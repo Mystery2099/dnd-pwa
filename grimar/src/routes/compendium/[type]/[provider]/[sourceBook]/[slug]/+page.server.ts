@@ -20,7 +20,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		log.info({ pathType, provider, sourceBook, slug }, 'Loading compendium item');
 
 		// Get the item by provider, sourceBook, and slug
-		const item = await compendiumService.getBySourceAndId(provider, dbType, slug);
+		const item = await compendiumService.getBySourceAndId(provider, dbType, slug, sourceBook);
 
 		if (!item) {
 			log.warn({ provider, sourceBook, slug }, 'Item not found');

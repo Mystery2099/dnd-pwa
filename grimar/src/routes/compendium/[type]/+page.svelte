@@ -5,6 +5,7 @@
 	import { fly } from 'svelte/transition';
 	import { browser } from '$app/environment';
 	import { createCompendiumAllQuery } from '$lib/core/client/queries';
+	import { stripSlugPrefix } from '$lib/core/utils/slug';
 	import { getCompendiumConfig } from '$lib/core/constants/compendium';
 	import CompendiumShell from '$lib/features/compendium/components/layout/CompendiumShell.svelte';
 	import CompendiumSidebar from '$lib/features/compendium/components/layout/CompendiumSidebar.svelte';
@@ -111,9 +112,9 @@
 	function selectItem(item: CompendiumItem) {
 		selectedItem = item;
 		// Update URL to include item identifier for deep linking
-		const itemId = item.externalId || item.name?.toLowerCase().replace(/\s+/g, '-');
-		const provider = item.source || 'open5e';
 		const sourceBook = item.sourceBook || 'SRD';
+		const itemId = stripSlugPrefix(item.externalId, sourceBook) || item.name?.toLowerCase().replace(/\s+/g, '-') || '';
+		const provider = item.source || 'open5e';
 		pushState(`/compendium/${pathType}/${provider}/${sourceBook}/${itemId}`, {});
 	}
 

@@ -49,6 +49,7 @@ import {
 	transformToUnifiedItem,
 	transformToUnified
 } from './transformers';
+import { buildExternalId } from '$lib/core/utils/slug';
 
 // ============================================================================
 // Utility Types
@@ -130,7 +131,8 @@ export interface CompendiumServiceInterface {
 	getBySourceAndId(
 		source: string,
 		type: AnyCompendiumType,
-		id: number | string
+		id: number | string,
+		sourceBook?: string
 	): Promise<UnifiedCompendiumItem | null>;
 
 	// Search
@@ -424,7 +426,12 @@ export const compendiumService: CompendiumServiceInterface = {
 		return item ? transformToUnified(item) : null;
 	},
 
-	async getBySourceAndId(source: string, type: AnyCompendiumType, id: number | string) {
+	async getBySourceAndId(
+		source: string,
+		type: AnyCompendiumType,
+		id: number | string,
+		sourceBook?: string
+	) {
 		const db = await getDb();
 		const log = createModuleLogger('CompendiumService');
 
@@ -435,7 +442,10 @@ export const compendiumService: CompendiumServiceInterface = {
 		const numericId = typeof id === 'number' ? id : parseInt(id);
 		const isNumeric = !Number.isNaN(numericId);
 
-		log.debug({ source, type, normalizedType, id, isNumeric }, 'Looking up item by source and ID');
+		// If non-numeric ID and sourceBook provided, reconstruct full externalId
+		const externalId = !isNumeric && sourceBook ? buildExternalId(id as string, sourceBook) : id;
+
+		log.debug({ source, type, normalizedType, id, isNumeric, sourceBook, externalId }, 'Looking up item by source and ID');
 
 		let item;
 		if (isNumeric) {
@@ -449,7 +459,7 @@ export const compendiumService: CompendiumServiceInterface = {
 		} else {
 			item = await db.query.compendiumItems.findFirst({
 				where: and(
-					eq(compendiumItems.externalId, id as string),
+					eq(compendiumItems.externalId, externalId as string),
 					eq(compendiumItems.type, normalizedType),
 					eq(compendiumItems.source, source)
 				)
@@ -457,7 +467,7 @@ export const compendiumService: CompendiumServiceInterface = {
 		}
 
 		if (!item) {
-			log.debug({ source, type, id }, 'Item not found');
+			log.debug({ source, type, id, sourceBook }, 'Item not found');
 		}
 
 		return item ? transformToUnified(item) : null;

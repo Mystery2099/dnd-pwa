@@ -18,6 +18,7 @@ import {
 	SECTION_TO_TYPE_FILTER
 } from '$lib/server/db/compendium-filters';
 import { searchFtsRanked } from '$lib/server/db/db-fts';
+import { stripSlugPrefix } from '$lib/core/utils/slug';
 
 const log = createModuleLogger('CompendiumSearchAPI');
 
@@ -205,7 +206,9 @@ export const GET: RequestHandler = async ({ url }) => {
 		const results: SearchResult[] = items.map((item) => {
 			const config = getCompendiumConfig(item.type);
 			const typePath = getUrlPathFromDbType(item.type);
-			const slug = item.externalId || item.name.toLowerCase().replace(/\s+/g, '-');
+			const sourceBook = item.sourceBook || 'Unknown';
+			const rawSlug = item.externalId || item.name.toLowerCase().replace(/\s+/g, '-');
+			const slug = stripSlugPrefix(rawSlug, sourceBook) ?? rawSlug;
 
 			return {
 				type: config.ui.displayName,
@@ -215,7 +218,7 @@ export const GET: RequestHandler = async ({ url }) => {
 				summary: item.summary,
 				source: item.source,
 				provider: item.source,
-				sourceBook: item.sourceBook || 'Unknown'
+				sourceBook
 			};
 		});
 

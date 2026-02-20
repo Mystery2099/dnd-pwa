@@ -28,6 +28,7 @@ import type {
 } from '$lib/core/types/compendium/unified';
 import { compendiumItems } from '$lib/server/db/schema';
 import logger from '$lib/server/logger';
+import { stripSlugPrefix } from '$lib/core/utils/slug';
 
 // ============================================================================
 // Utility Functions
@@ -106,7 +107,7 @@ export function transformToUnifiedSpell(item: typeof compendiumItems.$inferSelec
 		summary: summary,
 		source: item.source,
 		description: toStringArray(details.desc),
-		slug: item.externalId ?? String(item.id),
+		slug: stripSlugPrefix(item.externalId, item.sourceBook) ?? String(item.id),
 		type: 'spell',
 	level: toNumber(details.level) ?? 0,
 		school: toSchoolName(details.school),
@@ -151,7 +152,7 @@ export function transformToUnifiedCreature(
 		summary: summary,
 		source: item.source,
 		description: toStringArray(details.desc),
-		slug: item.externalId ?? String(item.id),
+		slug: stripSlugPrefix(item.externalId, item.sourceBook) ?? String(item.id),
 		type: 'creature',
 		size: toCreatureSize(details.size),
 		creatureType: toString(details.type) || 'Unknown',
@@ -351,7 +352,7 @@ export function transformToUnifiedFeat(item: typeof compendiumItems.$inferSelect
 		summary: summary,
 		source: item.source,
 		description: toStringArray(details.description),
-		slug: item.externalId ?? String(item.id),
+		slug: stripSlugPrefix(item.externalId, item.sourceBook) ?? String(item.id),
 		type: 'feat',
 		prerequisites: toStringArray(details.prerequisites),
 		benefits: toStringArray(details.benefits),
@@ -384,7 +385,7 @@ export function transformToUnifiedBackground(
 		summary: summary,
 		source: item.source,
 		description: toStringArray(details.description),
-		slug: item.externalId ?? String(item.id),
+		slug: stripSlugPrefix(item.externalId, item.sourceBook) ?? String(item.id),
 		type: 'background',
 		feature: featureObj,
 		skillProficiencies: toStringArray(details.skill_proficiencies),
@@ -445,7 +446,7 @@ export function transformToUnifiedRace(item: typeof compendiumItems.$inferSelect
 		summary: summary,
 		source: item.source,
 		description: toStringArray(details.description),
-		slug: item.externalId ?? String(item.id),
+		slug: stripSlugPrefix(item.externalId, item.sourceBook) ?? String(item.id),
 		type: 'race',
 		size: toCreatureSize(details.size),
 		speed: toNumber(details.speed) || 30,
@@ -526,7 +527,7 @@ export function transformToUnifiedClass(item: typeof compendiumItems.$inferSelec
 		summary: summary,
 		source: item.source,
 		description: toStringArray(details.description),
-		slug: item.externalId ?? String(item.id),
+		slug: stripSlugPrefix(item.externalId, item.sourceBook) ?? String(item.id),
 		type: 'class',
 		hitDie: toNumber(details.hit_die) ?? 8,
 		proficiencies,
@@ -551,7 +552,7 @@ export function transformToUnifiedItem(item: typeof compendiumItems.$inferSelect
 		summary: summary,
 		source: item.source,
 		description: toStringArray(details.description),
-		slug: item.externalId ?? String(item.id),
+		slug: stripSlugPrefix(item.externalId, item.sourceBook) ?? String(item.id),
 		type: 'item',
 		rarity: toString(details.rarity) || 'Common',
 		itemType: toString(details.type) || 'Unknown',
@@ -634,7 +635,7 @@ export function transformToUnified(
 				summary: item.summary || '',
 				source: item.source,
 				description: toStringArray(item.details),
-				slug: item.externalId ?? String(item.id),
+				slug: stripSlugPrefix(item.externalId, item.sourceBook) ?? String(item.id),
 				type: 'item',
 				rarity: 'Unknown',
 				itemType: 'Unknown',
