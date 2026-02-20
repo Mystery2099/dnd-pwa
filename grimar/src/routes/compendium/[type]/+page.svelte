@@ -67,14 +67,21 @@
 		}
 	});
 
-	// Initialize filter store - use derived to recreate when pathType changes
-	const filters = $derived.by(() => {
-		const store = new CompendiumFilterStore(filterConfig);
-		// Build search index if data is available
-		if (query?.data?.items && query.data.items.length > 0) {
-			store.buildSearchIndex(query.data.items);
+	// Initialize filter store once - recreate only when pathType changes
+	let filters = $state<CompendiumFilterStore | null>(null);
+
+	// Create/recreate filter store when pathType changes
+	$effect(() => {
+		if (pathType && mounted) {
+			filters = new CompendiumFilterStore(filterConfig);
 		}
-		return store;
+	});
+
+	// Build search index when data loads
+	$effect(() => {
+		if (filters && query?.data?.items && query.data.items.length > 0) {
+			filters.buildSearchIndex(query.data.items);
+		}
 	});
 
 	// -- State --
@@ -82,7 +89,7 @@
 
 	// Derived filtered items
 	const filteredItems = $derived.by(() => {
-		if (!query?.data?.items) return [];
+		if (!query?.data?.items || !filters) return [];
 		return filters.apply<CompendiumItem>(query.data.items);
 	});
 
@@ -113,13 +120,14 @@
 	// Sync filters with URL state
 	$effect(() => {
 		// Only sync filters when on list page, not overlay
-		if (page.url.pathname === `/compendium/${pathType}`) {
+		if (filters && page.url.pathname === `/compendium/${pathType}`) {
 			filters.syncWithUrl(page.url);
 		}
 	});
 
 	// Restore filter state from sessionStorage on mount
 	onMount(() => {
+		if (!filters) return;
 		const saved = sessionStorage.getItem(config.routes.storageKeyFilters);
 		if (saved) {
 			try {
@@ -166,14 +174,15 @@
 
 	// -- Filter Handlers --
 	function toggleFilter(groupKey: string, value: string) {
-		filters.toggle(groupKey, String(value));
+		filters?.toggle(groupKey, String(value));
 	}
 
 	function clearFilters() {
-		filters.clearFilters();
+		filters?.clearFilters();
 	}
 
 	function handleSort(value: string) {
+		if (!filters) return;
 		const [sortBy, sortOrder] = value.split('-');
 		filters.setSort(sortBy, (sortOrder as 'asc' | 'desc') || 'asc');
 	}
@@ -216,7 +225,7 @@
 		<FilterGroup title={group.title} open={group.openByDefault}>
 			<div class="flex flex-wrap gap-2">
 				{#each group.values as option (option.value)}
-					{@const isSelected = filters.getSet(group.key).has(String(option.value))}
+					{@const isSelected = filters?.getSet(group.key).has(String(option.value)) ?? false}
 					<button
 						class={`group rounded-md border px-2 py-1 text-xs transition-all ${
 							isSelected
@@ -240,8 +249,8 @@
 		onClear={clearFilters}
 		onSort={handleSort}
 		sortOptions={config.sorting.options}
-		initialSort={`${filters.sortBy}-${filters.sortOrder}`}
-		hasActiveFilters={filters.hasActiveFilters}
+		initialSort={filters ? `${filters.sortBy}-${filters.sortOrder}` : 'name-asc'}
+		hasActiveFilters={filters?.hasActiveFilters ?? false}
 		filters={filtersSnippet}
 	/>
 {/snippet}
