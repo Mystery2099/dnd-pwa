@@ -481,18 +481,6 @@
 							</SettingsItem>
 
 							<SettingsItem
-								label="Show SRD Badges"
-								description="Display indicator for System Reference Document content"
-							>
-								{#snippet control()}
-									<Toggle
-										checked={userSettingsStore.data.showSRDBadge}
-										onchange={(v: boolean) => userSettingsStore.updateSetting('showSRDBadge', v)}
-									/>
-								{/snippet}
-							</SettingsItem>
-
-							<SettingsItem
 								label="Sync on Load"
 								description="Automatically sync compendium when page loads"
 							>

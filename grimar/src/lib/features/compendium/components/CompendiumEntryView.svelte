@@ -1,23 +1,19 @@
 <script lang="ts">
 	import { Bookmark, X } from 'lucide-svelte';
 	import { type Snippet } from 'svelte';
-	import { getSourceBadgeClass } from '$lib/core/utils/sourceBadge';
 	import Badge from '$lib/components/ui/Badge.svelte';
-
 	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
 
 	interface Props {
 		title: string;
 		titleId?: string;
-		type: string; // "Spell", "Monster", etc.
-		tags?: string[]; // "Evocation", "Level 3"
-		source?: string; // "open5e", "5ebits"
-		provider?: string; // "open5e", "5ebits" (display name)
-		sourceBook?: string; // "PHB", "SRD", "XGE"
+		type: string;
+		tags?: string[];
+		sourceBook?: string;
 		onClose?: () => void;
 		onBookmark?: () => void;
 		bookmarked?: boolean;
-		accentColor?: string; // e.g. "text-rose-400"
+		accentColor?: string;
 		animate?: boolean;
 		children: Snippet;
 	}
@@ -27,8 +23,6 @@
 		titleId,
 		type,
 		tags = [],
-		source,
-		provider,
 		sourceBook,
 		onClose,
 		onBookmark,
@@ -64,15 +58,6 @@
 				{/if}
 				{#if sourceBook}
 					<Badge variant="outline">{sourceBook}</Badge>
-				{/if}
-				{#if provider}
-					<Badge color={getSourceBadgeClass(provider)}>
-						{provider.charAt(0).toUpperCase() + provider.slice(1)}
-					</Badge>
-				{:else if source}
-					<Badge color={getSourceBadgeClass(source)}>
-						{source.charAt(0).toUpperCase() + source.slice(1)}
-					</Badge>
 				{/if}
 			</div>
 		</div>

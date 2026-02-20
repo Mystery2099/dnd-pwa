@@ -68,9 +68,7 @@
 	<CompendiumEntryView
 		title={item.name}
 		type={config.ui.displayName}
-		source={item.source}
 		{sourceBook}
-		{provider}
 		tags={config.display.tags(itemForConfig)}
 		onClose={handleClose}
 		{accentColor}

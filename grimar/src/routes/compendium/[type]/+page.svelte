@@ -351,7 +351,7 @@
 								<CompendiumCardItem
 									title={item.name}
 									subtitle={config.display.subtitle(item)}
-									source={item.source}
+									sourceBook={item.sourceBook}
 									icon={config.ui.icon}
 									school={config.display.cardSchool?.(item)}
 									variant="grid"
@@ -375,7 +375,7 @@
 									<CompendiumListItem
 										title={item.name}
 										subtitle={config.display.subtitle(item)}
-										source={item.source}
+										sourceBook={item.sourceBook}
 										icon={config.ui.icon}
 										type={pathType}
 										{slug}
@@ -392,14 +392,11 @@
 
 	<!-- Detail View Overlay -->
 	{#if selectedItem}
-		{@const provider = selectedItem.source || 'open5e'}
 		{@const sourceBook = selectedItem.sourceBook || 'SRD'}
 		<div class="absolute inset-0 z-50 p-2 lg:p-4" transition:fly={{ x: 20, duration: 300 }}>
 			<CompendiumEntryView
 				title={selectedItem.name}
 				type={config.ui.displayName}
-				source={selectedItem.source}
-				{provider}
 				{sourceBook}
 				tags={config.display.tags(selectedItem)}
 				onClose={closeOverlay}

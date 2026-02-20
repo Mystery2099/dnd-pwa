@@ -16,8 +16,6 @@ export interface ServerSettings {
 	offlineEnabled: boolean;
 	/** How often to auto-sync: never | 15min | 30min | 1h */
 	autoSyncInterval: 'never' | '15min' | '30min' | '1h';
-	/** Show SRD badge on compendium items */
-	showSRDBadge: boolean;
 	/** Show A5e content */
 	showA5eContent: boolean;
 	/** Default sort order for spells */
@@ -31,7 +29,6 @@ export const DEFAULT_SERVER_SETTINGS: ServerSettings = {
 	syncOnLoad: false,
 	offlineEnabled: true,
 	autoSyncInterval: 'never',
-	showSRDBadge: true,
 	showA5eContent: true,
 	spellSortOrder: 'name',
 	autoExpandDetails: false

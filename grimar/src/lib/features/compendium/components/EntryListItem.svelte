@@ -1,28 +1,26 @@
 <script lang="ts">
 	import type { ComponentType } from 'svelte';
-	import { getSourceBadgeClass, getSourceLabel } from '$lib/core/utils/sourceBadge';
-	import Badge from '$lib/components/ui/Badge.svelte';
 
 	type ItemVariant = 'grid' | 'list';
 
 	interface Props {
 		title: string;
 		subtitle?: string;
-		source?: string;
+		sourceBook?: string | null;
 		active?: boolean;
 		icon?: ComponentType;
 		accentClass?: string;
-		school?: string; // Simplified school name for gem colors
+		school?: string;
 		variant?: ItemVariant;
-		type?: string; // Compendium type (e.g., 'spells', 'monsters')
-		slug?: string; // Item slug for URL generation
+		type?: string;
+		slug?: string;
 		onclick?: () => void;
 	}
 
 	let {
 		title,
 		subtitle,
-		source,
+		sourceBook,
 		active,
 		icon: Icon,
 		accentClass: _accentClass = 'hover:border-[var(--color-accent)]/50',
@@ -33,7 +31,6 @@
 		onclick
 	}: Props = $props();
 
-	// Map spell school to gem color CSS variable via theme
 	const schoolGemColor: Record<string, string> = {
 		evocation: 'var(--color-gem-ruby)',
 		abjuration: 'var(--color-gem-sapphire)',
@@ -46,5 +43,4 @@
 	};
 
 	const accentColor = $derived(school ? schoolGemColor[school] : 'var(--color-accent)');
-	const sourceBadgeClass = $derived(source ? getSourceBadgeClass(source) : '');
 </script>
