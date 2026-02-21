@@ -1,574 +1,259 @@
 /**
  * Compendium Service Layer
  *
- * Provides a unified API for fetching and searching compendium data.
- * All methods return unified types with consistent field naming.
- *
- * This service abstracts database queries and data transformation,
- * making it easier to maintain and extend compendium functionality.
- *
- * Search uses FTS5 for full-text search across names, summaries,
- * and detailed content (descriptions, abilities, etc.)
+ * Simplified service for the new schema aligned with Open5e API v2.
+ * All data is stored directly from the API - no transformation needed.
  */
 
 import { getDb } from '$lib/server/db';
+import { compendium, COMPENDIUM_TYPES } from '$lib/server/db/schema';
+import type { CompendiumType, CompendiumItem } from '$lib/core/types/compendium';
+import { eq, like, and, desc, asc, sql, or, inArray } from 'drizzle-orm';
 import { createModuleLogger } from '$lib/server/logger';
-import { compendiumItems } from '$lib/server/db/schema';
-import { eq, like, and, desc, asc, sql, inArray, or } from 'drizzle-orm';
-import { searchFtsRanked } from '$lib/server/db/db-fts';
-import {
-	DB_TYPES,
-	JSON_PATHS,
-	jsonExtract,
-	jsonExtractLower,
-	buildJsonFilter,
-	buildJsonExactFilter,
-	normalizeDbType,
-	type DbType
-} from '$lib/server/db/compendium-filters';
-import type {
-	UnifiedSpell,
-	UnifiedCreature,
-	UnifiedFeat,
-	UnifiedBackground,
-	UnifiedRace,
-	UnifiedClass,
-	UnifiedItem,
-	UnifiedCompendiumItem,
-	SpellFilters,
-	CreatureFilters,
-	NavigationResult
-} from '$lib/core/types/compendium/unified';
-import {
-	transformToUnifiedSpell,
-	transformToUnifiedCreature,
-	transformToUnifiedFeat,
-	transformToUnifiedBackground,
-	transformToUnifiedRace,
-	transformToUnifiedClass,
-	transformToUnifiedItem,
-	transformToUnified
-} from './transformers';
-import { buildExternalId } from '$lib/core/utils/slug';
 
-// ============================================================================
-// Utility Types
-// ============================================================================
+const log = createModuleLogger('CompendiumService');
 
-// Extended type that includes all compendium types - now using DB_TYPES
-export type AnyCompendiumType = DbType | string;
+export type { CompendiumType, CompendiumItem };
 
-type CompendiumType =
-	| typeof DB_TYPES.SPELLS
-	| typeof DB_TYPES.CREATURES
-	| typeof DB_TYPES.MAGIC_ITEMS
-	| typeof DB_TYPES.FEATS
-	| typeof DB_TYPES.BACKGROUNDS
-	| typeof DB_TYPES.SPECIES
-	| typeof DB_TYPES.CLASSES;
-
-// ============================================================================
-// Search Helper
-// ============================================================================
-
-/**
- * Apply FTS5 search with LIKE fallback to conditions array.
- * FTS5 is tried first for full-text search; if no results, falls back to LIKE.
- */
-async function applySearchFilter(
-	searchQuery: string,
-	conditions: unknown[]
-): Promise<void> {
-	const ftsResults = await searchFtsRanked(searchQuery, 50);
-	if (ftsResults.length > 0) {
-		const rowids = ftsResults.map((r) => r.rowid);
-		conditions.push(inArray(compendiumItems.id, rowids));
-	} else {
-		// Fallback to LIKE on name only (simpler fallback)
-		conditions.push(like(compendiumItems.name, `%${searchQuery}%`));
-	}
+export interface ListFilters {
+	search?: string;
+	source?: string;
+	gamesystem?: string;
+	document?: string;
+	limit?: number;
+	offset?: number;
 }
 
-// ============================================================================
-// Service Interface
-// ============================================================================
-
-export interface CompendiumServiceInterface {
-	// Spells
-	getSpells(filters?: SpellFilters): Promise<UnifiedSpell[]>;
-	getSpellById(id: number): Promise<UnifiedSpell | null>;
-
-	// Creatures
-	getCreatures(filters?: CreatureFilters): Promise<UnifiedCreature[]>;
-	getCreatureById(id: number): Promise<UnifiedCreature | null>;
-
-	// Feats
-	getFeats(filters?: { search?: string }): Promise<UnifiedFeat[]>;
-	getFeatById(id: number): Promise<UnifiedFeat | null>;
-
-	// Backgrounds
-	getBackgrounds(filters?: { search?: string }): Promise<UnifiedBackground[]>;
-	getBackgroundById(id: number): Promise<UnifiedBackground | null>;
-
-	// Races
-	getRaces(filters?: { search?: string }): Promise<UnifiedRace[]>;
-	getRaceById(id: number): Promise<UnifiedRace | null>;
-
-	// Classes
-	getClasses(filters?: { search?: string }): Promise<UnifiedClass[]>;
-	getClassById(id: number): Promise<UnifiedClass | null>;
-
-	// Items
-	getItems(filters?: { search?: string; rarity?: string }): Promise<UnifiedItem[]>;
-	getItemById(id: number): Promise<UnifiedItem | null>;
-
-	// Generic
-	getByType(
-		type: AnyCompendiumType,
-		filters?: Record<string, unknown>
-	): Promise<UnifiedCompendiumItem[]>;
-	getById(type: AnyCompendiumType, id: number | string): Promise<UnifiedCompendiumItem | null>;
-	getBySourceAndId(
-		source: string,
-		type: AnyCompendiumType,
-		id: number | string,
-		sourceBook?: string
-	): Promise<UnifiedCompendiumItem | null>;
-
-	// Search
-	search(query: string, type?: CompendiumType, limit?: number): Promise<UnifiedCompendiumItem[]>;
-
-	// Navigation
-	getNavigation(type: AnyCompendiumType, id: number): Promise<NavigationResult>;
+export interface NavigationResult {
+	prev: CompendiumItem | null;
+	next: CompendiumItem | null;
+	currentIndex: number;
+	total: number;
 }
 
-// ============================================================================
-// Service Implementation
-// ============================================================================
+function toItem(row: typeof compendium.$inferSelect): CompendiumItem {
+	return {
+		key: row.key,
+		type: row.type as CompendiumType,
+		name: row.name,
+		source: row.source,
+		documentKey: row.documentKey,
+		documentName: row.documentName,
+		gamesystemKey: row.gamesystemKey,
+		gamesystemName: row.gamesystemName,
+		publisherKey: row.publisherKey,
+		publisherName: row.publisherName,
+		description: row.description,
+		data: row.data as Record<string, unknown>,
+		createdAt: row.createdAt,
+		updatedAt: row.updatedAt,
+		createdBy: row.createdBy
+	};
+}
 
-export const compendiumService: CompendiumServiceInterface = {
-	// ========================================================================
-	// Spells
-	// ========================================================================
-
-	async getSpells(filters = {}) {
+export const compendiumService = {
+	async getByType(type: CompendiumType | string, filters: ListFilters = {}) {
 		const db = await getDb();
-		const conditions = [eq(compendiumItems.type, DB_TYPES.SPELLS)];
-
-		if (filters.level !== undefined) {
-			conditions.push(eq(jsonExtract(JSON_PATHS.SPELL_LEVEL), filters.level));
-		}
-		if (filters.school) {
-			conditions.push(eq(jsonExtractLower(JSON_PATHS.SPELL_SCHOOL), filters.school.toLowerCase()));
-		}
-		if (filters.search) {
-			await applySearchFilter(filters.search, conditions);
-		}
-
-		const items = await db
-			.select()
-			.from(compendiumItems)
-			.where(and(...conditions))
-			.orderBy(asc(compendiumItems.name));
-
-		return items.map(transformToUnifiedSpell);
-	},
-
-	async getSpellById(id) {
-		const db = await getDb();
-		const item = await db.query.compendiumItems.findFirst({
-			where: and(eq(compendiumItems.type, DB_TYPES.SPELLS), sql`${compendiumItems.id} = ${id}`)
-		});
-		return item ? transformToUnifiedSpell(item) : null;
-	},
-
-	// ========================================================================
-	// Creatures
-	// ========================================================================
-
-	async getCreatures(filters = {}) {
-		const db = await getDb();
-		const conditions = [eq(compendiumItems.type, DB_TYPES.CREATURES)];
-
-		if (filters.size) {
-			conditions.push(eq(jsonExtractLower(JSON_PATHS.CREATURE_SIZE), filters.size.toLowerCase()));
-		}
-		if (filters.type) {
-			conditions.push(eq(jsonExtractLower(JSON_PATHS.CREATURE_TYPE), filters.type.toLowerCase()));
-		}
-		if (filters.cr) {
-			conditions.push(eq(jsonExtract(JSON_PATHS.CREATURE_CR), filters.cr));
-		}
-		if (filters.search) {
-			await applySearchFilter(filters.search, conditions);
-		}
-
-		const items = await db
-			.select()
-			.from(compendiumItems)
-			.where(and(...conditions))
-			.orderBy(asc(compendiumItems.name));
-
-		return items.map(transformToUnifiedCreature);
-	},
-
-	async getCreatureById(id) {
-		const db = await getDb();
-		const item = await db.query.compendiumItems.findFirst({
-			where: and(eq(compendiumItems.type, DB_TYPES.CREATURES), sql`${compendiumItems.id} = ${id}`)
-		});
-		return item ? transformToUnifiedCreature(item) : null;
-	},
-
-	// ========================================================================
-	// Feats
-	// ========================================================================
-
-	async getFeats(filters = {}) {
-		const db = await getDb();
-		const conditions = [eq(compendiumItems.type, DB_TYPES.FEATS)];
+		const conditions = [eq(compendium.type, type)];
 
 		if (filters.search) {
-			await applySearchFilter(filters.search, conditions);
+			conditions.push(like(compendium.name, `%${filters.search}%`));
+		}
+		if (filters.source) {
+			conditions.push(eq(compendium.source, filters.source));
+		}
+		if (filters.gamesystem) {
+			conditions.push(eq(compendium.gamesystemKey, filters.gamesystem));
+		}
+		if (filters.document) {
+			conditions.push(eq(compendium.documentKey, filters.document));
 		}
 
-		const items = await db
+		const query = db
 			.select()
-			.from(compendiumItems)
+			.from(compendium)
 			.where(and(...conditions))
-			.orderBy(asc(compendiumItems.name));
+			.orderBy(asc(compendium.name));
 
-		return items.map(transformToUnifiedFeat);
+		if (filters.limit) {
+			query.limit(filters.limit);
+		}
+		if (filters.offset) {
+			query.offset(filters.offset);
+		}
+
+		const items = await query;
+		return items.map(toItem);
 	},
 
-	async getFeatById(id) {
+	async getByKey(key: string): Promise<CompendiumItem | null> {
 		const db = await getDb();
-		const item = await db.query.compendiumItems.findFirst({
-			where: and(eq(compendiumItems.type, DB_TYPES.FEATS), sql`${compendiumItems.id} = ${id}`)
+		const item = await db.query.compendium.findFirst({
+			where: eq(compendium.key, key)
 		});
-		return item ? transformToUnifiedFeat(item) : null;
+		return item ? toItem(item) : null;
 	},
 
-	// ========================================================================
-	// Backgrounds
-	// ========================================================================
-
-	async getBackgrounds(filters = {}) {
+	async getByTypeAndKey(type: CompendiumType | string, key: string): Promise<CompendiumItem | null> {
 		const db = await getDb();
-		const conditions = [eq(compendiumItems.type, DB_TYPES.BACKGROUNDS)];
-
-		if (filters.search) {
-			await applySearchFilter(filters.search, conditions);
-		}
-
-		const items = await db
-			.select()
-			.from(compendiumItems)
-			.where(and(...conditions))
-			.orderBy(asc(compendiumItems.name));
-
-		return items.map(transformToUnifiedBackground);
-	},
-
-	async getBackgroundById(id) {
-		const db = await getDb();
-		const item = await db.query.compendiumItems.findFirst({
-			where: and(eq(compendiumItems.type, DB_TYPES.BACKGROUNDS), sql`${compendiumItems.id} = ${id}`)
+		const item = await db.query.compendium.findFirst({
+			where: and(eq(compendium.type, type), eq(compendium.key, key))
 		});
-		return item ? transformToUnifiedBackground(item) : null;
-	},
-
-	// ========================================================================
-	// Races (DB type: 'species')
-	// ========================================================================
-
-	async getRaces(filters = {}) {
-		const db = await getDb();
-		// IMPORTANT: DB stores these as 'species', not 'races'
-		const conditions = [eq(compendiumItems.type, DB_TYPES.SPECIES)];
-
-		if (filters.search) {
-			await applySearchFilter(filters.search, conditions);
-		}
-
-		const items = await db
-			.select()
-			.from(compendiumItems)
-			.where(and(...conditions))
-			.orderBy(asc(compendiumItems.name));
-
-		return items.map(transformToUnifiedRace);
-	},
-
-	async getRaceById(id) {
-		const db = await getDb();
-		const item = await db.query.compendiumItems.findFirst({
-			where: and(eq(compendiumItems.type, DB_TYPES.SPECIES), sql`${compendiumItems.id} = ${id}`)
-		});
-		return item ? transformToUnifiedRace(item) : null;
-	},
-
-	// ========================================================================
-	// Classes
-	// ========================================================================
-
-	async getClasses(filters = {}) {
-		const db = await getDb();
-		const conditions = [eq(compendiumItems.type, DB_TYPES.CLASSES)];
-
-		if (filters.search) {
-			await applySearchFilter(filters.search, conditions);
-		}
-
-		const items = await db
-			.select()
-			.from(compendiumItems)
-			.where(and(...conditions))
-			.orderBy(asc(compendiumItems.name));
-
-		return items.map(transformToUnifiedClass);
-	},
-
-	async getClassById(id) {
-		const db = await getDb();
-		const item = await db.query.compendiumItems.findFirst({
-			where: and(eq(compendiumItems.type, DB_TYPES.CLASSES), sql`${compendiumItems.id} = ${id}`)
-		});
-		return item ? transformToUnifiedClass(item) : null;
-	},
-
-	// ========================================================================
-	// Items (includes magicitems)
-	// ========================================================================
-
-	async getItems(filters = {}) {
-		const db = await getDb();
-		// Query both 'items' and 'magicitems' types
-		const conditions = [or(
-			eq(compendiumItems.type, DB_TYPES.ITEMS),
-			eq(compendiumItems.type, DB_TYPES.MAGIC_ITEMS)
-		)];
-
-		if (filters.search) {
-			await applySearchFilter(filters.search, conditions);
-		}
-		if (filters.rarity) {
-			conditions.push(eq(jsonExtractLower(JSON_PATHS.ITEM_RARITY), filters.rarity.toLowerCase()));
-		}
-
-		const items = await db
-			.select()
-			.from(compendiumItems)
-			.where(and(...conditions))
-			.orderBy(asc(compendiumItems.name));
-
-		return items.map(transformToUnifiedItem);
-	},
-
-	async getItemById(id) {
-		const db = await getDb();
-		const item = await db.query.compendiumItems.findFirst({
-			where: and(
-				or(
-					eq(compendiumItems.type, DB_TYPES.ITEMS),
-					eq(compendiumItems.type, DB_TYPES.MAGIC_ITEMS)
-				),
-				sql`${compendiumItems.id} = ${id}`
-			)
-		});
-		return item ? transformToUnifiedItem(item) : null;
-	},
-
-	// ========================================================================
-	// Generic Type Query
-	// ========================================================================
-
-	async getByType(type, filters = {}) {
-		const db = await getDb();
-		// Normalize the type to handle aliases
-		const normalizedType = normalizeDbType(type);
-		const conditions = [eq(compendiumItems.type, normalizedType)];
-
-		const searchQuery = filters.search as string | undefined;
-		if (searchQuery) {
-			await applySearchFilter(searchQuery, conditions);
-		}
-
-		const items = await db
-			.select()
-			.from(compendiumItems)
-			.where(and(...conditions))
-			.orderBy(asc(compendiumItems.name));
-
-		return items.map(transformToUnified);
-	},
-
-	async getById(type: AnyCompendiumType, id: number | string) {
-		const db = await getDb();
-		// Normalize type
-		const normalizedType = normalizeDbType(type);
-
-		// Handle both numeric ID and slug (externalId)
-		const numericId = typeof id === 'number' ? id : parseInt(id);
-		const isNumeric = !Number.isNaN(numericId);
-
-		let item;
-		if (isNumeric) {
-			item = await db.query.compendiumItems.findFirst({
-				where: and(eq(compendiumItems.id, numericId), eq(compendiumItems.type, normalizedType))
-			});
-		} else {
-			item = await db.query.compendiumItems.findFirst({
-				where: and(eq(compendiumItems.externalId, id as string), eq(compendiumItems.type, normalizedType))
-			});
-		}
-
-		return item ? transformToUnified(item) : null;
+		return item ? toItem(item) : null;
 	},
 
 	async getBySourceAndId(
 		source: string,
-		type: AnyCompendiumType,
-		id: number | string,
-		sourceBook?: string
-	) {
+		type: CompendiumType | string,
+		slug: string,
+		documentName?: string
+	): Promise<CompendiumItem | null> {
 		const db = await getDb();
-		const log = createModuleLogger('CompendiumService');
+		const conditions = [eq(compendium.source, source), eq(compendium.type, type)];
 
-		// Normalize type
-		const normalizedType = normalizeDbType(type);
-
-		// Handle both numeric ID and slug (externalId)
-		const numericId = typeof id === 'number' ? id : parseInt(id);
-		const isNumeric = !Number.isNaN(numericId);
-
-		// If non-numeric ID and sourceBook provided, reconstruct full externalId
-		const externalId = !isNumeric && sourceBook ? buildExternalId(id as string, sourceBook) : id;
-
-		log.debug({ source, type, normalizedType, id, isNumeric, sourceBook, externalId }, 'Looking up item by source and ID');
-
-		let item;
-		if (isNumeric) {
-			item = await db.query.compendiumItems.findFirst({
-				where: and(
-					eq(compendiumItems.id, numericId),
-					eq(compendiumItems.type, normalizedType),
-					eq(compendiumItems.source, source)
-				)
-			});
-		} else {
-			item = await db.query.compendiumItems.findFirst({
-				where: and(
-					eq(compendiumItems.externalId, externalId as string),
-					eq(compendiumItems.type, normalizedType),
-					eq(compendiumItems.source, source)
-				)
-			});
+		if (documentName) {
+			conditions.push(
+				or(eq(compendium.documentName, documentName), eq(compendium.documentKey, documentName))!
+			);
 		}
 
-		if (!item) {
-			log.debug({ source, type, id, sourceBook }, 'Item not found');
-		}
+		conditions.push(
+			or(eq(compendium.key, slug), like(compendium.key, `%-${slug}`), eq(compendium.name, slug))!
+		);
 
-		return item ? transformToUnified(item) : null;
+		const item = await db.query.compendium.findFirst({
+			where: and(...conditions)
+		});
+		return item ? toItem(item) : null;
 	},
 
-	// ========================================================================
-	// Search
-	// ========================================================================
-
-	async search(query, type, limit = 50) {
+	async search(query: string, type?: CompendiumType | string, limit = 50): Promise<CompendiumItem[]> {
 		const db = await getDb();
+		const conditions = [like(compendium.name, `%${query}%`)];
 
-		// Use FTS5 for full-text search across all indexed content
-		const ftsResults = await searchFtsRanked(query, limit * 2); // Get extra to allow for type filtering
-
-		if (ftsResults.length === 0) {
-			return [];
-		}
-
-		// Get rowids from FTS results
-		const rowids = ftsResults.map((r) => r.rowid);
-
-		// Build conditions: FTS rowids + optional type filter
-		const conditions = [inArray(compendiumItems.id, rowids)];
 		if (type) {
-			conditions.push(eq(compendiumItems.type, type));
+			conditions.push(eq(compendium.type, type));
 		}
 
 		const items = await db
 			.select()
-			.from(compendiumItems)
+			.from(compendium)
 			.where(and(...conditions))
-			.limit(limit);
+			.limit(limit)
+			.orderBy(asc(compendium.name));
 
-		// Re-order items by FTS rank (BM25 score)
-		const itemMap = new Map(items.map((item) => [item.id, item]));
-		const rankedItems = rowids
-			.map((id) => itemMap.get(id))
-			.filter((item): item is (typeof items)[0] => item !== undefined);
-
-		return rankedItems.map(transformToUnified);
+		return items.map(toItem);
 	},
 
-	// ========================================================================
-	// Navigation
-	// ========================================================================
-
-	async getNavigation(type, id) {
+	async getNavigation(type: CompendiumType | string, key: string): Promise<NavigationResult> {
 		const db = await getDb();
 
-		// First, get the current item to find its name
-		const currentItem = await db.query.compendiumItems.findFirst({
-			where: and(eq(compendiumItems.id, id), eq(compendiumItems.type, type))
+		const currentItem = await db.query.compendium.findFirst({
+			where: and(eq(compendium.key, key), eq(compendium.type, type))
 		});
 
 		if (!currentItem) {
-			return {
-				prev: null,
-				next: null,
-				currentIndex: 0,
-				total: 0
-			};
+			return { prev: null, next: null, currentIndex: 0, total: 0 };
 		}
 
 		const currentName = currentItem.name;
 
-		// Get prev item (name < current name)
 		const prevItems = await db
 			.select()
-			.from(compendiumItems)
-			.where(and(eq(compendiumItems.type, type), sql`name < ${currentName}`))
-			.orderBy(desc(compendiumItems.name))
+			.from(compendium)
+			.where(and(eq(compendium.type, type), sql`name < ${currentName}`))
+			.orderBy(desc(compendium.name))
 			.limit(1);
 
-		const prevItem = prevItems[0] ? transformToUnified(prevItems[0]) : null;
+		const prevItem = prevItems[0] ? toItem(prevItems[0]) : null;
 
-		// Get next item (name > current name)
 		const nextItems = await db
 			.select()
-			.from(compendiumItems)
-			.where(and(eq(compendiumItems.type, type), sql`name > ${currentName}`))
-			.orderBy(asc(compendiumItems.name))
+			.from(compendium)
+			.where(and(eq(compendium.type, type), sql`name > ${currentName}`))
+			.orderBy(asc(compendium.name))
 			.limit(1);
 
-		const nextItem = nextItems[0] ? transformToUnified(nextItems[0]) : null;
+		const nextItem = nextItems[0] ? toItem(nextItems[0]) : null;
 
-		// Get total count
-		const totalCount = await db.$count(compendiumItems, eq(compendiumItems.type, type));
+		const totalCount = await db.$count(compendium, eq(compendium.type, type));
 
-		// Get current index
 		const itemsBefore = await db.$count(
-			compendiumItems,
-			and(eq(compendiumItems.type, type), sql`name < ${currentName}`)
+			compendium,
+			and(eq(compendium.type, type), sql`name < ${currentName}`)
 		);
-		const currentIndex = itemsBefore + 1;
 
 		return {
 			prev: prevItem,
 			next: nextItem,
-			currentIndex,
+			currentIndex: itemsBefore + 1,
 			total: totalCount
 		};
+	},
+
+	async getCount(type?: CompendiumType | string): Promise<number> {
+		const db = await getDb();
+		if (type) {
+			return db.$count(compendium, eq(compendium.type, type));
+		}
+		return db.$count(compendium);
+	},
+
+	async getTypes(): Promise<{ type: string; count: number }[]> {
+		const db = await getDb();
+		const result = await db
+			.select({
+				type: compendium.type,
+				count: sql<number>`count(*)`.as('count')
+			})
+			.from(compendium)
+			.groupBy(compendium.type)
+			.orderBy(asc(compendium.type));
+
+		return result.map((r) => ({ type: r.type, count: r.count }));
+	},
+
+	async getSources(): Promise<{ source: string; count: number }[]> {
+		const db = await getDb();
+		const result = await db
+			.select({
+				source: compendium.source,
+				count: sql<number>`count(*)`.as('count')
+			})
+			.from(compendium)
+			.groupBy(compendium.source)
+			.orderBy(asc(compendium.source));
+
+		return result.map((r) => ({ source: r.source, count: r.count }));
+	},
+
+	async getGamesystems(): Promise<{ key: string; name: string; count: number }[]> {
+		const db = await getDb();
+		const result = await db
+			.select({
+				key: compendium.gamesystemKey,
+				name: compendium.gamesystemName,
+				count: sql<number>`count(*)`.as('count')
+			})
+			.from(compendium)
+			.where(sql`gamesystem_key IS NOT NULL`)
+			.groupBy(compendium.gamesystemKey, compendium.gamesystemName)
+			.orderBy(asc(compendium.gamesystemName));
+
+		return result.map((r) => ({ key: r.key ?? '', name: r.name ?? '', count: Number(r.count) }));
+	},
+
+	async clearType(type: CompendiumType | string): Promise<void> {
+		const db = await getDb();
+		await db.delete(compendium).where(eq(compendium.type, type));
+		log.info({ type }, 'Cleared compendium type');
+	},
+
+	async clearSource(source: string): Promise<void> {
+		const db = await getDb();
+		await db.delete(compendium).where(eq(compendium.source, source));
+		log.info({ source }, 'Cleared compendium source');
 	}
 };
+
+export default compendiumService;
