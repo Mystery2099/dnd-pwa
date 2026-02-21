@@ -2,7 +2,6 @@ import { error, json } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 import { getDb } from '$lib/server/db';
 import { syncAllProviders } from '$lib/server/services/sync/orchestrator';
-import { invalidateAllCompendiumCache } from '$lib/server/repositories/compendium';
 import { createModuleLogger } from '$lib/server/logger';
 
 const log = createModuleLogger('AdminSyncAPI');
@@ -34,14 +33,8 @@ export const POST = async ({ request }: { request: Request }) => {
 	const duration = Date.now() - startTime;
 	log.info({ providerCount: results.length, duration }, 'Sync completed');
 
-	// Invalidate cache after sync
-	log.debug('Invalidating compendium cache');
-	invalidateAllCompendiumCache();
-
 	// Aggregate results for response
-	const totalSpells = results.reduce((sum, r) => sum + r.spells, 0);
-	const totalCreatures = results.reduce((sum, r) => sum + r.creatures, 0);
-	const totalItems = results.reduce((sum, r) => sum + r.items, 0);
+	const totalItems = results.reduce((sum, r) => sum + r.totalItems, 0);
 	const totalErrors = results.reduce((sum, r) => sum + r.errors.length, 0);
 	const providersWithErrors = results.filter((r) => r.errors.length > 0).length;
 
@@ -49,10 +42,7 @@ export const POST = async ({ request }: { request: Request }) => {
 		{
 			duration,
 			summary: {
-				spells: totalSpells,
-				creatures: totalCreatures,
-				items: totalItems,
-				totalItems: totalSpells + totalCreatures + totalItems,
+				totalItems,
 				providersSynced: results.length,
 				providersWithErrors,
 				totalErrors
@@ -69,10 +59,7 @@ export const POST = async ({ request }: { request: Request }) => {
 		ok: true,
 		providers: results,
 		summary: {
-			spells: totalSpells,
-			creatures: totalCreatures,
-			items: totalItems,
-			totalItems: totalSpells + totalCreatures + totalItems,
+			totalItems,
 			providersSynced: results.length,
 			providersWithErrors,
 			totalErrors

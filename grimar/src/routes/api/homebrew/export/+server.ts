@@ -1,25 +1,30 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { getUserHomebrewItems } from '$lib/server/repositories/compendium';
+import { requireUser } from '$lib/server/services/auth';
+import { getHomebrewItemByKey } from '$lib/server/repositories/compendium';
 
-export const GET: RequestHandler = async ({ locals }) => {
-	const user = locals.user;
-	if (!user) {
-		return json({ error: 'Unauthorized' }, { status: 401 });
+export const POST: RequestHandler = async ({ request, locals }) => {
+	const user = requireUser(locals);
+	const { key } = await request.json();
+	
+	const item = await getHomebrewItemByKey(key);
+	
+	if (!item || item.source !== 'homebrew') {
+		return json({ error: 'Item not found' }, { status: 404 });
 	}
-
-	const items = await getUserHomebrewItems(user.username);
-
-	const exportData = items.map((item) => ({
+	
+	if (user.role !== 'admin' && item.createdBy !== user.username) {
+		return json({ error: 'Unauthorized' }, { status: 403 });
+	}
+	
+	const exportedItem = {
 		name: item.name,
-		desc: item.summary || '',
-		...JSON.parse(item.jsonData || '{}')
-	}));
-
-	return new Response(JSON.stringify(exportData, null, 2), {
-		headers: {
-			'Content-Type': 'application/json',
-			'Content-Disposition': `attachment; filename="homebrew-${user.username}.json"`
-		}
-	});
+		type: item.type,
+		description: item.description,
+		data: item.data,
+		exportedAt: new Date().toISOString(),
+		version: '1.0'
+	};
+	
+	return json(exportedItem);
 };

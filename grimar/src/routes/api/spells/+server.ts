@@ -1,7 +1,7 @@
 import { json } from '@sveltejs/kit';
 import { getDb } from '$lib/server/db';
-import { compendiumItems } from '$lib/server/db/schema';
-import { eq } from 'drizzle-orm';
+import { compendium } from '$lib/server/db/schema';
+import { eq, count } from 'drizzle-orm';
 import { createModuleLogger } from '$lib/server/logger';
 
 const log = createModuleLogger('SpellsAPI');
@@ -10,12 +10,13 @@ export const GET = async () => {
 	try {
 		const db = await getDb();
 
-		// Get actual count of spells using $count()
-		const count = await db.$count(compendiumItems, eq(compendiumItems.type, 'spell'));
+		// Get actual count of spells
+		const result = await db.select({ count: count() }).from(compendium).where(eq(compendium.type, 'spells'));
+		const spellCount = result[0]?.count ?? 0;
 
 		return json({
-			hasSpells: count > 0,
-			count
+			hasSpells: spellCount > 0,
+			count: spellCount
 		});
 	} catch (error) {
 		log.error({ error }, 'Error checking spells');

@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { createHomebrewItem } from '$lib/server/repositories/compendium';
+import { upsertItem } from '$lib/server/repositories/compendium';
 
 export const POST: RequestHandler = async ({ request, locals }) => {
 	const user = locals.user;
@@ -40,16 +40,22 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 			}
 
 			try {
-				await createHomebrewItem(
-					{
-						name: item.name,
-						summary: item.desc || '',
-						details: {},
-						jsonData: JSON.stringify(item),
-						type
-					},
-					user.username
-				);
+				const { name, desc, ...rest } = item;
+				await upsertItem({
+					key: `homebrew-${type}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+					name,
+					type,
+					source: 'homebrew',
+					description: desc || '',
+					data: rest,
+					documentKey: null,
+					documentName: null,
+					gamesystemKey: null,
+					gamesystemName: null,
+					publisherKey: null,
+					publisherName: null,
+					createdBy: user.username
+				});
 				successCount++;
 			} catch (e) {
 				errorCount++;

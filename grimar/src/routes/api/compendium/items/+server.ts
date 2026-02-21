@@ -1,16 +1,9 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { getDb } from '$lib/server/db';
-import { compendiumItems } from '$lib/server/db/schema';
-import { eq, like, and, or, desc, asc, inArray, type SQL } from 'drizzle-orm';
+import { compendium } from '$lib/server/db/schema';
+import { eq, like, and, or, desc, asc, inArray, sql, type SQL } from 'drizzle-orm';
 import { getDbTypeFromPath, DB_TYPES } from '$lib/core/constants/compendium';
-import {
-	JSON_PATHS,
-	FILTER_PARAMS,
-	jsonExtract,
-	jsonExtractLower,
-	normalizeDbType
-} from '$lib/server/db/compendium-filters';
 import { searchFtsRanked } from '$lib/server/db/db-fts';
 import { createModuleLogger } from '$lib/server/logger';
 
@@ -27,13 +20,14 @@ export const GET: RequestHandler = async ({ url }) => {
 		const all = url.searchParams.get('all') === 'true';
 		const page = parseInt(url.searchParams.get('page') || '1');
 		const limit = all ? 10000 : Math.min(parseInt(url.searchParams.get('limit') || '50'), 100);
-		const search = url.searchParams.get(FILTER_PARAMS.SEARCH) || '';
-		const sortBy = url.searchParams.get(FILTER_PARAMS.SORT_BY) || 'name';
-		const sortOrder = url.searchParams.get(FILTER_PARAMS.SORT_ORDER) || 'asc';
-		const spellLevel = url.searchParams.get(FILTER_PARAMS.SPELL_LEVEL);
-		const spellSchool = url.searchParams.get(FILTER_PARAMS.SPELL_SCHOOL);
-		const challengeRating = url.searchParams.get(FILTER_PARAMS.CHALLENGE_RATING);
-		const creatureType = url.searchParams.get(FILTER_PARAMS.CREATURE_TYPE);
+		const search = url.searchParams.get('search') || '';
+		const sortBy = url.searchParams.get('sortBy') || 'name';
+		const sortOrder = url.searchParams.get('sortOrder') || 'asc';
+		const spellLevel = url.searchParams.get('level');
+		const spellSchool = url.searchParams.get('school');
+		const challengeRating = url.searchParams.get('cr');
+		const creatureType = url.searchParams.get('creatureType');
+		const gamesystem = url.searchParams.get('gamesystem');
 
 		if (!pathType) {
 			return json({ error: 'Missing type parameter' }, { status: 400 });
@@ -41,18 +35,17 @@ export const GET: RequestHandler = async ({ url }) => {
 
 		const db = await getDb();
 		const dbType = getDbTypeFromPath(pathType);
-		const normalizedType = normalizeDbType(dbType);
 
 		const conditions: (SQL | undefined)[] = [];
 
 		// Handle items/magicitems as a combined type
-		if (normalizedType === DB_TYPES.ITEMS || normalizedType === DB_TYPES.MAGIC_ITEMS) {
+		if (dbType === DB_TYPES.ITEMS || dbType === DB_TYPES.MAGIC_ITEMS) {
 			conditions.push(or(
-				eq(compendiumItems.type, DB_TYPES.ITEMS),
-				eq(compendiumItems.type, DB_TYPES.MAGIC_ITEMS)
+				eq(compendium.type, DB_TYPES.ITEMS),
+				eq(compendium.type, DB_TYPES.MAGIC_ITEMS)
 			));
 		} else {
-			conditions.push(eq(compendiumItems.type, normalizedType));
+			conditions.push(eq(compendium.type, dbType));
 		}
 
 		// Search with FTS + LIKE fallback
@@ -60,41 +53,46 @@ export const GET: RequestHandler = async ({ url }) => {
 			try {
 				const ftsResults = await searchFtsRanked(search, 100);
 				if (ftsResults.length > 0) {
-					const rowids = ftsResults.map((r) => r.rowid);
-					conditions.push(inArray(compendiumItems.id, rowids));
+					const keys = ftsResults.map((r) => r.key);
+					conditions.push(inArray(compendium.key, keys));
 				} else {
 					const searchPattern = `%${search}%`;
 					conditions.push(or(
-						like(compendiumItems.name, searchPattern),
-						like(compendiumItems.summary, searchPattern)
+						like(compendium.name, searchPattern),
+						like(compendium.description, searchPattern)
 					));
 				}
 			} catch {
 				// FTS not available, fallback to LIKE
 				const searchPattern = `%${search}%`;
 				conditions.push(or(
-					like(compendiumItems.name, searchPattern),
-					like(compendiumItems.summary, searchPattern)
+					like(compendium.name, searchPattern),
+					like(compendium.description, searchPattern)
 				));
 			}
 		}
 
-		// Spell filters using shared constants
+		// Game system filter
+		if (gamesystem) {
+			conditions.push(eq(compendium.gamesystemKey, gamesystem));
+		}
+
+		// Spell filters using JSON extraction
 		if (spellLevel != null && spellLevel !== '') {
-			conditions.push(eq(jsonExtract(JSON_PATHS.SPELL_LEVEL), parseInt(spellLevel)));
+			conditions.push(eq(sql`json_extract(${compendium.data}, '$.level')`, parseInt(spellLevel)));
 		}
 
 		if (spellSchool) {
-			conditions.push(eq(jsonExtractLower(JSON_PATHS.SPELL_SCHOOL), spellSchool.toLowerCase()));
+			conditions.push(sql`lower(json_extract(${compendium.data}, '$.school.key')) = ${spellSchool.toLowerCase()}`);
 		}
 
-		// Creature filters using shared constants
+		// Creature filters using JSON extraction
 		if (challengeRating != null && challengeRating !== '') {
-			conditions.push(eq(jsonExtract(JSON_PATHS.CREATURE_CR), challengeRating));
+			conditions.push(eq(sql`json_extract(${compendium.data}, '$.challenge_rating_decimal')`, parseFloat(challengeRating)));
 		}
 
 		if (creatureType) {
-			conditions.push(eq(jsonExtractLower(JSON_PATHS.CREATURE_TYPE), creatureType.toLowerCase()));
+			conditions.push(sql`lower(json_extract(${compendium.data}, '$.type.key')) = ${creatureType.toLowerCase()}`);
 		}
 
 		// Filter out undefined values and build where clause
@@ -102,20 +100,23 @@ export const GET: RequestHandler = async ({ url }) => {
 		const whereClause = and(...validConditions);
 
 		// Get total count
-		const totalCount = await db.$count(compendiumItems, whereClause);
+		const countResult = await db
+			.select({ count: sql<number>`count(*)` })
+			.from(compendium)
+			.where(whereClause);
+		const totalCount = countResult[0]?.count || 0;
 
 		// Calculate offset
 		const offset = (page - 1) * limit;
 
 		// Determine sort column and direction
-		const sortColumn =
-			compendiumItems[sortBy as keyof typeof compendiumItems] || compendiumItems.name;
+		const sortColumn = compendium[sortBy as keyof typeof compendium] || compendium.name;
 		const orderFn = sortOrder === 'asc' ? asc : desc;
 
 		// Fetch items
 		const items = await db
 			.select()
-			.from(compendiumItems)
+			.from(compendium)
 			.where(whereClause)
 			.orderBy(orderFn(sortColumn as any))
 			.limit(limit)

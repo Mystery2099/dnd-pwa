@@ -1,63 +1,48 @@
 import { json } from '@sveltejs/kit';
+import type { RequestHandler } from './$types';
+import { providerRegistry } from '$lib/server/providers/registry';
+import { syncProviderById } from '$lib/server/services/sync/orchestrator';
 import { getDb } from '$lib/server/db';
-import { syncAllProviders } from '$lib/server/services/sync/orchestrator';
-import { invalidateAllCompendiumCache } from '$lib/server/repositories/compendium';
-import { setCacheVersion } from '$lib/server/cache-version';
-import { createModuleLogger } from '$lib/server/logger';
 
-const log = createModuleLogger('CompendiumSyncAPI');
-
-export const POST = async () => {
-	const db = await getDb();
-
+export const POST: RequestHandler = async ({ request }) => {
+	const { providerId } = await request.json();
+	
+	if (!providerId) {
+		return json({ error: 'Provider ID is required' }, { status: 400 });
+	}
+	
+	const provider = providerRegistry.getProvider(providerId);
+	
+	if (!provider) {
+		return json({ error: 'Provider not found or not enabled' }, { status: 404 });
+	}
+	
 	try {
-		const results = await syncAllProviders(db);
-
-		// Invalidate cache after sync
-		invalidateAllCompendiumCache();
-
-		// Also clear the repository's in-memory cache
-		const { compendiumRepository } = await import('$lib/server/repositories/compendium');
-		compendiumRepository.invalidateAllCache();
-
-		// Update cache version to trigger client invalidation
-		setCacheVersion(`sync-${Date.now()}`);
-
-		// Aggregate results for response
-		const totalSpells = results.reduce((sum, r) => sum + r.spells, 0);
-		const totalCreatures = results.reduce((sum, r) => sum + r.creatures, 0);
-		const totalErrors = results.reduce((sum, r) => sum + r.errors.length, 0);
-
-		log.info(
-			{
-				spells: totalSpells,
-				creatures: totalCreatures,
-				providers: results.map((r) => ({
-					id: r.providerId,
-					spells: r.spells,
-					creatures: r.creatures,
-					errors: r.errors
-				}))
-			},
-			'Sync completed'
-		);
-
+		const db = await getDb();
+		const result = await syncProviderById(db, providerId);
+		
 		return json({
-			ok: totalErrors === 0,
-			summary: {
-				spells: totalSpells,
-				creatures: totalCreatures
-			},
-			errors: totalErrors > 0 ? results.flatMap((r) => r.errors) : undefined
+			success: true,
+			provider: providerId,
+			totalItems: result.totalItems,
+			counts: result.counts
 		});
 	} catch (error) {
-		log.error({ error }, 'Sync failed');
-		return json(
-			{
-				ok: false,
-				error: error instanceof Error ? error.message : 'Unknown error'
-			},
-			{ status: 500 }
-		);
+		console.error('Sync failed:', error);
+		return json({ 
+			error: error instanceof Error ? error.message : 'Sync failed' 
+		}, { status: 500 });
 	}
+};
+
+export const GET: RequestHandler = async () => {
+	const providers = providerRegistry.getEnabledProviders();
+	
+	const syncStatus = providers.map(p => ({
+		id: p.id,
+		name: p.name,
+		supportedTypes: p.supportedTypes
+	}));
+	
+	return json({ providers: syncStatus });
 };

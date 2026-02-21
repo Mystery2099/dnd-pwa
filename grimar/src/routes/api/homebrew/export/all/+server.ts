@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { getAllHomebrewItems } from '$lib/server/repositories/compendium';
+import { getUserHomebrewItems } from '$lib/server/repositories/compendium';
 
 export const GET: RequestHandler = async ({ locals }) => {
 	const user = locals.user;
@@ -8,13 +8,13 @@ export const GET: RequestHandler = async ({ locals }) => {
 		return json({ error: 'Unauthorized' }, { status: 401 });
 	}
 
-	const items = await getAllHomebrewItems();
+	const items = await getUserHomebrewItems(user.username);
 
 	const exportData = items.map((item) => ({
 		name: item.name,
-		desc: item.summary || '',
+		desc: item.description || '',
 		createdBy: item.createdBy,
-		...JSON.parse(item.jsonData || '{}')
+		...item.data
 	}));
 
 	return new Response(JSON.stringify(exportData, null, 2), {

@@ -9,7 +9,7 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { getDb } from '$lib/server/db';
-import { compendiumItems } from '$lib/server/db/schema';
+import { compendium } from '$lib/server/db/schema';
 import { createModuleLogger } from '$lib/server/logger';
 
 const log = createModuleLogger('CompendiumExportAPI');
@@ -28,7 +28,7 @@ export const GET: RequestHandler = async ({ url, request }) => {
 
 		if (shouldExportFull) {
 			// Full export: load all data and count in one pass
-			const allItems = await db.select().from(compendiumItems);
+			const allItems = await db.select().from(compendium);
 			for (const item of allItems) {
 				if (item.type) {
 					typeCounts[item.type] = (typeCounts[item.type] || 0) + 1;
@@ -36,19 +36,24 @@ export const GET: RequestHandler = async ({ url, request }) => {
 				}
 			}
 			items = allItems.map((item) => ({
+				key: item.key,
 				type: item.type,
 				source: item.source,
-				externalId: item.externalId,
 				name: item.name,
-				summary: item.summary,
-				details: item.details
+				description: item.description,
+				data: item.data,
+				documentKey: item.documentKey,
+				gamesystemKey: item.gamesystemKey
 			}));
 		} else {
 			// Counts only: use query API for efficiency
-			const spells = await db.$count(compendiumItems, undefined);
-			const creatures = await db.$count(compendiumItems, undefined);
-			typeCounts = { spell: spells, creature: creatures };
-			totalCount = spells + creatures;
+			const allItems = await db.select().from(compendium);
+			for (const item of allItems) {
+				if (item.type) {
+					typeCounts[item.type] = (typeCounts[item.type] || 0) + 1;
+					totalCount++;
+				}
+			}
 		}
 
 		const currentChecksum = nanoid(12);
