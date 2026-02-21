@@ -8,14 +8,12 @@ import { createModuleLogger } from '$lib/server/logger';
 
 const log = createModuleLogger('SyncMetadata');
 
-// Define the table row type inline (avoid naming conflict with interface)
 type SyncMetadataRow = typeof syncMetadataTable.$inferSelect;
 
 export interface SyncMetadata {
 	lastSyncTime: string | null;
 	syncCount: number;
 	lastSyncDuration: number;
-	lastSyncType: 'full' | 'incremental';
 }
 
 export interface ProviderSyncMetadata extends SyncMetadata {
@@ -23,9 +21,6 @@ export interface ProviderSyncMetadata extends SyncMetadata {
 }
 
 export class SyncMetadataManager {
-	/**
-	 * Get last sync timestamp for a provider
-	 */
 	async getLastSyncTime(db: Db, providerId: string): Promise<number | null> {
 		try {
 			const result = await db
@@ -33,22 +28,19 @@ export class SyncMetadataManager {
 				.from(syncMetadataTable)
 				.where(eq(syncMetadataTable.providerId, providerId))
 				.limit(1);
-			return result[0]?.lastSyncAt ?? null;
+			const ts = result[0]?.lastSyncAt;
+			return ts ? ts.getTime() : null;
 		} catch (error) {
 			log.warn({ providerId, error }, 'Could not get last sync time');
 			return null;
 		}
 	}
 
-	/**
-	 * Update sync metadata after completion
-	 */
 	async updateSyncMetadata(
 		db: Db,
 		providerId: string,
-		timestamp: number,
-		itemsSynced: number,
-		syncType: 'full' | 'incremental' = 'full'
+		timestamp: Date,
+		itemCount: number
 	): Promise<void> {
 		try {
 			await db
@@ -56,19 +48,17 @@ export class SyncMetadataManager {
 				.values({
 					providerId,
 					lastSyncAt: timestamp,
-					lastSyncType: syncType,
-					itemsSynced
+					itemCount
 				})
 				.onConflictDoUpdate({
 					target: syncMetadataTable.providerId,
 					set: {
 						lastSyncAt: timestamp,
-						lastSyncType: syncType,
-						itemsSynced
+						itemCount
 					}
 				});
 			log.info(
-				{ providerId, itemsSynced, timestamp: new Date(timestamp).toISOString() },
+				{ providerId, itemCount, timestamp: timestamp.toISOString() },
 				'Updated metadata'
 			);
 		} catch (error) {
@@ -76,9 +66,6 @@ export class SyncMetadataManager {
 		}
 	}
 
-	/**
-	 * Get comprehensive sync metadata for all providers
-	 */
 	async getSyncMetadata(db: Db): Promise<ProviderSyncMetadata[]> {
 		try {
 			const results = await db
@@ -87,10 +74,9 @@ export class SyncMetadataManager {
 				.orderBy(desc(syncMetadataTable.lastSyncAt));
 			return results.map((r: SyncMetadataRow) => ({
 				providerId: r.providerId,
-				lastSyncTime: r.lastSyncAt ? new Date(r.lastSyncAt).toISOString() : null,
-				syncCount: r.itemsSynced ?? 0,
-				lastSyncDuration: 0, // Not tracked
-				lastSyncType: (r.lastSyncType as 'full' | 'incremental') ?? 'full'
+				lastSyncTime: r.lastSyncAt ? r.lastSyncAt.toISOString() : null,
+				syncCount: r.itemCount ?? 0,
+				lastSyncDuration: 0
 			}));
 		} catch (error) {
 			log.warn({ error }, 'Could not get sync metadata');
@@ -98,9 +84,6 @@ export class SyncMetadataManager {
 		}
 	}
 
-	/**
-	 * Get metadata for a specific provider
-	 */
 	async getProviderMetadata(db: Db, providerId: string): Promise<ProviderSyncMetadata | null> {
 		try {
 			const result = await db
@@ -112,10 +95,9 @@ export class SyncMetadataManager {
 			const r = result[0] as SyncMetadataRow;
 			return {
 				providerId: r.providerId,
-				lastSyncTime: r.lastSyncAt ? new Date(r.lastSyncAt).toISOString() : null,
-				syncCount: r.itemsSynced ?? 0,
-				lastSyncDuration: 0,
-				lastSyncType: (r.lastSyncType as 'full' | 'incremental') ?? 'full'
+				lastSyncTime: r.lastSyncAt ? r.lastSyncAt.toISOString() : null,
+				syncCount: r.itemCount ?? 0,
+				lastSyncDuration: 0
 			};
 		} catch (error) {
 			log.warn({ providerId, error }, 'Could not get metadata');
