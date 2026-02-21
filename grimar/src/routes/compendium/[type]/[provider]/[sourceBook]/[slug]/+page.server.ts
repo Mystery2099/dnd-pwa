@@ -1,6 +1,6 @@
 import type { PageServerLoad } from './$types';
 import { compendiumService } from '$lib/server/services/compendium';
-import { getCompendiumConfig, getDbTypeFromPath } from '$lib/core/constants/compendium';
+import { getCompendiumTypeConfig, getDbTypeFromPath } from '$lib/core/constants/compendium';
 import { error } from '@sveltejs/kit';
 import { requireUser } from '$lib/server/services/auth';
 import { createModuleLogger } from '$lib/server/logger';
@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 	const { type: pathType, provider, sourceBook, slug } = params;
 
 	try {
-		const config = getCompendiumConfig(pathType);
+		const config = getCompendiumTypeConfig(pathType);
 		const dbType = getDbTypeFromPath(pathType);
 
 		log.info({ pathType, provider, sourceBook, slug }, 'Loading compendium item');
@@ -24,16 +24,16 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 
 		if (!item) {
 			log.warn({ provider, sourceBook, slug }, 'Item not found');
-			throw error(404, `${config.ui.displayName} not found`);
+			throw error(404, `${config.displayName} not found`);
 		}
 
-		// Get navigation for prev/next (only if item has an id)
+		// Get navigation for prev/next (only if item has a key)
 		let navigation = null;
-		if (item.id) {
+		if (item.key) {
 			try {
-				navigation = await compendiumService.getNavigation(dbType, item.id);
+				navigation = await compendiumService.getNavigation(dbType, item.key);
 			} catch (navError) {
-				log.warn({ error: navError, itemId: item.id }, 'Failed to load navigation');
+				log.warn({ error: navError, itemKey: item.key }, 'Failed to load navigation');
 				navigation = null;
 			}
 		}

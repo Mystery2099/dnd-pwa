@@ -6,7 +6,7 @@
 	import { browser } from '$app/environment';
 	import { createCompendiumAllQuery } from '$lib/core/client/queries';
 	import { stripSlugPrefix } from '$lib/core/utils/slug';
-	import { getCompendiumConfig } from '$lib/core/constants/compendium';
+	import { getCompendiumTypeConfig } from '$lib/core/constants/compendium';
 	import CompendiumShell from '$lib/features/compendium/components/layout/CompendiumShell.svelte';
 	import CompendiumSidebar from '$lib/features/compendium/components/layout/CompendiumSidebar.svelte';
 	import FilterGroup from '$lib/features/compendium/components/layout/FilterGroup.svelte';
@@ -14,7 +14,7 @@
 	import CompendiumCardItem from '$lib/features/compendium/components/EntryCard.svelte';
 	import CompendiumEntryView from '$lib/features/compendium/components/CompendiumEntryView.svelte';
 	import VirtualList from '$lib/components/ui/VirtualList.svelte';
-	import { Download, RefreshCw } from 'lucide-svelte';
+	import { Download, RefreshCw, Book } from 'lucide-svelte';
 	import { CompendiumFilterStore } from '$lib/features/compendium/stores/filter.svelte';
 	import type { CompendiumItem, CompendiumType } from '$lib/core/types/compendium';
 	import CompendiumSkeleton from '$lib/features/compendium/components/ui/CompendiumSkeleton.svelte';
@@ -36,12 +36,19 @@
 	const dbType = $derived(data.dbType);
 	// Load config client-side to avoid SSR serialization issues with Svelte components
 	// Use non-null assertion since pathType should always be defined when page renders
-	const config = $derived(pathType ? getCompendiumConfig(pathType) : {
-		ui: { displayName: 'Loading...' }
-	} as ReturnType<typeof getCompendiumConfig>);
+	const config = $derived(pathType ? getCompendiumTypeConfig(pathType) : {
+		displayName: 'Loading...',
+		dbType: 'spells' as const,
+		description: '',
+		icon: Book,
+		color: 'blue',
+		category: 'primary' as const,
+		filters: [],
+		sorting: { options: [], default: { value: 'name', direction: 'asc' as const } }
+	} as ReturnType<typeof getCompendiumTypeConfig>);
 
 	// Page title
-	const pageTitle = $derived(`${config.ui.displayName} - Grimar Compendium`);
+	const pageTitle = $derived(`${config.displayName} - Grimar Compendium`);
 
 	// TanStack Query for compendium data - only available on client
 	// Use onMount to avoid hydration mismatch (effects run during hydration)
@@ -57,14 +64,14 @@
 
 	// Map CompendiumTypeConfig to CompendiumFilterConfig expected by the store
 	const filterConfig = $derived({
-		setParams: config.filters.reduce(
-			(acc: Record<string, string>, f: any) => ({ ...acc, [f.urlParam]: f.key }),
+		setParams: (config.filters ?? []).reduce(
+			(acc: Record<string, string>, f) => ({ ...acc, [f.urlParam]: f.key }),
 			{}
 		),
-		validSortBy: config.sorting.options.map((o: any) => o.column),
+		validSortBy: (config.sorting?.options ?? []).map((o) => o.value),
 		defaults: {
-			sortBy: config.sorting.default.column,
-			sortOrder: config.sorting.default.direction
+			sortBy: config.sorting?.default?.value ?? 'name',
+			sortOrder: config.sorting?.default?.direction ?? 'asc'
 		}
 	});
 
@@ -95,12 +102,12 @@
 	});
 
 	// Navigation helper - finds adjacent items in the current list
-	// Use database id to uniquely identify items (handles duplicates from different sources)
+	// Use key to uniquely identify items (handles duplicates from different sources)
 	let itemNav = $derived(() => {
 		const items = filteredItems;
 		if (!selectedItem || items.length === 0) return null;
-		const selectedId = selectedItem.id;
-		const idx = items.findIndex((i) => i.id === selectedId);
+		const selectedKey = selectedItem.key;
+		const idx = items.findIndex((i) => i.key === selectedKey);
 		if (idx === -1) return null;
 		return {
 			prev: items[idx - 1] ?? null,
@@ -112,8 +119,8 @@
 	function selectItem(item: CompendiumItem) {
 		selectedItem = item;
 		// Update URL to include item identifier for deep linking
-		const sourceBook = item.sourceBook || 'SRD';
-		const itemId = stripSlugPrefix(item.externalId, sourceBook) || item.name?.toLowerCase().replace(/\s+/g, '-') || '';
+		const sourceBook = (item.data?.document as { name?: string })?.name || item.documentKey || 'SRD';
+		const itemId = stripSlugPrefix(item.key, sourceBook) || item.name?.toLowerCase().replace(/\s+/g, '-') || '';
 		const provider = item.source || 'open5e';
 		pushState(`/compendium/${pathType}/${provider}/${sourceBook}/${itemId}`, {});
 	}
@@ -129,11 +136,13 @@
 	// Restore filter state from sessionStorage on mount
 	onMount(() => {
 		if (!filters) return;
-		const saved = sessionStorage.getItem(config.routes.storageKeyFilters);
-		if (saved) {
-			try {
-				filters.deserialize(JSON.parse(saved));
-				sessionStorage.removeItem(config.routes.storageKeyFilters);
+		const saved = config.routes?.storageKeyFilters ? sessionStorage.getItem(config.routes.storageKeyFilters) : null;
+			if (saved) {
+				try {
+					filters.deserialize(JSON.parse(saved));
+					if (config.routes?.storageKeyFilters) {
+						sessionStorage.removeItem(config.routes.storageKeyFilters);
+					}
 			} catch (e) {
 				console.warn('Failed to restore filter state:', e);
 			}
@@ -249,7 +258,7 @@
 	<CompendiumSidebar
 		onClear={clearFilters}
 		onSort={handleSort}
-		sortOptions={config.sorting.options}
+		sortOptions={config.sorting?.options ?? []}
 		initialSort={filters ? `${filters.sortBy}-${filters.sortOrder}` : 'name-asc'}
 		hasActiveFilters={filters?.hasActiveFilters ?? false}
 		filters={filtersSnippet}
@@ -264,7 +273,7 @@
 	<!-- Fixed header -->
 	<header class="mb-4 shrink-0 border-b border-[var(--color-border)] pb-4">
 		<h1 class="text-2xl font-bold text-[var(--color-text-primary)]">
-			{config.ui.displayName}
+			{config.ui?.displayName ?? config.displayName}
 		</h1>
 	</header>
 
@@ -291,13 +300,17 @@
 				<div class="z-50 flex h-full items-center justify-center p-8">
 					<div class="max-w-md text-center">
 						<div class="mb-6 text-6xl">
-							<config.ui.icon class="mx-auto size-16" />
+							{#if config.ui?.icon}
+								<config.ui.icon class="mx-auto size-16" />
+							{:else}
+								<Book class="mx-auto size-16" />
+							{/if}
 						</div>
 						<h3 class="mb-4 text-xl font-bold text-[var(--color-text-primary)]">
-							{config.ui.databaseEmptyState.title}
+							{config.ui?.databaseEmptyState?.title ?? 'No items found'}
 						</h3>
 						<p class="mb-6 text-[var(--color-text-muted)]">
-							{config.ui.databaseEmptyState.description}
+							{config.ui?.databaseEmptyState?.description ?? 'Sync to load data'}
 						</p>
 
 						<!-- Sync Button -->
@@ -312,7 +325,7 @@
 									Syncing...
 								{:else}
 									<Download class="h-4 w-4" />
-									{config.ui.databaseEmptyState.ctaText || 'Sync Now'}
+									{config.ui?.databaseEmptyState?.ctaText || 'Sync Now'}
 								{/if}
 							</button>
 						</div>
@@ -338,7 +351,7 @@
 				<div
 					class="flex flex-1 items-center justify-center py-12 text-center text-[var(--color-text-muted)]"
 				>
-					{config.ui.emptyState.title}. {config.ui.emptyState.description}
+					{config.ui?.emptyState?.title ?? 'No items'}. {config.ui?.emptyState?.description ?? 'Adjust your filters'}
 				</div>
 			{:else}
 				<div class="relative z-10 max-h-[calc(100vh-280px)] min-h-0 flex-1">
@@ -351,19 +364,19 @@
 							minCardWidth={220}
 						>
 							{#snippet children(item: CompendiumItem, _index: number)}
-								{@const sourcePrefix = item.externalId?.includes('_')
-									? item.externalId.split('_', 2)[0]
+								{@const sourcePrefix = item.key?.includes('_')
+									? item.key.split('_', 2)[0]
 									: ''}
-								{@const itemId = item.externalId?.includes('_')
-									? item.externalId.split('_', 2)[1]
-									: item.externalId}
+								{@const itemId = item.key?.includes('_')
+									? item.key.split('_', 2)[1]
+									: item.key}
 								{@const slug = `providers/${sourcePrefix}/${itemId}`}
 								<CompendiumCardItem
 									title={item.name}
-									subtitle={config.display.subtitle(item)}
-									sourceBook={item.sourceBook}
-									icon={config.ui.icon}
-									school={config.display.cardSchool?.(item)}
+									subtitle={config.display?.subtitle?.(item) ?? ''}
+									sourceBook={(item.data?.document as { name?: string })?.name || item.documentKey || undefined}
+									icon={config.ui?.icon ?? config.icon}
+									school={config.display?.cardSchool?.(item)}
 									variant="grid"
 									type={pathType}
 									{slug}
@@ -374,19 +387,19 @@
 					{:else}
 						<VirtualList items={filteredItems} class="glass-scroll p-1">
 							{#snippet children(item: CompendiumItem, _index: number)}
-								{@const sourcePrefix = item.externalId?.includes('_')
-									? item.externalId.split('_', 2)[0]
+								{@const sourcePrefix = item.key?.includes('_')
+									? item.key.split('_', 2)[0]
 									: ''}
-								{@const itemId = item.externalId?.includes('_')
-									? item.externalId.split('_', 2)[1]
-									: item.externalId}
+								{@const itemId = item.key?.includes('_')
+									? item.key.split('_', 2)[1]
+									: item.key}
 								{@const slug = `providers/${sourcePrefix}/${itemId}`}
 								<div class="p-1">
 									<CompendiumListItem
 										title={item.name}
-										subtitle={config.display.subtitle(item)}
-										sourceBook={item.sourceBook}
-										icon={config.ui.icon}
+										subtitle={config.display?.subtitle?.(item) ?? ''}
+										sourceBook={(item.data?.document as { name?: string })?.name || item.documentKey || undefined}
+										icon={config.ui?.icon ?? config.icon}
 										type={pathType}
 										{slug}
 										onclick={() => selectItem(item)}
@@ -402,18 +415,18 @@
 
 	<!-- Detail View Overlay -->
 	{#if selectedItem}
-		{@const sourceBook = selectedItem.sourceBook || 'SRD'}
+		{@const sourceBook = (selectedItem.data?.document as { name?: string })?.name || selectedItem.documentKey || 'SRD'}
 		<div class="absolute inset-0 z-50 p-2 lg:p-4" transition:fly={{ x: 20, duration: 300 }}>
 			<CompendiumEntryView
 				title={selectedItem.name}
-				type={config.ui.displayName}
+				type={config.ui?.displayName ?? config.displayName}
 				{sourceBook}
-				tags={config.display.tags(selectedItem)}
+				tags={config.display?.tags?.(selectedItem) ?? []}
 				onClose={closeOverlay}
-				accentColor={config.display.detailAccent(selectedItem)}
+				accentColor={config.display?.detailAccent?.(selectedItem) ?? ''}
 				animate={false}
 			>
-				<EntryContentRenderer dbType={dbType as CompendiumType} details={selectedItem.details ?? {}} />
+				<EntryContentRenderer dbType={dbType as CompendiumType} details={selectedItem.data ?? {}} />
 			</CompendiumEntryView>
 		</div>
 	{/if}

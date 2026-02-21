@@ -3,7 +3,7 @@
 	import { createKeyboardNav } from '$lib/core/utils/keyboardNav';
 	import CompendiumEntryView from '$lib/features/compendium/components/CompendiumEntryView.svelte';
 	import EntryViewNavigation from '$lib/features/compendium/components/EntryViewNavigation.svelte';
-	import { getCompendiumConfig } from '$lib/core/constants/compendium';
+	import { getCompendiumTypeConfig } from '$lib/core/constants/compendium';
 	import type { PageData } from './$types';
 	import type { CompendiumItem } from '$lib/core/types/compendium';
 	import type { CompendiumType } from '$lib/core/types/compendium/unified';
@@ -19,19 +19,19 @@
 	const pathType = $derived(data.pathType);
 	const provider = $derived(data.provider);
 	const sourceBook = $derived(data.sourceBook);
-	const config = $derived(getCompendiumConfig(pathType));
+	const config = $derived(getCompendiumTypeConfig(pathType));
 
 	// Cast item to CompendiumItem for config functions that expect it
 	// The unified types have the same essential properties
 	const itemForConfig = $derived(item as unknown as CompendiumItem);
 
 	// Get accent color from config
-	const accentColor = $derived(config.display.detailAccent(itemForConfig));
+	const accentColor = $derived(config.display?.detailAccent?.(itemForConfig) ?? '');
 
 	// Build URLs with provider/sourceBook
 	const basePath = $derived(`/compendium/${pathType}/${provider}/${sourceBook}`);
-	const prevUrl = $derived(nav.prev ? `${basePath}/${nav.prev.slug}` : null);
-	const nextUrl = $derived(nav.next ? `${basePath}/${nav.next.slug}` : null);
+	const prevUrl = $derived(nav.prev ? `${basePath}/${nav.prev.key}` : null);
+	const nextUrl = $derived(nav.next ? `${basePath}/${nav.next.key}` : null);
 	// URL for "All X" button - goes to full list without provider/sourceBook filter
 	const allUrl = $derived(`/compendium/${pathType}`);
 	const listUrl = $derived(allUrl);
@@ -42,23 +42,24 @@
 			navigation: nav as { prev: CompendiumItem | null; next: CompendiumItem | null },
 			basePath,
 			onClose: handleClose,
-			listUrlKey: config.routes.storageKeyListUrl
+			listUrlKey: config.routes?.storageKeyListUrl ?? 'compendium-list-url'
 		});
 		return cleanup;
 	});
 
 	// Close handler that preserves filters
 	function handleClose() {
-		const savedListUrl = sessionStorage.getItem(config.routes.storageKeyListUrl);
+		const storageKey = config.routes?.storageKeyListUrl;
+		const savedListUrl = storageKey ? sessionStorage.getItem(storageKey) : null;
 		goto(savedListUrl || listUrl);
 	}
 </script>
 
 <svelte:head>
-	<title>{item.name} - {config.ui.displayName} - Grimar Compendium</title>
-	<meta name="description" content={config.display.metaDescription(itemForConfig)} />
+	<title>{item.name} - {config.ui?.displayName ?? config.displayName} - Grimar Compendium</title>
+	<meta name="description" content={config.display?.metaDescription?.(itemForConfig) ?? ''} />
 	<meta property="og:title" content={item.name} />
-	<meta property="og:description" content={config.display.subtitle(itemForConfig)} />
+	<meta property="og:description" content={config.display?.subtitle?.(itemForConfig) ?? ''} />
 	<meta property="og:type" content="website" />
 </svelte:head>
 
@@ -67,9 +68,9 @@
 
 	<CompendiumEntryView
 		title={item.name}
-		type={config.ui.displayName}
+		type={config.ui?.displayName ?? config.displayName}
 		{sourceBook}
-		tags={config.display.tags(itemForConfig)}
+		tags={config.display?.tags?.(itemForConfig) ?? []}
 		onClose={handleClose}
 		{accentColor}
 	>
@@ -78,7 +79,7 @@
 
 	<!-- Keyboard shortcuts hint -->
 	<div class="mt-6 text-center text-xs text-[var(--color-text-muted)]">
-		<span class="mr-4">← → Navigate {config.ui.displayName.toLowerCase()}</span>
+		<span class="mr-4">← → Navigate {(config.ui?.displayName ?? config.displayName).toLowerCase()}</span>
 		<span>Esc Close</span>
 	</div>
 </div>

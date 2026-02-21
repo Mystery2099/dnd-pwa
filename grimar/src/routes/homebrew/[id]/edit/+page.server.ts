@@ -1,12 +1,12 @@
 import { json } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { requireUser } from '$lib/server/services/auth';
-import { getHomebrewItemById, updateHomebrewItem } from '$lib/server/repositories/compendium';
+import { getHomebrewItemByKey, updateHomebrewItem } from '$lib/server/repositories/compendium';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	const user = requireUser(locals);
 	
-	const item = await getHomebrewItemById(Number(params.id));
+	const item = await getHomebrewItemByKey(params.id);
 	
 	if (!item || item.source !== 'homebrew') {
 		throw new Error('Item not found');
@@ -20,11 +20,11 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	
 	return {
 		item: {
-			id: item.id,
+			key: item.key,
 			name: item.name,
 			type: item.type,
-			summary: item.summary || '',
-			jsonData: item.jsonData ? JSON.stringify(JSON.parse(item.jsonData), null, 2) : '{}'
+			description: item.description ?? '',
+			data: item.data ?? '{}'
 		},
 		user: {
 			username: user.username,
@@ -37,7 +37,7 @@ export const actions: Actions = {
 	default: async ({ request, params, locals }) => {
 		const user = requireUser(locals);
 		
-		const item = await getHomebrewItemById(Number(params.id));
+		const item = await getHomebrewItemByKey(params.id);
 		
 		if (!item || item.source !== 'homebrew') {
 			return json({ error: 'Item not found' }, { status: 404 });
@@ -51,19 +51,18 @@ export const actions: Actions = {
 		
 		const formData = await request.formData();
 		const name = formData.get('name') as string;
-		const summary = formData.get('summary') as string;
-		const jsonData = formData.get('jsonData') as string;
+		const description = formData.get('description') as string;
+		const data = formData.get('data') as string;
 		
 		try {
-			const parsed = JSON.parse(jsonData);
+			const parsed = JSON.parse(data);
 			
 			await updateHomebrewItem(
-				Number(params.id),
+				params.id,
 				{
 					name,
-					summary,
-					jsonData: JSON.stringify(parsed),
-					details: {}
+					description,
+					data: parsed
 				},
 				user.username,
 				user.role

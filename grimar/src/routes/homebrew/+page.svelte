@@ -29,11 +29,11 @@
 		return data.user.role === 'admin' || item.createdBy === data.user.username;
 	}
 
-	async function deleteItem(itemId: number, itemName: string) {
+	async function deleteItem(itemKey: string, itemName: string) {
 		if (!confirm(`Delete "${itemName}"? This cannot be undone.`)) return;
 
 		try {
-			const response = await fetch(`/api/homebrew/${itemId}`, {
+			const response = await fetch(`/api/homebrew/${encodeURIComponent(itemKey)}`, {
 				method: 'DELETE'
 			});
 
@@ -87,7 +87,7 @@
 							<li class="rounded bg-[var(--color-bg-elevated)] p-2">
 								<div class="flex items-center justify-between">
 									<a
-										href="/compendium/{item.type}/homebrew/{item.id}"
+										href="/compendium/{item.type}/homebrew/{item.key}"
 										class="text-[var(--color-text-primary)] hover:underline"
 									>
 										{item.name}
@@ -95,13 +95,13 @@
 									{#if canEdit(item)}
 										<div class="flex gap-2">
 											<a
-												href="/homebrew/{item.id}/edit"
+												href="/homebrew/{item.key}/edit"
 												class="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
 											>
 												Edit
 											</a>
 											<button
-												onclick={() => deleteItem(item.id, item.name)}
+												onclick={() => deleteItem(item.key, item.name)}
 												class="text-sm text-red-400 hover:text-red-300"
 											>
 												Delete

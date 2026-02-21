@@ -26,13 +26,13 @@
 		error = '';
 
 		try {
-			const response = await fetch(`/api/homebrew/${data.item.id}`, {
+			const response = await fetch(`/api/homebrew/${data.item.key}`, {
 				method: 'PUT',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
 					name: formData.name,
-					summary: formData.summary,
-					jsonData: JSON.stringify(formData)
+					description: formData.description,
+					data: JSON.stringify(formData)
 				})
 			});
 
@@ -70,10 +70,10 @@
 		<div class="mb-4 rounded bg-red-900/30 p-3 text-red-400">{error}</div>
 	{/if}
 
-	{#if data.item.jsonData}
+	{#if data.item.data}
 		<HomebrewEditor
 			contentType={data.item.type}
-			initialData={JSON.parse(data.item.jsonData)}
+			initialData={data.item.data}
 			{saving}
 			onsubmit={handleSubmit}
 		/>
