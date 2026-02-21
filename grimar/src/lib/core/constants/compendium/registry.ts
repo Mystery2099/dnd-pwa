@@ -11,6 +11,7 @@
  */
 
 import type { ComponentType } from 'svelte';
+import type { CompendiumItem } from '$lib/core/types/compendium';
 import {
 	Flame,
 	Skull,
@@ -32,6 +33,30 @@ import {
 
 export type CategoryId = 'primary' | 'character' | 'equipment' | 'abilities' | 'rules' | 'reference';
 
+export interface FilterOption {
+	value: string;
+	label: string;
+	color?: { base: string };
+}
+
+export interface FilterConfig {
+	urlParam: string;
+	key: string;
+	title: string;
+	openByDefault?: boolean;
+	values: FilterOption[];
+}
+
+export interface SortingOption {
+	value: string;
+	label: string;
+}
+
+export interface SortingConfig {
+	options: SortingOption[];
+	default: { value: string; direction: 'asc' | 'desc' };
+}
+
 export interface TypeRegistryEntry {
 	dbType: string;
 	displayName: string;
@@ -43,8 +68,26 @@ export interface TypeRegistryEntry {
 	showInSidebar?: boolean;
 	aliases?: string[];
 	urlPath?: string;
-	configSource?: string;
 	entryComponent?: string;
+	filters?: FilterConfig[];
+	sorting?: SortingConfig;
+	ui?: {
+		displayName: string;
+		icon: ComponentType;
+		databaseEmptyState: { title: string; description: string; ctaText?: string };
+		emptyState: { title: string; description: string };
+	};
+	display?: {
+		subtitle: (item: CompendiumItem) => string;
+		cardSchool?: (item: CompendiumItem) => string | undefined;
+		tags: (item: CompendiumItem) => string[];
+		detailAccent: (item: CompendiumItem) => string;
+		metaDescription?: (item: CompendiumItem) => string;
+	};
+	routes?: {
+		storageKeyFilters: string;
+		storageKeyListUrl?: string;
+	};
 }
 
 export const COMPENDIUM_TYPE_REGISTRY: Record<string, TypeRegistryEntry> = {
@@ -56,9 +99,7 @@ export const COMPENDIUM_TYPE_REGISTRY: Record<string, TypeRegistryEntry> = {
 		color: 'rose',
 		category: 'primary',
 		showOnDashboard: true,
-		showInSidebar: true,
-		configSource: 'spells',
-		entryComponent: 'SpellEntryContent'
+		showInSidebar: true
 	},
 	creatures: {
 		dbType: 'creatures',
@@ -69,9 +110,7 @@ export const COMPENDIUM_TYPE_REGISTRY: Record<string, TypeRegistryEntry> = {
 		category: 'primary',
 		showOnDashboard: true,
 		showInSidebar: true,
-		aliases: ['monsters'],
-		configSource: 'creatures',
-		entryComponent: 'MonsterEntryContent'
+		aliases: ['monsters']
 	},
 	classes: {
 		dbType: 'classes',
@@ -126,9 +165,7 @@ export const COMPENDIUM_TYPE_REGISTRY: Record<string, TypeRegistryEntry> = {
 		showOnDashboard: true,
 		showInSidebar: true,
 		aliases: ['races'],
-		urlPath: 'races',
-		configSource: 'races',
-		entryComponent: 'RaceEntryContent'
+		urlPath: 'races'
 	},
 	magic_items: {
 		dbType: 'magicitems',
@@ -139,9 +176,7 @@ export const COMPENDIUM_TYPE_REGISTRY: Record<string, TypeRegistryEntry> = {
 		category: 'equipment',
 		showOnDashboard: true,
 		showInSidebar: true,
-		urlPath: 'items',
-		configSource: 'items',
-		entryComponent: 'ItemEntryContent'
+		urlPath: 'items'
 	},
 	weapons: {
 		dbType: 'weapons',
@@ -275,9 +310,7 @@ export const COMPENDIUM_TYPE_REGISTRY: Record<string, TypeRegistryEntry> = {
 		color: 'blue',
 		category: 'reference',
 		showOnDashboard: true,
-		showInSidebar: true,
-		configSource: 'planes',
-		entryComponent: 'LookupEntryContent'
+		showInSidebar: true
 	},
 	itemsets: {
 		dbType: 'itemsets',
