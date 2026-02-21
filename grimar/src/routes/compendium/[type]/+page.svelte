@@ -137,7 +137,7 @@
 							<h3 class="font-semibold text-[var(--color-text-primary)] group-hover:text-accent transition-colors line-clamp-1">
 								{item.name}
 							</h3>
-							{#if item.source}
+							{#if item.source && item.source !== 'open5e'}
 								<p class="mt-1 text-sm text-[var(--color-text-muted)] line-clamp-1">
 									{item.source}
 								</p>

@@ -113,12 +113,16 @@
 						<h1 class="text-3xl font-bold text-[var(--color-text-primary)]">
 							{item.name}
 						</h1>
-						{#if item.source}
+						{#if item.source && item.source !== 'open5e'}
 							<p class="mt-1 text-sm text-[var(--color-text-muted)]">
 								{item.source}
 								{#if (itemData.document as { name?: string })?.name}
 									• {(itemData.document as { name?: string }).name}
 								{/if}
+							</p>
+						{:else if (itemData.document as { name?: string })?.name}
+							<p class="mt-1 text-sm text-[var(--color-text-muted)]">
+								{(itemData.document as { name?: string }).name}
 							</p>
 						{/if}
 					</div>
