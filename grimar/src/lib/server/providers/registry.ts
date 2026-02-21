@@ -6,7 +6,7 @@
  */
 
 import type { CompendiumProvider, ProviderHealthStatus } from './types';
-import { Open5eProvider } from './open5e';
+import { Open5eApiProvider } from './open5e-api';
 import { HomebrewProvider } from './homebrew';
 import { createModuleLogger } from '$lib/server/logger';
 
@@ -24,7 +24,7 @@ export interface ProviderDefinition {
 const PROVIDER_DEFINITIONS: ProviderDefinition[] = [
 	{
 		id: 'open5e',
-		create: () => new Open5eProvider()
+		create: () => new Open5eApiProvider()
 	},
 	{
 		id: 'homebrew',

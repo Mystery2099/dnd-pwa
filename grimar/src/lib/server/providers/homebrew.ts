@@ -2,6 +2,7 @@
  * Homebrew Provider
  *
  * File-based provider for custom homebrew content.
+ * Aligned with Open5e API v2 schema for consistency.
  * Reads data from JSON files in the data/homebrew directory.
  */
 
@@ -10,71 +11,42 @@ import { join } from 'path';
 import { nanoid } from 'nanoid';
 import { BaseProvider } from './base-provider';
 import type { ProviderListResponse, TransformResult } from './types';
-import type { CompendiumTypeName } from '$lib/core/types/compendium';
+import { COMPENDIUM_TYPES, type CompendiumType } from '$lib/server/db/schema';
 import { createModuleLogger } from '$lib/server/logger';
 
 const log = createModuleLogger('HomebrewProvider');
 
-/**
- * Homebrew item structure (follows Open5e format for compatibility)
- */
 interface HomebrewItem {
-	slug?: string;
-	index?: string;
-	id?: string;
+	key?: string;
 	name: string;
-	level?: number | string;
-	school?: string | { name: string };
-	size?: string;
-	type?: string;
-	challenge_rating?: number | string;
-	feat?: {
-		prerequisites?: string[];
-		description?: string[];
+	desc?: string;
+	document?: {
+		key?: string;
+		name?: string;
+		publisher?: { key?: string; name?: string };
+		gamesystem?: { key?: string; name?: string };
 	};
-	background?: {
-		feature?: { name: string };
-		skill_proficiencies?: string[];
-	};
-	race?: {
-		size?: string;
-		speed?: number;
-		ability_bonuses?: Record<string, number>;
-	};
-	class?: {
-		hit_die?: number;
-	};
-	[key: string]: unknown; // Allow any additional fields
+	[key: string]: unknown;
 }
 
-/**
- * Homebrew Provider Implementation
- * Loads data from local JSON files
- */
+const SUPPORTED_TYPES = COMPENDIUM_TYPES.filter((t) =>
+	['spells', 'creatures', 'magicitems', 'feats', 'backgrounds', 'species', 'classes'].includes(t)
+);
+
 export class HomebrewProvider extends BaseProvider {
 	readonly id = 'homebrew';
 	readonly name = 'Homebrew';
 	readonly baseUrl = '';
 
-	private static readonly DEFAULT_TYPES = [
-		'spells',
-		'creatures',
-		'magicitems',
-		'feats',
-		'backgrounds',
-		'species',
-		'classes'
-	] as const satisfies readonly CompendiumTypeName[];
-
 	private dataPath: string;
 	private loadedData: Map<string, unknown[]> = new Map();
 
-	constructor(dataPath: string = 'data/homebrew', supportedTypes?: readonly CompendiumTypeName[]) {
-		super(supportedTypes ?? HomebrewProvider.DEFAULT_TYPES);
+	constructor(dataPath: string = 'data/homebrew') {
+		super(SUPPORTED_TYPES);
 		this.dataPath = dataPath;
 	}
 
-	async fetchList(type: CompendiumTypeName): Promise<ProviderListResponse> {
+	async fetchList(type: CompendiumType): Promise<ProviderListResponse> {
 		const items = this.loadFromFile(type);
 		this.loadedData.set(type, items);
 		return {
@@ -83,203 +55,61 @@ export class HomebrewProvider extends BaseProvider {
 		};
 	}
 
-	async fetchAllPages(type: CompendiumTypeName): Promise<unknown[]> {
+	async fetchAllPages(type: CompendiumType): Promise<unknown[]> {
 		return this.loadFromFile(type);
 	}
 
-	async fetchDetail(
-		type: CompendiumTypeName,
-		externalId: string
-	): Promise<Record<string, unknown>> {
+	async fetchDetail(type: CompendiumType, key: string): Promise<Record<string, unknown>> {
 		const items = this.loadedData.get(type) || [];
-		const item = items.find((i) => this.getExternalId(i) === externalId);
+		const item = items.find((i) => this.getItemKey(i as HomebrewItem) === key);
 		if (!item) {
-			throw new Error(`Homebrew item not found: ${type}/${externalId}`);
+			throw new Error(`Homebrew item not found: ${type}/${key}`);
 		}
 		return item as Record<string, unknown>;
 	}
 
-	private getExternalId(item: unknown): string {
-		const homebrewItem = item as HomebrewItem;
-		return homebrewItem.slug || homebrewItem.index || homebrewItem.id || this.generateId();
-	}
-
-	transformItem(rawItem: unknown, type: CompendiumTypeName): TransformResult {
+	transformItem(rawItem: unknown, type: CompendiumType): TransformResult {
 		const item = rawItem as HomebrewItem;
-		const externalId = item.slug || item.index || item.id || this.generateId();
-		const jsonData = JSON.stringify(item);
-
-		switch (type) {
-			case 'spells':
-				return this.transformSpell(item, externalId, jsonData);
-			case 'creatures':
-				return this.transformMonster(item, externalId, jsonData);
-			case 'feats':
-				return this.transformFeat(item, externalId, jsonData);
-			case 'backgrounds':
-				return this.transformBackground(item, externalId, jsonData);
-			case 'species':
-				return this.transformRace(item, externalId, jsonData);
-			case 'classes':
-				return this.transformClass(item, externalId, jsonData);
-			default:
-				return this.transformGeneric(item, externalId, jsonData);
-		}
-	}
-
-	private transformSpell(
-		item: HomebrewItem,
-		externalId: string,
-		jsonData: string
-	): TransformResult {
-		let level = 0;
-		if (typeof item.level === 'number') {
-			level = item.level;
-		} else if (typeof item.level === 'string') {
-			if (item.level === 'Cantrip') {
-				level = 0;
-			} else {
-				level = parseInt(item.level) || 0;
-			}
-		}
-
-		let schoolName = 'Unknown';
-		if (typeof item.school === 'string') {
-			schoolName = item.school;
-		} else if (item.school?.name) {
-			schoolName = item.school.name;
-		}
-		schoolName = this.toTitleCase(schoolName);
-
-		const summary = level === 0 ? `Cantrip ${schoolName}` : `Level ${level} ${schoolName}`;
+		const key = this.getItemKey(item);
+		const document = item.document;
+		const publisher = document?.publisher;
+		const gamesystem = document?.gamesystem;
 
 		return {
-			externalId,
-			name: item.name,
-			summary,
-			details: item,
-			jsonData,
-			spellLevel: level,
-			spellSchool: schoolName,
-			sourcePublisher: 'homebrew'
+			key,
+			type,
+			name: item.name || 'Unknown',
+			source: 'homebrew',
+			documentKey: document?.key ?? 'homebrew',
+			documentName: document?.name ?? 'Homebrew',
+			gamesystemKey: gamesystem?.key ?? '5e-2014',
+			gamesystemName: gamesystem?.name ?? 'D&D 5e (2014)',
+			publisherKey: publisher?.key ?? 'homebrew',
+			publisherName: publisher?.name ?? 'Homebrew',
+			description: this.extractDescription(item.desc),
+			data: { ...item, key }
 		};
 	}
 
-	private transformMonster(
-		item: HomebrewItem,
-		externalId: string,
-		jsonData: string
-	): TransformResult {
-		const size = this.toTitleCase(item.size || 'Medium');
-		const typeName = this.toTitleCase(item.type || 'Humanoid');
-		const cr = String(item.challenge_rating || '0');
-
-		const summary = `${size} ${typeName}, CR ${cr}`;
-
-		return {
-			externalId,
-			name: item.name,
-			summary,
-			details: item,
-			jsonData,
-			challengeRating: cr,
-			creatureSize: size,
-			creatureType: typeName,
-			sourcePublisher: 'homebrew'
-		};
+	private getItemKey(item: HomebrewItem): string {
+		if (item.key) return item.key;
+		const slug = item.name
+			.toLowerCase()
+			.replace(/[^a-z0-9]+/g, '_')
+			.replace(/^_|_$/g, '');
+		return `homebrew_${slug}_${nanoid(6)}`;
 	}
 
-	private transformFeat(item: HomebrewItem, externalId: string, jsonData: string): TransformResult {
-		const summary = item.feat?.prerequisites?.length
-			? `Prerequisite: ${item.feat.prerequisites.join(', ')}`
-			: 'Feat';
-
-		return {
-			externalId,
-			name: item.name,
-			summary,
-			details: item,
-			jsonData,
-			featPrerequisites: item.feat?.prerequisites?.join(', ') || '',
-			featBenefits: item.feat?.description || [],
-			sourcePublisher: 'homebrew'
-		};
+	private extractDescription(desc?: string): string | null {
+		if (!desc) return null;
+		const cleaned = desc
+			.replace(/<[^>]*>/g, '')
+			.replace(/\s+/g, ' ')
+			.trim();
+		return cleaned || null;
 	}
 
-	private transformBackground(
-		item: HomebrewItem,
-		externalId: string,
-		jsonData: string
-	): TransformResult {
-		const summary = item.background?.feature
-			? `Feature: ${item.background.feature.name}`
-			: 'Background';
-
-		return {
-			externalId,
-			name: item.name,
-			summary,
-			details: item,
-			jsonData,
-			backgroundFeature: item.background?.feature?.name || '',
-			backgroundSkillProficiencies: item.background?.skill_proficiencies?.join(', ') || '',
-			sourcePublisher: 'homebrew'
-		};
-	}
-
-	private transformRace(item: HomebrewItem, externalId: string, jsonData: string): TransformResult {
-		const size = this.toTitleCase(item.race?.size || 'Medium');
-
-		const summary = `${size} | Speed ${item.race?.speed || 30}`;
-
-		return {
-			externalId,
-			name: item.name,
-			summary,
-			details: item,
-			jsonData,
-			raceSize: size,
-			raceSpeed: item.race?.speed || 30,
-			raceAbilityScores: item.race?.ability_bonuses || {},
-			sourcePublisher: 'homebrew'
-		};
-	}
-
-	private transformClass(
-		item: HomebrewItem,
-		externalId: string,
-		jsonData: string
-	): TransformResult {
-		const summary = `Hit Die: d${item.class?.hit_die || 8}`;
-
-		return {
-			externalId,
-			name: item.name,
-			summary,
-			details: item,
-			jsonData,
-			classHitDie: item.class?.hit_die || 8,
-			sourcePublisher: 'homebrew'
-		};
-	}
-
-	private transformGeneric(
-		item: HomebrewItem,
-		externalId: string,
-		jsonData: string
-	): TransformResult {
-		return {
-			externalId,
-			name: item.name,
-			summary: `${item.name} (Homebrew)`,
-			details: item,
-			jsonData,
-			sourcePublisher: 'homebrew'
-		};
-	}
-
-	private loadFromFile(type: CompendiumTypeName): unknown[] {
-		// Map compendium type to filename (Open5e v2 format)
+	private loadFromFile(type: CompendiumType): unknown[] {
 		const fileMap: Record<string, string> = {
 			spells: 'spells.json',
 			creatures: 'creatures.json',
@@ -287,30 +117,7 @@ export class HomebrewProvider extends BaseProvider {
 			feats: 'feats.json',
 			backgrounds: 'backgrounds.json',
 			species: 'species.json',
-			classes: 'classes.json',
-			subclasses: 'subclasses.json',
-			subraces: 'subraces.json',
-			traits: 'traits.json',
-			features: 'features.json',
-			skills: 'skills.json',
-			languages: 'languages.json',
-			alignments: 'alignments.json',
-			damagetypes: 'damagetypes.json',
-			spellschools: 'spellschools.json',
-			equipment: 'equipment.json',
-			weaponproperties: 'weaponproperties.json',
-			itemcategories: 'itemcategories.json',
-			vehicles: 'vehicles.json',
-			creaturetypes: 'creaturetypes.json',
-			rules: 'rules.json',
-			rulesections: 'rulesections.json',
-			weapons: 'weapons.json',
-			armor: 'armor.json',
-			conditions: 'conditions.json',
-			environments: 'environments.json',
-			sections: 'sections.json',
-			proficiencies: 'proficiencies.json',
-			abilities: 'abilities.json'
+			classes: 'classes.json'
 		};
 
 		const fileName = fileMap[type] || `${type}.json`;
@@ -338,11 +145,9 @@ export class HomebrewProvider extends BaseProvider {
 		}
 	}
 
-	private generateId(): string {
-		return nanoid(10);
-	}
-
-	protected getEndpoint(_type: CompendiumTypeName): string {
+	protected getEndpoint(_type: CompendiumType): string {
 		throw new Error('Homebrew provider does not use API endpoints');
 	}
 }
+
+export const homebrewProvider = new HomebrewProvider();

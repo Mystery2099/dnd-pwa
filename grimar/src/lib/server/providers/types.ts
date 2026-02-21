@@ -1,10 +1,10 @@
 /**
  * Provider System - Type Definitions
- *
- * Core interfaces for the multi-provider compendium sync system.
+ * 
+ * Simplified for new schema alignment with Open5e API v2.
  */
 
-import type { CompendiumTypeName } from '$lib/core/types/compendium';
+import type { CompendiumType } from '$lib/server/db/schema';
 
 /**
  * Lightweight list response from a provider
@@ -26,118 +26,21 @@ export interface FetchOptions {
 
 /**
  * Result of transforming a provider's raw data
- * Contains normalized fields for filtering/sorting across all types
+ * Directly maps to compendium table schema
  */
 export interface TransformResult {
-	// Core fields
-	externalId: string;
+	key: string;
+	type: CompendiumType;
 	name: string;
-	summary: string;
-	details: Record<string, unknown>;
-
-	// Full cleaned/transformed payload as JSON string (Hybrid SQLite)
-	jsonData?: string;
-
-	// Source tracking
-	sourceBook?: string;
-	sourcePublisher?: string; // wizards-of-the-coast, kobold-press, en-publishing, etc.
-	edition?: string;
-
-	// Spell-specific fields
-	spellLevel?: number;
-	spellSchool?: string;
-
-	// Creature-specific fields
-	challengeRating?: string;
-	creatureSize?: string;
-	creatureType?: string;
-
-	// Feat-specific fields
-	featPrerequisites?: string;
-	featBenefits?: string[];
-
-	// Background-specific fields
-	backgroundFeature?: string;
-	backgroundSkillProficiencies?: string;
-
-	// Race-specific fields
-	raceSize?: string;
-	raceSpeed?: number;
-	raceAbilityScores?: Record<string, number>;
-
-	// Class-specific fields
-	classHitDie?: number;
-	classProficiencies?: string[];
-	classSpellcasting?: Record<string, unknown>;
-
-	// Subclass-specific fields
-	subclassName?: string;
-	className?: string;
-	subclassFlavor?: string;
-
-	// Subrace-specific fields
-	subraceName?: string;
-	raceName?: string;
-
-	// Trait-specific fields
-	traitName?: string;
-	traitRaces?: string;
-
-	// Condition-specific fields
-	conditionName?: string;
-
-	// Feature-specific fields
-	featureName?: string;
-	featureLevel?: number;
-
-	// Skill-specific fields
-	skillName?: string;
-	abilityScore?: string;
-
-	// Language-specific fields
-	languageName?: string;
-	typicalSpeakers?: string;
-
-	// Alignment-specific fields
-	alignmentName?: string;
-	alignmentAbbreviation?: string;
-
-	// Proficiency-specific fields
-	proficiencyName?: string;
-	proficiencyType?: string;
-
-	// Ability Score fields
-	abilityScoreName?: string;
-	abilityScoreAbbreviation?: string;
-
-	// Damage Type fields
-	damageTypeName?: string;
-
-	// Magic School fields
-	magicSchoolName?: string;
-
-	// Equipment fields
-	equipmentName?: string;
-	equipmentCategory?: string;
-
-	// Weapon Property fields
-	weaponPropertyName?: string;
-
-	// Equipment Category fields
-	equipmentCategoryName?: string;
-
-	// Vehicle fields
-	vehicleName?: string;
-	vehicleCategory?: string;
-
-	// Monster Type fields
-	creatureTypeName?: string;
-
-	// Rule fields
-	ruleName?: string;
-
-	// Rule Section fields
-	ruleSectionName?: string;
+	source: 'open5e' | 'homebrew';
+	documentKey?: string | null;
+	documentName?: string | null;
+	gamesystemKey?: string | null;
+	gamesystemName?: string | null;
+	publisherKey?: string | null;
+	publisherName?: string | null;
+	description?: string | null;
+	data: Record<string, unknown>;
 }
 
 /**
@@ -147,17 +50,17 @@ export interface CompendiumProvider {
 	readonly id: string;
 	readonly name: string;
 	readonly baseUrl: string;
-	readonly supportedTypes: readonly CompendiumTypeName[];
+	readonly supportedTypes: readonly CompendiumType[];
 
-	fetchList(type: CompendiumTypeName, options?: FetchOptions): Promise<ProviderListResponse>;
+	fetchList(type: CompendiumType, options?: FetchOptions): Promise<ProviderListResponse>;
 
-	fetchDetail?(type: CompendiumTypeName, externalId: string): Promise<Record<string, unknown>>;
+	fetchDetail?(type: CompendiumType, key: string): Promise<Record<string, unknown>>;
 
-	transformItem(rawItem: unknown, type: CompendiumTypeName): TransformResult;
+	transformItem(rawItem: unknown, type: CompendiumType): TransformResult;
 
 	healthCheck(): Promise<boolean>;
 
-	fetchAllPages?(type: CompendiumTypeName): Promise<unknown[]>;
+	fetchAllPages?(type: CompendiumType): Promise<unknown[]>;
 }
 
 /**
@@ -175,46 +78,7 @@ export interface ProviderHealthStatus {
  */
 export interface ProviderSyncResult {
 	providerId: string;
-	spells: number;
-	creatures: number;
-	items: number;
-	feats: number;
-	backgrounds: number;
-	races: number;
-	classes: number;
-	subclasses: number;
-	subraces: number;
-	traits: number;
-	conditions: number;
-	features: number;
-	skills: number;
-	languages: number;
-	alignments: number;
-	proficiencies: number;
-	abilityScores: number;
-	damageTypes: number;
-	magicSchools: number;
-	equipment: number;
-	weaponProperties: number;
-	equipmentCategories: number;
-	vehicles: number;
-	creatureTypes: number;
-	rules: number;
-	ruleSections: number;
-	weapons: number;
-	armor: number;
-	planes: number;
-	sections: number;
-	classfeatures: number;
-	classfeatureitems: number;
-	creatureactions: number;
-	creatureactionattacks: number;
-	creaturetraits: number;
-	speciestraits: number;
-	backgroundbenefits: number;
-	featbenefits: number;
-	spellcastingoptions: number;
-	weaponpropertyassignments: number;
+	counts: Record<string, number>;
 	totalItems: number;
 	skipped: number;
 	errors: string[];

@@ -11,5 +11,5 @@ export {
 	SYNC_CONFIG,
 	PRIMARY_PROVIDER_ID
 } from './registry';
-export { Open5eProvider } from './open5e';
+export { Open5eApiProvider, open5eApiProvider } from './open5e-api';
 export { HomebrewProvider } from './homebrew';
