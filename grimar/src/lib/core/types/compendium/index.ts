@@ -18,7 +18,6 @@ import type { ComponentType } from 'svelte';
 
 export type { CompendiumFilterConfig } from './filter';
 export type { CompendiumCategory, CompendiumCard } from './categories';
-export type { CompendiumType } from './unified';
 
 // Normalized types for provider data transformation
 export type {
@@ -46,53 +45,14 @@ export type {
 
 export { slugify, createSlug } from './normalized';
 
-// All valid compendium type names as a tuple for runtime checks
-// Aligned with Open5e API v2 endpoints
-export const COMPENDIUM_TYPES = [
-	'spells',
-	'creatures',
-	'magicitems',
-	'itemsets',
-	'itemcategories',
-	'documents',
-	'licenses',
-	'publishers',
-	'weapons',
-	'armor',
-	'gamesystems',
-	'backgrounds',
-	'feats',
-	'species',
-	'creaturetypes',
-	'creaturesets',
-	'damagetypes',
-	'languages',
-	'alignments',
-	'conditions',
-	'spellschools',
-	'classes',
-	'sizes',
-	'itemrarities',
-	'environments',
-	'abilities',
-	'skills',
-	'rules',
-	'rulesections',
-	'rulesets',
-	'images',
-	'weaponproperties',
-	'services',
-	'classfeatures',
-	'classfeatureitems',
-	'creatureactions',
-	'creatureactionattacks',
-	'creaturetraits',
-	'speciestraits',
-	'backgroundbenefits',
-	'featbenefits',
-	'spellcastingoptions',
-	'weaponpropertyassignments'
-] as const;
+// Re-export from schema for single source of truth
+export { COMPENDIUM_TYPES } from '$lib/server/db/schema';
+import type {
+	CompendiumType as SchemaCompendiumType,
+	CompendiumItem as SchemaCompendiumItem
+} from '$lib/server/db/schema';
+export type CompendiumType = SchemaCompendiumType;
+export type CompendiumItem = SchemaCompendiumItem;
 
 //#region Core Types
 
@@ -100,24 +60,7 @@ export const COMPENDIUM_TYPES = [
  * The database type stored in compendium_items.type
  * Derived from COMPENDIUM_TYPES array for single source of truth
  */
-export type CompendiumTypeName = (typeof COMPENDIUM_TYPES)[number];
-
-/**
- * Raw compendium item from database
- * This represents a row from compendium_items table
- * Type-specific data is stored in the `details` JSON field
- */
-export interface CompendiumItem {
-	id: number;
-	source: string;
-	sourceBook: string | null;
-	type: string;
-	externalId: string | null;
-	name: string;
-	summary: string | null;
-	details: Record<string, unknown>;
-	createdBy: string | null;
-}
+export type CompendiumTypeName = CompendiumType;
 
 //#endregion
 

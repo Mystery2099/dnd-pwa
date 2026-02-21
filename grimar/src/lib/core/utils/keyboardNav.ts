@@ -32,9 +32,9 @@ export function createKeyboardNav(options: KeyboardNavOptions): () => void {
 				goto(basePath);
 			}
 		} else if (e.key === 'ArrowLeft' && navigation.prev) {
-			goto(`${basePath}/${navigation.prev.externalId}`);
+			goto(`${basePath}/${navigation.prev.key}`);
 		} else if (e.key === 'ArrowRight' && navigation.next) {
-			goto(`${basePath}/${navigation.next.externalId}`);
+			goto(`${basePath}/${navigation.next.key}`);
 		}
 	};
 

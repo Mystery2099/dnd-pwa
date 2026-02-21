@@ -11,9 +11,9 @@ import { colorMap, getListItemColor, DEFAULT_COLOR } from '$lib/core/constants/c
  * Extract school name from spell details
  */
 export function getSpellSchool(item: CompendiumItem): string {
-	const details = item.details;
-	if (!details) return 'Unknown';
-	const school = (details as Record<string, unknown>).school;
+	const data = item.data;
+	if (!data) return 'Unknown';
+	const school = (data as Record<string, unknown>).school;
 	if (typeof school === 'string') return school;
 	if (school && typeof school === 'object' && 'name' in school) {
 		return String(school.name);
@@ -25,7 +25,7 @@ export function getSpellSchool(item: CompendiumItem): string {
  * Get spell level formatted as text
  */
 export function getSpellLevelText(item: CompendiumItem): string {
-	const level = (item.details?.level as number | undefined) ?? 0;
+	const level = (item.data?.level as number | undefined) ?? 0;
 	return level === 0 ? 'Cantrip' : `Level ${level}`;
 }
 
