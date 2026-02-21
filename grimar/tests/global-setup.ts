@@ -7,7 +7,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 export default async function globalSetup() {
 	console.log('Setting up E2E test environment...');
 	const projectRoot = join(__dirname, '..');
-	
+
 	try {
 		execSync('bun run db:push', {
 			cwd: projectRoot,

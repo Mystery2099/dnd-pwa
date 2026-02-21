@@ -18,12 +18,12 @@ export const ThemeColorsSchema = z.object({
 	shadow: z.string().optional(),
 	overlayLight: z.string().optional(),
 	overlayDark: z.string().optional(),
-	effectUrl: z.string().optional(),
+	effectUrl: z.string().optional()
 });
 
 export const ThemeTypographySchema = z.object({
 	display: z.string(),
-	body: z.string(),
+	body: z.string()
 });
 
 export const ThemeAnimationSchema = z.object({
@@ -33,12 +33,12 @@ export const ThemeAnimationSchema = z.object({
 			fast: z.number().optional(),
 			slow: z.number().optional()
 		})
-		.optional(),
+		.optional()
 });
 
 export const ThemeVisualEffectsSchema = z.object({
 	noiseOpacity: z.number().optional(),
-	borderSeparator: z.string().optional(),
+	borderSeparator: z.string().optional()
 });
 
 export const ThemeConfigSchema = z.object({
@@ -50,7 +50,7 @@ export const ThemeConfigSchema = z.object({
 	typography: ThemeTypographySchema.optional(),
 	animation: ThemeAnimationSchema.optional(),
 	visualEffects: ThemeVisualEffectsSchema.optional(),
-	icon: z.any().optional(),
+	icon: z.any().optional()
 });
 
 export const ThemeColorsPartialSchema = ThemeColorsSchema.partial();
@@ -132,7 +132,11 @@ function hexToRgb(hex: string): string {
 	return `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`;
 }
 
-export function validateThemeConfig(input: unknown): { success: boolean; data?: ThemeConfig; error?: string } {
+export function validateThemeConfig(input: unknown): {
+	success: boolean;
+	data?: ThemeConfig;
+	error?: string;
+} {
 	const result = ThemeConfigSchema.safeParse(input);
 	if (result.success) {
 		return { success: true, data: result.data };
@@ -141,7 +145,11 @@ export function validateThemeConfig(input: unknown): { success: boolean; data?: 
 	return { success: false, error: errors };
 }
 
-export function validatePartialThemeConfig(input: unknown): { success: boolean; data?: ThemeConfig; error?: string } {
+export function validatePartialThemeConfig(input: unknown): {
+	success: boolean;
+	data?: ThemeConfig;
+	error?: string;
+} {
 	const result = ThemeConfigPartialSchema.safeParse(input);
 	if (result.success) {
 		const filled = fillDefaults(result.data);

@@ -17,9 +17,7 @@ export * from './fts-utils';
  * Run a function within a database transaction
  * Automatically commits on success, rolls back on error
  */
-export async function withTransaction<T>(
-	fn: (db: Db) => Promise<T>
-): Promise<T> {
+export async function withTransaction<T>(fn: (db: Db) => Promise<T>): Promise<T> {
 	const db = await getDb();
 	return db.transaction(fn);
 }

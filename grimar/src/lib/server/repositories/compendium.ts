@@ -58,16 +58,20 @@ export async function getPaginatedItems(
 
 	const sortBy = filters.sortBy ?? 'name';
 	const sortOrder = filters.sortOrder ?? 'asc';
-	const sortColumn = sortBy === 'created_at' 
-		? compendium.createdAt 
-		: sortBy === 'updated_at' 
-			? compendium.updatedAt 
-			: compendium.name;
+	const sortColumn =
+		sortBy === 'created_at'
+			? compendium.createdAt
+			: sortBy === 'updated_at'
+				? compendium.updatedAt
+				: compendium.name;
 	const orderBy = sortOrder === 'desc' ? desc(sortColumn) : sortColumn;
 
 	const [items, countResult] = await Promise.all([
 		db.select().from(compendium).where(whereClause).orderBy(orderBy).limit(pageSize).offset(offset),
-		db.select({ count: sql<number>`count(*)` }).from(compendium).where(whereClause)
+		db
+			.select({ count: sql<number>`count(*)` })
+			.from(compendium)
+			.where(whereClause)
 	]);
 
 	const total = Number(countResult[0]?.count ?? 0);
@@ -156,7 +160,7 @@ export async function createItem(
 ): Promise<CompendiumItem> {
 	const db = await getDb();
 	const now = new Date();
-	
+
 	const [item] = await db
 		.insert(compendium)
 		.values({
@@ -175,7 +179,7 @@ export async function updateItem(
 ): Promise<CompendiumItem | null> {
 	const db = await getDb();
 	const now = new Date();
-	
+
 	const [item] = await db
 		.update(compendium)
 		.set({
@@ -223,7 +227,7 @@ export async function getDistinctValues(
 ): Promise<string[]> {
 	const db = await getDb();
 	const column = compendium[field];
-	
+
 	let query = db
 		.selectDistinct({ value: column })
 		.from(compendium)
@@ -252,12 +256,14 @@ export async function clearSource(source: string): Promise<number> {
 	return result.length;
 }
 
-export async function bulkInsert(items: Omit<CompendiumItem, 'createdAt' | 'updatedAt'>[]): Promise<number> {
+export async function bulkInsert(
+	items: Omit<CompendiumItem, 'createdAt' | 'updatedAt'>[]
+): Promise<number> {
 	if (items.length === 0) return 0;
-	
+
 	const db = await getDb();
 	const now = new Date();
-	
+
 	const itemsWithTimestamps = items.map((item) => ({
 		...item,
 		createdAt: now,
@@ -273,7 +279,7 @@ export async function upsertItem(
 ): Promise<CompendiumItem> {
 	const db = await getDb();
 	const now = new Date();
-	
+
 	const [item] = await db
 		.insert(compendium)
 		.values({
@@ -305,7 +311,7 @@ export async function upsertItems(
 	items: Omit<CompendiumItem, 'createdAt' | 'updatedAt'>[]
 ): Promise<number> {
 	if (items.length === 0) return 0;
-	
+
 	let count = 0;
 	for (const item of items) {
 		await upsertItem(item);
@@ -340,15 +346,15 @@ export async function updateHomebrewItem(
 	role: string
 ): Promise<CompendiumItem | null> {
 	const item = await getHomebrewItemByKey(key);
-	
+
 	if (!item) {
 		return null;
 	}
-	
+
 	if (role !== 'admin' && item.createdBy !== username) {
 		return null;
 	}
-	
+
 	return updateItem(key, data);
 }
 
@@ -358,14 +364,14 @@ export async function deleteHomebrewItem(
 	role: string
 ): Promise<boolean> {
 	const item = await getHomebrewItemByKey(key);
-	
+
 	if (!item) {
 		return false;
 	}
-	
+
 	if (role !== 'admin' && item.createdBy !== username) {
 		return false;
 	}
-	
+
 	return deleteItem(key);
 }

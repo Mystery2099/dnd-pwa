@@ -25,6 +25,7 @@ Compression that hurts readability is not simplification.
 Default scope: **recently modified code** in the current session.
 
 To identify scope:
+
 1. Check staged changes: `git diff --staged`
 2. Fall back to unstaged: `git diff`
 3. Use user-provided file paths if specified

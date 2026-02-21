@@ -39,7 +39,10 @@ export const BUILTIN_THEMES: ThemeConfig[] = [
 			overlayDark: 'rgba(0, 0, 0, 0.3)',
 			effectUrl: ''
 		},
-		typography: { display: 'Quicksand, system-ui, sans-serif', body: 'Inter, system-ui, sans-serif' },
+		typography: {
+			display: 'Quicksand, system-ui, sans-serif',
+			body: 'Inter, system-ui, sans-serif'
+		},
 		animation: {
 			ease: 'cubic-bezier(0.4, 0, 0.2, 1)',
 			duration: { fast: 150, slow: 300 }
@@ -106,7 +109,10 @@ export const BUILTIN_THEMES: ThemeConfig[] = [
 			overlayDark: 'rgba(0, 0, 0, 0.4)',
 			effectUrl: ''
 		},
-		typography: { display: 'DM Serif Display, Georgia, serif', body: 'DM Sans, system-ui, sans-serif' },
+		typography: {
+			display: 'DM Serif Display, Georgia, serif',
+			body: 'DM Sans, system-ui, sans-serif'
+		},
 		animation: {
 			ease: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
 			duration: { fast: 200, slow: 500 }
@@ -205,7 +211,10 @@ export const BUILTIN_THEMES: ThemeConfig[] = [
 			overlayDark: 'rgba(0, 0, 0, 0.5)',
 			effectUrl: ''
 		},
-		typography: { display: 'Montserrat, system-ui, sans-serif', body: 'Inter, system-ui, sans-serif' },
+		typography: {
+			display: 'Montserrat, system-ui, sans-serif',
+			body: 'Inter, system-ui, sans-serif'
+		},
 		animation: {
 			ease: 'cubic-bezier(0.4, 0, 0.2, 1)',
 			duration: { fast: 180, slow: 350 }
@@ -237,7 +246,10 @@ export const BUILTIN_THEMES: ThemeConfig[] = [
 			overlayDark: 'rgba(0, 0, 0, 0.5)',
 			effectUrl: ''
 		},
-		typography: { display: 'Space Grotesk, system-ui, sans-serif', body: 'Inter, system-ui, sans-serif' },
+		typography: {
+			display: 'Space Grotesk, system-ui, sans-serif',
+			body: 'Inter, system-ui, sans-serif'
+		},
 		animation: {
 			ease: 'cubic-bezier(0.4, 0, 0.2, 1)',
 			duration: { fast: 200, slow: 500 }
@@ -269,7 +281,10 @@ export const BUILTIN_THEMES: ThemeConfig[] = [
 			overlayDark: 'rgba(0, 0, 0, 0.4)',
 			effectUrl: ''
 		},
-		typography: { display: 'Bebas Neue, system-ui, sans-serif', body: 'Nunito, system-ui, sans-serif' },
+		typography: {
+			display: 'Bebas Neue, system-ui, sans-serif',
+			body: 'Nunito, system-ui, sans-serif'
+		},
 		animation: {
 			ease: 'cubic-bezier(0.4, 0, 0.2, 1)',
 			duration: { fast: 200, slow: 400 }
@@ -333,7 +348,10 @@ export const BUILTIN_THEMES: ThemeConfig[] = [
 			overlayDark: 'rgba(0, 0, 0, 0.4)',
 			effectUrl: ''
 		},
-		typography: { display: 'Quicksand, system-ui, sans-serif', body: 'Nunito, system-ui, sans-serif' },
+		typography: {
+			display: 'Quicksand, system-ui, sans-serif',
+			body: 'Nunito, system-ui, sans-serif'
+		},
 		animation: {
 			ease: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
 			duration: { fast: 200, slow: 400 }

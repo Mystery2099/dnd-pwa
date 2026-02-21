@@ -46,7 +46,6 @@
 
 		// Initialize theme from localStorage
 		initTheme();
-
 	});
 
 	// Simple active link helper

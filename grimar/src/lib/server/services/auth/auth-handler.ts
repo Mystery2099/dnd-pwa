@@ -34,7 +34,10 @@ function createAuthUser(username: string, groups: string[] = []): AuthUser {
 function getAuthentikGroups(headers: Headers): string[] {
 	const groupsHeader = headers.get('x-authentik-groups');
 	if (!groupsHeader) return [];
-	return groupsHeader.split('|').map((g) => g.trim()).filter(Boolean);
+	return groupsHeader
+		.split('|')
+		.map((g) => g.trim())
+		.filter(Boolean);
 }
 
 /** Authentication middleware hook */

@@ -1,6 +1,6 @@
 /**
  * Simplified Compendium Schema
- * 
+ *
  * Aligned with Open5e API v2 structure:
  * - Uses API 'key' as primary key (e.g., 'srd-2014_fireball', 'homebrew_custom_spell')
  * - Stores full JSON response in 'data' column

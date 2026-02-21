@@ -82,9 +82,9 @@ src/
 
 ```typescript
 interface Props {
-    title: string;
-    active?: boolean;
-    onclick?: () => void;
+	title: string;
+	active?: boolean;
+	onclick?: () => void;
 }
 let { title, active = false, onclick }: Props = $props();
 ```
@@ -109,14 +109,14 @@ console.error('Failed to resolve user:', error);
 
 ### File Naming
 
-| Directory | Pattern | Example |
-|-----------|---------|---------|
-| `db/` | `db-*` prefix | `db-connection.ts` |
-| `auth/` | `auth-*` prefix | `auth-handler.ts` |
-| `sync/` | `sync-*` prefix | `sync-cleanup.ts` |
-| `cache/` | `cache-*` prefix | `cache-manager.ts` |
-| Svelte components | PascalCase | `Button.svelte`, `AppShell.svelte` |
-| Test files | `*.test.ts` | `service.test.ts` |
+| Directory         | Pattern          | Example                            |
+| ----------------- | ---------------- | ---------------------------------- |
+| `db/`             | `db-*` prefix    | `db-connection.ts`                 |
+| `auth/`           | `auth-*` prefix  | `auth-handler.ts`                  |
+| `sync/`           | `sync-*` prefix  | `sync-cleanup.ts`                  |
+| `cache/`          | `cache-*` prefix | `cache-manager.ts`                 |
+| Svelte components | PascalCase       | `Button.svelte`, `AppShell.svelte` |
+| Test files        | `*.test.ts`      | `service.test.ts`                  |
 
 ### Database Schema
 
@@ -134,9 +134,9 @@ Use const objects for type-safe enums:
 
 ```typescript
 export const COMPENDIUM_TYPES = {
-    SPELL: 'spell',
-    MONSTER: 'monster',
-    ITEM: 'item',
+	SPELL: 'spell',
+	MONSTER: 'monster',
+	ITEM: 'item'
 } as const;
 
 export type CompendiumType = (typeof COMPENDIUM_TYPES)[keyof typeof COMPENDIUM_TYPES];
@@ -150,13 +150,13 @@ export type CompendiumType = (typeof COMPENDIUM_TYPES)[keyof typeof COMPENDIUM_T
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 describe('ModuleName', () => {
-    beforeEach(() => {
-        vi.clearAllMocks();
-    });
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
 
-    it('should do expected behavior', () => {
-        // Test implementation
-    });
+	it('should do expected behavior', () => {
+		// Test implementation
+	});
 });
 ```
 
@@ -164,17 +164,17 @@ describe('ModuleName', () => {
 
 ```typescript
 vi.mock('$app/environment', () => ({
-    browser: true,
-    building: false,
-    dev: true
+	browser: true,
+	building: false,
+	dev: true
 }));
 
 vi.mock('$app/stores', () => ({
-    page: {
-        get: vi.fn().mockReturnValue({
-            data: { user: { username: 'test' } }
-        })
-    }
+	page: {
+		get: vi.fn().mockReturnValue({
+			data: { user: { username: 'test' } }
+		})
+	}
 }));
 ```
 
@@ -182,7 +182,7 @@ vi.mock('$app/stores', () => ({
 
 ```typescript
 vi.mock('$lib/server/db', () => ({
-    getDb: vi.fn().mockResolvedValue(mockDb)
+	getDb: vi.fn().mockResolvedValue(mockDb)
 }));
 ```
 
@@ -194,8 +194,8 @@ Use custom fixtures from `tests/fixtures.ts`:
 import { test, expect } from './fixtures';
 
 test('authenticated user can access characters', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/characters');
-    await expect(authenticatedPage.locator('h1')).toHaveText('Characters');
+	await authenticatedPage.goto('/characters');
+	await expect(authenticatedPage.locator('h1')).toHaveText('Characters');
 });
 ```
 
@@ -226,12 +226,12 @@ See `src/lib/core/constants/compendium/README.md` for detailed instructions.
 
 ## Coverage Expectations
 
-| Module Type | Minimum |
-|-------------|---------|
-| Services | 70% |
-| Providers | 85% |
-| Utilities | 70% |
-| Transformers | 80% |
+| Module Type  | Minimum |
+| ------------ | ------- |
+| Services     | 70%     |
+| Providers    | 85%     |
+| Utilities    | 70%     |
+| Transformers | 80%     |
 
 ## CI Command
 

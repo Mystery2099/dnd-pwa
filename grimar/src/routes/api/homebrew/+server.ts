@@ -12,7 +12,7 @@ export const GET: RequestHandler = async ({ locals }) => {
 export const POST: RequestHandler = async ({ request, locals }) => {
 	const user = requireUser(locals);
 	const data = await request.json();
-	
+
 	const item = await upsertItem({
 		key: data.key || `homebrew-${Date.now()}`,
 		type: data.type,
@@ -28,6 +28,6 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 		publisherName: null,
 		createdBy: user.username
 	});
-	
+
 	return json(item);
 };

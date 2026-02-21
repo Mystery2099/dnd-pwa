@@ -41,14 +41,13 @@
 			<Dialog.Title class="flex items-center gap-3">
 				{#if Icon}
 					<div
-						class="rounded-lg border border-[var(--color-accent)]/30 bg-[var(--color-accent)]/10 p-2.5 {variant === 'danger'
+						class="rounded-lg border border-[var(--color-accent)]/30 bg-[var(--color-accent)]/10 p-2.5 {variant ===
+						'danger'
 							? 'border-red-500/30 bg-red-500/10'
 							: ''}"
 					>
 						<Icon
-							class="size-6 {variant === 'danger'
-								? 'text-red-400'
-								: 'text-[var(--color-accent)]'}"
+							class="size-6 {variant === 'danger' ? 'text-red-400' : 'text-[var(--color-accent)]'}"
 						/>
 					</div>
 				{/if}

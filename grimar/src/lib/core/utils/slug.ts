@@ -8,7 +8,10 @@
  * e.g., "deepm_abhorrent-apparition" -> "abhorrent-apparition"
  * e.g., "srd_fireball" -> "fireball"
  */
-export function stripSlugPrefix(externalId: string | null | undefined, _sourceBook?: string | null): string | null {
+export function stripSlugPrefix(
+	externalId: string | null | undefined,
+	_sourceBook?: string | null
+): string | null {
 	if (!externalId) return null;
 	const underscoreIndex = externalId.indexOf('_');
 	if (underscoreIndex === -1) return externalId;

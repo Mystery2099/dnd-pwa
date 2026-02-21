@@ -54,7 +54,7 @@ describe('themeStore', () => {
 		// Reset to get fresh localStorage read
 		mockLocalStorage.getItem.mockReturnValue(null);
 		setTheme('amethyst');
-		
+
 		mockLocalStorage.getItem.mockReturnValue('ocean');
 		initThemeSync();
 		// initThemeSync updates DOM but not the store value

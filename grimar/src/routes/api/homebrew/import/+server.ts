@@ -78,7 +78,11 @@ function determineType(item: Record<string, unknown>): string | null {
 	if (item.level !== undefined || item.school !== undefined || item.range !== undefined) {
 		return 'spell';
 	}
-	if (item.hit_die !== undefined || item.spellcasting !== undefined || item.proficiencies !== undefined) {
+	if (
+		item.hit_die !== undefined ||
+		item.spellcasting !== undefined ||
+		item.proficiencies !== undefined
+	) {
 		return 'class';
 	}
 	if (item.size !== undefined || item.type !== undefined || item.hp !== undefined) {

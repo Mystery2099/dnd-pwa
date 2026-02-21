@@ -126,7 +126,10 @@ function buildSummary(data: Record<string, unknown>, type: string): string {
 	switch (type) {
 		case 'spells': {
 			const level = data.level;
-			const school = typeof data.school === 'string' ? data.school : (data.school as Record<string, unknown>)?.name || 'Unknown';
+			const school =
+				typeof data.school === 'string'
+					? data.school
+					: (data.school as Record<string, unknown>)?.name || 'Unknown';
 			if (level === 0 || level === 'Cantrip') return `Cantrip ${school}`;
 			return `Level ${level} ${school}`;
 		}
@@ -173,7 +176,8 @@ function extractTypeSpecificFields(data: Record<string, unknown>, type: string) 
 	switch (type) {
 		case 'spells': {
 			const level = data.level;
-			result.spellLevel = typeof level === 'number' ? level : (level === 'Cantrip' ? 0 : parseInt(String(level)) || 0);
+			result.spellLevel =
+				typeof level === 'number' ? level : level === 'Cantrip' ? 0 : parseInt(String(level)) || 0;
 			let school = 'Unknown';
 			if (typeof data.school === 'string') {
 				school = data.school;
@@ -191,12 +195,16 @@ function extractTypeSpecificFields(data: Record<string, unknown>, type: string) 
 			break;
 		}
 		case 'feats': {
-			result.featPrerequisites = Array.isArray(data.prerequisites) ? data.prerequisites.join(', ') : '';
+			result.featPrerequisites = Array.isArray(data.prerequisites)
+				? data.prerequisites.join(', ')
+				: '';
 			break;
 		}
 		case 'backgrounds': {
-			result.backgroundFeature = (data.feature as Record<string, unknown>)?.name as string || '';
-			result.backgroundSkillProficiencies = Array.isArray(data.skill_proficiencies) ? data.skill_proficiencies.join(', ') : '';
+			result.backgroundFeature = ((data.feature as Record<string, unknown>)?.name as string) || '';
+			result.backgroundSkillProficiencies = Array.isArray(data.skill_proficiencies)
+				? data.skill_proficiencies.join(', ')
+				: '';
 			break;
 		}
 		case 'species': {

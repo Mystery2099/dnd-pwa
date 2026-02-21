@@ -62,7 +62,9 @@ export function addUserCreatedTheme(theme: ThemeConfig): void {
 
 export function updateUserCreatedTheme(theme: ThemeConfig): void {
 	const existing = getUserCreatedThemes();
-	const updated = existing.map((t) => (t.id === theme.id ? { ...theme, source: 'created' as const } : t));
+	const updated = existing.map((t) =>
+		t.id === theme.id ? { ...theme, source: 'created' as const } : t
+	);
 	saveUserCreatedThemes(updated);
 }
 
@@ -98,7 +100,11 @@ export function getThemeSource(id: string): 'builtin' | 'created' | 'imported' |
 	return undefined;
 }
 
-export function importTheme(jsonString: string): { success: boolean; theme?: ThemeConfig; error?: string } {
+export function importTheme(jsonString: string): {
+	success: boolean;
+	theme?: ThemeConfig;
+	error?: string;
+} {
 	try {
 		const parsed = JSON.parse(jsonString);
 		const result = ThemeConfigSchema.safeParse(parsed);

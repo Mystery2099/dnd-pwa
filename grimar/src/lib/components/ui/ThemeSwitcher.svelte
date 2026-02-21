@@ -1,5 +1,10 @@
 <script lang="ts">
-	import { getTheme, setTheme, THEME_OPTIONS, themeStore } from '$lib/core/client/themeStore.svelte';
+	import {
+		getTheme,
+		setTheme,
+		THEME_OPTIONS,
+		themeStore
+	} from '$lib/core/client/themeStore.svelte';
 	import Select from '$lib/components/ui/select/select.svelte';
 
 	interface Props {

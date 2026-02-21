@@ -1,5 +1,10 @@
 <script lang="ts">
-	import { getAllThemes, getCurrentTheme, setTheme, type ThemeConfig } from '$lib/core/client/themeStore.svelte';
+	import {
+		getAllThemes,
+		getCurrentTheme,
+		setTheme,
+		type ThemeConfig
+	} from '$lib/core/client/themeStore.svelte';
 	import { getThemeGradient, getThemeAccentClass } from '$lib/core/client/themeCSS';
 	import { Palette } from 'lucide-svelte';
 

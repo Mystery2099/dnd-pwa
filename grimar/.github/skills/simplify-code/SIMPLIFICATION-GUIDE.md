@@ -39,11 +39,13 @@ function process(x) {
 ```
 
 **When to apply**:
+
 - Validation/precondition checks
 - Error conditions that abort early
 - Nesting depth > 2
 
 **When NOT to apply**:
+
 - When early return would skip important cleanup
 - When the "else" branch has significant logic (not just returning)
 
@@ -84,6 +86,7 @@ if (a && b) {
 #### Dead Code
 
 Remove code that:
+
 - Is never executed (unreachable after return/throw)
 - Is commented out (if it's needed, it should be in version control)
 - Assigns to variables never read
@@ -92,11 +95,13 @@ Remove code that:
 #### Duplicate Logic
 
 Identify repeated patterns. Extract **only if**:
+
 - The pattern appears 3+ times
 - The extraction has a clear, meaningful name
 - The abstraction is stable (won't diverge between call sites)
 
 Do NOT extract if:
+
 - Only 2 occurrences (wait for the third)
 - The "pattern" is coincidental, not conceptual
 - Extraction requires many parameters
@@ -113,6 +118,7 @@ return computeValue()
 ```
 
 **Keep the variable if**:
+
 - The name adds semantic meaning
 - It's used in debugging/logging
 - The expression is complex and benefits from a name
@@ -172,11 +178,13 @@ return x
 ### 4. Decompose Functions
 
 Split a function **only if**:
+
 - It's doing multiple distinct things
 - A section can be named meaningfully
 - The extraction reduces cognitive load, not just line count
 
 Do NOT split if:
+
 - The function is already coherent
 - Extraction would require passing many parameters
 - The "extracted" function would only be called once and has no standalone meaning

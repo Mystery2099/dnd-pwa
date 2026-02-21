@@ -12,9 +12,14 @@ import {
 	updateUserCreatedTheme,
 	removeUserCreatedTheme,
 	type ThemeConfig,
-	ThemeConfigSchema,
+	ThemeConfigSchema
 } from './themeRegistry';
-import { generateThemeCSS, injectThemeCSS, getThemeGradient, getThemeAccentClass } from './themeCSS';
+import {
+	generateThemeCSS,
+	injectThemeCSS,
+	getThemeGradient,
+	getThemeAccentClass
+} from './themeCSS';
 
 const THEME_KEY = 'grimar-theme';
 
@@ -38,9 +43,15 @@ function createThemeStore(): {
 	getUserCreatedThemes: () => ThemeConfig[];
 	getImportedThemes: () => ThemeConfig[];
 	importTheme: (jsonString: string) => { success: boolean; theme?: ThemeConfig; error?: string };
-	importThemeFromFile: (file: File) => Promise<{ success: boolean; theme?: ThemeConfig; error?: string }>;
+	importThemeFromFile: (
+		file: File
+	) => Promise<{ success: boolean; theme?: ThemeConfig; error?: string }>;
 	removeImportedTheme: (themeId: string) => boolean;
-	createTheme: (theme: Omit<ThemeConfig, 'id' | 'source'>) => { success: boolean; theme?: ThemeConfig; error?: string };
+	createTheme: (theme: Omit<ThemeConfig, 'id' | 'source'>) => {
+		success: boolean;
+		theme?: ThemeConfig;
+		error?: string;
+	};
 	updateTheme: (themeId: string, updates: Partial<Omit<ThemeConfig, 'id' | 'source'>>) => boolean;
 	deleteTheme: (themeId: string) => boolean;
 	exportTheme: (themeId: string) => string | null;
@@ -120,7 +131,9 @@ function createThemeStore(): {
 				const result = ThemeConfigSchema.safeParse(parsed);
 
 				if (!result.success) {
-					const issues = result.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join(', ');
+					const issues = result.error.issues
+						.map((i) => `${i.path.join('.')}: ${i.message}`)
+						.join(', ');
 					return { success: false, error: `Invalid theme: ${issues}` };
 				}
 
@@ -133,11 +146,16 @@ function createThemeStore(): {
 				addImportedTheme(theme);
 				return { success: true, theme };
 			} catch (e) {
-				return { success: false, error: `Failed to parse JSON: ${e instanceof Error ? e.message : 'Unknown error'}` };
+				return {
+					success: false,
+					error: `Failed to parse JSON: ${e instanceof Error ? e.message : 'Unknown error'}`
+				};
 			}
 		},
 
-		importThemeFromFile(file: File): Promise<{ success: boolean; theme?: ThemeConfig; error?: string }> {
+		importThemeFromFile(
+			file: File
+		): Promise<{ success: boolean; theme?: ThemeConfig; error?: string }> {
 			return new Promise((resolve) => {
 				const reader = new FileReader();
 				reader.onload = () => {
@@ -169,7 +187,11 @@ function createThemeStore(): {
 			return true;
 		},
 
-		createTheme(theme: Omit<ThemeConfig, 'id' | 'source'>): { success: boolean; theme?: ThemeConfig; error?: string } {
+		createTheme(theme: Omit<ThemeConfig, 'id' | 'source'>): {
+			success: boolean;
+			theme?: ThemeConfig;
+			error?: string;
+		} {
 			if (!browser) {
 				return { success: false, error: 'Cannot create themes on server' };
 			}
@@ -178,12 +200,14 @@ function createThemeStore(): {
 			const fullTheme: ThemeConfig = {
 				...theme,
 				id,
-				source: 'created',
+				source: 'created'
 			};
 
 			const result = ThemeConfigSchema.safeParse(fullTheme);
 			if (!result.success) {
-				const issues = result.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join(', ');
+				const issues = result.error.issues
+					.map((i) => `${i.path.join('.')}: ${i.message}`)
+					.join(', ');
 				return { success: false, error: `Invalid theme: ${issues}` };
 			}
 
@@ -231,7 +255,7 @@ function createThemeStore(): {
 			const theme = registryGetThemeById(themeId);
 			if (!theme) return null;
 			return JSON.stringify(theme, null, 2);
-		},
+		}
 	};
 }
 
@@ -244,8 +268,19 @@ export const initTheme = themeStore.init;
 export const initThemeSync = themeStore.init;
 export const getAllThemes = themeStore.getAllThemes;
 
-export { getBuiltinThemes, getUserCreatedThemes, getImportedThemes, getThemeById, getAllThemes as allThemes } from './themeRegistry';
-export { generateThemeCSS, injectThemeCSS, getThemeGradient, getThemeAccentClass } from './themeCSS';
+export {
+	getBuiltinThemes,
+	getUserCreatedThemes,
+	getImportedThemes,
+	getThemeById,
+	getAllThemes as allThemes
+} from './themeRegistry';
+export {
+	generateThemeCSS,
+	injectThemeCSS,
+	getThemeGradient,
+	getThemeAccentClass
+} from './themeCSS';
 export type { ThemeConfig } from './themeRegistry';
 
 export const THEMES: ThemeConfig[] = registryGetBuiltinThemes();

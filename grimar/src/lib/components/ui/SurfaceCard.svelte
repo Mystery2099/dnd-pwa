@@ -10,7 +10,7 @@
 
 	let { href = '', class: className = '', padding = 'p-0', children, ...rest }: Props = $props();
 
-	const tag = $derived< 'a' | 'div'>(href ? 'a' : 'div');
+	const tag = $derived<'a' | 'div'>(href ? 'a' : 'div');
 </script>
 
 <svelte:element

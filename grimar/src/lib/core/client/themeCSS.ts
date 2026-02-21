@@ -69,7 +69,7 @@ export function exportThemeAsCSS(theme: ThemeConfig): string {
 
 export function getThemeGradient(theme: ThemeConfig): string {
 	const accent = theme.colors.accent.toLowerCase();
-	
+
 	const colorToShade: Record<string, string> = {
 		'#a855f7': 'purple',
 		'#f59e0b': 'amber',
@@ -84,14 +84,14 @@ export function getThemeGradient(theme: ThemeConfig): string {
 		'#eab308': 'yellow',
 		'#6366f1': 'indigo'
 	};
-	
+
 	const shade = colorToShade[accent] || 'purple';
 	return `from-${shade}-500/20 to-${shade}-500/20`;
 }
 
 export function getThemeAccentClass(theme: ThemeConfig): string {
 	const accent = theme.colors.accent.toLowerCase();
-	
+
 	const colorToClass: Record<string, string> = {
 		'#a855f7': 'text-purple-400',
 		'#f59e0b': 'text-amber-400',
@@ -106,6 +106,6 @@ export function getThemeAccentClass(theme: ThemeConfig): string {
 		'#eab308': 'text-yellow-400',
 		'#6366f1': 'text-indigo-400'
 	};
-	
+
 	return colorToClass[accent] || 'text-purple-400';
 }

@@ -63,7 +63,7 @@
 		totalItems={displayInfo.totalItems}
 		scrollTop={displayInfo.scrollTop}
 	/>
-	<div class="relative w-full virtual-list-inner" style="height: {$virtualizer.getTotalSize()}px;">
+	<div class="virtual-list-inner relative w-full" style="height: {$virtualizer.getTotalSize()}px;">
 		{#each $virtualizer.getVirtualItems() as row (row.index)}
 			<div
 				class="virtual-list-item absolute left-0 w-full"
