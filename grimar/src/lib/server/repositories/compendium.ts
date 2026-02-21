@@ -2,6 +2,8 @@ import { eq, and, sql, like, or, desc, inArray, type SQL } from 'drizzle-orm';
 import { getDb } from '../db/index';
 import { compendium, type CompendiumItem, type CompendiumType } from '../db/schema';
 
+export type { CompendiumType } from '../db/schema';
+
 export interface PaginatedResult<T> {
 	items: T[];
 	total: number;
