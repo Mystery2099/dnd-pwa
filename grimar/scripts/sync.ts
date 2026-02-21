@@ -39,8 +39,8 @@ import type {
 	SyncProgressCallback
 } from '../src/lib/server/services/sync/progress';
 import { applyPragmas } from '../src/lib/server/db/db-config';
-import { count } from 'drizzle-orm';
-import { compendiumItems } from '../src/lib/server/db/schema';
+import { count, eq } from 'drizzle-orm';
+import { compendium } from '../src/lib/server/db/schema';
 
 // Silence the winston logger during sync for cleaner output
 process.env.SUPPRESS_LOGS = 'true';
@@ -361,7 +361,11 @@ ${colors.bright}Examples:${colors.reset}
 async function getDbStats(db: any): Promise<Record<CompendiumTypeName, number>> {
 	const stats: Record<string, number> = {};
 	for (const type of VALID_TYPES) {
-		stats[type] = (await db.$count(compendiumItems, undefined)) as number;
+		const result = await db
+			.select({ count: count() })
+			.from(compendium)
+			.where(eq(schema.compendium.type, type));
+		stats[type] = result[0]?.count || 0;
 	}
 	return stats as Record<CompendiumTypeName, number>;
 }
