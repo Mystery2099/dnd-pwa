@@ -5,74 +5,50 @@
  * that B-tree indexes can't efficiently handle.
  *
  * This module indexes:
+ * - key: Unique identifier (stored for lookups)
  * - name: Item name (high weight)
- * - summary: Brief description (medium weight)
- * - content: Full searchable text from details JSON (lower weight)
+ * - description: Full description text
  */
 
 import { getDb } from '$lib/server/db';
 import type { Db } from '$lib/server/db';
-import { compendiumItems } from '$lib/server/db/schema';
+import { compendium } from '$lib/server/db/schema';
 import { sql } from 'drizzle-orm';
 import { createModuleLogger } from '$lib/server/logger';
-import { extractSearchableContent } from './fts-utils';
 
 const log = createModuleLogger('FtsService');
 
-// ============================================================================
-// Query Parsing
-// ============================================================================
-
-/**
- * Parse FTS5 query: trim, split on whitespace, join with AND, add wildcard
- */
 function parseFtsQuery(query: string): string {
 	return query.trim().split(/\s+/).join(' ') + '*';
 }
 
-/**
- * Initialize FTS virtual table for compendium search
- * Run this once during app startup or migration
- */
 export async function initFts(db?: Db): Promise<void> {
 	log.info('Initializing FTS5 virtual table');
 	const database = db ?? (await getDb());
 
-	// Drop existing FTS table to recreate with new schema
-	// This ensures clean migration when schema changes
-	await database.run(sql`DROP TABLE IF EXISTS compendium_items_fts`);
+	await database.run(sql`DROP TABLE IF EXISTS compendium_fts`);
 
-	// Create FTS5 virtual table with content column for full-text search
-	// Using content= explicitly (not contentless) since we have searchable content
 	await database.run(sql`
-		CREATE VIRTUAL TABLE compendium_items_fts USING fts5(
+		CREATE VIRTUAL TABLE compendium_fts USING fts5(
+			key,
 			name,
-			summary,
-			content,
+			description,
 			tokenize='unicode61'
 		)
 	`);
 	log.info('FTS5 virtual table created');
 }
 
-/**
- * Populate FTS with all existing compendium data
- * Should be called after initFts() during setup or migration
- */
 export async function populateFtsFromDatabase(db?: Db): Promise<number> {
 	log.info('Populating FTS with existing compendium data');
 	const database = db ?? (await getDb());
 
-	const items = await database.select().from(compendiumItems);
+	const items = await database.select().from(compendium);
 	let count = 0;
 
 	for (const item of items) {
-		const content = item.content
-			? extractSearchableContent(item.details as Record<string, unknown>) + ' ' + item.content
-			: extractSearchableContent(item.details as Record<string, unknown>);
-
 		await database.run(
-			sql`INSERT INTO compendium_items_fts(rowid, name, summary, content) VALUES (${item.id}, ${item.name}, ${item.summary ?? ''}, ${content})`
+			sql`INSERT INTO compendium_fts(key, name, description) VALUES (${item.key}, ${item.name}, ${item.description ?? ''})`
 		);
 		count++;
 	}
@@ -81,100 +57,68 @@ export async function populateFtsFromDatabase(db?: Db): Promise<number> {
 	return count;
 }
 
-/**
- * Sync a single item to FTS index
- */
 export async function syncItemToFts(
-	id: number,
+	key: string,
 	name: string,
-	summary: string | null,
-	details: Record<string, unknown>,
-	content: string | null,
+	description: string | null,
 	db?: Db
 ): Promise<void> {
 	const database = db ?? (await getDb());
 
-	// Extract searchable content from details if not provided
-	const searchableContent = content
-		? extractSearchableContent(details) + ' ' + content
-		: extractSearchableContent(details);
-
 	await database.run(
-		sql`INSERT OR REPLACE INTO compendium_items_fts(rowid, name, summary, content) VALUES (${id}, ${name}, ${summary ?? ''}, ${searchableContent})`
+		sql`INSERT OR REPLACE INTO compendium_fts(key, name, description) VALUES (${key}, ${name}, ${description ?? ''})`
 	);
-	log.debug({ id, name }, 'Item synced to FTS');
+	log.debug({ key, name }, 'Item synced to FTS');
 }
 
-/**
- * Remove item from FTS index
- */
-export async function removeItemFromFts(id: number, db?: Db): Promise<void> {
+export async function removeItemFromFts(key: string, db?: Db): Promise<void> {
 	const database = db ?? (await getDb());
-	await database.run(sql`DELETE FROM compendium_items_fts WHERE rowid = ${id}`);
-	log.debug({ id }, 'Item removed from FTS');
+	await database.run(sql`DELETE FROM compendium_fts WHERE key = ${key}`);
+	log.debug({ key }, 'Item removed from FTS');
 }
 
-/**
- * Search using FTS5 - much faster than LIKE '%query%'
- * @param query Search term (splits on spaces for AND matching)
- * @param limit Max results
- * @returns Array of rowids matching the search
- */
-export async function searchFts(query: string, limit: number = 50, db?: Db): Promise<number[]> {
+export async function searchFts(query: string, limit: number = 50, db?: Db): Promise<string[]> {
 	const database = db ?? (await getDb());
 	const ftsQuery = parseFtsQuery(query);
 
 	log.debug({ query: ftsQuery, limit }, 'FTS search executed');
-	const results = await database.all<{ rowid: number }>(
-		sql`SELECT rowid FROM compendium_items_fts WHERE compendium_items_fts MATCH ${ftsQuery} LIMIT ${limit}`
+	const results = await database.all<{ key: string }>(
+		sql`SELECT key FROM compendium_fts WHERE compendium_fts MATCH ${ftsQuery} LIMIT ${limit}`
 	);
 
 	log.debug({ resultCount: results.length }, 'FTS search completed');
-	return results.map((r) => r.rowid);
+	return results.map((r) => r.key);
 }
 
-/**
- * Search with ranking - returns results ordered by relevance (BM25)
- */
 export async function searchFtsRanked(
 	query: string,
 	limit: number = 50,
 	db?: Db
-): Promise<{ rowid: number; rank: number }[]> {
+): Promise<{ key: string; rank: number }[]> {
 	const database = db ?? (await getDb());
 	const ftsQuery = parseFtsQuery(query);
 
 	log.debug({ query: ftsQuery, limit }, 'FTS ranked search executed');
-	const results = await database.all<{ rowid: number; rank: number }>(
-		sql`SELECT rowid, bm25(compendium_items_fts) as rank FROM compendium_items_fts WHERE compendium_items_fts MATCH ${ftsQuery} ORDER BY rank LIMIT ${limit}`
+	const results = await database.all<{ key: string; rank: number }>(
+		sql`SELECT key, bm25(compendium_fts) as rank FROM compendium_fts WHERE compendium_fts MATCH ${ftsQuery} ORDER BY rank LIMIT ${limit}`
 	);
 
 	log.debug({ resultCount: results.length }, 'FTS ranked search completed');
 	return results;
 }
 
-/**
- * Rebuild the entire FTS index from all compendium items
- * Useful for migration or after adding new searchable content
- */
 export async function rebuildFtsIndex(db?: Db): Promise<number> {
 	log.info('Rebuilding FTS index');
 	const database = db ?? (await getDb());
 
-	// Clear existing index
-	await database.run(sql`DELETE FROM compendium_items_fts`);
+	await database.run(sql`DELETE FROM compendium_fts`);
 
-	// Get all items with their content
-	const items = await database.select().from(compendiumItems);
+	const items = await database.select().from(compendium);
 	let count = 0;
 
 	for (const item of items) {
-		const searchableContent = item.content
-			? extractSearchableContent(item.details as Record<string, unknown>) + ' ' + item.content
-			: extractSearchableContent(item.details as Record<string, unknown>);
-
 		await database.run(
-			sql`INSERT INTO compendium_items_fts(rowid, name, summary, content) VALUES (${item.id}, ${item.name}, ${item.summary ?? ''}, ${searchableContent})`
+			sql`INSERT INTO compendium_fts(key, name, description) VALUES (${item.key}, ${item.name}, ${item.description ?? ''})`
 		);
 		count++;
 	}
@@ -183,22 +127,13 @@ export async function rebuildFtsIndex(db?: Db): Promise<number> {
 	return count;
 }
 
-/**
- * Get FTS index statistics
- */
-export async function getFtsStats(db?: Db): Promise<{ rowCount: number; tableSize: string }> {
+export async function getFtsStats(db?: Db): Promise<{ rowCount: number }> {
 	const database = db ?? (await getDb());
 
 	const rowCountResult = await database.all<{ count: number }>(
-		sql`SELECT count(*) as count FROM compendium_items_fts`
+		sql`SELECT count(*) as count FROM compendium_fts`
 	);
 	const rowCount = rowCountResult[0]?.count ?? 0;
 
-	// Get approximate size
-	const sizeResult = await database.all<{ size: string }>(
-		sql`SELECT pg_size_approx(sqlite_fts_data('compendium_items_fts')) as size`
-	);
-	const tableSize = sizeResult[0]?.size ?? 'unknown';
-
-	return { rowCount, tableSize };
+	return { rowCount };
 }

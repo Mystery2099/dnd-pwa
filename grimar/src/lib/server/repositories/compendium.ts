@@ -1,617 +1,371 @@
-import { getDb } from '$lib/server/db';
-import { compendiumItems } from '$lib/server/db/schema';
-import { eq, sql, desc, like, or, and, inArray } from 'drizzle-orm';
-import { MemoryCache, CacheKeys, getCacheTTL } from '$lib/server/utils/cache';
-import { measureDb } from '$lib/server/utils/monitoring';
-import { CompendiumQueryParser, type QueryOptions } from './CompendiumQueryParser';
-import { createModuleLogger } from '$lib/server/logger';
-import { JSON_PATHS, jsonExtract } from '$lib/server/db/compendium-filters';
-
-const log = createModuleLogger('CompendiumRepository');
-
-export interface PaginationOptions {
-	limit?: number;
-	offset?: number;
-	search?: string;
-	sortBy?: 'name' | 'source' | 'created_at' | 'spellLevel' | 'spellSchool';
-	sortOrder?: 'asc' | 'desc';
-	filterLogic?: 'and' | 'or';
-	filters?: {
-		spellLevel?: number[];
-		spellSchool?: string[];
-	};
-}
+import { eq, and, sql, like, or, desc, inArray, type SQL } from 'drizzle-orm';
+import { getDb } from '../db/index';
+import { compendium, type CompendiumItem, type CompendiumType } from '../db/schema';
 
 export interface PaginatedResult<T> {
 	items: T[];
 	total: number;
-	limit: number;
-	offset: number;
-	hasMore: boolean;
-	hasPrevious: boolean;
+	page: number;
+	pageSize: number;
 	totalPages: number;
-	currentPage: number;
+	hasMore: boolean;
 }
 
-/**
- * Compendium Repository
- *
- * Handles database operations for compendium items.
- * Now uses modular components for query parsing and data transformation.
- */
-export class CompendiumRepository {
-	private cache = MemoryCache.getInstance();
+export interface FilterOptions {
+	search?: string;
+	gamesystem?: string;
+	document?: string;
+	source?: string;
+	sortBy?: 'name' | 'created_at' | 'updated_at';
+	sortOrder?: 'asc' | 'desc';
+}
 
-	/**
-	 * Get paginated compendium items
-	 * @param type The type of compendium items
-	 * @param options Query options
-	 * @returns Paginated result of items
-	 */
-	async getPaginatedItems(
-		type: string,
-		options: QueryOptions = {}
-	): Promise<PaginatedResult<typeof compendiumItems.$inferSelect>> {
-		// Check cache first
-		const cacheKey = CacheKeys.compendiumList(type, options);
-		const cached = this.cache.get<PaginatedResult<typeof compendiumItems.$inferSelect>>(cacheKey);
-		if (cached) {
-			log.debug({ type, cacheKey }, 'Cache hit');
-			return cached;
-		}
-		log.debug({ type, cacheKey }, 'Cache miss - fetching from DB');
+export async function getPaginatedItems(
+	type: CompendiumType,
+	options: {
+		page?: number;
+		pageSize?: number;
+		filters?: FilterOptions;
+	}
+): Promise<PaginatedResult<CompendiumItem>> {
+	const db = await getDb();
+	const page = options.page ?? 1;
+	const pageSize = Math.min(options.pageSize ?? 50, 100);
+	const offset = (page - 1) * pageSize;
+	const filters = options.filters ?? {};
 
-		const db = await measureDb('compendium_db_connection', () => getDb());
+	let whereClause: SQL<unknown> = eq(compendium.type, type);
 
-		// Apply filters and sorting
-		const whereClause = this.buildWhereClause(type, options);
-		const orderClause = this.buildOrderClause(options);
-
-		log.debug({ type }, 'Querying database');
-
-		// Get total count efficiently using $count() instead of loading all rows
-		const total = await db.$count(compendiumItems, whereClause);
-		log.debug({ type, total }, 'Total items matching type');
-
-		// Get paginated items
-		const items = await db
-			.select()
-			.from(compendiumItems)
-			.where(whereClause)
-			.orderBy(orderClause)
-			.limit(options.limit || 50)
-			.offset(options.offset || 0);
-
-		const totalPages = Math.ceil(total / (options.limit || 50));
-		const currentPage = Math.floor((options.offset || 0) / (options.limit || 50)) + 1;
-		const hasMore = currentPage < totalPages;
-
-		const result = {
-			items,
-			total,
-			limit: options.limit || 50,
-			offset: options.offset || 0,
-			hasMore,
-			hasPrevious: (options.offset || 0) > 0,
-			totalPages,
-			currentPage
-		};
-
-		// Cache result
-		this.cache.set(cacheKey, result, getCacheTTL('compendium'));
-
-		return result;
+	if (filters.search) {
+		const searchTerm = `%${filters.search}%`;
+		whereClause = and(
+			whereClause,
+			or(like(compendium.name, searchTerm), like(compendium.description, searchTerm))
+		)!;
 	}
 
-	/**
-	 * Get a single compendium item
-	 * @param type The type of item
-	 * @param id The ID of item
-	 * @returns The item or null if not found
-	 */
-	async getItem(
-		type: string,
-		id: string | number
-	): Promise<typeof compendiumItems.$inferSelect | null> {
-		const cacheKey = CacheKeys.compendiumItem(type, String(id));
-
-		// Check cache first
-		const cached = this.cache.get<typeof compendiumItems.$inferSelect>(cacheKey);
-		if (cached) {
-			log.debug({ type, id, cacheKey }, 'Cache hit - item found');
-			return cached;
-		}
-		log.debug({ type, id, cacheKey }, 'Cache miss - fetching from DB');
-
-		const db = await getDb();
-
-		let item;
-		if (typeof id === 'string') {
-			// Search by external ID
-			log.debug({ type, externalId: id }, 'Querying by external ID');
-			item = await db
-				.select()
-				.from(compendiumItems)
-				.where(and(eq(compendiumItems.type, type), eq(compendiumItems.externalId, id)))
-				.limit(1);
-		} else {
-			// Search by internal ID
-			log.debug({ type, internalId: id }, 'Querying by internal ID');
-			item = await db
-				.select()
-				.from(compendiumItems)
-				.where(and(eq(compendiumItems.type, type), eq(compendiumItems.id, id)))
-				.limit(1);
-		}
-
-		const result = item.length > 0 ? item[0] : null;
-
-		if (result) {
-			log.debug({ type, id, found: true }, 'Item found in database');
-			// Cache result
-			this.cache.set(cacheKey, result, getCacheTTL('compendium'));
-		} else {
-			log.debug({ type, id }, 'Item not found in database');
-		}
-
-		return result;
+	if (filters.gamesystem) {
+		whereClause = and(whereClause, eq(compendium.gamesystemKey, filters.gamesystem))!;
 	}
 
-	/**
-	 * Get normalized compendium items with transformation applied
-	 * @param type The type of items
-	 * @param options Query options
-	 * @returns Paginated result of normalized items
-	 */
-	async getNormalizedItems<T = typeof compendiumItems.$inferSelect>(
-		type: string,
-		options: QueryOptions = {}
-	): Promise<PaginatedResult<T>> {
-		const result = await this.getPaginatedItems(type, options);
-
-		// Transform each item - for now just return the raw items
-		const transformedItems = result.items.map((item) => item as T);
-
-		return {
-			...result,
-			items: transformedItems
-		};
+	if (filters.document) {
+		whereClause = and(whereClause, eq(compendium.documentKey, filters.document))!;
 	}
 
-	/**
-	 * Get a normalized compendium item with transformation applied
-	 * @param type The type of item
-	 * @param id The ID of item
-	 * @returns The normalized item or null if not found
-	 */
-	async getNormalizedItem<T = typeof compendiumItems.$inferSelect>(
-		type: string,
-		id: string | number
-	): Promise<T | null> {
-		const item = await this.getItem(type, id);
-		if (!item) {
-			return null;
-		}
-
-		return item as T;
+	if (filters.source) {
+		whereClause = and(whereClause, eq(compendium.source, filters.source))!;
 	}
 
-	/**
-	 * Search compendium items using FTS for fast search
-	 * Falls back to LIKE if FTS returns no results
-	 * @param type The type of items
-	 * @param query Search query
-	 * @returns Array of matching items
-	 */
-	async searchItems(type: string, query: string): Promise<(typeof compendiumItems.$inferSelect)[]> {
-		const cacheKey = CacheKeys.compendiumSearch(type, query);
+	const sortBy = filters.sortBy ?? 'name';
+	const sortOrder = filters.sortOrder ?? 'asc';
+	const sortColumn = sortBy === 'created_at' 
+		? compendium.createdAt 
+		: sortBy === 'updated_at' 
+			? compendium.updatedAt 
+			: compendium.name;
+	const orderBy = sortOrder === 'desc' ? desc(sortColumn) : sortColumn;
 
-		// Check cache first
-		const cached = this.cache.get<(typeof compendiumItems.$inferSelect)[]>(cacheKey);
-		if (cached) {
-			log.debug({ type, query, cacheKey, resultCount: cached.length }, 'Search cache hit');
-			return cached;
-		}
-		log.debug({ type, query, cacheKey }, 'Search cache miss');
+	const [items, countResult] = await Promise.all([
+		db.select().from(compendium).where(whereClause).orderBy(orderBy).limit(pageSize).offset(offset),
+		db.select({ count: sql<number>`count(*)` }).from(compendium).where(whereClause)
+	]);
 
-		const db = await getDb();
+	const total = Number(countResult[0]?.count ?? 0);
+	const totalPages = Math.ceil(total / pageSize);
 
-		let items: (typeof compendiumItems.$inferSelect)[];
+	return {
+		items,
+		total,
+		page,
+		pageSize,
+		totalPages,
+		hasMore: page < totalPages
+	};
+}
 
-		try {
-			// Try FTS search first (much faster than LIKE)
-			const { searchFts } = await import('$lib/server/db/db-fts');
-			const ftsIds = await searchFts(query, 50);
+export async function getItem(type: CompendiumType, key: string): Promise<CompendiumItem | null> {
+	const db = await getDb();
+	const results = await db
+		.select()
+		.from(compendium)
+		.where(and(eq(compendium.type, type), eq(compendium.key, key)))
+		.limit(1);
 
-			if (ftsIds.length > 0) {
-				log.debug({ query, ftsResultCount: ftsIds.length }, 'FTS search successful');
-				// Fetch items by FTS rowids, filtered by type - use inArray for type safety
-				items = await db
-					.select()
-					.from(compendiumItems)
-					.where(and(eq(compendiumItems.type, type), inArray(compendiumItems.id, ftsIds)));
-			} else {
-				// Fallback to LIKE if FTS finds nothing
-				log.info({ query }, 'FTS returned no results, falling back to LIKE');
-				items = await db
-					.select()
-					.from(compendiumItems)
-					.where(
-						and(
-							eq(compendiumItems.type, type),
-							or(
-								like(compendiumItems.name, `%${query}%`),
-								like(compendiumItems.summary || '', `%${query}%`)
-							)
-						)
-					)
-					.limit(20);
-			}
-		} catch (error) {
-			// If FTS fails (not initialized), fall back to LIKE
-			log.warn({ query, error }, 'FTS search failed, falling back to LIKE');
-			items = await db
-				.select()
-				.from(compendiumItems)
-				.where(
-					and(
-						eq(compendiumItems.type, type),
-						or(
-							like(compendiumItems.name, `%${query}%`),
-							like(compendiumItems.summary || '', `%${query}%`)
-						)
-					)
-				)
-				.limit(20);
-		}
+	return results[0] ?? null;
+}
 
-		log.debug({ query, resultCount: items.length }, 'Search completed');
-		// Cache result
-		this.cache.set(cacheKey, items, getCacheTTL('search'));
+export async function getItemByKey(key: string): Promise<CompendiumItem | null> {
+	const db = await getDb();
+	const results = await db.select().from(compendium).where(eq(compendium.key, key)).limit(1);
+	return results[0] ?? null;
+}
 
-		return items;
-	}
+export async function searchItems(
+	type: CompendiumType,
+	query: string,
+	options?: { limit?: number }
+): Promise<CompendiumItem[]> {
+	const db = await getDb();
+	const limit = options?.limit ?? 50;
+	const searchTerm = `%${query}%`;
 
-	/**
-	 * Build WHERE clause from query options
-	 * Uses shared JSON paths for consistency
-	 * @param type The type of items
-	 * @param options Query options
-	 * @returns WHERE clause
-	 */
-	private buildWhereClause(type: string, options: QueryOptions) {
-		const baseCondition = eq(compendiumItems.type, type);
-		const filterConditions: ReturnType<typeof and>[] = [];
-
-		// Spell level filter
-		if (options.filters?.spellLevel && options.filters.spellLevel.length > 0) {
-			const levelConditions = options.filters.spellLevel.map((level) =>
-				eq(jsonExtract(JSON_PATHS.SPELL_LEVEL), level)
-			);
-			filterConditions.push(or(...levelConditions));
-		}
-
-		// Spell school filter
-		if (options.filters?.spellSchool && options.filters.spellSchool.length > 0) {
-			const schoolConditions = options.filters.spellSchool.map((school) =>
-				eq(jsonExtract(JSON_PATHS.SPELL_SCHOOL), school)
-			);
-			filterConditions.push(or(...schoolConditions));
-		}
-
-		// Creature type filter
-		if (options.filters?.type && options.filters.type.length > 0) {
-			const typeConditions = options.filters.type.map((t) =>
-				eq(jsonExtract(JSON_PATHS.CREATURE_TYPE), t)
-			);
-			filterConditions.push(or(...typeConditions));
-		}
-
-		// Creature size filter
-		if (options.filters?.creatureSize && options.filters.creatureSize.length > 0) {
-			const sizeConditions = options.filters.creatureSize.map((size) =>
-				eq(jsonExtract(JSON_PATHS.CREATURE_SIZE), size)
-			);
-			filterConditions.push(or(...sizeConditions));
-		}
-
-		let filterClause: ReturnType<typeof and> | undefined = undefined;
-		if (filterConditions.length > 0) {
-			filterClause =
-				options.filterLogic === 'or' ? or(...filterConditions) : and(...filterConditions);
-		}
-
-		let searchClause: ReturnType<typeof or> | undefined = undefined;
-		if (options.search) {
-			const searchTerm = `%${options.search}%`;
-			searchClause = or(
-				like(compendiumItems.name, searchTerm),
-				like(compendiumItems.summary || '', searchTerm)
-			);
-		}
-
-		const whereParts: ReturnType<typeof and>[] = [baseCondition];
-		if (filterClause) whereParts.push(filterClause);
-		if (searchClause) whereParts.push(and(baseCondition, searchClause));
-
-		return and(...whereParts);
-	}
-
-	/**
-	 * Build ORDER BY clause from query options
-	 * Uses shared JSON paths for consistency
-	 * @param options Query options
-	 * @returns ORDER BY clause
-	 */
-	private buildOrderClause(options: QueryOptions) {
-		const sortBy = options.sortBy || 'name';
-		const sortOrder = options.sortOrder || 'asc';
-
-		// Handle challenge rating special sorting
-		if (sortBy === 'challengeRating') {
-			return sql`
-				CASE
-					WHEN ${jsonExtract(JSON_PATHS.CREATURE_CR)} = '0' THEN 0
-					WHEN ${jsonExtract(JSON_PATHS.CREATURE_CR)} = '1/8' THEN 1
-					WHEN ${jsonExtract(JSON_PATHS.CREATURE_CR)} = '1/4' THEN 2
-					WHEN ${jsonExtract(JSON_PATHS.CREATURE_CR)} = '1/2' THEN 3
-					ELSE CAST(${jsonExtract(JSON_PATHS.CREATURE_CR)} AS REAL)
-				END ${sortOrder === 'desc' ? sql`DESC` : sql`ASC`}
-			`;
-		}
-
-		switch (sortBy) {
-			case 'spellLevel':
-				return sortOrder === 'desc'
-					? desc(jsonExtract(JSON_PATHS.SPELL_LEVEL))
-					: sql`${jsonExtract(JSON_PATHS.SPELL_LEVEL)}`;
-			case 'spellSchool':
-				return sortOrder === 'desc'
-					? desc(jsonExtract(JSON_PATHS.SPELL_SCHOOL))
-					: sql`${jsonExtract(JSON_PATHS.SPELL_SCHOOL)} COLLATE NOCASE`;
-			case 'creatureSize':
-				return sortOrder === 'desc'
-					? desc(jsonExtract(JSON_PATHS.CREATURE_SIZE))
-					: sql`${jsonExtract(JSON_PATHS.CREATURE_SIZE)} COLLATE NOCASE`;
-			case 'creatureType':
-				return sortOrder === 'desc'
-					? desc(jsonExtract(JSON_PATHS.CREATURE_TYPE))
-					: sql`${jsonExtract(JSON_PATHS.CREATURE_TYPE)} COLLATE NOCASE`;
-			case 'name':
-			default:
-				return sortOrder === 'desc'
-					? desc(compendiumItems.name)
-					: sql`${compendiumItems.name} COLLATE NOCASE`;
-		}
-	}
-
-	/**
-	 * Invalidate cache for a specific type
-	 * @param type The type of items to invalidate
-	 */
-	invalidateCache(type: string): void {
-		// Invalidate all cache entries for this type
-		this.cache.invalidatePattern(`compendium:list:${type}:.*`);
-		this.cache.invalidatePattern(`compendium:search:${type}:.*`);
-		this.cache.delete(CacheKeys.compendiumCount(type));
-	}
-
-	/**
-	 * Invalidate all compendium cache
-	 */
-	invalidateAllCache(): void {
-		// Invalidate all cache entries
-		this.cache.invalidatePattern('compendium:list:.*');
-		this.cache.invalidatePattern('compendium:search:.*');
-		this.cache.invalidatePattern('compendium:count:.*');
-	}
-
-	/**
-	 * Create a new homebrew item
-	 * @param data The homebrew item data
-	 * @param username The creator's username
-	 * @returns The ID of the created item
-	 */
-	async createHomebrewItem(
-		data: {
-			type: string;
-			name: string;
-			summary: string;
-			details: Record<string, unknown>;
-			jsonData: string;
-			externalId?: string;
-		},
-		username: string
-	): Promise<number> {
-		const db = await getDb();
-		const result = await db.insert(compendiumItems).values({
-			source: 'homebrew',
-			type: data.type,
-			externalId: data.externalId || `homebrew_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`,
-			name: data.name,
-			summary: data.summary,
-			details: data.details,
-			jsonData: data.jsonData,
-			sourcePublisher: 'homebrew',
-			sourceBook: username,
-			createdBy: username
-		}).returning({ id: compendiumItems.id });
-
-		this.invalidateCache(data.type);
-		log.info({ itemId: result[0].id, username, type: data.type }, 'Created homebrew item');
-		return result[0].id;
-	}
-
-	/**
-	 * Update a homebrew item (ownership or admin check required)
-	 * @param id The item ID
-	 * @param data The updated data
-	 * @param username The user's username
-	 * @param role The user's role
-	 * @returns True if updated, false if not authorized or not found
-	 */
-	async updateHomebrewItem(
-		id: number,
-		data: Partial<{
-			name: string;
-			summary: string;
-			details: Record<string, unknown>;
-			jsonData: string;
-		}>,
-		username: string,
-		role: 'user' | 'admin'
-	): Promise<boolean> {
-		const db = await getDb();
-
-		// Check ownership or admin
-		const item = await db
-			.select()
-			.from(compendiumItems)
-			.where(eq(compendiumItems.id, id))
-			.limit(1);
-
-		if (item.length === 0) {
-			log.warn({ id }, 'Homebrew item not found');
-			return false;
-		}
-
-		const existingItem = item[0];
-		if (existingItem.source !== 'homebrew') {
-			log.warn({ id }, 'Item is not a homebrew item');
-			return false;
-		}
-
-		if (role !== 'admin' && existingItem.createdBy !== username) {
-			log.warn({ id, username, role }, 'Not authorized to update this item');
-			return false;
-		}
-
-		// Build update values
-		const updateData: Record<string, unknown> = {};
-		if (data.name !== undefined) updateData.name = data.name;
-		if (data.summary !== undefined) updateData.summary = data.summary;
-		if (data.details !== undefined) updateData.details = data.details;
-		if (data.jsonData !== undefined) updateData.jsonData = data.jsonData;
-
-		await db
-			.update(compendiumItems)
-			.set(updateData)
-			.where(eq(compendiumItems.id, id));
-
-		this.invalidateCache(existingItem.type);
-		log.info({ itemId: id, username }, 'Updated homebrew item');
-		return true;
-	}
-
-	/**
-	 * Delete a homebrew item (ownership or admin check required)
-	 * @param id The item ID
-	 * @param username The user's username
-	 * @param role The user's role
-	 * @returns True if deleted, false if not authorized or not found
-	 */
-	async deleteHomebrewItem(
-		id: number,
-		username: string,
-		role: 'user' | 'admin'
-	): Promise<boolean> {
-		const db = await getDb();
-
-		// Check ownership or admin
-		const item = await db
-			.select()
-			.from(compendiumItems)
-			.where(eq(compendiumItems.id, id))
-			.limit(1);
-
-		if (item.length === 0) {
-			log.warn({ id }, 'Homebrew item not found');
-			return false;
-		}
-
-		const existingItem = item[0];
-		if (existingItem.source !== 'homebrew') {
-			log.warn({ id }, 'Item is not a homebrew item');
-			return false;
-		}
-
-		if (role !== 'admin' && existingItem.createdBy !== username) {
-			log.warn({ id, username, role }, 'Not authorized to delete this item');
-			return false;
-		}
-
-		await db.delete(compendiumItems).where(eq(compendiumItems.id, id));
-
-		this.invalidateCache(existingItem.type);
-		log.info({ itemId: id, username }, 'Deleted homebrew item');
-		return true;
-	}
-
-	/**
-	 * Get user's homebrew items
-	 * @param username The user's username
-	 * @returns Array of homebrew items
-	 */
-	async getUserHomebrewItems(username: string): Promise<typeof compendiumItems.$inferSelect[]> {
-		const db = await getDb();
-		return db
-			.select()
-			.from(compendiumItems)
-			.where(
-				and(
-					eq(compendiumItems.source, 'homebrew'),
-					eq(compendiumItems.createdBy, username)
-				)
+	const results = await db
+		.select()
+		.from(compendium)
+		.where(
+			and(
+				eq(compendium.type, type),
+				or(like(compendium.name, searchTerm), like(compendium.description, searchTerm))
 			)
-			.orderBy(desc(compendiumItems.id));
-	}
+		)
+		.orderBy(compendium.name)
+		.limit(limit);
 
-	/**
-	 * Get all homebrew items (visible to all users)
-	 * @returns Array of all homebrew items
-	 */
-	async getAllHomebrewItems(): Promise<typeof compendiumItems.$inferSelect[]> {
-		const db = await getDb();
-		return db
-			.select()
-			.from(compendiumItems)
-			.where(eq(compendiumItems.source, 'homebrew'))
-			.orderBy(desc(compendiumItems.id));
-	}
-
-	/**
-	 * Get homebrew item by internal ID
-	 * @param id The item ID
-	 * @returns The item or null if not found
-	 */
-	async getHomebrewItemById(id: number): Promise<typeof compendiumItems.$inferSelect | null> {
-		const db = await getDb();
-		const items = await db
-			.select()
-			.from(compendiumItems)
-			.where(and(eq(compendiumItems.id, id), eq(compendiumItems.source, 'homebrew')))
-			.limit(1);
-		return items.length > 0 ? items[0] : null;
-	}
+	return results;
 }
 
-// Export a singleton instance
-export const compendiumRepository = new CompendiumRepository();
+export async function searchAll(
+	query: string,
+	options?: { limit?: number; types?: CompendiumType[] }
+): Promise<CompendiumItem[]> {
+	const db = await getDb();
+	const limit = options?.limit ?? 50;
+	const searchTerm = `%${query}%`;
 
-// Legacy functions for backward compatibility
-export const getPaginatedCompendiumItems = (type: string, options: QueryOptions = {}) =>
-	compendiumRepository.getPaginatedItems(type, options);
+	let whereClause: SQL<unknown> = or(
+		like(compendium.name, searchTerm),
+		like(compendium.description, searchTerm)
+	)!;
 
-export const parsePaginationQuery = (url: URL) => CompendiumQueryParser.parseQuery(url);
+	if (options?.types?.length) {
+		whereClause = and(whereClause, inArray(compendium.type, options.types))!;
+	}
 
-export const invalidateCompendiumCache = (type: string) =>
-	compendiumRepository.invalidateCache(type);
+	const results = await db
+		.select()
+		.from(compendium)
+		.where(whereClause)
+		.orderBy(compendium.name)
+		.limit(limit);
 
-export const invalidateAllCompendiumCache = () => compendiumRepository.invalidateAllCache();
+	return results;
+}
 
-export const createHomebrewItem = compendiumRepository.createHomebrewItem.bind(compendiumRepository);
-export const updateHomebrewItem = compendiumRepository.updateHomebrewItem.bind(compendiumRepository);
-export const deleteHomebrewItem = compendiumRepository.deleteHomebrewItem.bind(compendiumRepository);
-export const getUserHomebrewItems = compendiumRepository.getUserHomebrewItems.bind(compendiumRepository);
-export const getAllHomebrewItems = compendiumRepository.getAllHomebrewItems.bind(compendiumRepository);
-export const getHomebrewItemById = compendiumRepository.getHomebrewItemById.bind(compendiumRepository);
+export async function createItem(
+	data: Omit<CompendiumItem, 'createdAt' | 'updatedAt'>
+): Promise<CompendiumItem> {
+	const db = await getDb();
+	const now = new Date();
+	
+	const [item] = await db
+		.insert(compendium)
+		.values({
+			...data,
+			createdAt: now,
+			updatedAt: now
+		})
+		.returning();
+
+	return item;
+}
+
+export async function updateItem(
+	key: string,
+	data: Partial<Omit<CompendiumItem, 'key' | 'createdAt'>>
+): Promise<CompendiumItem | null> {
+	const db = await getDb();
+	const now = new Date();
+	
+	const [item] = await db
+		.update(compendium)
+		.set({
+			...data,
+			updatedAt: now
+		})
+		.where(eq(compendium.key, key))
+		.returning();
+
+	return item ?? null;
+}
+
+export async function deleteItem(key: string): Promise<boolean> {
+	const db = await getDb();
+	const result = await db.delete(compendium).where(eq(compendium.key, key)).returning();
+	return result.length > 0;
+}
+
+export async function getItemsBySource(source: string): Promise<CompendiumItem[]> {
+	const db = await getDb();
+	return db.select().from(compendium).where(eq(compendium.source, source));
+}
+
+export async function getItemsByType(type: CompendiumType): Promise<CompendiumItem[]> {
+	const db = await getDb();
+	return db.select().from(compendium).where(eq(compendium.type, type));
+}
+
+export async function getTypeCounts(): Promise<Record<string, number>> {
+	const db = await getDb();
+	const results = await db
+		.select({
+			type: compendium.type,
+			count: sql<number>`count(*)`
+		})
+		.from(compendium)
+		.groupBy(compendium.type);
+
+	return Object.fromEntries(results.map((r) => [r.type, Number(r.count)]));
+}
+
+export async function getDistinctValues(
+	field: 'gamesystemKey' | 'documentKey' | 'publisherKey' | 'source',
+	type?: CompendiumType
+): Promise<string[]> {
+	const db = await getDb();
+	const column = compendium[field];
+	
+	let query = db
+		.selectDistinct({ value: column })
+		.from(compendium)
+		.where(sql`${column} IS NOT NULL`);
+
+	if (type) {
+		query = db
+			.selectDistinct({ value: column })
+			.from(compendium)
+			.where(and(eq(compendium.type, type), sql`${column} IS NOT NULL`));
+	}
+
+	const results = await query.orderBy(column);
+	return results.map((r) => r.value).filter((v): v is string => v !== null);
+}
+
+export async function clearType(type: CompendiumType): Promise<number> {
+	const db = await getDb();
+	const result = await db.delete(compendium).where(eq(compendium.type, type)).returning();
+	return result.length;
+}
+
+export async function clearSource(source: string): Promise<number> {
+	const db = await getDb();
+	const result = await db.delete(compendium).where(eq(compendium.source, source)).returning();
+	return result.length;
+}
+
+export async function bulkInsert(items: Omit<CompendiumItem, 'createdAt' | 'updatedAt'>[]): Promise<number> {
+	if (items.length === 0) return 0;
+	
+	const db = await getDb();
+	const now = new Date();
+	
+	const itemsWithTimestamps = items.map((item) => ({
+		...item,
+		createdAt: now,
+		updatedAt: now
+	}));
+
+	const result = await db.insert(compendium).values(itemsWithTimestamps).returning();
+	return result.length;
+}
+
+export async function upsertItem(
+	data: Omit<CompendiumItem, 'createdAt' | 'updatedAt'>
+): Promise<CompendiumItem> {
+	const db = await getDb();
+	const now = new Date();
+	
+	const [item] = await db
+		.insert(compendium)
+		.values({
+			...data,
+			createdAt: now,
+			updatedAt: now
+		})
+		.onConflictDoUpdate({
+			target: compendium.key,
+			set: {
+				name: data.name,
+				description: data.description,
+				data: data.data,
+				documentKey: data.documentKey,
+				documentName: data.documentName,
+				gamesystemKey: data.gamesystemKey,
+				gamesystemName: data.gamesystemName,
+				publisherKey: data.publisherKey,
+				publisherName: data.publisherName,
+				updatedAt: now
+			}
+		})
+		.returning();
+
+	return item;
+}
+
+export async function upsertItems(
+	items: Omit<CompendiumItem, 'createdAt' | 'updatedAt'>[]
+): Promise<number> {
+	if (items.length === 0) return 0;
+	
+	let count = 0;
+	for (const item of items) {
+		await upsertItem(item);
+		count++;
+	}
+	return count;
+}
+
+export async function getUserHomebrewItems(username: string): Promise<CompendiumItem[]> {
+	const db = await getDb();
+	return db
+		.select()
+		.from(compendium)
+		.where(and(eq(compendium.source, 'homebrew'), eq(compendium.createdBy, username)))
+		.orderBy(desc(compendium.updatedAt));
+}
+
+export async function getHomebrewItemByKey(key: string): Promise<CompendiumItem | null> {
+	const db = await getDb();
+	const results = await db
+		.select()
+		.from(compendium)
+		.where(and(eq(compendium.key, key), eq(compendium.source, 'homebrew')))
+		.limit(1);
+	return results[0] ?? null;
+}
+
+export async function updateHomebrewItem(
+	key: string,
+	data: { name?: string; description?: string; data?: Record<string, unknown> },
+	username: string,
+	role: string
+): Promise<CompendiumItem | null> {
+	const item = await getHomebrewItemByKey(key);
+	
+	if (!item) {
+		return null;
+	}
+	
+	if (role !== 'admin' && item.createdBy !== username) {
+		return null;
+	}
+	
+	return updateItem(key, data);
+}
+
+export async function deleteHomebrewItem(
+	key: string,
+	username: string,
+	role: string
+): Promise<boolean> {
+	const item = await getHomebrewItemByKey(key);
+	
+	if (!item) {
+		return false;
+	}
+	
+	if (role !== 'admin' && item.createdBy !== username) {
+		return false;
+	}
+	
+	return deleteItem(key);
+}
