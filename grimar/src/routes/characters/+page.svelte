@@ -2,17 +2,13 @@
 	import CharacterGrid from '$lib/features/dashboard/components/CharacterGrid.svelte';
 	import DashboardActions from '$lib/features/dashboard/components/DashboardActions.svelte';
 	import { createCharactersQuery } from '$lib/core/client/queries';
-	import CompendiumLoading from '$lib/features/compendium/components/ui/CompendiumLoading.svelte';
-	import CompendiumError from '$lib/features/compendium/components/ui/CompendiumError.svelte';
 
 	let { data: _data } = $props();
 
-	// TanStack Query for characters (server-first, NetworkOnly)
 	const charactersQuery = $derived(createCharactersQuery());
 </script>
 
 <div class="relative min-h-[calc(100vh-6rem)]">
-	<!-- Header Area -->
 	<div class="mb-8">
 		<div>
 			<h1 class="text-holo mb-1 text-3xl font-bold text-[var(--color-text-primary)]">
@@ -22,15 +18,16 @@
 		</div>
 	</div>
 
-	<!-- Content -->
 	{#if charactersQuery.isPending}
-		<CompendiumLoading message="Loading characters..." subtext="Fetching from server" />
+		<div class="flex items-center justify-center py-12">
+			<div class="text-[var(--color-text-muted)]">Loading characters...</div>
+		</div>
 	{:else if charactersQuery.isError}
-		<CompendiumError
-			message={charactersQuery.error instanceof Error
-				? charactersQuery.error.message
-				: 'Unknown error'}
-		/>
+		<div class="flex items-center justify-center py-12">
+			<div class="text-red-400">
+				{charactersQuery.error instanceof Error ? charactersQuery.error.message : 'Unknown error'}
+			</div>
+		</div>
 	{:else if charactersQuery.data.length === 0}
 		<DashboardActions />
 	{:else}
