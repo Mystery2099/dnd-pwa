@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "9da1d61d-22bc-481e-a015-04b3258c2cbd",
-  "prevId": "9cc148fe-039e-4c8a-aee2-1692205ecff1",
+  "id": "01a67f9c-89db-4a2b-9121-e4327766db77",
+  "prevId": "b002a8f4-939e-4395-afa6-ba7f45a7aa6b",
   "tables": {
     "characters": {
       "name": "characters",
@@ -92,11 +92,11 @@
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
-    "compendium_cache": {
-      "name": "compendium_cache",
+    "compendium": {
+      "name": "compendium",
       "columns": {
-        "id": {
-          "name": "id",
+        "key": {
+          "name": "key",
           "type": "text",
           "primaryKey": true,
           "notNull": true,
@@ -107,59 +107,6 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
-        },
-        "data": {
-          "name": "data",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {
-        "compendium_cache_type_idx": {
-          "name": "compendium_cache_type_idx",
-          "columns": [
-            "type"
-          ],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
-    "compendium_items": {
-      "name": "compendium_items",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "source": {
-          "name": "source",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "type": {
-          "name": "type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "external_id": {
-          "name": "external_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
           "autoincrement": false
         },
         "name": {
@@ -169,102 +116,81 @@
           "notNull": true,
           "autoincrement": false
         },
-        "summary": {
-          "name": "summary",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "details": {
-          "name": "details",
+        "source": {
+          "name": "source",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "json_path": {
-          "name": "json_path",
+        "document_key": {
+          "name": "document_key",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "spell_level": {
-          "name": "spell_level",
+        "document_name": {
+          "name": "document_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "gamesystem_key": {
+          "name": "gamesystem_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "gamesystem_name": {
+          "name": "gamesystem_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "publisher_key": {
+          "name": "publisher_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "publisher_name": {
+          "name": "publisher_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "data": {
+          "name": "data",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
-        "spell_school": {
-          "name": "spell_school",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "challenge_rating": {
-          "name": "challenge_rating",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "monster_size": {
-          "name": "monster_size",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "monster_type": {
-          "name": "monster_type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "class_hit_die": {
-          "name": "class_hit_die",
+        "updated_at": {
+          "name": "updated_at",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "race_size": {
-          "name": "race_size",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "race_speed": {
-          "name": "race_speed",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "background_feature": {
-          "name": "background_feature",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "background_skill_proficiencies": {
-          "name": "background_skill_proficiencies",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "feat_prerequisites": {
-          "name": "feat_prerequisites",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "created_by": {
@@ -276,121 +202,61 @@
         }
       },
       "indexes": {
-        "compendium_items_external": {
-          "name": "compendium_items_external",
-          "columns": [
-            "type",
-            "source",
-            "external_id"
-          ],
-          "isUnique": true
-        },
-        "compendium_items_type_idx": {
-          "name": "compendium_items_type_idx",
+        "compendium_type_idx": {
+          "name": "compendium_type_idx",
           "columns": [
             "type"
           ],
           "isUnique": false
         },
-        "compendium_items_name_idx": {
-          "name": "compendium_items_name_idx",
-          "columns": [
-            "name"
-          ],
-          "isUnique": false
-        },
-        "compendium_items_type_name_idx": {
-          "name": "compendium_items_type_name_idx",
+        "compendium_type_name_idx": {
+          "name": "compendium_type_name_idx",
           "columns": [
             "type",
             "name"
           ],
           "isUnique": false
         },
-        "compendium_items_created_by_idx": {
-          "name": "compendium_items_created_by_idx",
+        "compendium_source_idx": {
+          "name": "compendium_source_idx",
           "columns": [
-            "created_by"
+            "source"
           ],
           "isUnique": false
         },
-        "compendium_items_spell_level_idx": {
-          "name": "compendium_items_spell_level_idx",
+        "compendium_document_idx": {
+          "name": "compendium_document_idx",
           "columns": [
-            "spell_level"
+            "document_key"
           ],
           "isUnique": false
         },
-        "compendium_items_spell_school_idx": {
-          "name": "compendium_items_spell_school_idx",
+        "compendium_gamesystem_idx": {
+          "name": "compendium_gamesystem_idx",
           "columns": [
-            "spell_school"
+            "gamesystem_key"
           ],
           "isUnique": false
         },
-        "compendium_items_type_level_school_idx": {
-          "name": "compendium_items_type_level_school_idx",
+        "compendium_publisher_idx": {
+          "name": "compendium_publisher_idx",
           "columns": [
-            "type",
-            "spell_level",
-            "spell_school"
+            "publisher_key"
           ],
           "isUnique": false
         },
-        "compendium_items_challenge_rating_idx": {
-          "name": "compendium_items_challenge_rating_idx",
+        "compendium_name_idx": {
+          "name": "compendium_name_idx",
           "columns": [
-            "challenge_rating"
-          ],
-          "isUnique": false
-        },
-        "compendium_items_monster_size_idx": {
-          "name": "compendium_items_monster_size_idx",
-          "columns": [
-            "monster_size"
-          ],
-          "isUnique": false
-        },
-        "compendium_items_monster_type_idx": {
-          "name": "compendium_items_monster_type_idx",
-          "columns": [
-            "monster_type"
-          ],
-          "isUnique": false
-        },
-        "compendium_items_class_hit_die_idx": {
-          "name": "compendium_items_class_hit_die_idx",
-          "columns": [
-            "class_hit_die"
-          ],
-          "isUnique": false
-        },
-        "compendium_items_race_size_idx": {
-          "name": "compendium_items_race_size_idx",
-          "columns": [
-            "race_size"
-          ],
-          "isUnique": false
-        },
-        "compendium_items_background_feature_idx": {
-          "name": "compendium_items_background_feature_idx",
-          "columns": [
-            "background_feature"
-          ],
-          "isUnique": false
-        },
-        "compendium_items_feat_prerequisites_idx": {
-          "name": "compendium_items_feat_prerequisites_idx",
-          "columns": [
-            "feat_prerequisites"
+            "name"
           ],
           "isUnique": false
         }
       },
       "foreignKeys": {
-        "compendium_items_created_by_users_username_fk": {
-          "name": "compendium_items_created_by_users_username_fk",
-          "tableFrom": "compendium_items",
+        "compendium_created_by_users_username_fk": {
+          "name": "compendium_created_by_users_username_fk",
+          "tableFrom": "compendium",
           "tableTo": "users",
           "columnsFrom": [
             "created_by"
@@ -423,15 +289,8 @@
           "notNull": false,
           "autoincrement": false
         },
-        "last_sync_type": {
-          "name": "last_sync_type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "items_synced": {
-          "name": "items_synced",
+        "item_count": {
+          "name": "item_count",
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
@@ -439,15 +298,7 @@
           "default": 0
         }
       },
-      "indexes": {
-        "sync_metadata_provider_id_idx": {
-          "name": "sync_metadata_provider_id_idx",
-          "columns": [
-            "provider_id"
-          ],
-          "isUnique": false
-        }
-      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
@@ -483,7 +334,9 @@
   "_meta": {
     "schemas": {},
     "tables": {},
-    "columns": {}
+    "columns": {
+      "\"sync_metadata\".\"items_synced\"": "\"sync_metadata\".\"item_count\""
+    }
   },
   "internal": {
     "indexes": {}

@@ -8,6 +8,13 @@
       "when": 1766978462951,
       "tag": "0000_handy_stepford_cuckoos",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1771695965776,
+      "tag": "0001_careful_midnight",
+      "breakpoints": true
     }
   ]
 }
