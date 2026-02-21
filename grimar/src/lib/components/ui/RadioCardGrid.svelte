@@ -14,10 +14,11 @@
 		value?: string;
 		options: readonly Option[];
 		columns?: number;
-		onchange?: (value: string) => void;
+		class?: string;
 		label?: string;
 		description?: string;
-		class?: string;
+		onchange?: (value: string) => void;
+		children?: Snippet<[{ option: Option; checked: boolean }]>;
 	};
 
 	let {
@@ -25,10 +26,11 @@
 		value = $bindable(''),
 		options,
 		columns = 2,
-		onchange,
+		class: className = '',
 		label,
 		description,
-		class: className = ''
+		onchange,
+		children
 	}: Props = $props();
 
 	function handleValueChange(newValue: string) {
@@ -61,7 +63,9 @@
 							: ''
 					)}
 				>
-					{#snippet children()}
+					{#if children}
+						{@render children({ option, checked: isSelected })}
+					{:else}
 						<div class="flex flex-col">
 							<span
 								class="text-sm font-medium"
@@ -80,7 +84,7 @@
 								</span>
 							{/if}
 						</div>
-					{/snippet}
+					{/if}
 				</RadioGroup.Item>
 			{/each}
 		</div>

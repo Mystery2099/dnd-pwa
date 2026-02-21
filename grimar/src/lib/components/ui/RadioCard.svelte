@@ -1,19 +1,20 @@
 <script lang="ts">
 	import { RadioGroup } from 'bits-ui';
+	import { cn } from '$lib/utils.js';
 	import type { Snippet } from 'svelte';
 
 	interface Option {
 		value: string;
 		label: string;
 		description?: string;
-		icon?: string;
 	}
 
 	type Props = {
+		name?: string;
 		value?: string;
 		options: readonly Option[];
+		columns?: number;
 		class?: string;
-		gridCols?: number;
 		label?: string;
 		description?: string;
 		onchange?: (value: string) => void;
@@ -21,15 +22,21 @@
 	};
 
 	let {
-		value = $bindable<string>(),
+		name = '',
+		value = $bindable(''),
 		options,
+		columns = 2,
 		class: className = '',
-		gridCols = 2,
 		label,
 		description,
 		onchange,
 		children
 	}: Props = $props();
+
+	function handleValueChange(newValue: string) {
+		value = newValue;
+		onchange?.(newValue);
+	}
 </script>
 
 <div class={className}>
@@ -42,29 +49,44 @@
 		</div>
 	{/if}
 
-	<div class="grid gap-3" style="grid-template-columns: repeat({gridCols}, minmax(0, 1fr));">
-		{#each options as option (option.value)}
-			{@const isSelected = value === option.value}
-			<button
-				type="button"
-				onclick={() => {
-					value = option.value;
-					onchange?.(option.value);
-				}}
-				class="runestone"
-				data-state={isSelected ? 'selected' : 'unselected'}
-				aria-label="Select {option.label}"
-			>
-				{#if children}
-					{@render children({ option, checked: isSelected })}
-				{:else}
-					<div class="runestone-content">
-						<div class="runestone-label">
-							<span class="runestone-label-text">{option.label}</span>
+	<RadioGroup.Root {value} {name} onValueChange={handleValueChange}>
+		<div class="grid gap-3" style="grid-template-columns: repeat({columns}, minmax(0, 1fr));">
+			{#each options as option (option.value)}
+				{@const isSelected = value === option.value}
+				<RadioGroup.Item
+					value={option.value}
+					class={cn(
+						'rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-3 text-left transition-all',
+						'hover:border-[var(--color-accent)]/50',
+						isSelected
+							? 'border-[var(--color-accent)] bg-[var(--color-accent)]/10 ring-1 ring-[var(--color-accent)]'
+							: ''
+					)}
+				>
+					{#if children}
+						{@render children({ option, checked: isSelected })}
+					{:else}
+						<div class="flex flex-col">
+							<span
+								class="text-sm font-medium"
+								class:text-white={isSelected}
+								class:text-[var(--color-text-primary)]={!isSelected}
+							>
+								{option.label}
+							</span>
+							{#if option.description}
+								<span
+									class="text-xs"
+									class:text-[var(--color-text-muted)]={isSelected}
+									class:text-[var(--color-text-secondary)]={!isSelected}
+								>
+									{option.description}
+								</span>
+							{/if}
 						</div>
-					</div>
-				{/if}
-			</button>
-		{/each}
-	</div>
+					{/if}
+				</RadioGroup.Item>
+			{/each}
+		</div>
+	</RadioGroup.Root>
 </div>
