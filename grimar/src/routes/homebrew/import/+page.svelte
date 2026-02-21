@@ -1,5 +1,5 @@
 <script lang="ts">
-	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
+	import PageShell from '$lib/components/ui/PageShell.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import { Upload, FileText, X } from 'lucide-svelte';
 
@@ -22,7 +22,9 @@
 	function handleDrop(e: DragEvent) {
 		e.preventDefault();
 		isDragging = false;
-		const files = Array.from(e.dataTransfer?.files || []).filter(f => f.type === 'application/json' || f.name.endsWith('.json'));
+		const files = Array.from(e.dataTransfer?.files || []).filter(
+			(f) => f.type === 'application/json' || f.name.endsWith('.json')
+		);
 		if (files.length > 0) {
 			selectedFiles = files;
 		}
@@ -86,17 +88,17 @@
 	<title>Import Homebrew</title>
 </svelte:head>
 
-<div class="container mx-auto max-w-2xl p-4">
+<PageShell title="Import Homebrew">
 	<div class="mb-6">
-		<a href="/homebrew" class="text-[var(--color-text-secondary)] hover:underline">&larr; Back to Homebrew</a>
+		<a href="/homebrew" class="text-[var(--color-text-secondary)] hover:underline"
+			>&larr; Back to Homebrew</a
+		>
 	</div>
 
-	<h1 class="mb-6 text-3xl font-bold text-[var(--color-text-primary)]">Import Homebrew</h1>
-
-	<SurfaceCard class="bg-[var(--color-bg-card)] p-6">
+	<div class="rounded-xl bg-[var(--color-bg-card)] p-6">
 		<div class="space-y-6">
 			<div
-				class="relative border-2 border-dashed rounded-xl p-8 text-center transition-all {isDragging
+				class="relative rounded-xl border-2 border-dashed p-8 text-center transition-all {isDragging
 					? 'border-[var(--color-accent)] bg-[var(--color-accent)]/10'
 					: 'border-[var(--color-border)] hover:border-[var(--color-accent)]/50'}"
 				role="button"
@@ -122,14 +124,14 @@
 						<p class="text-lg font-medium text-[var(--color-text-primary)]">
 							{isDragging ? 'Drop files here' : 'Drag & drop JSON files'}
 						</p>
-						<p class="text-sm text-[var(--color-text-secondary)] mt-1">
-							or click to browse
-						</p>
+						<p class="mt-1 text-sm text-[var(--color-text-secondary)]">or click to browse</p>
 					</div>
 				</div>
 
 				{#if isDragging}
-					<div class="absolute inset-0 bg-[var(--color-accent)]/20 rounded-xl pointer-events-none"></div>
+					<div
+						class="pointer-events-none absolute inset-0 rounded-xl bg-[var(--color-accent)]/20"
+					></div>
 				{/if}
 			</div>
 
@@ -140,7 +142,9 @@
 					</p>
 					<ul class="space-y-2">
 						{#each selectedFiles as file, i (file.name + i)}
-							<li class="flex items-center justify-between bg-[var(--color-bg-elevated)] rounded-lg px-4 py-2">
+							<li
+								class="flex items-center justify-between rounded-lg bg-[var(--color-bg-elevated)] px-4 py-2"
+							>
 								<div class="flex items-center gap-3">
 									<FileText class="size-5 text-[var(--color-text-secondary)]" />
 									<span class="text-[var(--color-text-primary)]">{file.name}</span>
@@ -151,7 +155,7 @@
 								<button
 									type="button"
 									onclick={() => removeFile(i)}
-									class="text-[var(--color-text-secondary)] hover:text-red-400 transition-colors"
+									class="text-[var(--color-text-secondary)] transition-colors hover:text-red-400"
 									aria-label="Remove {file.name}"
 								>
 									<X class="size-5" />
@@ -163,24 +167,30 @@
 			{/if}
 
 			<p class="text-sm text-[var(--color-text-secondary)]">
-				Upload JSON files containing homebrew content. Each file can contain a single item or an array of items.
-				The system will automatically detect the type (spell, monster, feat, etc.) based on the data structure.
+				Upload JSON files containing homebrew content. Each file can contain a single item or an
+				array of items. The system will automatically detect the type (spell, monster, feat, etc.)
+				based on the data structure.
 			</p>
 
 			{#if message}
-				<div class="rounded-lg bg-green-900/30 border border-green-800/50 p-4 text-green-400">{message}</div>
+				<div class="rounded-lg border border-green-800/50 bg-green-900/30 p-4 text-green-400">
+					{message}
+				</div>
 			{/if}
 
 			{#if error}
-				<div class="rounded-lg bg-red-900/30 border border-red-800/50 p-4 text-red-400 whitespace-pre-line">{error}</div>
+				<div
+					class="rounded-lg border border-red-800/50 bg-red-900/30 p-4 whitespace-pre-line text-red-400"
+				>
+					{error}
+				</div>
 			{/if}
 
 			<div class="flex gap-3">
-				<Button
-					onclick={handleImport}
-					disabled={importing || selectedFiles.length === 0}
-				>
-					{importing ? 'Importing...' : `Import${selectedFiles.length > 1 ? ` ${selectedFiles.length} Files` : ''}`}
+				<Button onclick={handleImport} disabled={importing || selectedFiles.length === 0}>
+					{importing
+						? 'Importing...'
+						: `Import${selectedFiles.length > 1 ? ` ${selectedFiles.length} Files` : ''}`}
 				</Button>
 				{#if selectedFiles.length > 0}
 					<Button
@@ -196,5 +206,5 @@
 				{/if}
 			</div>
 		</div>
-	</SurfaceCard>
-</div>
+	</div>
+</PageShell>

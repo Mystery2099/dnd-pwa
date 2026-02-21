@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Button from '$lib/components/ui/Button.svelte';
 	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
 </script>
 
@@ -14,22 +15,6 @@
 			adventures in a self-hosted, offline-capable environment.
 		</p>
 
-		<a
-			href="/dashboard"
-			class="btn-gem px-8 py-3 text-lg"
-			onclick={(e) => {
-				// Handle navigation with proper SvelteKit routing
-				const target = e.currentTarget as HTMLAnchorElement;
-				const url = new URL(target.href, window.location.origin);
-				if (window.location.pathname !== url.pathname) {
-					import('$app/navigation').then(({ goto }) => {
-						goto(url.pathname).catch(() => {});
-					});
-				}
-				e.preventDefault();
-			}}
-		>
-			Enter the Archives
-		</a>
+		<Button href="/dashboard" variant="gem" size="lg">Enter the Archives</Button>
 	</SurfaceCard>
 </div>

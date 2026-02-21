@@ -36,7 +36,13 @@
 		SPELL_SORT_OPTIONS
 	} from '$lib/core/client/settingsStore.svelte';
 	import { userSettingsStore } from '$lib/core/client/userSettingsStore.svelte';
-	import { getImportedThemes, importTheme, exportTheme, deleteImportedTheme, getAllThemes } from '$lib/core/client/themeRegistry';
+	import {
+		getImportedThemes,
+		importTheme,
+		exportTheme,
+		deleteImportedTheme,
+		getAllThemes
+	} from '$lib/core/client/themeRegistry';
 	import { setTheme } from '$lib/core/client/themeStore.svelte';
 	import type { ThemeConfig } from '$lib/core/types/theme';
 
@@ -315,7 +321,9 @@
 			/>
 		</div>
 		<div>
-			<h1 class="text-3xl font-black tracking-tight text-[var(--color-text-primary)]">Settings</h1>
+			<h1 class="text-holo text-3xl font-black tracking-tight text-[var(--color-text-primary)]">
+				Settings
+			</h1>
 			<p class="text-sm text-[var(--color-text-secondary)]">Configure your grimoire experience</p>
 		</div>
 	</header>
@@ -371,14 +379,20 @@
 							</SettingsItem>
 
 							{#if importedThemes.length > 0}
-								<SettingsItem label="Imported Themes" description="Manage your imported themes" divider={false}>
+								<SettingsItem
+									label="Imported Themes"
+									description="Manage your imported themes"
+									divider={false}
+								>
 									{#snippet control()}
 										<div class="flex flex-wrap gap-2">
 											{#each importedThemes as theme}
 												<div
 													class="flex items-center gap-1 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] px-2 py-1"
 												>
-													<span class="text-xs text-[var(--color-text-secondary)]">{theme.name}</span>
+													<span class="text-xs text-[var(--color-text-secondary)]"
+														>{theme.name}</span
+													>
 													<button
 														class="rounded p-0.5 text-[var(--color-text-muted)] hover:bg-[var(--color-bg-overlay)] hover:text-[var(--color-text-primary)]"
 														onclick={() => handleApplyTheme(theme.id)}
@@ -898,14 +912,15 @@
 			<Dialog.Header>
 				<Dialog.Title>Import Theme</Dialog.Title>
 				<Dialog.Description>
-					Paste a theme JSON below or upload a file. Imported themes are stored locally in your browser.
+					Paste a theme JSON below or upload a file. Imported themes are stored locally in your
+					browser.
 				</Dialog.Description>
 			</Dialog.Header>
 			<div class="py-4">
 				<textarea
 					bind:value={importText}
-					placeholder={"{\"id\": \"my-theme\", \"name\": \"My Theme\", \"colors\": {...}, ...}"}
-					class="min-h-[200px] w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-3 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]"
+					placeholder={'{"id": "my-theme", "name": "My Theme", "colors": {...}, ...}'}
+					class="min-h-[200px] w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-3 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)] focus:ring-1 focus:ring-[var(--color-accent)] focus:outline-none"
 				></textarea>
 				{#if importError}
 					<p class="mt-2 text-sm text-red-400">{importError}</p>

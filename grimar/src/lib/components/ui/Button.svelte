@@ -6,6 +6,7 @@
 		variant?: 'gem' | 'ghost' | 'outline' | 'danger';
 		size?: 'sm' | 'md' | 'lg';
 		href?: string;
+		download?: string;
 		class?: string;
 		title?: string;
 		disabled?: boolean;
@@ -18,6 +19,7 @@
 		variant = 'gem',
 		size = 'md',
 		href,
+		download,
 		class: className = '',
 		title: _title,
 		disabled = false,
@@ -49,7 +51,7 @@
 </script>
 
 {#if href}
-	<a {href} class={combinedClasses} {...rest}>
+	<a {href} {download} class={combinedClasses} {...rest}>
 		{#if children}
 			{@render children()}
 		{/if}

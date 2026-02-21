@@ -1,6 +1,6 @@
 <script lang="ts">
+	import PageShell from '$lib/components/ui/PageShell.svelte';
 	import { goto } from '$app/navigation';
-	import Button from '$lib/components/ui/Button.svelte';
 	import HomebrewEditor from '$lib/features/homebrew/components/HomebrewEditor.svelte';
 
 	let { data } = $props();
@@ -43,7 +43,7 @@
 			} else {
 				error = result.error || 'Failed to save';
 			}
-		} catch (e) {
+		} catch (_e) {
 			error = 'Failed to save changes';
 		} finally {
 			saving = false;
@@ -55,16 +55,12 @@
 	<title>Edit {data.item.name} | Homebrew</title>
 </svelte:head>
 
-<div class="container mx-auto max-w-4xl p-4">
+<PageShell title="Edit {typeLabels[data.item.type] || data.item.type}">
 	<div class="mb-6">
 		<a href="/homebrew" class="text-[var(--color-text-secondary)] hover:underline">
 			&larr; Back to Homebrew
 		</a>
 	</div>
-
-	<h1 class="mb-6 text-3xl font-bold text-[var(--color-text-primary)]">
-		Edit {typeLabels[data.item.type] || data.item.type}
-	</h1>
 
 	{#if error}
 		<div class="mb-4 rounded bg-red-900/30 p-3 text-red-400">{error}</div>
@@ -80,4 +76,4 @@
 	{:else}
 		<p class="text-[var(--color-text-secondary)]">No data available to edit.</p>
 	{/if}
-</div>
+</PageShell>

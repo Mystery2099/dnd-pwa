@@ -1,6 +1,7 @@
 <script lang="ts">
+	import PageShell from '$lib/components/ui/PageShell.svelte';
 	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
-	import { page } from '$app/stores';
+	import Button from '$lib/components/ui/Button.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -43,47 +44,48 @@
 				const result = await response.json();
 				alert(result.error || 'Failed to delete');
 			}
-		} catch (e) {
+		} catch (_e) {
 			alert('Failed to delete item');
 		}
 	}
 </script>
 
-<div class="container mx-auto p-4">
-	<div class="mb-6 flex items-center justify-between">
-		<h1 class="text-3xl font-bold text-[var(--color-text-primary)]">My Homebrew</h1>
-		<div class="flex gap-2">
-			<a href="/api/homebrew/export/all" class="btn-ghost px-4 py-2" download="homebrew-all.json">
-				Export All
-			</a>
-			<a href="/homebrew/import" class="btn-ghost px-4 py-2">Import</a>
-			<a href="/homebrew/new" class="btn-gem px-4 py-2">Create New</a>
-		</div>
+<PageShell title="My Homebrew">
+	<div class="mb-6 flex flex-wrap gap-2 sm:justify-end">
+		<Button variant="ghost" href="/api/homebrew/export/all" download="homebrew-all.json">
+			Export All
+		</Button>
+		<Button variant="ghost" href="/homebrew/import">Import</Button>
+		<Button variant="gem" href="/homebrew/new">Create New</Button>
 	</div>
 
 	{#if data.items.length === 0}
-		<SurfaceCard class="bg-[var(--color-bg-card)] p-8 text-center">
-			<p class="mb-4 text-[var(--color-text-secondary)]">You haven't created any homebrew content yet.</p>
-			<a href="/homebrew/new" class="btn-gem px-6 py-3 inline-block">Create the First Item</a>
-		</SurfaceCard>
+		<div class="rounded-xl bg-[var(--color-bg-card)] p-8 text-center">
+			<p class="mb-4 text-[var(--color-text-secondary)]">
+				You haven't created any homebrew content yet.
+			</p>
+			<Button variant="gem" href="/homebrew/new">Create the First Item</Button>
+		</div>
 	{:else}
 		<div class="mb-4 text-sm text-[var(--color-text-secondary)]">
 			{data.items.length} item{data.items.length !== 1 ? 's' : ''}
 		</div>
 		<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-			{#each Object.entries(data.itemsByType) as [type, items]}
+			{#each Object.entries(data.itemsByType) as [type, items] (type)}
 				<SurfaceCard class="bg-[var(--color-bg-card)] p-4">
 					<div class="mb-3 flex items-center gap-2">
 						<span class="text-2xl">{typeIcons[type] || '📦'}</span>
 						<h2 class="text-xl font-semibold text-[var(--color-text-primary)]">
 							{typeLabels[type] || type}
 						</h2>
-						<span class="ml-auto rounded-full bg-[var(--color-bg-elevated)] px-2 py-0.5 text-sm text-[var(--color-text-secondary)]">
+						<span
+							class="ml-auto rounded-full bg-[var(--color-bg-elevated)] px-2 py-0.5 text-sm text-[var(--color-text-secondary)]"
+						>
 							{items.length}
 						</span>
 					</div>
 					<ul class="space-y-2">
-						{#each items as item}
+						{#each items as item (item.key)}
 							<li class="rounded bg-[var(--color-bg-elevated)] p-2">
 								<div class="flex items-center justify-between">
 									<a
@@ -127,10 +129,8 @@
 
 	<div class="mt-8">
 		<h2 class="mb-4 text-xl font-semibold text-[var(--color-text-primary)]">Export</h2>
-		<div class="flex gap-4">
-			<a href="/api/homebrew/export/all" class="btn-ghost px-4 py-2" download="homebrew-all.json">
-				Download All as JSON
-			</a>
-		</div>
+		<Button variant="ghost" href="/api/homebrew/export/all" download="homebrew-all.json">
+			Download All as JSON
+		</Button>
 	</div>
-</div>
+</PageShell>

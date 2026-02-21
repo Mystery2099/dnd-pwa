@@ -1,9 +1,17 @@
 <script lang="ts">
-	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
+	import PageShell from '$lib/components/ui/PageShell.svelte';
 	import { goto } from '$app/navigation';
 	import HomebrewEditor from '$lib/features/homebrew/components/HomebrewEditor.svelte';
 
-	const CONTENT_TYPES = ['spells', 'creatures', 'magicitems', 'feats', 'backgrounds', 'species', 'classes'] as const;
+	const CONTENT_TYPES = [
+		'spells',
+		'creatures',
+		'magicitems',
+		'feats',
+		'backgrounds',
+		'species',
+		'classes'
+	] as const;
 	type ContentType = (typeof CONTENT_TYPES)[number];
 
 	let contentType = $state<ContentType>('spells');
@@ -59,14 +67,14 @@
 	<title>Create Homebrew | Grimar</title>
 </svelte:head>
 
-<div class="container mx-auto max-w-4xl p-4">
+<PageShell title="Create Homebrew">
 	<div class="mb-6">
-		<a href="/homebrew" class="text-[var(--color-text-secondary)] hover:underline">&larr; Back to Community Homebrew</a>
+		<a href="/homebrew" class="text-[var(--color-text-secondary)] hover:underline"
+			>&larr; Back to Homebrew</a
+		>
 	</div>
 
-	<h1 class="mb-6 text-3xl font-bold text-[var(--color-text-primary)]">Create Homebrew</h1>
-
-	<SurfaceCard class="mb-4 bg-[var(--color-bg-card)] p-6">
+	<div class="rounded-xl bg-[var(--color-bg-card)] p-6">
 		<div class="mb-6">
 			<label for="type" class="mb-2 block text-sm font-medium text-[var(--color-text-secondary)]">
 				Content Type
@@ -86,11 +94,7 @@
 			<h2 class="mb-4 text-lg font-semibold text-[var(--color-text-primary)]">
 				{typeLabels[contentType]} Details
 			</h2>
-		<HomebrewEditor
-				{contentType}
-				initialData={{}}
-				onsubmit={handleEditorSubmit}
-			/>
+			<HomebrewEditor {contentType} initialData={{}} onsubmit={handleEditorSubmit} />
 		</div>
 
 		{#if error}
@@ -98,5 +102,5 @@
 				{error}
 			</div>
 		{/if}
-	</SurfaceCard>
-</div>
+	</div>
+</PageShell>
