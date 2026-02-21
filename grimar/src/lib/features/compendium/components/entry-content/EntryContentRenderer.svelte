@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { UnifiedCompendiumItem, CompendiumType } from '$lib/core/types/compendium/unified';
+	import type { CompendiumItem } from '$lib/server/db/schema';
 	import MonsterEntryContent from './MonsterEntryContent.svelte';
 	import SpellEntryContent from './SpellEntryContent.svelte';
 	import RaceEntryContent from './RaceEntryContent.svelte';
@@ -10,13 +11,15 @@
 
 	interface Props {
 		dbType: CompendiumType | string;
-		item?: UnifiedCompendiumItem;
+		item?: UnifiedCompendiumItem | CompendiumItem;
 		details?: Record<string, unknown>;
 	}
 
 	let { dbType, item, details }: Props = $props();
 
-	const data = $derived(item?.details ?? details ?? {});
+	const data = $derived(
+		(item as CompendiumItem)?.data ?? (item as UnifiedCompendiumItem)?.details ?? details ?? {}
+	);
 	const genericConfig = $derived(getConfigForType(dbType));
 </script>
 

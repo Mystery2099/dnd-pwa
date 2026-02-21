@@ -7,7 +7,7 @@
 
 	let { details }: Props = $props();
 
-	const desc = details.desc as string[] | string | undefined;
+	const desc = $derived(details.desc as string[] | string | undefined);
 	const descriptionMd = $derived(Array.isArray(desc) ? desc.join('\n\n') : desc || '');
 
 	interface AbilityBonus {
@@ -20,8 +20,8 @@
 		desc?: string;
 	}
 
-	const abilityBonuses = details.ability_bonuses as AbilityBonus[] | undefined;
-	const traits = details.traits as Trait[] | undefined;
+	const abilityBonuses = $derived(details.ability_bonuses as AbilityBonus[] | undefined);
+	const traits = $derived(details.traits as Trait[] | undefined);
 
 	let SvelteMarkdown: any = $state(null);
 

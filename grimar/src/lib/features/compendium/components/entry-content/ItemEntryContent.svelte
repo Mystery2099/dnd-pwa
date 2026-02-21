@@ -7,7 +7,7 @@
 
 	let { details }: Props = $props();
 
-	const desc = details.desc as string[] | string | undefined;
+	const desc = $derived(details.desc as string[] | string | undefined);
 	const descriptionMd = $derived(
 		Array.isArray(desc) ? desc.join('\n\n') : desc || (details.summary as string) || ''
 	);
@@ -21,8 +21,8 @@
 		}
 	});
 
-	const isWeapon = details.weapon_category !== undefined;
-	const isArmor = details.armor_category !== undefined;
+	const isWeapon = $derived(details.weapon_category !== undefined);
+	const isArmor = $derived(details.armor_category !== undefined);
 </script>
 
 <div class="mb-8 flex flex-wrap gap-4">

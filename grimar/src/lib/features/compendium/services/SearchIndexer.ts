@@ -24,8 +24,8 @@ export class SearchIndexer<T extends CompendiumItem> {
 		// Keys to search across
 		keys: [
 			{ name: 'name', weight: 2 }, // Name is most important
-			{ name: 'summary', weight: 1.5 }, // Summary is second
-			{ name: 'details', weight: 1 } // Details are least important
+			{ name: 'description', weight: 1.5 }, // Description is second
+			{ name: 'data', weight: 1 } // Data is least important
 		],
 		// Fuzzy matching threshold (0.0 = exact match, 1.0 = match anything)
 		threshold: 0.4,

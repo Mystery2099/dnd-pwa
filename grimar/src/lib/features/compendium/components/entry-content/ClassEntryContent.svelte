@@ -7,7 +7,7 @@
 
 	let { details }: Props = $props();
 
-	const desc = details.desc as string[] | string | undefined;
+	const desc = $derived(details.desc as string[] | string | undefined);
 	const descriptionMd = $derived(Array.isArray(desc) ? desc.join('\n\n') : desc || '');
 
 	interface Proficiency {
@@ -20,16 +20,18 @@
 		desc?: string;
 	}
 
-	const profArmor = details.prof_armor as string | undefined;
-	const profWeapons = details.prof_weapons as string | undefined;
-	const profTools = (details.prof_tools as string | string[] | undefined) ?? [];
-	const profSkills = (details.prof_skills as Proficiency[] | string[] | undefined) ?? [];
-	const profSaves = (details.prof_saving_throws as string[] | undefined) ?? [];
+	const profArmor = $derived(details.prof_armor as string | undefined);
+	const profWeapons = $derived(details.prof_weapons as string | undefined);
+	const profTools = $derived((details.prof_tools as string | string[] | undefined) ?? []);
+	const profSkills = $derived((details.prof_skills as Proficiency[] | string[] | undefined) ?? []);
+	const profSaves = $derived((details.prof_saving_throws as string[] | undefined) ?? []);
 
-	const features = details.features as Feature[] | undefined;
-	const spellcasting = details.spellcasting as
-		| { ability?: string; dc?: number; attack_modifier?: number }
-		| undefined;
+	const features = $derived(details.features as Feature[] | undefined);
+	const spellcasting = $derived(
+		details.spellcasting as
+			| { ability?: string; dc?: number; attack_modifier?: number }
+			| undefined
+	);
 
 	let SvelteMarkdown: any = $state(null);
 

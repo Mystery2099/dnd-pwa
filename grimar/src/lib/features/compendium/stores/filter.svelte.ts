@@ -149,7 +149,7 @@ export class CompendiumFilterStore {
 		const startTime = performance.now();
 
 		// Store items for search indexing if they're CompendiumItems
-		if (items.length > 0 && 'externalId' in items[0]) {
+		if (items.length > 0 && 'key' in items[0]) {
 			this.buildSearchIndex(items as unknown as CompendiumItem[]);
 		}
 
@@ -158,10 +158,10 @@ export class CompendiumFilterStore {
 		// 0. A5e content filter - hide Advanced 5e content by default
 		if (!userSettingsStore.data.showA5eContent) {
 			filtered = filtered.filter((item) => {
-				// Check if this is an A5e item (externalId ends with -a5e and source is open5e)
-				const externalId = item.externalId as string;
+				// Check if this is an A5e item (key ends with -a5e and source is open5e)
+				const itemKey = item.key as string;
 				const source = item.source as string;
-				return !(source === 'open5e' && externalId.endsWith('-a5e'));
+				return !(source === 'open5e' && itemKey.endsWith('-a5e'));
 			});
 			debugLog('A5e filter applied:', filtered.length, 'items remaining');
 		}
@@ -169,8 +169,8 @@ export class CompendiumFilterStore {
 		// 1. Search filter with full-text search
 		if (this.state.searchTerm && this.searchIndexer.isIndexed()) {
 			const searchResults = this.searchIndexer.search(this.state.searchTerm);
-			const searchIds = new SvelteSet(searchResults.map((item) => item.id));
-			filtered = filtered.filter((item) => searchIds.has(item.id));
+			const searchIds = new SvelteSet(searchResults.map((item) => item.key));
+			filtered = filtered.filter((item) => searchIds.has(item.key));
 			debugLog('Search filter applied:', this.state.searchTerm, '- results:', filtered.length);
 		}
 

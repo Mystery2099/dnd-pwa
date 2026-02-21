@@ -10,7 +10,7 @@
 
 	let { details }: Props = $props();
 
-	const desc = details.desc as string[] | string | undefined;
+	const desc = $derived(details.desc as string[] | string | undefined);
 	const descriptionMd = $derived(Array.isArray(desc) ? desc.join('\n\n') : desc || '');
 	const higherLevelMd = $derived(details.higher_level as string | undefined);
 

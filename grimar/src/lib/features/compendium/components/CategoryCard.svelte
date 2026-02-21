@@ -1,18 +1,56 @@
 <script lang="ts">
 	import type { ComponentType } from 'svelte';
 	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
+	import Book from 'lucide-svelte/icons/book';
+	import Star from 'lucide-svelte/icons/star';
+	import Crown from 'lucide-svelte/icons/crown';
+	import Sword from 'lucide-svelte/icons/sword';
+	import Shield from 'lucide-svelte/icons/shield';
+	import FlaskConical from 'lucide-svelte/icons/flask-conical';
+	import Skull from 'lucide-svelte/icons/skull';
+	import Heart from 'lucide-svelte/icons/heart';
+	import Users from 'lucide-svelte/icons/users';
+	import Compass from 'lucide-svelte/icons/compass';
+	import Sparkles from 'lucide-svelte/icons/sparkles';
+	import Scroll from 'lucide-svelte/icons/scroll';
+	import Zap from 'lucide-svelte/icons/zap';
+	import Package from 'lucide-svelte/icons/package';
+	import FileText from 'lucide-svelte/icons/file-text';
+	import Layers from 'lucide-svelte/icons/layers';
+	import Flag from 'lucide-svelte/icons/flag';
+
+	const iconMap: Record<string, ComponentType> = {
+		book: Book,
+		star: Star,
+		crown: Crown,
+		sword: Sword,
+		shield: Shield,
+		flask: FlaskConical,
+		skull: Skull,
+		heart: Heart,
+		users: Users,
+		compass: Compass,
+		sparkles: Sparkles,
+		scroll: Scroll,
+		zap: Zap,
+		package: Package,
+		'file-text': FileText,
+		layers: Layers,
+		flag: Flag
+	};
 
 	interface Props {
 		title: string;
 		description: string;
 		href: string;
-		icon: ComponentType;
+		icon: string;
 		gradient: string;
 		accent: string;
 		count?: number;
 	}
 
-	let { title, description, href, icon: Icon, gradient, accent, count }: Props = $props();
+	let { title, description, href, icon, gradient, accent, count }: Props = $props();
+	const Icon = $derived(iconMap[icon] || Book);
 </script>
 
 <SurfaceCard
