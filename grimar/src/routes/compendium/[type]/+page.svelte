@@ -18,7 +18,7 @@
 	let sortOrder = $state(($page.url.searchParams.get('sortOrder') as 'asc' | 'desc') ?? 'asc');
 
 	let config = $derived(COMPENDIUM_TYPE_CONFIGS[data.type]);
-	let query = createCompendiumQuery(data.type);
+	let query = $derived(createCompendiumQuery(data.type));
 	let items = $derived(query.data?.items ?? []);
 	let totalItems = $derived(query.data?.total ?? 0);
 	let totalPages = $derived(query.data?.totalPages ?? 1);
