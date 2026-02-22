@@ -86,7 +86,8 @@ async function fetchAllPages<T>(
 				throw new Error(`HTTP ${response.status}: ${response.statusText}`);
 			}
 
-			const data: { count?: number; next?: string | null; results?: unknown[] } = await response.json();
+			const data: { count?: number; next?: string | null; results?: unknown[] } =
+				await response.json();
 			total = data.count ?? total;
 
 			for (const item of data.results ?? []) {
@@ -94,7 +95,10 @@ async function fetchAllPages<T>(
 					const validated = itemSchema.parse(item);
 					items.push(validated);
 				} catch (err) {
-					logger.warn({ err, itemKey: (item as Record<string, unknown>)?.key }, '[open5e] Failed to validate item');
+					logger.warn(
+						{ err, itemKey: (item as Record<string, unknown>)?.key },
+						'[open5e] Failed to validate item'
+					);
 				}
 			}
 
@@ -125,11 +129,15 @@ function transformToCompendiumItem<T extends Record<string, unknown>>(
 					key?: string;
 					publisher?: { name: string; key: string };
 					gamesystem?: { name: string; key: string };
-			  })
+				})
 			: undefined;
 
 	const name = extractName(item, type);
-	const key = (item.key as string | undefined) ?? (typeof item.url === 'string' ? extractKeyFromUrl(item.url) : name?.toLowerCase() ?? 'unknown');
+	const key =
+		(item.key as string | undefined) ??
+		(typeof item.url === 'string'
+			? extractKeyFromUrl(item.url)
+			: (name?.toLowerCase() ?? 'unknown'));
 
 	return {
 		key,

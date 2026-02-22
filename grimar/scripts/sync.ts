@@ -1,7 +1,7 @@
 /**
  * Compendium Sync CLI
  * Syncs data from Open5e API to local database
- * 
+ *
  * Usage:
  *   bun run db:sync                    # Sync all types
  *   bun run db:sync --types spells     # Sync only spells
@@ -9,7 +9,11 @@
  *   bun run db:sync --limit 100        # Limit items per type (for testing)
  */
 
-import { syncType, SYNCABLE_TYPES, type CompendiumType } from '$lib/server/services/sync/open5e-sync';
+import {
+	syncType,
+	SYNCABLE_TYPES,
+	type CompendiumType
+} from '$lib/server/services/sync/open5e-sync';
 import { getDb } from '$lib/server/db';
 
 interface SyncProgress {
@@ -84,7 +88,7 @@ async function main(): Promise<void> {
 
 	// Validate types if specified
 	if (options.types.length > 0) {
-		const invalidTypes = options.types.filter(t => !SYNCABLE_TYPES.includes(t));
+		const invalidTypes = options.types.filter((t) => !SYNCABLE_TYPES.includes(t));
 		if (invalidTypes.length > 0) {
 			console.error(`Invalid types: ${invalidTypes.join(', ')}`);
 			console.error(`Available types: ${SYNCABLE_TYPES.join(', ')}`);
@@ -122,14 +126,16 @@ async function main(): Promise<void> {
 
 		try {
 			const result = await syncType(type, progressCallback);
-			
+
 			if (result.synced > 0) {
-				console.log(`[${type}] ✓ Synced ${result.synced}/${result.total} items in ${result.duration}ms`);
+				console.log(
+					`[${type}] ✓ Synced ${result.synced}/${result.total} items in ${result.duration}ms`
+				);
 				totalItems += result.synced;
 			} else {
 				console.log(`[${type}] No items to sync`);
 			}
-			
+
 			if (result.errors > 0) {
 				console.error(`[${type}] ✗ ${result.errors} errors occurred`);
 				totalErrors++;
@@ -141,7 +147,7 @@ async function main(): Promise<void> {
 	}
 
 	const duration = Date.now() - startTime;
-	
+
 	console.log('\n' + '='.repeat(50));
 	console.log('Sync Complete');
 	console.log('='.repeat(50));

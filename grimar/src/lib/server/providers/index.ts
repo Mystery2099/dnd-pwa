@@ -14,4 +14,10 @@ export function getAllProviders(): CompendiumProvider[] {
 }
 
 export { open5eProvider } from './open5e';
-export type { CompendiumProvider, SyncResult, ProviderStats, SyncProgressEvent, SyncProgressCallback } from './types';
+export type {
+	CompendiumProvider,
+	SyncResult,
+	ProviderStats,
+	SyncProgressEvent,
+	SyncProgressCallback
+} from './types';

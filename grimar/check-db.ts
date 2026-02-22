@@ -1,4 +1,4 @@
-import { sql, eq } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { compendiumItems } from './src/lib/server/db/schema';
 import { drizzle } from 'drizzle-orm/bun-sqlite';
 import { Database } from 'bun:sqlite';
