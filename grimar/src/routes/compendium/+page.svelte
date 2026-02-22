@@ -16,7 +16,9 @@
 <PageShell title="Compendium" description="Browse the complete D&D 5e reference library">
 	<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 		{#each COMPENDIUM_CATEGORIES as category}
-			{@const categoryTypes = category.types.filter((t: string) => COMPENDIUM_TYPE_CONFIGS[t as keyof typeof COMPENDIUM_TYPE_CONFIGS])}
+			{@const categoryTypes = category.types.filter(
+				(t: string) => COMPENDIUM_TYPE_CONFIGS[t as keyof typeof COMPENDIUM_TYPE_CONFIGS]
+			)}
 			{#if categoryTypes.length > 0}
 				<div class="category-card">
 					<h2 class="category-title">{category.name}</h2>
@@ -48,24 +50,14 @@
 		border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
 		border-radius: 12px;
 		padding: 1.25rem;
-		transition: transform 0.2s ease, box-shadow 0.2s ease;
+		transition:
+			transform 0.2s ease,
+			box-shadow 0.2s ease;
 	}
 
 	.category-card:hover {
 		transform: translateY(-2px);
 		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-	}
-
-	.category-header {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
-		margin-bottom: 0.5rem;
-	}
-
-	.category-icon {
-		font-size: 1.5rem;
-		filter: drop-shadow(0 0 8px var(--color-accent, #a78bfa));
 	}
 
 	.category-title {
@@ -88,14 +80,16 @@
 		gap: 0.5rem;
 	}
 
-	.type-card {
+	:global(.type-card) {
 		background: var(--color-bg-subtle, rgba(255, 255, 255, 0.03));
 		border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
 		border-radius: 8px;
-		transition: background 0.15s ease, border-color 0.15s ease;
+		transition:
+			background 0.15s ease,
+			border-color 0.15s ease;
 	}
 
-	.type-card:hover {
+	:global(.type-card:hover) {
 		background: var(--color-bg-hover, rgba(255, 255, 255, 0.08));
 		border-color: var(--color-accent, #a78bfa);
 	}

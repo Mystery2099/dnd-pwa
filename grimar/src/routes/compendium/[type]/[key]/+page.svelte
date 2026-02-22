@@ -1,7 +1,10 @@
 <script lang="ts">
 	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
 	import Badge from '$lib/components/ui/Badge.svelte';
+	import { marked } from 'marked';
 	import type { PageData } from './$types';
+
+	marked.setOptions({ gfm: true, breaks: true });
 
 	interface Props {
 		data: PageData;
@@ -11,6 +14,140 @@
 
 	let item = $derived(data.item);
 	let itemData = $derived(item.data as Record<string, unknown>);
+
+	interface LinkedItem {
+		name?: string;
+		key?: string;
+		url?: string;
+	}
+
+	interface WeaponProperty {
+		property?: {
+			name?: string;
+			type?: string | null;
+			desc?: string;
+		};
+		detail?: string | null;
+	}
+
+	interface DescriptionItem {
+		desc: string;
+		document?: string;
+		gamesystem?: string;
+	}
+
+	interface BenefitItem {
+		desc: string;
+	}
+
+	interface SpeedData {
+		unit?: string;
+		walk?: number;
+		crawl?: number;
+		fly?: number;
+		hover?: boolean;
+		burrow?: number;
+		climb?: number;
+		swim?: number;
+	}
+
+	interface LanguageData {
+		as_string?: string;
+		data?: LinkedItem[];
+		languages?: string[];
+		any_languages?: number;
+		any_one_language?: number;
+		telepathy?: number;
+		understands_but_cant_speak?: string[];
+	}
+
+	function isLinkedItem(obj: unknown): obj is LinkedItem {
+		if (!obj || typeof obj !== 'object') return false;
+		const o = obj as Record<string, unknown>;
+		return (typeof o.name === 'string' || typeof o.key === 'string') && typeof o.url === 'string';
+	}
+
+	function isLinkedArray(value: unknown): value is LinkedItem[] {
+		return Array.isArray(value) && value.length > 0 && isLinkedItem(value[0]);
+	}
+
+	function getLinkedItems(value: unknown): LinkedItem[] | null {
+		if (isLinkedArray(value)) return value;
+		if (isLinkedItem(value)) return [value];
+		return null;
+	}
+
+	function isWeaponPropertyArray(value: unknown): value is WeaponProperty[] {
+		if (!Array.isArray(value) || value.length === 0) return false;
+		const first = value[0] as Record<string, unknown>;
+		return typeof first.property === 'object';
+	}
+
+	function getWeaponProperties(value: unknown): WeaponProperty[] | null {
+		return isWeaponPropertyArray(value) ? value : null;
+	}
+
+	function isDescriptionArray(value: unknown): value is DescriptionItem[] {
+		if (!Array.isArray(value) || value.length === 0) return false;
+		const first = value[0] as Record<string, unknown>;
+		return typeof first.desc === 'string' && ('document' in first || 'gamesystem' in first);
+	}
+
+	function getDescriptions(value: unknown): DescriptionItem[] | null {
+		return isDescriptionArray(value) ? value : null;
+	}
+
+	function isBenefitArray(value: unknown): value is BenefitItem[] {
+		if (!Array.isArray(value) || value.length === 0) return false;
+		const first = value[0] as Record<string, unknown>;
+		return typeof first.desc === 'string' && !('document' in first) && !('gamesystem' in first) && !('property' in first);
+	}
+
+	function getBenefits(value: unknown): BenefitItem[] | null {
+		return isBenefitArray(value) ? value : null;
+	}
+
+	function isSpeedObject(value: unknown): value is SpeedData {
+		if (!value || typeof value !== 'object') return false;
+		const o = value as Record<string, unknown>;
+		return typeof o.walk === 'number' || typeof o.swim === 'number' || typeof o.fly === 'number';
+	}
+
+	function formatSpeed(speed: SpeedData): string {
+		const parts: string[] = [];
+		const unit = speed.unit ?? 'ft';
+		if (speed.walk) parts.push(`Walk ${speed.walk} ${unit}`);
+		if (speed.swim) parts.push(`Swim ${speed.swim} ${unit}`);
+		if (speed.fly && speed.fly > 0) parts.push(`Fly ${speed.fly} ${unit}${speed.hover ? ' (hover)' : ''}`);
+		if (speed.burrow) parts.push(`Burrow ${speed.burrow} ${unit}`);
+		if (speed.climb) parts.push(`Climb ${speed.climb} ${unit}`);
+		if (speed.crawl) parts.push(`Crawl ${speed.crawl} ${unit}`);
+		return parts.join(', ') || '—';
+	}
+
+	function isLanguageObject(value: unknown): value is LanguageData {
+		if (!value || typeof value !== 'object') return false;
+		const o = value as Record<string, unknown>;
+		return typeof o.as_string === 'string' || Array.isArray(o.data) || Array.isArray(o.languages);
+	}
+
+	function formatLanguages(lang: LanguageData): string {
+		if (lang.as_string) return lang.as_string;
+		const parts: string[] = [];
+		if (lang.data && lang.data.length > 0) {
+			parts.push(lang.data.map(l => l.name ?? l.key ?? '').filter(Boolean).join(', '));
+		}
+		if (lang.languages && lang.languages.length > 0) {
+			parts.push(lang.languages.join(', '));
+		}
+		if (lang.any_languages) parts.push(`any ${lang.any_languages} languages`);
+		if (lang.any_one_language) parts.push(`any one language`);
+		if (lang.telepathy) parts.push(`telepathy ${lang.telepathy} ft`);
+		if (lang.understands_but_cant_speak?.length) {
+			parts.push(`understands ${lang.understands_but_cant_speak.join(', ')} but can't speak`);
+		}
+		return parts.join('; ') || '—';
+	}
 
 	function formatFieldName(key: string): string {
 		return key
@@ -27,25 +164,44 @@
 		if (typeof value === 'boolean') return value ? 'Yes' : 'No';
 		if (typeof value === 'number') return value.toLocaleString();
 		if (typeof value === 'string') return value;
+		if (isLinkedArray(value)) return value.map(v => v.name ?? v.key ?? '').filter(Boolean).join(', ');
+		if (isWeaponPropertyArray(value)) {
+			return value
+				.map(wp => {
+					const name = wp.property?.name ?? '';
+					return wp.detail ? `${name} (${wp.detail})` : name;
+				})
+				.filter(Boolean)
+				.join(', ');
+		}
 		if (Array.isArray(value)) {
 			if (value.length === 0) return 'None';
 			if (typeof value[0] === 'string') return value.join(', ');
 			return JSON.stringify(value);
 		}
-		if (typeof value === 'object') return JSON.stringify(value);
+		if (isLanguageObject(value)) return formatLanguages(value);
+		if (isSpeedObject(value)) return formatSpeed(value);
+		if (typeof value === 'object' && value !== null) {
+			const o = value as Record<string, unknown>;
+			if (typeof o.name === 'string') return o.name;
+		}
 		return String(value);
 	}
 
+	function renderMarkdown(text: string): string {
+		return marked.parse(text) as string;
+	}
+
 	const DISPLAY_FIELDS: Record<string, string[]> = {
-		spell: ['level', 'school', 'casting_time', 'duration', 'range', 'range_text', 'concentration', 'ritual', 'verbal', 'somatic', 'material', 'material_specified', 'material_cost', 'material_consumed', 'target_type', 'target_count', 'saving_throw_ability', 'attack_roll', 'damage_roll', 'damage_types', 'classes'],
-		creature: ['type', 'size', 'challenge_rating_text', 'alignment', 'armor_class', 'armor_detail', 'hit_points', 'hit_dice', 'speed_all', 'languages', 'experience_points'],
-		class: ['hit_dice', 'saving_throws', 'primary_abilities'],
+		spells: ['level', 'school', 'casting_time', 'duration', 'range', 'range_text', 'concentration', 'ritual', 'verbal', 'somatic', 'material', 'material_specified', 'material_cost', 'material_consumed', 'target_type', 'target_count', 'saving_throw_ability', 'attack_roll', 'damage_roll', 'damage_types', 'classes'],
+		creatures: ['type', 'size', 'challenge_rating_text', 'alignment', 'armor_class', 'armor_detail', 'hit_points', 'hit_dice', 'experience_points'],
+		classes: ['hit_dice', 'saving_throws', 'primary_abilities'],
 		species: ['size', 'speed'],
-		background: [],
-		feat: [],
-		weapon: ['damage_dice', 'damage_type', 'weight', 'range', 'properties'],
+		backgrounds: [],
+		feats: [],
+		weapons: ['damage_dice', 'damage_type', 'weight', 'range'],
 		armor: ['armor_class', 'armor_type', 'weight', 'strength_required', 'stealth_disadvantage'],
-		magicitem: ['rarity', 'requires_attunement', 'type']
+		magicitems: ['rarity', 'requires_attunement', 'type']
 	};
 
 	function getDisplayFields(): string[] {
@@ -53,7 +209,7 @@
 	}
 
 	function shouldDisplayField(key: string): boolean {
-		const excludeFields = ['key', 'name', 'desc', 'description', 'document', 'document_key', 'document_name', 'gamesystem_key', 'gamesystem_name', 'publisher_key', 'publisher_name', 'created_at', 'updated_at', 'url'];
+		const excludeFields = ['key', 'name', 'desc', 'description', 'descriptions', 'document', 'document_key', 'document_name', 'gamesystem_key', 'gamesystem_name', 'publisher_key', 'publisher_name', 'created_at', 'updated_at', 'url', 'features', 'benefits', 'properties', 'speed_all', 'languages'];
 		if (excludeFields.includes(key)) return false;
 
 		const displayFields = getDisplayFields();
@@ -137,7 +293,7 @@
 							</Badge>
 						{/if}
 						{#if itemData.school}
-							<Badge variant="outline" >{String(itemData.school)}</Badge>
+							<Badge variant="outline" >{formatValue(itemData.school)}</Badge>
 						{/if}
 						{#if itemData.concentration}
 							<Badge variant="outline" >Concentration</Badge>
@@ -152,13 +308,13 @@
 							<Badge variant="solid" >CR {itemData.challenge_rating_text}</Badge>
 						{/if}
 						{#if itemData.size}
-							<Badge variant="outline" >{String(itemData.size)}</Badge>
+							<Badge variant="outline" >{formatValue(itemData.size)}</Badge>
 						{/if}
 						{#if itemData.type}
-							<Badge variant="outline" >{String(itemData.type)}</Badge>
+							<Badge variant="outline" >{formatValue(itemData.type)}</Badge>
 						{/if}
 						{#if itemData.alignment}
-							<Badge variant="outline" >{String(itemData.alignment)}</Badge>
+							<Badge variant="outline" >{formatValue(itemData.alignment)}</Badge>
 						{/if}
 					</div>
 				{:else if data.type === 'classes' && itemData}
@@ -188,12 +344,79 @@
 				{/if}
 			</div>
 
-			{#if item.description || itemData.desc}
+			{#if itemData.desc || item.description}
 				<div class="border-b border-[var(--color-border)] p-6">
 					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Description</h2>
-					<div class="prose prose-invert max-w-none text-[var(--color-text-secondary)] whitespace-pre-line">
-						{renderDescription(item.description || itemData.desc)}
+					<div class="prose prose-invert max-w-none text-[var(--color-text-secondary)]">
+						{@html renderMarkdown(String(itemData.desc || item.description))}
 					</div>
+				</div>
+			{/if}
+
+			{#if isDescriptionArray(itemData.descriptions) }
+				<div class="border-b border-[var(--color-border)] p-6">
+					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Descriptions</h2>
+					<div class="space-y-4">
+						{#each getDescriptions(itemData.descriptions) as desc}
+							<div class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4">
+								<div class="mb-2 flex flex-wrap gap-2">
+									{#if desc.gamesystem}
+										<span class="rounded bg-accent/20 px-2 py-0.5 text-xs text-accent">{desc.gamesystem}</span>
+									{/if}
+									{#if desc.document}
+										<span class="rounded bg-[var(--color-bg-secondary)] px-2 py-0.5 text-xs text-[var(--color-text-muted)]">{desc.document}</span>
+									{/if}
+								</div>
+								<div class="prose prose-invert prose-sm max-w-none text-[var(--color-text-secondary)]">
+									{@html renderMarkdown(desc.desc)}
+								</div>
+							</div>
+						{/each}
+					</div>
+				</div>
+			{/if}
+
+			{#if isBenefitArray(itemData.benefits) }
+				<div class="border-b border-[var(--color-border)] p-6">
+					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Benefits</h2>
+					<ul class="list-inside list-disc space-y-2 text-[var(--color-text-secondary)]">
+						{#each getBenefits(itemData.benefits) as benefit}
+							<li class="prose prose-invert prose-sm max-w-none">{@html renderMarkdown(benefit.desc)}</li>
+						{/each}
+					</ul>
+				</div>
+			{/if}
+
+			{#if data.type === 'weapons' && isWeaponPropertyArray(itemData.properties) }
+				<div class="border-b border-[var(--color-border)] p-6">
+					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Properties</h2>
+					<div class="space-y-3">
+						{#each getWeaponProperties(itemData.properties) as wp}
+							<div class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4">
+								<div class="flex items-center gap-2">
+									<span class="font-semibold text-accent">{wp.property?.name ?? ''}</span>
+									{#if wp.property?.type}
+										<span class="rounded bg-accent/20 px-2 py-0.5 text-xs text-accent">{wp.property.type}</span>
+									{/if}
+									{#if wp.detail}
+										<span class="text-sm text-[var(--color-text-muted)]">({wp.detail})</span>
+									{/if}
+								</div>
+								{#if wp.property?.desc}
+									<div class="prose prose-invert prose-sm mt-2 max-w-none text-[var(--color-text-secondary)]">
+										{@html renderMarkdown(wp.property.desc)}
+									</div>
+								{/if}
+							</div>
+						{/each}
+					</div>
+				</div>
+			{/if}
+
+			{#if data.type === 'creatures' && isSpeedObject(itemData.speed_all)}
+				<div class="border-b border-[var(--color-border)] p-6">
+					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Speed</h2>
+					<p class="text-[var(--color-text-secondary)]">{formatSpeed(itemData.speed_all)}</p>
 				</div>
 			{/if}
 
@@ -223,7 +446,9 @@
 								<div class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4">
 									<h3 class="font-semibold text-accent">{action.name || action.key}</h3>
 									{#if action.desc}
-										<p class="mt-1 text-sm text-[var(--color-text-secondary)] whitespace-pre-line">{action.desc}</p>
+										<div class="prose prose-invert prose-sm mt-1 max-w-none text-[var(--color-text-secondary)]">
+											{@html renderMarkdown(action.desc)}
+										</div>
 									{/if}
 								</div>
 							{/each}
@@ -239,7 +464,9 @@
 								<div class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4">
 									<h3 class="font-semibold text-accent">{trait.name || trait.key}</h3>
 									{#if trait.desc}
-										<p class="mt-1 text-sm text-[var(--color-text-secondary)] whitespace-pre-line">{trait.desc}</p>
+										<div class="prose prose-invert prose-sm mt-1 max-w-none text-[var(--color-text-secondary)]">
+											{@html renderMarkdown(trait.desc)}
+										</div>
 									{/if}
 								</div>
 							{/each}
@@ -265,7 +492,9 @@
 				{#if itemData.higher_level}
 					<div class="border-b border-[var(--color-border)] p-6">
 						<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">At Higher Levels</h2>
-						<p class="text-[var(--color-text-secondary)] whitespace-pre-line">{renderDescription(itemData.higher_level)}</p>
+						<div class="prose prose-invert max-w-none text-[var(--color-text-secondary)]">
+							{@html renderMarkdown(String(itemData.higher_level))}
+						</div>
 					</div>
 				{/if}
 			{/if}
@@ -290,7 +519,9 @@
 										{/if}
 									</div>
 									{#if feature.desc}
-										<p class="mt-2 text-sm text-[var(--color-text-secondary)] whitespace-pre-line">{feature.desc}</p>
+										<div class="prose prose-invert prose-sm mt-2 max-w-none text-[var(--color-text-secondary)]">
+											{@html renderMarkdown(feature.desc)}
+										</div>
 									{/if}
 								</div>
 							{/each}

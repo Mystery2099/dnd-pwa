@@ -65,14 +65,21 @@
 	<title>{config.plural} | Compendium | D&D</title>
 </svelte:head>
 
-<div class="min-h-screen bg-gradient-to-b from-[var(--color-bg-primary)] to-[var(--color-bg-secondary)]">
+<div
+	class="min-h-screen bg-gradient-to-b from-[var(--color-bg-primary)] to-[var(--color-bg-secondary)]"
+>
 	<div class="mx-auto max-w-7xl px-4 py-8">
 		<div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 			<div>
-				<a href="/compendium" class="text-sm text-[var(--color-text-muted)] hover:text-accent transition-colors">
+				<a
+					href="/compendium"
+					class="text-sm text-[var(--color-text-muted)] transition-colors hover:text-accent"
+				>
 					← Back to Compendium
 				</a>
-				<h1 class="mt-2 text-3xl font-bold text-[var(--color-text-primary)] flex items-center gap-3">
+				<h1
+					class="mt-2 flex items-center gap-3 text-3xl font-bold text-[var(--color-text-primary)]"
+				>
 					<span class="text-4xl">{config.icon}</span>
 					{config.plural}
 				</h1>
@@ -84,23 +91,36 @@
 		</div>
 
 		<div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-			<div class="relative flex-1 max-w-md">
+			<div class="relative max-w-md flex-1">
 				<input
 					type="text"
 					placeholder="Search {config.plural.toLowerCase()}..."
 					value={searchQuery}
 					oninput={handleSearch}
-					class="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] px-4 py-2 pl-10 text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+					class="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] px-4 py-2 pl-10 text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:border-accent focus:ring-1 focus:ring-accent focus:outline-none"
 				/>
-				<svg class="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[var(--color-text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+				<svg
+					class="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 text-[var(--color-text-muted)]"
+					fill="none"
+					stroke="currentColor"
+					viewBox="0 0 24 24"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+					/>
 				</svg>
 			</div>
 
 			<div class="flex gap-2">
 				<button
 					onclick={() => handleSort('name')}
-					class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] px-3 py-2 text-sm text-[var(--color-text-secondary)] transition-colors hover:border-accent hover:text-accent {sortBy === 'name' ? 'border-accent text-accent' : ''}"
+					class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] px-3 py-2 text-sm text-[var(--color-text-secondary)] transition-colors hover:border-accent hover:text-accent {sortBy ===
+					'name'
+						? 'border-accent text-accent'
+						: ''}"
 				>
 					Name {sortBy === 'name' ? (sortOrder === 'asc' ? '↑' : '↓') : ''}
 				</button>
@@ -115,14 +135,21 @@
 			</div>
 		{:else if items.length === 0}
 			<div class="flex flex-col items-center justify-center py-16 text-center">
-				<div class="text-6xl mb-4">🔍</div>
-				<h2 class="text-xl font-semibold text-[var(--color-text-primary)]">No {config.plural.toLowerCase()} found</h2>
+				<div class="mb-4 text-6xl">🔍</div>
+				<h2 class="text-xl font-semibold text-[var(--color-text-primary)]">
+					No {config.plural.toLowerCase()} found
+				</h2>
 				<p class="mt-2 text-[var(--color-text-secondary)]">
 					{searchQuery ? `No results for "${searchQuery}"` : 'No items available in this category'}
 				</p>
 				{#if searchQuery}
 					<button
-						onclick={() => { searchQuery = ''; currentPage = 1; updateUrl(); query.refetch(); }}
+						onclick={() => {
+							searchQuery = '';
+							currentPage = 1;
+							updateUrl();
+							query.refetch();
+						}}
 						class="mt-4 rounded-lg bg-accent px-4 py-2 text-white transition-opacity hover:opacity-90"
 					>
 						Clear search
@@ -134,16 +161,18 @@
 				{#each items as item (item.key)}
 					<SurfaceCard href="/compendium/{data.type}/{item.key}" class="group">
 						<div class="p-4">
-							<h3 class="font-semibold text-[var(--color-text-primary)] group-hover:text-accent transition-colors line-clamp-1">
+							<h3
+								class="line-clamp-1 font-semibold text-[var(--color-text-primary)] transition-colors group-hover:text-accent"
+							>
 								{item.name}
 							</h3>
 							{#if item.source && item.source !== 'open5e'}
-								<p class="mt-1 text-sm text-[var(--color-text-muted)] line-clamp-1">
+								<p class="mt-1 line-clamp-1 text-sm text-[var(--color-text-muted)]">
 									{item.source}
 								</p>
 							{/if}
 							{#if item.description}
-								<p class="mt-2 text-sm text-[var(--color-text-secondary)] line-clamp-2">
+								<p class="mt-2 line-clamp-2 text-sm text-[var(--color-text-secondary)]">
 									{item.description}
 								</p>
 							{/if}
@@ -155,7 +184,9 @@
 										</Badge>
 									{/if}
 									{#if item.data.school}
-										<Badge variant="outline">{String(item.data.school)}</Badge>
+										<Badge variant="outline"
+											>{item.data.school?.name ?? item.data.school?.key ?? item.data.school}</Badge
+										>
 									{/if}
 								</div>
 							{:else if data.type === 'creatures' && item.data}
@@ -164,7 +195,7 @@
 										<Badge variant="solid">CR {item.data.challenge_rating_text}</Badge>
 									{/if}
 									{#if item.data.type}
-										<Badge variant="outline">{String(item.data.type)}</Badge>
+										<Badge variant="outline">{item.data.type?.name ?? item.data.type}</Badge>
 									{/if}
 								</div>
 							{:else if data.type === 'classes' && item.data}
@@ -188,14 +219,16 @@
 					>
 						Previous
 					</button>
-					
+
 					<div class="flex items-center gap-1">
 						{#each Array(Math.min(5, totalPages)) as _, i}
 							{@const pageNum = Math.max(1, Math.min(currentPage - 2 + i, totalPages - 4 + i))}
 							{#if pageNum >= 1 && pageNum <= totalPages}
 								<button
 									onclick={() => goToPage(pageNum)}
-									class="min-w-[2.5rem] rounded-lg border {currentPage === pageNum ? 'border-accent bg-accent/20 text-accent' : 'border-[var(--color-border)] bg-[var(--color-bg-card)] text-[var(--color-text-secondary)] hover:border-accent'} px-3 py-2 text-sm transition-colors"
+									class="min-w-[2.5rem] rounded-lg border {currentPage === pageNum
+										? 'border-accent bg-accent/20 text-accent'
+										: 'border-[var(--color-border)] bg-[var(--color-bg-card)] text-[var(--color-text-secondary)] hover:border-accent'} px-3 py-2 text-sm transition-colors"
 								>
 									{pageNum}
 								</button>

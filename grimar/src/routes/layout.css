@@ -1484,6 +1484,47 @@
    UTILITY CLASSES
    ======================== */
 
+@layer components {
+	/* Markdown Table Styles */
+	.prose table {
+		@apply w-full border-collapse overflow-hidden rounded-lg text-sm;
+	}
+
+	.prose thead {
+		@apply border-b-2;
+		border-color: var(--color-accent);
+	}
+
+	.prose th {
+		@apply px-4 py-3 text-left font-semibold;
+		color: var(--color-accent);
+		background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+	}
+
+	.prose tbody tr {
+		@apply border-b transition-colors;
+		border-color: var(--color-border);
+	}
+
+	.prose tbody tr:hover {
+		background: color-mix(in srgb, var(--color-accent) 5%, transparent);
+	}
+
+	.prose td {
+		@apply px-4 py-2;
+		color: var(--color-text-primary);
+	}
+
+	.prose td:first-child {
+		@apply font-medium;
+	}
+
+	.prose table em,
+	.prose table i {
+		color: var(--color-text-secondary);
+	}
+}
+
 @layer utilities {
 	.text-theme-primary {
 		color: var(--color-text-primary);
