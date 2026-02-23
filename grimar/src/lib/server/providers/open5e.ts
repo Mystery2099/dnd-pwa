@@ -29,6 +29,7 @@ const TYPE_ENDPOINTS: Record<CompendiumType, string> = {
 	rulesections: 'rulesections',
 	weapons: 'weapons',
 	armor: 'armor',
+	items: 'items',
 	magicitems: 'magicitems',
 	environments: 'environments',
 	sizes: 'sizes',
@@ -57,6 +58,7 @@ const SYNCABLE_TYPES: CompendiumType[] = [
 	'backgrounds',
 	'feats',
 	'spells',
+	'spellschools',
 	'skills',
 	'languages',
 	'alignments',
@@ -71,6 +73,7 @@ const SYNCABLE_TYPES: CompendiumType[] = [
 	'creaturesets',
 	'weapons',
 	'armor',
+	'items',
 	'magicitems',
 	'environments',
 	'sizes',
@@ -78,7 +81,11 @@ const SYNCABLE_TYPES: CompendiumType[] = [
 	'documents',
 	'licenses',
 	'publishers',
-	'gamesystems'
+	'gamesystems',
+	'rules',
+	'rulesets',
+	'images',
+	'services'
 ];
 
 interface ApiItem {

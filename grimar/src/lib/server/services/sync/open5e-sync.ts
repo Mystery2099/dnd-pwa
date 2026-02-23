@@ -7,25 +7,39 @@ const logger = createModuleLogger('open5e-sync');
 const OPEN5E_BASE_URL = 'http://10.147.20.240:8888/v2';
 
 export const SYNCABLE_TYPES: CompendiumType[] = [
-	'spells',
-	'creatures',
 	'species',
-	'magicitems',
 	'classes',
-	'weapons',
-	'armor',
 	'backgrounds',
 	'feats',
+	'spells',
+	'spellschools',
 	'skills',
 	'languages',
 	'alignments',
-	'conditions',
 	'abilities',
-	'sizes',
 	'damagetypes',
-	'spellschools',
+	'conditions',
+	'weaponproperties',
+	'itemcategories',
+	'itemsets',
+	'creatures',
 	'creaturetypes',
-	'environments'
+	'creaturesets',
+	'weapons',
+	'armor',
+	'items',
+	'magicitems',
+	'environments',
+	'sizes',
+	'itemrarities',
+	'documents',
+	'licenses',
+	'publishers',
+	'gamesystems',
+	'rules',
+	'rulesets',
+	'images',
+	'services'
 ];
 
 export interface SyncProgress {
