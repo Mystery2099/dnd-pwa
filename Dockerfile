@@ -36,7 +36,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf 
 # Copy package files
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/grimar/package.json ./grimar/
-COPY --from=builder /app/grimar/bun.lock ./
+COPY --from=builder /app/bun.lock ./
 
 # Install production dependencies
 RUN bun install --prod
