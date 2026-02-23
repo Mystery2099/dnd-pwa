@@ -33,11 +33,16 @@ WORKDIR /app
 # Install curl for healthcheck
 RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 
+# Copy package files
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/grimar/package.json ./grimar/
+COPY --from=builder /app/grimar/bun.lock ./
+
+# Install production dependencies (recreates node_modules from lockfile)
+RUN bun install --frozen-lockfile --prod
+
 # Copy built application
 COPY --from=builder /app/grimar/build ./build
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/grimar/package.json ./grimar-package.json
-COPY --from=builder /app/node_modules ./node_modules
 
 # Copy initialized database from builder
 COPY --from=builder /app/grimar/data ./data
