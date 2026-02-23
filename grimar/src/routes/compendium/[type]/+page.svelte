@@ -166,11 +166,6 @@
 							>
 								{item.name}
 							</h3>
-							{#if item.source && item.source !== 'open5e'}
-								<p class="mt-1 line-clamp-1 text-sm text-[var(--color-text-muted)]">
-									{item.source}
-								</p>
-							{/if}
 							{#if item.description}
 								<p class="mt-2 line-clamp-2 text-sm text-[var(--color-text-secondary)]">
 									{item.description}
@@ -203,6 +198,11 @@
 									{#if item.data.hit_dice}
 										<Badge variant="solid">d{item.data.hit_dice}</Badge>
 									{/if}
+								</div>
+							{/if}
+							{#if item.documentName}
+								<div class="mt-3">
+									<Badge variant="outline" class="text-xs opacity-70">{item.documentName}</Badge>
 								</div>
 							{/if}
 						</div>
