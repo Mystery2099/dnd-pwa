@@ -108,11 +108,11 @@
 			href="/compendium">Compendium</a
 		>
 		<a
-			class="rounded-lg px-3 py-2 hover:bg-[var(--color-bg-card)] {isActive('/characters')}"
+			class="rounded-lg px-3 py-2 hover:bg-[var(--color-bg-card)] pointer-events-none opacity-50 {isActive('/characters')}"
 			href="/characters">Characters</a
 		>
 		<a
-			class="rounded-lg px-3 py-2 hover:bg-[var(--color-bg-card)] {isActive('/forge')}"
+			class="rounded-lg px-3 py-2 hover:bg-[var(--color-bg-card)] pointer-events-none opacity-50 {isActive('/forge')}"
 			href="/forge">The Forge</a
 		>
 
