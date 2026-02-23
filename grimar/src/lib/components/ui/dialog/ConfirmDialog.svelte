@@ -63,9 +63,9 @@
 		{/if}
 
 		<Dialog.Footer class="mt-6 flex justify-end gap-3">
-			<Button variant="outline" onclick={onclose}>{cancelText}</Button>
+			<Button variant="secondary" onclick={onclose}>{cancelText}</Button>
 			<Button
-				variant={variant === 'danger' ? 'danger' : 'gem'}
+				variant={variant === 'danger' ? 'danger' : 'primary'}
 				onclick={handleConfirm}
 				class="min-w-[100px]"
 			>
