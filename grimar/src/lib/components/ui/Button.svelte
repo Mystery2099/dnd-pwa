@@ -3,7 +3,7 @@
 
 	type Props = {
 		type?: 'button' | 'submit' | 'reset';
-		variant?: 'gem' | 'ghost' | 'outline' | 'danger';
+		variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
 		size?: 'sm' | 'md' | 'lg';
 		href?: string;
 		download?: string;
@@ -16,7 +16,7 @@
 
 	let {
 		type = 'button',
-		variant = 'gem',
+		variant = 'primary',
 		size = 'md',
 		href,
 		download,
@@ -32,11 +32,10 @@
 		'inline-flex items-center justify-center gap-2 font-medium transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100';
 
 	const variantClasses = {
-		gem: 'btn-gem',
+		primary: 'btn-gem',
+		secondary: 'btn-3d hover:bg-[var(--color-bg-card)] text-[var(--color-text-secondary)]',
 		ghost: 'hover:bg-[var(--color-bg-card)] text-[var(--color-text-secondary)]',
-		outline: 'btn-3d hover:bg-[var(--color-bg-card)] text-[var(--color-text-secondary)]',
-		danger: 'bg-red-500/20 border border-red-500/50 text-red-400 hover:bg-red-500/30',
-		panel: 'btn-3d'
+		danger: 'bg-red-500/20 border border-red-500/50 text-red-400 hover:bg-red-500/30'
 	};
 
 	const sizeClasses = {
