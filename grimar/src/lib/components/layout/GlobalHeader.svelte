@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import Omnibar from '$lib/components/layout/Omnibar.svelte';
 	import PrimaryNav from '$lib/components/layout/PrimaryNav.svelte';
 	import MobileNavDrawer from '$lib/components/layout/MobileNavDrawer.svelte';
 	import logoUrl from '$lib/assets/grimar-hermetica-title.png';
@@ -39,8 +38,6 @@
 	<div class="hidden max-w-xl flex-1 md:block">
 		{#if center}
 			{@render center()}
-		{:else}
-			<Omnibar />
 		{/if}
 	</div>
 

@@ -5,7 +5,7 @@
  * Connects to server to receive push notifications when cache is updated.
  */
 
-import { browser } from '$app/environment';
+import { browser, dev } from '$app/environment';
 import { queryClient } from './query-client';
 import { setCachedVersion, getCachedVersion, type CacheVersion } from './cache-version';
 import { offlineStore } from './offline-store';
@@ -32,6 +32,10 @@ class CacheSync {
 	 */
 	connect(): void {
 		if (!browser) return;
+		if (dev) {
+			console.log('[CacheSync] Disabled in dev mode');
+			return;
+		}
 		if (this.eventSource) return; // Already connected
 
 		console.log('[CacheSync] Connecting to SSE...');
