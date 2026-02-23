@@ -96,6 +96,13 @@ class CacheSync {
 	}
 
 	private async handleVersionUpdate(version: string, timestamp?: number): Promise<void> {
+		const currentVersion = await getCachedVersion();
+
+		if (currentVersion.version === version) {
+			console.log('[CacheSync] Version unchanged, skipping invalidation:', version);
+			return;
+		}
+
 		// Update cached version
 		await setCachedVersion(version, timestamp);
 
