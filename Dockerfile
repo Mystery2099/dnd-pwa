@@ -17,8 +17,12 @@ RUN bun install --frozen-lockfile
 # Copy source
 COPY grimar ./grimar
 
-# Build
+# Generate and push database schema (run migrations)
 WORKDIR /app/grimar
+ENV DATABASE_URL=/app/grimar/data/grimar.db
+RUN mkdir -p /app/grimar/data && bun run db:push
+
+# Build
 RUN bun run build
 
 # Production stage
@@ -34,7 +38,13 @@ COPY --from=builder /app/grimar/build ./build
 COPY --from=builder /app/grimar/package.json ./
 COPY --from=builder /app/grimar/node_modules ./node_modules
 
-# Create data directory for SQLite
+# Copy initialized database from builder
+COPY --from=builder /app/grimar/data ./data
+
+# Copy startup script
+COPY grimar/scripts/docker-start.sh ./docker-start.sh
+
+# Create data directory (in case of fresh start)
 RUN mkdir -p /app/data
 
 # Environment defaults
@@ -46,9 +56,5 @@ ENV NODE_ENV=production \
 # Expose port
 EXPOSE 3000
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:3000/ || exit 1
-
-# Run the server
-CMD ["bun", "./build/index.js"]
+# Run the startup script (handles DB init + starts server)
+CMD ["sh", "./docker-start.sh"]

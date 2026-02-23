@@ -31,8 +31,8 @@ export default defineConfig({
 					}
 				]
 			},
-			strategies: 'generateSW',
 			workbox: {
+				maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5 MB for large SVG favicon
 				runtimeCaching: [
 					{
 						urlPattern: /^https:\/\/api\.open5e\.com\/.*/i,
