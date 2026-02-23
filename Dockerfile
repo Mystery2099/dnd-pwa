@@ -35,6 +35,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf 
 
 # Copy built application
 COPY --from=builder /app/grimar/build ./build
+COPY --from=builder /app/package.json ./
 COPY --from=builder /app/grimar/package.json ./grimar-package.json
 COPY --from=builder /app/node_modules ./node_modules
 
