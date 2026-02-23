@@ -276,6 +276,7 @@
 	async function confirmLogout() {
 		showLogoutDialog = false;
 		loggingOut = true;
+		document.querySelector<HTMLFormElement>('#logout-form')?.requestSubmit();
 	}
 
 	// Helper to format session duration
@@ -808,6 +809,7 @@
 
 								<div class="pt-4">
 									<form
+										id="logout-form"
 										method="POST"
 										action="?/logout"
 										use:enhance={() => {
