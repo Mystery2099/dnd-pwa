@@ -155,6 +155,14 @@ export const COMPENDIUM_TYPE_CONFIGS: Record<CompendiumTypeName, CompendiumTypeC
 		description: 'Protective gear and shields',
 		endpoint: 'armor'
 	},
+	items: {
+		name: 'items',
+		label: 'Item',
+		plural: 'Items',
+		icon: '📦',
+		description: 'General adventuring items and gear',
+		endpoint: 'items'
+	},
 	magicitems: {
 		name: 'magicitems',
 		label: 'Magic Item',
@@ -363,22 +371,41 @@ export const COMPENDIUM_CATEGORIES = [
 	{
 		name: 'Creatures & Monsters',
 		description: 'Bestiary of foes',
-		types: ['creatures', 'creaturetypes'] as CompendiumTypeName[]
+		types: ['creatures', 'creaturetypes', 'creaturesets'] as CompendiumTypeName[]
 	},
 	{
 		name: 'Equipment',
 		description: 'Gear and treasure',
-		types: ['weapons', 'armor', 'magicitems'] as CompendiumTypeName[]
+		types: [
+			'weapons',
+			'armor',
+			'items',
+			'magicitems',
+			'itemcategories',
+			'itemrarities',
+			'itemsets',
+			'weaponproperties'
+		] as CompendiumTypeName[]
 	},
 	{
 		name: 'Rules & Mechanics',
 		description: 'Game fundamentals',
-		types: ['conditions', 'damagetypes', 'skills', 'abilities', 'rules'] as CompendiumTypeName[]
+		types: ['conditions', 'damagetypes', 'skills', 'abilities', 'rules', 'rulesets'] as CompendiumTypeName[]
 	},
 	{
 		name: 'World Building',
 		description: 'Languages, environments, and more',
 		types: ['languages', 'environments', 'alignments', 'sizes'] as CompendiumTypeName[]
+	},
+	{
+		name: 'Source Materials',
+		description: 'Documents, publishers, and licenses',
+		types: ['documents', 'gamesystems', 'publishers', 'licenses', 'images'] as CompendiumTypeName[]
+	},
+	{
+		name: 'Services',
+		description: 'Available game services',
+		types: ['services'] as CompendiumTypeName[]
 	}
 ] as const;
 
@@ -391,6 +418,7 @@ export const SEARCHABLE_TYPES: CompendiumTypeName[] = [
 	'creatures',
 	'weapons',
 	'armor',
+	'items',
 	'magicitems',
 	'skills',
 	'languages',
@@ -402,5 +430,17 @@ export const SEARCHABLE_TYPES: CompendiumTypeName[] = [
 	'creaturetypes',
 	'environments',
 	'sizes',
-	'rules'
+	'rules',
+	'rulesets',
+	'documents',
+	'gamesystems',
+	'publishers',
+	'licenses',
+	'images',
+	'services',
+	'itemcategories',
+	'itemrarities',
+	'itemsets',
+	'weaponproperties',
+	'creaturesets'
 ];
