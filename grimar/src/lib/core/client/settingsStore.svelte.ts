@@ -9,40 +9,15 @@
 
 const STORAGE_KEY = 'grimar-device-settings';
 const DEFAULT_DEVICE_SETTINGS = {
-	fontSize: 'md' as const,
-	compactMode: false,
-	animationLevel: 'full' as const,
-	defaultCompendiumView: 'grid' as const,
-	gridMaxColumns: 4,
-	reducedMotion: false,
-	highContrast: false,
-	keyboardShortcuts: true
+	gridMaxColumns: 4
 };
 
-type FontSize = 'sm' | 'md' | 'lg' | 'xl';
-type AnimationLevel = 'full' | 'reduced' | 'minimal';
-type CompendiumView = 'grid' | 'list';
-
 export interface DeviceSettings {
-	fontSize: FontSize;
-	compactMode: boolean;
-	animationLevel: AnimationLevel;
-	defaultCompendiumView: CompendiumView;
 	gridMaxColumns: number;
-	reducedMotion: boolean;
-	highContrast: boolean;
-	keyboardShortcuts: boolean;
 }
 
 interface _DeviceSettingsActions {
-	setFontSize: (value: FontSize) => void;
-	setCompactMode: (value: boolean) => void;
-	setAnimationLevel: (value: AnimationLevel) => void;
-	setDefaultCompendiumView: (value: CompendiumView) => void;
 	setGridMaxColumns: (value: number) => void;
-	setReducedMotion: (value: boolean) => void;
-	setHighContrast: (value: boolean) => void;
-	setKeyboardShortcuts: (value: boolean) => void;
 	reset: () => void;
 }
 
@@ -72,43 +47,8 @@ function createDeviceSettingsStore() {
 		}
 	}
 
-	function setFontSize(value: FontSize) {
-		settings.fontSize = value;
-		save();
-	}
-
-	function setCompactMode(value: boolean) {
-		settings.compactMode = value;
-		save();
-	}
-
-	function setAnimationLevel(value: AnimationLevel) {
-		settings.animationLevel = value;
-		save();
-	}
-
-	function setDefaultCompendiumView(value: CompendiumView) {
-		settings.defaultCompendiumView = value;
-		save();
-	}
-
 	function setGridMaxColumns(value: number) {
 		settings.gridMaxColumns = value;
-		save();
-	}
-
-	function setReducedMotion(value: boolean) {
-		settings.reducedMotion = value;
-		save();
-	}
-
-	function setHighContrast(value: boolean) {
-		settings.highContrast = value;
-		save();
-	}
-
-	function setKeyboardShortcuts(value: boolean) {
-		settings.keyboardShortcuts = value;
 		save();
 	}
 
@@ -126,14 +66,7 @@ function createDeviceSettingsStore() {
 		get settings() {
 			return settings;
 		},
-		setFontSize,
-		setCompactMode,
-		setAnimationLevel,
-		setDefaultCompendiumView,
 		setGridMaxColumns,
-		setReducedMotion,
-		setHighContrast,
-		setKeyboardShortcuts,
 		reset,
 		load
 	};
@@ -145,24 +78,6 @@ export const deviceSettingsStore = createDeviceSettingsStore();
 export const settingsStore = deviceSettingsStore;
 
 // Helper functions for dropdown options
-export const FONT_SIZE_OPTIONS = [
-	{ value: 'sm', label: 'Small', description: 'Compact text size' },
-	{ value: 'md', label: 'Medium', description: 'Standard text size' },
-	{ value: 'lg', label: 'Large', description: 'Larger text size' },
-	{ value: 'xl', label: 'Extra Large', description: 'Maximum text size' }
-] as const;
-
-export const ANIMATION_LEVEL_OPTIONS = [
-	{ value: 'full', label: 'Full', description: 'All animations enabled' },
-	{ value: 'reduced', label: 'Reduced', description: 'Minimal animations' },
-	{ value: 'minimal', label: 'Minimal', description: 'Essential animations only' }
-] as const;
-
-export const COMPENDIUM_VIEW_OPTIONS = [
-	{ value: 'grid', label: 'Grid', description: 'Card-based grid layout' },
-	{ value: 'list', label: 'List', description: 'Compact list layout' }
-] as const;
-
 export const SYNC_INTERVAL_OPTIONS = [
 	{ value: 'never', label: 'Never', description: 'Manual sync only' },
 	{ value: '15min', label: '15 minutes', description: 'Sync every 15 minutes' },
@@ -176,10 +91,4 @@ export const GRID_MAX_COLUMNS_OPTIONS = [
 	{ value: '4', label: '4', description: 'Up to 4 columns' },
 	{ value: '5', label: '5', description: 'Up to 5 columns' },
 	{ value: '6', label: '6', description: 'Up to 6 columns' }
-] as const;
-
-export const SPELL_SORT_OPTIONS = [
-	{ value: 'name', label: 'Name', description: 'Alphabetical order' },
-	{ value: 'level', label: 'Level', description: 'By spell level' },
-	{ value: 'school', label: 'School', description: 'By spell school' }
 ] as const;

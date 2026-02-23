@@ -16,20 +16,11 @@ export interface ServerSettings {
 	offlineEnabled: boolean;
 	/** How often to auto-sync: never | 15min | 30min | 1h */
 	autoSyncInterval: 'never' | '15min' | '30min' | '1h';
-	/** Show A5e content */
-	showA5eContent: boolean;
-	/** Default sort order for spells */
-	spellSortOrder: 'name' | 'level' | 'school';
-	/** Auto-expand spell/creature entry views */
-	autoExpandDetails: boolean;
 }
 
 export const DEFAULT_SERVER_SETTINGS: ServerSettings = {
 	userThemes: [],
 	syncOnLoad: false,
 	offlineEnabled: true,
-	autoSyncInterval: 'never',
-	showA5eContent: true,
-	spellSortOrder: 'name',
-	autoExpandDetails: false
+	autoSyncInterval: 'never'
 };

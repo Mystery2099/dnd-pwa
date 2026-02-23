@@ -9,7 +9,6 @@
 		LogOut,
 		Trash2,
 		Download,
-		Eye,
 		Book,
 		RefreshCw,
 		HardDrive,
@@ -28,14 +27,7 @@
 	import Button from '$lib/components/ui/Button.svelte';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { Tabs } from 'bits-ui';
-	import {
-		settingsStore,
-		FONT_SIZE_OPTIONS,
-		ANIMATION_LEVEL_OPTIONS,
-		SYNC_INTERVAL_OPTIONS,
-		GRID_MAX_COLUMNS_OPTIONS,
-		SPELL_SORT_OPTIONS
-	} from '$lib/core/client/settingsStore.svelte';
+	import { settingsStore, SYNC_INTERVAL_OPTIONS } from '$lib/core/client/settingsStore.svelte';
 	import { userSettingsStore } from '$lib/core/client/userSettingsStore.svelte';
 	import {
 		getImportedThemes,
@@ -127,14 +119,6 @@
 	let resettingSettings = $state(false);
 	let loggingOut = $state(false);
 
-	// Local bindings for segmented controls (convert to/from strings)
-	let gridMaxColumns = $state(settingsStore.settings.gridMaxColumns.toString());
-
-	// Sync local bindings back to store
-	$effect(() => {
-		settingsStore.setGridMaxColumns(Number(gridMaxColumns));
-	});
-
 	// Confirmation dialogs
 	let showClearCacheDialog = $state(false);
 	let showClearOfflineDialog = $state(false);
@@ -164,13 +148,6 @@
 			icon: RefreshCw,
 			color: 'sapphire',
 			accent: 'var(--gem-sapphire)'
-		},
-		{
-			id: 'accessibility',
-			label: 'Accessibility',
-			icon: Eye,
-			color: 'topaz',
-			accent: 'var(--gem-topaz)'
 		},
 		{
 			id: 'account',
@@ -422,42 +399,6 @@
 									{/snippet}
 								</SettingsItem>
 							{/if}
-
-							<SettingsItem label="Font Size" description="Adjust text size for readability">
-								{#snippet control()}
-									<SegmentedControl
-										bind:value={settingsStore.settings.fontSize}
-										options={FONT_SIZE_OPTIONS}
-										size="sm"
-									/>
-								{/snippet}
-							</SettingsItem>
-
-							<SettingsItem
-								label="Compact Mode"
-								description="Use a denser layout with smaller spacing"
-							>
-								{#snippet control()}
-									<Toggle
-										checked={settingsStore.settings.compactMode}
-										onchange={(v: boolean) => settingsStore.setCompactMode(v)}
-									/>
-								{/snippet}
-							</SettingsItem>
-
-							<SettingsItem
-								label="Animation Level"
-								description="Control intensity of animations"
-								divider={false}
-							>
-								{#snippet control()}
-									<SegmentedControl
-										bind:value={settingsStore.settings.animationLevel}
-										options={ANIMATION_LEVEL_OPTIONS}
-										size="sm"
-									/>
-								{/snippet}
-							</SettingsItem>
 						</SettingsGroup>
 					</section></Tabs.Content
 				>
@@ -474,31 +415,9 @@
 							accentColor="var(--gem-emerald)"
 						>
 							<SettingsItem
-								label="Default View"
-								description="Choose how compendium items are displayed"
-							>
-								{#snippet control()}
-									<Toggle
-										checked={settingsStore.settings.defaultCompendiumView === 'grid'}
-										onchange={(v: boolean) =>
-											settingsStore.setDefaultCompendiumView(v ? 'grid' : 'list')}
-									/>
-								{/snippet}
-							</SettingsItem>
-
-							<SettingsItem label="Max Grid Columns" description="Maximum columns in grid view">
-								{#snippet control()}
-									<SegmentedControl
-										bind:value={gridMaxColumns}
-										options={GRID_MAX_COLUMNS_OPTIONS}
-										size="sm"
-									/>
-								{/snippet}
-							</SettingsItem>
-
-							<SettingsItem
 								label="Sync on Load"
 								description="Automatically sync compendium when page loads"
+								divider={false}
 							>
 								{#snippet control()}
 									<Toggle
@@ -508,56 +427,6 @@
 								{/snippet}
 							</SettingsItem>
 
-							<SettingsItem
-								label="Show Advanced 5e Content"
-								description="Display content from the Advanced 5e (A5e) expansion"
-							>
-								{#snippet control()}
-									<Toggle
-										checked={userSettingsStore.data.showA5eContent}
-										onchange={(v: boolean) => userSettingsStore.updateSetting('showA5eContent', v)}
-									/>
-								{/snippet}
-							</SettingsItem>
-
-							<SettingsItem label="Spell Sort Order" description="How spells are ordered in lists">
-								{#snippet control()}
-									<SegmentedControl
-										bind:value={userSettingsStore.data.spellSortOrder}
-										options={SPELL_SORT_OPTIONS}
-										size="sm"
-									/>
-								{/snippet}
-							</SettingsItem>
-
-							<SettingsItem
-								label="Auto-Expand Details"
-								description="Automatically expand item details when navigating"
-								divider={false}
-							>
-								{#snippet control()}
-									<Toggle
-										checked={userSettingsStore.data.autoExpandDetails}
-										onchange={(v: boolean) =>
-											userSettingsStore.updateSetting('autoExpandDetails', v)}
-									/>
-								{/snippet}
-							</SettingsItem>
-						</SettingsGroup>
-					</section></Tabs.Content
-				>
-
-				<!-- 3. Data & Sync Section -->
-				<Tabs.Content value="data" class="settings-tab-content">
-					<section id="data">
-						<SettingsGroup
-							id="data"
-							title="Data & Sync"
-							description="Manage offline data and synchronization"
-							icon={RefreshCw}
-							index={2}
-							accentColor="var(--gem-sapphire)"
-						>
 							<SettingsItem label="Offline Data" description="Enable caching for offline use">
 								{#snippet control()}
 									<Toggle
@@ -685,57 +554,6 @@
 											Reset All
 										{/if}
 									</Button>
-								{/snippet}
-							</SettingsItem>
-						</SettingsGroup>
-					</section></Tabs.Content
-				>
-
-				<!-- 4. Accessibility Section -->
-				<Tabs.Content value="accessibility" class="settings-tab-content">
-					<section id="accessibility">
-						<SettingsGroup
-							id="accessibility"
-							title="Accessibility"
-							description="Configure accessibility and input preferences"
-							icon={Eye}
-							index={3}
-							accentColor="var(--gem-topaz)"
-						>
-							<SettingsItem
-								label="Reduced Motion"
-								description="Minimize animations for motion sensitivity"
-							>
-								{#snippet control()}
-									<Toggle
-										checked={settingsStore.settings.reducedMotion}
-										onchange={(v: boolean) => settingsStore.setReducedMotion(v)}
-									/>
-								{/snippet}
-							</SettingsItem>
-
-							<SettingsItem
-								label="High Contrast"
-								description="Increase visual contrast for better clarity"
-							>
-								{#snippet control()}
-									<Toggle
-										checked={settingsStore.settings.highContrast}
-										onchange={(v: boolean) => settingsStore.setHighContrast(v)}
-									/>
-								{/snippet}
-							</SettingsItem>
-
-							<SettingsItem
-								label="Keyboard Shortcuts"
-								description="Enable keyboard navigation and shortcuts"
-								divider={false}
-							>
-								{#snippet control()}
-									<Toggle
-										checked={settingsStore.settings.keyboardShortcuts}
-										onchange={(v: boolean) => settingsStore.setKeyboardShortcuts(v)}
-									/>
 								{/snippet}
 							</SettingsItem>
 						</SettingsGroup>
