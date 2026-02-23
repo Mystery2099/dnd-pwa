@@ -33,16 +33,11 @@ WORKDIR /app
 # Install curl for healthcheck
 RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 
-# Copy package files
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/grimar/package.json ./grimar/
-COPY --from=builder /app/bun.lock ./
-
-# Install dependencies (ignore scripts to avoid native module build failures)
-RUN bun install --ignore-scripts
-
 # Copy built application
 COPY --from=builder /app/grimar/build ./build
+
+# Copy node_modules from builder (Bun workspace structure)
+COPY --from=builder /app/node_modules ./node_modules
 
 # Copy initialized database from builder
 COPY --from=builder /app/grimar/data ./data
@@ -62,5 +57,9 @@ ENV NODE_ENV=production \
 # Expose port
 EXPOSE 3000
 
-# Run the startup script (handles DB init + starts server)
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:3000/ || exit 1
+
+# Run the startup script
 CMD ["sh", "./docker-start.sh"]
