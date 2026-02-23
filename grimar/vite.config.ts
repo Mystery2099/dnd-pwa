@@ -6,7 +6,7 @@ import { SvelteKitPWA } from '@vite-pwa/sveltekit';
 export default defineConfig({
 	envDir: '.',
 	ssr: {
-		noExternal: ['clsx', 'tailwind-merge']
+		noExternal: ['clsx', 'tailwind-merge', 'nanoid', /.*/]
 	},
 	plugins: [
 		tailwindcss(),
