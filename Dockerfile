@@ -3,10 +3,13 @@ FROM oven/bun:1 AS builder
 
 WORKDIR /app
 
+# Install build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends python3 build-essential curl && rm -rf /var/lib/apt/lists/*
+
 # Copy workspace config
-COPY package.json bun.lockb ./
+COPY package.json bun.lock ./
 COPY grimar/package.json ./grimar/
-COPY grimar/bun.lockb ./grimar/
+COPY grimar/bun.lock ./grimar/
 
 # Install dependencies
 RUN bun install --frozen-lockfile
@@ -22,6 +25,9 @@ RUN bun run build
 FROM oven/bun:1-slim AS runtime
 
 WORKDIR /app
+
+# Install curl for healthcheck
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 
 # Copy built application
 COPY --from=builder /app/grimar/build ./build
