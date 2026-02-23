@@ -56,7 +56,7 @@
 			Export All
 		</Button>
 		<Button variant="ghost" href="/homebrew/import">Import</Button>
-		<Button variant="gem" href="/homebrew/new">Create New</Button>
+		<Button variant="primary" href="/homebrew/new">Create New</Button>
 	</div>
 
 	{#if data.items.length === 0}
@@ -64,7 +64,7 @@
 			<p class="mb-4 text-[var(--color-text-secondary)]">
 				You haven't created any homebrew content yet.
 			</p>
-			<Button variant="gem" href="/homebrew/new">Create the First Item</Button>
+			<Button variant="primary" href="/homebrew/new">Create the First Item</Button>
 		</div>
 	{:else}
 		<div class="mb-4 text-sm text-[var(--color-text-secondary)]">

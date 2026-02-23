@@ -974,6 +974,145 @@
 		background: color-mix(in srgb, var(--color-accent) 50%, transparent);
 	}
 
+	/* ========================
+	   LIST ITEM PATTERNS
+	   ======================== */
+
+	/* List Row - Standard list item with hover state */
+	.list-row {
+		@apply relative flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all duration-200;
+		background: transparent;
+	}
+
+	.list-row:hover {
+		@apply bg-[color-mix(in_srgb,var(--color-accent)_8%,transparent)];
+	}
+
+	.list-row:active {
+		@apply bg-[color-mix(in_srgb,var(--color-accent)_12%,transparent)];
+	}
+
+	/* List Item - Clickable card-style item */
+	.list-item {
+		@apply relative flex items-center gap-3 rounded-xl border border-[var(--color-border)] p-3 transition-all duration-200;
+		background: var(--color-bg-card);
+	}
+
+	.list-item:hover {
+		@apply -translate-y-0.5 border-[var(--color-border-hover)];
+		box-shadow:
+			0 4px 12px color-mix(in srgb, black 30%, transparent),
+			inset 0 1px 0 color-mix(in srgb, var(--color-text-primary) 10%, transparent);
+	}
+
+	.list-item:active {
+		@apply translate-y-0;
+	}
+
+	/* List Item Icon */
+	.list-item-icon {
+		@apply flex shrink-0 items-center justify-center rounded-lg;
+		width: 2.5rem;
+		height: 2.5rem;
+		background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+		color: var(--color-accent);
+	}
+
+	/* List Item Content */
+	.list-item-content {
+		@apply min-w-0 flex-1;
+	}
+
+	.list-item-title {
+		@apply block truncate text-sm font-medium text-[var(--color-text-primary)];
+	}
+
+	.list-item-description {
+		@apply mt-0.5 block truncate text-xs text-[var(--color-text-secondary)];
+	}
+
+	/* List Item Meta */
+	.list-item-meta {
+		@apply shrink-0 text-right;
+	}
+
+	.list-item-badge {
+		@apply inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium;
+		background: color-mix(in srgb, black 30%, transparent);
+		color: var(--color-text-muted);
+	}
+
+	/* List Item Arrow */
+	.list-item-arrow {
+		@apply shrink-0 text-[var(--color-text-muted)] transition-transform duration-200;
+	}
+
+	.list-item:hover .list-item-arrow {
+		@apply text-[var(--color-accent)];
+	}
+
+	/* ========================
+	   CATEGORY CARD PATTERNS
+	   ======================== */
+
+	.category-card {
+		@apply relative overflow-hidden rounded-2xl border border-[var(--color-border)] p-5 transition-all duration-200;
+		background: var(--color-bg-card);
+	}
+
+	.category-card:hover {
+		@apply -translate-y-1 border-[var(--color-border-hover)];
+		box-shadow:
+			0 8px 32px color-mix(in srgb, black 40%, transparent),
+			inset 0 1px 0 color-mix(in srgb, var(--color-text-primary) 15%, transparent);
+	}
+
+	.category-title {
+		@apply mb-1 text-lg font-semibold tracking-tight text-[var(--color-text-primary)];
+	}
+
+	.category-description {
+		@apply mb-4 text-sm text-[var(--color-text-muted)];
+	}
+
+	/* ========================
+	   TYPE LIST PATTERNS
+	   ======================== */
+
+	.type-list {
+		@apply flex flex-col gap-2;
+	}
+
+	.type-row {
+		@apply relative flex items-center justify-between rounded-lg border border-transparent px-3 py-2.5 transition-all duration-150;
+	}
+
+	.type-row:hover {
+		@apply border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-accent)_5%,transparent)];
+	}
+
+	.type-row:active {
+		@apply bg-[color-mix(in_srgb,var(--color-accent)_10%,transparent)];
+	}
+
+	.type-info {
+		@apply flex items-center gap-2.5;
+	}
+
+	.type-icon {
+		@apply flex items-center justify-center text-lg text-[var(--color-text-secondary)];
+	}
+
+	.type-name {
+		@apply text-sm font-medium text-[var(--color-text-primary)];
+	}
+
+	.type-count {
+		@apply rounded-md px-2 py-0.5 text-xs font-medium tabular-nums;
+		background: color-mix(in srgb, black 25%, transparent);
+		color: var(--color-text-muted);
+	}
+
 	/* Toggle styles */
 	.toggle-track {
 		@apply transition-all duration-300;

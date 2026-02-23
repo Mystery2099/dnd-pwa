@@ -15,6 +15,6 @@
 			adventures in a self-hosted, offline-capable environment.
 		</p>
 
-		<Button href="/dashboard" variant="gem" size="lg">Enter the Archives</Button>
+		<Button href="/dashboard" variant="primary" size="lg">Enter the Archives</Button>
 	</SurfaceCard>
 </div>
