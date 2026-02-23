@@ -38,8 +38,8 @@ COPY --from=builder /app/package.json ./
 COPY --from=builder /app/grimar/package.json ./grimar/
 COPY --from=builder /app/grimar/bun.lock ./
 
-# Install production dependencies (recreates node_modules from lockfile)
-RUN bun install --frozen-lockfile --prod
+# Install production dependencies
+RUN bun install --prod
 
 # Copy built application
 COPY --from=builder /app/grimar/build ./build
