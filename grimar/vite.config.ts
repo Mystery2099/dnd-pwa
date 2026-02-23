@@ -5,6 +5,9 @@ import { SvelteKitPWA } from '@vite-pwa/sveltekit';
 
 export default defineConfig({
 	envDir: '.',
+	optimizeDeps: {
+		include: ['clsx', 'tailwind-merge']
+	},
 	plugins: [
 		tailwindcss(),
 		sveltekit(),
