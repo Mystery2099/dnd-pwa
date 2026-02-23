@@ -35,6 +35,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf 
 
 # Copy built application
 COPY --from=builder /app/grimar/build ./build
+COPY --from=builder /app/bun.lock ./
 
 # Copy node_modules from builder (Bun workspace structure)
 COPY --from=builder /app/node_modules ./node_modules
