@@ -350,7 +350,7 @@
 								description="Import a custom theme from a JSON file"
 							>
 								{#snippet control()}
-									<Button variant="outline" size="sm" onclick={() => (showImportDialog = true)}>
+									<Button variant="secondary" size="sm" onclick={() => (showImportDialog = true)}>
 										<Upload class="size-4" />
 										Import
 									</Button>
@@ -497,7 +497,7 @@
 
 							<SettingsItem label="Export Data" description="Download your settings and data">
 								{#snippet control()}
-									<Button variant="outline" size="sm">
+									<Button variant="secondary" size="sm">
 										<Download class="size-4" />
 										Export
 									</Button>
@@ -506,7 +506,7 @@
 
 							<SettingsItem label="Import Data" description="Restore settings and data from backup">
 								{#snippet control()}
-									<Button variant="outline" size="sm">
+									<Button variant="secondary" size="sm">
 										<Upload class="size-4" />
 										Import
 									</Button>
@@ -541,7 +541,7 @@
 								{#snippet control()}
 									<Button
 										type="button"
-										variant="outline"
+										variant="secondary"
 										size="sm"
 										disabled={resettingSettings}
 										onclick={resetAllSettings}
@@ -663,7 +663,7 @@
 								<div class="py-8 text-center">
 									<User class="mx-auto mb-3 size-12 text-gray-500" />
 									<p class="text-gray-400">Not signed in</p>
-									<Button href="/login" variant="gem" size="sm" class="mt-4">Sign In</Button>
+									<Button href="/login" variant="primary" size="sm" class="mt-4">Sign In</Button>
 								</div>
 							{/if}
 						</SettingsGroup>
@@ -750,11 +750,11 @@
 				{/if}
 			</div>
 			<Dialog.Footer>
-				<Button variant="outline" onclick={handleImportFromFile}>
+				<Button variant="secondary" onclick={handleImportFromFile}>
 					<Upload class="size-4" />
 					Upload File
 				</Button>
-				<Button variant="gem" disabled={importingTheme} onclick={handleImportFromText}>
+				<Button variant="primary" disabled={importingTheme} onclick={handleImportFromText}>
 					{#if importingTheme}
 						<RefreshCw class="size-4 animate-spin" />
 						Importing...

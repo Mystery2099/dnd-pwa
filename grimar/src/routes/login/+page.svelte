@@ -78,7 +78,7 @@
 		<!-- Actions -->
 		<div class="flex flex-col gap-3">
 			{#if !isDevMode || hasAuthentikConfig || (!mockUser && !hasAuthentikConfig)}
-				<Button href="/auth/login" variant="gem" size="lg">
+				<Button href="/auth/login" variant="primary" size="lg">
 					<LogIn class="size-5" />
 					Sign In with Authentik
 				</Button>
@@ -89,7 +89,7 @@
 				{/if}
 			{/if}
 
-			<Button href="/" variant="outline" size="lg">Go to Homepage</Button>
+			<Button href="/" variant="secondary" size="lg">Go to Homepage</Button>
 		</div>
 	</SurfaceCard>
 </div>
