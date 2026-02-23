@@ -26,6 +26,6 @@ export const load: PageServerLoad = async ({ cookies }) => {
 export const actions: Actions = {
 	logout: async ({ cookies }) => {
 		destroySession(cookies);
-		throw redirect(302, '/');
+		throw redirect(302, '/login');
 	}
 };
