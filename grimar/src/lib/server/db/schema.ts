@@ -109,6 +109,7 @@ export const COMPENDIUM_TYPES = [
 	'spells',
 	'creatures',
 	'species',
+	'items',
 	'magicitems',
 	'classes',
 	'weapons',

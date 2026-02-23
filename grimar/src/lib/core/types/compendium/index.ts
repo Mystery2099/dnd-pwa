@@ -10,6 +10,7 @@ export type CompendiumTypeName =
 	| 'abilities'
 	| 'weapons'
 	| 'armor'
+	| 'items'
 	| 'magicitems'
 	| 'itemcategories'
 	| 'itemrarities'
