@@ -413,6 +413,24 @@
 				</div>
 			{/if}
 
+			{#if data.type === 'species' && itemData.traits && Array.isArray(itemData.traits) && itemData.traits.length > 0}
+				<div class="border-b border-[var(--color-border)] p-6">
+					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Traits</h2>
+					<div class="space-y-3">
+						{#each itemData.traits as trait}
+							<div class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4">
+								<h3 class="font-semibold text-accent">{trait.name}</h3>
+								{#if trait.desc}
+									<div class="prose prose-invert prose-sm mt-1 max-w-none text-[var(--color-text-secondary)]">
+										{@html renderMarkdown(trait.desc)}
+									</div>
+								{/if}
+							</div>
+						{/each}
+					</div>
+				</div>
+			{/if}
+
 			{#if data.type === 'creatures' && isSpeedObject(itemData.speed_all)}
 				<div class="border-b border-[var(--color-border)] p-6">
 					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Speed</h2>
