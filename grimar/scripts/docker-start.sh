@@ -15,8 +15,5 @@ if [ ! -d "$DB_DIR" ]; then
     mkdir -p "$DB_DIR"
 fi
 
-echo "[startup] Running database migrations..."
-bun run db:push
-
-echo "[startup] Database ready. Starting server..."
+echo "[startup] Starting server..."
 exec bun ./build/index.js
