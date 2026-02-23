@@ -38,8 +38,8 @@ COPY --from=builder /app/package.json ./
 COPY --from=builder /app/grimar/package.json ./grimar/
 COPY --from=builder /app/bun.lock ./
 
-# Install production dependencies
-RUN bun install --prod
+# Install dependencies
+RUN bun install
 
 # Copy built application
 COPY --from=builder /app/grimar/build ./build
