@@ -1287,7 +1287,7 @@
 		{/if}
 
 		<div class="flex gap-4 pt-4">
-			<Button type="submit" variant="gem" disabled={saving}>
+			<Button type="submit" variant="primary" disabled={saving}>
 				{isEditing ? 'Save Changes' : 'Create'}
 				{typeInfo.label}
 			</Button>
