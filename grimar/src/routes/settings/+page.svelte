@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
 	import {
 		Palette,
 		Cog,
@@ -814,9 +815,11 @@
 										action="?/logout"
 										use:enhance={() => {
 											loggingOut = true;
-											return async ({ update }) => {
-												await update();
+											return async ({ result }) => {
 												loggingOut = false;
+												if (result.type === 'redirect') {
+													goto(result.location, { invalidateAll: true });
+												}
 											};
 										}}
 									>
