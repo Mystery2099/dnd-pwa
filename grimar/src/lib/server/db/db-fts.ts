@@ -55,7 +55,8 @@ export async function populateFtsFromDatabase(db?: Db): Promise<number> {
 	const items = await database.select().from(compendium);
 	let count = 0;
 
-	await database.transaction(async (tx) => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	await database.transaction(async (tx: any) => {
 		await tx.run(sql`DELETE FROM compendium_fts`);
 		
 		const BATCH_SIZE = 500;
@@ -131,7 +132,8 @@ export async function rebuildFtsIndex(db?: Db): Promise<number> {
 	const items = await database.select().from(compendium);
 	let count = 0;
 
-	await database.transaction(async (tx) => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	await database.transaction(async (tx: any) => {
 		await tx.run(sql`DELETE FROM compendium_fts`);
 		
 		const BATCH_SIZE = 500;

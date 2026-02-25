@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { eq, desc, and } from 'drizzle-orm';
 import type { Db } from '$lib/server/db';
 import { characters } from '$lib/server/db/schema';
 import { createModuleLogger } from '$lib/server/logger';
@@ -32,7 +32,7 @@ export class CharacterRepository {
 
 		const result = await db.query.characters.findMany({
 			where: eq(characters.owner, owner),
-			orderBy: (model, { desc }) => desc(model.id)
+			orderBy: [desc(characters.id)]
 		});
 
 		this.cache.set(cacheKey, result, getCacheTTL('character'));
@@ -51,10 +51,12 @@ export class CharacterRepository {
 		}
 		log.debug({ id, owner, cacheKey }, 'Character cache miss');
 
+		const condition = owner
+			? and(eq(characters.id, id), eq(characters.owner, owner))
+			: eq(characters.id, id);
+
 		const result = await db.query.characters.findFirst({
-			where: owner
-				? (model, { and }) => and(eq(model.id, id), eq(model.owner, owner))
-				: (model) => eq(model.id, id)
+			where: condition
 		});
 
 		if (result) {

@@ -22,7 +22,9 @@
 	}: Props = $props();
 
 	let inputMode = $state<'form' | 'json'>('form');
+	// svelte-ignore state_referenced_locally
 	let formValues = $state<Record<string, unknown>>({ ...initialData });
+	// svelte-ignore state_referenced_locally
 	let jsonInput = $state(JSON.stringify(initialData, null, 2));
 	let jsonError = $state('');
 	let isDragging = $state(false);

@@ -15,7 +15,7 @@
 
 	let { config, value, onChange }: Props = $props();
 
-	const fieldId = `field-${config.name}`;
+	const fieldId = $derived(`field-${config.name}`);
 </script>
 
 {#if config.type === 'string'}

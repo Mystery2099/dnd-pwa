@@ -220,7 +220,7 @@ export async function getTypeCounts(): Promise<Record<string, number>> {
 		.from(compendium)
 		.groupBy(compendium.type);
 
-	return Object.fromEntries(results.map((r) => [r.type, Number(r.count)]));
+	return Object.fromEntries(results.map((r: { type: string; count: number }) => [r.type, Number(r.count)]));
 }
 
 export async function getDistinctValues(
@@ -243,7 +243,7 @@ export async function getDistinctValues(
 	}
 
 	const results = await query.orderBy(column);
-	return results.map((r) => r.value).filter((v): v is string => v !== null);
+	return results.map((r: { value: string | null }) => r.value).filter((v): v is string => v !== null);
 }
 
 export async function clearType(type: CompendiumType): Promise<number> {

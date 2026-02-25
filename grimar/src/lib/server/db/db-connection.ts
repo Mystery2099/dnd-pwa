@@ -19,6 +19,7 @@
  *
  * In production, connections are typically managed by the runtime and don't need
  * manual cleanup. The `closeDb()` function is available for graceful shutdowns.
+ */
 
 import * as schema from './schema';
 import { applyPragmas } from './db-config';
