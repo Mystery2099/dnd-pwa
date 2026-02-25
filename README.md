@@ -31,8 +31,6 @@ dnd-pwa/
 │   ├── tests/           # E2E tests
 │   └── package.json     # App dependencies
 ├── docs/                # Complete documentation
-├── CLAUDE.md            # AI/Developer guide (START HERE)
-├── AGENTS.md            # Agent guidelines
 └── package.json         # Workspace root (proxies commands to grimar/)
 ```
 
@@ -40,8 +38,7 @@ dnd-pwa/
 
 | File | Purpose |
 |------|---------|
-| **[CLAUDE.md](./CLAUDE.md)** | Development guide - commands, architecture, patterns |
-| **[docs/README.md](./docs/README.md)** | Complete documentation index |
+| **[docs/README.md](./docs/README.md)** | Documentation index and project status |
 | **[docs/SPECIFICATIONS.md](./docs/SPECIFICATIONS.md)** | Feature specifications |
 | **[docs/architecture-doc.md](./docs/architecture-doc.md)** | Technical architecture |
 | **[docs/STYLE_GUIDE.md](./docs/STYLE_GUIDE.md)** | "Arcane Aero" design system |
@@ -90,7 +87,7 @@ bun run start            # Run production server
 
 ## 🔧 Development Workflow
 
-1. Read [CLAUDE.md](./CLAUDE.md) for development guidelines
+1. Read [docs/README.md](./docs/README.md) for project overview and guidelines
 2. Run `bun run dev` to start development
 3. Run `bun run check` and `bun run test:run` before committing
 4. See [docs/](./docs/) for detailed documentation

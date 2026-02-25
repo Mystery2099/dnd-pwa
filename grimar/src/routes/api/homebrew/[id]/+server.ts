@@ -6,6 +6,7 @@ import {
 	updateHomebrewItem,
 	deleteHomebrewItem
 } from '$lib/server/repositories/compendium';
+import { homebrewItemSchema, type HomebrewItemInput } from '$lib/server/validators/homebrew';
 
 export const GET: RequestHandler = async ({ params, locals }) => {
 	const user = requireUser(locals);
@@ -24,14 +25,21 @@ export const GET: RequestHandler = async ({ params, locals }) => {
 
 export const PUT: RequestHandler = async ({ params, request, locals }) => {
 	const user = requireUser(locals);
-	const data = await request.json();
+	const body = await request.json();
+
+	const parsed = homebrewItemSchema.safeParse(body);
+	if (!parsed.success) {
+		return json({ error: 'Validation failed', details: parsed.error.issues }, { status: 400 });
+	}
+
+	const validated: HomebrewItemInput = parsed.data;
 
 	const item = await updateHomebrewItem(
 		params.id,
 		{
-			name: data.name,
-			description: data.description,
-			data: typeof data.data === 'string' ? JSON.parse(data.data) : data.data
+			name: validated.name,
+			description: validated.summary,
+			data: validated.details
 		},
 		user.username,
 		user.role

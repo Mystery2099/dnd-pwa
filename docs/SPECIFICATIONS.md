@@ -1,6 +1,6 @@
 # 📖 The Grimar Hermetica: Project Specification
 
-**Version:** 1.0.0
+**Version:** alpha 0.0.1
 **Status:** Approved for Phase 1 (MVP)
 **Stack:** SvelteKit, Bun, SQLite (Drizzle), Tailwind CSS 4
 **Deployment:** Self-Hosted Docker (Traefik + Authentik)
@@ -44,27 +44,32 @@ It prioritizes the **"Arcane Aero"** aesthetic (glassmorphism/3D depth) and util
     3.  **Ability Scores:** Supports Manual Entry, Point Buy, and Standard Array.
   * **Output:** Creates a new Character entry in SQLite.
 
-### 2.4 Export & Portability
+### 2.4 Export & Portability [REMOVED]
 
-  * **JSON Export:** Raw data dump for backups.
-  * **PDF Export:** Generates a standard 5e Character Sheet.
-      * **Tech:** Uses `pdf-lib` to map database fields onto a blank, form-fillable PDF template stored in assets.
+> **Status:** Removed from roadmap. JSON export via API endpoint still available.
 
-### 2.5 The Dice Roller
+* **JSON Export:** Raw data dump for backups.
+* **PDF Export:** ~~Generates a standard 5e Character Sheet.~~
+    * ~~**Tech:** Uses `pdf-lib` to map database fields onto a blank, form-fillable PDF template stored in assets.~~
 
-  * **Context-Aware:** Clicking a spell/weapon on the sheet automatically rolls the correct damage (e.g., `8d6` Fire).
-  * **Manual Tray:** A sidebar drawer for arbitrary rolls (e.g., `/r 2d20 + 5`).
-  * **Visuals:** 3D physics or particle effects (confetti/sparks) on Critical Hits (Nat 20).
+### 2.5 The Dice Roller [REMOVED]
 
-### 2.6 Bookmarks
+> **Status:** Removed from roadmap. SSE-based real-time dice rolling never implemented.
 
-Users can bookmark Compendium entities for quick access.
+* ~~**Context-Aware:** Clicking a spell/weapon on the sheet automatically rolls the correct damage (e.g., `8d6` Fire).~~
+* ~~**Manual Tray:** A sidebar drawer for arbitrary rolls (e.g., `/r 2d20 + 5`).~~
+* ~~**Visuals:** 3D physics or particle effects (confetti/sparks) on Critical Hits (Nat 20).~~
 
-  * **Scope:** Spells, Items, Monsters (and any other `compendium_items` types).
-  * **Ownership:** Per-user.
-  * **UI (MVP):** A star/bookmark toggle on Compendium cards and on the detail modal.
-  * **Filtering (MVP):** Compendium sidebar includes a "Bookmarked only" toggle.
-  * **Persistence:** Stored in SQLite; available across devices/browsers for the same authenticated user.
+### 2.6 Bookmarks [REMOVED]
+
+> **Status:** Removed from roadmap. Bookmarking functionality never implemented.
+
+* ~~Users can bookmark Compendium entities for quick access.~~
+* ~~**Scope:** Spells, Items, Monsters (and any other `compendium_items` types).~~
+* ~~**Ownership:** Per-user.~~
+* ~~**UI (MVP):** A star/bookmark toggle on Compendium cards and on the detail modal.~~
+* ~~**Filtering (MVP):** Compendium sidebar includes a "Bookmarked only" toggle.~~
+* ~~**Persistence:** Stored in SQLite; available across devices/browsers for the same authenticated user.~~
 
 -----
 
@@ -104,9 +109,11 @@ The App Shell is a universal, persistent frame for all authenticated views. It e
 * **Material:** Obsidian (`surface.canvas`) for the drawer, with a modal overlay backdrop (`surface.overlay`).
 * **Contents (MVP):** Dashboard, Compendium, Settings.
 
-#### 🏠 **Dashboard** (`/dashboard`)
+#### 🏠 **Dashboard** (`/dashboard`) [REMOVED: Campaigns]
 
-  * **Layout:** Grid view of the user's Characters and Campaigns.
+> **Note:** Campaign management module was removed. Dashboard shows only characters.
+
+  * **Layout:** Grid view of the user's Characters and ~~Campaigns~~.
   * **Visual:** Large "Crystal Card" styling for each character showing Portrait, Name, Level, and Class.
 
 #### 📖 **Compendium** (`/compendium`)
@@ -265,10 +272,10 @@ The Character Sheet should feel like a personal, living artifact: a crystalline 
 ### 3.5 Dashboard Design (`/dashboard`)
 
 #### Design Concept: "The Hall of Heroes"
-The Dashboard is the landing space for ongoing play. It should be optimized for fast re-entry into a character sheet. Characters are the primary focus; campaigns are a secondary, optional module.
+The Dashboard is the landing space for ongoing play. It should be optimized for fast re-entry into a character sheet. Characters are the primary focus.
 
 * **Primary Content:** Character Grid.
-* **Secondary Content:** Campaigns module (can be minimal or omitted in MVP).
+* ~~**Secondary Content:** Campaigns module (can be minimal or omitted in MVP).~~
 
 #### Layout
 
@@ -284,10 +291,13 @@ The Dashboard is the landing space for ongoing play. It should be optimized for 
 * **Card Contents (MVP):** Portrait, Name, Class/Level.
 * **Card Contents (Deferred):** Quick-scan small engraved tiles (HP/AC) are intentionally omitted in MVP to keep the dashboard clean.
 
-##### 3. Campaigns Module (Secondary / Optional)
-* **Priority:** Visually de-emphasized versus the Character Grid.
-* **Form:** Small strip or compact list below characters.
-* **MVP Note:** This section can be hidden entirely if there are no campaigns.
+##### 3. Campaigns Module (Secondary / Optional) [REMOVED]
+
+> **Status:** Removed from roadmap.
+
+* ~~**Priority:** Visually de-emphasized versus the Character Grid.~~
+* ~~**Form:** Small strip or compact list below characters.~~
+* ~~**MVP Note:** This section can be hidden entirely if there are no campaigns.~~
 
 #### States
 
@@ -304,7 +314,7 @@ The Dashboard is the landing space for ongoing play. It should be optimized for 
 
 * **Open Character:** Clicking a Crystal Card navigates to `/characters/[id]`.
 * **Create Character:** CTA navigates to the Forge flow.
-* **Campaign Entry (If present):** Clicking a campaign opens campaign details (future scope).
+* ~~**Campaign Entry (If present):** Clicking a campaign opens campaign details (future scope).~~
 
 -----
 

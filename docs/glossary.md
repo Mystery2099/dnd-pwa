@@ -66,9 +66,11 @@ The URL segment identifying entry type:
 
 ### Entry View URL Pattern
 ```
-/compendium/[type]/[provider]/[sourceBook]/[slug]
+/compendium/[type]/[slug]
 ```
-Example: `/compendium/spells/5ebits/PHB/fireball`
+Example: `/compendium/spells/fireball`
+
+> **Note:** The provider/sourceBook is stored in the entry's `source` field in the database, not in the URL.
 
 ## SvelteKit Terms
 

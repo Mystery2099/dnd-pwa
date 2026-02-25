@@ -3,6 +3,26 @@
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import { marked } from 'marked';
 	import type { PageData } from './$types';
+	import {
+		isLinkedItem,
+		isLinkedArray,
+		getLinkedItems,
+		isWeaponPropertyArray,
+		getWeaponProperties,
+		isDescriptionArray,
+		getDescriptions,
+		isBenefitArray,
+		getBenefits,
+		isSpeedObject,
+		isLanguageObject,
+		formatSpeed,
+		formatLanguages,
+		formatFieldName,
+		formatValue,
+		DISPLAY_FIELDS,
+		getSortedFields,
+		renderDescription
+	} from '$lib/utils/compendium';
 
 	marked.setOptions({ gfm: true, breaks: true });
 
@@ -14,195 +34,6 @@
 
 	let item = $derived(data.item);
 	let itemData = $derived(item.data as Record<string, unknown>);
-
-	interface LinkedItem {
-		name?: string;
-		key?: string;
-		url?: string;
-	}
-
-	interface WeaponProperty {
-		property?: {
-			name?: string;
-			type?: string | null;
-			desc?: string;
-		};
-		detail?: string | null;
-	}
-
-	interface DescriptionItem {
-		desc: string;
-		document?: string;
-		gamesystem?: string;
-	}
-
-	interface BenefitItem {
-		desc: string;
-	}
-
-	interface SpeedData {
-		unit?: string;
-		walk?: number;
-		crawl?: number;
-		fly?: number;
-		hover?: boolean;
-		burrow?: number;
-		climb?: number;
-		swim?: number;
-	}
-
-	interface LanguageData {
-		as_string?: string;
-		data?: LinkedItem[];
-		languages?: string[];
-		any_languages?: number;
-		any_one_language?: number;
-		telepathy?: number;
-		understands_but_cant_speak?: string[];
-	}
-
-	function isLinkedItem(obj: unknown): obj is LinkedItem {
-		if (!obj || typeof obj !== 'object') return false;
-		const o = obj as Record<string, unknown>;
-		return (typeof o.name === 'string' || typeof o.key === 'string') && typeof o.url === 'string';
-	}
-
-	function isLinkedArray(value: unknown): value is LinkedItem[] {
-		return Array.isArray(value) && value.length > 0 && isLinkedItem(value[0]);
-	}
-
-	function getLinkedItems(value: unknown): LinkedItem[] | null {
-		if (isLinkedArray(value)) return value;
-		if (isLinkedItem(value)) return [value];
-		return null;
-	}
-
-	function isWeaponPropertyArray(value: unknown): value is WeaponProperty[] {
-		if (!Array.isArray(value) || value.length === 0) return false;
-		const first = value[0] as Record<string, unknown>;
-		return typeof first.property === 'object';
-	}
-
-	function getWeaponProperties(value: unknown): WeaponProperty[] | null {
-		return isWeaponPropertyArray(value) ? value : null;
-	}
-
-	function isDescriptionArray(value: unknown): value is DescriptionItem[] {
-		if (!Array.isArray(value) || value.length === 0) return false;
-		const first = value[0] as Record<string, unknown>;
-		return typeof first.desc === 'string' && ('document' in first || 'gamesystem' in first);
-	}
-
-	function getDescriptions(value: unknown): DescriptionItem[] | null {
-		return isDescriptionArray(value) ? value : null;
-	}
-
-	function isBenefitArray(value: unknown): value is BenefitItem[] {
-		if (!Array.isArray(value) || value.length === 0) return false;
-		const first = value[0] as Record<string, unknown>;
-		return typeof first.desc === 'string' && !('document' in first) && !('gamesystem' in first) && !('property' in first);
-	}
-
-	function getBenefits(value: unknown): BenefitItem[] | null {
-		return isBenefitArray(value) ? value : null;
-	}
-
-	function isSpeedObject(value: unknown): value is SpeedData {
-		if (!value || typeof value !== 'object') return false;
-		const o = value as Record<string, unknown>;
-		return typeof o.walk === 'number' || typeof o.swim === 'number' || typeof o.fly === 'number';
-	}
-
-	function formatSpeed(speed: SpeedData): string {
-		const parts: string[] = [];
-		const unit = speed.unit ?? 'ft';
-		if (speed.walk) parts.push(`Walk ${speed.walk} ${unit}`);
-		if (speed.swim) parts.push(`Swim ${speed.swim} ${unit}`);
-		if (speed.fly && speed.fly > 0) parts.push(`Fly ${speed.fly} ${unit}${speed.hover ? ' (hover)' : ''}`);
-		if (speed.burrow) parts.push(`Burrow ${speed.burrow} ${unit}`);
-		if (speed.climb) parts.push(`Climb ${speed.climb} ${unit}`);
-		if (speed.crawl) parts.push(`Crawl ${speed.crawl} ${unit}`);
-		return parts.join(', ') || '—';
-	}
-
-	function isLanguageObject(value: unknown): value is LanguageData {
-		if (!value || typeof value !== 'object') return false;
-		const o = value as Record<string, unknown>;
-		return typeof o.as_string === 'string' || Array.isArray(o.data) || Array.isArray(o.languages);
-	}
-
-	function formatLanguages(lang: LanguageData): string {
-		if (lang.as_string) return lang.as_string;
-		const parts: string[] = [];
-		if (lang.data && lang.data.length > 0) {
-			parts.push(lang.data.map(l => l.name ?? l.key ?? '').filter(Boolean).join(', '));
-		}
-		if (lang.languages && lang.languages.length > 0) {
-			parts.push(lang.languages.join(', '));
-		}
-		if (lang.any_languages) parts.push(`any ${lang.any_languages} languages`);
-		if (lang.any_one_language) parts.push(`any one language`);
-		if (lang.telepathy) parts.push(`telepathy ${lang.telepathy} ft`);
-		if (lang.understands_but_cant_speak?.length) {
-			parts.push(`understands ${lang.understands_but_cant_speak.join(', ')} but can't speak`);
-		}
-		return parts.join('; ') || '—';
-	}
-
-	function formatFieldName(key: string): string {
-		return key
-			.replace(/_/g, ' ')
-			.replace(/([A-Z])/g, ' $1')
-			.split(' ')
-			.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-			.join(' ')
-			.trim();
-	}
-
-	function formatValue(value: unknown): string {
-		if (value === null || value === undefined) return '—';
-		if (typeof value === 'boolean') return value ? 'Yes' : 'No';
-		if (typeof value === 'number') return value.toLocaleString();
-		if (typeof value === 'string') return value;
-		if (isLinkedArray(value)) return value.map(v => v.name ?? v.key ?? '').filter(Boolean).join(', ');
-		if (isWeaponPropertyArray(value)) {
-			return value
-				.map(wp => {
-					const name = wp.property?.name ?? '';
-					return wp.detail ? `${name} (${wp.detail})` : name;
-				})
-				.filter(Boolean)
-				.join(', ');
-		}
-		if (Array.isArray(value)) {
-			if (value.length === 0) return 'None';
-			if (typeof value[0] === 'string') return value.join(', ');
-			return JSON.stringify(value);
-		}
-		if (isLanguageObject(value)) return formatLanguages(value);
-		if (isSpeedObject(value)) return formatSpeed(value);
-		if (typeof value === 'object' && value !== null) {
-			const o = value as Record<string, unknown>;
-			if (typeof o.name === 'string') return o.name;
-		}
-		return String(value);
-	}
-
-	function renderMarkdown(text: string): string {
-		return marked.parse(text) as string;
-	}
-
-	const DISPLAY_FIELDS: Record<string, string[]> = {
-		spells: ['level', 'school', 'casting_time', 'duration', 'range', 'range_text', 'concentration', 'ritual', 'verbal', 'somatic', 'material', 'material_specified', 'material_cost', 'material_consumed', 'target_type', 'target_count', 'saving_throw_ability', 'attack_roll', 'damage_roll', 'damage_types', 'classes'],
-		creatures: ['type', 'size', 'challenge_rating_text', 'alignment', 'armor_class', 'armor_detail', 'hit_points', 'hit_dice', 'experience_points'],
-		classes: ['hit_dice', 'saving_throws', 'primary_abilities'],
-		species: ['size', 'speed'],
-		backgrounds: [],
-		feats: [],
-		weapons: ['damage_dice', 'damage_type', 'weight', 'range'],
-		armor: ['armor_class', 'armor_type', 'weight', 'strength_required', 'stealth_disadvantage'],
-		magicitems: ['rarity', 'requires_attunement', 'type']
-	};
 
 	function getDisplayFields(): string[] {
 		return DISPLAY_FIELDS[data.type] ?? [];
@@ -219,34 +50,12 @@
 		return true;
 	}
 
-	function getSortedFields(): [string, unknown][] {
-		const fields = Object.entries(itemData).filter(([key]) => shouldDisplayField(key));
-		const displayFields = getDisplayFields();
-
-		if (displayFields.length > 0) {
-			fields.sort((a, b) => {
-				const aIndex = displayFields.indexOf(a[0]);
-				const bIndex = displayFields.indexOf(b[0]);
-				if (aIndex === -1 && bIndex === -1) return 0;
-				if (aIndex === -1) return 1;
-				if (bIndex === -1) return -1;
-				return aIndex - bIndex;
-			});
-		} else {
-			fields.sort((a, b) => a[0].localeCompare(b[0]));
-		}
-
-		return fields;
+	function getSortedFieldsLocal(): [string, unknown][] {
+		return getSortedFields(itemData, data.type);
 	}
 
-	function renderDescription(desc: unknown): string {
-		if (typeof desc !== 'string') return '';
-		return desc
-			.replace(/<\/?p>/gi, '\n')
-			.replace(/<br\s*\/?>/gi, '\n')
-			.replace(/<[^>]+>/g, '')
-			.replace(/\n{3,}/g, '\n\n')
-			.trim();
+	function renderMarkdown(text: string): string {
+		return marked.parse(text) as string;
 	}
 </script>
 
@@ -548,19 +357,19 @@
 				{/if}
 			{/if}
 
-			{#if getSortedFields().length > 0}
-				<div class="p-6">
-					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Details</h2>
-					<dl class="grid gap-2 sm:grid-cols-2">
-						{#each getSortedFields() as [key, value]}
-							<div class="flex flex-col rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-3">
-								<dt class="text-xs font-medium uppercase text-[var(--color-text-muted)]">{formatFieldName(key)}</dt>
-								<dd class="mt-1 text-sm text-[var(--color-text-primary)]">{formatValue(value)}</dd>
-							</div>
-						{/each}
-					</dl>
-				</div>
-			{/if}
+		{#if getSortedFieldsLocal().length > 0}
+			<div class="p-6">
+				<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Details</h2>
+				<dl class="grid gap-2 sm:grid-cols-2">
+					{#each getSortedFieldsLocal() as [key, value]}
+						<div class="flex flex-col rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-3">
+							<dt class="text-xs font-medium uppercase text-[var(--color-text-muted)]">{formatFieldName(key)}</dt>
+							<dd class="mt-1 text-sm text-[var(--color-text-primary)]">{formatValue(value)}</dd>
+						</div>
+					{/each}
+				</dl>
+			</div>
+		{/if}
 		</div>
 	</div>
 </div>

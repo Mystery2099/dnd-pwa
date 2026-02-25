@@ -2,7 +2,23 @@
  * Database Connection
  *
  * Uses bun:sqlite for SQLite database access.
- */
+ *
+ * ## Singleton Pattern
+ *
+ * This module uses a singleton pattern - the database connection is created once
+ * and reused across all requests. This is efficient for serverless/SvelteKit deployments.
+ *
+ * ## Cleanup
+ *
+ * In development (HMR), you may want to reset the connection:
+ * ```ts
+ * import { resetDb } from '$lib/server/db';
+ * // After schema changes or migrations
+ * await resetDb();
+ * ```
+ *
+ * In production, connections are typically managed by the runtime and don't need
+ * manual cleanup. The `closeDb()` function is available for graceful shutdowns.
 
 import * as schema from './schema';
 import { applyPragmas } from './db-config';

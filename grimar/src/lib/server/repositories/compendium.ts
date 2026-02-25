@@ -314,12 +314,44 @@ export async function upsertItems(
 ): Promise<number> {
 	if (items.length === 0) return 0;
 
-	let count = 0;
-	for (const item of items) {
-		await upsertItem(item);
-		count++;
+	const db = await getDb();
+	const now = new Date();
+	const BATCH_SIZE = 100;
+	let totalUpserted = 0;
+
+	for (let i = 0; i < items.length; i += BATCH_SIZE) {
+		const batch = items.slice(i, i + BATCH_SIZE);
+
+		const itemsWithTimestamps = batch.map((item) => ({
+			...item,
+			createdAt: now,
+			updatedAt: now
+		}));
+
+		const result = await db
+			.insert(compendium)
+			.values(itemsWithTimestamps)
+			.onConflictDoUpdate({
+				target: compendium.key,
+				set: {
+					name: sql`excluded.name`,
+					description: sql`excluded.description`,
+					data: sql`excluded.data`,
+					documentKey: sql`excluded.document_key`,
+					documentName: sql`excluded.document_name`,
+					gamesystemKey: sql`excluded.gamesystem_key`,
+					gamesystemName: sql`excluded.gamesystem_name`,
+					publisherKey: sql`excluded.publisher_key`,
+					publisherName: sql`excluded.publisher_name`,
+					updatedAt: now
+				}
+			})
+			.returning();
+
+		totalUpserted += result.length;
 	}
-	return count;
+
+	return totalUpserted;
 }
 
 export async function getUserHomebrewItems(username: string): Promise<CompendiumItem[]> {

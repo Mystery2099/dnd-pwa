@@ -7,7 +7,7 @@ beveled glass) and modern product UI (clarity, restraint, accessibility).
 **Relationship to Design System:**
 
 * This guide describes the **visual skin** (shine, bevel, noise, gemstone accents).
-* `docs/arcane-design-sysem.md` defines the **tokens, states, motion rules, and accessibility**.
+* `docs/arcane-design-system.md` defines the **tokens, states, motion rules, and accessibility**.
 
 ## Consistency Contract
 

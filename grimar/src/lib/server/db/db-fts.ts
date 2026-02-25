@@ -18,8 +18,17 @@ import { createModuleLogger } from '$lib/server/logger';
 
 const log = createModuleLogger('FtsService');
 
+function sanitizeFtsTerm(term: string): string {
+	return term.replace(/['"*():^\-]/g, ' ').trim();
+}
+
 function parseFtsQuery(query: string): string {
-	return query.trim().split(/\s+/).join(' ') + '*';
+	const terms = query
+		.trim()
+		.split(/\s+/)
+		.map(sanitizeFtsTerm)
+		.filter((t) => t.length > 0);
+	return terms.map((t) => `"${t}"*`).join(' ');
 }
 
 export async function initFts(db?: Db): Promise<void> {
@@ -46,12 +55,20 @@ export async function populateFtsFromDatabase(db?: Db): Promise<number> {
 	const items = await database.select().from(compendium);
 	let count = 0;
 
-	for (const item of items) {
-		await database.run(
-			sql`INSERT INTO compendium_fts(key, name, description) VALUES (${item.key}, ${item.name}, ${item.description ?? ''})`
-		);
-		count++;
-	}
+	await database.transaction(async (tx) => {
+		await tx.run(sql`DELETE FROM compendium_fts`);
+		
+		const BATCH_SIZE = 500;
+		for (let i = 0; i < items.length; i += BATCH_SIZE) {
+			const batch = items.slice(i, i + BATCH_SIZE);
+			for (const item of batch) {
+				await tx.run(
+					sql`INSERT INTO compendium_fts(key, name, description) VALUES (${item.key}, ${item.name}, ${item.description ?? ''})`
+				);
+				count++;
+			}
+		}
+	});
 
 	log.info({ count }, 'FTS populated with existing data');
 	return count;
@@ -111,17 +128,23 @@ export async function rebuildFtsIndex(db?: Db): Promise<number> {
 	log.info('Rebuilding FTS index');
 	const database = db ?? (await getDb());
 
-	await database.run(sql`DELETE FROM compendium_fts`);
-
 	const items = await database.select().from(compendium);
 	let count = 0;
 
-	for (const item of items) {
-		await database.run(
-			sql`INSERT INTO compendium_fts(key, name, description) VALUES (${item.key}, ${item.name}, ${item.description ?? ''})`
-		);
-		count++;
-	}
+	await database.transaction(async (tx) => {
+		await tx.run(sql`DELETE FROM compendium_fts`);
+		
+		const BATCH_SIZE = 500;
+		for (let i = 0; i < items.length; i += BATCH_SIZE) {
+			const batch = items.slice(i, i + BATCH_SIZE);
+			for (const item of batch) {
+				await tx.run(
+					sql`INSERT INTO compendium_fts(key, name, description) VALUES (${item.key}, ${item.name}, ${item.description ?? ''})`
+				);
+				count++;
+			}
+		}
+	});
 
 	log.info({ count }, 'FTS index rebuilt');
 	return count;
