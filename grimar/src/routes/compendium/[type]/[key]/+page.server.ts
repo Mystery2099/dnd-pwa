@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { COMPENDIUM_TYPE_CONFIGS, type CompendiumTypeName } from '$lib/core/constants/compendium';
-import { getItemByKey } from '$lib/server/repositories/compendium';
+import { getItem } from '$lib/server/repositories/compendium';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const type = params.type as CompendiumTypeName;
@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({ params }) => {
 		throw error(404, `Unknown compendium type: ${type}`);
 	}
 
-	const item = await getItemByKey(key);
+	const item = await getItem(type, key);
 	if (!item) {
 		throw error(404, `${config.label} not found: ${key}`);
 	}
