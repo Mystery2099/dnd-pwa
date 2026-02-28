@@ -2,7 +2,7 @@
 	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import { marked } from 'marked';
-	import DOMPurify from 'dompurify';
+	import DOMPurify from 'isomorphic-dompurify';
 	import type { PageData } from './$types';
 	import {
 		isLinkedItem,
