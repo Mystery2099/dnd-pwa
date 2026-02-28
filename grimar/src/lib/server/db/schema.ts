@@ -8,7 +8,7 @@
  * - Single table for all compendium types (no metadata tables)
  */
 
-import { integer, sqliteTable, text, index } from 'drizzle-orm/sqlite-core';
+import { integer, sqliteTable, text, index, primaryKey } from 'drizzle-orm/sqlite-core';
 
 // ============================================================================
 // Users Table
@@ -31,7 +31,7 @@ export type NewCompendiumItem = typeof compendium.$inferInsert;
 export const compendium = sqliteTable(
 	'compendium',
 	{
-		key: text('key').primaryKey(),
+		key: text('key').notNull(),
 		type: text('type').notNull(),
 		name: text('name').notNull(),
 		source: text('source').notNull(),
@@ -52,6 +52,7 @@ export const compendium = sqliteTable(
 		createdBy: text('created_by').references(() => users.username)
 	},
 	(table) => ({
+		pk: primaryKey({ columns: [table.type, table.key] }),
 		typeIdx: index('compendium_type_idx').on(table.type),
 		typeNameIdx: index('compendium_type_name_idx').on(table.type, table.name),
 		sourceIdx: index('compendium_source_idx').on(table.source),

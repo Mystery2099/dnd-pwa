@@ -20,6 +20,14 @@ export interface FilterOptions {
 	source?: string;
 	sortBy?: 'name' | 'created_at' | 'updated_at';
 	sortOrder?: 'asc' | 'desc';
+	/** Creature type filter (applied via json_extract on data column) */
+	creatureType?: string;
+	/** Spell level filter (applied via json_extract on data column) */
+	spellLevel?: number;
+	/** Spell school filter (applied via json_extract on data column) */
+	spellSchool?: string;
+	/** Challenge rating filter (applied via json_extract on data column) */
+	challengeRating?: number;
 }
 
 export async function getPaginatedItems(
@@ -56,6 +64,34 @@ export async function getPaginatedItems(
 
 	if (filters.source) {
 		whereClause = and(whereClause, eq(compendium.source, filters.source))!;
+	}
+
+	if (filters.creatureType) {
+		whereClause = and(
+			whereClause,
+			sql`LOWER(json_extract(${compendium.data}, '$.type')) = LOWER(${filters.creatureType})`
+		)!;
+	}
+
+	if (filters.spellLevel !== undefined) {
+		whereClause = and(
+			whereClause,
+			sql`json_extract(${compendium.data}, '$.level') = ${filters.spellLevel}`
+		)!;
+	}
+
+	if (filters.spellSchool) {
+		whereClause = and(
+			whereClause,
+			sql`LOWER(json_extract(${compendium.data}, '$.school')) = LOWER(${filters.spellSchool})`
+		)!;
+	}
+
+	if (filters.challengeRating !== undefined) {
+		whereClause = and(
+			whereClause,
+			sql`json_extract(${compendium.data}, '$.challenge_rating_decimal') = ${filters.challengeRating}`
+		)!;
 	}
 
 	const sortBy = filters.sortBy ?? 'name';
@@ -97,12 +133,6 @@ export async function getItem(type: CompendiumType, key: string): Promise<Compen
 		.where(and(eq(compendium.type, type), eq(compendium.key, key)))
 		.limit(1);
 
-	return results[0] ?? null;
-}
-
-export async function getItemByKey(key: string): Promise<CompendiumItem | null> {
-	const db = await getDb();
-	const results = await db.select().from(compendium).where(eq(compendium.key, key)).limit(1);
 	return results[0] ?? null;
 }
 
@@ -176,6 +206,7 @@ export async function createItem(
 }
 
 export async function updateItem(
+	type: CompendiumType,
 	key: string,
 	data: Partial<Omit<CompendiumItem, 'key' | 'createdAt'>>
 ): Promise<CompendiumItem | null> {
@@ -188,15 +219,19 @@ export async function updateItem(
 			...data,
 			updatedAt: now
 		})
-		.where(eq(compendium.key, key))
+		.where(and(eq(compendium.type, type), eq(compendium.key, key)))
 		.returning();
 
 	return item ?? null;
 }
 
-export async function deleteItem(key: string): Promise<boolean> {
+
+export async function deleteItem(type: CompendiumType, key: string): Promise<boolean> {
 	const db = await getDb();
-	const result = await db.delete(compendium).where(eq(compendium.key, key)).returning();
+	const result = await db
+		.delete(compendium)
+		.where(and(eq(compendium.type, type), eq(compendium.key, key)))
+		.returning();
 	return result.length > 0;
 }
 
@@ -290,7 +325,7 @@ export async function upsertItem(
 			updatedAt: now
 		})
 		.onConflictDoUpdate({
-			target: compendium.key,
+			target: [compendium.type, compendium.key],
 			set: {
 				name: data.name,
 				description: data.description,
@@ -332,7 +367,7 @@ export async function upsertItems(
 			.insert(compendium)
 			.values(itemsWithTimestamps)
 			.onConflictDoUpdate({
-				target: compendium.key,
+					target: [compendium.type, compendium.key],
 				set: {
 					name: sql`excluded.name`,
 					description: sql`excluded.description`,
@@ -389,7 +424,7 @@ export async function updateHomebrewItem(
 		return null;
 	}
 
-	return updateItem(key, data);
+	return updateItem(item.type as CompendiumType, key, data);
 }
 
 export async function deleteHomebrewItem(
@@ -407,5 +442,5 @@ export async function deleteHomebrewItem(
 		return false;
 	}
 
-	return deleteItem(key);
+	return deleteItem(item.type as CompendiumType, key);
 }

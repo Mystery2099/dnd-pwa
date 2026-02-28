@@ -21,6 +21,7 @@ export interface SessionData {
 	username: string;
 	email?: string;
 	name?: string;
+	groups?: string[];
 	createdAt: number;
 	expiresAt: number;
 }
@@ -101,7 +102,8 @@ export function createSession(
 	userId: string,
 	username: string,
 	email?: string,
-	name?: string
+	name?: string,
+	groups?: string[]
 ): SessionData {
 	const now = Date.now();
 	const session: SessionData = {
@@ -109,6 +111,7 @@ export function createSession(
 		username,
 		email,
 		name,
+		groups,
 		createdAt: now,
 		expiresAt: now + SESSION_MAX_AGE * 1000
 	};

@@ -6,6 +6,7 @@
  * This is called after sync operations complete.
  */
 
+import crypto from 'node:crypto';
 import { json, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { setCacheVersion } from '$lib/server/cache-version';
@@ -23,11 +24,20 @@ export const POST: RequestHandler = async ({ request }) => {
 	try {
 		const body = await request.json().catch(() => ({}));
 
-		// Optional: require sync token for production
+		// Always require a valid sync token
 		const authHeader = request.headers.get('authorization');
 		const syncToken = process.env.ADMIN_SYNC_TOKEN;
 
-		if (syncToken && authHeader !== `Bearer ${syncToken}`) {
+		if (!syncToken) {
+			throw error(500, 'ADMIN_SYNC_TOKEN is not configured');
+		}
+
+		const expectedHeader = `Bearer ${syncToken}`;
+		if (
+			!authHeader ||
+			authHeader.length !== expectedHeader.length ||
+			!crypto.timingSafeEqual(Buffer.from(authHeader), Buffer.from(expectedHeader))
+		) {
 			throw error(401, 'Unauthorized');
 		}
 

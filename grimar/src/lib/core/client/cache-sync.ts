@@ -10,7 +10,7 @@ import { queryClient } from './query-client';
 import { setCachedVersion, getCachedVersion, type CacheVersion } from './cache-version';
 import { offlineStore } from './offline-store';
 
-const SSE_ENDPOINT = 'https://www.grimar.win/api/cache/events';
+const SSE_ENDPOINT = '/api/cache/events';
 const RECONNECT_DELAY = 5000;
 const MAX_RECONNECT_ATTEMPTS = 10;
 

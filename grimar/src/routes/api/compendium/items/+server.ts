@@ -47,49 +47,19 @@ export const GET: RequestHandler = async ({ url }) => {
 			gamesystem,
 			document,
 			sortBy: sortBy as 'name' | 'created_at' | 'updated_at',
-			sortOrder
+			sortOrder,
+			creatureType: type === 'creatures' ? creatureType : undefined,
+			spellLevel:
+				type === 'spells' && spellLevel && !isNaN(parseInt(spellLevel, 10))
+					? parseInt(spellLevel, 10)
+					: undefined,
+			spellSchool: type === 'spells' ? spellSchool : undefined,
+			challengeRating:
+				type === 'creatures' && challengeRating && !isNaN(parseFloat(challengeRating))
+					? parseFloat(challengeRating)
+					: undefined
 		}
 	});
 
-	let items = result.items;
-
-	if (creatureType && type === 'creatures') {
-		items = items.filter((item) => {
-			const creatureData = item.data as { type?: string };
-			return creatureData.type?.toLowerCase() === creatureType.toLowerCase();
-		});
-	}
-
-	if (spellLevel !== undefined && type === 'spells') {
-		const level = parseInt(spellLevel, 10);
-		if (!isNaN(level)) {
-			items = items.filter((item) => {
-				const spellData = item.data as { level?: number };
-				return spellData.level === level;
-			});
-		}
-	}
-
-	if (spellSchool && type === 'spells') {
-		items = items.filter((item) => {
-			const spellData = item.data as { school?: string };
-			return spellData.school?.toLowerCase() === spellSchool.toLowerCase();
-		});
-	}
-
-	if (challengeRating && type === 'creatures') {
-		const cr = parseFloat(challengeRating);
-		if (!isNaN(cr)) {
-			items = items.filter((item) => {
-				const creatureData = item.data as { challenge_rating_decimal?: number };
-				return creatureData.challenge_rating_decimal === cr;
-			});
-		}
-	}
-
-	return json({
-		...result,
-		items,
-		total: items.length
-	});
+	return json(result);
 };

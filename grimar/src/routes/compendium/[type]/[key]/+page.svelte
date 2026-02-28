@@ -2,6 +2,7 @@
 	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import { marked } from 'marked';
+	import DOMPurify from 'isomorphic-dompurify';
 	import type { PageData } from './$types';
 	import {
 		isLinkedItem,
@@ -55,7 +56,7 @@
 	}
 
 	function renderMarkdown(text: string): string {
-		return marked.parse(text) as string;
+		return DOMPurify.sanitize(marked.parse(text) as string);
 	}
 </script>
 

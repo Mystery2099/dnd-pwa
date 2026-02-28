@@ -93,11 +93,19 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 		destroySession(cookies);
 
 		// Create new session
-		createSession(cookies, userId, username, email, name);
+		// Extract groups from userInfo (Authentik includes groups in OIDC claims)
+		const groups: string[] = (Array.isArray(userInfo.groups) ? userInfo.groups : [])
+			.filter((g: unknown): g is string => typeof g === 'string' && g.trim().length > 0)
+			.map((g: string) => g.trim());
 
-		// Get redirect URL
-		const redirectTo = cookies.get('auth_redirect') || '/dashboard';
+		createSession(cookies, userId, username, email, name, groups);
+
+		// Get redirect URL (validate it's a safe relative path)
+		let redirectTo = cookies.get('auth_redirect') || '/dashboard';
 		cookies.delete('auth_redirect', { path: '/' });
+		if (!redirectTo.startsWith('/') || redirectTo.startsWith('//')) {
+			redirectTo = '/dashboard';
+		}
 
 		throw redirect(302, redirectTo);
 	} catch (err) {

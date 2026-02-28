@@ -20,8 +20,11 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 		maxAge: 60 * 10 // 10 minutes
 	});
 
-	// Store redirect URL if provided
-	const redirectTo = url.searchParams.get('redirect') || '/dashboard';
+	// Store redirect URL if provided (validate it's a safe relative path)
+	let redirectTo = url.searchParams.get('redirect') || '/dashboard';
+	if (!redirectTo.startsWith('/') || redirectTo.startsWith('//')) {
+		redirectTo = '/dashboard';
+	}
 	cookies.set('auth_redirect', redirectTo, {
 		path: '/',
 		httpOnly: true,

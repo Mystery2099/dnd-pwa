@@ -22,7 +22,12 @@ function getEncryptionKey(): Buffer {
 		return crypto.scryptSync(key, 'grimar-salt', KEY_LENGTH);
 	}
 
-	// For development, use a fixed key (in production, always set SESSION_ENCRYPTION_KEY)
+	// In production, require SESSION_ENCRYPTION_KEY to be set
+	if (process.env.NODE_ENV === 'production') {
+		throw new Error('SESSION_ENCRYPTION_KEY must be set in production');
+	}
+
+	// For development, use a fixed key
 	log.warn('SESSION_ENCRYPTION_KEY not set, using development key');
 	return crypto.scryptSync('grimar-dev-key-do-not-use-in-production', 'grimar-salt', KEY_LENGTH);
 }
