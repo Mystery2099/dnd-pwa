@@ -47,8 +47,7 @@ export const GET: RequestHandler = async () => {
 	return new Response(stream, {
 		headers: {
 			'Content-Type': 'text/event-stream',
-			'Cache-Control': 'no-cache',
-			Connection: 'keep-alive'
+			'Cache-Control': 'no-cache'
 		}
 	});
 };
