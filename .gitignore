@@ -38,6 +38,10 @@ logs/
 .junie/
 .kilocode/
 .windsurf/
+.aider/
+.aider*
+aider.settings.*
+aider.history.*
 
 # Test
 coverage/
