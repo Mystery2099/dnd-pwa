@@ -94,7 +94,9 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 
 		// Create new session
 		// Extract groups from userInfo (Authentik includes groups in OIDC claims)
-		const groups: string[] = Array.isArray(userInfo.groups) ? userInfo.groups : [];
+		const groups: string[] = (Array.isArray(userInfo.groups) ? userInfo.groups : [])
+			.filter((g: unknown): g is string => typeof g === 'string' && g.trim().length > 0)
+			.map((g: string) => g.trim());
 
 		createSession(cookies, userId, username, email, name, groups);
 

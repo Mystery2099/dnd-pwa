@@ -109,12 +109,13 @@ export function deleteCharacterMutation(queryClient: QueryClient, id: string) {
 			return apiFetch(`/api/characters/${id}`, { method: 'DELETE' });
 		},
 		onMutate: async () => {
-			// Optimistic removal from list
-			await listUpdater.apply(id);
-			return { previous: undefined };
+			// Optimistic removal from list — capture previous for rollback
+			const previous = await listUpdater.apply(id);
+			return { previous };
 		},
-		onError: async (error, _variables, _context) => {
-			// Rollback on error - we need to refetch since we don't have the old list
+		onError: async (error, _variables, context) => {
+			// Rollback on error using captured previous state
+			listUpdater.rollback(context?.previous);
 			await queryClient.invalidateQueries({ queryKey: listKey });
 			// Queue for offline retry
 			if (

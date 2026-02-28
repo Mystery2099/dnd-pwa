@@ -50,14 +50,12 @@ export const GET: RequestHandler = async ({ url }) => {
 			sortOrder,
 			creatureType: type === 'creatures' ? creatureType : undefined,
 			spellLevel:
-				type === 'spells' && spellLevel !== undefined && !isNaN(parseInt(spellLevel, 10))
+				type === 'spells' && spellLevel && !isNaN(parseInt(spellLevel, 10))
 					? parseInt(spellLevel, 10)
 					: undefined,
 			spellSchool: type === 'spells' ? spellSchool : undefined,
 			challengeRating:
-				type === 'creatures' &&
-				challengeRating !== undefined &&
-				!isNaN(parseFloat(challengeRating))
+				type === 'creatures' && challengeRating && !isNaN(parseFloat(challengeRating))
 					? parseFloat(challengeRating)
 					: undefined
 		}

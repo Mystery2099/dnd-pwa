@@ -225,36 +225,31 @@ export async function syncType(
 			await db.delete(compendium).where(eq(compendium.type, type));
 
 			for (const item of items) {
-				try {
-					const compendiumItem = transformToCompendiumItem(item as Record<string, unknown>, type);
-					const now = new Date();
-					await db
-						.insert(compendium)
-						.values({
-							...compendiumItem,
-							createdAt: now,
+				const compendiumItem = transformToCompendiumItem(item as Record<string, unknown>, type);
+				const now = new Date();
+				await db
+					.insert(compendium)
+					.values({
+						...compendiumItem,
+						createdAt: now,
+						updatedAt: now
+					})
+					.onConflictDoUpdate({
+						target: [compendium.type, compendium.key],
+						set: {
+							name: compendiumItem.name,
+							description: compendiumItem.description,
+							data: compendiumItem.data,
+							documentKey: compendiumItem.documentKey,
+							documentName: compendiumItem.documentName,
+							gamesystemKey: compendiumItem.gamesystemKey,
+							gamesystemName: compendiumItem.gamesystemName,
+							publisherKey: compendiumItem.publisherKey,
+							publisherName: compendiumItem.publisherName,
 							updatedAt: now
-						})
-						.onConflictDoUpdate({
-							target: compendium.key,
-							set: {
-								name: compendiumItem.name,
-								description: compendiumItem.description,
-								data: compendiumItem.data,
-								documentKey: compendiumItem.documentKey,
-								documentName: compendiumItem.documentName,
-								gamesystemKey: compendiumItem.gamesystemKey,
-								gamesystemName: compendiumItem.gamesystemName,
-								publisherKey: compendiumItem.publisherKey,
-								publisherName: compendiumItem.publisherName,
-								updatedAt: now
-							}
-						});
-					synced++;
-				} catch (err) {
-					logger.error({ err, itemKey: item?.key }, '[open5e] Failed to upsert item');
-					errors++;
-				}
+						}
+					});
+				synced++;
 			}
 		});
 
