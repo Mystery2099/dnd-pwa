@@ -75,12 +75,12 @@ export function updateCharacterMutation(queryClient: QueryClient, id: string) {
 		},
 		onMutate: async (newData) => {
 			// Optimistic update for detail view
-			await listUpdater.apply(newData);
-			return { previous: undefined }; // Not used for object updates
+			const previous = await listUpdater.apply(newData);
+			return { previous };
 		},
-		onError: async (error, _variables, _context) => {
+		onError: async (error, _variables, context) => {
 			// Rollback on error
-			listUpdater.rollback(undefined);
+			listUpdater.rollback(context?.previous);
 			// Queue for offline retry
 			if (
 				ApiError.isApiError(error) &&

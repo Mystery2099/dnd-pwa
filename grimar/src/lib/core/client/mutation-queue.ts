@@ -6,7 +6,7 @@
  */
 
 import { browser } from '$app/environment';
-import { get, set, clear } from 'idb-keyval';
+import { get, set, del } from 'idb-keyval';
 import { ApiError, isRetryableError } from './errors';
 
 // Mutation queue key
@@ -74,12 +74,11 @@ class MutationQueueState {
 					mutation.retries++;
 					mutation.lastError = ApiError.isApiError(error) ? error.message : 'Unknown error';
 
-					// Only retry if error is retryable
+					// Only retry if error is retryable; discard non-retryable failures
 					if (isRetryableError(error) && mutation.retries < 3) {
 						failed.push(mutation);
-					} else {
-						failed.push(mutation);
 					}
+					// Non-retryable errors are silently discarded from the queue
 				}
 			}
 
@@ -170,7 +169,7 @@ export async function removeMutation(id: string): Promise<void> {
  */
 export async function clearQueue(): Promise<void> {
 	mutationQueue.pending = [];
-	await clear();
+	await del(MUTATION_QUEUE_KEY);
 }
 
 /**

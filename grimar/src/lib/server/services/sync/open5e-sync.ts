@@ -1,5 +1,8 @@
 import { z } from 'zod';
 import { upsertItem, clearType, type CompendiumType } from '$lib/server/repositories/compendium';
+import { withTransaction } from '$lib/server/db';
+import { compendium } from '$lib/server/db/schema';
+import { eq } from 'drizzle-orm';
 import { createModuleLogger } from '$lib/server/logger';
 
 const logger = createModuleLogger('open5e-sync');
@@ -214,21 +217,46 @@ export async function syncType(
 	logger.info({ type }, '[open5e] Starting sync');
 
 	try {
-		await clearType(type);
-
 		const GenericItemSchema = z.record(z.string(), z.unknown());
 		const items = await fetchAllPages(type, GenericItemSchema, onProgress);
 
-		for (const item of items) {
-			try {
-				const compendiumItem = transformToCompendiumItem(item as Record<string, unknown>, type);
-				await upsertItem(compendiumItem);
-				synced++;
-			} catch (err) {
-				logger.error({ err, itemKey: item?.key }, '[open5e] Failed to upsert item');
-				errors++;
+		// Wrap delete + re-insert in a transaction so a failed sync doesn't leave the type empty
+		await withTransaction(async (db) => {
+			await db.delete(compendium).where(eq(compendium.type, type));
+
+			for (const item of items) {
+				try {
+					const compendiumItem = transformToCompendiumItem(item as Record<string, unknown>, type);
+					const now = new Date();
+					await db
+						.insert(compendium)
+						.values({
+							...compendiumItem,
+							createdAt: now,
+							updatedAt: now
+						})
+						.onConflictDoUpdate({
+							target: compendium.key,
+							set: {
+								name: compendiumItem.name,
+								description: compendiumItem.description,
+								data: compendiumItem.data,
+								documentKey: compendiumItem.documentKey,
+								documentName: compendiumItem.documentName,
+								gamesystemKey: compendiumItem.gamesystemKey,
+								gamesystemName: compendiumItem.gamesystemName,
+								publisherKey: compendiumItem.publisherKey,
+								publisherName: compendiumItem.publisherName,
+								updatedAt: now
+							}
+						});
+					synced++;
+				} catch (err) {
+					logger.error({ err, itemKey: item?.key }, '[open5e] Failed to upsert item');
+					errors++;
+				}
 			}
-		}
+		});
 
 		const duration = Date.now() - startTime;
 		logger.info({ type, synced, errors, duration }, '[open5e] Sync complete');

@@ -20,6 +20,14 @@ export interface FilterOptions {
 	source?: string;
 	sortBy?: 'name' | 'created_at' | 'updated_at';
 	sortOrder?: 'asc' | 'desc';
+	/** Creature type filter (applied via json_extract on data column) */
+	creatureType?: string;
+	/** Spell level filter (applied via json_extract on data column) */
+	spellLevel?: number;
+	/** Spell school filter (applied via json_extract on data column) */
+	spellSchool?: string;
+	/** Challenge rating filter (applied via json_extract on data column) */
+	challengeRating?: number;
 }
 
 export async function getPaginatedItems(
@@ -56,6 +64,34 @@ export async function getPaginatedItems(
 
 	if (filters.source) {
 		whereClause = and(whereClause, eq(compendium.source, filters.source))!;
+	}
+
+	if (filters.creatureType) {
+		whereClause = and(
+			whereClause,
+			sql`LOWER(json_extract(${compendium.data}, '$.type')) = LOWER(${filters.creatureType})`
+		)!;
+	}
+
+	if (filters.spellLevel !== undefined) {
+		whereClause = and(
+			whereClause,
+			sql`json_extract(${compendium.data}, '$.level') = ${filters.spellLevel}`
+		)!;
+	}
+
+	if (filters.spellSchool) {
+		whereClause = and(
+			whereClause,
+			sql`LOWER(json_extract(${compendium.data}, '$.school')) = LOWER(${filters.spellSchool})`
+		)!;
+	}
+
+	if (filters.challengeRating !== undefined) {
+		whereClause = and(
+			whereClause,
+			sql`json_extract(${compendium.data}, '$.challenge_rating_decimal') = ${filters.challengeRating}`
+		)!;
 	}
 
 	const sortBy = filters.sortBy ?? 'name';

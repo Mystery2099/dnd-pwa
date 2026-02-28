@@ -56,11 +56,10 @@ export const handleAuth: Handle = async ({ event, resolve }) => {
 		}
 	}
 
-	// Session-based auth (OAuth2)
+	// Session-based auth (OAuth2) - use groups from session, not request headers
 	const session = getSession(event.cookies);
 	if (session) {
-		const groups = getAuthentikGroups(event.request.headers);
-		event.locals.user = createAuthUser(session.username, groups);
+		event.locals.user = createAuthUser(session.username, session.groups ?? []);
 		return resolve(event);
 	}
 
