@@ -38,9 +38,7 @@ dnd-pwa/
 
 | File | Purpose |
 |------|---------|
-| **[docs/README.md](./docs/README.md)** | Documentation index and project status |
 | **[docs/SPECIFICATIONS.md](./docs/SPECIFICATIONS.md)** | Feature specifications |
-| **[docs/architecture-doc.md](./docs/architecture-doc.md)** | Technical architecture |
 | **[docs/STYLE_GUIDE.md](./docs/STYLE_GUIDE.md)** | "Arcane Aero" design system |
 
 ## 🛠️ Tech Stack
@@ -87,9 +85,8 @@ bun run start            # Run production server
 
 ## 🔧 Development Workflow
 
-1. Read [docs/README.md](./docs/README.md) for project overview and guidelines
-2. Run `bun run dev` to start development
-3. Run `bun run check` and `bun run test:run` before committing
+1. Run `bun run dev` to start development
+2. Run `bun run check` and `bun run test:run` before committing
 4. See [docs/](./docs/) for detailed documentation
 
 ## 📄 License
