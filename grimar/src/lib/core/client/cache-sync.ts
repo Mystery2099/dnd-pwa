@@ -28,31 +28,35 @@ class CacheSync {
 	private isConnected = false;
 	private listeners: Set<(event: CacheEvent) => void> = new Set();
 
+	private logDebug(...args: unknown[]): void {
+		if (dev) console.log(...args);
+	}
+
 	/**
 	 * Start the SSE connection for cache sync.
 	 */
-	connect(): void {
-		if (!browser) return;
-		if (dev) {
-			console.log('[CacheSync] Disabled in dev mode');
-			return;
-		}
-		if (this.eventSource) return; // Already connected
+		connect(): void {
+			if (!browser) return;
+			if (dev) {
+				this.logDebug('[CacheSync] Disabled in dev mode');
+				return;
+			}
+			if (this.eventSource) return; // Already connected
 
-		console.log('[CacheSync] Connecting to SSE...');
-		this.createConnection();
-	}
+			this.logDebug('[CacheSync] Connecting to SSE...');
+			this.createConnection();
+		}
 
 	private createConnection(): void {
 		try {
 			this.eventSource = new EventSource(SSE_ENDPOINT);
 
-			this.eventSource.onopen = () => {
-				this.isConnected = true;
-				this.reconnectAttempts = 0;
-				console.log('[CacheSync] SSE connected');
-				offlineStore.resetReconnectAttempts();
-			};
+				this.eventSource.onopen = () => {
+					this.isConnected = true;
+					this.reconnectAttempts = 0;
+					this.logDebug('[CacheSync] SSE connected');
+					offlineStore.resetReconnectAttempts();
+				};
 
 			this.eventSource.onmessage = (event) => {
 				try {
@@ -78,7 +82,7 @@ class CacheSync {
 	}
 
 	private handleEvent(event: CacheEvent): void {
-		console.log('[CacheSync] Received event:', event.type, event.version);
+		this.logDebug('[CacheSync] Received event:', event.type, event.version);
 
 		switch (event.type) {
 			case 'version_update':
@@ -104,7 +108,7 @@ class CacheSync {
 		const currentVersion = await getCachedVersion();
 
 		if (currentVersion.version === version) {
-			console.log('[CacheSync] Version unchanged, skipping invalidation:', version);
+			this.logDebug('[CacheSync] Version unchanged, skipping invalidation:', version);
 			return;
 		}
 
@@ -113,12 +117,12 @@ class CacheSync {
 
 		await this.invalidateQueryScopes(['compendium', 'cache']);
 
-		console.log('[CacheSync] Cache invalidated, version:', version);
+		this.logDebug('[CacheSync] Cache invalidated, version:', version);
 	}
 
 	private async handleInvalidate(): Promise<void> {
 		await this.invalidateQueryScopes(['compendium', 'cache']);
-		console.log('[CacheSync] Cache invalidated');
+		this.logDebug('[CacheSync] Cache invalidated');
 	}
 
 	private async invalidateQueryScopes(scopes: Array<'compendium' | 'characters' | 'cache'>): Promise<void> {
@@ -148,7 +152,7 @@ class CacheSync {
 		offlineStore.incrementReconnectAttempts();
 
 		const delay = RECONNECT_DELAY * Math.pow(1.5, this.reconnectAttempts - 1);
-		console.log(`[CacheSync] Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts})`);
+		this.logDebug(`[CacheSync] Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts})`);
 
 		this.reconnectTimeout = setTimeout(() => {
 			this.createConnection();
@@ -170,7 +174,7 @@ class CacheSync {
 		}
 
 		this.isConnected = false;
-		console.log('[CacheSync] Disconnected');
+		this.logDebug('[CacheSync] Disconnected');
 	}
 
 	/**

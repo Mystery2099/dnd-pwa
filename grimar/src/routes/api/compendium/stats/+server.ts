@@ -13,7 +13,8 @@ export const GET: RequestHandler = async () => {
 		headers: {
 			'Server-Timing': `compendium-stats;dur=${durationMs}`,
 			'X-Query-Time-Ms': String(durationMs),
-			'X-Query-Bucket': bucket
+			'X-Query-Bucket': bucket,
+			'Cache-Control': 'public, max-age=30, stale-while-revalidate=120'
 		}
 	});
 };
