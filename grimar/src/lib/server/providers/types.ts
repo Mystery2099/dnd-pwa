@@ -2,7 +2,7 @@ export interface CompendiumProvider {
 	name: string;
 	displayName: string;
 	description: string;
-	sync: () => Promise<SyncResult>;
+	sync: (onProgress?: SyncProgressCallback) => Promise<SyncResult>;
 	getStats: () => Promise<ProviderStats>;
 }
 

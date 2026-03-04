@@ -4,33 +4,67 @@
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
 	import { COMPENDIUM_TYPE_CONFIGS } from '$lib/core/constants/compendium';
+	import type { CompendiumTypeName } from '$lib/core/types/compendium';
 	import type { PageData } from './$types';
 
 	interface Props {
 		data: PageData;
 	}
 
+	type CardItemData = {
+		level?: number;
+		school?: { name?: string; key?: string } | string;
+		challenge_rating_text?: string;
+		type?: { name?: string } | string;
+		hit_dice?: string | number;
+	};
+
+	function getSchoolLabel(school: CardItemData['school']): string | undefined {
+		if (!school) return undefined;
+		if (typeof school === 'string') return school;
+		return school.name ?? school.key;
+	}
+
+	function getTypeLabel(type: CardItemData['type']): string | undefined {
+		if (!type) return undefined;
+		if (typeof type === 'string') return type;
+		return type.name;
+	}
+
 	let { data }: Props = $props();
 
 	let searchQuery = $state($page.url.searchParams.get('search') ?? '');
 	let currentPage = $state(Number($page.url.searchParams.get('page')) || 1);
-	let sortBy = $state($page.url.searchParams.get('sortBy') ?? 'name');
+	let sortBy = $state(
+		($page.url.searchParams.get('sortBy') as 'name' | 'createdAt' | 'updatedAt') ?? 'name'
+	);
 	let sortOrder = $state(($page.url.searchParams.get('sortOrder') as 'asc' | 'desc') ?? 'asc');
 
 	let config = $derived(COMPENDIUM_TYPE_CONFIGS[data.type]);
-	let query = $derived(createCompendiumQuery(data.type));
+	let query = $derived(
+		createCompendiumQuery(data.type as CompendiumTypeName, {
+			search: searchQuery || undefined,
+			page: currentPage,
+			sortBy,
+			sortOrder,
+			creatureType: $page.url.searchParams.get('creatureType') ?? undefined,
+			spellLevel: $page.url.searchParams.get('spellLevel') ?? undefined,
+			spellSchool: $page.url.searchParams.get('spellSchool') ?? undefined,
+			challengeRating: $page.url.searchParams.get('challengeRating') ?? undefined
+		})
+	);
 	let items = $derived(query.data?.items ?? []);
 	let totalItems = $derived(query.data?.total ?? 0);
 	let totalPages = $derived(query.data?.totalPages ?? 1);
 	let isLoading = $derived(query.isFetching);
 
 	function updateUrl() {
-		const params = new URLSearchParams();
-		if (searchQuery) params.set('search', searchQuery);
-		if (currentPage > 1) params.set('page', currentPage.toString());
-		if (sortBy !== 'name') params.set('sortBy', sortBy);
-		if (sortOrder !== 'asc') params.set('sortOrder', sortOrder);
-		const newUrl = params.toString() ? `?${params.toString()}` : window.location.pathname;
+		const parts: string[] = [];
+		if (searchQuery) parts.push(`search=${encodeURIComponent(searchQuery)}`);
+		if (currentPage > 1) parts.push(`page=${currentPage}`);
+		if (sortBy !== 'name') parts.push(`sortBy=${sortBy}`);
+		if (sortOrder !== 'asc') parts.push(`sortOrder=${sortOrder}`);
+		const newUrl = parts.length > 0 ? `?${parts.join('&')}` : window.location.pathname;
 		window.history.replaceState({}, '', newUrl);
 	}
 
@@ -39,7 +73,6 @@
 		searchQuery = target.value;
 		currentPage = 1;
 		updateUrl();
-		query.refetch();
 	}
 
 	function handleSort(by: 'name' | 'createdAt' | 'updatedAt') {
@@ -50,13 +83,11 @@
 			sortOrder = 'asc';
 		}
 		updateUrl();
-		query.refetch();
 	}
 
 	function goToPage(page: number) {
 		currentPage = Math.max(1, Math.min(page, totalPages));
 		updateUrl();
-		query.refetch();
 		window.scrollTo({ top: 0, behavior: 'smooth' });
 	}
 </script>
@@ -148,7 +179,6 @@
 							searchQuery = '';
 							currentPage = 1;
 							updateUrl();
-							query.refetch();
 						}}
 						class="mt-4 rounded-lg bg-accent px-4 py-2 text-white transition-opacity hover:opacity-90"
 					>
@@ -159,6 +189,7 @@
 		{:else}
 			<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 				{#each items as item (item.key)}
+					{@const itemData = item.data as CardItemData}
 					<SurfaceCard href="/compendium/{data.type}/{item.key}" class="group">
 						<div class="p-4">
 							<h3
@@ -171,32 +202,32 @@
 									{item.description}
 								</p>
 							{/if}
-							{#if data.type === 'spells' && item.data}
+							{#if data.type === 'spells' && itemData}
 								<div class="mt-3 flex flex-wrap gap-1">
-									{#if item.data.level !== undefined}
+									{#if itemData.level !== undefined}
 										<Badge variant="solid">
-											{item.data.level === 0 ? 'Cantrip' : `Level ${item.data.level}`}
+											{itemData.level === 0 ? 'Cantrip' : `Level ${itemData.level}`}
 										</Badge>
 									{/if}
-									{#if item.data.school}
+									{#if itemData.school}
 										<Badge variant="outline"
-											>{item.data.school?.name ?? item.data.school?.key ?? item.data.school}</Badge
+											>{getSchoolLabel(itemData.school)}</Badge
 										>
 									{/if}
 								</div>
-							{:else if data.type === 'creatures' && item.data}
+							{:else if data.type === 'creatures' && itemData}
 								<div class="mt-3 flex flex-wrap gap-1">
-									{#if item.data.challenge_rating_text}
-										<Badge variant="solid">CR {item.data.challenge_rating_text}</Badge>
+									{#if itemData.challenge_rating_text}
+										<Badge variant="solid">CR {itemData.challenge_rating_text}</Badge>
 									{/if}
-									{#if item.data.type}
-										<Badge variant="outline">{item.data.type?.name ?? item.data.type}</Badge>
+									{#if itemData.type}
+										<Badge variant="outline">{getTypeLabel(itemData.type)}</Badge>
 									{/if}
 								</div>
-							{:else if data.type === 'classes' && item.data}
+							{:else if data.type === 'classes' && itemData}
 								<div class="mt-3 flex flex-wrap gap-1">
-									{#if item.data.hit_dice}
-										<Badge variant="solid">d{item.data.hit_dice}</Badge>
+									{#if itemData.hit_dice}
+										<Badge variant="solid">d{itemData.hit_dice}</Badge>
 									{/if}
 								</div>
 							{/if}

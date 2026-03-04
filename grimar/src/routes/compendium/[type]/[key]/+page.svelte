@@ -1,13 +1,9 @@
 <script lang="ts">
-	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import { marked } from 'marked';
 	import DOMPurify from 'isomorphic-dompurify';
 	import type { PageData } from './$types';
 	import {
-		isLinkedItem,
-		isLinkedArray,
-		getLinkedItems,
 		isWeaponPropertyArray,
 		getWeaponProperties,
 		isDescriptionArray,
@@ -15,14 +11,10 @@
 		isBenefitArray,
 		getBenefits,
 		isSpeedObject,
-		isLanguageObject,
 		formatSpeed,
-		formatLanguages,
 		formatFieldName,
 		formatValue,
-		DISPLAY_FIELDS,
-		getSortedFields,
-		renderDescription
+		getSortedFields
 	} from '$lib/utils/compendium';
 
 	marked.setOptions({ gfm: true, breaks: true });
@@ -35,42 +27,6 @@
 
 	let item = $derived(data.item);
 	let itemData = $derived(item.data as Record<string, unknown>);
-
-	function getDisplayFields(): string[] {
-		return DISPLAY_FIELDS[data.type] ?? [];
-	}
-
-	function shouldDisplayField(key: string): boolean {
-		const excludeFields = [
-			'key',
-			'name',
-			'desc',
-			'description',
-			'descriptions',
-			'document',
-			'document_key',
-			'document_name',
-			'gamesystem_key',
-			'gamesystem_name',
-			'publisher_key',
-			'publisher_name',
-			'created_at',
-			'updated_at',
-			'url',
-			'features',
-			'benefits',
-			'properties',
-			'speed_all',
-			'languages'
-		];
-		if (excludeFields.includes(key)) return false;
-
-		const displayFields = getDisplayFields();
-		if (displayFields.length > 0) {
-			return displayFields.includes(key);
-		}
-		return true;
-	}
 
 	function getSortedFieldsLocal(): [string, unknown][] {
 		return getSortedFields(itemData, data.type);
@@ -90,7 +46,7 @@
 		<div class="mb-6">
 			<a
 				href="/compendium/{data.type}"
-				class="text-text-muted) text-sm transition-colors hover:text-accent"
+				class="text-sm text-[var(--color-text-muted)] transition-colors hover:text-accent"
 			>
 				← Back to {data.config.plural}
 			</a>

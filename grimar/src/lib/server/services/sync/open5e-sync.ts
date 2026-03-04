@@ -1,49 +1,14 @@
 import { z } from 'zod';
-import { upsertItem, clearType, type CompendiumType } from '$lib/server/repositories/compendium';
+import type { CompendiumType } from '$lib/server/repositories/compendium';
 import { withTransaction } from '$lib/server/db';
 import { compendium } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { createModuleLogger } from '$lib/server/logger';
+import { OPEN5E_API_BASE_URL, OPEN5E_SYNCABLE_TYPES } from '$lib/server/providers/open5e-config';
 
 const logger = createModuleLogger('open5e-sync');
 
-const OPEN5E_BASE_URL = 'http://10.147.20.240:8888/v2';
-
-export const SYNCABLE_TYPES: CompendiumType[] = [
-	'species',
-	'classes',
-	'backgrounds',
-	'feats',
-	'spells',
-	'spellschools',
-	'skills',
-	'languages',
-	'alignments',
-	'abilities',
-	'damagetypes',
-	'conditions',
-	'weaponproperties',
-	'itemcategories',
-	'itemsets',
-	'creatures',
-	'creaturetypes',
-	'creaturesets',
-	'weapons',
-	'armor',
-	'items',
-	'magicitems',
-	'environments',
-	'sizes',
-	'itemrarities',
-	'documents',
-	'licenses',
-	'publishers',
-	'gamesystems',
-	'rules',
-	'rulesets',
-	'images',
-	'services'
-];
+export const SYNCABLE_TYPES = OPEN5E_SYNCABLE_TYPES;
 
 export interface SyncProgress {
 	type: string;
@@ -62,38 +27,13 @@ export interface SyncResult {
 	duration: number;
 }
 
-const Open5eDocumentSchema = z.object({
-	name: z.string(),
-	key: z.string(),
-	publisher: z
-		.object({
-			name: z.string(),
-			key: z.string()
-		})
-		.nullable(),
-	gamesystem: z
-		.object({
-			name: z.string(),
-			key: z.string()
-		})
-		.nullable()
-});
-
-const Open5eResponseSchema = <T extends z.ZodTypeAny>(itemSchema: T) =>
-	z.object({
-		count: z.number(),
-		next: z.string().nullable(),
-		previous: z.string().nullable(),
-		results: z.array(itemSchema)
-	});
-
 async function fetchAllPages<T>(
 	endpoint: string,
 	itemSchema: z.ZodType<T>,
 	onProgress?: (fetched: number, total: number) => void
 ): Promise<T[]> {
 	const items: T[] = [];
-	let nextUrl: string | null = `${OPEN5E_BASE_URL}/${endpoint}/?limit=100`;
+	let nextUrl: string | null = `${OPEN5E_API_BASE_URL}/${endpoint}/?limit=100`;
 	let total = 0;
 
 	while (nextUrl) {
@@ -212,7 +152,7 @@ export async function syncType(
 ): Promise<SyncResult> {
 	const startTime = Date.now();
 	let synced = 0;
-	let errors = 0;
+	const errors = 0;
 
 	logger.info({ type }, '[open5e] Starting sync');
 
@@ -291,7 +231,7 @@ export async function getApiStats(): Promise<Record<CompendiumType, number>> {
 
 	for (const type of SYNCABLE_TYPES) {
 		try {
-			const response = await fetch(`${OPEN5E_BASE_URL}/${type}/?limit=1`);
+			const response = await fetch(`${OPEN5E_API_BASE_URL}/${type}/?limit=1`);
 			if (response.ok) {
 				const data = await response.json();
 				stats[type] = data.count ?? 0;

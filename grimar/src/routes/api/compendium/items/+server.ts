@@ -4,6 +4,14 @@ import { getPaginatedItems, searchItems } from '$lib/server/repositories/compend
 import { COMPENDIUM_TYPES } from '$lib/server/db/schema';
 import type { CompendiumType } from '$lib/server/db/schema';
 
+type SortByParam = 'name' | 'created_at' | 'updated_at';
+
+function normalizeSortBy(value: string | null): SortByParam {
+	if (value === 'createdAt' || value === 'created_at') return 'created_at';
+	if (value === 'updatedAt' || value === 'updated_at') return 'updated_at';
+	return 'name';
+}
+
 export const GET: RequestHandler = async ({ url }) => {
 	const type = url.searchParams.get('type');
 	const search = url.searchParams.get('search') || undefined;
@@ -11,7 +19,7 @@ export const GET: RequestHandler = async ({ url }) => {
 	const document = url.searchParams.get('document') || undefined;
 	const page = parseInt(url.searchParams.get('page') || '1', 10);
 	const limit = parseInt(url.searchParams.get('limit') || '50', 10);
-	const sortBy = url.searchParams.get('sortBy') || 'name';
+	const sortBy = normalizeSortBy(url.searchParams.get('sortBy'));
 	const sortOrder = (url.searchParams.get('sortOrder') as 'asc' | 'desc') || 'asc';
 	const getAll = url.searchParams.get('all') === 'true';
 
@@ -46,7 +54,7 @@ export const GET: RequestHandler = async ({ url }) => {
 		filters: {
 			gamesystem,
 			document,
-			sortBy: sortBy as 'name' | 'created_at' | 'updated_at',
+			sortBy,
 			sortOrder,
 			creatureType: type === 'creatures' ? creatureType : undefined,
 			spellLevel:

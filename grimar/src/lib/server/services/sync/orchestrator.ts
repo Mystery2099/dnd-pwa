@@ -19,7 +19,7 @@ export async function syncAllProviders(
 		}
 
 		try {
-			const result = await provider.sync();
+			const result = await provider.sync(progressCallback);
 			results.set(provider.name, result);
 
 			if (progressCallback) {
@@ -69,7 +69,7 @@ export async function syncProvider(
 		return null;
 	}
 
-	return provider.sync();
+	return provider.sync(progressCallback);
 }
 
 export type { SyncProgressCallback, SyncResult };

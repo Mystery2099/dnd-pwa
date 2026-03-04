@@ -12,7 +12,46 @@
 
 import { createQuery } from '@tanstack/svelte-query';
 import type { QueryClient } from '@tanstack/svelte-query';
-import { ApiError, type ApiErrorCode } from './errors';
+import { ApiError } from './errors';
+import type { CompendiumSearchResult, CompendiumTypeName } from '$lib/core/types/compendium';
+
+type SortByParam = 'name' | 'createdAt' | 'updatedAt';
+
+export interface CompendiumListParams {
+	search?: string;
+	page?: number;
+	limit?: number;
+	sortBy?: SortByParam;
+	sortOrder?: 'asc' | 'desc';
+	creatureType?: string;
+	spellLevel?: string;
+	spellSchool?: string;
+	challengeRating?: string;
+}
+
+const COMPENDIUM_FILTER_KEYS = [
+	'search',
+	'page',
+	'limit',
+	'sortBy',
+	'sortOrder',
+	'creatureType',
+	'spellLevel',
+	'spellSchool',
+	'challengeRating'
+] as const;
+
+function normalizeCompendiumListParams(params: CompendiumListParams): Record<string, string> {
+	const normalized: Record<string, string> = {};
+
+	for (const key of COMPENDIUM_FILTER_KEYS) {
+		const value = params[key];
+		if (value === undefined || value === null || value === '') continue;
+		normalized[key] = String(value);
+	}
+
+	return normalized;
+}
 
 // ============================================================================
 // Query Keys - Centralized for type safety and easy invalidation
@@ -21,7 +60,8 @@ import { ApiError, type ApiErrorCode } from './errors';
 export const queryKeys = {
 	compendium: {
 		all: ['compendium'] as const,
-		list: (type: string) => ['compendium', 'list', type] as const,
+		list: (type: string, params: CompendiumListParams = {}) =>
+			['compendium', 'list', type, normalizeCompendiumListParams(params)] as const,
 		detail: (type: string, slug: string) => ['compendium', 'detail', type, slug] as const,
 		export: ['compendium', 'export'] as const
 	},
@@ -87,31 +127,14 @@ export async function apiFetch<T>(url: string, init?: RequestInit): Promise<T> {
 /**
  * Fetch a list of compendium items by type.
  */
-export async function fetchCompendiumList(pathType: string): Promise<any> {
-	// Build params from pathType
+export async function fetchCompendiumList(
+	pathType: string,
+	listParams: CompendiumListParams = {}
+): Promise<CompendiumSearchResult> {
 	const params = new URLSearchParams({ type: pathType });
 
-	// Read filter params from current URL and pass to API
-	// This enables filtering by creatureType, spellLevel, spellSchool, challengeRating, etc.
-	if (typeof window !== 'undefined') {
-		const url = new URL(window.location.href);
-		const filterKeys = ['creatureType', 'spellLevel', 'spellSchool', 'challengeRating', 'search'];
-		for (const key of filterKeys) {
-			const value = url.searchParams.get(key);
-			if (value) {
-				params.set(key, value);
-			}
-		}
-
-		// Also pass pagination params if present
-		const page = url.searchParams.get('page');
-		if (page) params.set('page', page);
-		const limit = url.searchParams.get('limit');
-		if (limit) params.set('limit', limit);
-		const sortBy = url.searchParams.get('sortBy');
-		if (sortBy) params.set('sortBy', sortBy);
-		const sortOrder = url.searchParams.get('sortOrder');
-		if (sortOrder) params.set('sortOrder', sortOrder);
+	for (const [key, value] of Object.entries(normalizeCompendiumListParams(listParams))) {
+		params.set(key, value);
 	}
 
 	return apiFetch(`/api/compendium/items?${params}`);
@@ -120,7 +143,7 @@ export async function fetchCompendiumList(pathType: string): Promise<any> {
 /**
  * Fetch all compendium items of a type for client-side processing.
  */
-export async function fetchCompendiumAll(pathType: string): Promise<any> {
+export async function fetchCompendiumAll(pathType: string): Promise<CompendiumSearchResult> {
 	const params = new URLSearchParams({ type: pathType, all: 'true' });
 	return apiFetch(`/api/compendium/items?${params}`);
 }
@@ -128,21 +151,21 @@ export async function fetchCompendiumAll(pathType: string): Promise<any> {
 /**
  * Fetch a single compendium item by type and slug.
  */
-export async function fetchCompendiumDetail(type: string, slug: string): Promise<any> {
+export async function fetchCompendiumDetail(type: string, slug: string): Promise<unknown> {
 	return apiFetch(`/api/compendium/${type}/${slug}`);
 }
 
 /**
  * Fetch all characters for the current user.
  */
-export async function fetchCharacters(): Promise<any[]> {
+export async function fetchCharacters(): Promise<unknown[]> {
 	return apiFetch('/api/characters');
 }
 
 /**
  * Fetch a single character by ID.
  */
-export async function fetchCharacter(id: string): Promise<any> {
+export async function fetchCharacter(id: string): Promise<unknown> {
 	return apiFetch(`/api/characters/${id}`);
 }
 
@@ -161,10 +184,12 @@ export async function fetchCacheVersion(): Promise<{ version: string; timestamp:
  * Create a compendium list query.
  * Cached for offline access, refetched after 10 minutes staleTime.
  */
-export function createCompendiumQuery(type: string) {
+export function createCompendiumQuery(type: CompendiumTypeName, params: CompendiumListParams = {}) {
+	const normalizedParams = normalizeCompendiumListParams(params);
+
 	return createQuery(() => ({
-		queryKey: queryKeys.compendium.list(type),
-		queryFn: () => fetchCompendiumList(type),
+		queryKey: queryKeys.compendium.list(type, normalizedParams),
+		queryFn: () => fetchCompendiumList(type, normalizedParams),
 		staleTime: 10 * 60 * 1000, // 10 minutes
 		gcTime: 30 * 60 * 1000, // 30 minutes in cache
 		networkMode: 'offlineFirst'

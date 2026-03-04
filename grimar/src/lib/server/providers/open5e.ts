@@ -1,8 +1,8 @@
-import { COMPENDIUM_TYPES, type CompendiumType } from '$lib/server/db/schema';
+import type { CompendiumType } from '$lib/server/db/schema';
 import { upsertItems, clearType, getTypeCounts } from '$lib/server/repositories/compendium';
 import type { CompendiumProvider, SyncResult, ProviderStats, SyncProgressCallback } from './types';
+import { OPEN5E_API_BASE_URL, OPEN5E_SYNCABLE_TYPES } from './open5e-config';
 
-const API_BASE = 'http://10.147.20.240:8888/v2';
 const PAGE_SIZE = 100;
 
 const TYPE_ENDPOINTS: Record<CompendiumType, string> = {
@@ -52,42 +52,6 @@ const TYPE_ENDPOINTS: Record<CompendiumType, string> = {
 	weaponpropertyassignments: 'weaponpropertyassignments'
 };
 
-const SYNCABLE_TYPES: CompendiumType[] = [
-	'species',
-	'classes',
-	'backgrounds',
-	'feats',
-	'spells',
-	'spellschools',
-	'skills',
-	'languages',
-	'alignments',
-	'abilities',
-	'damagetypes',
-	'conditions',
-	'weaponproperties',
-	'itemcategories',
-	'itemsets',
-	'creatures',
-	'creaturetypes',
-	'creaturesets',
-	'weapons',
-	'armor',
-	'items',
-	'magicitems',
-	'environments',
-	'sizes',
-	'itemrarities',
-	'documents',
-	'licenses',
-	'publishers',
-	'gamesystems',
-	'rules',
-	'rulesets',
-	'images',
-	'services'
-];
-
 interface ApiItem {
 	key: string;
 	name: string;
@@ -109,7 +73,7 @@ interface PaginatedResponse {
 
 async function fetchAllPages(endpoint: string): Promise<ApiItem[]> {
 	const items: ApiItem[] = [];
-	let url: string | null = `${API_BASE}/${endpoint}/?limit=${PAGE_SIZE}`;
+	let url: string | null = `${OPEN5E_API_BASE_URL}/${endpoint}/?limit=${PAGE_SIZE}`;
 
 	while (url) {
 		const response: Response = await fetch(url);
@@ -214,7 +178,7 @@ export const open5eProvider: CompendiumProvider = {
 		const errors: string[] = [];
 		let totalItems = 0;
 
-		for (const type of SYNCABLE_TYPES) {
+		for (const type of OPEN5E_SYNCABLE_TYPES) {
 			const result = await syncType(type, onProgress);
 			totalItems += result.count;
 			if (result.error) {
@@ -240,4 +204,4 @@ export const open5eProvider: CompendiumProvider = {
 	}
 };
 
-export { SYNCABLE_TYPES, TYPE_ENDPOINTS };
+export { OPEN5E_SYNCABLE_TYPES as SYNCABLE_TYPES, TYPE_ENDPOINTS };
