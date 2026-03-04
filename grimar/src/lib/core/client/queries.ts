@@ -120,6 +120,10 @@ export async function apiFetch<T>(url: string, init?: RequestInit): Promise<T> {
 		}
 		return undefined as T;
 	} catch (error) {
+		if (error instanceof DOMException && error.name === 'AbortError') {
+			// Preserve abort errors so TanStack Query can treat cancellation correctly.
+			throw error;
+		}
 		if (ApiError.isApiError(error)) {
 			throw error;
 		}
@@ -139,7 +143,8 @@ export async function apiFetch<T>(url: string, init?: RequestInit): Promise<T> {
  */
 export async function fetchCompendiumList(
 	pathType: string,
-	listParams: CompendiumListParams = {}
+	listParams: CompendiumListParams = {},
+	signal?: AbortSignal
 ): Promise<CompendiumSearchResult> {
 	const apiType = pathType === 'subclasses' ? 'classes' : pathType;
 	const params = new URLSearchParams({ type: apiType });
@@ -148,7 +153,7 @@ export async function fetchCompendiumList(
 		params.set(key, value);
 	}
 
-	return apiFetch(`/api/compendium/items?${params}`);
+	return apiFetch(`/api/compendium/items?${params}`, { signal });
 }
 
 /**
@@ -202,7 +207,8 @@ export function createCompendiumQuery(type: CompendiumTypeName, params: Compendi
 
 	return createQuery(() => ({
 		queryKey: queryKeys.compendium.list(type, normalizedParams),
-		queryFn: () => fetchCompendiumList(type, normalizedParams),
+		queryFn: ({ signal }) => fetchCompendiumList(type, normalizedParams, signal),
+		placeholderData: (previousData) => previousData,
 		staleTime: 10 * 60 * 1000, // 10 minutes
 		gcTime: 30 * 60 * 1000, // 30 minutes in cache
 		networkMode: 'offlineFirst'
