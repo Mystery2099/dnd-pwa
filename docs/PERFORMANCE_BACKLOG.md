@@ -19,4 +19,4 @@ Branch: `performance-improvements`
 ## Lower Priority / UX Perception
 
 - [x] Use TanStack prefetch for compendium detail routes (hover/viewport-driven prefetch).
-- [ ] Reduce global render overhead in layout (heavy visual overlays, external font loading path) for faster first paint.
+- [x] Reduce global render overhead in layout (heavy visual overlays, external font loading path) for faster first paint.

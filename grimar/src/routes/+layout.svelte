@@ -28,8 +28,12 @@
 	// Create QueryClient synchronously - needed for SSR and initial render
 	const queryClient = createQueryClient();
 	setQueryClient(queryClient);
+	let showNoiseOverlay = $state(false);
 
 	onMount(async () => {
+		showNoiseOverlay = window.matchMedia('(min-width: 1024px)').matches &&
+			window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+
 		if (pwaInfo) {
 			const { registerSW } = await import('virtual:pwa-register');
 			registerSW({ immediate: true });
@@ -82,11 +86,13 @@
 	{/if}
 </svelte:head>
 
-<!-- Noise Overlay -->
-<div
-	class="pointer-events-none fixed inset-0 z-50 opacity-40 mix-blend-overlay"
-	style="background-image: url(&quot;data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.5'/%3E%3C/svg%3E&quot;);"
-></div>
+{#if showNoiseOverlay}
+	<!-- Noise Overlay -->
+	<div
+		class="pointer-events-none fixed inset-0 z-50 opacity-40 mix-blend-overlay"
+		style="background-image: url(&quot;data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.5'/%3E%3C/svg%3E&quot;);"
+	></div>
+{/if}
 
 {#snippet header()}
 	<GlobalHeader homeHref="/dashboard" />
