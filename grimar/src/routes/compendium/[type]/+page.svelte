@@ -2,7 +2,8 @@
 	import { replaceState } from '$app/navigation';
 	import { onDestroy, onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import { createCompendiumQuery } from '$lib/core/client/queries';
+	import { createCompendiumQuery, prefetchCompendiumDetail } from '$lib/core/client/queries';
+	import { queryClient } from '$lib/core/client/query-client';
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import Breadcrumb from '$lib/components/ui/Breadcrumb.svelte';
 	import Input from '$lib/components/ui/Input.svelte';
@@ -254,6 +255,11 @@
 		currentPage = 1;
 		updateUrl();
 	}
+
+	function handleItemPrefetch(itemKey: string) {
+		if (!queryClient) return;
+		prefetchCompendiumDetail(queryClient, data.type, itemKey);
+	}
 </script>
 
 <svelte:head>
@@ -401,7 +407,12 @@
 			<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 				{#each items as item (item.key)}
 					{@const itemData = item.data as CardItemData}
-					<SurfaceCard href="/compendium/{data.type}/{item.key}" class="group">
+					<SurfaceCard
+						href="/compendium/{data.type}/{item.key}"
+						class="group"
+						onmouseenter={() => handleItemPrefetch(item.key)}
+						onfocusin={() => handleItemPrefetch(item.key)}
+					>
 						<div class="p-4">
 							<h3
 								class="line-clamp-1 font-semibold text-[var(--color-text-primary)] transition-colors group-hover:text-accent"

@@ -6,9 +6,19 @@
 		class?: string;
 		padding?: string;
 		children?: Snippet;
+		onmouseenter?: (event: MouseEvent) => void;
+		onfocusin?: (event: FocusEvent) => void;
 	}
 
-	let { href = '', class: className = '', padding = 'p-0', children, ...rest }: Props = $props();
+	let {
+		href = '',
+		class: className = '',
+		padding = 'p-0',
+		children,
+		onmouseenter,
+		onfocusin,
+		...rest
+	}: Props = $props();
 
 	const tag = $derived<'a' | 'div'>(href ? 'a' : 'div');
 </script>
@@ -16,6 +26,8 @@
 <svelte:element
 	this={tag}
 	{href}
+	{onmouseenter}
+	{onfocusin}
 	class={`card-crystal relative overflow-hidden transition-all duration-300 ${padding} ${className}`.trim()}
 	{...rest}
 >

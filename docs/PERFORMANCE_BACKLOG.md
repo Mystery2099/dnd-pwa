@@ -11,12 +11,12 @@ Branch: `performance-improvements`
 
 ## Medium Priority
 
-- [ ] Add server-side memory caching for compendium list/detail/count queries (similar to character repository caching).
+- [x] Add server-side memory caching for compendium list/detail/count queries (similar to character repository caching).
 - [ ] Cache or precompute compendium type counts used by `/compendium` landing page.
 - [x] Replace global TanStack invalidation calls with scoped invalidation by query key family.
 - [ ] Precompute/memoize markdown parse + sanitize on heavy detail pages to avoid repeated render-time parsing.
 
 ## Lower Priority / UX Perception
 
-- [ ] Use TanStack prefetch for compendium detail routes (hover/viewport-driven prefetch).
+- [x] Use TanStack prefetch for compendium detail routes (hover/viewport-driven prefetch).
 - [ ] Reduce global render overhead in layout (heavy visual overlays, external font loading path) for faster first paint.
