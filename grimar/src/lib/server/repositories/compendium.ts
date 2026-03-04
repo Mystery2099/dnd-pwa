@@ -180,7 +180,8 @@ export async function getPaginatedItems(
 		.limit(pageSize)
 		.offset(offset);
 
-	const total = options.skipTotalCount
+	const canInferTotalFromItems = options.skipTotalCount && page === 1 && items.length < pageSize;
+	const total = canInferTotalFromItems
 		? items.length
 		: Number(
 				(
