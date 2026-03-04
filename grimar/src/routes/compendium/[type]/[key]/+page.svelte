@@ -28,13 +28,20 @@
 
 	let item = $derived(data.item);
 	let itemData = $derived(item.data as Record<string, unknown>);
+	const markdownRenderCache = new Map<string, string>();
 
 	function getSortedFieldsLocal(): [string, unknown][] {
 		return getSortedFields(itemData, data.type);
 	}
 
 	function renderMarkdown(text: string): string {
-		return DOMPurify.sanitize(marked.parse(text) as string);
+		const cacheKey = text.trim();
+		const cached = markdownRenderCache.get(cacheKey);
+		if (cached) return cached;
+
+		const rendered = DOMPurify.sanitize(marked.parse(cacheKey) as string);
+		markdownRenderCache.set(cacheKey, rendered);
+		return rendered;
 	}
 </script>
 
