@@ -12,7 +12,18 @@ function normalizeSortBy(value: string | null): SortByParam {
 	return 'name';
 }
 
+function formatTimingHeaders(durationMs: number): HeadersInit {
+	const roundedMs = Number(durationMs.toFixed(2));
+	const bucket = durationMs < 50 ? 'fast' : durationMs < 150 ? 'moderate' : durationMs < 400 ? 'slow' : 'very-slow';
+	return {
+		'Server-Timing': `compendium-items;dur=${roundedMs}`,
+		'X-Query-Time-Ms': String(roundedMs),
+		'X-Query-Bucket': bucket
+	};
+}
+
 export const GET: RequestHandler = async ({ url }) => {
+	const start = performance.now();
 	const type = url.searchParams.get('type');
 	const search = url.searchParams.get('search') || undefined;
 	const gamesystem = url.searchParams.get('gamesystem') || undefined;
@@ -39,11 +50,17 @@ export const GET: RequestHandler = async ({ url }) => {
 		onlySubclasses === null ? undefined : onlySubclasses.toLowerCase() === 'true';
 
 	if (type && !COMPENDIUM_TYPES.includes(type as CompendiumType)) {
-		return json({ error: 'Invalid compendium type' }, { status: 400 });
+		return json(
+			{ error: 'Invalid compendium type' },
+			{ status: 400, headers: formatTimingHeaders(performance.now() - start) }
+		);
 	}
 
 	if (!type) {
-		return json({ error: 'Type parameter is required' }, { status: 400 });
+		return json(
+			{ error: 'Type parameter is required' },
+			{ status: 400, headers: formatTimingHeaders(performance.now() - start) }
+		);
 	}
 
 	const result = await getPaginatedItems(type as CompendiumType, {
@@ -72,5 +89,5 @@ export const GET: RequestHandler = async ({ url }) => {
 			}
 		});
 
-	return json(result);
+	return json(result, { headers: formatTimingHeaders(performance.now() - start) });
 };
