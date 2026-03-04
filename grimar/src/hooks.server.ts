@@ -4,8 +4,17 @@ import { handleAuth } from '$lib/server/services/auth';
 import { startCacheCleanup } from '$lib/server/utils/cache';
 import { createRequestLogger } from '$lib/server/utils/monitoring';
 
-// Initialize cache cleanup when app starts
-startCacheCleanup(60 * 1000); // Clean every minute
-
 // Combine request logging with auth handling
-export const handle: Handle = sequence(createRequestLogger(), handleAuth);
+const composedHandle = sequence(createRequestLogger(), handleAuth);
+let cacheCleanupInitialized = false;
+
+function ensureCacheCleanupStarted(): void {
+	if (cacheCleanupInitialized) return;
+	startCacheCleanup(60 * 1000); // Clean every minute
+	cacheCleanupInitialized = true;
+}
+
+export const handle: Handle = async ({ event, resolve }) => {
+	ensureCacheCleanupStarted();
+	return composedHandle({ event, resolve });
+};
