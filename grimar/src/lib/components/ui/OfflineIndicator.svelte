@@ -3,6 +3,7 @@
 	import { browser } from '$app/environment';
 	import { offlineStore, formatLastOnline } from '$lib/core/client/offline-store';
 	import { queryClient } from '$lib/core/client/query-client';
+	import { queryKeys } from '$lib/core/client/queries';
 
 	interface Props {
 		showDetails?: boolean;
@@ -35,7 +36,10 @@
 		if (!browser || !isOnline || !queryClient) return;
 
 		try {
-			await queryClient.invalidateQueries();
+			await Promise.all([
+				queryClient.invalidateQueries({ queryKey: queryKeys.compendium.all }),
+				queryClient.invalidateQueries({ queryKey: queryKeys.characters.all })
+			]);
 		} catch (error) {
 			console.error('[OfflineIndicator] Sync failed:', error);
 		}

@@ -16,6 +16,7 @@ import { getCachedVersion, setCachedVersion } from './cache-version';
 import type { CacheVersion } from './cache-version';
 import { settingsStore } from './settingsStore.svelte';
 import { userSettingsStore } from './userSettingsStore.svelte';
+import { queryKeys } from './queries';
 
 // Cache configuration
 const CACHE_KEY = 'grimar-query-cache';
@@ -136,13 +137,16 @@ export async function initializePersistence(client: QueryClient): Promise<void> 
 			const serverVersion: CacheVersion = await response.json();
 			const cachedVersion = await getCachedVersion();
 
-			// If version mismatch, invalidate cache
-			if (cachedVersion.version !== serverVersion.version) {
-				console.log('[QueryClient] Cache version mismatch, invalidating...');
-				await setCachedVersion(serverVersion.version, serverVersion.timestamp);
-				await client.invalidateQueries();
+				// If version mismatch, invalidate cache
+				if (cachedVersion.version !== serverVersion.version) {
+					console.log('[QueryClient] Cache version mismatch, invalidating...');
+					await setCachedVersion(serverVersion.version, serverVersion.timestamp);
+					await Promise.all([
+						client.invalidateQueries({ queryKey: queryKeys.compendium.all }),
+						client.invalidateQueries({ queryKey: queryKeys.cache.version })
+					]);
+				}
 			}
-		}
 	} catch (error) {
 		console.error('[QueryClient] Version check failed:', error);
 		// Continue with cached data

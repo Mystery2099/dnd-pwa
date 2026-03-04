@@ -8,6 +8,7 @@
 import { browser, dev } from '$app/environment';
 import { queryClient } from './query-client';
 import { setCachedVersion, getCachedVersion, type CacheVersion } from './cache-version';
+import { queryKeys } from './queries';
 import { offlineStore } from './offline-store';
 
 const SSE_ENDPOINT = '/api/cache/events';
@@ -110,20 +111,31 @@ class CacheSync {
 		// Update cached version
 		await setCachedVersion(version, timestamp);
 
-		// Invalidate all queries to trigger refetch
-		if (queryClient) {
-			await queryClient.invalidateQueries();
-		}
+		await this.invalidateQueryScopes(['compendium', 'cache']);
 
 		console.log('[CacheSync] Cache invalidated, version:', version);
 	}
 
 	private async handleInvalidate(): Promise<void> {
-		// Invalidate all queries without version change
-		if (queryClient) {
-			await queryClient.invalidateQueries();
-		}
+		await this.invalidateQueryScopes(['compendium', 'cache']);
 		console.log('[CacheSync] Cache invalidated');
+	}
+
+	private async invalidateQueryScopes(scopes: Array<'compendium' | 'characters' | 'cache'>): Promise<void> {
+		if (!queryClient) return;
+
+		const invalidations: Promise<unknown>[] = [];
+		for (const scope of scopes) {
+			if (scope === 'compendium') {
+				invalidations.push(queryClient.invalidateQueries({ queryKey: queryKeys.compendium.all }));
+			} else if (scope === 'characters') {
+				invalidations.push(queryClient.invalidateQueries({ queryKey: queryKeys.characters.all }));
+			} else if (scope === 'cache') {
+				invalidations.push(queryClient.invalidateQueries({ queryKey: queryKeys.cache.version }));
+			}
+		}
+
+		await Promise.all(invalidations);
 	}
 
 	private scheduleReconnect(): void {
@@ -190,14 +202,12 @@ class CacheSync {
 				const data: CacheVersion = await response.json();
 				const currentVersion = await getCachedVersion();
 
-				// Only invalidate if versions differ
-				if (currentVersion.version !== data.version) {
-					await setCachedVersion(data.version, data.timestamp);
-					if (queryClient) {
-						await queryClient.invalidateQueries();
+					// Only invalidate if versions differ
+					if (currentVersion.version !== data.version) {
+						await setCachedVersion(data.version, data.timestamp);
+						await this.invalidateQueryScopes(['compendium', 'cache']);
 					}
 				}
-			}
 		} catch (error) {
 			console.error('[CacheSync] Force sync failed:', error);
 		}
