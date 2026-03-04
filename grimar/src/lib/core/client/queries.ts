@@ -13,6 +13,7 @@
 import { createQuery } from '@tanstack/svelte-query';
 import type { QueryClient } from '@tanstack/svelte-query';
 import { ApiError } from './errors';
+import { perfTelemetryStore } from './perf-telemetry';
 import type { CompendiumSearchResult, CompendiumTypeName } from '$lib/core/types/compendium';
 
 type SortByParam = 'name' | 'createdAt' | 'updatedAt';
@@ -99,6 +100,8 @@ export async function apiFetch<T>(url: string, init?: RequestInit): Promise<T> {
 		throw ApiError.offline();
 	}
 
+	const startedAt = typeof performance !== 'undefined' ? performance.now() : Date.now();
+
 	try {
 		const response = await fetch(url, {
 			...init,
@@ -107,6 +110,8 @@ export async function apiFetch<T>(url: string, init?: RequestInit): Promise<T> {
 				...init?.headers
 			}
 		});
+		const durationMs = (typeof performance !== 'undefined' ? performance.now() : Date.now()) - startedAt;
+		perfTelemetryStore.recordFromResponse(url, response, durationMs);
 
 		if (!response.ok) {
 			const body = await response.text().catch(() => undefined);
@@ -120,6 +125,10 @@ export async function apiFetch<T>(url: string, init?: RequestInit): Promise<T> {
 		}
 		return undefined as T;
 	} catch (error) {
+		const durationMs = (typeof performance !== 'undefined' ? performance.now() : Date.now()) - startedAt;
+		if (error instanceof TypeError || error instanceof DOMException) {
+			perfTelemetryStore.recordNetworkError(url, durationMs);
+		}
 		if (error instanceof DOMException && error.name === 'AbortError') {
 			// Preserve abort errors so TanStack Query can treat cancellation correctly.
 			throw error;
