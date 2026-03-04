@@ -8,7 +8,6 @@
 	import OfflineIndicator from '$lib/components/ui/OfflineIndicator.svelte';
 	import { page } from '$app/state';
 	import { initThemeSync, initTheme } from '$lib/core/client/themeStore.svelte';
-	import { QueryClientProvider } from '@tanstack/svelte-query';
 	import ClientQueryProvider from '$lib/components/ui/ClientQueryProvider.svelte';
 	import { createQueryClient, setQueryClient } from '$lib/core/client/query-client';
 	import { startCacheSync } from '$lib/core/client/cache-sync';
@@ -30,9 +29,30 @@
 	setQueryClient(queryClient);
 	let showNoiseOverlay = $state(false);
 
+	function shouldLoadExternalFont(): boolean {
+		const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
+		const prefersReducedData =
+			'navigator' in window &&
+			'connection' in navigator &&
+			Boolean((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData);
+		return isDesktop && !prefersReducedData;
+	}
+
+	function loadInterFontAsync(): void {
+		if (!shouldLoadExternalFont()) return;
+		if (document.querySelector('link[data-font="inter"]')) return;
+
+		const link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap';
+		link.setAttribute('data-font', 'inter');
+		document.head.appendChild(link);
+	}
+
 	onMount(async () => {
 		showNoiseOverlay = window.matchMedia('(min-width: 1024px)').matches &&
 			window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+		loadInterFontAsync();
 
 		if (pwaInfo) {
 			const { registerSW } = await import('virtual:pwa-register');
@@ -72,14 +92,7 @@
 			}
 		})();
 	</script>
-	<!-- Preload Inter font (optional, but good for performance if using Google Fonts) -->
-	<link rel="preconnect" href="https://fonts.googleapis.com" />
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-	<link
-		href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-		rel="stylesheet"
-	/>
-	<!-- Only render web manifest if it's valid and safe -->
+		<!-- Only render web manifest if it's valid and safe -->
 	{#if webManifestLink && webManifestLink.includes('<link')}
 		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 		{@html webManifestLink}

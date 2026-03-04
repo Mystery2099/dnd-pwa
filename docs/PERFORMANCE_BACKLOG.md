@@ -20,3 +20,8 @@ Branch: `performance-improvements`
 
 - [x] Use TanStack prefetch for compendium detail routes (hover/viewport-driven prefetch).
 - [x] Reduce global render overhead in layout (heavy visual overlays, external font loading path) for faster first paint.
+
+## Additional Improvements Completed
+
+- [x] Cache distinct compendium metadata lookups (`gamesystem`, `document`, `publisher`, `source`) in repository read paths.
+- [x] Add API query telemetry headers (`Server-Timing`, query-duration bucket) for compendium endpoints.
