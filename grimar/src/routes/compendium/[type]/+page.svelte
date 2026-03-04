@@ -33,6 +33,7 @@
 		value: string;
 	};
 	const SEARCH_DEBOUNCE_MS = 250;
+	const SOURCE_DEBOUNCE_MS = 250;
 
 	const SORT_BY_OPTIONS: SelectOption[] = [
 		{ label: 'Name', value: 'name' },
@@ -119,10 +120,12 @@
 	const initialSearchQuery = $page.url.searchParams.get('search') ?? '';
 	let searchInput = $state(initialSearchQuery);
 	let searchQuery = $state(initialSearchQuery);
+	const initialSourceFilter = $page.url.searchParams.get('source') ?? '';
+	let sourceInput = $state(initialSourceFilter);
 	let currentPage = $state(Number($page.url.searchParams.get('page')) || 1);
 	let sortBy = $state(($page.url.searchParams.get('sortBy') as SortBy) ?? 'name');
 	let sortOrder = $state(($page.url.searchParams.get('sortOrder') as SortOrder) ?? 'asc');
-	let sourceFilter = $state($page.url.searchParams.get('source') ?? '');
+	let sourceFilter = $state(initialSourceFilter);
 	let creatureTypeFilter = $state($page.url.searchParams.get('creatureType') ?? 'all');
 	let spellLevelFilter = $state($page.url.searchParams.get('spellLevel') ?? 'all');
 	let spellSchoolFilter = $state($page.url.searchParams.get('spellSchool') ?? 'all');
@@ -152,6 +155,7 @@
 	let isLoading = $derived(query.isFetching);
 	let isMounted = $state(false);
 	let searchDebounceTimeout: ReturnType<typeof setTimeout> | undefined;
+	let sourceDebounceTimeout: ReturnType<typeof setTimeout> | undefined;
 
 	onMount(() => {
 		isMounted = true;
@@ -159,6 +163,7 @@
 
 	onDestroy(() => {
 		if (searchDebounceTimeout) clearTimeout(searchDebounceTimeout);
+		if (sourceDebounceTimeout) clearTimeout(sourceDebounceTimeout);
 	});
 
 	function updateUrl() {
@@ -211,6 +216,17 @@
 		updateUrl();
 	}
 
+	function handleSourceFilterInput(e: Event) {
+		const target = e.target as HTMLInputElement;
+		sourceInput = target.value;
+		if (sourceDebounceTimeout) clearTimeout(sourceDebounceTimeout);
+		sourceDebounceTimeout = setTimeout(() => {
+			sourceFilter = sourceInput;
+			currentPage = 1;
+			updateUrl();
+		}, SOURCE_DEBOUNCE_MS);
+	}
+
 	function applyFilters() {
 		currentPage = 1;
 		updateUrl();
@@ -224,8 +240,10 @@
 
 	function clearFilters() {
 		if (searchDebounceTimeout) clearTimeout(searchDebounceTimeout);
+		if (sourceDebounceTimeout) clearTimeout(sourceDebounceTimeout);
 		searchInput = '';
 		searchQuery = '';
+		sourceInput = '';
 		sourceFilter = '';
 		creatureTypeFilter = 'all';
 		spellLevelFilter = 'all';
@@ -305,11 +323,8 @@
 				<Input
 					type="text"
 					placeholder="Source (e.g. open5e)"
-					value={sourceFilter}
-					oninput={(e) => {
-						sourceFilter = (e.target as HTMLInputElement).value;
-						applyFilters();
-					}}
+					value={sourceInput}
+					oninput={handleSourceFilterInput}
 				/>
 
 				{#if data.type === 'spells'}
