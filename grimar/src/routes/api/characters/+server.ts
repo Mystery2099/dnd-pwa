@@ -5,7 +5,7 @@
  * GET /api/characters/[id] - Get a single character
  */
 
-import { json } from '@sveltejs/kit';
+import { json, isHttpError, isRedirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { requireUser } from '$lib/server/services/auth';
 import { characterRepository } from '$lib/server/repositories/characters';
@@ -28,6 +28,9 @@ export const GET: RequestHandler = async ({ locals }) => {
 
 		return json(characters);
 	} catch (error) {
+		if (isRedirect(error) || isHttpError(error)) {
+			throw error;
+		}
 		log.error({ error }, 'Error fetching characters');
 		return json({ error: 'Failed to fetch characters' }, { status: 500 });
 	}

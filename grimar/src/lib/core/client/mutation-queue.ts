@@ -27,13 +27,16 @@ class MutationQueueState {
 	pending: QueuedMutation[] = [];
 	syncing = false;
 	online = true;
+	private readonly initialized: Promise<void>;
 
 	constructor() {
-		if (browser) {
-			this.online = navigator.onLine;
-			this.loadQueue();
-			this.setupListeners();
-		}
+		this.initialized = browser ? this.initialize() : Promise.resolve();
+	}
+
+	private async initialize(): Promise<void> {
+		this.online = navigator.onLine;
+		await this.loadQueue();
+		this.setupListeners();
 	}
 
 	private async loadQueue(): Promise<void> {
@@ -55,11 +58,17 @@ class MutationQueueState {
 		});
 	}
 
+	async ready(): Promise<void> {
+		await this.initialized;
+	}
+
 	async save(): Promise<void> {
+		await this.ready();
 		await set(MUTATION_QUEUE_KEY, this.pending);
 	}
 
 	async sync(): Promise<void> {
+		await this.ready();
 		if (!browser || this.syncing || !this.online) return;
 
 		this.syncing = true;
@@ -128,6 +137,7 @@ export async function queueMutation<T>(
 	payload: T
 ): Promise<string> {
 	if (!browser) return '';
+	await mutationQueue.ready();
 
 	const mutation: QueuedMutation<T> = {
 		id: crypto.randomUUID(),
@@ -160,6 +170,7 @@ export async function syncQueue(): Promise<void> {
  * Remove a specific mutation from the queue.
  */
 export async function removeMutation(id: string): Promise<void> {
+	await mutationQueue.ready();
 	mutationQueue.pending = mutationQueue.pending.filter((m) => m.id !== id);
 	await mutationQueue.save();
 }
@@ -168,6 +179,7 @@ export async function removeMutation(id: string): Promise<void> {
  * Clear all queued mutations.
  */
 export async function clearQueue(): Promise<void> {
+	await mutationQueue.ready();
 	mutationQueue.pending = [];
 	await del(MUTATION_QUEUE_KEY);
 }

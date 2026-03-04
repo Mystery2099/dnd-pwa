@@ -5,7 +5,7 @@
  * PATCH /api/user/settings - Update settings (partial merge)
  */
 
-import { json } from '@sveltejs/kit';
+import { json, isHttpError, isRedirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { requireUser } from '$lib/server/services/auth';
 import { getUserSettings, updateUserSettings } from '$lib/server/repositories/users';
@@ -29,6 +29,9 @@ export const GET: RequestHandler = async ({ locals }) => {
 		log.debug({ username: user.username }, 'Settings retrieved');
 		return json(settings satisfies ServerSettings);
 	} catch (error) {
+		if (isRedirect(error) || isHttpError(error)) {
+			throw error;
+		}
 		log.error({ error }, 'Error fetching settings');
 		return json({ error: 'Failed to fetch settings' }, { status: 500 });
 	}
@@ -52,6 +55,9 @@ export const PATCH: RequestHandler = async ({ locals, request }) => {
 		log.info({ username: user.username }, 'Settings updated');
 		return json(settings satisfies ServerSettings);
 	} catch (error) {
+		if (isRedirect(error) || isHttpError(error)) {
+			throw error;
+		}
 		log.error({ error }, 'Error updating settings');
 		return json({ error: 'Failed to update settings' }, { status: 500 });
 	}
