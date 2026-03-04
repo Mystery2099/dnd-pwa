@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { replaceState } from '$app/navigation';
+	import { browser } from '$app/environment';
 	import { onDestroy, onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { createCompendiumQuery, prefetchCompendiumDetail } from '$lib/core/client/queries';
@@ -7,12 +8,13 @@
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import Breadcrumb from '$lib/components/ui/Breadcrumb.svelte';
 	import Input from '$lib/components/ui/Input.svelte';
+	import VirtualGrid from '$lib/components/ui/VirtualGrid.svelte';
 	import { Select } from '$lib/components/ui/select';
 	import { Button } from '$lib/components/ui/button';
 	import * as Pagination from '$lib/components/ui/pagination';
 	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
 	import { COMPENDIUM_TYPE_CONFIGS } from '$lib/core/constants/compendium';
-	import type { CompendiumTypeName } from '$lib/core/types/compendium';
+	import type { CompendiumItem, CompendiumTypeName } from '$lib/core/types/compendium';
 	import type { PageData } from './$types';
 
 	interface Props {
@@ -35,6 +37,7 @@
 	};
 	const SEARCH_DEBOUNCE_MS = 250;
 	const SOURCE_DEBOUNCE_MS = 250;
+	const VIRTUALIZATION_THRESHOLD = 30;
 
 	const SORT_BY_OPTIONS: SelectOption[] = [
 		{ label: 'Name', value: 'name' },
@@ -260,6 +263,30 @@
 		if (!queryClient) return;
 		prefetchCompendiumDetail(queryClient, data.type, itemKey);
 	}
+
+	function prefetchOnVisible(node: HTMLElement, itemKey: string) {
+		if (!browser || !queryClient || !('IntersectionObserver' in window)) return;
+
+		let hasPrefetched = false;
+		const observer = new IntersectionObserver(
+			(entries) => {
+				const isVisible = entries.some((entry) => entry.isIntersecting);
+				if (!isVisible || hasPrefetched) return;
+				hasPrefetched = true;
+				handleItemPrefetch(itemKey);
+				observer.disconnect();
+			},
+			{ rootMargin: '220px', threshold: 0.15 }
+		);
+
+		observer.observe(node);
+
+		return {
+			destroy() {
+				observer.disconnect();
+			}
+		};
+	}
 </script>
 
 <svelte:head>
@@ -403,17 +430,17 @@
 					</Button>
 				{/if}
 			</div>
-		{:else}
-			<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-				{#each items as item (item.key)}
+			{:else}
+				{#snippet compendiumCard(item: CompendiumItem)}
 					{@const itemData = item.data as CardItemData}
-					<SurfaceCard
-						href="/compendium/{data.type}/{item.key}"
-						class="group"
-						onmouseenter={() => handleItemPrefetch(item.key)}
-						onfocusin={() => handleItemPrefetch(item.key)}
-					>
-						<div class="p-4">
+					<div use:prefetchOnVisible={item.key} class="h-full">
+						<SurfaceCard
+							href="/compendium/{data.type}/{item.key}"
+							class="group h-full"
+							onmouseenter={() => handleItemPrefetch(item.key)}
+							onfocusin={() => handleItemPrefetch(item.key)}
+						>
+							<div class="p-4">
 							<h3
 								class="line-clamp-1 font-semibold text-[var(--color-text-primary)] transition-colors group-hover:text-accent"
 							>
@@ -432,36 +459,56 @@
 										</Badge>
 									{/if}
 									{#if itemData.school}
-										<Badge variant="outline"
-											>{getSchoolLabel(itemData.school)}</Badge
-										>
+										<Badge variant="outline">{getSchoolLabel(itemData.school)}</Badge>
 									{/if}
 								</div>
-								{:else if data.type === 'creatures' && itemData}
-									<div class="mt-3 flex flex-wrap gap-1">
-										{#if itemData.challenge_rating_text}
-											<Badge variant="solid">CR {itemData.challenge_rating_text}</Badge>
-										{/if}
-										{#if itemData.type}
-											<Badge variant="outline">{getTypeLabel(itemData.type)}</Badge>
-										{/if}
-									</div>
-								{:else if (data.type === 'classes' || data.type === 'subclasses') && itemData}
-									<div class="mt-3 flex flex-wrap gap-1">
-										{#if itemData.hit_dice}
-											<Badge variant="solid">d{itemData.hit_dice}</Badge>
-										{/if}
-									</div>
+							{:else if data.type === 'creatures' && itemData}
+								<div class="mt-3 flex flex-wrap gap-1">
+									{#if itemData.challenge_rating_text}
+										<Badge variant="solid">CR {itemData.challenge_rating_text}</Badge>
+									{/if}
+									{#if itemData.type}
+										<Badge variant="outline">{getTypeLabel(itemData.type)}</Badge>
+									{/if}
+								</div>
+							{:else if (data.type === 'classes' || data.type === 'subclasses') && itemData}
+								<div class="mt-3 flex flex-wrap gap-1">
+									{#if itemData.hit_dice}
+										<Badge variant="solid">d{itemData.hit_dice}</Badge>
+									{/if}
+								</div>
 							{/if}
 							{#if item.documentName}
 								<div class="mt-3">
 									<Badge variant="outline" class="text-xs opacity-70">{item.documentName}</Badge>
 								</div>
 							{/if}
-						</div>
-					</SurfaceCard>
-				{/each}
-			</div>
+							</div>
+						</SurfaceCard>
+					</div>
+				{/snippet}
+
+				{#if items.length >= VIRTUALIZATION_THRESHOLD}
+					<div class="h-[70vh] rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/20">
+						<VirtualGrid
+							items={items}
+							estimateRowHeight={210}
+							minCardWidth={260}
+							mobileMinCardWidth={170}
+							tabletMinCardWidth={220}
+						>
+							{#snippet children(item: CompendiumItem)}
+								{@render compendiumCard(item)}
+							{/snippet}
+						</VirtualGrid>
+					</div>
+				{:else}
+					<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+						{#each items as item (item.key)}
+							{@render compendiumCard(item)}
+						{/each}
+					</div>
+				{/if}
 
 				{#if totalPages > 1}
 					<div class="mt-8">
