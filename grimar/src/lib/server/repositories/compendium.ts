@@ -2,6 +2,7 @@ import { eq, and, sql, like, or, desc, inArray, type SQL } from 'drizzle-orm';
 import { getDb } from '../db/index';
 import { searchFtsRanked } from '../db/db-fts';
 import { compendium, type CompendiumItem, type CompendiumType } from '../db/schema';
+import { MemoryCache, getCacheTTL } from '$lib/server/utils/cache';
 
 export type { CompendiumType } from '../db/schema';
 
@@ -34,6 +35,28 @@ export interface FilterOptions {
 }
 
 const FTS_SEARCH_LIMIT = 5000;
+const COMPENDIUM_COUNTS_CACHE_KEY = 'compendium:counts:all';
+const cache = MemoryCache.getInstance();
+
+function buildListCacheKey(
+	type: CompendiumType,
+	page: number,
+	pageSize: number,
+	filters: FilterOptions
+): string {
+	const normalizedFilters = Object.entries(filters)
+		.filter(([, value]) => value !== undefined && value !== null && value !== '')
+		.sort(([a], [b]) => a.localeCompare(b));
+	return `compendium:list:${type}:${page}:${pageSize}:${JSON.stringify(normalizedFilters)}`;
+}
+
+function buildItemCacheKey(type: CompendiumType, key: string): string {
+	return `compendium:item:${type}:${key}`;
+}
+
+function invalidateCompendiumCaches(): void {
+	cache.invalidatePattern('compendium:*');
+}
 
 export async function getPaginatedItems(
 	type: CompendiumType,
@@ -49,6 +72,12 @@ export async function getPaginatedItems(
 	const pageSize = Math.min(options.pageSize ?? 50, options.maxPageSize ?? 100);
 	const offset = (page - 1) * pageSize;
 	const filters = options.filters ?? {};
+	const listCacheKey = buildListCacheKey(type, page, pageSize, filters);
+
+	const cachedResult = cache.get<PaginatedResult<CompendiumItem>>(listCacheKey);
+	if (cachedResult) {
+		return cachedResult;
+	}
 
 	let whereClause: SQL<unknown> = eq(compendium.type, type);
 	let useLikeSearchFallback = false;
@@ -153,7 +182,7 @@ export async function getPaginatedItems(
 	const total = Number(countResult[0]?.count ?? 0);
 	const totalPages = Math.ceil(total / pageSize);
 
-	return {
+	const result = {
 		items,
 		total,
 		page,
@@ -161,17 +190,29 @@ export async function getPaginatedItems(
 		totalPages,
 		hasMore: page < totalPages
 	};
+	cache.set(listCacheKey, result, getCacheTTL(filters.search ? 'search' : 'compendium'));
+	return result;
 }
 
 export async function getItem(type: CompendiumType, key: string): Promise<CompendiumItem | null> {
 	const db = await getDb();
+	const itemCacheKey = buildItemCacheKey(type, key);
+	const cachedItem = cache.get<CompendiumItem>(itemCacheKey);
+	if (cachedItem) {
+		return cachedItem;
+	}
+
 	const results = await db
 		.select()
 		.from(compendium)
 		.where(and(eq(compendium.type, type), eq(compendium.key, key)))
 		.limit(1);
 
-	return results[0] ?? null;
+	const item = results[0] ?? null;
+	if (item) {
+		cache.set(itemCacheKey, item, getCacheTTL('compendium'));
+	}
+	return item;
 }
 
 export async function searchItems(
@@ -244,9 +285,10 @@ export async function createItem(
 			...data,
 			createdAt: now,
 			updatedAt: now
-		})
-		.returning();
+			})
+			.returning();
 
+	invalidateCompendiumCaches();
 	return item;
 }
 
@@ -264,9 +306,10 @@ export async function updateItem(
 			...data,
 			updatedAt: now
 		})
-		.where(and(eq(compendium.type, type), eq(compendium.key, key)))
-		.returning();
+			.where(and(eq(compendium.type, type), eq(compendium.key, key)))
+			.returning();
 
+	invalidateCompendiumCaches();
 	return item ?? null;
 }
 
@@ -277,6 +320,7 @@ export async function deleteItem(type: CompendiumType, key: string): Promise<boo
 		.delete(compendium)
 		.where(and(eq(compendium.type, type), eq(compendium.key, key)))
 		.returning();
+	invalidateCompendiumCaches();
 	return result.length > 0;
 }
 
@@ -292,6 +336,11 @@ export async function getItemsByType(type: CompendiumType): Promise<CompendiumIt
 
 export async function getTypeCounts(): Promise<Record<string, number>> {
 	const db = await getDb();
+	const cachedCounts = cache.get<Record<string, number>>(COMPENDIUM_COUNTS_CACHE_KEY);
+	if (cachedCounts) {
+		return cachedCounts;
+	}
+
 	const results = await db
 		.select({
 			type: compendium.type,
@@ -328,6 +377,7 @@ export async function getTypeCounts(): Promise<Record<string, number>> {
 	counts.classes = Number(baseClasses[0]?.count ?? 0);
 	counts.subclasses = Number(subclasses[0]?.count ?? 0);
 
+	cache.set(COMPENDIUM_COUNTS_CACHE_KEY, counts, getCacheTTL('compendium'));
 	return counts;
 }
 
@@ -357,12 +407,14 @@ export async function getDistinctValues(
 export async function clearType(type: CompendiumType): Promise<number> {
 	const db = await getDb();
 	const result = await db.delete(compendium).where(eq(compendium.type, type)).returning();
+	invalidateCompendiumCaches();
 	return result.length;
 }
 
 export async function clearSource(source: string): Promise<number> {
 	const db = await getDb();
 	const result = await db.delete(compendium).where(eq(compendium.source, source)).returning();
+	invalidateCompendiumCaches();
 	return result.length;
 }
 
@@ -381,6 +433,7 @@ export async function bulkInsert(
 	}));
 
 	const result = await db.insert(compendium).values(itemsWithTimestamps).returning();
+	invalidateCompendiumCaches();
 	return result.length;
 }
 
@@ -411,9 +464,10 @@ export async function upsertItem(
 				publisherName: data.publisherName,
 				updatedAt: now
 			}
-		})
-		.returning();
+			})
+			.returning();
 
+	invalidateCompendiumCaches();
 	return item;
 }
 
@@ -459,6 +513,7 @@ export async function upsertItems(
 		totalUpserted += result.length;
 	}
 
+	invalidateCompendiumCaches();
 	return totalUpserted;
 }
 
