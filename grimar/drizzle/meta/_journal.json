@@ -15,6 +15,13 @@
       "when": 1771695965776,
       "tag": "0001_careful_midnight",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1772668800000,
+      "tag": "0002_jolly_performance_indexes",
+      "breakpoints": true
     }
   ]
 }
