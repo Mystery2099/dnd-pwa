@@ -36,7 +36,11 @@ vi.mock('$lib/server/db/schema', () => ({
 }));
 
 // Helper to create mock event
-function createMockEvent(urlStr: string, headers: Record<string, string> = {}) {
+function createMockEvent(
+	urlStr: string,
+	headers: Record<string, string> = {},
+	cookies: Record<string, string> = {}
+) {
 	return {
 		url: new URL(urlStr),
 		request: {
@@ -45,7 +49,7 @@ function createMockEvent(urlStr: string, headers: Record<string, string> = {}) {
 			}
 		},
 		cookies: {
-			get: vi.fn().mockReturnValue(null),
+			get: vi.fn((key: string) => cookies[key] || null),
 			set: vi.fn(),
 			delete: vi.fn(),
 			serialize: vi.fn()
@@ -58,8 +62,9 @@ describe('AuthHandler', () => {
 	beforeEach(async () => {
 		vi.resetAllMocks();
 
-		// Mock development mode to be false for this test
+		// Keep production-like process env defaults for session cookie behavior.
 		vi.stubEnv('NODE_ENV', 'production');
+		vi.stubEnv('DEV_TEST_AUTH_BYPASS', 'false');
 
 		const { getDb } = await import('$lib/server/db');
 		(getDb as any).mockResolvedValue(mockDb);
@@ -76,6 +81,29 @@ describe('AuthHandler', () => {
 	});
 
 	describe('handleAuth', () => {
+		it('does not allow test cookie bypass unless explicitly enabled', async () => {
+			const event = createMockEvent('http://test.com/dashboard', {}, { 'test-user': 'test-dm' });
+			const resolve = vi.fn().mockResolvedValue(new Response('ok'));
+
+			const response = await handleAuth({ event, resolve });
+
+			expect(event.locals.user).toBeUndefined();
+			expect(resolve).not.toHaveBeenCalled();
+			expect(response.status).toBe(302);
+		});
+
+		it('allows test cookie bypass when explicitly enabled', async () => {
+			vi.stubEnv('DEV_TEST_AUTH_BYPASS', 'true');
+			const event = createMockEvent('http://test.com/dashboard', {}, { 'test-user': 'test-dm' });
+			const resolve = vi.fn().mockResolvedValue(new Response('ok'));
+
+			await handleAuth({ event, resolve });
+
+			expect(event.locals.user).toBeDefined();
+			expect(event.locals.user.username).toBe('test-dm');
+			expect(resolve).toHaveBeenCalled();
+		});
+
 		it('should extract user from X-Authentik-Username header', async () => {
 			const event = createMockEvent('http://test.com/', { 'X-Authentik-Username': 'testuser' });
 			const resolve = vi.fn().mockResolvedValue(new Response('ok'));

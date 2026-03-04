@@ -34,7 +34,8 @@ export default defineConfig({
 		reuseExistingServer: !process.env.CI,
 		timeout: 120000,
 		env: {
-			VITE_MOCK_USER: 'test-dm'
+			VITE_MOCK_USER: 'test-dm',
+			DEV_TEST_AUTH_BYPASS: 'true'
 		}
 	},
 	timeout: 60000,

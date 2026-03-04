@@ -15,6 +15,10 @@ const ADMIN_GROUPS = (import.meta.env.ADMIN_GROUPS || '')
 	.map((g) => g.trim().toLowerCase())
 	.filter(Boolean);
 
+function isDevTestAuthBypassEnabled(): boolean {
+	return import.meta.env.DEV_TEST_AUTH_BYPASS === 'true';
+}
+
 function getUserRole(groups: string[]): 'user' | 'admin' {
 	if (groups.length === 0) return 'user';
 	const lowerGroups = groups.map((g) => g.toLowerCase());
@@ -45,13 +49,13 @@ export const handleAuth: Handle = async ({ event, resolve }) => {
 	const isDevMode = import.meta.env.DEV;
 	const path = event.url.pathname;
 
-	// Development: E2E test authentication via header or cookie
-	if (isDevMode) {
+	// Development-only test bypass: explicit opt-in to avoid accidental auth leakage.
+	if (isDevMode && isDevTestAuthBypassEnabled()) {
 		const testUser =
 			event.request.headers.get('X-Authentik-Username') || event.cookies.get('test-user');
-		if (testUser || path.startsWith('/api/')) {
+		if (testUser) {
 			const groups = getAuthentikGroups(event.request.headers);
-			event.locals.user = createAuthUser(testUser || 'test-dm', groups);
+			event.locals.user = createAuthUser(testUser, groups);
 			return resolve(event);
 		}
 	}
