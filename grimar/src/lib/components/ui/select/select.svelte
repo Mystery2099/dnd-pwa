@@ -32,16 +32,17 @@
 	}: Props = $props();
 
 	const selectedOption = $derived(options.find((option) => option.value === value));
-
-	// Trigger onchange when value changes
-	$effect(() => {
-		if (value !== undefined && onchange) {
-			onchange(value);
-		}
-	});
 </script>
 
-<SelectPrimitive.Root {type} bind:value {...restProps}>
+<SelectPrimitive.Root
+	{type}
+	bind:value
+	onValueChange={(nextValue) => {
+		value = nextValue;
+		onchange?.(nextValue);
+	}}
+	{...restProps}
+>
 	<SelectPrimitive.Trigger
 		class={cn(
 			'flex h-10 w-full items-center justify-between rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] px-4 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] hover:border-[var(--color-border-hover)] focus:ring-2 focus:ring-[var(--color-accent)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg-canvas)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50',

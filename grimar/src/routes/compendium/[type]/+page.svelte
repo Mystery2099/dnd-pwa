@@ -1,7 +1,14 @@
 <script lang="ts">
+	import { replaceState } from '$app/navigation';
+	import { onDestroy, onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { createCompendiumQuery } from '$lib/core/client/queries';
 	import Badge from '$lib/components/ui/Badge.svelte';
+	import Breadcrumb from '$lib/components/ui/Breadcrumb.svelte';
+	import Input from '$lib/components/ui/Input.svelte';
+	import { Select } from '$lib/components/ui/select';
+	import { Button } from '$lib/components/ui/button';
+	import * as Pagination from '$lib/components/ui/pagination';
 	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
 	import { COMPENDIUM_TYPE_CONFIGS } from '$lib/core/constants/compendium';
 	import type { CompendiumTypeName } from '$lib/core/types/compendium';
@@ -19,6 +26,82 @@
 		hit_dice?: string | number;
 	};
 
+	type SortBy = 'name' | 'createdAt' | 'updatedAt';
+	type SortOrder = 'asc' | 'desc';
+	type SelectOption = {
+		label: string;
+		value: string;
+	};
+	const SEARCH_DEBOUNCE_MS = 250;
+
+	const SORT_BY_OPTIONS: SelectOption[] = [
+		{ label: 'Name', value: 'name' },
+		{ label: 'Created', value: 'createdAt' },
+		{ label: 'Updated', value: 'updatedAt' }
+	];
+	const SORT_ORDER_OPTIONS: SelectOption[] = [
+		{ label: 'Ascending', value: 'asc' },
+		{ label: 'Descending', value: 'desc' }
+	];
+	const SPELL_LEVEL_OPTIONS: SelectOption[] = [
+		{ label: 'Any Level', value: 'all' },
+		{ label: 'Cantrip (0)', value: '0' },
+		{ label: 'Level 1', value: '1' },
+		{ label: 'Level 2', value: '2' },
+		{ label: 'Level 3', value: '3' },
+		{ label: 'Level 4', value: '4' },
+		{ label: 'Level 5', value: '5' },
+		{ label: 'Level 6', value: '6' },
+		{ label: 'Level 7', value: '7' },
+		{ label: 'Level 8', value: '8' },
+		{ label: 'Level 9', value: '9' }
+	];
+	const SPELL_SCHOOL_OPTIONS: SelectOption[] = [
+		{ label: 'Any School', value: 'all' },
+		{ label: 'Abjuration', value: 'abjuration' },
+		{ label: 'Conjuration', value: 'conjuration' },
+		{ label: 'Divination', value: 'divination' },
+		{ label: 'Enchantment', value: 'enchantment' },
+		{ label: 'Evocation', value: 'evocation' },
+		{ label: 'Illusion', value: 'illusion' },
+		{ label: 'Necromancy', value: 'necromancy' },
+		{ label: 'Transmutation', value: 'transmutation' }
+	];
+	const CREATURE_TYPE_OPTIONS: SelectOption[] = [
+		{ label: 'Any Type', value: 'all' },
+		{ label: 'Aberration', value: 'aberration' },
+		{ label: 'Beast', value: 'beast' },
+		{ label: 'Celestial', value: 'celestial' },
+		{ label: 'Construct', value: 'construct' },
+		{ label: 'Dragon', value: 'dragon' },
+		{ label: 'Elemental', value: 'elemental' },
+		{ label: 'Fey', value: 'fey' },
+		{ label: 'Fiend', value: 'fiend' },
+		{ label: 'Giant', value: 'giant' },
+		{ label: 'Humanoid', value: 'humanoid' },
+		{ label: 'Monstrosity', value: 'monstrosity' },
+		{ label: 'Ooze', value: 'ooze' },
+		{ label: 'Plant', value: 'plant' },
+		{ label: 'Undead', value: 'undead' }
+	];
+	const CHALLENGE_RATING_OPTIONS: SelectOption[] = [
+		{ label: 'Any CR', value: 'all' },
+		{ label: '0', value: '0' },
+		{ label: '1/8', value: '0.125' },
+		{ label: '1/4', value: '0.25' },
+		{ label: '1/2', value: '0.5' },
+		{ label: '1', value: '1' },
+		{ label: '2', value: '2' },
+		{ label: '3', value: '3' },
+		{ label: '4', value: '4' },
+		{ label: '5', value: '5' },
+		{ label: '6', value: '6' },
+		{ label: '7', value: '7' },
+		{ label: '8', value: '8' },
+		{ label: '9', value: '9' },
+		{ label: '10+', value: '10' }
+	];
+
 	function getSchoolLabel(school: CardItemData['school']): string | undefined {
 		if (!school) return undefined;
 		if (typeof school === 'string') return school;
@@ -33,12 +116,17 @@
 
 	let { data }: Props = $props();
 
-	let searchQuery = $state($page.url.searchParams.get('search') ?? '');
+	const initialSearchQuery = $page.url.searchParams.get('search') ?? '';
+	let searchInput = $state(initialSearchQuery);
+	let searchQuery = $state(initialSearchQuery);
 	let currentPage = $state(Number($page.url.searchParams.get('page')) || 1);
-	let sortBy = $state(
-		($page.url.searchParams.get('sortBy') as 'name' | 'createdAt' | 'updatedAt') ?? 'name'
-	);
-	let sortOrder = $state(($page.url.searchParams.get('sortOrder') as 'asc' | 'desc') ?? 'asc');
+	let sortBy = $state(($page.url.searchParams.get('sortBy') as SortBy) ?? 'name');
+	let sortOrder = $state(($page.url.searchParams.get('sortOrder') as SortOrder) ?? 'asc');
+	let sourceFilter = $state($page.url.searchParams.get('source') ?? '');
+	let creatureTypeFilter = $state($page.url.searchParams.get('creatureType') ?? 'all');
+	let spellLevelFilter = $state($page.url.searchParams.get('spellLevel') ?? 'all');
+	let spellSchoolFilter = $state($page.url.searchParams.get('spellSchool') ?? 'all');
+	let challengeRatingFilter = $state($page.url.searchParams.get('challengeRating') ?? 'all');
 
 	let config = $derived(COMPENDIUM_TYPE_CONFIGS[data.type]);
 	let query = $derived(
@@ -47,48 +135,106 @@
 			page: currentPage,
 			sortBy,
 			sortOrder,
-			creatureType: $page.url.searchParams.get('creatureType') ?? undefined,
-			spellLevel: $page.url.searchParams.get('spellLevel') ?? undefined,
-			spellSchool: $page.url.searchParams.get('spellSchool') ?? undefined,
-			challengeRating: $page.url.searchParams.get('challengeRating') ?? undefined
+			source: sourceFilter || undefined,
+			includeSubclasses: data.type === 'classes' ? false : data.type === 'subclasses' ? true : undefined,
+			onlySubclasses: data.type === 'subclasses' ? true : undefined,
+			creatureType: data.type === 'creatures' && creatureTypeFilter !== 'all' ? creatureTypeFilter : undefined,
+			spellLevel: data.type === 'spells' && spellLevelFilter !== 'all' ? spellLevelFilter : undefined,
+			spellSchool: data.type === 'spells' && spellSchoolFilter !== 'all' ? spellSchoolFilter : undefined,
+			challengeRating:
+				data.type === 'creatures' && challengeRatingFilter !== 'all' ? challengeRatingFilter : undefined
 		})
 	);
 	let items = $derived(query.data?.items ?? []);
 	let totalItems = $derived(query.data?.total ?? 0);
 	let totalPages = $derived(query.data?.totalPages ?? 1);
+	let pageSize = $derived(query.data?.pageSize ?? 50);
 	let isLoading = $derived(query.isFetching);
+	let isMounted = $state(false);
+	let searchDebounceTimeout: ReturnType<typeof setTimeout> | undefined;
+
+	onMount(() => {
+		isMounted = true;
+	});
+
+	onDestroy(() => {
+		if (searchDebounceTimeout) clearTimeout(searchDebounceTimeout);
+	});
 
 	function updateUrl() {
+		if (!isMounted) return;
+
 		const parts: string[] = [];
 		if (searchQuery) parts.push(`search=${encodeURIComponent(searchQuery)}`);
 		if (currentPage > 1) parts.push(`page=${currentPage}`);
 		if (sortBy !== 'name') parts.push(`sortBy=${sortBy}`);
 		if (sortOrder !== 'asc') parts.push(`sortOrder=${sortOrder}`);
-		const newUrl = parts.length > 0 ? `?${parts.join('&')}` : window.location.pathname;
-		window.history.replaceState({}, '', newUrl);
+		if (sourceFilter) parts.push(`source=${encodeURIComponent(sourceFilter)}`);
+		if (data.type === 'creatures' && creatureTypeFilter !== 'all') {
+			parts.push(`creatureType=${encodeURIComponent(creatureTypeFilter)}`);
+		}
+		if (data.type === 'spells' && spellLevelFilter !== 'all') {
+			parts.push(`spellLevel=${encodeURIComponent(spellLevelFilter)}`);
+		}
+		if (data.type === 'spells' && spellSchoolFilter !== 'all') {
+			parts.push(`spellSchool=${encodeURIComponent(spellSchoolFilter)}`);
+		}
+		if (data.type === 'creatures' && challengeRatingFilter !== 'all') {
+			parts.push(`challengeRating=${encodeURIComponent(challengeRatingFilter)}`);
+		}
+		const newUrl = parts.length > 0 ? `${$page.url.pathname}?${parts.join('&')}` : $page.url.pathname;
+		const currentUrl = `${$page.url.pathname}${$page.url.search}`;
+		if (newUrl === currentUrl) return;
+		replaceState(newUrl, $page.state);
 	}
 
 	function handleSearch(e: Event) {
 		const target = e.target as HTMLInputElement;
-		searchQuery = target.value;
+		searchInput = target.value;
+		if (searchDebounceTimeout) clearTimeout(searchDebounceTimeout);
+		searchDebounceTimeout = setTimeout(() => {
+			searchQuery = searchInput;
+			currentPage = 1;
+			updateUrl();
+		}, SEARCH_DEBOUNCE_MS);
+	}
+
+	function handleSortByChange(nextSortBy: string) {
+		sortBy = nextSortBy as SortBy;
 		currentPage = 1;
 		updateUrl();
 	}
 
-	function handleSort(by: 'name' | 'createdAt' | 'updatedAt') {
-		if (sortBy === by) {
-			sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
-		} else {
-			sortBy = by;
-			sortOrder = 'asc';
-		}
+	function handleSortOrderChange(nextSortOrder: string) {
+		sortOrder = nextSortOrder as SortOrder;
+		currentPage = 1;
 		updateUrl();
 	}
 
-	function goToPage(page: number) {
-		currentPage = Math.max(1, Math.min(page, totalPages));
+	function applyFilters() {
+		currentPage = 1;
+		updateUrl();
+	}
+
+	function handlePageChange(nextPage: number) {
+		currentPage = nextPage;
 		updateUrl();
 		window.scrollTo({ top: 0, behavior: 'smooth' });
+	}
+
+	function clearFilters() {
+		if (searchDebounceTimeout) clearTimeout(searchDebounceTimeout);
+		searchInput = '';
+		searchQuery = '';
+		sourceFilter = '';
+		creatureTypeFilter = 'all';
+		spellLevelFilter = 'all';
+		spellSchoolFilter = 'all';
+		challengeRatingFilter = 'all';
+		sortBy = 'name';
+		sortOrder = 'asc';
+		currentPage = 1;
+		updateUrl();
 	}
 </script>
 
@@ -100,17 +246,12 @@
 	class="min-h-screen bg-gradient-to-b from-[var(--color-bg-primary)] to-[var(--color-bg-secondary)]"
 >
 	<div class="mx-auto max-w-7xl px-4 py-8">
-		<div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-			<div>
-				<a
-					href="/compendium"
-					class="text-sm text-[var(--color-text-muted)] transition-colors hover:text-accent"
-				>
-					← Back to Compendium
-				</a>
-				<h1
-					class="mt-2 flex items-center gap-3 text-3xl font-bold text-[var(--color-text-primary)]"
-				>
+			<div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+				<div>
+					<Breadcrumb items={[{ label: 'Compendium', href: '/compendium' }, { label: config.plural }]} />
+					<h1
+						class="mt-2 flex items-center gap-3 text-3xl font-bold text-[var(--color-text-primary)]"
+					>
 					<span class="text-4xl">{config.icon}</span>
 					{config.plural}
 				</h1>
@@ -121,40 +262,99 @@
 			</div>
 		</div>
 
-		<div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-			<div class="relative max-w-md flex-1">
-				<input
-					type="text"
-					placeholder="Search {config.plural.toLowerCase()}..."
-					value={searchQuery}
-					oninput={handleSearch}
-					class="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] px-4 py-2 pl-10 text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:border-accent focus:ring-1 focus:ring-accent focus:outline-none"
-				/>
-				<svg
-					class="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 text-[var(--color-text-muted)]"
-					fill="none"
-					stroke="currentColor"
-					viewBox="0 0 24 24"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+		<div class="mb-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/60 p-4">
+			<div class="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+				<div class="relative md:col-span-2 lg:col-span-2">
+					<Input
+						type="text"
+						placeholder="Search {config.plural.toLowerCase()}..."
+						value={searchInput}
+						oninput={handleSearch}
+						class="w-full pl-10"
 					/>
-				</svg>
+					<svg
+						class="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 text-[var(--color-text-muted)]"
+						fill="none"
+						stroke="currentColor"
+						viewBox="0 0 24 24"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+						/>
+					</svg>
+				</div>
+
+				<Select
+					type="single"
+					value={sortBy}
+					options={SORT_BY_OPTIONS}
+					placeholder="Sort by"
+					onchange={handleSortByChange}
+				/>
+				<Select
+					type="single"
+					value={sortOrder}
+					options={SORT_ORDER_OPTIONS}
+					placeholder="Sort order"
+					onchange={handleSortOrderChange}
+				/>
+
+				<Input
+					type="text"
+					placeholder="Source (e.g. open5e)"
+					value={sourceFilter}
+					oninput={(e) => {
+						sourceFilter = (e.target as HTMLInputElement).value;
+						applyFilters();
+					}}
+				/>
+
+				{#if data.type === 'spells'}
+					<Select
+						type="single"
+						value={spellLevelFilter}
+						options={SPELL_LEVEL_OPTIONS}
+						placeholder="Spell level"
+						onchange={() => applyFilters()}
+					/>
+					<Select
+						type="single"
+						value={spellSchoolFilter}
+						options={SPELL_SCHOOL_OPTIONS}
+						placeholder="Spell school"
+						onchange={() => applyFilters()}
+					/>
+				{/if}
+
+				{#if data.type === 'creatures'}
+					<Select
+						type="single"
+						value={creatureTypeFilter}
+						options={CREATURE_TYPE_OPTIONS}
+						placeholder="Creature type"
+						onchange={() => applyFilters()}
+					/>
+					<Select
+						type="single"
+						value={challengeRatingFilter}
+						options={CHALLENGE_RATING_OPTIONS}
+						placeholder="Challenge rating"
+						onchange={() => applyFilters()}
+					/>
+				{/if}
 			</div>
 
-			<div class="flex gap-2">
-				<button
-					onclick={() => handleSort('name')}
-					class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] px-3 py-2 text-sm text-[var(--color-text-secondary)] transition-colors hover:border-accent hover:text-accent {sortBy ===
-					'name'
-						? 'border-accent text-accent'
-						: ''}"
+			<div class="mt-3 flex justify-end">
+				<Button
+					onclick={clearFilters}
+					variant="outline"
+					size="sm"
 				>
-					Name {sortBy === 'name' ? (sortOrder === 'asc' ? '↑' : '↓') : ''}
-				</button>
+					Reset filters
+				</Button>
 			</div>
 		</div>
 
@@ -174,16 +374,12 @@
 					{searchQuery ? `No results for "${searchQuery}"` : 'No items available in this category'}
 				</p>
 				{#if searchQuery}
-					<button
-						onclick={() => {
-							searchQuery = '';
-							currentPage = 1;
-							updateUrl();
-						}}
-						class="mt-4 rounded-lg bg-accent px-4 py-2 text-white transition-opacity hover:opacity-90"
+					<Button
+						onclick={clearFilters}
+						class="mt-4"
 					>
-						Clear search
-					</button>
+						Reset filters
+					</Button>
 				{/if}
 			</div>
 		{:else}
@@ -215,21 +411,21 @@
 										>
 									{/if}
 								</div>
-							{:else if data.type === 'creatures' && itemData}
-								<div class="mt-3 flex flex-wrap gap-1">
-									{#if itemData.challenge_rating_text}
-										<Badge variant="solid">CR {itemData.challenge_rating_text}</Badge>
-									{/if}
-									{#if itemData.type}
-										<Badge variant="outline">{getTypeLabel(itemData.type)}</Badge>
-									{/if}
-								</div>
-							{:else if data.type === 'classes' && itemData}
-								<div class="mt-3 flex flex-wrap gap-1">
-									{#if itemData.hit_dice}
-										<Badge variant="solid">d{itemData.hit_dice}</Badge>
-									{/if}
-								</div>
+								{:else if data.type === 'creatures' && itemData}
+									<div class="mt-3 flex flex-wrap gap-1">
+										{#if itemData.challenge_rating_text}
+											<Badge variant="solid">CR {itemData.challenge_rating_text}</Badge>
+										{/if}
+										{#if itemData.type}
+											<Badge variant="outline">{getTypeLabel(itemData.type)}</Badge>
+										{/if}
+									</div>
+								{:else if (data.type === 'classes' || data.type === 'subclasses') && itemData}
+									<div class="mt-3 flex flex-wrap gap-1">
+										{#if itemData.hit_dice}
+											<Badge variant="solid">d{itemData.hit_dice}</Badge>
+										{/if}
+									</div>
 							{/if}
 							{#if item.documentName}
 								<div class="mt-3">
@@ -241,41 +437,42 @@
 				{/each}
 			</div>
 
-			{#if totalPages > 1}
-				<div class="mt-8 flex items-center justify-center gap-2">
-					<button
-						onclick={() => goToPage(currentPage - 1)}
-						disabled={currentPage === 1}
-						class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] px-3 py-2 text-sm text-[var(--color-text-secondary)] transition-colors hover:border-accent disabled:opacity-50 disabled:hover:border-[var(--color-border)]"
-					>
-						Previous
-					</button>
+				{#if totalPages > 1}
+					<div class="mt-8">
+						<Pagination.Pagination
+							count={totalItems}
+							perPage={pageSize}
+							siblingCount={1}
+							bind:page={currentPage}
+							onPageChange={handlePageChange}
+						>
+							{#snippet children({ pages, currentPage })}
+								<Pagination.PaginationContent>
+									<Pagination.PaginationItem>
+										<Pagination.PaginationPrevious />
+									</Pagination.PaginationItem>
 
-					<div class="flex items-center gap-1">
-						{#each Array(Math.min(5, totalPages)) as _, i}
-							{@const pageNum = Math.max(1, Math.min(currentPage - 2 + i, totalPages - 4 + i))}
-							{#if pageNum >= 1 && pageNum <= totalPages}
-								<button
-									onclick={() => goToPage(pageNum)}
-									class="min-w-[2.5rem] rounded-lg border {currentPage === pageNum
-										? 'border-accent bg-accent/20 text-accent'
-										: 'border-[var(--color-border)] bg-[var(--color-bg-card)] text-[var(--color-text-secondary)] hover:border-accent'} px-3 py-2 text-sm transition-colors"
-								>
-									{pageNum}
-								</button>
-							{/if}
-						{/each}
+									{#each pages as pageItem (pageItem.key)}
+										<Pagination.PaginationItem>
+											{#if pageItem.type === 'ellipsis'}
+												<Pagination.PaginationEllipsis />
+											{:else}
+												<Pagination.PaginationLink
+													page={pageItem}
+													isActive={currentPage === pageItem.value}
+												/>
+											{/if}
+										</Pagination.PaginationItem>
+									{/each}
+
+									<Pagination.PaginationItem>
+										<Pagination.PaginationNext />
+									</Pagination.PaginationItem>
+								</Pagination.PaginationContent>
+							{/snippet}
+						</Pagination.Pagination>
 					</div>
-
-					<button
-						onclick={() => goToPage(currentPage + 1)}
-						disabled={currentPage === totalPages}
-						class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] px-3 py-2 text-sm text-[var(--color-text-secondary)] transition-colors hover:border-accent disabled:opacity-50 disabled:hover:border-[var(--color-border)]"
-					>
-						Next
-					</button>
-				</div>
-			{/if}
+				{/if}
 		{/if}
 	</div>
 </div>

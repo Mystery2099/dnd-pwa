@@ -1,6 +1,7 @@
-<script lang="ts">
-	import Badge from '$lib/components/ui/Badge.svelte';
-	import { marked } from 'marked';
+	<script lang="ts">
+		import Badge from '$lib/components/ui/Badge.svelte';
+		import Breadcrumb from '$lib/components/ui/Breadcrumb.svelte';
+		import { marked } from 'marked';
 	import DOMPurify from 'isomorphic-dompurify';
 	import type { PageData } from './$types';
 	import {
@@ -42,15 +43,16 @@
 </svelte:head>
 
 <div class="min-h-screen bg-linear-to-b from-(--color-bg-primary) to-(--color-bg-secondary)">
-	<div class="mx-auto max-w-4xl px-4 py-8">
-		<div class="mb-6">
-			<a
-				href="/compendium/{data.type}"
-				class="text-sm text-[var(--color-text-muted)] transition-colors hover:text-accent"
-			>
-				← Back to {data.config.plural}
-			</a>
-		</div>
+		<div class="mx-auto max-w-4xl px-4 py-8">
+			<div class="mb-6">
+				<Breadcrumb
+					items={[
+						{ label: 'Compendium', href: '/compendium' },
+						{ label: data.config.plural, href: `/compendium/${data.type}` },
+						{ label: item.name }
+					]}
+				/>
+			</div>
 
 		<div class="card-crystal overflow-hidden">
 			<div
