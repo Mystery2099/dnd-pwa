@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { getPaginatedItems, searchItems } from '$lib/server/repositories/compendium';
+import { getPaginatedItems } from '$lib/server/repositories/compendium';
 import { COMPENDIUM_TYPES } from '$lib/server/db/schema';
 import type { CompendiumType } from '$lib/server/db/schema';
 
@@ -23,6 +23,9 @@ export const GET: RequestHandler = async ({ url }) => {
 	const sortBy = normalizeSortBy(url.searchParams.get('sortBy'));
 	const sortOrder = (url.searchParams.get('sortOrder') as 'asc' | 'desc') || 'asc';
 	const getAll = url.searchParams.get('all') === 'true';
+	const effectivePage = getAll ? 1 : page;
+	const effectiveLimit = getAll ? 5000 : limit;
+	const effectiveMaxPageSize = getAll ? 5000 : 100;
 
 	const creatureType = url.searchParams.get('creatureType') || undefined;
 	const spellLevel = url.searchParams.get('spellLevel') || undefined;
@@ -43,26 +46,12 @@ export const GET: RequestHandler = async ({ url }) => {
 		return json({ error: 'Type parameter is required' }, { status: 400 });
 	}
 
-	if (search) {
-		const results = await searchItems(type as CompendiumType, search, {
-			limit,
-			includeSubclasses: type === 'classes' ? includeSubclassesFilter : undefined,
-			onlySubclasses: type === 'classes' ? onlySubclassesFilter : undefined
-		});
-		return json({
-			items: results,
-			total: results.length,
-			page: 1,
-			pageSize: getAll ? results.length : limit,
-			totalPages: 1,
-			hasMore: false
-		});
-	}
-
 	const result = await getPaginatedItems(type as CompendiumType, {
-		page,
-		pageSize: limit,
+		page: effectivePage,
+		pageSize: effectiveLimit,
+		maxPageSize: effectiveMaxPageSize,
 		filters: {
+			search,
 			gamesystem,
 			document,
 			source,

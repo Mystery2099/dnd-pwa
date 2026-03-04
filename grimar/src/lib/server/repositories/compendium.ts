@@ -1,5 +1,6 @@
 import { eq, and, sql, like, or, desc, inArray, type SQL } from 'drizzle-orm';
 import { getDb } from '../db/index';
+import { searchFtsRanked } from '../db/db-fts';
 import { compendium, type CompendiumItem, type CompendiumType } from '../db/schema';
 
 export type { CompendiumType } from '../db/schema';
@@ -32,28 +33,34 @@ export interface FilterOptions {
 	challengeRating?: number;
 }
 
+const FTS_SEARCH_LIMIT = 5000;
+
 export async function getPaginatedItems(
 	type: CompendiumType,
 	options: {
 		page?: number;
 		pageSize?: number;
+		maxPageSize?: number;
 		filters?: FilterOptions;
 	}
 ): Promise<PaginatedResult<CompendiumItem>> {
 	const db = await getDb();
 	const page = options.page ?? 1;
-	const pageSize = Math.min(options.pageSize ?? 50, 100);
+	const pageSize = Math.min(options.pageSize ?? 50, options.maxPageSize ?? 100);
 	const offset = (page - 1) * pageSize;
 	const filters = options.filters ?? {};
 
 	let whereClause: SQL<unknown> = eq(compendium.type, type);
+	let useLikeSearchFallback = false;
+	let ftsMatchedKeys: string[] | null = null;
 
 	if (filters.search) {
-		const searchTerm = `%${filters.search}%`;
-		whereClause = and(
-			whereClause,
-			or(like(compendium.name, searchTerm), like(compendium.description, searchTerm))
-		)!;
+		try {
+			const rankedMatches = await searchFtsRanked(filters.search, FTS_SEARCH_LIMIT, db);
+			ftsMatchedKeys = rankedMatches.map((match) => match.key);
+		} catch {
+			useLikeSearchFallback = true;
+		}
 	}
 
 	if (filters.gamesystem) {
@@ -102,6 +109,27 @@ export async function getPaginatedItems(
 			whereClause,
 			sql`json_extract(${compendium.data}, '$.challenge_rating_decimal') = ${filters.challengeRating}`
 		)!;
+	}
+
+	if (filters.search) {
+		if (useLikeSearchFallback) {
+			const searchTerm = `%${filters.search}%`;
+			whereClause = and(
+				whereClause,
+				or(like(compendium.name, searchTerm), like(compendium.description, searchTerm))
+			)!;
+		} else if (ftsMatchedKeys && ftsMatchedKeys.length > 0) {
+			whereClause = and(whereClause, inArray(compendium.key, ftsMatchedKeys))!;
+		} else {
+			return {
+				items: [],
+				total: 0,
+				page,
+				pageSize,
+				totalPages: 0,
+				hasMore: false
+			};
+		}
 	}
 
 	const sortBy = filters.sortBy ?? 'name';
