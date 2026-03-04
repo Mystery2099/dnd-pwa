@@ -64,6 +64,7 @@ export async function getPaginatedItems(
 		page?: number;
 		pageSize?: number;
 		maxPageSize?: number;
+		skipTotalCount?: boolean;
 		filters?: FilterOptions;
 	}
 ): Promise<PaginatedResult<CompendiumItem>> {
@@ -171,15 +172,24 @@ export async function getPaginatedItems(
 				: compendium.name;
 	const orderBy = sortOrder === 'desc' ? desc(sortColumn) : sortColumn;
 
-	const [items, countResult] = await Promise.all([
-		db.select().from(compendium).where(whereClause).orderBy(orderBy).limit(pageSize).offset(offset),
-		db
-			.select({ count: sql<number>`count(*)` })
-			.from(compendium)
-			.where(whereClause)
-	]);
+	const items = await db
+		.select()
+		.from(compendium)
+		.where(whereClause)
+		.orderBy(orderBy)
+		.limit(pageSize)
+		.offset(offset);
 
-	const total = Number(countResult[0]?.count ?? 0);
+	const total = options.skipTotalCount
+		? items.length
+		: Number(
+				(
+					await db
+						.select({ count: sql<number>`count(*)` })
+						.from(compendium)
+						.where(whereClause)
+				)[0]?.count ?? 0
+			);
 	const totalPages = Math.ceil(total / pageSize);
 
 	const result = {

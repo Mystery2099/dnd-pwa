@@ -67,6 +67,7 @@ export const GET: RequestHandler = async ({ url }) => {
 		page: effectivePage,
 		pageSize: effectiveLimit,
 		maxPageSize: effectiveMaxPageSize,
+		skipTotalCount: getAll,
 		filters: {
 			search,
 			gamesystem,

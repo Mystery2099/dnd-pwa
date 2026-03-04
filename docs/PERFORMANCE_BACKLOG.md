@@ -25,3 +25,4 @@ Branch: `performance-improvements`
 
 - [x] Cache distinct compendium metadata lookups (`gamesystem`, `document`, `publisher`, `source`) in repository read paths.
 - [x] Add API query telemetry headers (`Server-Timing`, query-duration bucket) for compendium endpoints.
+- [x] Skip `COUNT(*)` for `all=true` compendium API reads to reduce DB work on full-list preloads.
