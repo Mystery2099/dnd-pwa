@@ -385,6 +385,12 @@ export async function getDistinctValues(
 	field: 'gamesystemKey' | 'documentKey' | 'publisherKey' | 'source',
 	type?: CompendiumType
 ): Promise<string[]> {
+	const distinctCacheKey = `compendium:distinct:${field}:${type ?? 'all'}`;
+	const cachedValues = cache.get<string[]>(distinctCacheKey);
+	if (cachedValues) {
+		return cachedValues;
+	}
+
 	const db = await getDb();
 	const column = compendium[field];
 
@@ -401,7 +407,11 @@ export async function getDistinctValues(
 	}
 
 	const results = await query.orderBy(column);
-	return results.map((r: { value: string | null }) => r.value).filter((v): v is string => v !== null);
+	const values = results
+		.map((r: { value: string | null }) => r.value)
+		.filter((v): v is string => v !== null);
+	cache.set(distinctCacheKey, values, getCacheTTL('compendium'));
+	return values;
 }
 
 export async function clearType(type: CompendiumType): Promise<number> {
