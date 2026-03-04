@@ -17,6 +17,7 @@ export const GET: RequestHandler = async ({ url }) => {
 	const search = url.searchParams.get('search') || undefined;
 	const gamesystem = url.searchParams.get('gamesystem') || undefined;
 	const document = url.searchParams.get('document') || undefined;
+	const source = url.searchParams.get('source') || undefined;
 	const page = parseInt(url.searchParams.get('page') || '1', 10);
 	const limit = parseInt(url.searchParams.get('limit') || '50', 10);
 	const sortBy = normalizeSortBy(url.searchParams.get('sortBy'));
@@ -27,6 +28,12 @@ export const GET: RequestHandler = async ({ url }) => {
 	const spellLevel = url.searchParams.get('spellLevel') || undefined;
 	const spellSchool = url.searchParams.get('spellSchool') || undefined;
 	const challengeRating = url.searchParams.get('challengeRating') || undefined;
+	const includeSubclasses = url.searchParams.get('includeSubclasses');
+	const includeSubclassesFilter =
+		includeSubclasses === null ? undefined : includeSubclasses.toLowerCase() === 'true';
+	const onlySubclasses = url.searchParams.get('onlySubclasses');
+	const onlySubclassesFilter =
+		onlySubclasses === null ? undefined : onlySubclasses.toLowerCase() === 'true';
 
 	if (type && !COMPENDIUM_TYPES.includes(type as CompendiumType)) {
 		return json({ error: 'Invalid compendium type' }, { status: 400 });
@@ -37,7 +44,11 @@ export const GET: RequestHandler = async ({ url }) => {
 	}
 
 	if (search) {
-		const results = await searchItems(type as CompendiumType, search);
+		const results = await searchItems(type as CompendiumType, search, {
+			limit,
+			includeSubclasses: type === 'classes' ? includeSubclassesFilter : undefined,
+			onlySubclasses: type === 'classes' ? onlySubclassesFilter : undefined
+		});
 		return json({
 			items: results,
 			total: results.length,
@@ -54,6 +65,7 @@ export const GET: RequestHandler = async ({ url }) => {
 		filters: {
 			gamesystem,
 			document,
+			source,
 			sortBy,
 			sortOrder,
 			creatureType: type === 'creatures' ? creatureType : undefined,
@@ -61,13 +73,15 @@ export const GET: RequestHandler = async ({ url }) => {
 				type === 'spells' && spellLevel && !isNaN(parseInt(spellLevel, 10))
 					? parseInt(spellLevel, 10)
 					: undefined,
-			spellSchool: type === 'spells' ? spellSchool : undefined,
-			challengeRating:
-				type === 'creatures' && challengeRating && !isNaN(parseFloat(challengeRating))
-					? parseFloat(challengeRating)
-					: undefined
-		}
-	});
+				spellSchool: type === 'spells' ? spellSchool : undefined,
+				challengeRating:
+					type === 'creatures' && challengeRating && !isNaN(parseFloat(challengeRating))
+						? parseFloat(challengeRating)
+						: undefined,
+				includeSubclasses: type === 'classes' ? includeSubclassesFilter : undefined,
+				onlySubclasses: type === 'classes' ? onlySubclassesFilter : undefined
+			}
+		});
 
 	return json(result);
 };

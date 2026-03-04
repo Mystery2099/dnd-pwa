@@ -16,7 +16,15 @@ export const COMPENDIUM_TYPE_CONFIGS: Record<CompendiumTypeName, CompendiumTypeC
 		label: 'Class',
 		plural: 'Classes',
 		icon: '⚔️',
-		description: 'Character classes and subclasses',
+		description: 'Core character classes',
+		endpoint: 'classes'
+	},
+	subclasses: {
+		name: 'subclasses',
+		label: 'Subclass',
+		plural: 'Subclasses',
+		icon: '🛡️',
+		description: 'Class specializations and archetypes',
 		endpoint: 'classes'
 	},
 	classfeatures: {
@@ -361,7 +369,7 @@ export const COMPENDIUM_CATEGORIES = [
 	{
 		name: 'Character Options',
 		description: 'Build your character',
-		types: ['species', 'classes', 'backgrounds', 'feats'] as CompendiumTypeName[]
+		types: ['species', 'classes', 'subclasses', 'backgrounds', 'feats'] as CompendiumTypeName[]
 	},
 	{
 		name: 'Spells & Magic',
@@ -412,6 +420,7 @@ export const COMPENDIUM_CATEGORIES = [
 export const SEARCHABLE_TYPES: CompendiumTypeName[] = [
 	'species',
 	'classes',
+	'subclasses',
 	'backgrounds',
 	'feats',
 	'spells',

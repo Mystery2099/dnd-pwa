@@ -18,6 +18,8 @@ export interface FilterOptions {
 	gamesystem?: string;
 	document?: string;
 	source?: string;
+	includeSubclasses?: boolean;
+	onlySubclasses?: boolean;
 	sortBy?: 'name' | 'created_at' | 'updated_at';
 	sortOrder?: 'asc' | 'desc';
 	/** Creature type filter (applied via json_extract on data column) */
@@ -64,6 +66,14 @@ export async function getPaginatedItems(
 
 	if (filters.source) {
 		whereClause = and(whereClause, eq(compendium.source, filters.source))!;
+	}
+
+	if (type === 'classes') {
+		if (filters.onlySubclasses === true) {
+			whereClause = and(whereClause, sql`json_extract(${compendium.data}, '$.subclass_of') IS NOT NULL`)!;
+		} else if (filters.includeSubclasses === false) {
+			whereClause = and(whereClause, sql`json_extract(${compendium.data}, '$.subclass_of') IS NULL`)!;
+		}
 	}
 
 	if (filters.creatureType) {
@@ -139,21 +149,28 @@ export async function getItem(type: CompendiumType, key: string): Promise<Compen
 export async function searchItems(
 	type: CompendiumType,
 	query: string,
-	options?: { limit?: number }
+	options?: { limit?: number; includeSubclasses?: boolean; onlySubclasses?: boolean }
 ): Promise<CompendiumItem[]> {
 	const db = await getDb();
 	const limit = options?.limit ?? 50;
 	const searchTerm = `%${query}%`;
+	let whereClause: SQL<unknown> = and(
+		eq(compendium.type, type),
+		or(like(compendium.name, searchTerm), like(compendium.description, searchTerm))
+	)!;
+
+	if (type === 'classes') {
+		if (options?.onlySubclasses === true) {
+			whereClause = and(whereClause, sql`json_extract(${compendium.data}, '$.subclass_of') IS NOT NULL`)!;
+		} else if (options?.includeSubclasses === false) {
+			whereClause = and(whereClause, sql`json_extract(${compendium.data}, '$.subclass_of') IS NULL`)!;
+		}
+	}
 
 	const results = await db
 		.select()
 		.from(compendium)
-		.where(
-			and(
-				eq(compendium.type, type),
-				or(like(compendium.name, searchTerm), like(compendium.description, searchTerm))
-			)
-		)
+		.where(whereClause)
 		.orderBy(compendium.name)
 		.limit(limit);
 
@@ -255,7 +272,35 @@ export async function getTypeCounts(): Promise<Record<string, number>> {
 		.from(compendium)
 		.groupBy(compendium.type);
 
-	return Object.fromEntries(results.map((r: { type: string; count: number }) => [r.type, Number(r.count)]));
+	const counts = Object.fromEntries(
+		results.map((r: { type: string; count: number }) => [r.type, Number(r.count)])
+	) as Record<string, number>;
+
+	const [baseClasses, subclasses] = await Promise.all([
+		db
+			.select({ count: sql<number>`count(*)` })
+			.from(compendium)
+			.where(
+				and(
+					eq(compendium.type, 'classes'),
+					sql`json_extract(${compendium.data}, '$.subclass_of') IS NULL`
+				)
+			),
+		db
+			.select({ count: sql<number>`count(*)` })
+			.from(compendium)
+			.where(
+				and(
+					eq(compendium.type, 'classes'),
+					sql`json_extract(${compendium.data}, '$.subclass_of') IS NOT NULL`
+				)
+			)
+	]);
+
+	counts.classes = Number(baseClasses[0]?.count ?? 0);
+	counts.subclasses = Number(subclasses[0]?.count ?? 0);
+
+	return counts;
 }
 
 export async function getDistinctValues(

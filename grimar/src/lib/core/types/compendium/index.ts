@@ -3,6 +3,7 @@ export type CompendiumTypeName =
 	| 'creatures'
 	| 'species'
 	| 'classes'
+	| 'subclasses'
 	| 'classfeatures'
 	| 'backgrounds'
 	| 'feats'

@@ -21,8 +21,13 @@ export interface CompendiumListParams {
 	search?: string;
 	page?: number;
 	limit?: number;
+	gamesystem?: string;
+	document?: string;
+	source?: string;
 	sortBy?: SortByParam;
 	sortOrder?: 'asc' | 'desc';
+	includeSubclasses?: boolean;
+	onlySubclasses?: boolean;
 	creatureType?: string;
 	spellLevel?: string;
 	spellSchool?: string;
@@ -33,8 +38,13 @@ const COMPENDIUM_FILTER_KEYS = [
 	'search',
 	'page',
 	'limit',
+	'gamesystem',
+	'document',
+	'source',
 	'sortBy',
 	'sortOrder',
+	'includeSubclasses',
+	'onlySubclasses',
 	'creatureType',
 	'spellLevel',
 	'spellSchool',
@@ -131,7 +141,8 @@ export async function fetchCompendiumList(
 	pathType: string,
 	listParams: CompendiumListParams = {}
 ): Promise<CompendiumSearchResult> {
-	const params = new URLSearchParams({ type: pathType });
+	const apiType = pathType === 'subclasses' ? 'classes' : pathType;
+	const params = new URLSearchParams({ type: apiType });
 
 	for (const [key, value] of Object.entries(normalizeCompendiumListParams(listParams))) {
 		params.set(key, value);
@@ -144,7 +155,8 @@ export async function fetchCompendiumList(
  * Fetch all compendium items of a type for client-side processing.
  */
 export async function fetchCompendiumAll(pathType: string): Promise<CompendiumSearchResult> {
-	const params = new URLSearchParams({ type: pathType, all: 'true' });
+	const apiType = pathType === 'subclasses' ? 'classes' : pathType;
+	const params = new URLSearchParams({ type: apiType, all: 'true' });
 	return apiFetch(`/api/compendium/items?${params}`);
 }
 
@@ -152,7 +164,8 @@ export async function fetchCompendiumAll(pathType: string): Promise<CompendiumSe
  * Fetch a single compendium item by type and slug.
  */
 export async function fetchCompendiumDetail(type: string, slug: string): Promise<unknown> {
-	return apiFetch(`/api/compendium/${type}/${slug}`);
+	const apiType = type === 'subclasses' ? 'classes' : type;
+	return apiFetch(`/api/compendium/${apiType}/${slug}`);
 }
 
 /**
