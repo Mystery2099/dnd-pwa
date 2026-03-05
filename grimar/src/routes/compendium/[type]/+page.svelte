@@ -497,6 +497,7 @@
 							mobileMinCardWidth={170}
 							tabletMinCardWidth={220}
 							gap={24}
+							rowGap={32}
 							resetScrollOnItemsChange={true}
 						>
 							{#snippet children(item: CompendiumItem)}
