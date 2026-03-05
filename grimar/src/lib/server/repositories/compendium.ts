@@ -82,11 +82,12 @@ export async function getPaginatedItems(
 
 	let whereClause: SQL<unknown> = eq(compendium.type, type);
 	let useLikeSearchFallback = false;
+	let rankedMatches: Array<{ key: string; rank: number }> | null = null;
 	let ftsMatchedKeys: string[] | null = null;
 
 	if (filters.search) {
 		try {
-			const rankedMatches = await searchFtsRanked(filters.search, FTS_SEARCH_LIMIT, db);
+			rankedMatches = await searchFtsRanked(filters.search, FTS_SEARCH_LIMIT, db);
 			ftsMatchedKeys = rankedMatches.map((match) => match.key);
 		} catch {
 			useLikeSearchFallback = true;
@@ -168,9 +169,45 @@ export async function getPaginatedItems(
 		sortBy === 'created_at'
 			? compendium.createdAt
 			: sortBy === 'updated_at'
-				? compendium.updatedAt
-				: compendium.name;
+					? compendium.updatedAt
+					: compendium.name;
 	const orderBy = sortOrder === 'desc' ? desc(sortColumn) : sortColumn;
+
+	if (filters.search && !useLikeSearchFallback && rankedMatches && rankedMatches.length > 0) {
+		const filteredItems = await db.select().from(compendium).where(whereClause);
+		const rankByKey = new Map(rankedMatches.map((match, index) => [match.key, index]));
+		const maxRank = rankedMatches.length + 1;
+		const sortDirection = sortOrder === 'desc' ? -1 : 1;
+
+		filteredItems.sort((a, b) => {
+			const rankA = rankByKey.get(a.key) ?? maxRank;
+			const rankB = rankByKey.get(b.key) ?? maxRank;
+			if (rankA !== rankB) return rankA - rankB;
+
+			if (sortBy === 'created_at') {
+				return ((a.createdAt?.getTime() ?? 0) - (b.createdAt?.getTime() ?? 0)) * sortDirection;
+			}
+			if (sortBy === 'updated_at') {
+				return ((a.updatedAt?.getTime() ?? 0) - (b.updatedAt?.getTime() ?? 0)) * sortDirection;
+			}
+			return a.name.localeCompare(b.name) * sortDirection;
+		});
+
+		const total = filteredItems.length;
+		const totalPages = Math.ceil(total / pageSize);
+		const pagedItems = filteredItems.slice(offset, offset + pageSize);
+		const result = {
+			items: pagedItems,
+			total,
+			page,
+			pageSize,
+			totalPages,
+			hasMore: page < totalPages
+		};
+
+		cache.set(listCacheKey, result, getCacheTTL('search'));
+		return result;
+	}
 
 	const items = await db
 		.select()

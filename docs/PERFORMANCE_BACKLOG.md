@@ -30,7 +30,7 @@ Branch: `performance-improvements`
 ## Next Candidates
 
 - [x] Add compendium-specific DB indexes for JSON-backed filters (spell level/school, creature type/CR, subclass split).
-- [ ] Preserve FTS rank ordering end-to-end in list search results.
+- [x] Preserve FTS rank ordering end-to-end in list search results.
 - [x] Route-layer short TTL caching for compendium stats endpoint.
 - [x] Reduce production-path console logging noise in client cache sync.
 - [x] Use virtualization in compendium list/grid when item counts are high.
