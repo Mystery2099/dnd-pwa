@@ -156,7 +156,9 @@
 
 <AppShell {header} {nav}>
 	<ClientQueryProvider client={queryClient}>
-		{@render children()}
+		{#key page.url.pathname}
+			{@render children()}
+		{/key}
 	</ClientQueryProvider>
 </AppShell>
 
