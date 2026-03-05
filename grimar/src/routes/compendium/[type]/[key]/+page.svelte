@@ -1,7 +1,13 @@
-	<script lang="ts">
-		import Badge from '$lib/components/ui/Badge.svelte';
-		import Breadcrumb from '$lib/components/ui/Breadcrumb.svelte';
-		import { marked } from 'marked';
+		<script lang="ts">
+			import Badge from '$lib/components/ui/Badge.svelte';
+			import Breadcrumb from '$lib/components/ui/Breadcrumb.svelte';
+			import {
+				Accordion,
+				AccordionItem,
+				AccordionTrigger,
+				AccordionContent
+			} from '$lib/components/ui/accordion';
+			import { marked } from 'marked';
 	import DOMPurify from 'isomorphic-dompurify';
 	import type { PageData } from './$types';
 	import {
@@ -28,11 +34,9 @@
 
 	let item = $derived(data.item);
 	let itemData = $derived(item.data as Record<string, unknown>);
+	let sortedFields = $derived(getSortedFields(itemData, data.type));
+	let activeClassFeature = $state('');
 	const markdownRenderCache = new Map<string, string>();
-
-	function getSortedFieldsLocal(): [string, unknown][] {
-		return getSortedFields(itemData, data.type);
-	}
 
 	function renderMarkdown(text: string): string {
 		const cacheKey = text.trim();
@@ -364,13 +368,17 @@
 						<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">
 							Class Features
 						</h2>
-						<div class="space-y-3">
-							{#each itemData.features as feature}
-								<div
-									class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4"
-								>
-									<div class="flex items-center justify-between">
-										<h3 class="font-semibold text-accent">{feature.name || feature.key}</h3>
+						<Accordion
+							bind:value={activeClassFeature}
+							class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] px-4"
+						>
+							{#each itemData.features as feature, index}
+								{@const featureValue = String(feature.key || feature.name || `feature-${index}`)}
+								<AccordionItem value={featureValue} class="border-[var(--color-border)]">
+									<AccordionTrigger class="py-3 hover:no-underline">
+										<span class="mr-3 text-left font-semibold text-accent">
+											{feature.name || feature.key}
+										</span>
 										{#if feature.gained_at}
 											<span class="text-xs text-[var(--color-text-muted)]">
 												{#if Array.isArray(feature.gained_at)}
@@ -380,26 +388,26 @@
 												{/if}
 											</span>
 										{/if}
-									</div>
-									{#if feature.desc}
-										<div
-											class="prose prose-invert prose-sm mt-2 max-w-none text-[var(--color-text-secondary)]"
-										>
-											{@html renderMarkdown(feature.desc)}
-										</div>
-									{/if}
-								</div>
+									</AccordionTrigger>
+									<AccordionContent>
+										{#if feature.desc && activeClassFeature === featureValue}
+											<div class="prose prose-invert prose-sm max-w-none text-[var(--color-text-secondary)]">
+												{@html renderMarkdown(feature.desc)}
+											</div>
+										{/if}
+									</AccordionContent>
+								</AccordionItem>
 							{/each}
-						</div>
+						</Accordion>
 					</div>
 				{/if}
 			{/if}
 
-			{#if getSortedFieldsLocal().length > 0}
+			{#if sortedFields.length > 0}
 				<div class="p-6">
 					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Details</h2>
 					<dl class="grid gap-2 sm:grid-cols-2">
-						{#each getSortedFieldsLocal() as [key, value]}
+						{#each sortedFields as [key, value]}
 							<div
 								class="flex flex-col rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-3"
 							>
