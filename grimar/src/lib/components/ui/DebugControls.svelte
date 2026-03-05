@@ -16,7 +16,7 @@
 </script>
 
 {#if import.meta.env.DEV}
-	<div class="fixed top-4 left-4 z-50 text-xs">
+	<div class="fixed top-20 right-4 z-50 text-xs">
 		<button
 			type="button"
 			class="rounded border border-cyan-400/40 bg-black/80 px-2 py-1 font-mono text-cyan-200 backdrop-blur-sm"
