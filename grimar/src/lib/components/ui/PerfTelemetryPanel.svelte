@@ -1,22 +1,35 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
+	import { debugFlagsStore } from '$lib/core/client/debug-flags';
 	import { perfTelemetryStore } from '$lib/core/client/perf-telemetry';
 
 	type PerfSummary = ReturnType<typeof perfTelemetryStore.getSummaries>[number];
 
 	let summaries = $state<PerfSummary[]>([]);
 	let totalSamples = $state(0);
+	let showPerfPanel = $state(true);
 
 	$effect(() => {
 		if (!browser) return;
-		return perfTelemetryStore.subscribe((state) => {
-			totalSamples = state.samples.length;
-			summaries = perfTelemetryStore.getSummaries(6);
-		});
+		const unsubs: Array<() => void> = [];
+		unsubs.push(
+			perfTelemetryStore.subscribe((state) => {
+				totalSamples = state.samples.length;
+				summaries = perfTelemetryStore.getSummaries(6);
+			})
+		);
+		unsubs.push(
+			debugFlagsStore.subscribe((state) => {
+				showPerfPanel = state.showPerfPanel;
+			})
+		);
+		return () => {
+			for (const unsub of unsubs) unsub();
+		};
 	});
 </script>
 
-{#if import.meta.env.DEV && totalSamples > 0}
+{#if import.meta.env.DEV && showPerfPanel && totalSamples > 0}
 	<div
 		class="pointer-events-none fixed bottom-4 left-4 z-50 w-[360px] rounded-lg border border-cyan-400/40 bg-black/80 p-3 font-mono text-xs text-cyan-200 shadow-lg backdrop-blur-md"
 	>

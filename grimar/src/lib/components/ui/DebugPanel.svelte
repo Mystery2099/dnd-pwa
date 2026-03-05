@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
+	import { debugFlagsStore } from '$lib/core/client/debug-flags';
+
 	interface Props {
 		listName: string;
 		startIndex: number;
@@ -9,9 +12,17 @@
 	}
 
 	let { listName = '', startIndex, endIndex, totalItems, scrollTop, columns }: Props = $props();
+	let showVirtualDebug = $state(true);
+
+	$effect(() => {
+		if (!browser) return;
+		return debugFlagsStore.subscribe((state) => {
+			showVirtualDebug = state.showVirtualDebug;
+		});
+	});
 </script>
 
-{#if import.meta.env.DEV}
+{#if import.meta.env.DEV && showVirtualDebug}
 	<div
 		class="pointer-events-none fixed right-4 bottom-4 z-50 rounded-lg border border-[var(--color-accent)]/30 bg-black/80 px-3 py-2 font-mono text-xs text-[var(--color-accent)] shadow-lg backdrop-blur-md"
 	>

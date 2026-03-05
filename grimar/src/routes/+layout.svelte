@@ -6,6 +6,7 @@
 	import AppShell from '$lib/components/layout/AppShell.svelte';
 	import GlobalHeader from '$lib/components/layout/GlobalHeader.svelte';
 	import OfflineIndicator from '$lib/components/ui/OfflineIndicator.svelte';
+	import DebugControls from '$lib/components/ui/DebugControls.svelte';
 	import PerfTelemetryPanel from '$lib/components/ui/PerfTelemetryPanel.svelte';
 	import { page } from '$app/state';
 	import { initThemeSync, initTheme } from '$lib/core/client/themeStore.svelte';
@@ -160,3 +161,4 @@
 </AppShell>
 
 <PerfTelemetryPanel />
+<DebugControls />
