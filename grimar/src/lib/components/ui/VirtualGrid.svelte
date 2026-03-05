@@ -239,6 +239,7 @@
 		scrollTop: 0,
 		columns: 1
 	});
+	let lastResetItemsRef: T[] | null = null;
 
 	$effect(() => {
 		const virtualItems = $virtualizer.getVirtualItems();
@@ -250,12 +251,12 @@
 	});
 
 	$effect(() => {
-		// Track item changes reactively and reset container scroll if requested.
-		const itemCount = items.length;
+		// Reset only when the incoming dataset reference changes (e.g. new search/filter result).
+		// Avoid virtualizer method calls here to prevent effect update loops.
+		const currentItemsRef = items;
 		if (!resetScrollOnItemsChange || !containerEl) return;
-		void itemCount;
-		$virtualizer.measure();
-		$virtualizer.scrollToIndex(0, { align: 'start', behavior: 'auto' });
+		if (lastResetItemsRef === currentItemsRef) return;
+		lastResetItemsRef = currentItemsRef;
 		containerEl.scrollTo({ top: 0, behavior: 'auto' });
 	});
 
