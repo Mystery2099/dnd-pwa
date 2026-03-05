@@ -433,10 +433,10 @@
 			{:else}
 				{#snippet compendiumCard(item: CompendiumItem)}
 					{@const itemData = item.data as CardItemData}
-					<div use:prefetchOnVisible={item.key} class="h-full">
+					<div use:prefetchOnVisible={item.key} class="h-full w-full">
 						<SurfaceCard
 							href="/compendium/{data.type}/{item.key}"
-							class="group h-full"
+							class="group h-full w-full"
 							onmouseenter={() => handleItemPrefetch(item.key)}
 							onfocusin={() => handleItemPrefetch(item.key)}
 						>
@@ -492,10 +492,12 @@
 					<div class="h-[70vh] rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/20">
 						<VirtualGrid
 							items={items}
-							estimateRowHeight={210}
+							estimateRowHeight={190}
 							minCardWidth={260}
 							mobileMinCardWidth={170}
 							tabletMinCardWidth={220}
+							gap={24}
+							resetScrollOnItemsChange={true}
 						>
 							{#snippet children(item: CompendiumItem)}
 								{@render compendiumCard(item)}
@@ -503,7 +505,7 @@
 						</VirtualGrid>
 					</div>
 				{:else}
-					<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+					<div class="grid auto-rows-fr gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 						{#each items as item (item.key)}
 							{@render compendiumCard(item)}
 						{/each}

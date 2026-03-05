@@ -28,7 +28,7 @@
 	{href}
 	{onmouseenter}
 	{onfocusin}
-	class={`card-crystal relative overflow-hidden transition-all duration-300 ${padding} ${className}`.trim()}
+	class={`card-crystal relative block overflow-hidden transition-all duration-300 ${padding} ${className}`.trim()}
 	{...rest}
 >
 	{#if children}

@@ -332,7 +332,7 @@
 						use:measureRow
 						data-index={row.index}
 						class="absolute left-0 grid w-full"
-						style="gap: {gap}px; transform: translateY({row.start}px); grid-template-columns: repeat({columns}, minmax({currentMinCardWidth}px, 1fr)); will-change: transform;"
+						style="gap: {gap}px; transform: translateY({row.start}px); grid-template-columns: repeat({columns}, minmax(0, 1fr)); will-change: transform;"
 					>
 						{#each rowItems as { item, index } (index)}
 							<div class="flex min-w-0 items-stretch" data-index={index}>
