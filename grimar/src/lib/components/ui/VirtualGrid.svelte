@@ -158,9 +158,11 @@
 		 *
 		 * ADJUSTMENT: Increase for breathing room, decrease for density
 		 */
-		gap?: number;
-		class?: string;
-	}
+			gap?: number;
+			/** Reset scroll position to top when item dataset changes */
+			resetScrollOnItemsChange?: boolean;
+			class?: string;
+		}
 
 	let {
 		items,
@@ -169,10 +171,11 @@
 		overscan = 5,
 		minCardWidth = 220,
 		mobileMinCardWidth = 150,
-		tabletMinCardWidth = 190,
-		gap = 16,
-		class: className = ''
-	}: Props = $props();
+			tabletMinCardWidth = 190,
+			gap = 16,
+			resetScrollOnItemsChange = false,
+			class: className = ''
+		}: Props = $props();
 
 	// ============================================
 	// Container-based column detection with automatic resize tracking
@@ -244,6 +247,16 @@
 		displayInfo.totalItems = items.length;
 		displayInfo.scrollTop = containerEl?.scrollTop ?? 0;
 		displayInfo.columns = columns;
+	});
+
+	$effect(() => {
+		// Track item changes reactively and reset container scroll if requested.
+		const itemCount = items.length;
+		if (!resetScrollOnItemsChange || !containerEl) return;
+		void itemCount;
+		$virtualizer.measure();
+		$virtualizer.scrollToIndex(0, { align: 'start', behavior: 'auto' });
+		containerEl.scrollTo({ top: 0, behavior: 'auto' });
 	});
 
 	// ============================================
