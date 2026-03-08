@@ -7,8 +7,6 @@
 				AccordionTrigger,
 				AccordionContent
 			} from '$lib/components/ui/accordion';
-			import { marked } from 'marked';
-	import DOMPurify from 'isomorphic-dompurify';
 	import type { PageData } from './$types';
 	import {
 		isWeaponPropertyArray,
@@ -24,8 +22,6 @@
 		getSortedFields
 	} from '$lib/utils/compendium';
 
-	marked.setOptions({ gfm: true, breaks: true });
-
 	interface Props {
 		data: PageData;
 	}
@@ -35,17 +31,11 @@
 	let item = $derived(data.item);
 	let itemData = $derived(item.data as Record<string, unknown>);
 	let sortedFields = $derived(getSortedFields(itemData, data.type));
+	let markdownHtml = $derived<Record<string, string>>(data.markdownHtml ?? {});
 	let activeClassFeature = $state('');
-	const markdownRenderCache = new Map<string, string>();
 
-	function renderMarkdown(text: string): string {
-		const cacheKey = text.trim();
-		const cached = markdownRenderCache.get(cacheKey);
-		if (cached) return cached;
-
-		const rendered = DOMPurify.sanitize(marked.parse(cacheKey) as string);
-		markdownRenderCache.set(cacheKey, rendered);
-		return rendered;
+	function markdownAt(path: string): string {
+		return markdownHtml[path] ?? '';
 	}
 </script>
 
@@ -153,7 +143,7 @@
 				<div class="border-b border-[var(--color-border)] p-6">
 					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Description</h2>
 					<div class="prose prose-invert max-w-none text-[var(--color-text-secondary)]">
-						{@html renderMarkdown(String(itemData.desc || item.description))}
+						{@html markdownAt('description')}
 					</div>
 				</div>
 			{/if}
@@ -162,7 +152,7 @@
 				<div class="border-b border-[var(--color-border)] p-6">
 					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Descriptions</h2>
 					<div class="space-y-4">
-						{#each getDescriptions(itemData.descriptions) as desc}
+						{#each getDescriptions(itemData.descriptions) as desc, index}
 							<div
 								class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4"
 							>
@@ -182,7 +172,7 @@
 								<div
 									class="prose prose-invert prose-sm max-w-none text-[var(--color-text-secondary)]"
 								>
-									{@html renderMarkdown(desc.desc)}
+									{@html markdownAt(`descriptions.${index}.desc`)}
 								</div>
 							</div>
 						{/each}
@@ -194,9 +184,9 @@
 				<div class="border-b border-[var(--color-border)] p-6">
 					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Benefits</h2>
 					<ul class="list-inside list-disc space-y-2 text-[var(--color-text-secondary)]">
-						{#each getBenefits(itemData.benefits) as benefit}
+						{#each getBenefits(itemData.benefits) as benefit, index}
 							<li class="prose prose-invert prose-sm max-w-none">
-								{@html renderMarkdown(benefit.desc)}
+								{@html markdownAt(`benefits.${index}.desc`)}
 							</li>
 						{/each}
 					</ul>
@@ -207,7 +197,7 @@
 				<div class="border-b border-[var(--color-border)] p-6">
 					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Properties</h2>
 					<div class="space-y-3">
-						{#each getWeaponProperties(itemData.properties) as wp}
+						{#each getWeaponProperties(itemData.properties) as wp, index}
 							<div
 								class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4"
 							>
@@ -226,7 +216,7 @@
 									<div
 										class="prose prose-invert prose-sm mt-2 max-w-none text-[var(--color-text-secondary)]"
 									>
-										{@html renderMarkdown(wp.property.desc)}
+										{@html markdownAt(`weaponProperties.${index}.desc`)}
 									</div>
 								{/if}
 							</div>
@@ -239,7 +229,7 @@
 				<div class="border-b border-[var(--color-border)] p-6">
 					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Traits</h2>
 					<div class="space-y-3">
-						{#each itemData.traits as trait}
+						{#each itemData.traits as trait, index}
 							<div
 								class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4"
 							>
@@ -248,7 +238,7 @@
 									<div
 										class="prose prose-invert prose-sm mt-1 max-w-none text-[var(--color-text-secondary)]"
 									>
-										{@html renderMarkdown(trait.desc)}
+										{@html markdownAt(`traits.${index}.desc`)}
 									</div>
 								{/if}
 							</div>
@@ -290,9 +280,9 @@
 
 				{#if itemData.actions && Array.isArray(itemData.actions) && itemData.actions.length > 0}
 					<div class="border-b border-[var(--color-border)] p-6">
-						<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Actions</h2>
+					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Actions</h2>
 						<div class="space-y-4">
-							{#each itemData.actions as action}
+							{#each itemData.actions as action, index}
 								<div
 									class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4"
 								>
@@ -301,7 +291,7 @@
 										<div
 											class="prose prose-invert prose-sm mt-1 max-w-none text-[var(--color-text-secondary)]"
 										>
-											{@html renderMarkdown(action.desc)}
+											{@html markdownAt(`actions.${index}.desc`)}
 										</div>
 									{/if}
 								</div>
@@ -312,9 +302,9 @@
 
 				{#if itemData.traits && Array.isArray(itemData.traits) && itemData.traits.length > 0}
 					<div class="border-b border-[var(--color-border)] p-6">
-						<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Traits</h2>
+					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Traits</h2>
 						<div class="space-y-3">
-							{#each itemData.traits as trait}
+							{#each itemData.traits as trait, index}
 								<div
 									class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4"
 								>
@@ -323,7 +313,7 @@
 										<div
 											class="prose prose-invert prose-sm mt-1 max-w-none text-[var(--color-text-secondary)]"
 										>
-											{@html renderMarkdown(trait.desc)}
+											{@html markdownAt(`traits.${index}.desc`)}
 										</div>
 									{/if}
 								</div>
@@ -356,7 +346,7 @@
 							At Higher Levels
 						</h2>
 						<div class="prose prose-invert max-w-none text-[var(--color-text-secondary)]">
-							{@html renderMarkdown(String(itemData.higher_level))}
+							{@html markdownAt('higher_level')}
 						</div>
 					</div>
 				{/if}
@@ -392,7 +382,7 @@
 									<AccordionContent>
 										{#if feature.desc && activeClassFeature === featureValue}
 											<div class="prose prose-invert prose-sm max-w-none text-[var(--color-text-secondary)]">
-												{@html renderMarkdown(feature.desc)}
+												{@html markdownAt(`features.${index}.desc`)}
 											</div>
 										{/if}
 									</AccordionContent>
