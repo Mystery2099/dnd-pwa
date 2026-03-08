@@ -1294,7 +1294,7 @@
 		content: '';
 		@apply absolute -top-px left-1/2 h-0.75 w-1 rounded-sm;
 		background: var(--color-accent);
-		transform: translate-x-[-50%];
+		transform: translateX(-50%);
 		opacity: 0.5;
 	}
 

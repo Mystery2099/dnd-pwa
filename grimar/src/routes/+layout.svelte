@@ -8,6 +8,7 @@
 	import OfflineIndicator from '$lib/components/ui/OfflineIndicator.svelte';
 	import DebugControls from '$lib/components/ui/DebugControls.svelte';
 	import PerfTelemetryPanel from '$lib/components/ui/PerfTelemetryPanel.svelte';
+	import RouteSkeletonOverlay from '$lib/components/ui/RouteSkeletonOverlay.svelte';
 	import { page, navigating } from '$app/state';
 	import { initThemeSync, initTheme } from '$lib/core/client/themeStore.svelte';
 	import ClientQueryProvider from '$lib/components/ui/ClientQueryProvider.svelte';
@@ -70,6 +71,12 @@
 			startCacheSync();
 		}
 
+		// Capture user-centric rendering metrics in production.
+		if (browser && !import.meta.env.DEV) {
+			const { startWebVitalsReporting } = await import('$lib/core/client/web-vitals');
+			startWebVitalsReporting();
+		}
+
 		// Initialize theme from localStorage
 		initTheme();
 	});
@@ -113,6 +120,10 @@
 
 {#if showRouteProgress}
 	<div class="route-progress fixed top-0 right-0 left-0 z-[70] h-1"></div>
+{/if}
+
+{#if showRouteProgress}
+	<RouteSkeletonOverlay pathname={navigating.to?.url.pathname} />
 {/if}
 
 {#snippet header()}
