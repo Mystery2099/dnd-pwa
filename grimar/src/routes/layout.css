@@ -168,6 +168,34 @@
 	}
 }
 
+.route-progress {
+	background:
+		linear-gradient(
+			90deg,
+			color-mix(in srgb, var(--color-accent) 35%, transparent),
+			var(--color-accent),
+			color-mix(in srgb, var(--color-accent) 35%, transparent)
+		);
+	background-size: 200% 100%;
+	box-shadow: 0 0 14px color-mix(in srgb, var(--color-accent) 70%, transparent);
+	animation: route-progress-slide 900ms linear infinite;
+}
+
+@keyframes route-progress-slide {
+	from {
+		background-position: 200% 0;
+	}
+	to {
+		background-position: 0 0;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.route-progress {
+		animation: none;
+	}
+}
+
 /* ========================
    THEME DEFINITIONS
    ========================

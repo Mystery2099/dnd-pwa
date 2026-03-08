@@ -8,7 +8,7 @@
 	import OfflineIndicator from '$lib/components/ui/OfflineIndicator.svelte';
 	import DebugControls from '$lib/components/ui/DebugControls.svelte';
 	import PerfTelemetryPanel from '$lib/components/ui/PerfTelemetryPanel.svelte';
-	import { page } from '$app/state';
+	import { page, navigating } from '$app/state';
 	import { initThemeSync, initTheme } from '$lib/core/client/themeStore.svelte';
 	import ClientQueryProvider from '$lib/components/ui/ClientQueryProvider.svelte';
 	import { createQueryClient, setQueryClient } from '$lib/core/client/query-client';
@@ -80,6 +80,8 @@
 			? 'text-[var(--color-text-primary)] font-semibold drop-shadow-[0_0_8px_color-mix(in_srgb,var(--color-text-primary)_50%,transparent)]'
 			: 'text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors';
 	}
+
+	let showRouteProgress = $derived(Boolean(navigating.to));
 </script>
 
 <svelte:head>
@@ -107,6 +109,10 @@
 		class="pointer-events-none fixed inset-0 z-50 opacity-40 mix-blend-overlay"
 		style="background-image: url(&quot;data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.5'/%3E%3C/svg%3E&quot;);"
 	></div>
+{/if}
+
+{#if showRouteProgress}
+	<div class="route-progress fixed top-0 right-0 left-0 z-[70] h-1"></div>
 {/if}
 
 {#snippet header()}
@@ -156,9 +162,7 @@
 
 <AppShell {header} {nav}>
 	<ClientQueryProvider client={queryClient}>
-		{#key page.url.pathname}
-			{@render children()}
-		{/key}
+		{@render children()}
 	</ClientQueryProvider>
 </AppShell>
 
