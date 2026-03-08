@@ -6,7 +6,7 @@ import { SvelteKitPWA } from '@vite-pwa/sveltekit';
 export default defineConfig({
 	envDir: '.',
 	ssr: {
-		noExternal: ['clsx', 'tailwind-merge', 'nanoid', /.*/]
+		noExternal: ['clsx', 'tailwind-merge', 'nanoid']
 	},
 	plugins: [
 		tailwindcss(),
@@ -23,12 +23,12 @@ export default defineConfig({
 				icons: [
 					{
 						src: '/favicon.svg',
-						sizes: '3300x3300',
+						sizes: 'any',
 						type: 'image/svg+xml'
 					},
 					{
 						src: '/favicon.svg',
-						sizes: '3300x3300',
+						sizes: 'any',
 						type: 'image/svg+xml',
 						purpose: 'maskable'
 					}
@@ -36,7 +36,7 @@ export default defineConfig({
 			},
 			workbox: {
 				globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-				maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5 MB for large SVG favicon
+				maximumFileSizeToCacheInBytes: 1024 * 1024,
 				runtimeCaching: [
 					{
 						urlPattern: /^https:\/\/api\.open5e\.com\/.*/i,

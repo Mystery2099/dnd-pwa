@@ -20,16 +20,6 @@
 		<a
 			class="block transition duration-300 hover:drop-shadow-[0_0_15px_var(--color-accent-glow)]"
 			href={homeHref}
-			onclick={(e) => {
-				const target = e.currentTarget as HTMLAnchorElement;
-				const url = new URL(target.href, window.location.origin);
-				if (window.location.pathname !== url.pathname) {
-					import('$app/navigation').then(({ goto }) => {
-						goto(url.pathname).catch(() => {});
-					});
-				}
-				e.preventDefault();
-			}}
 		>
 			<img src={logoUrl} alt="Grimar" class="h-12 w-auto" />
 		</a>
