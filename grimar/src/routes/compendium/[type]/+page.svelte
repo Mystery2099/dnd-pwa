@@ -236,6 +236,26 @@
 		updateUrl();
 	}
 
+	function handleSpellLevelChange(nextValue: string) {
+		spellLevelFilter = nextValue;
+		applyFilters();
+	}
+
+	function handleSpellSchoolChange(nextValue: string) {
+		spellSchoolFilter = nextValue;
+		applyFilters();
+	}
+
+	function handleCreatureTypeChange(nextValue: string) {
+		creatureTypeFilter = nextValue;
+		applyFilters();
+	}
+
+	function handleChallengeRatingChange(nextValue: string) {
+		challengeRatingFilter = nextValue;
+		applyFilters();
+	}
+
 	function handlePageChange(nextPage: number) {
 		currentPage = nextPage;
 		updateUrl();
@@ -366,14 +386,14 @@
 						value={spellLevelFilter}
 						options={SPELL_LEVEL_OPTIONS}
 						placeholder="Spell level"
-						onchange={() => applyFilters()}
+						onchange={handleSpellLevelChange}
 					/>
 					<Select
 						type="single"
 						value={spellSchoolFilter}
 						options={SPELL_SCHOOL_OPTIONS}
 						placeholder="Spell school"
-						onchange={() => applyFilters()}
+						onchange={handleSpellSchoolChange}
 					/>
 				{/if}
 
@@ -383,14 +403,14 @@
 						value={creatureTypeFilter}
 						options={CREATURE_TYPE_OPTIONS}
 						placeholder="Creature type"
-						onchange={() => applyFilters()}
+						onchange={handleCreatureTypeChange}
 					/>
 					<Select
 						type="single"
 						value={challengeRatingFilter}
 						options={CHALLENGE_RATING_OPTIONS}
 						placeholder="Challenge rating"
-						onchange={() => applyFilters()}
+						onchange={handleChallengeRatingChange}
 					/>
 				{/if}
 			</div>
