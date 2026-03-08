@@ -88,7 +88,8 @@
 			: 'text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors';
 	}
 
-	let showRouteProgress = $derived(Boolean(navigating.to));
+	let navigatingPath = $derived(navigating.to?.url.pathname ?? '');
+	let showRouteProgress = $derived(Boolean(navigatingPath));
 </script>
 
 <svelte:head>
@@ -120,10 +121,7 @@
 
 {#if showRouteProgress}
 	<div class="route-progress fixed top-0 right-0 left-0 z-[70] h-1"></div>
-{/if}
-
-{#if showRouteProgress}
-	<RouteSkeletonOverlay pathname={navigating.to?.url.pathname} />
+	<RouteSkeletonOverlay pathname={navigatingPath} />
 {/if}
 
 {#snippet header()}

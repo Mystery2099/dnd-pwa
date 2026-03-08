@@ -10,6 +10,7 @@ type WebVitalMetric = {
 };
 
 let started = false;
+const WEB_VITALS_ENDPOINT = '/api/monitoring/web-vitals';
 
 type LayoutShiftEntry = PerformanceEntry & {
 	value: number;
@@ -60,13 +61,13 @@ function sendWebVitals(metrics: WebVitalMetric[]) {
 
 	if ('sendBeacon' in navigator) {
 		navigator.sendBeacon(
-			'/api/monitoring/web-vitals',
+			WEB_VITALS_ENDPOINT,
 			new Blob([payload], { type: 'application/json' })
 		);
 		return;
 	}
 
-	void fetch('/api/monitoring/web-vitals', {
+	void fetch(WEB_VITALS_ENDPOINT, {
 		method: 'POST',
 		headers: { 'content-type': 'application/json' },
 		body: payload,

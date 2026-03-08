@@ -10,6 +10,13 @@ type IncomingMetric = {
 	timestamp?: unknown;
 };
 
+function getRawMetrics(payload: unknown): unknown[] {
+	if (Array.isArray(payload)) return payload;
+
+	const metrics = (payload as { metrics?: unknown[] } | null)?.metrics;
+	return Array.isArray(metrics) ? metrics : [];
+}
+
 function isValidMetric(metric: IncomingMetric): metric is {
 	name: string;
 	value: number;
@@ -34,11 +41,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		return json({ error: 'invalid_json' }, { status: 400 });
 	}
 
-	const rawMetrics = Array.isArray(payload)
-		? payload
-		: Array.isArray((payload as { metrics?: unknown[] })?.metrics)
-			? (payload as { metrics: unknown[] }).metrics
-			: [];
+	const rawMetrics = getRawMetrics(payload);
 
 	if (rawMetrics.length === 0) {
 		return json({ recorded: 0 }, { status: 202 });
@@ -47,8 +50,9 @@ export const POST: RequestHandler = async ({ request }) => {
 	const monitor = PerformanceMonitor.getInstance();
 	let recorded = 0;
 
-	for (const metric of rawMetrics.slice(0, 20)) {
-		if (!isValidMetric(metric as IncomingMetric)) continue;
+	for (const rawMetric of rawMetrics.slice(0, 20)) {
+		const metric = rawMetric as IncomingMetric;
+		if (!isValidMetric(metric)) continue;
 
 		monitor.record(`web-vital:${metric.name}`, metric.value, {
 			rating: typeof metric.rating === 'string' ? metric.rating : undefined,
