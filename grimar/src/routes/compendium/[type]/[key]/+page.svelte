@@ -1,12 +1,12 @@
-		<script lang="ts">
-			import Badge from '$lib/components/ui/Badge.svelte';
-			import Breadcrumb from '$lib/components/ui/Breadcrumb.svelte';
-			import {
-				Accordion,
-				AccordionItem,
-				AccordionTrigger,
-				AccordionContent
-			} from '$lib/components/ui/accordion';
+<script lang="ts">
+	import Badge from '$lib/components/ui/Badge.svelte';
+	import Breadcrumb from '$lib/components/ui/Breadcrumb.svelte';
+	import {
+		Accordion,
+		AccordionItem,
+		AccordionTrigger,
+		AccordionContent
+	} from '$lib/components/ui/accordion';
 	import type { PageData } from './$types';
 	import {
 		isWeaponPropertyArray,

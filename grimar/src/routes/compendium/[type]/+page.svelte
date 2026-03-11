@@ -520,7 +520,7 @@
 							rowGap={32}
 							resetScrollOnItemsChange={true}
 						>
-							{#snippet children(item: CompendiumItem)}
+							{#snippet children(item: CompendiumItem, index: number)}
 								{@render compendiumCard(item)}
 							{/snippet}
 						</VirtualGrid>

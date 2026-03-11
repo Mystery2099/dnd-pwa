@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 
 import { existsSync, readdirSync, statSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, relative } from 'node:path';
 
 const ROOT = process.cwd();
 const CLIENT_OUT_DIR = join(ROOT, '.svelte-kit/output/client');
@@ -43,7 +43,7 @@ function walkFiles(dir: string): string[] {
 
 function toStat(path: string): FileStat {
 	return {
-		path: path.replace(`${ROOT}/`, ''),
+		path: relative(ROOT, path),
 		bytes: statSync(path).size
 	};
 }

@@ -63,17 +63,18 @@ class PerfTelemetryStore {
 	}
 
 	record(sample: PerfSample): void {
-		const nextSamples = [...this.state.samples, sample];
-		if (nextSamples.length > MAX_SAMPLES) {
-			nextSamples.splice(0, nextSamples.length - MAX_SAMPLES);
+		const samples = this.state.samples;
+		samples.push(sample);
+		if (samples.length > MAX_SAMPLES) {
+			samples.splice(0, samples.length - MAX_SAMPLES);
 		}
-		this.state = { samples: nextSamples };
+		this.state = { samples };
 		this.notify();
 	}
 
 	recordFromResponse(url: string, response: Response, fallbackDurationMs: number): void {
-		const headerDuration = response.headers.get('x-query-time-ms');
-		const serverTimingDuration = parseDurationFromServerTiming(response.headers.get('server-timing'));
+			const headerDuration = response.headers.get('x-query-time-ms');
+			const serverTimingDuration = parseDurationFromServerTiming(response.headers.get('server-timing'));
 		const parsedHeaderDuration = headerDuration ? Number(headerDuration) : null;
 		const durationMs =
 			(parsedHeaderDuration !== null && Number.isFinite(parsedHeaderDuration) && parsedHeaderDuration > 0
@@ -86,11 +87,11 @@ class PerfTelemetryStore {
 		this.record({
 			endpoint: normalizeEndpoint(url),
 			durationMs,
-			bucket,
-			status: response.status,
-			timestamp: Date.now(),
-			source: headerDuration || serverTimingDuration ? 'header' : 'client'
-		});
+				bucket,
+				status: response.status,
+				timestamp: Date.now(),
+				source: headerDuration != null || serverTimingDuration != null ? 'header' : 'client'
+			});
 	}
 
 	recordNetworkError(url: string, durationMs: number): void {

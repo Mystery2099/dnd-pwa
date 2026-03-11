@@ -126,12 +126,12 @@ export async function apiFetch<T>(url: string, init?: RequestInit): Promise<T> {
 		return undefined as T;
 	} catch (error) {
 		const durationMs = (typeof performance !== 'undefined' ? performance.now() : Date.now()) - startedAt;
-		if (error instanceof TypeError || error instanceof DOMException) {
-			perfTelemetryStore.recordNetworkError(url, durationMs);
-		}
 		if (error instanceof DOMException && error.name === 'AbortError') {
 			// Preserve abort errors so TanStack Query can treat cancellation correctly.
 			throw error;
+		}
+		if (error instanceof TypeError || error instanceof DOMException) {
+			perfTelemetryStore.recordNetworkError(url, durationMs);
 		}
 		if (ApiError.isApiError(error)) {
 			throw error;

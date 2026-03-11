@@ -1,5 +1,10 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
 import { PerformanceMonitor } from '$lib/server/utils/monitoring';
+import {
+	persistWebVital,
+	flushQueuedWebVitals,
+	getQueuedWebVitalCount
+} from '$lib/server/repositories/web-vitals';
 
 type IncomingMetric = {
 	name?: unknown;
@@ -48,13 +53,17 @@ export const POST: RequestHandler = async ({ request }) => {
 	}
 
 	const monitor = PerformanceMonitor.getInstance();
+	const flushResult = await flushQueuedWebVitals();
 	let recorded = 0;
+	let persisted = 0;
+	let persistenceErrors = 0;
 
 	for (const rawMetric of rawMetrics.slice(0, 20)) {
 		const metric = rawMetric as IncomingMetric;
 		if (!isValidMetric(metric)) continue;
-
-		monitor.record(`web-vital:${metric.name}`, metric.value, {
+		const normalizedMetric = {
+			name: metric.name,
+			value: metric.value,
 			rating: typeof metric.rating === 'string' ? metric.rating : undefined,
 			pathname: typeof metric.pathname === 'string' ? metric.pathname : undefined,
 			navigationType: typeof metric.navigationType === 'string' ? metric.navigationType : undefined,
@@ -62,9 +71,31 @@ export const POST: RequestHandler = async ({ request }) => {
 				typeof metric.timestamp === 'number' && Number.isFinite(metric.timestamp)
 					? metric.timestamp
 					: undefined
-		});
+		};
+
+		monitor.record(`web-vital:${normalizedMetric.name}`, normalizedMetric.value, normalizedMetric);
+		try {
+			await persistWebVital(normalizedMetric);
+			persisted += 1;
+		} catch (error) {
+			console.error('persistWebVital failed', {
+				name: normalizedMetric.name,
+				pathname: normalizedMetric.pathname,
+				error
+			});
+			persistenceErrors += 1;
+		}
 		recorded += 1;
 	}
 
-	return json({ recorded }, { status: 202 });
+	return json(
+		{
+			recorded,
+			persisted,
+			queued: getQueuedWebVitalCount(),
+			flushedFromQueue: flushResult.flushed,
+			persistenceErrors
+		},
+		{ status: persistenceErrors > 0 ? 503 : 202 }
+	);
 };

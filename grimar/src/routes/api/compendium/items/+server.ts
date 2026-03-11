@@ -3,6 +3,7 @@ import type { RequestHandler } from './$types';
 import { getPaginatedItems } from '$lib/server/repositories/compendium';
 import { COMPENDIUM_TYPES } from '$lib/server/db/schema';
 import type { CompendiumType } from '$lib/server/db/schema';
+import { getQueryBucket } from '$lib/server/utils/query-performance';
 
 type SortByParam = 'name' | 'created_at' | 'updated_at';
 
@@ -14,7 +15,7 @@ function normalizeSortBy(value: string | null): SortByParam {
 
 function formatTimingHeaders(durationMs: number): HeadersInit {
 	const roundedMs = Number(durationMs.toFixed(2));
-	const bucket = durationMs < 50 ? 'fast' : durationMs < 150 ? 'moderate' : durationMs < 400 ? 'slow' : 'very-slow';
+	const bucket = getQueryBucket(durationMs);
 	return {
 		'Server-Timing': `compendium-items;dur=${roundedMs}`,
 		'X-Query-Time-Ms': String(roundedMs),
@@ -35,8 +36,9 @@ export const GET: RequestHandler = async ({ url }) => {
 	const sortOrder = (url.searchParams.get('sortOrder') as 'asc' | 'desc') || 'asc';
 	const getAll = url.searchParams.get('all') === 'true';
 	const effectivePage = getAll ? 1 : page;
-	const effectiveLimit = getAll ? 5000 : limit;
-	const effectiveMaxPageSize = getAll ? 5000 : 100;
+	const effectiveLimit = getAll ? Number.MAX_SAFE_INTEGER : limit;
+	const effectiveMaxPageSize = getAll ? undefined : 100;
+	const skipTotalCount = getAll ? false : false;
 
 	const creatureType = url.searchParams.get('creatureType') || undefined;
 	const spellLevel = url.searchParams.get('spellLevel') || undefined;
@@ -64,10 +66,10 @@ export const GET: RequestHandler = async ({ url }) => {
 	}
 
 	const result = await getPaginatedItems(type as CompendiumType, {
-		page: effectivePage,
-		pageSize: effectiveLimit,
-		maxPageSize: effectiveMaxPageSize,
-		skipTotalCount: getAll,
+			page: effectivePage,
+			pageSize: effectiveLimit,
+			maxPageSize: effectiveMaxPageSize,
+			skipTotalCount,
 		filters: {
 			search,
 			gamesystem,

@@ -35,28 +35,28 @@ class CacheSync {
 	/**
 	 * Start the SSE connection for cache sync.
 	 */
-		connect(): void {
-			if (!browser) return;
-			if (dev) {
-				this.logDebug('[CacheSync] Disabled in dev mode');
-				return;
-			}
-			if (this.eventSource) return; // Already connected
-
-			this.logDebug('[CacheSync] Connecting to SSE...');
-			this.createConnection();
+	connect(): void {
+		if (!browser) return;
+		if (dev) {
+			this.logDebug('[CacheSync] Disabled in dev mode');
+			return;
 		}
+		if (this.eventSource) return; // Already connected
+
+		this.logDebug('[CacheSync] Connecting to SSE...');
+		this.createConnection();
+	}
 
 	private createConnection(): void {
 		try {
 			this.eventSource = new EventSource(SSE_ENDPOINT);
 
-				this.eventSource.onopen = () => {
-					this.isConnected = true;
-					this.reconnectAttempts = 0;
-					this.logDebug('[CacheSync] SSE connected');
-					offlineStore.resetReconnectAttempts();
-				};
+			this.eventSource.onopen = () => {
+				this.isConnected = true;
+				this.reconnectAttempts = 0;
+				this.logDebug('[CacheSync] SSE connected');
+				offlineStore.resetReconnectAttempts();
+			};
 
 			this.eventSource.onmessage = (event) => {
 				try {
@@ -206,12 +206,12 @@ class CacheSync {
 				const data: CacheVersion = await response.json();
 				const currentVersion = await getCachedVersion();
 
-					// Only invalidate if versions differ
-					if (currentVersion.version !== data.version) {
-						await setCachedVersion(data.version, data.timestamp);
-						await this.invalidateQueryScopes(['compendium', 'cache']);
-					}
+				// Only invalidate if versions differ
+				if (currentVersion.version !== data.version) {
+					await setCachedVersion(data.version, data.timestamp);
+					await this.invalidateQueryScopes(['compendium', 'cache']);
 				}
+			}
 		} catch (error) {
 			console.error('[CacheSync] Force sync failed:', error);
 		}

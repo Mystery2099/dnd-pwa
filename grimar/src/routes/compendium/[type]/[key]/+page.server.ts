@@ -8,6 +8,7 @@ import DOMPurify from 'isomorphic-dompurify';
 
 marked.setOptions({ gfm: true, breaks: true });
 
+const MAX_CACHE_ENTRIES = 1000;
 const markdownRenderCache = new Map<string, string>();
 
 function renderMarkdown(text: unknown): string | null {
@@ -16,10 +17,21 @@ function renderMarkdown(text: unknown): string | null {
 	if (!cacheKey) return null;
 
 	const cached = markdownRenderCache.get(cacheKey);
-	if (cached) return cached;
+	if (cached) {
+		// LRU touch: move accessed key to tail.
+		markdownRenderCache.delete(cacheKey);
+		markdownRenderCache.set(cacheKey, cached);
+		return cached;
+	}
 
 	const rendered = DOMPurify.sanitize(marked.parse(cacheKey) as string);
 	markdownRenderCache.set(cacheKey, rendered);
+	if (markdownRenderCache.size > MAX_CACHE_ENTRIES) {
+		const oldestKey = markdownRenderCache.keys().next().value;
+		if (oldestKey) {
+			markdownRenderCache.delete(oldestKey);
+		}
+	}
 	return rendered;
 }
 

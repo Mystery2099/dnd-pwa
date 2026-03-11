@@ -54,8 +54,15 @@ function buildItemCacheKey(type: CompendiumType, key: string): string {
 	return `compendium:item:${type}:${key}`;
 }
 
-function invalidateCompendiumCaches(): void {
+function invalidateCompendiumCaches(type?: CompendiumType): void {
+	if (type) {
+		cache.invalidatePattern(`compendium:*:${type}:*`);
+		cache.invalidatePattern(COMPENDIUM_COUNTS_CACHE_KEY);
+		return;
+	}
+
 	cache.invalidatePattern('compendium:*');
+	cache.invalidatePattern(COMPENDIUM_COUNTS_CACHE_KEY);
 }
 
 export async function getPaginatedItems(
@@ -70,7 +77,11 @@ export async function getPaginatedItems(
 ): Promise<PaginatedResult<CompendiumItem>> {
 	const db = await getDb();
 	const page = options.page ?? 1;
-	const pageSize = Math.min(options.pageSize ?? 50, options.maxPageSize ?? 100);
+	const requestedPageSize = options.pageSize ?? 50;
+	const pageSize =
+		options.maxPageSize === undefined
+			? requestedPageSize
+			: Math.min(requestedPageSize, options.maxPageSize);
 	const offset = (page - 1) * pageSize;
 	const filters = options.filters ?? {};
 	const listCacheKey = buildListCacheKey(type, page, pageSize, filters);
@@ -89,7 +100,8 @@ export async function getPaginatedItems(
 		try {
 			rankedMatches = await searchFtsRanked(filters.search, FTS_SEARCH_LIMIT, db);
 			ftsMatchedKeys = rankedMatches.map((match) => match.key);
-		} catch {
+		} catch (e) {
+			console.error('searchFtsRanked failed for filters.search', { search: filters.search, error: e });
 			useLikeSearchFallback = true;
 		}
 	}
@@ -174,30 +186,28 @@ export async function getPaginatedItems(
 	const orderBy = sortOrder === 'desc' ? desc(sortColumn) : sortColumn;
 
 	if (filters.search && !useLikeSearchFallback && rankedMatches && rankedMatches.length > 0) {
-		const filteredItems = await db.select().from(compendium).where(whereClause);
-		const rankByKey = new Map(rankedMatches.map((match, index) => [match.key, index]));
-		const maxRank = rankedMatches.length + 1;
-		const sortDirection = sortOrder === 'desc' ? -1 : 1;
-
-		filteredItems.sort((a, b) => {
-			const rankA = rankByKey.get(a.key) ?? maxRank;
-			const rankB = rankByKey.get(b.key) ?? maxRank;
-			if (rankA !== rankB) return rankA - rankB;
-
-			if (sortBy === 'created_at') {
-				return ((a.createdAt?.getTime() ?? 0) - (b.createdAt?.getTime() ?? 0)) * sortDirection;
-			}
-			if (sortBy === 'updated_at') {
-				return ((a.updatedAt?.getTime() ?? 0) - (b.updatedAt?.getTime() ?? 0)) * sortDirection;
-			}
-			return a.name.localeCompare(b.name) * sortDirection;
-		});
-
-		const total = filteredItems.length;
+		const rankCases = rankedMatches.map((match, index) =>
+			sql`WHEN ${compendium.key} = ${match.key} THEN ${index}`
+		);
+		const rankOrder = sql<number>`CASE ${sql.join(rankCases, sql.raw(' '))} ELSE ${rankedMatches.length} END`;
+		const items = await db
+			.select()
+			.from(compendium)
+			.where(whereClause)
+			.orderBy(rankOrder, orderBy)
+			.limit(pageSize)
+			.offset(offset);
+		const total = Number(
+			(
+				await db
+					.select({ count: sql<number>`count(*)` })
+					.from(compendium)
+					.where(whereClause)
+			)[0]?.count ?? 0
+		);
 		const totalPages = Math.ceil(total / pageSize);
-		const pagedItems = filteredItems.slice(offset, offset + pageSize);
 		const result = {
-			items: pagedItems,
+			items,
 			total,
 			page,
 			pageSize,
@@ -336,7 +346,7 @@ export async function createItem(
 			})
 			.returning();
 
-	invalidateCompendiumCaches();
+	invalidateCompendiumCaches(data.type as CompendiumType);
 	return item;
 }
 
@@ -357,7 +367,7 @@ export async function updateItem(
 			.where(and(eq(compendium.type, type), eq(compendium.key, key)))
 			.returning();
 
-	invalidateCompendiumCaches();
+	invalidateCompendiumCaches(type);
 	return item ?? null;
 }
 
@@ -368,7 +378,7 @@ export async function deleteItem(type: CompendiumType, key: string): Promise<boo
 		.delete(compendium)
 		.where(and(eq(compendium.type, type), eq(compendium.key, key)))
 		.returning();
-	invalidateCompendiumCaches();
+	invalidateCompendiumCaches(type);
 	return result.length > 0;
 }
 
@@ -465,7 +475,7 @@ export async function getDistinctValues(
 export async function clearType(type: CompendiumType): Promise<number> {
 	const db = await getDb();
 	const result = await db.delete(compendium).where(eq(compendium.type, type)).returning();
-	invalidateCompendiumCaches();
+	invalidateCompendiumCaches(type);
 	return result.length;
 }
 
@@ -491,7 +501,12 @@ export async function bulkInsert(
 	}));
 
 	const result = await db.insert(compendium).values(itemsWithTimestamps).returning();
-	invalidateCompendiumCaches();
+	const types = new Set(items.map((item) => item.type as CompendiumType));
+	if (types.size === 1) {
+		invalidateCompendiumCaches(types.values().next().value);
+	} else {
+		invalidateCompendiumCaches();
+	}
 	return result.length;
 }
 
@@ -525,7 +540,7 @@ export async function upsertItem(
 			})
 			.returning();
 
-	invalidateCompendiumCaches();
+	invalidateCompendiumCaches(data.type as CompendiumType);
 	return item;
 }
 
@@ -571,7 +586,12 @@ export async function upsertItems(
 		totalUpserted += result.length;
 	}
 
-	invalidateCompendiumCaches();
+	const types = new Set(items.map((item) => item.type as CompendiumType));
+	if (types.size === 1) {
+		invalidateCompendiumCaches(types.values().next().value);
+	} else {
+		invalidateCompendiumCaches();
+	}
 	return totalUpserted;
 }
 
