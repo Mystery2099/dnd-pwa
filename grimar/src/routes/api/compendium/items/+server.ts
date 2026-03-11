@@ -94,7 +94,14 @@ export const GET: RequestHandler = async ({ url }) => {
 		});
 
 		return json(result, { headers: formatTimingHeaders(performance.now() - start) });
-	} catch {
+	} catch (err) {
+		console.error('GET /api/compendium/items failed', {
+			type,
+			search,
+			page: effectivePage,
+			limit: effectiveLimit,
+			error: err
+		});
 		return json(
 			{ error: 'Internal Server Error' },
 			{ status: 500, headers: formatTimingHeaders(performance.now() - start) }

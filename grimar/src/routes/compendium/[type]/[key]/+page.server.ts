@@ -13,8 +13,9 @@ const markdownRenderCache = new Map<string, string>();
 
 async function renderMarkdown(text: unknown): Promise<string | null> {
 	if (typeof text !== 'string') return null;
-	const cacheKey = text.trim();
-	if (!cacheKey) return null;
+	const original = text as string;
+	if (original.length === 0) return null;
+	const cacheKey = original;
 
 	const cached = markdownRenderCache.get(cacheKey);
 	if (cached) {
@@ -24,7 +25,7 @@ async function renderMarkdown(text: unknown): Promise<string | null> {
 		return cached;
 	}
 
-	const parsed = marked.parse(cacheKey);
+	const parsed = marked.parse(original);
 	const rendered = DOMPurify.sanitize(typeof parsed === 'string' ? parsed : await parsed);
 	markdownRenderCache.set(cacheKey, rendered);
 	if (markdownRenderCache.size > MAX_CACHE_ENTRIES) {
@@ -45,7 +46,7 @@ async function setMarkdown(
 	target: Record<string, string>,
 	key: string,
 	value: unknown
-): void {
+): Promise<void> {
 	const rendered = await renderMarkdown(value);
 	if (rendered) {
 		target[key] = rendered;

@@ -13,6 +13,7 @@ export interface PaginatedResult<T> {
 	pageSize: number;
 	totalPages: number;
 	hasMore: boolean;
+	resultsTruncated: boolean;
 }
 
 export interface FilterOptions {
@@ -96,10 +97,15 @@ export async function getPaginatedItems(
 	let useLikeSearchFallback = false;
 	let rankedMatches: Array<{ key: string; rank: number }> | null = null;
 	let ftsMatchedKeys: string[] | null = null;
+	let resultsTruncated = false;
 
 	if (filters.search) {
 		try {
-			rankedMatches = await searchFtsRanked(filters.search, FTS_SEARCH_LIMIT, db);
+			const rankedMatchesWithSentinel = await searchFtsRanked(filters.search, FTS_SEARCH_LIMIT + 1, db);
+			resultsTruncated = rankedMatchesWithSentinel.length > FTS_SEARCH_LIMIT;
+			rankedMatches = resultsTruncated
+				? rankedMatchesWithSentinel.slice(0, FTS_SEARCH_LIMIT)
+				: rankedMatchesWithSentinel;
 			ftsMatchedKeys = rankedMatches.map((match) => match.key);
 		} catch (e) {
 			console.error('searchFtsRanked failed for filters.search', { search: filters.search, error: e });
@@ -171,7 +177,8 @@ export async function getPaginatedItems(
 				page,
 				pageSize,
 				totalPages: 0,
-				hasMore: false
+				hasMore: false,
+				resultsTruncated: false
 			};
 		}
 	}
@@ -213,7 +220,8 @@ export async function getPaginatedItems(
 			page,
 			pageSize,
 			totalPages,
-			hasMore: page < totalPages
+			hasMore: page < totalPages,
+			resultsTruncated
 		};
 
 		cache.set(listCacheKey, result, getCacheTTL('search'));
@@ -247,7 +255,8 @@ export async function getPaginatedItems(
 		page,
 		pageSize,
 		totalPages,
-		hasMore: page < totalPages
+		hasMore: page < totalPages,
+		resultsTruncated
 	};
 	cache.set(listCacheKey, result, getCacheTTL(filters.search ? 'search' : 'compendium'));
 	return result;

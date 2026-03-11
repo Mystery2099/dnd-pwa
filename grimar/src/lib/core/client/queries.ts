@@ -304,8 +304,8 @@ export function prefetchCompendiumDetail(
 	queryClient: QueryClient,
 	type: string,
 	slug: string
-): void {
-	queryClient.prefetchQuery({
+): Promise<void> {
+	return queryClient.prefetchQuery({
 		queryKey: queryKeys.compendium.detail(type, slug),
 		queryFn: () => fetchCompendiumDetail(type, slug),
 		staleTime: 30 * 60 * 1000
@@ -315,8 +315,8 @@ export function prefetchCompendiumDetail(
 /**
  * Prefetch character detail.
  */
-export function prefetchCharacter(queryClient: QueryClient, id: string): void {
-	queryClient.prefetchQuery({
+export function prefetchCharacter(queryClient: QueryClient, id: string): Promise<void> {
+	return queryClient.prefetchQuery({
 		queryKey: queryKeys.characters.detail(id),
 		queryFn: () => fetchCharacter(id),
 		staleTime: 5 * 60 * 1000
@@ -326,8 +326,8 @@ export function prefetchCharacter(queryClient: QueryClient, id: string): void {
 /**
  * Prefetch characters list.
  */
-export function prefetchCharacters(queryClient: QueryClient): void {
-	queryClient.prefetchQuery({
+export function prefetchCharacters(queryClient: QueryClient): Promise<void> {
+	return queryClient.prefetchQuery({
 		queryKey: queryKeys.characters.list,
 		queryFn: fetchCharacters,
 		staleTime: 2 * 60 * 1000
