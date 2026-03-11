@@ -30,17 +30,6 @@
 					? 'border-[var(--color-accent)]/50 bg-[var(--color-accent)]/20 text-[var(--color-text-primary)] shadow-[var(--color-accent-glow)]'
 					: 'border-transparent hover:border-[var(--color-border)] hover:bg-[var(--color-bg-card)] hover:text-[var(--color-text-primary)]')}
 			href={item.href}
-			onclick={(e) => {
-				// Handle navigation with proper SvelteKit routing
-				const target = e.currentTarget as HTMLAnchorElement;
-				const url = new URL(target.href, window.location.origin);
-				if (window.location.pathname !== url.pathname) {
-					import('$app/navigation').then(({ goto }) => {
-						goto(url.pathname).catch(() => {});
-					});
-				}
-				e.preventDefault();
-			}}
 		>
 			{item.label}
 		</a>

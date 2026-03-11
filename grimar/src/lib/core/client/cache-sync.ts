@@ -8,6 +8,7 @@
 import { browser, dev } from '$app/environment';
 import { queryClient } from './query-client';
 import { setCachedVersion, getCachedVersion, type CacheVersion } from './cache-version';
+import { queryKeys } from './queries';
 import { offlineStore } from './offline-store';
 
 const SSE_ENDPOINT = '/api/cache/events';
@@ -27,18 +28,22 @@ class CacheSync {
 	private isConnected = false;
 	private listeners: Set<(event: CacheEvent) => void> = new Set();
 
+	private logDebug(...args: unknown[]): void {
+		if (dev) console.log(...args);
+	}
+
 	/**
 	 * Start the SSE connection for cache sync.
 	 */
 	connect(): void {
 		if (!browser) return;
 		if (dev) {
-			console.log('[CacheSync] Disabled in dev mode');
+			this.logDebug('[CacheSync] Disabled in dev mode');
 			return;
 		}
 		if (this.eventSource) return; // Already connected
 
-		console.log('[CacheSync] Connecting to SSE...');
+		this.logDebug('[CacheSync] Connecting to SSE...');
 		this.createConnection();
 	}
 
@@ -49,7 +54,7 @@ class CacheSync {
 			this.eventSource.onopen = () => {
 				this.isConnected = true;
 				this.reconnectAttempts = 0;
-				console.log('[CacheSync] SSE connected');
+				this.logDebug('[CacheSync] SSE connected');
 				offlineStore.resetReconnectAttempts();
 			};
 
@@ -77,7 +82,7 @@ class CacheSync {
 	}
 
 	private handleEvent(event: CacheEvent): void {
-		console.log('[CacheSync] Received event:', event.type, event.version);
+		this.logDebug('[CacheSync] Received event:', event.type, event.version);
 
 		switch (event.type) {
 			case 'version_update':
@@ -103,27 +108,38 @@ class CacheSync {
 		const currentVersion = await getCachedVersion();
 
 		if (currentVersion.version === version) {
-			console.log('[CacheSync] Version unchanged, skipping invalidation:', version);
+			this.logDebug('[CacheSync] Version unchanged, skipping invalidation:', version);
 			return;
 		}
 
 		// Update cached version
 		await setCachedVersion(version, timestamp);
 
-		// Invalidate all queries to trigger refetch
-		if (queryClient) {
-			await queryClient.invalidateQueries();
-		}
+		await this.invalidateQueryScopes(['compendium', 'cache']);
 
-		console.log('[CacheSync] Cache invalidated, version:', version);
+		this.logDebug('[CacheSync] Cache invalidated, version:', version);
 	}
 
 	private async handleInvalidate(): Promise<void> {
-		// Invalidate all queries without version change
-		if (queryClient) {
-			await queryClient.invalidateQueries();
+		await this.invalidateQueryScopes(['compendium', 'cache']);
+		this.logDebug('[CacheSync] Cache invalidated');
+	}
+
+	private async invalidateQueryScopes(scopes: Array<'compendium' | 'characters' | 'cache'>): Promise<void> {
+		if (!queryClient) return;
+
+		const invalidations: Promise<unknown>[] = [];
+		for (const scope of scopes) {
+			if (scope === 'compendium') {
+				invalidations.push(queryClient.invalidateQueries({ queryKey: queryKeys.compendium.all }));
+			} else if (scope === 'characters') {
+				invalidations.push(queryClient.invalidateQueries({ queryKey: queryKeys.characters.all }));
+			} else if (scope === 'cache') {
+				invalidations.push(queryClient.invalidateQueries({ queryKey: queryKeys.cache.version }));
+			}
 		}
-		console.log('[CacheSync] Cache invalidated');
+
+		await Promise.all(invalidations);
 	}
 
 	private scheduleReconnect(): void {
@@ -136,7 +152,7 @@ class CacheSync {
 		offlineStore.incrementReconnectAttempts();
 
 		const delay = RECONNECT_DELAY * Math.pow(1.5, this.reconnectAttempts - 1);
-		console.log(`[CacheSync] Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts})`);
+		this.logDebug(`[CacheSync] Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts})`);
 
 		this.reconnectTimeout = setTimeout(() => {
 			this.createConnection();
@@ -158,7 +174,7 @@ class CacheSync {
 		}
 
 		this.isConnected = false;
-		console.log('[CacheSync] Disconnected');
+		this.logDebug('[CacheSync] Disconnected');
 	}
 
 	/**
@@ -193,9 +209,7 @@ class CacheSync {
 				// Only invalidate if versions differ
 				if (currentVersion.version !== data.version) {
 					await setCachedVersion(data.version, data.timestamp);
-					if (queryClient) {
-						await queryClient.invalidateQueries();
-					}
+					await this.invalidateQueryScopes(['compendium', 'cache']);
 				}
 			}
 		} catch (error) {

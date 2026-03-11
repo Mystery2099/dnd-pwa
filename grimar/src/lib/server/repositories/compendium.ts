@@ -1,6 +1,8 @@
 import { eq, and, sql, like, or, desc, inArray, type SQL } from 'drizzle-orm';
 import { getDb } from '../db/index';
+import { searchFtsRanked } from '../db/db-fts';
 import { compendium, type CompendiumItem, type CompendiumType } from '../db/schema';
+import { MemoryCache, getCacheTTL } from '$lib/server/utils/cache';
 
 export type { CompendiumType } from '../db/schema';
 
@@ -11,6 +13,7 @@ export interface PaginatedResult<T> {
 	pageSize: number;
 	totalPages: number;
 	hasMore: boolean;
+	resultsTruncated: boolean;
 }
 
 export interface FilterOptions {
@@ -32,28 +35,82 @@ export interface FilterOptions {
 	challengeRating?: number;
 }
 
+const FTS_SEARCH_LIMIT = 5000;
+const COMPENDIUM_COUNTS_CACHE_KEY = 'compendium:counts:all';
+const cache = MemoryCache.getInstance();
+
+function buildListCacheKey(
+	type: CompendiumType,
+	page: number,
+	pageSize: number,
+	filters: FilterOptions
+): string {
+	const normalizedFilters = Object.entries(filters)
+		.filter(([, value]) => value !== undefined && value !== null && value !== '')
+		.sort(([a], [b]) => a.localeCompare(b));
+	return `compendium:list:${type}:${page}:${pageSize}:${JSON.stringify(normalizedFilters)}`;
+}
+
+function buildItemCacheKey(type: CompendiumType, key: string): string {
+	return `compendium:item:${type}:${key}`;
+}
+
+function invalidateCompendiumCaches(type?: CompendiumType): void {
+	if (type) {
+		cache.invalidatePattern(`compendium:*:${type}:*`);
+		cache.invalidatePattern(`compendium:distinct:*:${type}`);
+		cache.invalidatePattern(COMPENDIUM_COUNTS_CACHE_KEY);
+		return;
+	}
+
+	cache.invalidatePattern('compendium:*');
+	cache.invalidatePattern(COMPENDIUM_COUNTS_CACHE_KEY);
+}
+
 export async function getPaginatedItems(
 	type: CompendiumType,
 	options: {
 		page?: number;
 		pageSize?: number;
+		maxPageSize?: number;
+		skipTotalCount?: boolean;
 		filters?: FilterOptions;
 	}
 ): Promise<PaginatedResult<CompendiumItem>> {
 	const db = await getDb();
 	const page = options.page ?? 1;
-	const pageSize = Math.min(options.pageSize ?? 50, 100);
+	const requestedPageSize = options.pageSize ?? 50;
+	const pageSize =
+		options.maxPageSize === undefined
+			? requestedPageSize
+			: Math.min(requestedPageSize, options.maxPageSize);
 	const offset = (page - 1) * pageSize;
 	const filters = options.filters ?? {};
+	const listCacheKey = buildListCacheKey(type, page, pageSize, filters);
+
+	const cachedResult = cache.get<PaginatedResult<CompendiumItem>>(listCacheKey);
+	if (cachedResult) {
+		return cachedResult;
+	}
 
 	let whereClause: SQL<unknown> = eq(compendium.type, type);
+	let useLikeSearchFallback = false;
+	let rankedMatches: Array<{ key: string; rank: number }> | null = null;
+	let ftsMatchedKeys: string[] | null = null;
+	let resultsTruncated = false;
 
 	if (filters.search) {
-		const searchTerm = `%${filters.search}%`;
-		whereClause = and(
-			whereClause,
-			or(like(compendium.name, searchTerm), like(compendium.description, searchTerm))
-		)!;
+		try {
+			const rankedMatchesWithSentinel = await searchFtsRanked(filters.search, FTS_SEARCH_LIMIT + 1, db);
+			resultsTruncated = rankedMatchesWithSentinel.length > FTS_SEARCH_LIMIT;
+			rankedMatches = resultsTruncated
+				? rankedMatchesWithSentinel.slice(0, FTS_SEARCH_LIMIT)
+				: rankedMatchesWithSentinel;
+			ftsMatchedKeys = rankedMatches.map((match) => match.key);
+		} catch (e) {
+			console.error('searchFtsRanked failed for filters.search', { search: filters.search, error: e });
+			useLikeSearchFallback = true;
+		}
 	}
 
 	if (filters.gamesystem) {
@@ -104,46 +161,126 @@ export async function getPaginatedItems(
 		)!;
 	}
 
+	if (filters.search) {
+		if (useLikeSearchFallback) {
+			const searchTerm = `%${filters.search}%`;
+			whereClause = and(
+				whereClause,
+				or(like(compendium.name, searchTerm), like(compendium.description, searchTerm))
+			)!;
+		} else if (ftsMatchedKeys && ftsMatchedKeys.length > 0) {
+			whereClause = and(whereClause, inArray(compendium.key, ftsMatchedKeys))!;
+		} else {
+			return {
+				items: [],
+				total: 0,
+				page,
+				pageSize,
+				totalPages: 0,
+				hasMore: false,
+				resultsTruncated: false
+			};
+		}
+	}
+
 	const sortBy = filters.sortBy ?? 'name';
 	const sortOrder = filters.sortOrder ?? 'asc';
 	const sortColumn =
 		sortBy === 'created_at'
 			? compendium.createdAt
 			: sortBy === 'updated_at'
-				? compendium.updatedAt
-				: compendium.name;
+					? compendium.updatedAt
+					: compendium.name;
 	const orderBy = sortOrder === 'desc' ? desc(sortColumn) : sortColumn;
 
-	const [items, countResult] = await Promise.all([
-		db.select().from(compendium).where(whereClause).orderBy(orderBy).limit(pageSize).offset(offset),
-		db
-			.select({ count: sql<number>`count(*)` })
+	if (filters.search && !useLikeSearchFallback && rankedMatches && rankedMatches.length > 0) {
+		const rankCases = rankedMatches.map((match, index) =>
+			sql`WHEN ${compendium.key} = ${match.key} THEN ${index}`
+		);
+		const rankOrder = sql<number>`CASE ${sql.join(rankCases, sql.raw(' '))} ELSE ${rankedMatches.length} END`;
+		const items = await db
+			.select()
 			.from(compendium)
 			.where(whereClause)
-	]);
+			.orderBy(rankOrder, orderBy)
+			.limit(pageSize)
+			.offset(offset);
+		const total = Number(
+			(
+				await db
+					.select({ count: sql<number>`count(*)` })
+					.from(compendium)
+					.where(whereClause)
+			)[0]?.count ?? 0
+		);
+		const totalPages = Math.ceil(total / pageSize);
+		const result = {
+			items,
+			total,
+			page,
+			pageSize,
+			totalPages,
+			hasMore: page < totalPages,
+			resultsTruncated
+		};
 
-	const total = Number(countResult[0]?.count ?? 0);
+		cache.set(listCacheKey, result, getCacheTTL('search'));
+		return result;
+	}
+
+	const items = await db
+		.select()
+		.from(compendium)
+		.where(whereClause)
+		.orderBy(orderBy)
+		.limit(pageSize)
+		.offset(offset);
+
+	const canInferTotalFromItems = options.skipTotalCount && page === 1 && items.length < pageSize;
+	const total = canInferTotalFromItems
+		? items.length
+		: Number(
+				(
+					await db
+						.select({ count: sql<number>`count(*)` })
+						.from(compendium)
+						.where(whereClause)
+				)[0]?.count ?? 0
+			);
 	const totalPages = Math.ceil(total / pageSize);
 
-	return {
+	const result = {
 		items,
 		total,
 		page,
 		pageSize,
 		totalPages,
-		hasMore: page < totalPages
+		hasMore: page < totalPages,
+		resultsTruncated
 	};
+	cache.set(listCacheKey, result, getCacheTTL(filters.search ? 'search' : 'compendium'));
+	return result;
 }
 
 export async function getItem(type: CompendiumType, key: string): Promise<CompendiumItem | null> {
 	const db = await getDb();
+	const itemCacheKey = buildItemCacheKey(type, key);
+	const cachedItem = cache.get<CompendiumItem>(itemCacheKey);
+	if (cachedItem) {
+		return cachedItem;
+	}
+
 	const results = await db
 		.select()
 		.from(compendium)
 		.where(and(eq(compendium.type, type), eq(compendium.key, key)))
 		.limit(1);
 
-	return results[0] ?? null;
+	const item = results[0] ?? null;
+	if (item) {
+		cache.set(itemCacheKey, item, getCacheTTL('compendium'));
+	}
+	return item;
 }
 
 export async function searchItems(
@@ -216,9 +353,10 @@ export async function createItem(
 			...data,
 			createdAt: now,
 			updatedAt: now
-		})
-		.returning();
+			})
+			.returning();
 
+	invalidateCompendiumCaches(data.type as CompendiumType);
 	return item;
 }
 
@@ -236,9 +374,10 @@ export async function updateItem(
 			...data,
 			updatedAt: now
 		})
-		.where(and(eq(compendium.type, type), eq(compendium.key, key)))
-		.returning();
+			.where(and(eq(compendium.type, type), eq(compendium.key, key)))
+			.returning();
 
+	invalidateCompendiumCaches(type);
 	return item ?? null;
 }
 
@@ -249,6 +388,7 @@ export async function deleteItem(type: CompendiumType, key: string): Promise<boo
 		.delete(compendium)
 		.where(and(eq(compendium.type, type), eq(compendium.key, key)))
 		.returning();
+	invalidateCompendiumCaches(type);
 	return result.length > 0;
 }
 
@@ -264,6 +404,11 @@ export async function getItemsByType(type: CompendiumType): Promise<CompendiumIt
 
 export async function getTypeCounts(): Promise<Record<string, number>> {
 	const db = await getDb();
+	const cachedCounts = cache.get<Record<string, number>>(COMPENDIUM_COUNTS_CACHE_KEY);
+	if (cachedCounts) {
+		return cachedCounts;
+	}
+
 	const results = await db
 		.select({
 			type: compendium.type,
@@ -300,6 +445,7 @@ export async function getTypeCounts(): Promise<Record<string, number>> {
 	counts.classes = Number(baseClasses[0]?.count ?? 0);
 	counts.subclasses = Number(subclasses[0]?.count ?? 0);
 
+	cache.set(COMPENDIUM_COUNTS_CACHE_KEY, counts, getCacheTTL('compendium'));
 	return counts;
 }
 
@@ -307,6 +453,12 @@ export async function getDistinctValues(
 	field: 'gamesystemKey' | 'documentKey' | 'publisherKey' | 'source',
 	type?: CompendiumType
 ): Promise<string[]> {
+	const distinctCacheKey = `compendium:distinct:${field}:${type ?? 'all'}`;
+	const cachedValues = cache.get<string[]>(distinctCacheKey);
+	if (cachedValues) {
+		return cachedValues;
+	}
+
 	const db = await getDb();
 	const column = compendium[field];
 
@@ -323,18 +475,24 @@ export async function getDistinctValues(
 	}
 
 	const results = await query.orderBy(column);
-	return results.map((r: { value: string | null }) => r.value).filter((v): v is string => v !== null);
+	const values = results
+		.map((r: { value: string | null }) => r.value)
+		.filter((v): v is string => v !== null);
+	cache.set(distinctCacheKey, values, getCacheTTL('compendium'));
+	return values;
 }
 
 export async function clearType(type: CompendiumType): Promise<number> {
 	const db = await getDb();
 	const result = await db.delete(compendium).where(eq(compendium.type, type)).returning();
+	invalidateCompendiumCaches(type);
 	return result.length;
 }
 
 export async function clearSource(source: string): Promise<number> {
 	const db = await getDb();
 	const result = await db.delete(compendium).where(eq(compendium.source, source)).returning();
+	invalidateCompendiumCaches();
 	return result.length;
 }
 
@@ -353,6 +511,12 @@ export async function bulkInsert(
 	}));
 
 	const result = await db.insert(compendium).values(itemsWithTimestamps).returning();
+	const types = new Set(items.map((item) => item.type as CompendiumType));
+	if (types.size === 1) {
+		invalidateCompendiumCaches(types.values().next().value);
+	} else {
+		invalidateCompendiumCaches();
+	}
 	return result.length;
 }
 
@@ -383,9 +547,10 @@ export async function upsertItem(
 				publisherName: data.publisherName,
 				updatedAt: now
 			}
-		})
-		.returning();
+			})
+			.returning();
 
+	invalidateCompendiumCaches(data.type as CompendiumType);
 	return item;
 }
 
@@ -431,6 +596,12 @@ export async function upsertItems(
 		totalUpserted += result.length;
 	}
 
+	const types = new Set(items.map((item) => item.type as CompendiumType));
+	if (types.size === 1) {
+		invalidateCompendiumCaches(types.values().next().value);
+	} else {
+		invalidateCompendiumCaches();
+	}
 	return totalUpserted;
 }
 

@@ -12,7 +12,7 @@ import type { AuthUser } from './auth-types';
 
 const ADMIN_GROUPS = (import.meta.env.ADMIN_GROUPS || '')
 	.split(',')
-	.map((g) => g.trim().toLowerCase())
+	.map((g: string) => g.trim().toLowerCase())
 	.filter(Boolean);
 
 function isDevTestAuthBypassEnabled(): boolean {

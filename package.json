@@ -23,6 +23,8 @@
 		"test:e2e:ui": "bun run --shell bun --cwd grimar test:e2e:ui",
 		"test:e2e:debug": "bun run --shell bun --cwd grimar test:e2e:debug",
 		"test:all": "bun run --shell bun --cwd grimar test:all",
+		"perf:budgets": "bun run --shell bun --cwd grimar perf:budgets",
+		"perf:check": "bun run --shell bun --cwd grimar perf:check",
 		"db:push": "bun run --shell bun --cwd grimar db:push",
 		"db:generate": "bun run --shell bun --cwd grimar db:generate",
 		"db:migrate": "bun run --shell bun --cwd grimar db:migrate",

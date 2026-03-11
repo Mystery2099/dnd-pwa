@@ -93,18 +93,7 @@
 							<a
 								class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] px-4 py-3 text-[var(--color-text-primary)] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_5%,transparent)] transition-all duration-200 ease-out hover:border-[var(--color-accent)]/20 hover:bg-[var(--color-bg-card)]"
 								href={item.href}
-								onclick={(e) => {
-									// Handle navigation with proper SvelteKit routing
-									const target = e.currentTarget as HTMLAnchorElement;
-									const url = new URL(target.href, window.location.origin);
-									if (window.location.pathname !== url.pathname) {
-										import('$app/navigation').then(({ goto }) => {
-											goto(url.pathname).catch(() => {});
-										});
-									}
-									e.preventDefault();
-									close();
-								}}
+								onclick={close}
 							>
 								{item.label}
 							</a>

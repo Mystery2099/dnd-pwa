@@ -13,6 +13,7 @@
 import { createQuery } from '@tanstack/svelte-query';
 import type { QueryClient } from '@tanstack/svelte-query';
 import { ApiError } from './errors';
+import { perfTelemetryStore } from './perf-telemetry';
 import type { CompendiumSearchResult, CompendiumTypeName } from '$lib/core/types/compendium';
 
 type SortByParam = 'name' | 'createdAt' | 'updatedAt';
@@ -99,6 +100,8 @@ export async function apiFetch<T>(url: string, init?: RequestInit): Promise<T> {
 		throw ApiError.offline();
 	}
 
+	const startedAt = typeof performance !== 'undefined' ? performance.now() : Date.now();
+
 	try {
 		const response = await fetch(url, {
 			...init,
@@ -107,6 +110,8 @@ export async function apiFetch<T>(url: string, init?: RequestInit): Promise<T> {
 				...init?.headers
 			}
 		});
+		const durationMs = (typeof performance !== 'undefined' ? performance.now() : Date.now()) - startedAt;
+		perfTelemetryStore.recordFromResponse(url, response, durationMs);
 
 		if (!response.ok) {
 			const body = await response.text().catch(() => undefined);
@@ -120,6 +125,14 @@ export async function apiFetch<T>(url: string, init?: RequestInit): Promise<T> {
 		}
 		return undefined as T;
 	} catch (error) {
+		const durationMs = (typeof performance !== 'undefined' ? performance.now() : Date.now()) - startedAt;
+		if (error instanceof DOMException && error.name === 'AbortError') {
+			// Preserve abort errors so TanStack Query can treat cancellation correctly.
+			throw error;
+		}
+		if (error instanceof TypeError || error instanceof DOMException) {
+			perfTelemetryStore.recordNetworkError(url, durationMs);
+		}
 		if (ApiError.isApiError(error)) {
 			throw error;
 		}
@@ -139,7 +152,8 @@ export async function apiFetch<T>(url: string, init?: RequestInit): Promise<T> {
  */
 export async function fetchCompendiumList(
 	pathType: string,
-	listParams: CompendiumListParams = {}
+	listParams: CompendiumListParams = {},
+	signal?: AbortSignal
 ): Promise<CompendiumSearchResult> {
 	const apiType = pathType === 'subclasses' ? 'classes' : pathType;
 	const params = new URLSearchParams({ type: apiType });
@@ -148,7 +162,7 @@ export async function fetchCompendiumList(
 		params.set(key, value);
 	}
 
-	return apiFetch(`/api/compendium/items?${params}`);
+	return apiFetch(`/api/compendium/items?${params}`, { signal });
 }
 
 /**
@@ -202,7 +216,8 @@ export function createCompendiumQuery(type: CompendiumTypeName, params: Compendi
 
 	return createQuery(() => ({
 		queryKey: queryKeys.compendium.list(type, normalizedParams),
-		queryFn: () => fetchCompendiumList(type, normalizedParams),
+		queryFn: ({ signal }) => fetchCompendiumList(type, normalizedParams, signal),
+		placeholderData: (previousData) => previousData,
 		staleTime: 10 * 60 * 1000, // 10 minutes
 		gcTime: 30 * 60 * 1000, // 30 minutes in cache
 		networkMode: 'offlineFirst'
@@ -289,8 +304,8 @@ export function prefetchCompendiumDetail(
 	queryClient: QueryClient,
 	type: string,
 	slug: string
-): void {
-	queryClient.prefetchQuery({
+): Promise<void> {
+	return queryClient.prefetchQuery({
 		queryKey: queryKeys.compendium.detail(type, slug),
 		queryFn: () => fetchCompendiumDetail(type, slug),
 		staleTime: 30 * 60 * 1000
@@ -300,8 +315,8 @@ export function prefetchCompendiumDetail(
 /**
  * Prefetch character detail.
  */
-export function prefetchCharacter(queryClient: QueryClient, id: string): void {
-	queryClient.prefetchQuery({
+export function prefetchCharacter(queryClient: QueryClient, id: string): Promise<void> {
+	return queryClient.prefetchQuery({
 		queryKey: queryKeys.characters.detail(id),
 		queryFn: () => fetchCharacter(id),
 		staleTime: 5 * 60 * 1000
@@ -311,8 +326,8 @@ export function prefetchCharacter(queryClient: QueryClient, id: string): void {
 /**
  * Prefetch characters list.
  */
-export function prefetchCharacters(queryClient: QueryClient): void {
-	queryClient.prefetchQuery({
+export function prefetchCharacters(queryClient: QueryClient): Promise<void> {
+	return queryClient.prefetchQuery({
 		queryKey: queryKeys.characters.list,
 		queryFn: fetchCharacters,
 		staleTime: 2 * 60 * 1000

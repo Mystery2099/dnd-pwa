@@ -146,7 +146,7 @@
 		 */
 		tabletMinCardWidth?: number;
 		/**
-		 * Gap between cards in pixels (default: 16 = Tailwind gap-4)
+		 * Gap between columns in pixels (default: 16 = Tailwind gap-4)
 		 *
 		 * PURPOSE: Spacing between cards in the same row
 		 * CALCULATION: Handled by CSS Grid: grid-gap property
@@ -159,6 +159,15 @@
 		 * ADJUSTMENT: Increase for breathing room, decrease for density
 		 */
 		gap?: number;
+		/**
+		 * Gap between rows in pixels (default: gap)
+		 *
+		 * PURPOSE: Vertical spacing between virtualized rows.
+		 * If omitted, uses `gap` so current behavior is preserved.
+		 */
+		rowGap?: number;
+		/** Reset scroll position to top when item dataset changes */
+		resetScrollOnItemsChange?: boolean;
 		class?: string;
 	}
 
@@ -171,6 +180,8 @@
 		mobileMinCardWidth = 150,
 		tabletMinCardWidth = 190,
 		gap = 16,
+		rowGap = gap,
+		resetScrollOnItemsChange = false,
 		class: className = ''
 	}: Props = $props();
 
@@ -236,6 +247,7 @@
 		scrollTop: 0,
 		columns: 1
 	});
+	let lastResetItemsRef: T[] | null = null;
 
 	$effect(() => {
 		const virtualItems = $virtualizer.getVirtualItems();
@@ -244,6 +256,16 @@
 		displayInfo.totalItems = items.length;
 		displayInfo.scrollTop = containerEl?.scrollTop ?? 0;
 		displayInfo.columns = columns;
+	});
+
+	$effect(() => {
+		// Reset only when the incoming dataset reference changes (e.g. new search/filter result).
+		// Avoid virtualizer method calls here to prevent effect update loops.
+		const currentItemsRef = items;
+		if (!resetScrollOnItemsChange || !containerEl) return;
+		if (lastResetItemsRef === currentItemsRef) return;
+		lastResetItemsRef = currentItemsRef;
+		containerEl.scrollTo({ top: 0, behavior: 'auto' });
 	});
 
 	// ============================================
@@ -318,7 +340,7 @@
 						use:measureRow
 						data-index={row.index}
 						class="absolute left-0 grid w-full"
-						style="gap: {gap}px; transform: translateY({row.start}px); grid-template-columns: repeat({columns}, minmax({currentMinCardWidth}px, 1fr)); will-change: transform;"
+						style="column-gap: {gap}px; row-gap: {rowGap}px; transform: translateY({row.start}px); grid-template-columns: repeat({columns}, minmax(0, 1fr)); will-change: transform;"
 					>
 						{#each rowItems as { item, index } (index)}
 							<div class="flex min-w-0 items-stretch" data-index={index}>

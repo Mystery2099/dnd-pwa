@@ -78,6 +78,7 @@ export interface CompendiumSearchResult {
 	pageSize: number;
 	totalPages: number;
 	hasMore: boolean;
+	resultsTruncated: boolean;
 }
 
 export interface CompendiumFilterOptions {

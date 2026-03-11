@@ -69,6 +69,12 @@ export {
 // Offline Store
 export { offlineStore, formatLastOnline } from './offline-store';
 
+// Perf Telemetry
+export { perfTelemetryStore, type PerfSample } from './perf-telemetry';
+
+// Debug Flags
+export { debugFlagsStore, type DebugFlagsState } from './debug-flags';
+
 // Cache Sync
 export { cacheSync, startCacheSync } from './cache-sync';
 

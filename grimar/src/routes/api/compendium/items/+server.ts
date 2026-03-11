@@ -1,8 +1,9 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { getPaginatedItems, searchItems } from '$lib/server/repositories/compendium';
+import { getPaginatedItems } from '$lib/server/repositories/compendium';
 import { COMPENDIUM_TYPES } from '$lib/server/db/schema';
 import type { CompendiumType } from '$lib/server/db/schema';
+import { getQueryBucket } from '$lib/server/utils/query-performance';
 
 type SortByParam = 'name' | 'created_at' | 'updated_at';
 
@@ -12,7 +13,18 @@ function normalizeSortBy(value: string | null): SortByParam {
 	return 'name';
 }
 
+function formatTimingHeaders(durationMs: number): HeadersInit {
+	const roundedMs = Number(durationMs.toFixed(2));
+	const bucket = getQueryBucket(durationMs);
+	return {
+		'Server-Timing': `compendium-items;dur=${roundedMs}`,
+		'X-Query-Time-Ms': String(roundedMs),
+		'X-Query-Bucket': bucket
+	};
+}
+
 export const GET: RequestHandler = async ({ url }) => {
+	const start = performance.now();
 	const type = url.searchParams.get('type');
 	const search = url.searchParams.get('search') || undefined;
 	const gamesystem = url.searchParams.get('gamesystem') || undefined;
@@ -23,6 +35,10 @@ export const GET: RequestHandler = async ({ url }) => {
 	const sortBy = normalizeSortBy(url.searchParams.get('sortBy'));
 	const sortOrder = (url.searchParams.get('sortOrder') as 'asc' | 'desc') || 'asc';
 	const getAll = url.searchParams.get('all') === 'true';
+	const effectivePage = getAll ? 1 : page;
+	const effectiveLimit = getAll ? Number.MAX_SAFE_INTEGER : limit;
+	const effectiveMaxPageSize = getAll ? undefined : 100;
+	const skipTotalCount = false;
 
 	const creatureType = url.searchParams.get('creatureType') || undefined;
 	const spellLevel = url.searchParams.get('spellLevel') || undefined;
@@ -36,43 +52,37 @@ export const GET: RequestHandler = async ({ url }) => {
 		onlySubclasses === null ? undefined : onlySubclasses.toLowerCase() === 'true';
 
 	if (type && !COMPENDIUM_TYPES.includes(type as CompendiumType)) {
-		return json({ error: 'Invalid compendium type' }, { status: 400 });
+		return json(
+			{ error: 'Invalid compendium type' },
+			{ status: 400, headers: formatTimingHeaders(performance.now() - start) }
+		);
 	}
 
 	if (!type) {
-		return json({ error: 'Type parameter is required' }, { status: 400 });
+		return json(
+			{ error: 'Type parameter is required' },
+			{ status: 400, headers: formatTimingHeaders(performance.now() - start) }
+		);
 	}
 
-	if (search) {
-		const results = await searchItems(type as CompendiumType, search, {
-			limit,
-			includeSubclasses: type === 'classes' ? includeSubclassesFilter : undefined,
-			onlySubclasses: type === 'classes' ? onlySubclassesFilter : undefined
-		});
-		return json({
-			items: results,
-			total: results.length,
-			page: 1,
-			pageSize: getAll ? results.length : limit,
-			totalPages: 1,
-			hasMore: false
-		});
-	}
-
-	const result = await getPaginatedItems(type as CompendiumType, {
-		page,
-		pageSize: limit,
-		filters: {
-			gamesystem,
-			document,
-			source,
-			sortBy,
-			sortOrder,
-			creatureType: type === 'creatures' ? creatureType : undefined,
-			spellLevel:
-				type === 'spells' && spellLevel && !isNaN(parseInt(spellLevel, 10))
-					? parseInt(spellLevel, 10)
-					: undefined,
+	try {
+		const result = await getPaginatedItems(type as CompendiumType, {
+			page: effectivePage,
+			pageSize: effectiveLimit,
+			maxPageSize: effectiveMaxPageSize,
+			skipTotalCount,
+			filters: {
+				search,
+				gamesystem,
+				document,
+				source,
+				sortBy,
+				sortOrder,
+				creatureType: type === 'creatures' ? creatureType : undefined,
+				spellLevel:
+					type === 'spells' && spellLevel && !isNaN(parseInt(spellLevel, 10))
+						? parseInt(spellLevel, 10)
+						: undefined,
 				spellSchool: type === 'spells' ? spellSchool : undefined,
 				challengeRating:
 					type === 'creatures' && challengeRating && !isNaN(parseFloat(challengeRating))
@@ -83,5 +93,18 @@ export const GET: RequestHandler = async ({ url }) => {
 			}
 		});
 
-	return json(result);
+		return json(result, { headers: formatTimingHeaders(performance.now() - start) });
+	} catch (err) {
+		console.error('GET /api/compendium/items failed', {
+			type,
+			search,
+			page: effectivePage,
+			limit: effectiveLimit,
+			error: err
+		});
+		return json(
+			{ error: 'Internal Server Error' },
+			{ status: 500, headers: formatTimingHeaders(performance.now() - start) }
+		);
+	}
 };
