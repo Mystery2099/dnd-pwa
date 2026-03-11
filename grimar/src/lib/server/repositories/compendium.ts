@@ -57,6 +57,7 @@ function buildItemCacheKey(type: CompendiumType, key: string): string {
 function invalidateCompendiumCaches(type?: CompendiumType): void {
 	if (type) {
 		cache.invalidatePattern(`compendium:*:${type}:*`);
+		cache.invalidatePattern(`compendium:distinct:*:${type}`);
 		cache.invalidatePattern(COMPENDIUM_COUNTS_CACHE_KEY);
 		return;
 	}

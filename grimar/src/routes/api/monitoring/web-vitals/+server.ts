@@ -15,6 +15,23 @@ type IncomingMetric = {
 	timestamp?: unknown;
 };
 
+const MAX_PATHNAME_LENGTH = 200;
+
+function sanitizePathname(pathname: string | undefined): string | undefined {
+	if (!pathname) return undefined;
+	const trimmed = pathname.trim();
+	if (!trimmed) return undefined;
+	try {
+		const parsed = new URL(trimmed, 'http://localhost');
+		return (parsed.pathname || '/').slice(0, MAX_PATHNAME_LENGTH);
+	} catch {
+		const withoutHash = trimmed.split('#')[0] ?? trimmed;
+		const withoutQuery = withoutHash.split('?')[0] ?? withoutHash;
+		const candidate = withoutQuery.startsWith('/') ? withoutQuery : `/${withoutQuery}`;
+		return candidate.slice(0, MAX_PATHNAME_LENGTH);
+	}
+}
+
 function getRawMetrics(payload: unknown): unknown[] {
 	if (Array.isArray(payload)) return payload;
 
@@ -56,7 +73,7 @@ export const POST: RequestHandler = async ({ request }) => {
 	const flushResult = await flushQueuedWebVitals();
 	let recorded = 0;
 	let persisted = 0;
-	let persistenceErrors = 0;
+	const persistenceErrors: Array<{ name: string; pathname?: string; message: string }> = [];
 
 	for (const rawMetric of rawMetrics.slice(0, 20)) {
 		const metric = rawMetric as IncomingMetric;
@@ -65,7 +82,7 @@ export const POST: RequestHandler = async ({ request }) => {
 			name: metric.name,
 			value: metric.value,
 			rating: typeof metric.rating === 'string' ? metric.rating : undefined,
-			pathname: typeof metric.pathname === 'string' ? metric.pathname : undefined,
+			pathname: sanitizePathname(typeof metric.pathname === 'string' ? metric.pathname : undefined),
 			navigationType: typeof metric.navigationType === 'string' ? metric.navigationType : undefined,
 			clientTimestamp:
 				typeof metric.timestamp === 'number' && Number.isFinite(metric.timestamp)
@@ -78,12 +95,13 @@ export const POST: RequestHandler = async ({ request }) => {
 			await persistWebVital(normalizedMetric);
 			persisted += 1;
 		} catch (error) {
+			const message = error instanceof Error ? error.message : 'Unknown error';
 			console.error('persistWebVital failed', {
 				name: normalizedMetric.name,
 				pathname: normalizedMetric.pathname,
-				error
+				error: message
 			});
-			persistenceErrors += 1;
+			persistenceErrors.push({ name: normalizedMetric.name, pathname: normalizedMetric.pathname, message });
 		}
 		recorded += 1;
 	}
@@ -96,6 +114,6 @@ export const POST: RequestHandler = async ({ request }) => {
 			flushedFromQueue: flushResult.flushed,
 			persistenceErrors
 		},
-		{ status: persistenceErrors > 0 ? 503 : 202 }
+		{ status: persistenceErrors.length > 0 ? 503 : 202 }
 	);
 };

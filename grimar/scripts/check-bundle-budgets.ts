@@ -5,7 +5,11 @@ import { join, relative } from 'node:path';
 
 const ROOT = process.cwd();
 const CLIENT_OUT_DIR = join(ROOT, '.svelte-kit/output/client');
-const IMMUTABLE_DIR = join(CLIENT_OUT_DIR, '_app/immutable');
+const NON_BUDGET_FILE_PATTERNS = [
+	/service-worker/i,
+	/registerSW/i,
+	/workbox/i
+];
 
 const BUDGETS = {
 	totalJsBytes: 700 * 1024,
@@ -48,16 +52,20 @@ function toStat(path: string): FileStat {
 	};
 }
 
-if (!existsSync(CLIENT_OUT_DIR) || !existsSync(IMMUTABLE_DIR)) {
+if (!existsSync(CLIENT_OUT_DIR)) {
 	console.error('Build output not found. Run `bun run build` first.');
 	process.exit(1);
 }
 
-const allFiles = walkFiles(IMMUTABLE_DIR);
+const allFiles = walkFiles(CLIENT_OUT_DIR).filter((path) => {
+	const relativePath = relative(CLIENT_OUT_DIR, path);
+	return !NON_BUDGET_FILE_PATTERNS.some((pattern) => pattern.test(relativePath));
+});
 const jsFiles = allFiles.filter((path) => path.endsWith('.js')).map(toStat);
 const cssFiles = allFiles.filter((path) => path.endsWith('.css')).map(toStat);
 const faviconPath = join(CLIENT_OUT_DIR, 'favicon.svg');
-const faviconSize = existsSync(faviconPath) ? statSync(faviconPath).size : 0;
+const faviconExists = existsSync(faviconPath);
+const faviconSize = faviconExists ? statSync(faviconPath).size : 0;
 
 const totalJsBytes = jsFiles.reduce((acc, file) => acc + file.bytes, 0);
 const totalCssBytes = cssFiles.reduce((acc, file) => acc + file.bytes, 0);
@@ -84,6 +92,10 @@ if (totalCssBytes > BUDGETS.totalCssBytes) {
 	failures.push(
 		`Total client CSS exceeds budget: ${formatBytes(totalCssBytes)} > ${formatBytes(BUDGETS.totalCssBytes)}`
 	);
+}
+
+if (!faviconExists) {
+	failures.push(`Favicon is missing: ${relative(ROOT, faviconPath)}`);
 }
 
 if (faviconSize > BUDGETS.faviconBytes) {
