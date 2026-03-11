@@ -15,9 +15,9 @@ const queue: WebVitalMetric[] = [];
 let tableInitialized = false;
 let initializedDb: Awaited<ReturnType<typeof getDb>> | null = null;
 
-async function ensureTable(): Promise<void> {
+async function ensureTable(): Promise<Awaited<ReturnType<typeof getDb>>> {
 	const db = await getDb();
-	if (tableInitialized && initializedDb === db) return;
+	if (tableInitialized && initializedDb === db) return db;
 	await db.run(sql`
 		CREATE TABLE IF NOT EXISTS web_vitals (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -34,11 +34,11 @@ async function ensureTable(): Promise<void> {
 	await db.run(sql`CREATE INDEX IF NOT EXISTS web_vitals_recorded_at_idx ON web_vitals(recorded_at)`);
 	tableInitialized = true;
 	initializedDb = db;
+	return db;
 }
 
 async function writeWebVital(metric: WebVitalMetric): Promise<void> {
-	await ensureTable();
-	const db = await getDb();
+	const db = await ensureTable();
 	await db.run(sql`
 		INSERT INTO web_vitals (
 			name,

@@ -9,8 +9,16 @@
 		"skipLibCheck": true,
 		"sourceMap": true,
 		"strict": true,
-		"moduleResolution": "bundler"
+		"moduleResolution": "bundler",
+		"types": [
+			"bun-types"
+		]
 	},
-	"include": ["src/**/*"],
-	"exclude": ["tests/**/*", "src/**/*.test.ts"]
+	"include": [
+		"src/**/*"
+	],
+	"exclude": [
+		"tests/**/*",
+		"src/**/*.test.ts"
+	]
 }
