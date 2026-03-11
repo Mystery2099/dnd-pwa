@@ -63,11 +63,11 @@ class PerfTelemetryStore {
 	}
 
 	record(sample: PerfSample): void {
-		const samples = this.state.samples;
-		samples.push(sample);
-		if (samples.length > MAX_SAMPLES) {
-			samples.splice(0, samples.length - MAX_SAMPLES);
-		}
+		const nextSamples = [...this.state.samples, sample];
+		const samples =
+			nextSamples.length > MAX_SAMPLES
+				? nextSamples.slice(nextSamples.length - MAX_SAMPLES)
+				: nextSamples;
 		this.state = { samples };
 		this.notify();
 	}

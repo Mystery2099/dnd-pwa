@@ -13,10 +13,11 @@ export interface WebVitalMetric {
 const MAX_QUEUE_SIZE = 2000;
 const queue: WebVitalMetric[] = [];
 let tableInitialized = false;
+let initializedDb: Awaited<ReturnType<typeof getDb>> | null = null;
 
 async function ensureTable(): Promise<void> {
-	if (tableInitialized) return;
 	const db = await getDb();
+	if (tableInitialized && initializedDb === db) return;
 	await db.run(sql`
 		CREATE TABLE IF NOT EXISTS web_vitals (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -32,6 +33,7 @@ async function ensureTable(): Promise<void> {
 	await db.run(sql`CREATE INDEX IF NOT EXISTS web_vitals_name_idx ON web_vitals(name)`);
 	await db.run(sql`CREATE INDEX IF NOT EXISTS web_vitals_recorded_at_idx ON web_vitals(recorded_at)`);
 	tableInitialized = true;
+	initializedDb = db;
 }
 
 async function writeWebVital(metric: WebVitalMetric): Promise<void> {
@@ -82,12 +84,16 @@ export async function flushQueuedWebVitals(): Promise<{ flushed: number; remaini
 
 	const pending = queue.splice(0, queue.length);
 	let flushed = 0;
-	for (const metric of pending) {
+	for (const [index, metric] of pending.entries()) {
 		try {
 			await writeWebVital(metric);
 			flushed += 1;
 		} catch {
 			enqueue(metric);
+			for (const remainingMetric of pending.slice(index + 1)) {
+				enqueue(remainingMetric);
+			}
+			break;
 		}
 	}
 

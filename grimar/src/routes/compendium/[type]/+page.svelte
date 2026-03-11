@@ -281,7 +281,9 @@
 
 	function handleItemPrefetch(itemKey: string) {
 		if (!queryClient) return;
-		prefetchCompendiumDetail(queryClient, data.type, itemKey);
+		void prefetchCompendiumDetail(queryClient, data.type, itemKey).catch(() => {
+			// Ignore prefetch errors; this is best-effort optimization.
+		});
 	}
 
 	function prefetchOnVisible(node: HTMLElement, itemKey: string) {

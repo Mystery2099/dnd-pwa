@@ -11,7 +11,7 @@ marked.setOptions({ gfm: true, breaks: true });
 const MAX_CACHE_ENTRIES = 1000;
 const markdownRenderCache = new Map<string, string>();
 
-function renderMarkdown(text: unknown): string | null {
+async function renderMarkdown(text: unknown): Promise<string | null> {
 	if (typeof text !== 'string') return null;
 	const cacheKey = text.trim();
 	if (!cacheKey) return null;
@@ -24,7 +24,8 @@ function renderMarkdown(text: unknown): string | null {
 		return cached;
 	}
 
-	const rendered = DOMPurify.sanitize(marked.parse(cacheKey) as string);
+	const parsed = marked.parse(cacheKey);
+	const rendered = DOMPurify.sanitize(typeof parsed === 'string' ? parsed : await parsed);
 	markdownRenderCache.set(cacheKey, rendered);
 	if (markdownRenderCache.size > MAX_CACHE_ENTRIES) {
 		const oldestKey = markdownRenderCache.keys().next().value;
@@ -40,31 +41,31 @@ function getRecord(value: unknown): Record<string, unknown> | null {
 	return value as Record<string, unknown>;
 }
 
-function setMarkdown(
+async function setMarkdown(
 	target: Record<string, string>,
 	key: string,
 	value: unknown
 ): void {
-	const rendered = renderMarkdown(value);
+	const rendered = await renderMarkdown(value);
 	if (rendered) {
 		target[key] = rendered;
 	}
 }
 
-function buildMarkdownHtml(
+async function buildMarkdownHtml(
 	itemData: Record<string, unknown>,
 	itemDescription: unknown
-): Record<string, string> {
+): Promise<Record<string, string>> {
 	const markdownHtml: Record<string, string> = {};
 
-	setMarkdown(markdownHtml, 'description', itemData.desc ?? itemDescription);
-	setMarkdown(markdownHtml, 'higher_level', itemData.higher_level);
+	await setMarkdown(markdownHtml, 'description', itemData.desc ?? itemDescription);
+	await setMarkdown(markdownHtml, 'higher_level', itemData.higher_level);
 
 	if (Array.isArray(itemData.descriptions)) {
 		for (const [index, description] of itemData.descriptions.entries()) {
 			const entry = getRecord(description);
 			if (!entry) continue;
-			setMarkdown(markdownHtml, `descriptions.${index}.desc`, entry.desc);
+			await setMarkdown(markdownHtml, `descriptions.${index}.desc`, entry.desc);
 		}
 	}
 
@@ -72,7 +73,7 @@ function buildMarkdownHtml(
 		for (const [index, benefit] of itemData.benefits.entries()) {
 			const entry = getRecord(benefit);
 			if (!entry) continue;
-			setMarkdown(markdownHtml, `benefits.${index}.desc`, entry.desc);
+			await setMarkdown(markdownHtml, `benefits.${index}.desc`, entry.desc);
 		}
 	}
 
@@ -81,7 +82,7 @@ function buildMarkdownHtml(
 			const propertyRecord = getRecord(property);
 			const innerProperty = propertyRecord ? getRecord(propertyRecord.property) : null;
 			if (!innerProperty) continue;
-			setMarkdown(markdownHtml, `weaponProperties.${index}.desc`, innerProperty.desc);
+			await setMarkdown(markdownHtml, `weaponProperties.${index}.desc`, innerProperty.desc);
 		}
 	}
 
@@ -89,7 +90,7 @@ function buildMarkdownHtml(
 		for (const [index, trait] of itemData.traits.entries()) {
 			const entry = getRecord(trait);
 			if (!entry) continue;
-			setMarkdown(markdownHtml, `traits.${index}.desc`, entry.desc);
+			await setMarkdown(markdownHtml, `traits.${index}.desc`, entry.desc);
 		}
 	}
 
@@ -97,7 +98,7 @@ function buildMarkdownHtml(
 		for (const [index, action] of itemData.actions.entries()) {
 			const entry = getRecord(action);
 			if (!entry) continue;
-			setMarkdown(markdownHtml, `actions.${index}.desc`, entry.desc);
+			await setMarkdown(markdownHtml, `actions.${index}.desc`, entry.desc);
 		}
 	}
 
@@ -105,7 +106,7 @@ function buildMarkdownHtml(
 		for (const [index, feature] of itemData.features.entries()) {
 			const entry = getRecord(feature);
 			if (!entry) continue;
-			setMarkdown(markdownHtml, `features.${index}.desc`, entry.desc);
+			await setMarkdown(markdownHtml, `features.${index}.desc`, entry.desc);
 		}
 	}
 
@@ -127,7 +128,7 @@ export const load: PageServerLoad = async ({ params }) => {
 		throw error(404, `${config.label} not found: ${key}`);
 	}
 	const itemData = (item.data ?? {}) as Record<string, unknown>;
-	const markdownHtml = buildMarkdownHtml(itemData, item.description);
+	const markdownHtml = await buildMarkdownHtml(itemData, item.description);
 
 	return {
 		type,

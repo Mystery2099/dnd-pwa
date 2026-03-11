@@ -22,9 +22,11 @@ vi.mock('$lib/server/repositories/web-vitals', () => ({
 describe('POST /api/monitoring/web-vitals', () => {
 	beforeEach(() => {
 		recordMock.mockClear();
-		persistWebVitalMock.mockClear();
+		persistWebVitalMock.mockReset();
+		persistWebVitalMock.mockResolvedValue(undefined);
 		flushQueuedWebVitalsMock.mockClear();
 		getQueuedWebVitalCountMock.mockClear();
+		getQueuedWebVitalCountMock.mockReturnValue(0);
 	});
 
 	it('persists each validated metric', async () => {
@@ -62,5 +64,45 @@ describe('POST /api/monitoring/web-vitals', () => {
 		);
 		expect(body.recorded).toBe(1);
 		expect(body.persisted).toBe(1);
+	});
+
+	it('queues metrics and returns 503 when persistence fails', async () => {
+		const { POST } = await import('./+server');
+		persistWebVitalMock.mockRejectedValueOnce(new Error('sqlite unavailable'));
+		getQueuedWebVitalCountMock.mockReturnValue(1);
+
+		const request = new Request('http://localhost/api/monitoring/web-vitals', {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify([
+				{
+					name: 'LCP',
+					value: 1234.56,
+					rating: 'good',
+					pathname: 'https://example.com/compendium?token=secret#fragment',
+					navigationType: 'navigate',
+					timestamp: Date.now()
+				}
+			])
+		});
+
+		const response = await POST({ request } as Parameters<typeof POST>[0]);
+		const body = await response.json();
+
+		expect(response.status).toBe(503);
+		expect(flushQueuedWebVitalsMock).toHaveBeenCalledTimes(1);
+		expect(recordMock).toHaveBeenCalledTimes(1);
+		expect(persistWebVitalMock).toHaveBeenCalledTimes(1);
+		expect(body.queued).toBe(1);
+		expect(Array.isArray(body.persistenceErrors)).toBe(true);
+		expect(body.persistenceErrors).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					name: 'LCP',
+					pathname: '/compendium',
+					message: 'sqlite unavailable'
+				})
+			])
+		);
 	});
 });

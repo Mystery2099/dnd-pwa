@@ -38,7 +38,7 @@ export const GET: RequestHandler = async ({ url }) => {
 	const effectivePage = getAll ? 1 : page;
 	const effectiveLimit = getAll ? Number.MAX_SAFE_INTEGER : limit;
 	const effectiveMaxPageSize = getAll ? undefined : 100;
-	const skipTotalCount = getAll ? false : false;
+	const skipTotalCount = false;
 
 	const creatureType = url.searchParams.get('creatureType') || undefined;
 	const spellLevel = url.searchParams.get('spellLevel') || undefined;
@@ -65,23 +65,24 @@ export const GET: RequestHandler = async ({ url }) => {
 		);
 	}
 
-	const result = await getPaginatedItems(type as CompendiumType, {
+	try {
+		const result = await getPaginatedItems(type as CompendiumType, {
 			page: effectivePage,
 			pageSize: effectiveLimit,
 			maxPageSize: effectiveMaxPageSize,
 			skipTotalCount,
-		filters: {
-			search,
-			gamesystem,
-			document,
-			source,
-			sortBy,
-			sortOrder,
-			creatureType: type === 'creatures' ? creatureType : undefined,
-			spellLevel:
-				type === 'spells' && spellLevel && !isNaN(parseInt(spellLevel, 10))
-					? parseInt(spellLevel, 10)
-					: undefined,
+			filters: {
+				search,
+				gamesystem,
+				document,
+				source,
+				sortBy,
+				sortOrder,
+				creatureType: type === 'creatures' ? creatureType : undefined,
+				spellLevel:
+					type === 'spells' && spellLevel && !isNaN(parseInt(spellLevel, 10))
+						? parseInt(spellLevel, 10)
+						: undefined,
 				spellSchool: type === 'spells' ? spellSchool : undefined,
 				challengeRating:
 					type === 'creatures' && challengeRating && !isNaN(parseFloat(challengeRating))
@@ -92,5 +93,11 @@ export const GET: RequestHandler = async ({ url }) => {
 			}
 		});
 
-	return json(result, { headers: formatTimingHeaders(performance.now() - start) });
+		return json(result, { headers: formatTimingHeaders(performance.now() - start) });
+	} catch {
+		return json(
+			{ error: 'Internal Server Error' },
+			{ status: 500, headers: formatTimingHeaders(performance.now() - start) }
+		);
+	}
 };
