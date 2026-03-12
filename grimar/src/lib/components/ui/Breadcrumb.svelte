@@ -22,7 +22,10 @@
 				{#if item.href && index !== lastIndex}
 					<a href={item.href} class="transition-colors hover:text-accent">{item.label}</a>
 				{:else}
-					<span aria-current={index === lastIndex ? 'page' : undefined} class="text-[var(--color-text-secondary)]">
+					<span
+						aria-current={index === lastIndex ? 'page' : undefined}
+						class="text-[var(--color-text-secondary)]"
+					>
 						{item.label}
 					</span>
 				{/if}

@@ -101,7 +101,11 @@ export const POST: RequestHandler = async ({ request }) => {
 				pathname: normalizedMetric.pathname,
 				error: message
 			});
-			persistenceErrors.push({ name: normalizedMetric.name, pathname: normalizedMetric.pathname, message });
+			persistenceErrors.push({
+				name: normalizedMetric.name,
+				pathname: normalizedMetric.pathname,
+				message
+			});
 		}
 		recorded += 1;
 	}

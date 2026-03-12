@@ -18,7 +18,10 @@
 
 	function handleInput(e: Event) {
 		const target = e.target as HTMLTextAreaElement;
-		const items = target.value.split('\n').map(s => s.trim()).filter(Boolean);
+		const items = target.value
+			.split('\n')
+			.map((s) => s.trim())
+			.filter(Boolean);
 		onChange(items);
 	}
 </script>

@@ -10,15 +10,8 @@
 		"sourceMap": true,
 		"strict": true,
 		"moduleResolution": "bundler",
-		"types": [
-			"bun-types"
-		]
+		"types": ["bun-types"]
 	},
-	"include": [
-		"src/**/*"
-	],
-	"exclude": [
-		"tests/**/*",
-		"src/**/*.test.ts"
-	]
+	"include": ["src/**/*"],
+	"exclude": ["tests/**/*", "src/**/*.test.ts"]
 }

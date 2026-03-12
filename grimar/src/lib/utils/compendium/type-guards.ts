@@ -83,7 +83,12 @@ export function getDescriptions(value: unknown): DescriptionItem[] | null {
 export function isBenefitArray(value: unknown): value is BenefitItem[] {
 	if (!Array.isArray(value) || value.length === 0) return false;
 	const first = value[0] as Record<string, unknown>;
-	return typeof first.desc === 'string' && !('document' in first) && !('gamesystem' in first) && !('property' in first);
+	return (
+		typeof first.desc === 'string' &&
+		!('document' in first) &&
+		!('gamesystem' in first) &&
+		!('property' in first)
+	);
 }
 
 export function getBenefits(value: unknown): BenefitItem[] | null {

@@ -164,7 +164,7 @@
 				<p class="text-sm text-red-400">{jsonError}</p>
 			{/if}
 		{:else}
-			<AutoForm fields={fields} values={formValues} onChange={handleFormChange} />
+			<AutoForm {fields} values={formValues} onChange={handleFormChange} />
 		{/if}
 
 		<div class="flex gap-4 pt-4">

@@ -101,14 +101,21 @@ export async function getPaginatedItems(
 
 	if (filters.search) {
 		try {
-			const rankedMatchesWithSentinel = await searchFtsRanked(filters.search, FTS_SEARCH_LIMIT + 1, db);
+			const rankedMatchesWithSentinel = await searchFtsRanked(
+				filters.search,
+				FTS_SEARCH_LIMIT + 1,
+				db
+			);
 			resultsTruncated = rankedMatchesWithSentinel.length > FTS_SEARCH_LIMIT;
 			rankedMatches = resultsTruncated
 				? rankedMatchesWithSentinel.slice(0, FTS_SEARCH_LIMIT)
 				: rankedMatchesWithSentinel;
 			ftsMatchedKeys = rankedMatches.map((match) => match.key);
 		} catch (e) {
-			console.error('searchFtsRanked failed for filters.search', { search: filters.search, error: e });
+			console.error('searchFtsRanked failed for filters.search', {
+				search: filters.search,
+				error: e
+			});
 			useLikeSearchFallback = true;
 		}
 	}
@@ -127,9 +134,15 @@ export async function getPaginatedItems(
 
 	if (type === 'classes') {
 		if (filters.onlySubclasses === true) {
-			whereClause = and(whereClause, sql`json_extract(${compendium.data}, '$.subclass_of') IS NOT NULL`)!;
+			whereClause = and(
+				whereClause,
+				sql`json_extract(${compendium.data}, '$.subclass_of') IS NOT NULL`
+			)!;
 		} else if (filters.includeSubclasses === false) {
-			whereClause = and(whereClause, sql`json_extract(${compendium.data}, '$.subclass_of') IS NULL`)!;
+			whereClause = and(
+				whereClause,
+				sql`json_extract(${compendium.data}, '$.subclass_of') IS NULL`
+			)!;
 		}
 	}
 
@@ -189,13 +202,13 @@ export async function getPaginatedItems(
 		sortBy === 'created_at'
 			? compendium.createdAt
 			: sortBy === 'updated_at'
-					? compendium.updatedAt
-					: compendium.name;
+				? compendium.updatedAt
+				: compendium.name;
 	const orderBy = sortOrder === 'desc' ? desc(sortColumn) : sortColumn;
 
 	if (filters.search && !useLikeSearchFallback && rankedMatches && rankedMatches.length > 0) {
-		const rankCases = rankedMatches.map((match, index) =>
-			sql`WHEN ${compendium.key} = ${match.key} THEN ${index}`
+		const rankCases = rankedMatches.map(
+			(match, index) => sql`WHEN ${compendium.key} = ${match.key} THEN ${index}`
 		);
 		const rankOrder = sql<number>`CASE ${sql.join(rankCases, sql.raw(' '))} ELSE ${rankedMatches.length} END`;
 		const items = await db
@@ -298,9 +311,15 @@ export async function searchItems(
 
 	if (type === 'classes') {
 		if (options?.onlySubclasses === true) {
-			whereClause = and(whereClause, sql`json_extract(${compendium.data}, '$.subclass_of') IS NOT NULL`)!;
+			whereClause = and(
+				whereClause,
+				sql`json_extract(${compendium.data}, '$.subclass_of') IS NOT NULL`
+			)!;
 		} else if (options?.includeSubclasses === false) {
-			whereClause = and(whereClause, sql`json_extract(${compendium.data}, '$.subclass_of') IS NULL`)!;
+			whereClause = and(
+				whereClause,
+				sql`json_extract(${compendium.data}, '$.subclass_of') IS NULL`
+			)!;
 		}
 	}
 
@@ -353,8 +372,8 @@ export async function createItem(
 			...data,
 			createdAt: now,
 			updatedAt: now
-			})
-			.returning();
+		})
+		.returning();
 
 	invalidateCompendiumCaches(data.type as CompendiumType);
 	return item;
@@ -374,13 +393,12 @@ export async function updateItem(
 			...data,
 			updatedAt: now
 		})
-			.where(and(eq(compendium.type, type), eq(compendium.key, key)))
-			.returning();
+		.where(and(eq(compendium.type, type), eq(compendium.key, key)))
+		.returning();
 
 	invalidateCompendiumCaches(type);
 	return item ?? null;
 }
-
 
 export async function deleteItem(type: CompendiumType, key: string): Promise<boolean> {
 	const db = await getDb();
@@ -547,8 +565,8 @@ export async function upsertItem(
 				publisherName: data.publisherName,
 				updatedAt: now
 			}
-			})
-			.returning();
+		})
+		.returning();
 
 	invalidateCompendiumCaches(data.type as CompendiumType);
 	return item;
@@ -577,7 +595,7 @@ export async function upsertItems(
 			.insert(compendium)
 			.values(itemsWithTimestamps)
 			.onConflictDoUpdate({
-					target: [compendium.type, compendium.key],
+				target: [compendium.type, compendium.key],
 				set: {
 					name: sql`excluded.name`,
 					description: sql`excluded.description`,

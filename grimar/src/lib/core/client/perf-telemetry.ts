@@ -73,11 +73,15 @@ class PerfTelemetryStore {
 	}
 
 	recordFromResponse(url: string, response: Response, fallbackDurationMs: number): void {
-			const headerDuration = response.headers.get('x-query-time-ms');
-			const serverTimingDuration = parseDurationFromServerTiming(response.headers.get('server-timing'));
+		const headerDuration = response.headers.get('x-query-time-ms');
+		const serverTimingDuration = parseDurationFromServerTiming(
+			response.headers.get('server-timing')
+		);
 		const parsedHeaderDuration = headerDuration ? Number(headerDuration) : null;
 		const durationMs =
-			(parsedHeaderDuration !== null && Number.isFinite(parsedHeaderDuration) && parsedHeaderDuration > 0
+			(parsedHeaderDuration !== null &&
+			Number.isFinite(parsedHeaderDuration) &&
+			parsedHeaderDuration > 0
 				? parsedHeaderDuration
 				: null) ??
 			serverTimingDuration ??
@@ -87,11 +91,11 @@ class PerfTelemetryStore {
 		this.record({
 			endpoint: normalizeEndpoint(url),
 			durationMs,
-				bucket,
-				status: response.status,
-				timestamp: Date.now(),
-				source: headerDuration != null || serverTimingDuration != null ? 'header' : 'client'
-			});
+			bucket,
+			status: response.status,
+			timestamp: Date.now(),
+			source: headerDuration != null || serverTimingDuration != null ? 'header' : 'client'
+		});
 	}
 
 	recordNetworkError(url: string, durationMs: number): void {

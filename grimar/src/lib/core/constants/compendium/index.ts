@@ -398,7 +398,14 @@ export const COMPENDIUM_CATEGORIES = [
 	{
 		name: 'Rules & Mechanics',
 		description: 'Game fundamentals',
-		types: ['conditions', 'damagetypes', 'skills', 'abilities', 'rules', 'rulesets'] as CompendiumTypeName[]
+		types: [
+			'conditions',
+			'damagetypes',
+			'skills',
+			'abilities',
+			'rules',
+			'rulesets'
+		] as CompendiumTypeName[]
 	},
 	{
 		name: 'World Building',

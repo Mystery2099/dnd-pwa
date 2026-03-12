@@ -23,7 +23,7 @@
 	</label>
 	<select
 		id={fieldId}
-		value={value as string ?? ''}
+		value={(value as string) ?? ''}
 		onchange={handleChange}
 		class="input-crystal w-full rounded-xl px-4 py-2"
 	>

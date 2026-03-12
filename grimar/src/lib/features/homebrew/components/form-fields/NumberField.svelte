@@ -25,7 +25,7 @@
 	</label>
 	<Input
 		id={fieldId}
-		value={value as number ?? ''}
+		value={(value as number) ?? ''}
 		oninput={handleInput}
 		placeholder={config.placeholder}
 		type="number"

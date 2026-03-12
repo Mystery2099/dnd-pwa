@@ -37,7 +37,9 @@
 		const prefersReducedData =
 			'navigator' in window &&
 			'connection' in navigator &&
-			Boolean((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData);
+			Boolean(
+				(navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData
+			);
 		return isDesktop && !prefersReducedData;
 	}
 
@@ -53,7 +55,8 @@
 	}
 
 	onMount(async () => {
-		showNoiseOverlay = window.matchMedia('(min-width: 1024px)').matches &&
+		showNoiseOverlay =
+			window.matchMedia('(min-width: 1024px)').matches &&
 			window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
 		loadInterFontAsync();
 
@@ -104,7 +107,7 @@
 			}
 		})();
 	</script>
-		<!-- Only render web manifest if it's valid and safe -->
+	<!-- Only render web manifest if it's valid and safe -->
 	{#if webManifestLink && webManifestLink.includes('<link')}
 		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 		{@html webManifestLink}
@@ -144,11 +147,15 @@
 			href="/compendium">Compendium</a
 		>
 		<a
-			class="rounded-lg px-3 py-2 hover:bg-[var(--color-bg-card)] pointer-events-none opacity-50 {isActive('/characters')}"
+			class="pointer-events-none rounded-lg px-3 py-2 opacity-50 hover:bg-[var(--color-bg-card)] {isActive(
+				'/characters'
+			)}"
 			href="/characters">Characters</a
 		>
 		<a
-			class="rounded-lg px-3 py-2 hover:bg-[var(--color-bg-card)] pointer-events-none opacity-50 {isActive('/forge')}"
+			class="pointer-events-none rounded-lg px-3 py-2 opacity-50 hover:bg-[var(--color-bg-card)] {isActive(
+				'/forge'
+			)}"
 			href="/forge">The Forge</a
 		>
 

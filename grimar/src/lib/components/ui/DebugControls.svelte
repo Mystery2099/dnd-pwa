@@ -28,7 +28,9 @@
 		</button>
 
 		{#if expanded}
-			<div class="mt-2 w-56 rounded border border-cyan-400/30 bg-black/85 p-2 font-mono text-cyan-100 backdrop-blur-sm">
+			<div
+				class="mt-2 w-56 rounded border border-cyan-400/30 bg-black/85 p-2 font-mono text-cyan-100 backdrop-blur-sm"
+			>
 				<label class="flex items-center justify-between py-1">
 					<span>Virtual Debug</span>
 					<input

@@ -23,7 +23,7 @@
 	</label>
 	<textarea
 		id={fieldId}
-		value={value as string ?? ''}
+		value={(value as string) ?? ''}
 		oninput={handleInput}
 		placeholder={config.placeholder}
 		class="input-crystal h-40 w-full resize-none rounded-xl p-4"

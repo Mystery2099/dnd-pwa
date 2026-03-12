@@ -5,11 +5,7 @@ import { join, relative } from 'node:path';
 
 const ROOT = process.cwd();
 const CLIENT_OUT_DIR = join(ROOT, '.svelte-kit/output/client');
-const NON_BUDGET_FILE_PATTERNS = [
-	/service-worker/i,
-	/registerSW/i,
-	/workbox/i
-];
+const NON_BUDGET_FILE_PATTERNS = [/service-worker/i, /registerSW/i, /workbox/i];
 
 const BUDGETS = {
 	totalJsBytes: 700 * 1024,
@@ -105,14 +101,18 @@ if (faviconSize > BUDGETS.faviconBytes) {
 }
 
 console.log('Bundle Budget Report');
-console.log(`- Total JS: ${formatBytes(totalJsBytes)} (budget: ${formatBytes(BUDGETS.totalJsBytes)})`);
+console.log(
+	`- Total JS: ${formatBytes(totalJsBytes)} (budget: ${formatBytes(BUDGETS.totalJsBytes)})`
+);
 console.log(
 	`- Largest JS chunk: ${largestJsChunk.path} (${formatBytes(largestJsChunk.bytes)}) (budget: ${formatBytes(BUDGETS.largestJsChunkBytes)})`
 );
 console.log(
 	`- Total CSS: ${formatBytes(totalCssBytes)} (budget: ${formatBytes(BUDGETS.totalCssBytes)})`
 );
-console.log(`- Favicon: ${formatBytes(faviconSize)} (budget: ${formatBytes(BUDGETS.faviconBytes)})`);
+console.log(
+	`- Favicon: ${formatBytes(faviconSize)} (budget: ${formatBytes(BUDGETS.faviconBytes)})`
+);
 
 if (failures.length > 0) {
 	console.error('\nBudget check failed:');

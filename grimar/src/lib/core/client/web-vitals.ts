@@ -60,10 +60,7 @@ function sendWebVitals(metrics: WebVitalMetric[]) {
 	const payload = JSON.stringify({ metrics });
 
 	if ('sendBeacon' in navigator) {
-		navigator.sendBeacon(
-			WEB_VITALS_ENDPOINT,
-			new Blob([payload], { type: 'application/json' })
-		);
+		navigator.sendBeacon(WEB_VITALS_ENDPOINT, new Blob([payload], { type: 'application/json' }));
 		return;
 	}
 

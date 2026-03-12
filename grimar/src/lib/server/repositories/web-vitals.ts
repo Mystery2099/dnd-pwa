@@ -31,7 +31,9 @@ async function ensureTable(): Promise<Awaited<ReturnType<typeof getDb>>> {
 		)
 	`);
 	await db.run(sql`CREATE INDEX IF NOT EXISTS web_vitals_name_idx ON web_vitals(name)`);
-	await db.run(sql`CREATE INDEX IF NOT EXISTS web_vitals_recorded_at_idx ON web_vitals(recorded_at)`);
+	await db.run(
+		sql`CREATE INDEX IF NOT EXISTS web_vitals_recorded_at_idx ON web_vitals(recorded_at)`
+	);
 	tableInitialized = true;
 	initializedDb = db;
 	return db;

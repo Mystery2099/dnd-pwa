@@ -125,7 +125,9 @@ class CacheSync {
 		this.logDebug('[CacheSync] Cache invalidated');
 	}
 
-	private async invalidateQueryScopes(scopes: Array<'compendium' | 'characters' | 'cache'>): Promise<void> {
+	private async invalidateQueryScopes(
+		scopes: Array<'compendium' | 'characters' | 'cache'>
+	): Promise<void> {
 		if (!queryClient) return;
 
 		const invalidations: Promise<unknown>[] = [];

@@ -17,6 +17,10 @@
 
 <div class="space-y-4">
 	{#each fields as field}
-		<Field config={field} value={values[field.name]} onChange={(v) => handleChange(field.name, v)} />
+		<Field
+			config={field}
+			value={values[field.name]}
+			onChange={(v) => handleChange(field.name, v)}
+		/>
 	{/each}
 </div>

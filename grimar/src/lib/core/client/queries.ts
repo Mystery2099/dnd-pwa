@@ -110,7 +110,8 @@ export async function apiFetch<T>(url: string, init?: RequestInit): Promise<T> {
 				...init?.headers
 			}
 		});
-		const durationMs = (typeof performance !== 'undefined' ? performance.now() : Date.now()) - startedAt;
+		const durationMs =
+			(typeof performance !== 'undefined' ? performance.now() : Date.now()) - startedAt;
 		perfTelemetryStore.recordFromResponse(url, response, durationMs);
 
 		if (!response.ok) {
@@ -125,7 +126,8 @@ export async function apiFetch<T>(url: string, init?: RequestInit): Promise<T> {
 		}
 		return undefined as T;
 	} catch (error) {
-		const durationMs = (typeof performance !== 'undefined' ? performance.now() : Date.now()) - startedAt;
+		const durationMs =
+			(typeof performance !== 'undefined' ? performance.now() : Date.now()) - startedAt;
 		if (error instanceof DOMException && error.name === 'AbortError') {
 			// Preserve abort errors so TanStack Query can treat cancellation correctly.
 			throw error;

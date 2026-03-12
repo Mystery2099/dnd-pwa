@@ -27,25 +27,28 @@
 		arrow = false,
 		class: className = '',
 		onclick,
-		children,
+		children
 	}: Props = $props();
 
 	const tag = $derived(href ? 'a' : 'button');
-	
-	const badgeClasses = $derived({
-		default: 'bg-[color-mix(in_srgb,black_30%,transparent)] text-[var(--color-text-muted)]',
-		accent: 'bg-[color-mix(in_srgb,var(--color-accent)_20%,transparent)] text-[var(--color-accent)]',
-		success: 'bg-emerald-500/20 text-emerald-400',
-		warning: 'bg-amber-500/20 text-amber-400',
-		danger: 'bg-red-500/20 text-red-400',
-	}[badgeVariant]);
+
+	const badgeClasses = $derived(
+		{
+			default: 'bg-[color-mix(in_srgb,black_30%,transparent)] text-[var(--color-text-muted)]',
+			accent:
+				'bg-[color-mix(in_srgb,var(--color-accent)_20%,transparent)] text-[var(--color-accent)]',
+			success: 'bg-emerald-500/20 text-emerald-400',
+			warning: 'bg-amber-500/20 text-amber-400',
+			danger: 'bg-red-500/20 text-red-400'
+		}[badgeVariant]
+	);
 </script>
 
 <svelte:element
 	this={tag}
 	{href}
 	onclick={href ? undefined : onclick}
-	class="list-item group {className}"
+	class="group list-item {className}"
 	role={href ? undefined : 'button'}
 	tabindex={href ? undefined : 0}
 >
@@ -54,7 +57,7 @@
 			<Icon class="size-5" />
 		</div>
 	{/if}
-	
+
 	<div class="list-item-content">
 		<span class="list-item-title">{title}</span>
 		{#if description}

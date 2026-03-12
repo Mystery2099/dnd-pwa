@@ -44,16 +44,16 @@
 </svelte:head>
 
 <div class="min-h-screen bg-linear-to-b from-(--color-bg-primary) to-(--color-bg-secondary)">
-		<div class="mx-auto max-w-4xl px-4 py-8">
-			<div class="mb-6">
-				<Breadcrumb
-					items={[
-						{ label: 'Compendium', href: '/compendium' },
-						{ label: data.config.plural, href: `/compendium/${data.type}` },
-						{ label: item.name }
-					]}
-				/>
-			</div>
+	<div class="mx-auto max-w-4xl px-4 py-8">
+		<div class="mb-6">
+			<Breadcrumb
+				items={[
+					{ label: 'Compendium', href: '/compendium' },
+					{ label: data.config.plural, href: `/compendium/${data.type}` },
+					{ label: item.name }
+				]}
+			/>
+		</div>
 
 		<div class="card-crystal overflow-hidden">
 			<div
@@ -280,7 +280,7 @@
 
 				{#if itemData.actions && Array.isArray(itemData.actions) && itemData.actions.length > 0}
 					<div class="border-b border-[var(--color-border)] p-6">
-					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Actions</h2>
+						<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Actions</h2>
 						<div class="space-y-4">
 							{#each itemData.actions as action, index}
 								<div
@@ -302,7 +302,7 @@
 
 				{#if itemData.traits && Array.isArray(itemData.traits) && itemData.traits.length > 0}
 					<div class="border-b border-[var(--color-border)] p-6">
-					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Traits</h2>
+						<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Traits</h2>
 						<div class="space-y-3">
 							{#each itemData.traits as trait, index}
 								<div
@@ -381,7 +381,9 @@
 									</AccordionTrigger>
 									<AccordionContent>
 										{#if feature.desc && activeClassFeature === featureValue}
-											<div class="prose prose-invert prose-sm max-w-none text-[var(--color-text-secondary)]">
+											<div
+												class="prose prose-invert prose-sm max-w-none text-[var(--color-text-secondary)]"
+											>
 												{@html markdownAt(`features.${index}.desc`)}
 											</div>
 										{/if}

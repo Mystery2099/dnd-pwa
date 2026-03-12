@@ -11,7 +11,9 @@
 	let { title, description, class: className = '', children }: Props = $props();
 </script>
 
-<div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] overflow-hidden {className}">
+<div
+	class="overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] {className}"
+>
 	{#if title}
 		<div class="border-b border-[var(--color-border)] px-4 py-3">
 			<h3 class="text-sm font-semibold text-[var(--color-text-primary)]">{title}</h3>

@@ -118,26 +118,26 @@ function createUserSettingsStore() {
 			cacheSettings(newData);
 
 			// Server sync
-				try {
-					const response = await fetch('/api/user/settings', {
-						method: 'PATCH',
-						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify({ [key]: value })
-					});
+			try {
+				const response = await fetch('/api/user/settings', {
+					method: 'PATCH',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ [key]: value })
+				});
 
-					if (!response.ok) {
-						throw new Error('Failed to update');
-					}
-
-					const serverSettings = (await response.json()) as ServerSettings;
-					settingsStore$.set(serverSettings);
-					reactiveData = serverSettings;
-					cacheSettings(serverSettings);
-				} catch (err) {
-					console.error('[UserSettingsStore] Failed to update setting:', err);
-					// Refetch to get actual server state
-					await this.init();
+				if (!response.ok) {
+					throw new Error('Failed to update');
 				}
+
+				const serverSettings = (await response.json()) as ServerSettings;
+				settingsStore$.set(serverSettings);
+				reactiveData = serverSettings;
+				cacheSettings(serverSettings);
+			} catch (err) {
+				console.error('[UserSettingsStore] Failed to update setting:', err);
+				// Refetch to get actual server state
+				await this.init();
+			}
 		},
 
 		/**

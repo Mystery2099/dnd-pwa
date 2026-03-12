@@ -1,9 +1,4 @@
-import type {
-	LinkedItem,
-	WeaponProperty,
-	SpeedData,
-	LanguageData
-} from './type-guards';
+import type { LinkedItem, WeaponProperty, SpeedData, LanguageData } from './type-guards';
 import {
 	isLinkedArray,
 	isWeaponPropertyArray,
@@ -16,7 +11,8 @@ export function formatSpeed(speed: SpeedData): string {
 	const unit = speed.unit ?? 'ft';
 	if (speed.walk) parts.push(`Walk ${speed.walk} ${unit}`);
 	if (speed.swim) parts.push(`Swim ${speed.swim} ${unit}`);
-	if (speed.fly && speed.fly > 0) parts.push(`Fly ${speed.fly} ${unit}${speed.hover ? ' (hover)' : ''}`);
+	if (speed.fly && speed.fly > 0)
+		parts.push(`Fly ${speed.fly} ${unit}${speed.hover ? ' (hover)' : ''}`);
 	if (speed.burrow) parts.push(`Burrow ${speed.burrow} ${unit}`);
 	if (speed.climb) parts.push(`Climb ${speed.climb} ${unit}`);
 	if (speed.crawl) parts.push(`Crawl ${speed.crawl} ${unit}`);
@@ -27,7 +23,12 @@ export function formatLanguages(lang: LanguageData): string {
 	if (lang.as_string) return lang.as_string;
 	const parts: string[] = [];
 	if (lang.data && lang.data.length > 0) {
-		parts.push(lang.data.map((l: LinkedItem) => l.name ?? l.key ?? '').filter(Boolean).join(', '));
+		parts.push(
+			lang.data
+				.map((l: LinkedItem) => l.name ?? l.key ?? '')
+				.filter(Boolean)
+				.join(', ')
+		);
 	}
 	if (lang.languages && lang.languages.length > 0) {
 		parts.push(lang.languages.join(', '));
@@ -46,7 +47,7 @@ export function formatFieldName(key: string): string {
 		.replace(/_/g, ' ')
 		.replace(/([A-Z])/g, ' $1')
 		.split(' ')
-		.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+		.map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
 		.join(' ')
 		.trim();
 }
@@ -57,7 +58,11 @@ export function formatValue(value: unknown): string {
 	if (typeof value === 'number') return value.toLocaleString();
 	if (typeof value === 'string') return value;
 
-	if (isLinkedArray(value)) return value.map((v: LinkedItem) => v.name ?? v.key ?? '').filter(Boolean).join(', ');
+	if (isLinkedArray(value))
+		return value
+			.map((v: LinkedItem) => v.name ?? v.key ?? '')
+			.filter(Boolean)
+			.join(', ');
 	if (isWeaponPropertyArray(value)) {
 		return value
 			.map((wp: WeaponProperty) => {
@@ -82,8 +87,40 @@ export function formatValue(value: unknown): string {
 }
 
 export const DISPLAY_FIELDS: Record<string, string[]> = {
-	spells: ['level', 'school', 'casting_time', 'duration', 'range', 'range_text', 'concentration', 'ritual', 'verbal', 'somatic', 'material', 'material_specified', 'material_cost', 'material_consumed', 'target_type', 'target_count', 'saving_throw_ability', 'attack_roll', 'damage_roll', 'damage_types', 'classes'],
-	creatures: ['type', 'size', 'challenge_rating_text', 'alignment', 'armor_class', 'armor_detail', 'hit_points', 'hit_dice', 'experience_points'],
+	spells: [
+		'level',
+		'school',
+		'casting_time',
+		'duration',
+		'range',
+		'range_text',
+		'concentration',
+		'ritual',
+		'verbal',
+		'somatic',
+		'material',
+		'material_specified',
+		'material_cost',
+		'material_consumed',
+		'target_type',
+		'target_count',
+		'saving_throw_ability',
+		'attack_roll',
+		'damage_roll',
+		'damage_types',
+		'classes'
+	],
+	creatures: [
+		'type',
+		'size',
+		'challenge_rating_text',
+		'alignment',
+		'armor_class',
+		'armor_detail',
+		'hit_points',
+		'hit_dice',
+		'experience_points'
+	],
 	classes: ['hit_die', 'saving_throws', 'primary_abilities'],
 	species: ['size', 'speed'],
 	backgrounds: [],
@@ -94,9 +131,26 @@ export const DISPLAY_FIELDS: Record<string, string[]> = {
 };
 
 export const EXCLUDE_FIELDS = [
-	'key', 'name', 'desc', 'description', 'descriptions', 'document', 'document_key', 
-	'document_name', 'gamesystem_key', 'gamesystem_name', 'publisher_key', 'publisher_name', 
-	'created_at', 'updated_at', 'url', 'features', 'benefits', 'properties', 'speed_all', 'languages'
+	'key',
+	'name',
+	'desc',
+	'description',
+	'descriptions',
+	'document',
+	'document_key',
+	'document_name',
+	'gamesystem_key',
+	'gamesystem_name',
+	'publisher_key',
+	'publisher_name',
+	'created_at',
+	'updated_at',
+	'url',
+	'features',
+	'benefits',
+	'properties',
+	'speed_all',
+	'languages'
 ];
 
 export function getDisplayFields(type: string): string[] {
@@ -112,7 +166,10 @@ export function shouldDisplayField(key: string, type: string): boolean {
 	return true;
 }
 
-export function getSortedFields(itemData: Record<string, unknown>, type: string): [string, unknown][] {
+export function getSortedFields(
+	itemData: Record<string, unknown>,
+	type: string
+): [string, unknown][] {
 	const fields = Object.entries(itemData).filter(([key]) => shouldDisplayField(key, type));
 	const displayFields = getDisplayFields(type);
 

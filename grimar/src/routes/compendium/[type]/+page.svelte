@@ -143,13 +143,19 @@
 			sortBy,
 			sortOrder,
 			source: sourceFilter || undefined,
-			includeSubclasses: data.type === 'classes' ? false : data.type === 'subclasses' ? true : undefined,
+			includeSubclasses:
+				data.type === 'classes' ? false : data.type === 'subclasses' ? true : undefined,
 			onlySubclasses: data.type === 'subclasses' ? true : undefined,
-			creatureType: data.type === 'creatures' && creatureTypeFilter !== 'all' ? creatureTypeFilter : undefined,
-			spellLevel: data.type === 'spells' && spellLevelFilter !== 'all' ? spellLevelFilter : undefined,
-			spellSchool: data.type === 'spells' && spellSchoolFilter !== 'all' ? spellSchoolFilter : undefined,
+			creatureType:
+				data.type === 'creatures' && creatureTypeFilter !== 'all' ? creatureTypeFilter : undefined,
+			spellLevel:
+				data.type === 'spells' && spellLevelFilter !== 'all' ? spellLevelFilter : undefined,
+			spellSchool:
+				data.type === 'spells' && spellSchoolFilter !== 'all' ? spellSchoolFilter : undefined,
 			challengeRating:
-				data.type === 'creatures' && challengeRatingFilter !== 'all' ? challengeRatingFilter : undefined
+				data.type === 'creatures' && challengeRatingFilter !== 'all'
+					? challengeRatingFilter
+					: undefined
 		})
 	);
 	let items = $derived(query.data?.items ?? []);
@@ -191,7 +197,8 @@
 		if (data.type === 'creatures' && challengeRatingFilter !== 'all') {
 			parts.push(`challengeRating=${encodeURIComponent(challengeRatingFilter)}`);
 		}
-		const newUrl = parts.length > 0 ? `${$page.url.pathname}?${parts.join('&')}` : $page.url.pathname;
+		const newUrl =
+			parts.length > 0 ? `${$page.url.pathname}?${parts.join('&')}` : $page.url.pathname;
 		const currentUrl = `${$page.url.pathname}${$page.url.search}`;
 		if (newUrl === currentUrl) return;
 		replaceState(newUrl, $page.state);
@@ -319,12 +326,14 @@
 	class="min-h-screen bg-gradient-to-b from-[var(--color-bg-primary)] to-[var(--color-bg-secondary)]"
 >
 	<div class="mx-auto max-w-7xl px-4 py-8">
-			<div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-				<div>
-					<Breadcrumb items={[{ label: 'Compendium', href: '/compendium' }, { label: config.plural }]} />
-					<h1
-						class="mt-2 flex items-center gap-3 text-3xl font-bold text-[var(--color-text-primary)]"
-					>
+		<div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+			<div>
+				<Breadcrumb
+					items={[{ label: 'Compendium', href: '/compendium' }, { label: config.plural }]}
+				/>
+				<h1
+					class="mt-2 flex items-center gap-3 text-3xl font-bold text-[var(--color-text-primary)]"
+				>
 					<span class="text-4xl">{config.icon}</span>
 					{config.plural}
 				</h1>
@@ -335,7 +344,9 @@
 			</div>
 		</div>
 
-		<div class="mb-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/60 p-4">
+		<div
+			class="mb-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/60 p-4"
+		>
 			<div class="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
 				<div class="relative md:col-span-2 lg:col-span-2">
 					<Input
@@ -418,13 +429,7 @@
 			</div>
 
 			<div class="mt-3 flex justify-end">
-				<Button
-					onclick={clearFilters}
-					variant="outline"
-					size="sm"
-				>
-					Reset filters
-				</Button>
+				<Button onclick={clearFilters} variant="outline" size="sm">Reset filters</Button>
 			</div>
 		</div>
 
@@ -444,25 +449,20 @@
 					{searchQuery ? `No results for "${searchQuery}"` : 'No items available in this category'}
 				</p>
 				{#if searchQuery}
-					<Button
-						onclick={clearFilters}
-						class="mt-4"
-					>
-						Reset filters
-					</Button>
+					<Button onclick={clearFilters} class="mt-4">Reset filters</Button>
 				{/if}
 			</div>
-			{:else}
-				{#snippet compendiumCard(item: CompendiumItem)}
-					{@const itemData = item.data as CardItemData}
-					<div use:prefetchOnVisible={item.key} class="h-full w-full">
-						<SurfaceCard
-							href="/compendium/{data.type}/{item.key}"
-							class="group h-full w-full"
-							onmouseenter={() => handleItemPrefetch(item.key)}
-							onfocusin={() => handleItemPrefetch(item.key)}
-						>
-							<div class="p-4">
+		{:else}
+			{#snippet compendiumCard(item: CompendiumItem)}
+				{@const itemData = item.data as CardItemData}
+				<div use:prefetchOnVisible={item.key} class="h-full w-full">
+					<SurfaceCard
+						href="/compendium/{data.type}/{item.key}"
+						class="group h-full w-full"
+						onmouseenter={() => handleItemPrefetch(item.key)}
+						onfocusin={() => handleItemPrefetch(item.key)}
+					>
+						<div class="p-4">
 							<h3
 								class="line-clamp-1 font-semibold text-[var(--color-text-primary)] transition-colors group-hover:text-accent"
 							>
@@ -505,72 +505,74 @@
 									<Badge variant="outline" class="text-xs opacity-70">{item.documentName}</Badge>
 								</div>
 							{/if}
-							</div>
-						</SurfaceCard>
-					</div>
-				{/snippet}
+						</div>
+					</SurfaceCard>
+				</div>
+			{/snippet}
 
-				{#if items.length >= VIRTUALIZATION_THRESHOLD}
-					<div class="h-[70vh] rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/20">
-						<VirtualGrid
-							items={items}
-							estimateRowHeight={190}
-							minCardWidth={260}
-							mobileMinCardWidth={170}
-							tabletMinCardWidth={220}
-							gap={24}
-							rowGap={32}
-							resetScrollOnItemsChange={true}
-						>
-							{#snippet children(item: CompendiumItem, index: number)}
-								{@render compendiumCard(item)}
-							{/snippet}
-						</VirtualGrid>
-					</div>
-				{:else}
-					<div class="grid auto-rows-fr gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-						{#each items as item (item.key)}
+			{#if items.length >= VIRTUALIZATION_THRESHOLD}
+				<div
+					class="h-[70vh] rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/20"
+				>
+					<VirtualGrid
+						{items}
+						estimateRowHeight={190}
+						minCardWidth={260}
+						mobileMinCardWidth={170}
+						tabletMinCardWidth={220}
+						gap={24}
+						rowGap={32}
+						resetScrollOnItemsChange={true}
+					>
+						{#snippet children(item: CompendiumItem, index: number)}
 							{@render compendiumCard(item)}
-						{/each}
-					</div>
-				{/if}
+						{/snippet}
+					</VirtualGrid>
+				</div>
+			{:else}
+				<div class="grid auto-rows-fr gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+					{#each items as item (item.key)}
+						{@render compendiumCard(item)}
+					{/each}
+				</div>
+			{/if}
 
-				{#if totalPages > 1}
-					<div class="mt-8">
-						<Pagination.Pagination
-							count={totalItems}
-							perPage={pageSize}
-							siblingCount={1}
-							bind:page={currentPage}
-							onPageChange={handlePageChange}
-						>
-							{#snippet children({ pages, currentPage })}
-								<Pagination.PaginationContent>
+			{#if totalPages > 1}
+				<div class="mt-8">
+					<Pagination.Pagination
+						count={totalItems}
+						perPage={pageSize}
+						siblingCount={1}
+						bind:page={currentPage}
+						onPageChange={handlePageChange}
+					>
+						{#snippet children({ pages, currentPage })}
+							<Pagination.PaginationContent>
+								<Pagination.PaginationItem>
+									<Pagination.PaginationPrevious />
+								</Pagination.PaginationItem>
+
+								{#each pages as pageItem (pageItem.key)}
 									<Pagination.PaginationItem>
-										<Pagination.PaginationPrevious />
+										{#if pageItem.type === 'ellipsis'}
+											<Pagination.PaginationEllipsis />
+										{:else}
+											<Pagination.PaginationLink
+												page={pageItem}
+												isActive={currentPage === pageItem.value}
+											/>
+										{/if}
 									</Pagination.PaginationItem>
+								{/each}
 
-									{#each pages as pageItem (pageItem.key)}
-										<Pagination.PaginationItem>
-											{#if pageItem.type === 'ellipsis'}
-												<Pagination.PaginationEllipsis />
-											{:else}
-												<Pagination.PaginationLink
-													page={pageItem}
-													isActive={currentPage === pageItem.value}
-												/>
-											{/if}
-										</Pagination.PaginationItem>
-									{/each}
-
-									<Pagination.PaginationItem>
-										<Pagination.PaginationNext />
-									</Pagination.PaginationItem>
-								</Pagination.PaginationContent>
-							{/snippet}
-						</Pagination.Pagination>
-					</div>
-				{/if}
+								<Pagination.PaginationItem>
+									<Pagination.PaginationNext />
+								</Pagination.PaginationItem>
+							</Pagination.PaginationContent>
+						{/snippet}
+					</Pagination.Pagination>
+				</div>
+			{/if}
 		{/if}
 	</div>
 </div>
