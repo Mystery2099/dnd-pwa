@@ -3,10 +3,7 @@
 	import Button from '$lib/components/ui/Button.svelte';
 	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
 
-	let { data: _data } = $props();
-
-	// Authentik configuration
-	const authentikUrl = import.meta.env.VITE_AUTHENTIK_URL || 'https://authentik.mathewtech.us';
+	let { data } = $props();
 </script>
 
 <svelte:head>
@@ -38,7 +35,8 @@
 				<LogIn class="size-5" />
 				Sign In with Authentik
 			</Button>
-			<p class="text-xs text-[var(--color-text-muted)]">Redirects to {authentikUrl}</p>
+			<p class="text-xs text-[var(--color-text-muted)]">Provider: {data.authentikUrl}</p>
+			<p class="text-xs text-[var(--color-text-muted)]">Callback: {data.redirectUri}</p>
 
 			<Button href="/" variant="secondary" size="lg">Go to Homepage</Button>
 		</div>

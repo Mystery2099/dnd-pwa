@@ -1,14 +1,19 @@
 import { redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
+import {
+	getAuthentikClientId,
+	getAuthentikRedirectUri,
+	getAuthentikUrl
+} from '$lib/server/services/auth/auth-config';
 
 /**
  * GET /auth/login
  * Redirects to Authentik OAuth2 authorize endpoint
  */
 export const GET: RequestHandler = async ({ url, cookies }) => {
-	const authentikUrl = process.env.AUTHENTIK_URL || 'https://authentik.mathewtech.us';
-	const clientId = process.env.AUTHENTIK_CLIENT_ID;
-	const redirectUri = process.env.AUTHENTIK_REDIRECT_URI || `${url.origin}/auth/callback`;
+	const authentikUrl = getAuthentikUrl();
+	const clientId = getAuthentikClientId();
+	const redirectUri = getAuthentikRedirectUri(url);
 	const state = crypto.randomUUID();
 
 	// Store state in cookie for CSRF protection
@@ -35,7 +40,7 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 
 	// Build authorization URL
 	const authUrl = new URL(`${authentikUrl}/application/o/authorize/`);
-	authUrl.searchParams.set('client_id', clientId || 'grimar');
+	authUrl.searchParams.set('client_id', clientId);
 	authUrl.searchParams.set('redirect_uri', redirectUri);
 	authUrl.searchParams.set('response_type', 'code');
 	authUrl.searchParams.set('scope', 'openid profile email');

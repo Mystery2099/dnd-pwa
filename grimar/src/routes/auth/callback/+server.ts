@@ -2,6 +2,12 @@ import { redirect, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { createSession, destroySession } from '$lib/server/auth/session';
 import { createModuleLogger } from '$lib/server/logger';
+import {
+	getAuthentikClientId,
+	getAuthentikClientSecret,
+	getAuthentikRedirectUri,
+	getAuthentikUrl
+} from '$lib/server/services/auth/auth-config';
 
 const log = createModuleLogger('AuthCallback');
 
@@ -37,10 +43,10 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 	}
 
 	// Get Authentik configuration
-	const authentikUrl = process.env.AUTHENTIK_URL || 'https://authentik.mathewtech.us';
-	const clientId = process.env.AUTHENTIK_CLIENT_ID;
-	const clientSecret = process.env.AUTHENTIK_CLIENT_SECRET;
-	const redirectUri = process.env.AUTHENTIK_REDIRECT_URI || `${url.origin}/auth/callback`;
+	const authentikUrl = getAuthentikUrl();
+	const clientId = getAuthentikClientId();
+	const clientSecret = getAuthentikClientSecret();
+	const redirectUri = getAuthentikRedirectUri(url);
 
 	if (!clientId || !clientSecret) {
 		throw error(500, 'Authentik not configured');
