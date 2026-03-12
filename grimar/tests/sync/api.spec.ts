@@ -1,55 +1,33 @@
 import { test, expect } from '../fixtures';
 
-test.describe('API Sync', () => {
-	test.beforeEach(async () => {
-		// Auth is handled by the authenticatedPage fixture
-	});
-
-	test('sync endpoint returns success when triggered', async ({ page }) => {
-		// Navigate to dashboard or compendium page first to establish session
+test.describe('Authenticated App Smoke', () => {
+	test('dashboard loads for an authenticated user', async ({ page }) => {
 		await page.goto('/dashboard');
 		await page.waitForLoadState('domcontentloaded');
-
-		// The sync should be accessible - check that the page loads correctly
-		await expect(page.locator('body')).toBeVisible();
+		await expect(page.locator('h1')).toContainText('Dashboard');
+		await expect(page.locator('body')).toContainText('test-dm');
 	});
 
-	test('sync endpoint handles rate limiting gracefully', async ({ page }) => {
-		// This test verifies the API handles concurrent requests appropriately
-		await page.goto('/dashboard');
-		await page.waitForLoadState('domcontentloaded');
-
-		// Just verify the page loads without errors
-		await expect(page.locator('h1')).toBeVisible();
-	});
-
-	test('compendium pages handle loading states', async ({ page }) => {
-		await page.goto('/compendium/spells');
-		await page.waitForLoadState('domcontentloaded');
-
-		// The page should eventually show content or loading indicator
-		const content = page.locator('body');
-		await expect(content).toBeVisible();
-	});
-
-	test('character creation page loads', async ({ page }) => {
+	test('characters page loads seeded character data', async ({ page }) => {
 		await page.goto('/characters');
 		await page.waitForLoadState('domcontentloaded');
-
-		// Should load without errors
-		await expect(page.locator('body')).toBeVisible();
+		await expect(page.locator('h1')).toContainText('My Characters');
+		await expect(page.locator('body')).toContainText('Playwright Ranger');
 	});
 
-	test('dashboard loads and shows user info', async ({ page }) => {
-		await page.goto('/dashboard');
+	test('settings page loads for an authenticated user', async ({ page }) => {
+		await page.goto('/settings');
 		await page.waitForLoadState('domcontentloaded');
-
-		// Should load the dashboard
-		await expect(page.locator('body')).toBeVisible();
+		await expect(page.locator('h1')).toContainText('Settings');
 	});
 
-	test('handles 404 for non-existent routes gracefully', async ({ page }) => {
-		const response = await page.goto('/compendium/non-existent-page');
-		expect(response?.status()).toBeGreaterThanOrEqual(200);
+	test('api requests include authenticated identity in browser context', async ({ page }) => {
+		await page.goto('/compendium/spells');
+		const response = await page.evaluate(async () => {
+			const result = await fetch('/api/characters');
+			return { status: result.status, items: await result.json() };
+		});
+		expect(response.status).toBe(200);
+		expect(Array.isArray(response.items)).toBe(true);
 	});
 });

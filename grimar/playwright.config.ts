@@ -6,7 +6,7 @@ export default defineConfig({
 	forbidOnly: !!process.env.CI,
 	retries: process.env.CI ? 2 : 0,
 	workers: process.env.CI ? 1 : undefined,
-	reporter: 'html',
+	reporter: process.env.CI ? 'line' : [['html', { open: 'never' }]],
 	globalSetup: './tests/global-setup.ts',
 	use: {
 		baseURL: 'http://localhost:5173',
@@ -34,8 +34,8 @@ export default defineConfig({
 		reuseExistingServer: !process.env.CI,
 		timeout: 120000,
 		env: {
-			VITE_MOCK_USER: 'test-dm',
-			DEV_TEST_AUTH_BYPASS: 'true'
+			DEV_TEST_AUTH_BYPASS: 'true',
+			DATABASE_URL: './data/e2e.db'
 		}
 	},
 	timeout: 60000,
