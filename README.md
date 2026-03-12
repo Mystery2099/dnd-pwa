@@ -86,7 +86,7 @@ bun run reindex-fts
 
 ## Testing Notes
 
-Unit tests run with Vitest. E2E tests run with Playwright against a dedicated seeded SQLite database created by [`grimar/scripts/setup-e2e-db.ts`](/home/mystery/misc-projects/dnd-pwa/grimar/scripts/setup-e2e-db.ts).
+Unit tests run with Vitest. E2E tests run with Playwright against a dedicated seeded SQLite database created by [`grimar/scripts/setup-e2e-db.ts`](grimar/scripts/setup-e2e-db.ts).
 
 The Playwright suite is intentionally configured to use a single worker because it shares one local dev server and one seeded database during the run. If you see `ERR_CONNECTION_REFUSED` during a customized parallel run, revert to the default `bun run test:e2e` command.
 
