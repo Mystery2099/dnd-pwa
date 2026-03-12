@@ -48,7 +48,7 @@ function buildListCacheKey(
 	const normalizedFilters = Object.entries(filters)
 		.filter(([, value]) => value !== undefined && value !== null && value !== '')
 		.sort(([a], [b]) => a.localeCompare(b));
-	return `compendium:list:${type}:${page}:${pageSize}:${JSON.stringify(normalizedFilters)}`;
+	return `compendium:list:v2:${type}:${page}:${pageSize}:${JSON.stringify(normalizedFilters)}`;
 }
 
 function buildItemCacheKey(type: CompendiumType, key: string): string {
@@ -149,7 +149,11 @@ export async function getPaginatedItems(
 	if (filters.creatureType) {
 		whereClause = and(
 			whereClause,
-			sql`LOWER(json_extract(${compendium.data}, '$.type')) = LOWER(${filters.creatureType})`
+			sql`LOWER(COALESCE(
+				json_extract(${compendium.data}, '$.type.key'),
+				json_extract(${compendium.data}, '$.type.name'),
+				json_extract(${compendium.data}, '$.type')
+			)) = LOWER(${filters.creatureType})`
 		)!;
 	}
 
@@ -170,7 +174,7 @@ export async function getPaginatedItems(
 	if (filters.challengeRating !== undefined) {
 		whereClause = and(
 			whereClause,
-			sql`json_extract(${compendium.data}, '$.challenge_rating_decimal') = ${filters.challengeRating}`
+			sql`CAST(json_extract(${compendium.data}, '$.challenge_rating_decimal') AS REAL) = ${filters.challengeRating}`
 		)!;
 	}
 
