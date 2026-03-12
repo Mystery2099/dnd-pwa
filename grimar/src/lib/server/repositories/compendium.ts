@@ -1,6 +1,6 @@
 import { eq, and, sql, like, or, desc, inArray, type SQL } from 'drizzle-orm';
 import { getDb } from '../db/index';
-import { searchFtsRanked } from '../db/db-fts';
+import { getFtsStats, searchFtsRanked } from '../db/db-fts';
 import { compendium, type CompendiumItem, type CompendiumType } from '../db/schema';
 import { MemoryCache, getCacheTTL } from '$lib/server/utils/cache';
 
@@ -48,7 +48,7 @@ function buildListCacheKey(
 	const normalizedFilters = Object.entries(filters)
 		.filter(([, value]) => value !== undefined && value !== null && value !== '')
 		.sort(([a], [b]) => a.localeCompare(b));
-	return `compendium:list:v2:${type}:${page}:${pageSize}:${JSON.stringify(normalizedFilters)}`;
+	return `compendium:list:v3:${type}:${page}:${pageSize}:${JSON.stringify(normalizedFilters)}`;
 }
 
 function buildItemCacheKey(type: CompendiumType, key: string): string {
@@ -101,16 +101,30 @@ export async function getPaginatedItems(
 
 	if (filters.search) {
 		try {
-			const rankedMatchesWithSentinel = await searchFtsRanked(
-				filters.search,
-				FTS_SEARCH_LIMIT + 1,
-				db
-			);
+			const [compendiumCountRows, { rowCount: ftsRowCount = 0 } = { rowCount: 0 }] =
+				await Promise.all([
+					db
+						.select({ count: sql<number>`count(*)` })
+						.from(compendium)
+						.where(eq(compendium.type, type)),
+					getFtsStats(db)
+				]);
+			const compendiumCount = Number(compendiumCountRows[0]?.count ?? 0);
+
+			if (ftsRowCount < compendiumCount) {
+				useLikeSearchFallback = true;
+			} else {
+				const rankedMatchesWithSentinel = await searchFtsRanked(
+					filters.search,
+					FTS_SEARCH_LIMIT + 1,
+					db
+				);
 			resultsTruncated = rankedMatchesWithSentinel.length > FTS_SEARCH_LIMIT;
 			rankedMatches = resultsTruncated
 				? rankedMatchesWithSentinel.slice(0, FTS_SEARCH_LIMIT)
 				: rankedMatchesWithSentinel;
 			ftsMatchedKeys = rankedMatches.map((match) => match.key);
+			}
 		} catch (e) {
 			console.error('searchFtsRanked failed for filters.search', {
 				search: filters.search,
