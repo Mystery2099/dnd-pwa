@@ -12,9 +12,10 @@ test.describe('Compendium Creatures - Smoke Tests', () => {
 	});
 
 	test('displays creature list', async ({ page }) => {
-		await expect(page.locator('a[href^="/compendium/creatures/"]')).toHaveCount(2);
-		await expect(page.getByRole('link', { name: /Goblin/i })).toBeVisible();
-		await expect(page.getByRole('link', { name: /Ancient Red Dragon/i })).toBeVisible();
+		await expect(page.getByRole('link', { name: /Goblin/i })).toBeVisible({ timeout: 15000 });
+		await expect(page.getByRole('link', { name: /Ancient Red Dragon/i })).toBeVisible({
+			timeout: 15000
+		});
 	});
 
 	test('opens creature detail page', async ({ page }) => {

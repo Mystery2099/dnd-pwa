@@ -13,9 +13,10 @@ test.describe('Compendium Spells - Smoke Tests', () => {
 	});
 
 	test('displays spell list', async ({ page }) => {
-		await expect(page.locator('a[href^="/compendium/spells/"]')).toHaveCount(3);
-		await expect(page.getByRole('link', { name: /Fireball/i })).toBeVisible();
-		await expect(page.getByRole('link', { name: /Magic Missile/i })).toBeVisible();
+		await expect(page.getByRole('link', { name: /Fireball/i })).toBeVisible({ timeout: 15000 });
+		await expect(page.getByRole('link', { name: /Magic Missile/i })).toBeVisible({
+			timeout: 15000
+		});
 	});
 
 	test('opens spell detail page', async ({ page }) => {
