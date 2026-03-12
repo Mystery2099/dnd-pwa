@@ -296,6 +296,46 @@ export async function getItem(type: CompendiumType, key: string): Promise<Compen
 	return item;
 }
 
+const IMAGE_RELATION_PATHS: Partial<Record<CompendiumType, string[]>> = {
+	creatures: ['/monsters/'],
+	conditions: ['/conditions/']
+};
+
+export async function getRelatedImages(
+	type: CompendiumType,
+	name: string,
+	options?: { limit?: number }
+): Promise<CompendiumItem[]> {
+	const supportedPaths = IMAGE_RELATION_PATHS[type];
+	if (!supportedPaths || supportedPaths.length === 0) {
+		return [];
+	}
+
+	const db = await getDb();
+	const limit = options?.limit ?? 6;
+	const normalizedName = name.trim();
+	if (!normalizedName) {
+		return [];
+	}
+
+	const pathClauses = supportedPaths.map(
+		(path) => sql`LOWER(json_extract(${compendium.data}, '$.file_url')) LIKE ${`%${path.toLowerCase()}%`}`
+	);
+
+	return db
+		.select()
+		.from(compendium)
+		.where(
+			and(
+				eq(compendium.type, 'images'),
+				sql`LOWER(${compendium.name}) = LOWER(${normalizedName})`,
+				or(...pathClauses)
+			)
+		)
+		.orderBy(compendium.name)
+		.limit(limit);
+}
+
 export async function searchItems(
 	type: CompendiumType,
 	query: string,

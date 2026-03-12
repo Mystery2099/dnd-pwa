@@ -7,6 +7,7 @@ export interface LinkedItem {
 export interface WeaponProperty {
 	property?: {
 		name?: string;
+		key?: string;
 		type?: string | null;
 		desc?: string;
 	};

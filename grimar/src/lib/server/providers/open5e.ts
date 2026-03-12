@@ -58,6 +58,8 @@ interface ApiItem {
 	document?: {
 		key?: string;
 		name?: string;
+		display_name?: string;
+		permalink?: string;
 		publisher?: { key?: string; name?: string };
 		gamesystem?: { key?: string; name?: string };
 	};
@@ -95,12 +97,15 @@ function transformToCompendiumItem(item: ApiItem, type: CompendiumType) {
 		name: item.name,
 		source: 'open5e',
 		documentKey: item.document?.key ?? null,
-		documentName: item.document?.name ?? null,
+		documentName: item.document?.display_name ?? item.document?.name ?? null,
 		gamesystemKey: item.document?.gamesystem?.key ?? null,
 		gamesystemName: item.document?.gamesystem?.name ?? null,
 		publisherKey: item.document?.publisher?.key ?? null,
 		publisherName: item.document?.publisher?.name ?? null,
-		description: item.desc ?? item.description ?? null,
+		description:
+			item.desc ??
+			item.description ??
+			(typeof item.alt_text === 'string' ? item.alt_text : null),
 		data: item,
 		createdBy: null
 	};
