@@ -20,7 +20,6 @@
 	} from 'lucide-svelte';
 	import ThemeCardSelector from '$lib/components/ui/ThemeCardSelector.svelte';
 	import Toggle from '$lib/components/ui/Toggle.svelte';
-	import SegmentedControl from '$lib/components/ui/SegmentedControl.svelte';
 	import RadioCardGrid from '$lib/components/ui/RadioCardGrid.svelte';
 	import SettingsGroup from '$lib/components/ui/SettingsGroup.svelte';
 	import SettingsItem from '$lib/components/ui/SettingsItem.svelte';
@@ -33,8 +32,7 @@
 		getImportedThemes,
 		importTheme,
 		exportTheme,
-		deleteImportedTheme,
-		getAllThemes
+		deleteImportedTheme
 	} from '$lib/core/client/themeRegistry';
 	import { setTheme } from '$lib/core/client/themeStore.svelte';
 	import type { ThemeConfig } from '$lib/core/types/theme';
@@ -491,24 +489,6 @@
 											<HardDrive class="size-4" />
 											Clear All Data
 										{/if}
-									</Button>
-								{/snippet}
-							</SettingsItem>
-
-							<SettingsItem label="Export Data" description="Download your settings and data">
-								{#snippet control()}
-									<Button variant="secondary" size="sm">
-										<Download class="size-4" />
-										Export
-									</Button>
-								{/snippet}
-							</SettingsItem>
-
-							<SettingsItem label="Import Data" description="Restore settings and data from backup">
-								{#snippet control()}
-									<Button variant="secondary" size="sm">
-										<Upload class="size-4" />
-										Import
 									</Button>
 								{/snippet}
 							</SettingsItem>

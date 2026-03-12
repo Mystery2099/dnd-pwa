@@ -62,10 +62,6 @@ Encrypted cookie used by the app’s session-based auth flow.
 
 Explicit development/test flag that allows bypass auth behavior when combined with test headers or cookies.
 
-### `VITE_MOCK_USER`
-
-A development-only client/server convenience variable still referenced in parts of the login and auth utility flow.
-
 ## Frontend Terms
 
 ### App shell

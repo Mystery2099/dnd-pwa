@@ -73,9 +73,9 @@ class PerfTelemetryStore {
 	}
 
 	recordFromResponse(url: string, response: Response, fallbackDurationMs: number): void {
-		const headerDuration = response.headers.get('x-query-time-ms');
+		const headerDuration = response.headers?.get('x-query-time-ms') ?? null;
 		const serverTimingDuration = parseDurationFromServerTiming(
-			response.headers.get('server-timing')
+			response.headers?.get('server-timing') ?? null
 		);
 		const parsedHeaderDuration = headerDuration ? Number(headerDuration) : null;
 		const durationMs =
@@ -86,7 +86,7 @@ class PerfTelemetryStore {
 				: null) ??
 			serverTimingDuration ??
 			fallbackDurationMs;
-		const bucket = response.headers.get('x-query-bucket') ?? 'client';
+		const bucket = response.headers?.get('x-query-bucket') ?? 'client';
 
 		this.record({
 			endpoint: normalizeEndpoint(url),

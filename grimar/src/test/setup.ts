@@ -12,7 +12,8 @@ vi.mock('$app/navigation', () => ({
 }));
 
 vi.mock('$app/environment', () => ({
-	browser: true
+	browser: true,
+	dev: false
 }));
 
 vi.mock('$app/state', () => ({

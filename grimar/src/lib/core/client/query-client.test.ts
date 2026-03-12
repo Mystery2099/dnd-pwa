@@ -64,7 +64,13 @@ describe('query-client persistence', () => {
 
 		expect(mocks.persistQueryClient).toHaveBeenCalledTimes(1);
 		expect(mocks.setCachedVersion).toHaveBeenCalledWith('server-v2', 123);
-		expect(invalidateQueries).toHaveBeenCalledTimes(1);
+		expect(invalidateQueries).toHaveBeenCalledTimes(2);
+		expect(invalidateQueries).toHaveBeenNthCalledWith(1, {
+			queryKey: ['compendium']
+		});
+		expect(invalidateQueries).toHaveBeenNthCalledWith(2, {
+			queryKey: ['cache', 'version']
+		});
 	});
 
 	it('persister restore safely handles malformed persisted cache data', async () => {

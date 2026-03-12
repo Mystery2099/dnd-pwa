@@ -4,5 +4,4 @@
 declare module '$env/dynamic/private' {
 	export const env: Record<string, string | undefined>;
 	export const DATABASE_URL: string;
-	export const VITE_MOCK_USER: string | undefined;
 }

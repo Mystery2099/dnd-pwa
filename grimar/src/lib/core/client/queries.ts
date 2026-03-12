@@ -120,7 +120,7 @@ export async function apiFetch<T>(url: string, init?: RequestInit): Promise<T> {
 		}
 
 		// Handle empty responses
-		const contentType = response.headers.get('content-type');
+		const contentType = response.headers?.get('content-type');
 		if (contentType?.includes('application/json')) {
 			return response.json() as Promise<T>;
 		}
