@@ -14,12 +14,7 @@ import {
 	type ThemeConfig,
 	ThemeConfigSchema
 } from './themeRegistry';
-import {
-	generateThemeCSS,
-	injectThemeCSS,
-	getThemeGradient,
-	getThemeAccentClass
-} from './themeCSS';
+import { injectThemeCSS } from './themeCSS';
 
 const THEME_KEY = 'grimar-theme';
 

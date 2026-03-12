@@ -143,6 +143,7 @@
 				<div class="border-b border-[var(--color-border)] p-6">
 					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Description</h2>
 					<div class="prose prose-invert max-w-none text-[var(--color-text-secondary)]">
+						<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 						{@html markdownAt('description')}
 					</div>
 				</div>
@@ -152,7 +153,7 @@
 				<div class="border-b border-[var(--color-border)] p-6">
 					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Descriptions</h2>
 					<div class="space-y-4">
-						{#each getDescriptions(itemData.descriptions) as desc, index}
+						{#each getDescriptions(itemData.descriptions) as desc, index (`${desc.document ?? 'description'}-${index}`)}
 							<div
 								class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4"
 							>
@@ -172,6 +173,7 @@
 								<div
 									class="prose prose-invert prose-sm max-w-none text-[var(--color-text-secondary)]"
 								>
+									<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 									{@html markdownAt(`descriptions.${index}.desc`)}
 								</div>
 							</div>
@@ -184,8 +186,9 @@
 				<div class="border-b border-[var(--color-border)] p-6">
 					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Benefits</h2>
 					<ul class="list-inside list-disc space-y-2 text-[var(--color-text-secondary)]">
-						{#each getBenefits(itemData.benefits) as benefit, index}
+						{#each getBenefits(itemData.benefits) as _benefit, index (index)}
 							<li class="prose prose-invert prose-sm max-w-none">
+								<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 								{@html markdownAt(`benefits.${index}.desc`)}
 							</li>
 						{/each}
@@ -197,7 +200,7 @@
 				<div class="border-b border-[var(--color-border)] p-6">
 					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Properties</h2>
 					<div class="space-y-3">
-						{#each getWeaponProperties(itemData.properties) as wp, index}
+						{#each getWeaponProperties(itemData.properties) as wp, index (`${wp.property?.key ?? wp.property?.name ?? 'property'}-${index}`)}
 							<div
 								class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4"
 							>
@@ -216,6 +219,7 @@
 									<div
 										class="prose prose-invert prose-sm mt-2 max-w-none text-[var(--color-text-secondary)]"
 									>
+										<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 										{@html markdownAt(`weaponProperties.${index}.desc`)}
 									</div>
 								{/if}
@@ -229,7 +233,7 @@
 				<div class="border-b border-[var(--color-border)] p-6">
 					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Traits</h2>
 					<div class="space-y-3">
-						{#each itemData.traits as trait, index}
+						{#each itemData.traits as trait, index (`${trait.key ?? trait.name ?? 'trait'}-${index}`)}
 							<div
 								class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4"
 							>
@@ -238,6 +242,7 @@
 									<div
 										class="prose prose-invert prose-sm mt-1 max-w-none text-[var(--color-text-secondary)]"
 									>
+										<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 										{@html markdownAt(`traits.${index}.desc`)}
 									</div>
 								{/if}
@@ -261,7 +266,7 @@
 							Ability Scores
 						</h2>
 						<div class="grid grid-cols-3 gap-3 sm:grid-cols-6">
-							{#each Object.entries(itemData.ability_scores as Record<string, number>) as [ability, score]}
+							{#each Object.entries(itemData.ability_scores as Record<string, number>) as [ability, score] (ability)}
 								<div
 									class="flex flex-col items-center rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-2"
 								>
@@ -282,7 +287,7 @@
 					<div class="border-b border-[var(--color-border)] p-6">
 						<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Actions</h2>
 						<div class="space-y-4">
-							{#each itemData.actions as action, index}
+							{#each itemData.actions as action, index (`${action.key ?? action.name ?? 'action'}-${index}`)}
 								<div
 									class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4"
 								>
@@ -291,6 +296,7 @@
 										<div
 											class="prose prose-invert prose-sm mt-1 max-w-none text-[var(--color-text-secondary)]"
 										>
+											<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 											{@html markdownAt(`actions.${index}.desc`)}
 										</div>
 									{/if}
@@ -304,7 +310,7 @@
 					<div class="border-b border-[var(--color-border)] p-6">
 						<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Traits</h2>
 						<div class="space-y-3">
-							{#each itemData.traits as trait, index}
+							{#each itemData.traits as trait, index (`${trait.key ?? trait.name ?? 'trait'}-${index}`)}
 								<div
 									class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4"
 								>
@@ -313,6 +319,7 @@
 										<div
 											class="prose prose-invert prose-sm mt-1 max-w-none text-[var(--color-text-secondary)]"
 										>
+											<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 											{@html markdownAt(`traits.${index}.desc`)}
 										</div>
 									{/if}
@@ -328,7 +335,7 @@
 					<div class="border-b border-[var(--color-border)] p-6">
 						<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Classes</h2>
 						<div class="flex flex-wrap gap-2">
-							{#each itemData.classes as cls}
+							{#each itemData.classes as cls, index (`${cls.key ?? cls.name ?? cls}-${index}`)}
 								<a
 									href="/compendium/classes/{cls.key || cls}"
 									class="transition-colors hover:text-accent"
@@ -346,6 +353,7 @@
 							At Higher Levels
 						</h2>
 						<div class="prose prose-invert max-w-none text-[var(--color-text-secondary)]">
+							<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 							{@html markdownAt('higher_level')}
 						</div>
 					</div>
@@ -362,7 +370,7 @@
 							bind:value={activeClassFeature}
 							class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] px-4"
 						>
-							{#each itemData.features as feature, index}
+							{#each itemData.features as feature, index (`${feature.key ?? feature.name ?? 'feature'}-${index}`)}
 								{@const featureValue = String(feature.key || feature.name || `feature-${index}`)}
 								<AccordionItem value={featureValue} class="border-[var(--color-border)]">
 									<AccordionTrigger class="py-3 hover:no-underline">
@@ -384,6 +392,7 @@
 											<div
 												class="prose prose-invert prose-sm max-w-none text-[var(--color-text-secondary)]"
 											>
+												<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 												{@html markdownAt(`features.${index}.desc`)}
 											</div>
 										{/if}
@@ -399,7 +408,7 @@
 				<div class="p-6">
 					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Details</h2>
 					<dl class="grid gap-2 sm:grid-cols-2">
-						{#each sortedFields as [key, value]}
+						{#each sortedFields as [key, value] (key)}
 							<div
 								class="flex flex-col rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-3"
 							>

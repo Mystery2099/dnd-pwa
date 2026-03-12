@@ -1,5 +1,3 @@
-import { z } from 'zod';
-
 export type FormValue = unknown;
 export type FormData = Record<string, FormValue>;
 
@@ -384,12 +382,4 @@ export function getFieldsForType(type: string): FieldConfig[] {
 			{ name: 'description', label: 'Description', type: 'textarea', required: false, rows: 4 }
 		]
 	);
-}
-
-function formatLabel(name: string): string {
-	return name
-		.replace(/([A-Z])/g, ' $1')
-		.replace(/_/g, ' ')
-		.replace(/^./, (s) => s.toUpperCase())
-		.trim();
 }

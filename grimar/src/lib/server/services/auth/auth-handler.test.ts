@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import type { RequestEvent } from '@sveltejs/kit';
 import { handleAuth } from './auth-handler';
 import { resolveUser } from './auth-utils';
 
@@ -55,7 +56,7 @@ function createMockEvent(
 			serialize: vi.fn()
 		},
 		locals: {}
-	} as any;
+	} as unknown as RequestEvent;
 }
 
 describe('AuthHandler', () => {
@@ -67,7 +68,7 @@ describe('AuthHandler', () => {
 		vi.stubEnv('DEV_TEST_AUTH_BYPASS', 'false');
 
 		const { getDb } = await import('$lib/server/db');
-		(getDb as any).mockResolvedValue(mockDb);
+		vi.mocked(getDb).mockResolvedValue(mockDb);
 
 		// Setup default mock chain
 		mockDb.select.mockReturnValue(mockDb);

@@ -44,7 +44,7 @@
 				const result = await response.json();
 				alert(result.error || 'Failed to delete');
 			}
-		} catch (_e) {
+		} catch {
 			alert('Failed to delete item');
 		}
 	}

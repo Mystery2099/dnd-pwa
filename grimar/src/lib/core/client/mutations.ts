@@ -60,7 +60,6 @@ export function createCharacterMutation(queryClient: QueryClient) {
  * Update character mutation with optimistic update.
  */
 export function updateCharacterMutation(queryClient: QueryClient, id: string) {
-	const listKey = queryKeys.characters.list;
 	const detailKey = queryKeys.characters.detail(id);
 	const listUpdater = optimisticPatterns.updateObject(queryClient, detailKey);
 

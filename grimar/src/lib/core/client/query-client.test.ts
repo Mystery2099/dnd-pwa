@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { QueryClient } from '@tanstack/svelte-query';
 
 const mocks = vi.hoisted(() => ({
 	persistQueryClient: vi.fn(),
@@ -52,7 +53,7 @@ describe('query-client persistence', () => {
 	it('invalidates queries when cache version mismatches server version', async () => {
 		const { initializePersistence } = await loadModule();
 		const invalidateQueries = vi.fn().mockResolvedValue(undefined);
-		const queryClient = { invalidateQueries } as any;
+		const queryClient = { invalidateQueries } as Pick<QueryClient, 'invalidateQueries'>;
 
 		mocks.fetch.mockResolvedValue({
 			ok: true,
@@ -60,7 +61,7 @@ describe('query-client persistence', () => {
 		});
 		mocks.getCachedVersion.mockResolvedValue({ version: 'server-v1', timestamp: 100 });
 
-		await initializePersistence(queryClient);
+		await initializePersistence(queryClient as QueryClient);
 
 		expect(mocks.persistQueryClient).toHaveBeenCalledTimes(1);
 		expect(mocks.setCachedVersion).toHaveBeenCalledWith('server-v2', 123);
@@ -83,7 +84,10 @@ describe('query-client persistence', () => {
 		mocks.getCachedVersion.mockResolvedValue({ version: 'same', timestamp: 123 });
 		mocks.idbGet.mockResolvedValue('{ this is not valid JSON');
 
-		await initializePersistence({ invalidateQueries: vi.fn() } as any);
+		await initializePersistence({ invalidateQueries: vi.fn() } as Pick<
+			QueryClient,
+			'invalidateQueries'
+		> as QueryClient);
 
 		const persistArgs = mocks.persistQueryClient.mock.calls[0]?.[0];
 		expect(persistArgs).toBeDefined();

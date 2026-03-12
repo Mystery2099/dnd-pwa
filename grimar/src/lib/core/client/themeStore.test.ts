@@ -17,10 +17,10 @@ const mockDocument = {
 	}
 };
 
-global.localStorage = mockLocalStorage as any;
-global.document = mockDocument as any;
+global.localStorage = mockLocalStorage as unknown as Storage;
+global.document = mockDocument as unknown as Document;
 
-import { getTheme, setTheme, initThemeSync, themeStore } from './themeStore.svelte';
+import { getTheme, setTheme, initThemeSync } from './themeStore.svelte';
 
 describe('themeStore', () => {
 	beforeEach(() => {

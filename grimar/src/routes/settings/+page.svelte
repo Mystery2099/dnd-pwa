@@ -311,7 +311,7 @@
 		<aside class="settings-sidebar">
 			<Tabs.Root bind:value={activeSection}>
 				<nav class="settings-nav">
-					{#each sections as section}
+					{#each sections as section (section.id)}
 						<Tabs.Trigger value={section.id} class="settings-nav-item">
 							<span class="nav-icon">
 								<section.icon class="size-5" style="color: {section.accent}" />
@@ -363,7 +363,7 @@
 								>
 									{#snippet control()}
 										<div class="flex flex-wrap gap-2">
-											{#each importedThemes as theme}
+											{#each importedThemes as theme (theme.id)}
 												<div
 													class="flex items-center gap-1 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] px-2 py-1"
 												>

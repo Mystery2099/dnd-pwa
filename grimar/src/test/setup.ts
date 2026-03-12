@@ -27,7 +27,7 @@ vi.mock('$lib/core/types/compendium/filter', () => ({
 // Mock Svelte internals
 vi.mock('svelte/reactivity', () => ({
 	SvelteSet: class extends Set {
-		constructor(iterable?: any) {
+		constructor(iterable?: Iterable<unknown>) {
 			super(iterable);
 		}
 	},
@@ -56,7 +56,7 @@ Object.defineProperty(window, 'matchMedia', {
 
 // Mock ResizeObserver
 global.ResizeObserver = vi.fn().mockImplementation((callback) => ({
-	observe: vi.fn((el) => {
+	observe: vi.fn((el: Element) => {
 		// Immediately trigger callback with the element
 		callback([
 			{

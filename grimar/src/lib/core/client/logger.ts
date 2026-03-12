@@ -3,8 +3,6 @@
  * Provides a compatible API with the server logger but uses console methods
  */
 
-type LogLevel = 'info' | 'warn' | 'error' | 'debug';
-
 interface LogContext {
 	[key: string]: unknown;
 }

@@ -30,7 +30,7 @@
 		{#if !config.required}
 			<option value="">Select...</option>
 		{/if}
-		{#each config.options ?? [] as option}
+		{#each config.options ?? [] as option (option.value)}
 			<option value={option.value}>{option.label}</option>
 		{/each}
 	</select>

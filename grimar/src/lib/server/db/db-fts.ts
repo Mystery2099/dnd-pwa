@@ -19,7 +19,7 @@ import { createModuleLogger } from '$lib/server/logger';
 const log = createModuleLogger('FtsService');
 
 function sanitizeFtsTerm(term: string): string {
-	return term.replace(/['"*():^\-]/g, ' ').trim();
+	return term.replace(/['"*():^-]/g, ' ').trim();
 }
 
 function parseFtsQuery(query: string): string {

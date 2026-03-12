@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { listUserCharacters, loadCharacter, createUserCharacter } from './service';
 import * as charactersRepo from '$lib/server/repositories/characters';
+import type { CharacterCreateInput, CharacterRecord } from '$lib/server/repositories/characters';
 
 // Mock the db module
 const { mockDb } = vi.hoisted(() => {
@@ -23,11 +24,11 @@ describe('CharactersService', () => {
 
 	describe('listUserCharacters', () => {
 		it('should return characters for a user', async () => {
-			const mockCharacters = [
+			const mockCharacters: CharacterRecord[] = [
 				{ id: 1, name: 'Gandalf', owner: 'testuser' },
 				{ id: 2, name: 'Frodo', owner: 'testuser' }
-			];
-			vi.spyOn(charactersRepo, 'listByOwner').mockReturnValue(mockCharacters as any);
+			] as CharacterRecord[];
+			vi.spyOn(charactersRepo, 'listByOwner').mockResolvedValue(mockCharacters);
 
 			const result = await listUserCharacters('testuser');
 
@@ -36,7 +37,7 @@ describe('CharactersService', () => {
 		});
 
 		it('should return empty array when user has no characters', async () => {
-			vi.spyOn(charactersRepo, 'listByOwner').mockReturnValue([] as any);
+			vi.spyOn(charactersRepo, 'listByOwner').mockResolvedValue([]);
 
 			const result = await listUserCharacters('testuser');
 
@@ -46,8 +47,8 @@ describe('CharactersService', () => {
 
 	describe('loadCharacter', () => {
 		it('should load a character by id', async () => {
-			const mockCharacter = { id: 1, name: 'Gandalf', owner: 'testuser' };
-			vi.spyOn(charactersRepo, 'getCharacter').mockReturnValue(mockCharacter as any);
+			const mockCharacter = { id: 1, name: 'Gandalf', owner: 'testuser' } as CharacterRecord;
+			vi.spyOn(charactersRepo, 'getCharacter').mockResolvedValue(mockCharacter);
 
 			const result = await loadCharacter(1, 'testuser');
 
@@ -65,9 +66,9 @@ describe('CharactersService', () => {
 
 	describe('createUserCharacter', () => {
 		it('should create a new character with owner', async () => {
-			const payload = { name: 'Aragorn', class: 'Ranger', level: 5 };
-			const mockCreated = { id: 3, owner: 'testuser', ...payload };
-			vi.spyOn(charactersRepo, 'createCharacter').mockReturnValue(mockCreated as any);
+			const payload = { name: 'Aragorn' } as CharacterCreateInput;
+			const mockCreated = { id: 3, owner: 'testuser', ...payload } as CharacterRecord;
+			vi.spyOn(charactersRepo, 'createCharacter').mockResolvedValue(mockCreated);
 
 			const result = await createUserCharacter('testuser', payload);
 

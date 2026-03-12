@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { getDbWithRetry } from './db-retry';
+import type { Db } from '$lib/server/db';
 
 // Mock the db-connection module
 const { mockGetDb } = vi.hoisted(() => {
@@ -25,7 +26,7 @@ describe('db-retry', () => {
 
 	describe('getDbWithRetry', () => {
 		it('should return database connection on first attempt', async () => {
-			const mockDb = {} as any;
+			const mockDb = {} as Db;
 			mockGetDb.mockResolvedValue(mockDb);
 
 			const result = await getDbWithRetry(3);
@@ -35,7 +36,7 @@ describe('db-retry', () => {
 		});
 
 		it('should retry on failure and succeed', async () => {
-			const mockDb = {} as any;
+			const mockDb = {} as Db;
 			mockGetDb
 				.mockRejectedValueOnce(new Error('Connection refused'))
 				.mockRejectedValueOnce(new Error('Connection refused'))
@@ -70,7 +71,7 @@ describe('db-retry', () => {
 		});
 
 		it('should use exponential backoff', async () => {
-			const mockDb = {} as any;
+			const mockDb = {} as Db;
 			mockGetDb.mockRejectedValueOnce(new Error('Fail 1')).mockResolvedValue(mockDb);
 
 			const resultPromise = getDbWithRetry(3);
@@ -84,7 +85,7 @@ describe('db-retry', () => {
 		});
 
 		it('should respect custom maxRetries parameter', async () => {
-			const mockDb = {} as any;
+			const mockDb = {} as Db;
 			mockGetDb.mockRejectedValueOnce(new Error('Fail')).mockResolvedValue(mockDb);
 
 			const resultPromise = getDbWithRetry(2); // Only 2 retries

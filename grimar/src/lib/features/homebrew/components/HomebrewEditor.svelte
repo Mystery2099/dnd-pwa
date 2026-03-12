@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Button from '$lib/components/ui/Button.svelte';
 	import { AutoForm } from './form-fields';
-	import { getFieldsForType, type FieldConfig } from './form-fields/types';
+	import { getFieldsForType } from './form-fields/types';
 
 	type Props = {
 		contentType: string;

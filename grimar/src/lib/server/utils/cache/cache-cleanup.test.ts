@@ -8,7 +8,9 @@ describe('cache-cleanup', () => {
 	});
 
 	it('starts only once until stopped', () => {
-		const setIntervalSpy = vi.spyOn(globalThis, 'setInterval').mockReturnValue(123 as any);
+		const setIntervalSpy = vi
+			.spyOn(globalThis, 'setInterval')
+			.mockReturnValue(123 as unknown as ReturnType<typeof setInterval>);
 
 		expect(startCacheCleanup(1_000)).toBe(true);
 		expect(startCacheCleanup(1_000)).toBe(false);
@@ -17,7 +19,9 @@ describe('cache-cleanup', () => {
 	});
 
 	it('can stop and start again', () => {
-		const setIntervalSpy = vi.spyOn(globalThis, 'setInterval').mockReturnValue(456 as any);
+		const setIntervalSpy = vi
+			.spyOn(globalThis, 'setInterval')
+			.mockReturnValue(456 as unknown as ReturnType<typeof setInterval>);
 		const clearIntervalSpy = vi.spyOn(globalThis, 'clearInterval');
 
 		expect(startCacheCleanup(1_000)).toBe(true);

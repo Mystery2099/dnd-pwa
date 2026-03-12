@@ -2,7 +2,7 @@ export interface PerformanceMetric {
 	name: string;
 	duration: number;
 	timestamp: number;
-	metadata?: Record<string, any>;
+	metadata?: Record<string, unknown>;
 }
 
 export class PerformanceMonitor {
@@ -17,7 +17,7 @@ export class PerformanceMonitor {
 		return PerformanceMonitor.instance;
 	}
 
-	record(name: string, duration: number, metadata?: Record<string, any>): void {
+	record(name: string, duration: number, metadata?: Record<string, unknown>): void {
 		const metric: PerformanceMetric = {
 			name,
 			duration,

@@ -135,6 +135,8 @@ bun run db:sync
 bun run reindex-fts
 ```
 
+Playwright E2E runs use a dedicated seeded SQLite database created during global setup and intentionally execute with a single worker for deterministic local runs.
+
 ## Environment Variables
 
 Documented or inferred from current code:

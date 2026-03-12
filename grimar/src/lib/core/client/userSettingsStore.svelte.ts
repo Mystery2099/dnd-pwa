@@ -13,7 +13,6 @@ import { writable, get } from 'svelte/store';
 import type { ServerSettings } from './settings';
 import { DEFAULT_SERVER_SETTINGS } from './settings';
 
-const QUERY_KEY = ['user-settings'];
 const STORAGE_KEY = 'grimar-user-settings-cache';
 
 // LocalStorage cache for offline/first load

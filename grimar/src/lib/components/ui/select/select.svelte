@@ -2,7 +2,6 @@
 	import { Select as SelectPrimitive } from 'bits-ui';
 	import { cn } from '$lib/utils.js';
 	import ChevronDown from 'lucide-svelte/icons/chevron-down';
-	import type { Snippet } from 'svelte';
 
 	type SelectOption = {
 		label: string;
