@@ -1,94 +1,117 @@
-# Grimar - D&D 5e Progressive Web App
+# Grimar
 
-A self-hosted, offline-capable D&D 5e reference tool built with modern web technologies.
+Self-hosted, offline-capable D&D 5e reference and campaign utility built with SvelteKit, Bun, SQLite, and Tailwind CSS v4.
 
-## 🚀 Quick Start
+## Workspace
 
-All commands run from the **project root** - no need to cd anywhere:
+This repository uses Bun workspaces. Run commands from the repo root:
 
 ```bash
-# Install dependencies (first time only)
 bun install
-
-# Start development server
-bun run dev              # Runs on localhost:5173
-
-# Run tests
-bun run test:run         # Unit tests
-bun run test:e2e         # E2E tests
-
-# Build for production
+bun run dev
+bun run check
+bun run test:run
+bun run test:e2e
 bun run build
-bun run start            # Run production server
+bun run start
 ```
 
-## 📁 Project Structure
+The root `package.json` proxies most commands into [`grimar/`](/home/mystery/misc-projects/dnd-pwa/grimar).
 
-```
-dnd-pwa/
-├── grimar/              # Main application workspace
-│   ├── src/             # Source code
-│   ├── tests/           # E2E tests
-│   └── package.json     # App dependencies
-├── docs/                # Complete documentation
-└── package.json         # Workspace root (proxies commands to grimar/)
-```
+## What Exists Today
 
-## 📚 Documentation
+- Authenticated SvelteKit app with Bun runtime and SQLite via Drizzle
+- Unified compendium backed by Open5e plus user homebrew content
+- Character list and CRUD API
+- Offline-aware client caching, query persistence, and cache invalidation endpoints
+- Theme system with 12 built-in themes plus JSON theme import/export
+- Web vitals ingestion and lightweight request monitoring
 
-| File | Purpose |
-|------|---------|
-| **[docs/SPECIFICATIONS.md](./docs/SPECIFICATIONS.md)** | Feature specifications |
-| **[docs/STYLE_GUIDE.md](./docs/STYLE_GUIDE.md)** | "Arcane Aero" design system |
+## Route Map
 
-## 🛠️ Tech Stack
+- `/` public landing page; redirects to `/dashboard` when authenticated
+- `/login` login screen
+- `/dashboard` authenticated overview page
+- `/characters` character management
+- `/compendium` compendium landing
+- `/compendium/[type]` compendium type listing
+- `/homebrew` homebrew listing
+- `/homebrew/new` new homebrew entry
+- `/homebrew/import` homebrew import workflow
+- `/homebrew/[id]/edit` edit homebrew entry
+- `/settings` appearance, sync, and account settings
 
-- **Framework**: SvelteKit 2 + Svelte 5 Runes
-- **Runtime**: Bun (not Node.js)
-- **Database**: SQLite with Drizzle ORM
-- **Styling**: Tailwind CSS v4
-- **State**: TanStack Query
-- **Testing**: Vitest + Playwright
+## API Surface
 
-## 🎯 Key Features
+- `/api/characters` and `/api/characters/[id]`
+- `/api/compendium/items`
+- `/api/compendium/stats`
+- `/api/compendium/[type]/[slug]`
+- `/api/homebrew`
+- `/api/homebrew/[id]`
+- `/api/homebrew/import`
+- `/api/homebrew/export`
+- `/api/homebrew/export/all`
+- `/api/cache/version`
+- `/api/cache/events`
+- `/api/cache/invalidate`
+- `/api/user/settings`
+- `/api/monitoring/web-vitals`
 
-- Multi-provider compendium (Open5e, SRD, Homebrew)
-- Full-text search with FTS5
-- Offline-capable PWA
-- Header-based authentication (reverse proxy)
-- 7-theme "Arcane Aero" design system
-
-## 📝 Common Commands
+## Common Commands
 
 ```bash
-# Development
-bun run dev              # Dev server
-bun run check            # Type checking
-bun run format           # Format code
-bun run lint             # Lint code
+# app lifecycle
+bun run dev
+bun run build
+bun run preview
+bun run start
 
-# Testing
-bun run test:run         # Unit tests (CI mode)
-bun run test:e2e         # Playwright E2E
-bun run test:all         # All tests
+# quality
+bun run check
+bun run lint
+bun run format
+bun run test:run
+bun run test:e2e
+bun run test:all
 
-# Database
-bun run db:push          # Push schema (dev)
-bun run db:studio        # Drizzle Studio UI
-bun run db:sync          # Sync compendium data
-bun run reindex-fts      # Rebuild search index
-
-# Production
-bun run build            # Build app
-bun run start            # Run production server
+# data
+bun run db:push
+bun run db:generate
+bun run db:migrate
+bun run db:studio
+bun run db:sync
+bun run reindex-fts
 ```
 
-## 🔧 Development Workflow
+## Environment
 
-1. Run `bun run dev` to start development
-2. Run `bun run check` and `bun run test:run` before committing
-4. See [docs/](./docs/) for detailed documentation
+Start from [`grimar/.env.example`](/home/mystery/misc-projects/dnd-pwa/grimar/.env.example).
 
-## 📄 License
+Common variables:
 
-[MIT](./LICENSE)
+- `DATABASE_URL`
+- `OPEN5E_API_BASE_URL`
+- `OPEN5E_SYNC_BATCH_SIZE`
+- `DEV_TEST_AUTH_BYPASS`
+- `VITE_MOCK_USER`
+- `ADMIN_GROUPS`
+- `ADMIN_SYNC_TOKEN`
+- `AUTHENTIK_URL`
+- `AUTHENTIK_CLIENT_ID`
+- `AUTHENTIK_CLIENT_SECRET`
+- `AUTHENTIK_REDIRECT_URI`
+- `SESSION_ENCRYPTION_KEY`
+
+## Documentation
+
+- [docs/SPECIFICATIONS.md](/home/mystery/misc-projects/dnd-pwa/docs/SPECIFICATIONS.md)
+- [docs/DESIGN_SYSTEM.md](/home/mystery/misc-projects/dnd-pwa/docs/DESIGN_SYSTEM.md)
+- [docs/STYLE_GUIDE.md](/home/mystery/misc-projects/dnd-pwa/docs/STYLE_GUIDE.md)
+- [docs/THEMING_DEV.md](/home/mystery/misc-projects/dnd-pwa/docs/THEMING_DEV.md)
+- [docs/THEMING_USER.md](/home/mystery/misc-projects/dnd-pwa/docs/THEMING_USER.md)
+- [docs/glossary.md](/home/mystery/misc-projects/dnd-pwa/docs/glossary.md)
+
+## License
+
+[MIT](/home/mystery/misc-projects/dnd-pwa/LICENSE)

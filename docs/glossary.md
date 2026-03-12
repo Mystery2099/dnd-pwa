@@ -1,173 +1,117 @@
 # Grimar Glossary
 
-A dictionary of terms used in the Grimar D&D 5e PWA project.
-
 ## Core Terms
 
-### Entry
-The umbrella term for any D&D 5e content item - spells, monsters, classes, items, feats, backgrounds, races, etc. Use "entry" instead of "compendium entry."
+### Compendium item
 
-**Example:** "The fireball spell entry has a concentration property."
+A normalized record in the unified `compendium` table. Each item belongs to a `type` and `source` and stores the original payload in `data`.
 
-### Entry View
-The detail panel/page displaying a single entry. Shows full information including description, statistics, and metadata.
+### Homebrew
 
-**See also:** Entry List
+User-authored content stored alongside upstream compendium content with source `homebrew`.
 
-### Entry List
-The main page showing all entries of a particular type (spells, monsters, etc.) with filtering and virtual scrolling.
+### Character
 
-## Data Source Terms
+A lightweight player record stored in the `characters` table. The current app exposes character listing and CRUD APIs, not a full sheet route.
 
-### Source Book / Source
-The publication or provider where content originates:
-- **PHB** - Player's Handbook
-- **SRD** - Systems Reference Document (free, OGL content)
-- **XGE** - Xanathar's Guide to Everything
-- **TCE** - Tasha's Cauldron of Everything
-- **5ebits** - 5eBits provider (dnd5eapi.co)
-- **Open5e** - Open5e provider (api.open5e.com)
+### Theme
 
-### Provider
-A data source that supplies entry content:
-- **5ebits** - Primary provider, uses 5eBits API
-- **Open5e** - Secondary provider, uses Open5e API
-- **Homebrew** - User-created custom content
-- **SRD** - Built-in SRD data
+A validated configuration object that controls CSS variables, typography, animation timing, and visual effects.
 
-### External ID / Slug
-The unique identifier for an entry from its source provider. Used for URL routing and lookups.
+## Data Terms
 
-## Database Terms
+### Open5e
 
-### Unified Item
-A standardized data structure that normalizes content from different providers into a consistent format.
+The external provider used for synchronized compendium data.
 
-### Details JSON
-The `details` column in the database stores type-specific data as JSON:
-- **Spell details** - Casting time, range, components, duration, concentration, ritual
-- **Monster details** - Armor class, hit points, speed, abilities, actions
-- **Item details** - Rarity, type, weight, value, attunement
+### Source
 
-### FTS (Full-Text Search)
-SQLite FTS5 virtual table enabling fast search across entry names, summaries, and descriptions.
+The origin of a compendium item. Current source values are `open5e` and `homebrew`.
 
-## URL Structure
+### Type
 
-### Type Path
-The URL segment identifying entry type:
-- `/spells` - Spell entries
-- `/monsters` - Monster entries
-- `/magicitems` - Magic item entries
-- `/feats` - Feat entries
-- `/backgrounds` - Background entries
-- `/races** - Race entries
-- `/classes** - Class entries
+The content category for a compendium item, such as `spells`, `creatures`, `items`, or `classes`.
 
-### Entry View URL Pattern
-```
-/compendium/[type]/[slug]
-```
-Example: `/compendium/spells/fireball`
+### Key
 
-> **Note:** The provider/sourceBook is stored in the entry's `source` field in the database, not in the URL.
+The provider-level identifier for a compendium item. In the database, `(type, key)` forms the primary key.
 
-## SvelteKit Terms
+### FTS
 
-### Load Function
-Server-side function (`+page.server.ts`) that fetches data before rendering a page.
+SQLite full-text search infrastructure used to support fast compendium search.
 
-### SSR (Server-Side Rendering)
-Initial page render on the server, as opposed to client-side hydration.
+### Sync metadata
 
-### Hydration
-Svelte "wakes up" server-rendered HTML on the client, adding interactivity.
+Tracking data for provider synchronization, stored in the `sync_metadata` table.
 
-### Runes
-Svelte 5's reactivity system using `$state()`, `$derived()`, `$effect()`.
-
-### Snippet
-Svelte 5's named template block, used for render props (e.g., `{#snippet children(item)}`).
-
-## Design System Terms
-
-### Arcane Aero
-The project's design system with glass morphism, Frutiger Aero aesthetics, and gem-themed spell school colors.
-
-### Material Level
-Visual hierarchy using opacity and blur:
-- **Canvas** - Sidebars, large containers (`bg-gray-950/40`)
-- **Card** - Content panels, spell cards (`bg-gray-800/60`)
-- **Overlay** - Modals, dropdowns (`bg-gray-700/80`)
-
-### Spell School Gems
-Color coding for spell schools:
-| School | Gem | Color |
-|--------|-----|-------|
-| Evocation | Ruby | Rose/Red |
-| Abjuration | Sapphire | Sky/Blue |
-| Necromancy | Emerald | Green |
-| Illusion | Amethyst | Purple |
-| Divination | Topaz | Amber/Yellow |
-| Conjuration | Topaz | Amber |
-| Transmutation | Citrine | Yellow-Orange |
-| Enchantment | Aquamarine | Blue-Green |
-| Divination (alt) | Diamond | Clear |
-| Necromancy (alt) | Black Onyx | Black |
-
-## Authentication Terms
+## Auth Terms
 
 ### Authentik
-The upstream authentication provider handling user login via reverse proxy.
 
-### X-Authentik-Username
-HTTP header containing the authenticated username, extracted in `hooks.server.ts`.
+The upstream identity provider used by the login flow and reverse-proxy integration.
 
-### VITE_MOCK_USER
-Development environment variable bypassing auth for testing.
+### `X-Authentik-Username`
 
-## State Management Terms
+Proxy header used to identify an authenticated user.
 
-### TanStack Query
-React Query-inspired library managing server state with caching, background refetching, and localStorage persistence.
+### Session cookie
 
-### Query Key
-Unique identifier for cached data (e.g., `['entries', 'list', 'spell']`).
+Encrypted cookie used by the app’s session-based auth flow.
 
-### Invalidate Cache
-Client-side operation clearing TanStack Query cache after data mutations.
+### `DEV_TEST_AUTH_BYPASS`
 
-### VirtualList / VirtualGrid
-Virtualized scrolling components rendering only visible items for performance with 50+ entries.
+Explicit development/test flag that allows bypass auth behavior when combined with test headers or cookies.
 
-## Sync Terms
+### `VITE_MOCK_USER`
 
-### DataLoader
-Utility that loads and validates JSON data from providers before database insert.
+A development-only client/server convenience variable still referenced in parts of the login and auth utility flow.
 
-### Deduplication
-Process ensuring entries with same `externalId` and `source` aren't duplicated.
+## Frontend Terms
 
-### Cache Version
-Server-Sent Events endpoint pushing version updates to invalidate client caches.
+### App shell
 
-## Testing Terms
+The persistent layout frame that wraps authenticated routes.
 
-### Vitest
-Unit testing framework used with happy-dom for component tests.
+### Surface card
 
-### Playwright
-E2E testing framework for browser automation and integration tests.
+Reusable panel component for most primary content blocks.
 
-### Test Fixture
-Reusable test setup providing mock data or configured state.
+### Theme card selector
 
-## Environment Variables
+UI used on the settings page to switch among available themes.
 
-| Variable | Purpose |
-|----------|---------|
-| `DATABASE_URL` | SQLite file path |
-| `VITE_MOCK_USER` | Dev auth bypass username |
-| `ADMIN_SYNC_TOKEN` | Bearer token for admin sync |
-| `NODE_ENV` | 'development' or 'production' |
-| `SUPPRESS_LOGS` | Disable console logging |
+### Virtual list / virtual grid
+
+Components that render only visible rows or tiles to keep large datasets performant.
+
+## Cache Terms
+
+### Cache version
+
+Versioned state used to notify clients that cached data should be refreshed.
+
+### SSE
+
+Server-sent events, used here for cache event streaming.
+
+### Offline data
+
+Browser-stored application data in localStorage and IndexedDB used for caching and persistence.
+
+## Route Terms
+
+### Dashboard
+
+Authenticated overview page at `/dashboard`.
+
+### Characters
+
+Character management page at `/characters`.
+
+### Compendium
+
+Browsing interface for synced and homebrew content under `/compendium`.
+
+### Settings
+
+Configuration page for appearance, sync behavior, account state, and local data management.
