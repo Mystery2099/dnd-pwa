@@ -1,8 +1,9 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { COMPENDIUM_TYPE_CONFIGS, type CompendiumTypeName } from '$lib/core/constants/compendium';
-import { getItem } from '$lib/server/repositories/compendium';
+import { getItem, getRelatedImages } from '$lib/server/repositories/compendium';
 import type { CompendiumType } from '$lib/server/db/schema';
+import { OPEN5E_API_BASE_URL } from '$lib/server/providers/open5e-config';
 import { marked } from 'marked';
 import DOMPurify from 'isomorphic-dompurify';
 
@@ -114,6 +115,24 @@ async function buildMarkdownHtml(
 	return markdownHtml;
 }
 
+function resolveImageAssetUrl(fileUrl: unknown): string | null {
+	if (typeof fileUrl !== 'string' || fileUrl.length === 0) return null;
+	if (/^https?:\/\//i.test(fileUrl)) return fileUrl;
+
+	const origin = OPEN5E_API_BASE_URL.replace(/\/v2$/i, '');
+	return new URL(fileUrl, `${origin}/`).toString();
+}
+
+type RelatedImage = {
+	key: string;
+	name: string;
+	documentName: string | null;
+	description: string | null;
+	assetUrl: string | null;
+	altText: string | null;
+	attribution: string | null;
+};
+
 export const load: PageServerLoad = async ({ params }) => {
 	const type = params.type as CompendiumTypeName;
 	const key = params.key;
@@ -130,12 +149,28 @@ export const load: PageServerLoad = async ({ params }) => {
 	}
 	const itemData = (item.data ?? {}) as Record<string, unknown>;
 	const markdownHtml = await buildMarkdownHtml(itemData, item.description);
+	const imageAssetUrl = type === 'images' ? resolveImageAssetUrl(itemData.file_url) : null;
+	const relatedImagesRaw = await getRelatedImages(itemType, item.name);
+	const relatedImages: RelatedImage[] = relatedImagesRaw.map((image) => {
+		const imageData = (image.data ?? {}) as Record<string, unknown>;
+		return {
+			key: image.key,
+			name: image.name,
+			documentName: image.documentName,
+			description: image.description,
+			assetUrl: resolveImageAssetUrl(imageData.file_url),
+			altText: typeof imageData.alt_text === 'string' ? imageData.alt_text : null,
+			attribution: typeof imageData.attribution === 'string' ? imageData.attribution : null
+		};
+	});
 
 	return {
 		type,
 		key,
 		config,
 		item,
-		markdownHtml
+		markdownHtml,
+		imageAssetUrl,
+		relatedImages
 	};
 };

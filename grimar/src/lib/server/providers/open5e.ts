@@ -103,9 +103,7 @@ function transformToCompendiumItem(item: ApiItem, type: CompendiumType) {
 		publisherKey: item.document?.publisher?.key ?? null,
 		publisherName: item.document?.publisher?.name ?? null,
 		description:
-			item.desc ??
-			item.description ??
-			(typeof item.alt_text === 'string' ? item.alt_text : null),
+			item.desc ?? item.description ?? (typeof item.alt_text === 'string' ? item.alt_text : null),
 		data: item,
 		createdBy: null
 	};

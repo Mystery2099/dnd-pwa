@@ -1,6 +1,9 @@
 <script lang="ts">
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import Breadcrumb from '$lib/components/ui/Breadcrumb.svelte';
+	import CreatureEncounterPanel from '$lib/components/compendium/CreatureEncounterPanel.svelte';
+	import CreatureHeader from '$lib/components/compendium/CreatureHeader.svelte';
+	import StructuredValue from '$lib/components/ui/StructuredValue.svelte';
 	import {
 		Accordion,
 		AccordionItem,
@@ -15,8 +18,6 @@
 		getDescriptions,
 		isBenefitArray,
 		getBenefits,
-		isSpeedObject,
-		formatSpeed,
 		formatFieldName,
 		formatValue,
 		getSortedFields
@@ -26,16 +27,152 @@
 		data: PageData;
 	}
 
+	type ImageDocumentData = {
+		name?: string;
+		display_name?: string;
+		permalink?: string;
+		publisher?: { name?: string };
+		gamesystem?: { name?: string };
+	};
+
+	type ImageItemData = {
+		file_url?: string;
+		alt_text?: string;
+		attribution?: string;
+		document?: ImageDocumentData;
+	};
+
+	type NamedDetailEntry = {
+		key?: string;
+		name?: string;
+		desc?: string;
+	};
+
+	const CREATURE_DETAIL_FIELDS_IN_REFERENCE = [
+		'armor_class',
+		'armor_detail',
+		'hit_points',
+		'hit_dice',
+		'type',
+		'size',
+		'alignment',
+		'challenge_rating_text',
+		'experience_points'
+	];
+
 	let { data }: Props = $props();
 
 	let item = $derived(data.item);
 	let itemData = $derived(item.data as Record<string, unknown>);
-	let sortedFields = $derived(getSortedFields(itemData, data.type));
+	let imageData = $derived((item.data as ImageItemData | undefined) ?? {});
+	let featuredRelatedImage = $derived(data.type === 'images' ? undefined : data.relatedImages?.[0]);
+	let remainingRelatedImages = $derived(data.relatedImages?.slice(1) ?? []);
+	let creatureAbilityScores = $derived(getAbilityScoreEntries(itemData.ability_scores));
+	let creatureActionEntries = $derived(getNamedDetailEntries(itemData.actions));
+	let creatureTraitEntries = $derived(getNamedDetailEntries(itemData.traits));
+	let sortedFields = $derived.by(() => {
+		const fields = getSortedFields(itemData, data.type);
+		if (data.type === 'images') {
+			return fields.filter(
+				([key]) => !['file_url', 'alt_text', 'attribution', 'document'].includes(key)
+			);
+		}
+
+		if (data.type === 'creatures') {
+			return fields.filter(([key]) => !CREATURE_DETAIL_FIELDS_IN_REFERENCE.includes(key));
+		}
+
+		return fields;
+	});
 	let markdownHtml = $derived<Record<string, string>>(data.markdownHtml ?? {});
 	let activeClassFeature = $state('');
 
 	function markdownAt(path: string): string {
 		return markdownHtml[path] ?? '';
+	}
+
+	function getNonEmptyString(value: unknown): string | undefined {
+		if (typeof value !== 'string') return undefined;
+		const trimmed = value.trim();
+		return trimmed.length > 0 ? trimmed : undefined;
+	}
+
+	function getDocumentLabel(): string | undefined {
+		return (
+			getNonEmptyString(imageData.document?.display_name) ??
+			getNonEmptyString(imageData.document?.name) ??
+			getNonEmptyString(item.documentName) ??
+			undefined
+		);
+	}
+
+	function getImageAltText(): string | undefined {
+		return getNonEmptyString(imageData.alt_text);
+	}
+
+	function getImageAttribution(): string | undefined {
+		return getNonEmptyString(imageData.attribution);
+	}
+
+	function getImagePublisher(): string | undefined {
+		return getNonEmptyString(imageData.document?.publisher?.name);
+	}
+
+	function getImageGameSystem(): string | undefined {
+		return getNonEmptyString(imageData.document?.gamesystem?.name);
+	}
+
+	function getImagePermalink(): string | undefined {
+		return getNonEmptyString(imageData.document?.permalink);
+	}
+
+	function hasImageMetadata(): boolean {
+		return Boolean(getImageAltText() || getImageAttribution());
+	}
+
+	function hasImageDocumentMetadata(): boolean {
+		return Boolean(
+			getDocumentLabel() || getImagePublisher() || getImageGameSystem() || getImagePermalink()
+		);
+	}
+
+	function getRelatedImageDescription(image: {
+		description: string | null;
+		altText: string | null;
+	}): string | undefined {
+		return getNonEmptyString(image.description) ?? getNonEmptyString(image.altText);
+	}
+
+	function getAbilityScoreEntries(value: unknown): Array<[string, number]> {
+		if (!value || typeof value !== 'object' || Array.isArray(value)) {
+			return [];
+		}
+
+		const abilityScores = value as Record<string, unknown>;
+		const orderedAbilities = [
+			'strength',
+			'dexterity',
+			'constitution',
+			'intelligence',
+			'wisdom',
+			'charisma'
+		];
+
+		return orderedAbilities
+			.map((ability) => [ability, abilityScores[ability]])
+			.filter((entry): entry is [string, number] => typeof entry[1] === 'number');
+	}
+
+	function getNamedDetailEntries(
+		value: unknown
+	): Array<{ key?: string; name?: string; desc?: string }> {
+		if (!Array.isArray(value)) {
+			return [];
+		}
+
+		return value.filter(
+			(entry): entry is NamedDetailEntry => Boolean(entry) && typeof entry === 'object'
+		);
 	}
 </script>
 
@@ -44,7 +181,7 @@
 </svelte:head>
 
 <div class="min-h-screen bg-linear-to-b from-(--color-bg-primary) to-(--color-bg-secondary)">
-	<div class="mx-auto max-w-4xl px-4 py-8">
+	<div class="mx-auto max-w-6xl px-4 py-8">
 		<div class="mb-6">
 			<Breadcrumb
 				items={[
@@ -57,89 +194,272 @@
 
 		<div class="card-crystal overflow-hidden">
 			<div
-				class="border-b border-[var(--color-border)] bg-gradient-to-r from-accent/10 to-transparent p-6"
+				class="border-b border-[var(--color-border)] bg-gradient-to-r from-accent/12 via-accent/5 to-transparent p-6 lg:p-8"
 			>
-				<div class="flex items-start justify-between gap-4">
+				{#if data.type === 'creatures'}
+					<CreatureHeader
+						label={data.config.label}
+						title={item.name}
+						source={item.source}
+						documentLabel={getDocumentLabel()}
+						icon={data.config.icon}
+						challengeRatingText={itemData.challenge_rating_text}
+						size={itemData.size}
+						typeValue={itemData.type}
+						alignment={itemData.alignment}
+						experiencePoints={itemData.experience_points}
+						{featuredRelatedImage}
+					/>
+				{:else}
 					<div>
-						<h1 class="text-3xl font-bold text-[var(--color-text-primary)]">
-							{item.name}
-						</h1>
-						{#if item.source && item.source !== 'open5e'}
-							<p class="mt-1 text-sm text-[var(--color-text-muted)]">
-								{item.source}
-								{#if (itemData.document as { name?: string })?.name}
-									• {(itemData.document as { name?: string }).name}
+						<div class="flex items-start justify-between gap-4">
+							<div>
+								<div class="mb-3 flex flex-wrap items-center gap-2">
+									<Badge variant="outline" class="text-xs tracking-[0.18em] uppercase">
+										{data.config.label}
+									</Badge>
+									{#if item.source}
+										<Badge variant="outline" class="text-xs">{item.source}</Badge>
+									{/if}
+								</div>
+								<h1
+									class="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] lg:text-4xl"
+								>
+									{item.name}
+								</h1>
+								{#if item.source && item.source !== 'open5e'}
+									<p class="mt-2 text-sm text-[var(--color-text-muted)]">
+										{item.source}
+										{#if getDocumentLabel()}
+											• {getDocumentLabel()}
+										{/if}
+									</p>
+								{:else if getDocumentLabel()}
+									<p class="mt-2 text-sm text-[var(--color-text-muted)]">
+										{getDocumentLabel()}
+									</p>
 								{/if}
-							</p>
-						{:else if (itemData.document as { name?: string })?.name}
-							<p class="mt-1 text-sm text-[var(--color-text-muted)]">
-								{(itemData.document as { name?: string }).name}
-							</p>
-						{/if}
-					</div>
-					<div class="text-4xl">{data.config.icon}</div>
-				</div>
+							</div>
+							<div class="text-4xl">{data.config.icon}</div>
+						</div>
 
-				{#if data.type === 'spells' && itemData}
-					<div class="mt-4 flex flex-wrap gap-2">
-						{#if itemData.level !== undefined}
-							<Badge variant="solid">
-								{itemData.level === 0 ? 'Cantrip' : `Level ${itemData.level}`}
-							</Badge>
-						{/if}
-						{#if itemData.school}
-							<Badge variant="outline">{formatValue(itemData.school)}</Badge>
-						{/if}
-						{#if itemData.concentration}
-							<Badge variant="outline">Concentration</Badge>
-						{/if}
-						{#if itemData.ritual}
-							<Badge variant="outline">Ritual</Badge>
-						{/if}
-					</div>
-				{:else if data.type === 'creatures' && itemData}
-					<div class="mt-4 flex flex-wrap gap-2">
-						{#if itemData.challenge_rating_text}
-							<Badge variant="solid">CR {itemData.challenge_rating_text}</Badge>
-						{/if}
-						{#if itemData.size}
-							<Badge variant="outline">{formatValue(itemData.size)}</Badge>
-						{/if}
-						{#if itemData.type}
-							<Badge variant="outline">{formatValue(itemData.type)}</Badge>
-						{/if}
-						{#if itemData.alignment}
-							<Badge variant="outline">{formatValue(itemData.alignment)}</Badge>
-						{/if}
-					</div>
-				{:else if data.type === 'classes' && itemData}
-					<div class="mt-4 flex flex-wrap gap-2">
-						{#if itemData.hit_dice}
-							<Badge variant="solid">Hit Die: d{itemData.hit_dice}</Badge>
-						{/if}
-						{#if itemData.primary_abilities}
-							<Badge variant="outline">{formatValue(itemData.primary_abilities)}</Badge>
-						{/if}
-						{#if itemData.saving_throws}
-							<Badge variant="outline">Saves: {formatValue(itemData.saving_throws)}</Badge>
-						{/if}
-					</div>
-				{:else if data.type === 'magicitems' && itemData}
-					<div class="mt-4 flex flex-wrap gap-2">
-						{#if itemData.rarity}
-							<Badge variant="solid">{String(itemData.rarity)}</Badge>
-						{/if}
-						{#if itemData.type}
-							<Badge variant="outline">{String(itemData.type)}</Badge>
-						{/if}
-						{#if itemData.requires_attunement}
-							<Badge variant="outline">Requires Attunement</Badge>
+						{#if data.type === 'spells' && itemData}
+							<div class="mt-5 flex flex-wrap gap-2">
+								{#if itemData.level !== undefined}
+									<Badge variant="solid">
+										{itemData.level === 0 ? 'Cantrip' : `Level ${itemData.level}`}
+									</Badge>
+								{/if}
+								{#if itemData.school}
+									<Badge variant="outline">{formatValue(itemData.school)}</Badge>
+								{/if}
+								{#if itemData.concentration}
+									<Badge variant="outline">Concentration</Badge>
+								{/if}
+								{#if itemData.ritual}
+									<Badge variant="outline">Ritual</Badge>
+								{/if}
+							</div>
+						{:else if data.type === 'classes' && itemData}
+							<div class="mt-5 flex flex-wrap gap-2">
+								{#if itemData.hit_dice}
+									<Badge variant="solid">Hit Die: d{itemData.hit_dice}</Badge>
+								{/if}
+								{#if itemData.primary_abilities}
+									<Badge variant="outline">{formatValue(itemData.primary_abilities)}</Badge>
+								{/if}
+								{#if itemData.saving_throws}
+									<Badge variant="outline">Saves: {formatValue(itemData.saving_throws)}</Badge>
+								{/if}
+							</div>
+						{:else if data.type === 'magicitems' && itemData}
+							<div class="mt-5 flex flex-wrap gap-2">
+								{#if itemData.rarity}
+									<Badge variant="solid">{String(itemData.rarity)}</Badge>
+								{/if}
+								{#if itemData.type}
+									<Badge variant="outline">{String(itemData.type)}</Badge>
+								{/if}
+								{#if itemData.requires_attunement}
+									<Badge variant="outline">Requires Attunement</Badge>
+								{/if}
+							</div>
 						{/if}
 					</div>
 				{/if}
 			</div>
 
-			{#if itemData.desc || item.description}
+			{#if data.type === 'images'}
+				<div class="border-b border-[var(--color-border)] p-6">
+					<div class="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
+						<div
+							class="overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white/95 p-6"
+						>
+							{#if data.imageAssetUrl}
+								<img
+									src={data.imageAssetUrl}
+									alt={getImageAltText() ?? item.name}
+									class="h-auto max-h-[26rem] w-full object-contain"
+									loading="eager"
+								/>
+							{:else}
+								<div
+									class="flex min-h-64 items-center justify-center rounded-xl border border-dashed border-[var(--color-border)] bg-[var(--color-bg-secondary)]/40 px-6 text-center text-sm text-[var(--color-text-muted)]"
+								>
+									Image preview unavailable
+								</div>
+							{/if}
+						</div>
+
+						<div class="space-y-4">
+							{#if hasImageMetadata()}
+								<div
+									class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4"
+								>
+									<h2 class="text-lg font-semibold text-[var(--color-text-primary)]">Image Data</h2>
+									<dl class="mt-3 space-y-3">
+										{#if getImageAltText()}
+											<div>
+												<dt class="text-xs font-medium text-[var(--color-text-muted)] uppercase">
+													Alt Text
+												</dt>
+												<dd class="mt-1 text-sm text-[var(--color-text-primary)]">
+													{getImageAltText()}
+												</dd>
+											</div>
+										{/if}
+										{#if getImageAttribution()}
+											<div>
+												<dt class="text-xs font-medium text-[var(--color-text-muted)] uppercase">
+													Attribution
+												</dt>
+												<dd class="mt-1 text-sm text-[var(--color-text-primary)]">
+													{getImageAttribution()}
+												</dd>
+											</div>
+										{/if}
+									</dl>
+								</div>
+							{/if}
+
+							{#if hasImageDocumentMetadata()}
+								<div
+									class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4"
+								>
+									<h2 class="text-lg font-semibold text-[var(--color-text-primary)]">
+										Source Document
+									</h2>
+									<dl class="mt-3 space-y-3">
+										{#if getDocumentLabel()}
+											<div>
+												<dt class="text-xs font-medium text-[var(--color-text-muted)] uppercase">
+													Document
+												</dt>
+												<dd class="mt-1 text-sm text-[var(--color-text-primary)]">
+													{getDocumentLabel()}
+												</dd>
+											</div>
+										{/if}
+										{#if getImagePublisher()}
+											<div>
+												<dt class="text-xs font-medium text-[var(--color-text-muted)] uppercase">
+													Publisher
+												</dt>
+												<dd class="mt-1 text-sm text-[var(--color-text-primary)]">
+													{getImagePublisher()}
+												</dd>
+											</div>
+										{/if}
+										{#if getImageGameSystem()}
+											<div>
+												<dt class="text-xs font-medium text-[var(--color-text-muted)] uppercase">
+													Game System
+												</dt>
+												<dd class="mt-1 text-sm text-[var(--color-text-primary)]">
+													{getImageGameSystem()}
+												</dd>
+											</div>
+										{/if}
+										{#if getImagePermalink()}
+											<div>
+												<dt class="text-xs font-medium text-[var(--color-text-muted)] uppercase">
+													Permalink
+												</dt>
+												<dd class="mt-1 text-sm">
+													<a
+														href={getImagePermalink()}
+														target="_blank"
+														rel="noreferrer"
+														class="break-all text-accent transition-colors hover:text-accent/80"
+													>
+														{getImagePermalink()}
+													</a>
+												</dd>
+											</div>
+										{/if}
+									</dl>
+								</div>
+							{/if}
+						</div>
+					</div>
+				</div>
+			{/if}
+
+			{#if data.type !== 'images' && featuredRelatedImage && data.type !== 'creatures'}
+				<div class="border-b border-[var(--color-border)] p-6">
+					<div
+						class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/20 p-4"
+					>
+						<a
+							href={`/compendium/images/${featuredRelatedImage.key}`}
+							class="group flex items-center gap-4"
+						>
+							<div
+								class="shrink-0 overflow-hidden rounded-xl border border-[var(--color-border)] bg-linear-to-b from-white via-white to-white/90 p-3 transition-colors group-hover:border-accent/40"
+							>
+								{#if featuredRelatedImage.assetUrl}
+									<img
+										src={featuredRelatedImage.assetUrl}
+										alt={featuredRelatedImage.altText ?? featuredRelatedImage.name}
+										class="h-16 w-16 object-contain transition-transform duration-300 group-hover:scale-[1.04]"
+										loading="lazy"
+									/>
+								{/if}
+							</div>
+
+							<div class="flex min-w-0 flex-1 items-center justify-between gap-4">
+								<div class="min-w-0">
+									<p
+										class="text-xs font-medium tracking-[0.18em] text-[var(--color-text-muted)] uppercase"
+									>
+										Illustration
+									</p>
+									<p class="mt-1 truncate font-semibold text-[var(--color-text-primary)]">
+										{featuredRelatedImage.name}
+									</p>
+								</div>
+								<span
+									class="shrink-0 text-sm text-accent transition-colors group-hover:text-accent/80"
+								>
+									Open image details
+								</span>
+							</div>
+						</a>
+					</div>
+				</div>
+			{/if}
+
+			{#if data.type === 'creatures' && itemData}
+				<CreatureEncounterPanel
+					{itemData}
+					abilityScores={creatureAbilityScores}
+					actions={creatureActionEntries}
+					traits={creatureTraitEntries}
+					{markdownAt}
+				/>
+			{/if}
+
+			{#if data.type !== 'creatures' && (itemData.desc || item.description)}
 				<div class="border-b border-[var(--color-border)] p-6">
 					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Description</h2>
 					<div class="prose prose-invert max-w-none text-[var(--color-text-secondary)]">
@@ -252,82 +572,79 @@
 				</div>
 			{/if}
 
-			{#if data.type === 'creatures' && isSpeedObject(itemData.speed_all)}
+			{#if data.type !== 'images' && remainingRelatedImages.length > 0}
 				<div class="border-b border-[var(--color-border)] p-6">
-					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Speed</h2>
-					<p class="text-[var(--color-text-secondary)]">{formatSpeed(itemData.speed_all)}</p>
+					<div class="mb-5 flex items-end justify-between gap-4">
+						<div>
+							<h2 class="text-lg font-semibold text-[var(--color-text-primary)]">Related Images</h2>
+							<p class="mt-1 text-sm text-[var(--color-text-secondary)]">
+								Artwork and icons matched from the image compendium for this entry.
+							</p>
+						</div>
+						<a
+							href="/compendium/images"
+							class="text-sm text-accent transition-colors hover:text-accent/80"
+						>
+							Browse all images
+						</a>
+					</div>
+
+					<div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+						{#each remainingRelatedImages as relatedImage (relatedImage.key)}
+							<a
+								href={`/compendium/images/${relatedImage.key}`}
+								class="group overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/85 transition-colors hover:border-accent/50"
+							>
+								<div
+									class="flex aspect-[4/3] items-center justify-center bg-linear-to-b from-white via-white to-white/90 p-4"
+								>
+									{#if relatedImage.assetUrl}
+										<img
+											src={relatedImage.assetUrl}
+											alt={relatedImage.altText ?? relatedImage.name}
+											class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-[1.04]"
+											loading="lazy"
+										/>
+									{:else}
+										<div class="px-4 text-center text-sm text-[var(--color-text-muted)]">
+											Image preview unavailable
+										</div>
+									{/if}
+								</div>
+								<div class="space-y-2 p-4">
+									<div class="flex items-start justify-between gap-3">
+										<h3
+											class="font-semibold text-[var(--color-text-primary)] transition-colors group-hover:text-accent"
+										>
+											{relatedImage.name}
+										</h3>
+										<Badge variant="outline" class="shrink-0 text-xs">Image</Badge>
+									</div>
+									{#if getRelatedImageDescription(relatedImage)}
+										<p class="line-clamp-3 text-sm text-[var(--color-text-secondary)]">
+											{getRelatedImageDescription(relatedImage)}
+										</p>
+									{/if}
+									{#if relatedImage.documentName}
+										<p class="text-xs tracking-[0.18em] text-[var(--color-text-muted)] uppercase">
+											{relatedImage.documentName}
+										</p>
+									{/if}
+								</div>
+							</a>
+						{/each}
+					</div>
 				</div>
 			{/if}
 
-			{#if data.type === 'creatures' && itemData}
-				{#if itemData.ability_scores}
-					<div class="border-b border-[var(--color-border)] p-6">
-						<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">
-							Ability Scores
-						</h2>
-						<div class="grid grid-cols-3 gap-3 sm:grid-cols-6">
-							{#each Object.entries(itemData.ability_scores as Record<string, number>) as [ability, score] (ability)}
-								<div
-									class="flex flex-col items-center rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-2"
-								>
-									<span class="text-xs font-medium text-[var(--color-text-muted)] uppercase"
-										>{ability.slice(0, 3).toUpperCase()}</span
-									>
-									<span class="text-xl font-bold text-[var(--color-text-primary)]">{score}</span>
-									<span class="text-xs text-[var(--color-text-muted)]">
-										{score >= 10 ? '+' : ''}{Math.floor((score - 10) / 2)}
-									</span>
-								</div>
-							{/each}
-						</div>
+			{#if data.type === 'creatures' && (itemData.desc || item.description)}
+				<div class="border-b border-[var(--color-border)] p-6">
+					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Description</h2>
+					<div class="prose prose-invert max-w-none text-[var(--color-text-secondary)]">
+						<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+						{@html markdownAt('description')}
 					</div>
-				{/if}
-
-				{#if itemData.actions && Array.isArray(itemData.actions) && itemData.actions.length > 0}
-					<div class="border-b border-[var(--color-border)] p-6">
-						<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Actions</h2>
-						<div class="space-y-4">
-							{#each itemData.actions as action, index (`${action.key ?? action.name ?? 'action'}-${index}`)}
-								<div
-									class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4"
-								>
-									<h3 class="font-semibold text-accent">{action.name || action.key}</h3>
-									{#if action.desc}
-										<div
-											class="prose prose-invert prose-sm mt-1 max-w-none text-[var(--color-text-secondary)]"
-										>
-											<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-											{@html markdownAt(`actions.${index}.desc`)}
-										</div>
-									{/if}
-								</div>
-							{/each}
-						</div>
-					</div>
-				{/if}
-
-				{#if itemData.traits && Array.isArray(itemData.traits) && itemData.traits.length > 0}
-					<div class="border-b border-[var(--color-border)] p-6">
-						<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Traits</h2>
-						<div class="space-y-3">
-							{#each itemData.traits as trait, index (`${trait.key ?? trait.name ?? 'trait'}-${index}`)}
-								<div
-									class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4"
-								>
-									<h3 class="font-semibold text-accent">{trait.name || trait.key}</h3>
-									{#if trait.desc}
-										<div
-											class="prose prose-invert prose-sm mt-1 max-w-none text-[var(--color-text-secondary)]"
-										>
-											<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-											{@html markdownAt(`traits.${index}.desc`)}
-										</div>
-									{/if}
-								</div>
-							{/each}
-						</div>
-					</div>
-				{/if}
+				</div>
 			{/if}
 
 			{#if data.type === 'spells' && itemData}
@@ -415,7 +732,9 @@
 								<dt class="text-xs font-medium text-[var(--color-text-muted)] uppercase">
 									{formatFieldName(key)}
 								</dt>
-								<dd class="mt-1 text-sm text-[var(--color-text-primary)]">{formatValue(value)}</dd>
+								<dd class="mt-1 text-sm text-[var(--color-text-primary)]">
+									<StructuredValue {value} />
+								</dd>
 							</div>
 						{/each}
 					</dl>

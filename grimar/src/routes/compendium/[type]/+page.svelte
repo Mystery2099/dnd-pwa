@@ -27,6 +27,12 @@
 		challenge_rating_text?: string;
 		type?: { name?: string } | string;
 		hit_dice?: string | number;
+		alt_text?: string;
+		attribution?: string;
+		document?: {
+			name?: string;
+			display_name?: string;
+		};
 	};
 
 	type SortBy = 'name' | 'createdAt' | 'updatedAt';
@@ -117,6 +123,16 @@
 		if (!type) return undefined;
 		if (typeof type === 'string') return type;
 		return type.name;
+	}
+
+	function getDocumentLabel(item: CompendiumItem, itemData: CardItemData): string | undefined {
+		return (
+			itemData.document?.display_name ?? itemData.document?.name ?? item.documentName ?? undefined
+		);
+	}
+
+	function getCardDescription(item: CompendiumItem, itemData: CardItemData): string | undefined {
+		return item.description ?? itemData.alt_text;
 	}
 
 	let { data }: Props = $props();
@@ -468,9 +484,9 @@
 							>
 								{item.name}
 							</h3>
-							{#if item.description}
+							{#if getCardDescription(item, itemData)}
 								<p class="mt-2 line-clamp-2 text-sm text-[var(--color-text-secondary)]">
-									{item.description}
+									{getCardDescription(item, itemData)}
 								</p>
 							{/if}
 							{#if data.type === 'spells' && itemData}
@@ -499,10 +515,20 @@
 										<Badge variant="solid">d{itemData.hit_dice}</Badge>
 									{/if}
 								</div>
+							{:else if data.type === 'images' && itemData}
+								<div class="mt-3 flex flex-wrap gap-1">
+									{#if itemData.attribution}
+										<Badge variant="outline" class="max-w-full truncate text-xs opacity-80">
+											Artwork credit
+										</Badge>
+									{/if}
+								</div>
 							{/if}
-							{#if item.documentName}
+							{#if getDocumentLabel(item, itemData)}
 								<div class="mt-3">
-									<Badge variant="outline" class="text-xs opacity-70">{item.documentName}</Badge>
+									<Badge variant="outline" class="text-xs opacity-70"
+										>{getDocumentLabel(item, itemData)}</Badge
+									>
 								</div>
 							{/if}
 						</div>

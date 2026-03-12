@@ -319,7 +319,8 @@ export async function getRelatedImages(
 	}
 
 	const pathClauses = supportedPaths.map(
-		(path) => sql`LOWER(json_extract(${compendium.data}, '$.file_url')) LIKE ${`%${path.toLowerCase()}%`}`
+		(path) =>
+			sql`LOWER(json_extract(${compendium.data}, '$.file_url')) LIKE ${`%${path.toLowerCase()}%`}`
 	);
 
 	return db

@@ -27,7 +27,7 @@ vi.mock('$lib/core/types/compendium/filter', () => ({
 // Mock Svelte internals
 vi.mock('svelte/reactivity', () => ({
 	SvelteSet: class extends Set {
-		constructor(iterable?: Iterable<unknown>) {
+		constructor(iterable?: readonly unknown[] | null) {
 			super(iterable);
 		}
 	},
