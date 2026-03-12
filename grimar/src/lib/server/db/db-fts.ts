@@ -152,6 +152,12 @@ export async function rebuildFtsIndex(db?: Db): Promise<number> {
 	return count;
 }
 
+export async function rebuildFtsTable(db?: Db): Promise<number> {
+	const database = db ?? (await getDb());
+	await initFts(database);
+	return populateFtsFromDatabase(database);
+}
+
 export async function getFtsStats(db?: Db): Promise<{ rowCount: number }> {
 	const database = db ?? (await getDb());
 

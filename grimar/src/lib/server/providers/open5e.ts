@@ -1,4 +1,5 @@
 import type { CompendiumType } from '$lib/server/db/schema';
+import { rebuildFtsTable } from '$lib/server/db/db-fts';
 import { upsertItems, clearType, getTypeCounts } from '$lib/server/repositories/compendium';
 import type { CompendiumProvider, SyncResult, ProviderStats, SyncProgressCallback } from './types';
 import { OPEN5E_API_BASE_URL, OPEN5E_SYNCABLE_TYPES } from './open5e-config';
@@ -171,30 +172,56 @@ async function syncType(
 	}
 }
 
+export async function syncOpen5eTypes(
+	types: readonly CompendiumType[],
+	onProgress?: SyncProgressCallback
+): Promise<SyncResult> {
+	const startTime = Date.now();
+	const errors: string[] = [];
+	let totalItems = 0;
+
+	for (const type of types) {
+		const result = await syncType(type, onProgress);
+		totalItems += result.count;
+		if (result.error) {
+			errors.push(`${type}: ${result.error}`);
+		}
+	}
+
+	if (errors.length === 0) {
+		onProgress?.({
+			provider: 'open5e',
+			type: 'all',
+			status: 'saving',
+			itemsProcessed: totalItems,
+			totalItems,
+			message: 'Rebuilding full-text search index'
+		});
+
+		try {
+			await rebuildFtsTable();
+		} catch (error) {
+			errors.push(
+				`fts: ${error instanceof Error ? error.message : 'Failed to rebuild search index'}`
+			);
+		}
+	}
+
+	return {
+		success: errors.length === 0,
+		itemsSynced: totalItems,
+		errors,
+		duration: Date.now() - startTime
+	};
+}
+
 export const open5eProvider: CompendiumProvider = {
 	name: 'open5e',
 	displayName: 'Open5e',
 	description: 'Open5e API - D&D 5e SRD and compatible content',
 
 	async sync(onProgress?: SyncProgressCallback): Promise<SyncResult> {
-		const startTime = Date.now();
-		const errors: string[] = [];
-		let totalItems = 0;
-
-		for (const type of OPEN5E_SYNCABLE_TYPES) {
-			const result = await syncType(type, onProgress);
-			totalItems += result.count;
-			if (result.error) {
-				errors.push(`${type}: ${result.error}`);
-			}
-		}
-
-		return {
-			success: errors.length === 0,
-			itemsSynced: totalItems,
-			errors,
-			duration: Date.now() - startTime
-		};
+		return syncOpen5eTypes(OPEN5E_SYNCABLE_TYPES, onProgress);
 	},
 
 	async getStats(): Promise<ProviderStats> {
