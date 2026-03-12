@@ -1,6 +1,6 @@
 import type { CompendiumType } from '$lib/server/db/schema';
 import { rebuildFtsTable } from '$lib/server/db/db-fts';
-import { upsertItems, clearType, getTypeCounts } from '$lib/server/repositories/compendium';
+import { replaceTypeItems, getTypeCounts } from '$lib/server/repositories/compendium';
 import type { CompendiumProvider, SyncResult, ProviderStats, SyncProgressCallback } from './types';
 import { OPEN5E_API_BASE_URL, OPEN5E_SYNCABLE_TYPES } from './open5e-config';
 
@@ -54,8 +54,13 @@ const TYPE_ENDPOINTS: Record<CompendiumType, string> = {
 };
 
 interface ApiItem {
-	key: string;
-	name: string;
+	key?: string;
+	name?: string;
+	url?: string;
+	title?: string;
+	short_name?: string;
+	morality?: string;
+	societal_attitude?: string;
 	document?: {
 		key?: string;
 		name?: string;
@@ -91,11 +96,96 @@ async function fetchAllPages(endpoint: string): Promise<ApiItem[]> {
 	return items;
 }
 
+function extractKeyFromUrl(url: string): string | null {
+	const parts = url.split('/').filter(Boolean);
+	return parts.at(-1) ?? null;
+}
+
+function slugify(value: string): string {
+	return value
+		.trim()
+		.toLowerCase()
+		.replace(/[^a-z0-9]+/g, '-')
+		.replace(/^-+|-+$/g, '');
+}
+
+function extractItemName(item: ApiItem, type: CompendiumType): string | null {
+	if (typeof item.name === 'string' && item.name.trim()) {
+		return item.name.trim();
+	}
+
+	if (type === 'alignments') {
+		if (typeof item.short_name === 'string' && item.short_name.trim()) {
+			return item.short_name.trim();
+		}
+
+		if (
+			typeof item.morality === 'string' &&
+			item.morality.trim() &&
+			typeof item.societal_attitude === 'string' &&
+			item.societal_attitude.trim()
+		) {
+			return `${item.morality.trim()} ${item.societal_attitude.trim()}`;
+		}
+	}
+
+	if (typeof item.title === 'string' && item.title.trim()) {
+		return item.title.trim();
+	}
+
+	if (typeof item.key === 'string' && item.key.trim()) {
+		return item.key.trim();
+	}
+
+	if (typeof item.url === 'string' && item.url.trim()) {
+		return extractKeyFromUrl(item.url);
+	}
+
+	return null;
+}
+
+function extractItemKey(item: ApiItem, fallbackName: string | null): string | null {
+	if (typeof item.key === 'string' && item.key.trim()) {
+		return item.key.trim();
+	}
+
+	if (typeof item.url === 'string' && item.url.trim()) {
+		const keyFromUrl = extractKeyFromUrl(item.url);
+		if (keyFromUrl) {
+			return keyFromUrl;
+		}
+	}
+
+	if (fallbackName) {
+		const slug = slugify(fallbackName);
+		if (slug) {
+			return slug;
+		}
+	}
+
+	return null;
+}
+
 function transformToCompendiumItem(item: ApiItem, type: CompendiumType) {
+	const name = extractItemName(item, type);
+	const key = extractItemKey(item, name);
+
+	if (!name || !key) {
+		throw new Error(
+			`Missing required compendium identity fields for ${type}: ${JSON.stringify({
+				key: item.key,
+				name: item.name,
+				title: item.title,
+				url: item.url,
+				short_name: item.short_name
+			})}`
+		);
+	}
+
 	return {
-		key: item.key,
+		key,
 		type,
-		name: item.name,
+		name,
 		source: 'open5e',
 		documentKey: item.document?.key ?? null,
 		documentName: item.document?.display_name ?? item.document?.name ?? null,
@@ -147,8 +237,7 @@ async function syncType(
 			totalItems: transformed.length
 		});
 
-		await clearType(type);
-		await upsertItems(transformed);
+		await replaceTypeItems(type, transformed);
 
 		onProgress?.({
 			provider: 'open5e',

@@ -1,5 +1,5 @@
 import { eq, and, sql, like, or, desc, inArray, type SQL } from 'drizzle-orm';
-import { getDb } from '../db/index';
+import { getDb, type Db } from '../db/index';
 import { getFtsStats, searchFtsRanked } from '../db/db-fts';
 import { compendium, type CompendiumItem, type CompendiumType } from '../db/schema';
 import { MemoryCache, getCacheTTL } from '$lib/server/utils/cache';
@@ -597,6 +597,52 @@ export async function bulkInsert(
 	return result.length;
 }
 
+async function upsertItemsInDb(
+	db: Db,
+	items: Omit<CompendiumItem, 'createdAt' | 'updatedAt'>[]
+): Promise<number> {
+	if (items.length === 0) {
+		return 0;
+	}
+
+	const now = new Date();
+	const BATCH_SIZE = 100;
+	let totalUpserted = 0;
+
+	for (let i = 0; i < items.length; i += BATCH_SIZE) {
+		const batch = items.slice(i, i + BATCH_SIZE);
+		const itemsWithTimestamps = batch.map((item) => ({
+			...item,
+			createdAt: now,
+			updatedAt: now
+		}));
+
+		const result = await db
+			.insert(compendium)
+			.values(itemsWithTimestamps)
+			.onConflictDoUpdate({
+				target: [compendium.type, compendium.key],
+				set: {
+					name: sql`excluded.name`,
+					description: sql`excluded.description`,
+					data: sql`excluded.data`,
+					documentKey: sql`excluded.document_key`,
+					documentName: sql`excluded.document_name`,
+					gamesystemKey: sql`excluded.gamesystem_key`,
+					gamesystemName: sql`excluded.gamesystem_name`,
+					publisherKey: sql`excluded.publisher_key`,
+					publisherName: sql`excluded.publisher_name`,
+					updatedAt: now
+				}
+			})
+			.returning();
+
+		totalUpserted += result.length;
+	}
+
+	return totalUpserted;
+}
+
 export async function upsertItem(
 	data: Omit<CompendiumItem, 'createdAt' | 'updatedAt'>
 ): Promise<CompendiumItem> {
@@ -634,44 +680,12 @@ export async function upsertItem(
 export async function upsertItems(
 	items: Omit<CompendiumItem, 'createdAt' | 'updatedAt'>[]
 ): Promise<number> {
-	if (items.length === 0) return 0;
+	if (items.length === 0) {
+		return 0;
+	}
 
 	const db = await getDb();
-	const now = new Date();
-	const BATCH_SIZE = 100;
-	let totalUpserted = 0;
-
-	for (let i = 0; i < items.length; i += BATCH_SIZE) {
-		const batch = items.slice(i, i + BATCH_SIZE);
-
-		const itemsWithTimestamps = batch.map((item) => ({
-			...item,
-			createdAt: now,
-			updatedAt: now
-		}));
-
-		const result = await db
-			.insert(compendium)
-			.values(itemsWithTimestamps)
-			.onConflictDoUpdate({
-				target: [compendium.type, compendium.key],
-				set: {
-					name: sql`excluded.name`,
-					description: sql`excluded.description`,
-					data: sql`excluded.data`,
-					documentKey: sql`excluded.document_key`,
-					documentName: sql`excluded.document_name`,
-					gamesystemKey: sql`excluded.gamesystem_key`,
-					gamesystemName: sql`excluded.gamesystem_name`,
-					publisherKey: sql`excluded.publisher_key`,
-					publisherName: sql`excluded.publisher_name`,
-					updatedAt: now
-				}
-			})
-			.returning();
-
-		totalUpserted += result.length;
-	}
+	const totalUpserted = await upsertItemsInDb(db, items);
 
 	const types = new Set(items.map((item) => item.type as CompendiumType));
 	if (types.size === 1) {
@@ -679,6 +693,21 @@ export async function upsertItems(
 	} else {
 		invalidateCompendiumCaches();
 	}
+	return totalUpserted;
+}
+
+export async function replaceTypeItems(
+	type: CompendiumType,
+	items: Omit<CompendiumItem, 'createdAt' | 'updatedAt'>[]
+): Promise<number> {
+	const db = await getDb();
+
+	const totalUpserted = await db.transaction(async (tx) => {
+		await tx.delete(compendium).where(eq(compendium.type, type));
+		return upsertItemsInDb(tx, items);
+	});
+
+	invalidateCompendiumCaches(type);
 	return totalUpserted;
 }
 
