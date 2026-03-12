@@ -118,7 +118,7 @@ export function importTheme(jsonString: string): {
 		}
 		addImportedTheme(theme);
 		return { success: true, theme };
-	} catch (e) {
+	} catch {
 		return { success: false, error: 'Invalid JSON format' };
 	}
 }

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Switch as SwitchPrimitive, type WithoutChildrenOrChild } from 'bits-ui';
-	import type { Snippet } from 'svelte';
 	import { cn } from '$lib/utils.js';
 
 	type Props = WithoutChildrenOrChild<SwitchPrimitive.RootProps> & {

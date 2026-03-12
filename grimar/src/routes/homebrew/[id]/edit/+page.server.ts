@@ -69,7 +69,7 @@ export const actions: Actions = {
 			);
 
 			return { success: true };
-		} catch (e) {
+		} catch {
 			return json({ error: 'Invalid JSON format' }, { status: 400 });
 		}
 	}

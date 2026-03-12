@@ -11,6 +11,10 @@ const test = base.extend({
 	 */
 	page: [
 		async ({ page }, use) => {
+			await page.context().setExtraHTTPHeaders({
+				'X-Authentik-Username': 'test-dm'
+			});
+
 			// Set test user cookie before any navigation
 			await page
 				.context()
@@ -25,7 +29,7 @@ const test = base.extend({
 						...(options.headers || {}),
 						'X-Authentik-Username': 'test-dm'
 					};
-					return originalFetch(args[0], options);
+					return originalFetch(args[0], options as RequestInit);
 				};
 			});
 			await use(page);

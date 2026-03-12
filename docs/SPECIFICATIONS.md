@@ -135,6 +135,8 @@ bun run db:sync
 bun run reindex-fts
 ```
 
+Playwright E2E runs use a dedicated seeded SQLite database created during global setup and intentionally execute with a single worker for deterministic local runs.
+
 ## Environment Variables
 
 Documented or inferred from current code:
@@ -143,7 +145,6 @@ Documented or inferred from current code:
 - `OPEN5E_API_BASE_URL`
 - `OPEN5E_SYNC_BATCH_SIZE`
 - `DEV_TEST_AUTH_BYPASS`
-- `VITE_MOCK_USER`
 - `VITE_AUTHENTIK_URL`
 - `VITE_AUTHENTIK_CLIENT_ID`
 - `ADMIN_GROUPS`
@@ -157,6 +158,6 @@ Documented or inferred from current code:
 
 ## Current Gaps
 
-- `.env.example` still uses `OPEN5E_API_URL`; the code reads `OPEN5E_API_BASE_URL`
-- The login page still references `VITE_MOCK_USER` while the main auth bypass is gated by `DEV_TEST_AUTH_BYPASS`
-- Some settings UI actions are present before full backup/restore workflows are wired end-to-end
+- Offline support is cache-oriented and not a full local-first sync system
+- The dashboard still uses placeholder content instead of real campaign or character summaries
+- Character management is limited to lightweight records and list/create flows

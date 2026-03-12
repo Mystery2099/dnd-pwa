@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import type { ComponentType } from 'svelte';
 
 export const ThemeColorsSchema = z.object({
 	bgCanvas: z.string(),

@@ -53,7 +53,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 			success: true,
 			importedCount: upsertedCount
 		});
-	} catch (e) {
+	} catch {
 		return json({ error: 'Invalid JSON file' }, { status: 400 });
 	}
 };

@@ -9,15 +9,9 @@ import { type Handle } from '@sveltejs/kit';
 import { resolveUser } from './auth-utils';
 import { getSession } from '$lib/server/auth/session';
 import type { AuthUser } from './auth-types';
+import { getAdminGroups, isDevTestAuthBypassEnabled } from './auth-config';
 
-const ADMIN_GROUPS = (import.meta.env.ADMIN_GROUPS || '')
-	.split(',')
-	.map((g: string) => g.trim().toLowerCase())
-	.filter(Boolean);
-
-function isDevTestAuthBypassEnabled(): boolean {
-	return import.meta.env.DEV_TEST_AUTH_BYPASS === 'true';
-}
+const ADMIN_GROUPS = getAdminGroups();
 
 function getUserRole(groups: string[]): 'user' | 'admin' {
 	if (groups.length === 0) return 'user';
@@ -44,15 +38,22 @@ function getAuthentikGroups(headers: Headers): string[] {
 		.filter(Boolean);
 }
 
+function getDevMockUser(): string | null {
+	const username = import.meta.env.VITE_MOCK_USER?.trim();
+	return username ? username : null;
+}
+
 /** Authentication middleware hook */
 export const handleAuth: Handle = async ({ event, resolve }) => {
-	const isDevMode = import.meta.env.DEV;
+	const isDevMode = import.meta.env.DEV || import.meta.env.MODE === 'test';
 	const path = event.url.pathname;
 
-	// Development-only test bypass: explicit opt-in to avoid accidental auth leakage.
-	if (isDevMode && isDevTestAuthBypassEnabled()) {
+	if (isDevMode) {
+		// Preserve the old local-dev shortcut while still keeping the explicit E2E bypass path.
 		const testUser =
-			event.request.headers.get('X-Authentik-Username') || event.cookies.get('test-user');
+			(isDevTestAuthBypassEnabled() &&
+				(event.request.headers.get('X-Authentik-Username') || event.cookies.get('test-user'))) ||
+			getDevMockUser();
 		if (testUser) {
 			const groups = getAuthentikGroups(event.request.headers);
 			event.locals.user = createAuthUser(testUser, groups);

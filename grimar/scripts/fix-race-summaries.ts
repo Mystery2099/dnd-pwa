@@ -23,18 +23,6 @@ const races = db
 
 let fixed = 0;
 
-function stripMarkdown(text: string): string {
-	// Remove markdown headers
-	let cleaned = text.replace(/^#+\s+/gm, '');
-	// Remove markdown emphasis markers
-	cleaned = cleaned.replace(/\*\*|__/g, '');
-	// Remove single emphasis
-	cleaned = cleaned.replace(/\*|_/g, '');
-	// Clean up extra whitespace
-	cleaned = cleaned.replace(/\s+/g, ' ').trim();
-	return cleaned;
-}
-
 for (const race of races) {
 	const details = JSON.parse(race.details || '{}');
 

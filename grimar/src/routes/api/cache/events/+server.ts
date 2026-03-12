@@ -15,31 +15,30 @@ const HEARTBEAT_INTERVAL = 30000; // 30 seconds
  * Returns a Server-Sent Events stream for cache updates.
  */
 export const GET: RequestHandler = async () => {
-	let controller: ReadableStreamDefaultController | null = null;
+	let heartbeatInterval: ReturnType<typeof setInterval> | null = null;
 
 	const stream = new ReadableStream({
 		start(ctrl) {
-			controller = ctrl;
-
 			// Send initial version update event
 			ctrl.enqueue(`data: ${getVersionJson()}\n\n`);
 
 			// Set up heartbeat interval
-			const heartbeatInterval = setInterval(() => {
+			heartbeatInterval = setInterval(() => {
 				try {
 					ctrl.enqueue(`data: ${getHeartbeatEvent()}\n\n`);
 				} catch {
-					clearInterval(heartbeatInterval);
+					if (heartbeatInterval) {
+						clearInterval(heartbeatInterval);
+						heartbeatInterval = null;
+					}
 				}
 			}, HEARTBEAT_INTERVAL);
-
-			// Store interval for cleanup
-			(ctrl as any).heartbeatInterval = heartbeatInterval;
 		},
 		cancel() {
 			// Cleanup when client disconnects
-			if (controller && (controller as any).heartbeatInterval) {
-				clearInterval((controller as any).heartbeatInterval);
+			if (heartbeatInterval) {
+				clearInterval(heartbeatInterval);
+				heartbeatInterval = null;
 			}
 		}
 	});

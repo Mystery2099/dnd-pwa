@@ -16,7 +16,7 @@
 </script>
 
 <div class="space-y-4">
-	{#each fields as field}
+	{#each fields as field (field.name)}
 		<Field
 			config={field}
 			value={values[field.name]}

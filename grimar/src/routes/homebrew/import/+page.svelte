@@ -68,7 +68,7 @@
 					totalErrors++;
 					error = (error ? error + '\n' : '') + `${file.name}: ${result.error || 'Import failed'}`;
 				}
-			} catch (e) {
+			} catch {
 				totalErrors++;
 				error = (error ? error + '\n' : '') + `${file.name}: Failed to upload`;
 			}

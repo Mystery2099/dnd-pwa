@@ -43,7 +43,7 @@
 			} else {
 				error = result.error || 'Failed to save';
 			}
-		} catch (_e) {
+		} catch {
 			error = 'Failed to save changes';
 		} finally {
 			saving = false;

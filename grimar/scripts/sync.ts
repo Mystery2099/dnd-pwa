@@ -9,17 +9,8 @@
  *   bun run db:sync --limit 100        # Limit items per type (for testing)
  */
 
-import {
-	syncType,
-	SYNCABLE_TYPES,
-	type CompendiumType
-} from '$lib/server/services/sync/open5e-sync';
+import { syncType, SYNCABLE_TYPES } from '$lib/server/services/sync/open5e-sync';
 import { getDb } from '$lib/server/db';
-
-interface SyncProgress {
-	fetched: number;
-	total: number;
-}
 
 interface CliOptions {
 	types: string[];

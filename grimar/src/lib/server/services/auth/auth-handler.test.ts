@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import type { RequestEvent } from '@sveltejs/kit';
 import { handleAuth } from './auth-handler';
 import { resolveUser } from './auth-utils';
 
@@ -55,7 +56,7 @@ function createMockEvent(
 			serialize: vi.fn()
 		},
 		locals: {}
-	} as any;
+	} as unknown as RequestEvent;
 }
 
 describe('AuthHandler', () => {
@@ -65,9 +66,10 @@ describe('AuthHandler', () => {
 		// Keep production-like process env defaults for session cookie behavior.
 		vi.stubEnv('NODE_ENV', 'production');
 		vi.stubEnv('DEV_TEST_AUTH_BYPASS', 'false');
+		vi.stubEnv('VITE_MOCK_USER', '');
 
 		const { getDb } = await import('$lib/server/db');
-		(getDb as any).mockResolvedValue(mockDb);
+		vi.mocked(getDb).mockResolvedValue(mockDb);
 
 		// Setup default mock chain
 		mockDb.select.mockReturnValue(mockDb);
@@ -95,6 +97,18 @@ describe('AuthHandler', () => {
 		it('allows test cookie bypass when explicitly enabled', async () => {
 			vi.stubEnv('DEV_TEST_AUTH_BYPASS', 'true');
 			const event = createMockEvent('http://test.com/dashboard', {}, { 'test-user': 'test-dm' });
+			const resolve = vi.fn().mockResolvedValue(new Response('ok'));
+
+			await handleAuth({ event, resolve });
+
+			expect(event.locals.user).toBeDefined();
+			expect(event.locals.user.username).toBe('test-dm');
+			expect(resolve).toHaveBeenCalled();
+		});
+
+		it('allows mock user bypass in dev when VITE_MOCK_USER is set', async () => {
+			vi.stubEnv('VITE_MOCK_USER', 'test-dm');
+			const event = createMockEvent('http://test.com/dashboard');
 			const resolve = vi.fn().mockResolvedValue(new Response('ok'));
 
 			await handleAuth({ event, resolve });

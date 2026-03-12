@@ -435,7 +435,7 @@
 
 		{#if isLoading}
 			<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-				{#each Array(12) as _}
+				{#each Array(12) as _, index (index)}
 					<div class="card-crystal h-32 animate-pulse rounded-lg bg-[var(--color-bg-card)]"></div>
 				{/each}
 			</div>
@@ -524,7 +524,7 @@
 						rowGap={32}
 						resetScrollOnItemsChange={true}
 					>
-						{#snippet children(item: CompendiumItem, index: number)}
+						{#snippet children(item: CompendiumItem)}
 							{@render compendiumCard(item)}
 						{/snippet}
 					</VirtualGrid>

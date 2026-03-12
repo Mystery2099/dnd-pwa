@@ -3,20 +3,17 @@
 	import { goto } from '$app/navigation';
 	import HomebrewEditor from '$lib/features/homebrew/components/HomebrewEditor.svelte';
 
-	const CONTENT_TYPES = [
-		'spells',
-		'creatures',
-		'magicitems',
-		'feats',
-		'backgrounds',
-		'species',
-		'classes'
-	] as const;
-	type ContentType = (typeof CONTENT_TYPES)[number];
+	type ContentType =
+		| 'spells'
+		| 'creatures'
+		| 'magicitems'
+		| 'feats'
+		| 'backgrounds'
+		| 'species'
+		| 'classes';
 
 	let contentType = $state<ContentType>('spells');
 	let error = $state('');
-	let saving = $state(false);
 
 	const typeLabels: Record<ContentType, string> = {
 		spells: 'Spell',
@@ -30,7 +27,6 @@
 
 	async function handleEditorSubmit(formValues: Record<string, unknown>) {
 		error = '';
-		saving = true;
 
 		try {
 			const name = formValues.name as string;
@@ -57,8 +53,6 @@
 			goto('/homebrew');
 		} catch (err) {
 			error = err instanceof Error ? err.message : 'Failed to create';
-		} finally {
-			saving = false;
 		}
 	}
 </script>
@@ -84,7 +78,7 @@
 				bind:value={contentType}
 				class="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-4 py-2 text-[var(--color-text-primary)]"
 			>
-				{#each Object.entries(typeLabels) as [value, label]}
+				{#each Object.entries(typeLabels) as [value, label] (value)}
 					<option {value}>{label}</option>
 				{/each}
 			</select>

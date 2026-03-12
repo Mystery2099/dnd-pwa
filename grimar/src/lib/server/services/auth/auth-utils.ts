@@ -11,20 +11,10 @@ import type { AuthResult, AuthUser } from './auth-types';
 import type { RequestEvent } from '@sveltejs/kit';
 
 const log = createModuleLogger('AuthUtils');
-const MOCK_USER = import.meta.env.VITE_MOCK_USER;
 
 /** Read username from authentication header */
 export function readAuthHeader(event: RequestEvent): string | null {
 	return event.request.headers.get('X-Authentik-Username');
-}
-
-/** Apply development bypass for testing */
-export function applyDevBypass(existingUsername: string | null): string | null {
-	if (existingUsername || import.meta.env.MODE === 'test' || !import.meta.env.DEV || !MOCK_USER) {
-		return existingUsername;
-	}
-	log.info({ mockUser: MOCK_USER }, 'Dev bypass applied');
-	return MOCK_USER;
 }
 
 /** Upsert user and load their data */
@@ -45,7 +35,7 @@ export async function upsertAndLoadUser(username: string): Promise<AuthUser | nu
 
 /** Resolve user from request */
 export async function resolveUser(event: RequestEvent): Promise<AuthResult> {
-	const username = applyDevBypass(readAuthHeader(event));
+	const username = readAuthHeader(event);
 	if (!username) {
 		return { user: null };
 	}

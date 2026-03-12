@@ -1,10 +1,12 @@
 <script lang="ts">
 	import VirtualList from './VirtualList.svelte';
-	let { items } = $props();
+	type VirtualListTestItem = { name: string };
+
+	let { items }: { items: VirtualListTestItem[] } = $props();
 </script>
 
 <VirtualList {items} estimateSize={40}>
-	{#snippet children(item: any, index: number)}
+	{#snippet children(item: VirtualListTestItem, index: number)}
 		<div>Item {index}: {item.name}</div>
 	{/snippet}
 </VirtualList>

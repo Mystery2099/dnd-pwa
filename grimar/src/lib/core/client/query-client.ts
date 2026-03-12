@@ -14,7 +14,6 @@ import { browser } from '$app/environment';
 import { get, set, del, clear } from 'idb-keyval';
 import { getCachedVersion, setCachedVersion } from './cache-version';
 import type { CacheVersion } from './cache-version';
-import { settingsStore } from './settingsStore.svelte';
 import { userSettingsStore } from './userSettingsStore.svelte';
 import { queryKeys } from './queries';
 

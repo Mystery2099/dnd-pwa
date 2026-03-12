@@ -20,7 +20,6 @@
 	} from 'lucide-svelte';
 	import ThemeCardSelector from '$lib/components/ui/ThemeCardSelector.svelte';
 	import Toggle from '$lib/components/ui/Toggle.svelte';
-	import SegmentedControl from '$lib/components/ui/SegmentedControl.svelte';
 	import RadioCardGrid from '$lib/components/ui/RadioCardGrid.svelte';
 	import SettingsGroup from '$lib/components/ui/SettingsGroup.svelte';
 	import SettingsItem from '$lib/components/ui/SettingsItem.svelte';
@@ -33,8 +32,7 @@
 		getImportedThemes,
 		importTheme,
 		exportTheme,
-		deleteImportedTheme,
-		getAllThemes
+		deleteImportedTheme
 	} from '$lib/core/client/themeRegistry';
 	import { setTheme } from '$lib/core/client/themeStore.svelte';
 	import type { ThemeConfig } from '$lib/core/types/theme';
@@ -313,7 +311,7 @@
 		<aside class="settings-sidebar">
 			<Tabs.Root bind:value={activeSection}>
 				<nav class="settings-nav">
-					{#each sections as section}
+					{#each sections as section (section.id)}
 						<Tabs.Trigger value={section.id} class="settings-nav-item">
 							<span class="nav-icon">
 								<section.icon class="size-5" style="color: {section.accent}" />
@@ -365,7 +363,7 @@
 								>
 									{#snippet control()}
 										<div class="flex flex-wrap gap-2">
-											{#each importedThemes as theme}
+											{#each importedThemes as theme (theme.id)}
 												<div
 													class="flex items-center gap-1 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] px-2 py-1"
 												>
@@ -491,24 +489,6 @@
 											<HardDrive class="size-4" />
 											Clear All Data
 										{/if}
-									</Button>
-								{/snippet}
-							</SettingsItem>
-
-							<SettingsItem label="Export Data" description="Download your settings and data">
-								{#snippet control()}
-									<Button variant="secondary" size="sm">
-										<Download class="size-4" />
-										Export
-									</Button>
-								{/snippet}
-							</SettingsItem>
-
-							<SettingsItem label="Import Data" description="Restore settings and data from backup">
-								{#snippet control()}
-									<Button variant="secondary" size="sm">
-										<Upload class="size-4" />
-										Import
 									</Button>
 								{/snippet}
 							</SettingsItem>
