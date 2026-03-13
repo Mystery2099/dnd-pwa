@@ -1,5 +1,10 @@
 <script lang="ts">
-	import { getTheme, setTheme, THEME_OPTIONS } from '$lib/core/client/themeStore.svelte';
+	import {
+		getThemeById,
+		setTheme,
+		THEME_OPTIONS,
+		themeStore
+	} from '$lib/core/client/themeStore.svelte';
 	import Select from '$lib/components/ui/select/select.svelte';
 
 	interface Props {
@@ -8,7 +13,7 @@
 
 	let { class: className = '' }: Props = $props();
 
-	const currentThemeId = $derived(getTheme()?.id);
+	const currentThemeId = $derived(getThemeById($themeStore)?.id);
 
 	function handleThemeChange(v: string) {
 		setTheme(v);
