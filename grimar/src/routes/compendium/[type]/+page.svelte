@@ -15,6 +15,7 @@
 	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
 	import { COMPENDIUM_TYPE_CONFIGS } from '$lib/core/constants/compendium';
 	import type { CompendiumItem, CompendiumTypeName } from '$lib/core/types/compendium';
+	import { getImageKindLabel } from '$lib/utils/compendium';
 	import type { PageData } from './$types';
 
 	interface Props {
@@ -27,6 +28,7 @@
 		challenge_rating_text?: string;
 		type?: { name?: string } | string;
 		hit_dice?: string | number;
+		file_url?: string;
 		alt_text?: string;
 		attribution?: string;
 		document?: {
@@ -517,6 +519,7 @@
 								</div>
 							{:else if data.type === 'images' && itemData}
 								<div class="mt-3 flex flex-wrap gap-1">
+									<Badge variant="solid">{getImageKindLabel(itemData.file_url)}</Badge>
 									{#if itemData.attribution}
 										<Badge variant="outline" class="max-w-full truncate text-xs opacity-80">
 											Artwork credit

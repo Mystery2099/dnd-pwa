@@ -14,12 +14,10 @@ function log(message: string): void {
 }
 
 function getColumnInfo(db: Database): ColumnInfo[] {
-	return db
-		.query(`PRAGMA table_info(compendium)`)
-		.all() as Array<{
-			name: string;
-			pk: number;
-		}>;
+	return db.query(`PRAGMA table_info(compendium)`).all() as Array<{
+		name: string;
+		pk: number;
+	}>;
 }
 
 function hasCompositePrimaryKey(columns: ColumnInfo[]): boolean {
@@ -31,9 +29,7 @@ function hasCompositePrimaryKey(columns: ColumnInfo[]): boolean {
 
 function hasCompendiumTable(db: Database): boolean {
 	const result = db
-		.query(
-			`SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'compendium' LIMIT 1`
-		)
+		.query(`SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'compendium' LIMIT 1`)
 		.get() as { name?: string } | null;
 
 	return result?.name === 'compendium';

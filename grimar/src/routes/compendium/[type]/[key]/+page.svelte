@@ -20,7 +20,8 @@
 		getBenefits,
 		formatFieldName,
 		formatValue,
-		getSortedFields
+		getSortedFields,
+		getImageKindLabel
 	} from '$lib/utils/compendium';
 
 	interface Props {
@@ -124,6 +125,10 @@
 
 	function getImagePermalink(): string | undefined {
 		return getNonEmptyString(imageData.document?.permalink);
+	}
+
+	function getImageKindText(fileUrl: unknown): string {
+		return getImageKindLabel(fileUrl);
 	}
 
 	function hasImageMetadata(): boolean {
@@ -284,6 +289,13 @@
 									<Badge variant="outline">Requires Attunement</Badge>
 								{/if}
 							</div>
+						{:else if data.type === 'images' && itemData}
+							<div class="mt-5 flex flex-wrap gap-2">
+								<Badge variant="solid">{getImageKindText(imageData.file_url)}</Badge>
+								{#if getImageAttribution()}
+									<Badge variant="outline">Attributed</Badge>
+								{/if}
+							</div>
 						{/if}
 					</div>
 				{/if}
@@ -432,7 +444,7 @@
 									<p
 										class="text-xs font-medium tracking-[0.18em] text-[var(--color-text-muted)] uppercase"
 									>
-										Illustration
+										{getImageKindText(featuredRelatedImage.assetUrl)}
 									</p>
 									<p class="mt-1 truncate font-semibold text-[var(--color-text-primary)]">
 										{featuredRelatedImage.name}
@@ -441,7 +453,7 @@
 								<span
 									class="shrink-0 text-sm text-accent transition-colors group-hover:text-accent/80"
 								>
-									Open image details
+									Open asset details
 								</span>
 							</div>
 						</a>
@@ -578,7 +590,7 @@
 						<div>
 							<h2 class="text-lg font-semibold text-[var(--color-text-primary)]">Related Images</h2>
 							<p class="mt-1 text-sm text-[var(--color-text-secondary)]">
-								Artwork and icons matched from the image compendium for this entry.
+								Matched assets from the image compendium for this entry.
 							</p>
 						</div>
 						<a
@@ -618,7 +630,9 @@
 										>
 											{relatedImage.name}
 										</h3>
-										<Badge variant="outline" class="shrink-0 text-xs">Image</Badge>
+										<Badge variant="outline" class="shrink-0 text-xs">
+											{getImageKindText(relatedImage.assetUrl)}
+										</Badge>
 									</div>
 									{#if getRelatedImageDescription(relatedImage)}
 										<p class="line-clamp-3 text-sm text-[var(--color-text-secondary)]">

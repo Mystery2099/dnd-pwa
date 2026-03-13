@@ -94,7 +94,9 @@ async function main(): Promise<void> {
 
 	// Validate types if specified
 	if (options.types.length > 0) {
-		const invalidTypes = options.types.filter((t) => !OPEN5E_SYNCABLE_TYPES.includes(t as CompendiumType));
+		const invalidTypes = options.types.filter(
+			(t) => !OPEN5E_SYNCABLE_TYPES.includes(t as CompendiumType)
+		);
 		if (invalidTypes.length > 0) {
 			console.error(`Invalid types: ${invalidTypes.join(', ')}`);
 			console.error(`Available types: ${OPEN5E_SYNCABLE_TYPES.join(', ')}`);
@@ -103,9 +105,7 @@ async function main(): Promise<void> {
 	}
 
 	const typesToSync =
-		options.types.length > 0
-			? (options.types as CompendiumType[])
-			: [...OPEN5E_SYNCABLE_TYPES];
+		options.types.length > 0 ? (options.types as CompendiumType[]) : [...OPEN5E_SYNCABLE_TYPES];
 
 	console.log('Starting compendium sync...');
 	console.log(`Types to sync: ${typesToSync.join(', ')}`);

@@ -119,11 +119,11 @@ export async function getPaginatedItems(
 					FTS_SEARCH_LIMIT + 1,
 					db
 				);
-			resultsTruncated = rankedMatchesWithSentinel.length > FTS_SEARCH_LIMIT;
-			rankedMatches = resultsTruncated
-				? rankedMatchesWithSentinel.slice(0, FTS_SEARCH_LIMIT)
-				: rankedMatchesWithSentinel;
-			ftsMatchedKeys = rankedMatches.map((match) => match.key);
+				resultsTruncated = rankedMatchesWithSentinel.length > FTS_SEARCH_LIMIT;
+				rankedMatches = resultsTruncated
+					? rankedMatchesWithSentinel.slice(0, FTS_SEARCH_LIMIT)
+					: rankedMatchesWithSentinel;
+				ftsMatchedKeys = rankedMatches.map((match) => match.key);
 			}
 		} catch (e) {
 			console.error('searchFtsRanked failed for filters.search', {
