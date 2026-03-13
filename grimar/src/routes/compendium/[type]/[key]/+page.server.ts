@@ -149,6 +149,23 @@ type RelatedImage = {
 	attribution: string | null;
 };
 
+function sanitizePageData(value: unknown): unknown {
+	if (value === null || value === undefined) return value;
+	if (value instanceof Date) return value;
+	if (Array.isArray(value)) return value.map((entry) => sanitizePageData(entry));
+	if (typeof value !== 'object') return value;
+
+	const record = value as Record<string, unknown>;
+	const sanitized: Record<string, unknown> = {};
+
+	for (const [key, entry] of Object.entries(record)) {
+		if (key === '__proto__') continue;
+		sanitized[key] = sanitizePageData(entry);
+	}
+
+	return sanitized;
+}
+
 export const load: PageServerLoad = async ({ params }) => {
 	const type = params.type as CompendiumTypeName;
 	const key = params.key;
@@ -184,9 +201,9 @@ export const load: PageServerLoad = async ({ params }) => {
 		type,
 		key,
 		config,
-		item,
-		markdownHtml,
+		item: sanitizePageData(item),
+		markdownHtml: sanitizePageData(markdownHtml),
 		imageAssetUrl,
-		relatedImages
+		relatedImages: sanitizePageData(relatedImages)
 	};
 };
