@@ -1,9 +1,14 @@
 <script lang="ts">
-	import { getAllThemes, getCurrentTheme, setTheme } from '$lib/core/client/themeStore.svelte';
+	import {
+		getAllThemes,
+		getThemeById,
+		setTheme,
+		themeStore
+	} from '$lib/core/client/themeStore.svelte';
 	import { getThemeGradient, getThemeAccentClass } from '$lib/core/client/themeCSS';
 	import { Palette } from 'lucide-svelte';
 
-	const currentTheme = $derived(getCurrentTheme());
+	const currentTheme = $derived(getThemeById($themeStore));
 	const themes = $derived(getAllThemes());
 
 	function handleSetTheme(themeId: string) {
