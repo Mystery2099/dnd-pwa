@@ -45,6 +45,7 @@ COPY --from=builder /app/grimar/data ./data
 
 # Copy startup script
 COPY grimar/scripts/docker-start.sh ./docker-start.sh
+COPY grimar/scripts/ensure-runtime-db.ts ./ensure-runtime-db.ts
 
 # Create data directory (in case of fresh start)
 RUN mkdir -p /app/data

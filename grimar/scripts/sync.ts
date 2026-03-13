@@ -13,6 +13,7 @@ import { syncOpen5eTypes } from '$lib/server/providers/open5e';
 import { getDb } from '$lib/server/db';
 import type { CompendiumType } from '$lib/server/db/schema';
 import type { SyncProgressEvent } from '$lib/server/providers/types';
+import { ensureRuntimeDbCompatibility } from './ensure-runtime-db';
 
 interface CliOptions {
 	types: string[];
@@ -109,6 +110,8 @@ async function main(): Promise<void> {
 	console.log('Starting compendium sync...');
 	console.log(`Types to sync: ${typesToSync.join(', ')}`);
 	console.log('');
+
+	await ensureRuntimeDbCompatibility();
 
 	// Initialize database connection
 	await getDb();

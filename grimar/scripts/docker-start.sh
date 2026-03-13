@@ -15,5 +15,8 @@ if [ ! -d "$DB_DIR" ]; then
     mkdir -p "$DB_DIR"
 fi
 
+echo "[startup] Ensuring runtime database compatibility..."
+bun ./ensure-runtime-db.ts
+
 echo "[startup] Starting server..."
 exec bun ./build/index.js

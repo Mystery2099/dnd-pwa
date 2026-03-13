@@ -120,7 +120,15 @@ function resolveImageAssetUrl(fileUrl: unknown): string | null {
 	if (/^https?:\/\//i.test(fileUrl)) return fileUrl;
 
 	const origin = OPEN5E_API_BASE_URL.replace(/\/v2$/i, '');
-	return new URL(fileUrl, `${origin}/`).toString();
+	try {
+		return new URL(fileUrl, `${origin}/`).toString();
+	} catch (error) {
+		console.warn('Unable to resolve compendium image asset URL', {
+			fileUrl,
+			error
+		});
+		return null;
+	}
 }
 
 type RelatedImage = {
