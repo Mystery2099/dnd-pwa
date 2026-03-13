@@ -2,7 +2,7 @@
 
 ## Summary
 
-Grimar is a self-hosted SvelteKit application for browsing 5e compendium data, managing homebrew content, and maintaining lightweight character records. The current implementation is a single Bun-powered web app with SQLite persistence and Open5e synchronization.
+Grimar is a self-hosted SvelteKit application for browsing 5e compendium data, managing homebrew content, maintaining lightweight character records, and customizing the client theme. The current implementation is a Bun-powered web app with SQLite persistence, Open5e synchronization, and offline-oriented client caching.
 
 This document describes the implemented product shape, not older roadmap ideas.
 
@@ -17,7 +17,7 @@ This document describes the implemented product shape, not older roadmap ideas.
 - Homebrew create, edit, import, export, and delete flows
 - Character storage with list and item APIs
 - Offline-aware cache versioning and SSE cache events
-- Theme selection with built-in and imported JSON themes
+- Theme selection with built-in themes and local JSON theme import/export
 - User settings persistence
 - Request logging and web vitals ingestion
 
@@ -27,7 +27,7 @@ This document describes the implemented product shape, not older roadmap ideas.
 - Dice rolling system
 - Campaign management
 - Character sheet route such as `/characters/[id]`
-- Built-in UI for authoring custom themes from scratch
+- Built-in server-backed theme sharing or sync between devices
 - File-uploaded character portraits
 
 ## Application Structure
@@ -69,6 +69,7 @@ This document describes the implemented product shape, not older roadmap ideas.
 - SvelteKit 2
 - Svelte 5 runes
 - Vite 7
+- Vite PWA integration
 
 ### Storage
 
@@ -105,7 +106,8 @@ Supported modes:
 
 - OAuth-style encrypted session cookie flow
 - Reverse proxy header flow using `X-Authentik-Username`
-- Development and test bypasses when explicitly enabled
+- Development mock-user bypass using `VITE_MOCK_USER`
+- Explicit test bypass using `DEV_TEST_AUTH_BYPASS` plus a test cookie or proxy header
 
 Unauthenticated users are redirected to `/login` for non-public pages.
 
@@ -115,13 +117,14 @@ Unauthenticated users are redirected to `/login` for non-public pages.
 - Cache version endpoints support invalidation
 - SSE endpoint broadcasts cache change events
 - IndexedDB and localStorage are used for offline persistence and client caches
+- Imported themes are stored in browser storage on the current device
 - Settings page includes cache and offline-data clearing actions
 
 Offline support is partial and cache-oriented. It is not a full local-first mutation system.
 
 ## Operations
 
-Root commands proxy into the app workspace:
+Repo-root commands proxy into the app workspace:
 
 ```bash
 bun run dev
@@ -135,6 +138,14 @@ bun run db:sync
 bun run reindex-fts
 ```
 
+Workspace-only commands are available in [`grimar/package.json`](/home/mystery/misc-projects/dnd-pwa/grimar/package.json):
+
+```bash
+bun run --cwd grimar perf:budgets
+bun run --cwd grimar perf:check
+bun run --cwd grimar db:seed
+```
+
 Playwright E2E runs use a dedicated seeded SQLite database created during global setup and intentionally execute with a single worker for deterministic local runs.
 
 ## Environment Variables
@@ -142,11 +153,10 @@ Playwright E2E runs use a dedicated seeded SQLite database created during global
 Documented or inferred from current code:
 
 - `DATABASE_URL`
+- `VITE_MOCK_USER`
 - `OPEN5E_API_BASE_URL`
 - `OPEN5E_SYNC_BATCH_SIZE`
 - `DEV_TEST_AUTH_BYPASS`
-- `VITE_AUTHENTIK_URL`
-- `VITE_AUTHENTIK_CLIENT_ID`
 - `ADMIN_GROUPS`
 - `ADMIN_SYNC_TOKEN`
 - `AUTHENTIK_URL`
@@ -161,3 +171,4 @@ Documented or inferred from current code:
 - Offline support is cache-oriented and not a full local-first sync system
 - The dashboard still uses placeholder content instead of real campaign or character summaries
 - Character management is limited to lightweight records and list/create flows
+- Imported themes are device-local rather than synced through the server

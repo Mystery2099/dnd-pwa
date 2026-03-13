@@ -1,10 +1,12 @@
 # Grimar
 
-Self-hosted, offline-capable D&D 5e reference and campaign utility built with SvelteKit, Bun, SQLite, and Tailwind CSS v4.
+Self-hosted, offline-aware D&D 5e reference app for compendium browsing, homebrew management, lightweight character records, and theme customization. Built with SvelteKit, Bun, SQLite, and Tailwind CSS v4.
 
 ## Workspace
 
-This repository uses Bun workspaces. Run commands from the repo root:
+This repository uses a Bun workspace with a thin root package and the main application in [`grimar/`](/home/mystery/misc-projects/dnd-pwa/grimar).
+
+Run the common app commands from the repo root:
 
 ```bash
 bun install
@@ -16,15 +18,17 @@ bun run build
 bun run start
 ```
 
-The root `package.json` proxies most commands into [`grimar/`](/home/mystery/misc-projects/dnd-pwa/grimar).
+The root `package.json` proxies the common lifecycle, quality, test, and database commands into [`grimar/`](/home/mystery/misc-projects/dnd-pwa/grimar).
 
 ## What Exists Today
 
 - Authenticated SvelteKit app with Bun runtime and SQLite via Drizzle
+- Session-based Authentik OAuth plus reverse-proxy header auth support
 - Unified compendium backed by Open5e plus user homebrew content
-- Character list and CRUD API
+- Character list and CRUD API for lightweight records
 - Offline-aware client caching, query persistence, and cache invalidation endpoints
-- Theme system with 12 built-in themes plus JSON theme import/export
+- Theme system with 12 built-in themes plus local JSON import/export
+- User settings persistence, cache clearing, and sync controls
 - Web vitals ingestion and lightweight request monitoring
 
 ## Route Map
@@ -84,11 +88,21 @@ bun run db:sync
 bun run reindex-fts
 ```
 
+Workspace-only commands that exist in [`grimar/package.json`](/home/mystery/misc-projects/dnd-pwa/grimar/package.json) but are not proxied at the repo root:
+
+```bash
+bun run --cwd grimar perf:budgets
+bun run --cwd grimar perf:check
+bun run --cwd grimar db:seed
+```
+
 ## Testing Notes
 
 Unit tests run with Vitest. E2E tests run with Playwright against a dedicated seeded SQLite database created by [`grimar/scripts/setup-e2e-db.ts`](grimar/scripts/setup-e2e-db.ts).
 
 The Playwright suite is intentionally configured to use a single worker because it shares one local dev server and one seeded database during the run. If you see `ERR_CONNECTION_REFUSED` during a customized parallel run, revert to the default `bun run test:e2e` command.
+
+For local development and automated test flows, auth bypasses are available through `VITE_MOCK_USER` and `DEV_TEST_AUTH_BYPASS`. Those are intended for development or test use only.
 
 ## Environment
 
@@ -97,6 +111,7 @@ Start from [`grimar/.env.example`](/home/mystery/misc-projects/dnd-pwa/grimar/.e
 Common variables:
 
 - `DATABASE_URL`
+- `VITE_MOCK_USER`
 - `OPEN5E_API_BASE_URL`
 - `OPEN5E_SYNC_BATCH_SIZE`
 - `DEV_TEST_AUTH_BYPASS`
@@ -107,6 +122,8 @@ Common variables:
 - `AUTHENTIK_CLIENT_SECRET`
 - `AUTHENTIK_REDIRECT_URI`
 - `SESSION_ENCRYPTION_KEY`
+
+`SESSION_ENCRYPTION_KEY` is required in production. In development, the server falls back to a temporary key if it is unset.
 
 ## Documentation
 
