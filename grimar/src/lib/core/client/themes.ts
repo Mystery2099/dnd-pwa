@@ -1,18 +1,3 @@
-import type { ComponentType } from 'svelte';
-import {
-	Sparkles,
-	Flame,
-	Leaf,
-	Droplets,
-	CircleDot,
-	Snowflake,
-	Palmtree,
-	Skull,
-	Heart,
-	Sun,
-	Gem
-} from 'lucide-svelte';
-
 // Lightweight theme registry - SINGLE SOURCE OF TRUTH FOR METADATA
 // Colors are defined in layout.css via CSS custom properties
 // When adding a new theme, update layout.css with color values
@@ -21,22 +6,22 @@ export interface ThemeMeta {
 	id: string;
 	name: string;
 	description: string;
-	icon: ComponentType;
+	icon: string;
 }
 
 export const THEMES = [
-	{ id: 'amethyst', name: 'Amethyst', description: 'Deep mystical purple', icon: Sparkles },
-	{ id: 'arcane', name: 'Arcane', description: 'Gold runes on dark leather', icon: Flame },
-	{ id: 'nature', name: 'Nature', description: 'Bioluminescence in the dark', icon: Leaf },
-	{ id: 'fire', name: 'Fire', description: 'Magma flowing over cold stone', icon: Flame },
-	{ id: 'ice', name: 'Ice', description: 'Deep freeze', icon: Snowflake },
-	{ id: 'ocean', name: 'Ocean', description: 'Abyssal depths', icon: Droplets },
-	{ id: 'void', name: 'Void', description: 'Cosmic emptiness', icon: CircleDot },
-	{ id: 'beach', name: 'Beach', description: 'Sandy shores', icon: Palmtree },
-	{ id: 'necropolis', name: 'Necropolis', description: 'Bone & Spirit', icon: Skull },
-	{ id: 'charmed', name: 'Charmed', description: 'Rose Quartz & Love Potion', icon: Heart },
-	{ id: 'divine', name: 'Divine', description: 'Celestial Bronze', icon: Sun },
-	{ id: 'underdark', name: 'Underdark', description: 'Deep Slate & Spore', icon: Gem }
+	{ id: 'amethyst', name: 'Amethyst', description: 'Deep mystical purple', icon: 'amethyst' },
+	{ id: 'arcane', name: 'Arcane', description: 'Gold runes on dark leather', icon: 'arcane' },
+	{ id: 'nature', name: 'Nature', description: 'Bioluminescence in the dark', icon: 'nature' },
+	{ id: 'fire', name: 'Fire', description: 'Magma flowing over cold stone', icon: 'fire' },
+	{ id: 'ice', name: 'Ice', description: 'Deep freeze', icon: 'ice' },
+	{ id: 'ocean', name: 'Ocean', description: 'Abyssal depths', icon: 'ocean' },
+	{ id: 'void', name: 'Void', description: 'Cosmic emptiness', icon: 'void' },
+	{ id: 'beach', name: 'Beach', description: 'Sandy shores', icon: 'beach' },
+	{ id: 'necropolis', name: 'Necropolis', description: 'Bone & Spirit', icon: 'necropolis' },
+	{ id: 'charmed', name: 'Charmed', description: 'Rose Quartz & Love Potion', icon: 'charmed' },
+	{ id: 'divine', name: 'Divine', description: 'Celestial Bronze', icon: 'divine' },
+	{ id: 'underdark', name: 'Underdark', description: 'Deep Slate & Spore', icon: 'underdark' }
 ] as const;
 
 // Theme styling helpers - derived from CSS custom properties

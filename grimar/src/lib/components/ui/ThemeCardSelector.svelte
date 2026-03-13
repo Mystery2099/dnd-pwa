@@ -5,8 +5,8 @@
 		setTheme,
 		themeStore
 	} from '$lib/core/client/themeStore.svelte';
-	import { getThemeGradient, getThemeAccentClass } from '$lib/core/client/themeCSS';
-	import { Palette } from 'lucide-svelte';
+	import { getThemeGradient } from '$lib/core/client/themeCSS';
+	import ThemeIcon from '$lib/components/ui/ThemeIcon.svelte';
 
 	const currentTheme = $derived(getThemeById($themeStore));
 	const themes = $derived(getAllThemes());
@@ -20,8 +20,10 @@
 	{#each themes as theme (theme.id)}
 		{@const isSelected = currentTheme?.id === theme.id}
 		{@const gradient = getThemeGradient(theme)}
-		{@const accentClass = getThemeAccentClass(theme)}
-		{@const Icon = theme.icon || Palette}
+		{@const primaryColor = isSelected ? theme.colors.accent : theme.colors.textPrimary}
+		{@const secondaryColor = isSelected
+			? theme.colors.textPrimary
+			: theme.colors.accentGlow || theme.colors.accent}
 
 		<button
 			type="button"
@@ -54,11 +56,13 @@
 			<div class="relative flex h-full flex-col items-center justify-center gap-4 text-center">
 				<!-- Icon Container -->
 				<div
-					class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent),0_4px_20px_color-mix(in_srgb,black_30%,transparent)] transition-all duration-300 group-hover:scale-110 {accentClass}"
+					class="rounded-[1.1rem] border border-[var(--color-border)] bg-[var(--color-bg-card)] px-5 py-4 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent),0_4px_20px_color-mix(in_srgb,black_30%,transparent)] transition-all duration-300 group-hover:scale-110"
 				>
-					<Icon
-						class="size-8 drop-shadow-[0_0_8px_currentColor]"
-						style="color: {isSelected ? 'var(--theme-accent)' : ''}"
+					<ThemeIcon
+						themeId={theme.icon || theme.id}
+						class="size-12 drop-shadow-[0_0_12px_currentColor]"
+						{primaryColor}
+						{secondaryColor}
 					/>
 				</div>
 

@@ -49,7 +49,7 @@ export const ThemeConfigSchema = z.object({
 	typography: ThemeTypographySchema.optional(),
 	animation: ThemeAnimationSchema.optional(),
 	visualEffects: ThemeVisualEffectsSchema.optional(),
-	icon: z.any().optional()
+	icon: z.string().optional()
 });
 
 export const ThemeColorsPartialSchema = ThemeColorsSchema.partial();

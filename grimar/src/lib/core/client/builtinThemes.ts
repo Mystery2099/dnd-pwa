@@ -1,17 +1,4 @@
 import type { ThemeConfig } from '$lib/core/types/theme';
-import {
-	Sparkles,
-	Flame,
-	Leaf,
-	Droplets,
-	CircleDot,
-	Snowflake,
-	Palmtree,
-	Skull,
-	Heart,
-	Sun,
-	Gem
-} from 'lucide-svelte';
 
 export const BUILTIN_THEMES: ThemeConfig[] = [
 	{
@@ -19,7 +6,7 @@ export const BUILTIN_THEMES: ThemeConfig[] = [
 		name: 'Amethyst',
 		description: 'Deep mystical purple',
 		source: 'builtin',
-		icon: Sparkles,
+		icon: 'amethyst',
 		colors: {
 			bgCanvas: '#0f172a',
 			bgCard: 'rgba(30, 27, 75, 0.6)',
@@ -54,7 +41,7 @@ export const BUILTIN_THEMES: ThemeConfig[] = [
 		name: 'Arcane',
 		description: 'Gold runes on dark leather',
 		source: 'builtin',
-		icon: Flame,
+		icon: 'arcane',
 		colors: {
 			bgCanvas: '#271c19',
 			bgCard: 'rgba(66, 32, 6, 0.5)',
@@ -89,7 +76,7 @@ export const BUILTIN_THEMES: ThemeConfig[] = [
 		name: 'Nature',
 		description: 'Bioluminescence in the dark',
 		source: 'builtin',
-		icon: Leaf,
+		icon: 'nature',
 		colors: {
 			bgCanvas: '#022c22',
 			bgCard: 'rgba(6, 78, 59, 0.5)',
@@ -124,7 +111,7 @@ export const BUILTIN_THEMES: ThemeConfig[] = [
 		name: 'Fire',
 		description: 'Magma flowing over cold stone',
 		source: 'builtin',
-		icon: Flame,
+		icon: 'fire',
 		colors: {
 			bgCanvas: '#1c1917',
 			bgCard: 'rgba(41, 37, 36, 0.6)',
@@ -159,7 +146,7 @@ export const BUILTIN_THEMES: ThemeConfig[] = [
 		name: 'Ice',
 		description: 'Deep freeze',
 		source: 'builtin',
-		icon: Snowflake,
+		icon: 'ice',
 		colors: {
 			bgCanvas: '#082f49',
 			bgCard: 'rgba(12, 74, 110, 0.6)',
@@ -191,7 +178,7 @@ export const BUILTIN_THEMES: ThemeConfig[] = [
 		name: 'Ocean',
 		description: 'Abyssal depths',
 		source: 'builtin',
-		icon: Droplets,
+		icon: 'ocean',
 		colors: {
 			bgCanvas: '#020617',
 			bgCard: 'rgba(30, 41, 59, 0.6)',
@@ -226,7 +213,7 @@ export const BUILTIN_THEMES: ThemeConfig[] = [
 		name: 'Void',
 		description: 'Cosmic emptiness',
 		source: 'builtin',
-		icon: CircleDot,
+		icon: 'void',
 		colors: {
 			bgCanvas: '#0a0a0a',
 			bgCard: 'rgba(23, 23, 23, 0.8)',
@@ -261,7 +248,7 @@ export const BUILTIN_THEMES: ThemeConfig[] = [
 		name: 'Beach',
 		description: 'Sandy shores',
 		source: 'builtin',
-		icon: Palmtree,
+		icon: 'beach',
 		colors: {
 			bgCanvas: '#292524',
 			bgCard: 'rgba(69, 58, 43, 0.6)',
@@ -296,7 +283,7 @@ export const BUILTIN_THEMES: ThemeConfig[] = [
 		name: 'Necropolis',
 		description: 'Bone & Spirit',
 		source: 'builtin',
-		icon: Skull,
+		icon: 'necropolis',
 		colors: {
 			bgCanvas: '#1c1917',
 			bgCard: 'rgba(28, 25, 23, 0.8)',
@@ -328,7 +315,7 @@ export const BUILTIN_THEMES: ThemeConfig[] = [
 		name: 'Charmed',
 		description: 'Rose Quartz & Love Potion',
 		source: 'builtin',
-		icon: Heart,
+		icon: 'charmed',
 		colors: {
 			bgCanvas: '#4a044e',
 			bgCard: 'rgba(131, 24, 67, 0.5)',
@@ -363,7 +350,7 @@ export const BUILTIN_THEMES: ThemeConfig[] = [
 		name: 'Divine',
 		description: 'Celestial Bronze',
 		source: 'builtin',
-		icon: Sun,
+		icon: 'divine',
 		colors: {
 			bgCanvas: '#271a0c',
 			bgCard: 'rgba(66, 32, 6, 0.6)',
@@ -398,7 +385,7 @@ export const BUILTIN_THEMES: ThemeConfig[] = [
 		name: 'Underdark',
 		description: 'Deep Slate & Spore',
 		source: 'builtin',
-		icon: Gem,
+		icon: 'underdark',
 		colors: {
 			bgCanvas: '#020617',
 			bgCard: 'rgba(15, 23, 42, 0.85)',
