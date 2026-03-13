@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
+	import { goto, replaceState } from '$app/navigation';
+	import { page } from '$app/state';
+	import { onMount } from 'svelte';
 	import {
 		Palette,
 		Cog,
@@ -26,7 +28,11 @@
 	import Button from '$lib/components/ui/Button.svelte';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { Tabs } from 'bits-ui';
-	import { settingsStore, SYNC_INTERVAL_OPTIONS } from '$lib/core/client/settingsStore.svelte';
+	import {
+		settingsStore,
+		SYNC_INTERVAL_OPTIONS,
+		GRID_MAX_COLUMNS_OPTIONS
+	} from '$lib/core/client/settingsStore.svelte';
 	import { userSettingsStore } from '$lib/core/client/userSettingsStore.svelte';
 	import {
 		getImportedThemes,
@@ -48,9 +54,7 @@
 
 	// Load imported themes
 	$effect(() => {
-		if (showImportDialog) {
-			importedThemes = getImportedThemes();
-		}
+		importedThemes = getImportedThemes();
 	});
 
 	// Import theme functions
@@ -157,8 +161,62 @@
 		{ id: 'about', label: 'About', icon: Info, color: 'pearl', accent: 'var(--gem-pearl)' }
 	] as const;
 
+	function isSectionId(value: string): value is (typeof sections)[number]['id'] {
+		return sections.some((section) => section.id === value);
+	}
+
+	function getSectionFromUrl(): (typeof sections)[number]['id'] {
+		const section = page.url.searchParams.get('section');
+		return section && isSectionId(section) ? section : 'appearance';
+	}
+
+	function getSectionMeta(sectionId: (typeof sections)[number]['id']) {
+		switch (sectionId) {
+			case 'appearance':
+				return 'Themes and imported palettes';
+			case 'compendium':
+				return 'Browsing behavior and layout';
+			case 'data':
+				return 'Caches, storage, and sync';
+			case 'account':
+				return 'Identity and session details';
+			case 'about':
+				return 'Build and project information';
+		}
+	}
+
+	function getSectionSummary(sectionId: (typeof sections)[number]['id']) {
+		switch (sectionId) {
+			case 'appearance':
+				return 'Adjust the visual language of the app and manage imported themes.';
+			case 'compendium':
+				return 'Set how your archives behave while browsing and loading content.';
+			case 'data':
+				return 'Control cache strategy, local cleanup, and device-specific persistence.';
+			case 'account':
+				return 'Review your identity, session lifetime, and sign-out access.';
+			case 'about':
+				return 'Check release details and project metadata.';
+		}
+	}
+
 	// Track active section - now bound to Tabs
-	let activeSection = $state('appearance');
+	let activeSection = $state<(typeof sections)[number]['id']>(getSectionFromUrl());
+
+	function updateSectionUrl(sectionId: (typeof sections)[number]['id']) {
+		const nextUrl = new URL(page.url);
+		if (sectionId === 'appearance') {
+			nextUrl.searchParams.delete('section');
+		} else {
+			nextUrl.searchParams.set('section', sectionId);
+		}
+
+		const nextPath = `${nextUrl.pathname}${nextUrl.search}`;
+		const currentPath = `${page.url.pathname}${page.url.search}`;
+		if (nextPath === currentPath) return;
+
+		replaceState(nextPath, page.state);
+	}
 
 	// Client-side cache clearing functions
 	async function clearCache() {
@@ -272,6 +330,13 @@
 	}
 
 	const sessionInfo = $derived(getSessionInfo());
+	const activeSectionConfig = $derived(
+		sections.find((section) => section.id === activeSection) ?? sections[0]
+	);
+	const syncIntervalLabel = $derived(
+		SYNC_INTERVAL_OPTIONS.find((option) => option.value === userSettingsStore.data.autoSyncInterval)
+			?.label ?? 'Manual only'
+	);
 
 	// Format creation date
 	function formatDate(timestamp: number) {
@@ -283,52 +348,112 @@
 			minute: '2-digit'
 		});
 	}
+
+	$effect(() => {
+		updateSectionUrl(activeSection);
+	});
+
+	onMount(() => {
+		const handlePopState = () => {
+			activeSection = getSectionFromUrl();
+		};
+
+		window.addEventListener('popstate', handlePopState);
+
+		return () => {
+			window.removeEventListener('popstate', handlePopState);
+		};
+	});
 </script>
 
 <svelte:head>
 	<title>Settings - Grimar</title>
 </svelte:head>
 
-<div class="settings-workspace min-h-screen p-6">
-	<!-- Page Header -->
-	<header class="mb-6 flex items-center gap-4">
-		<div class="rounded-xl border border-[var(--color-accent)]/30 bg-[var(--color-accent)]/10 p-3">
-			<Cog
-				class="size-7 text-[var(--color-accent)] drop-shadow-[0_0_8px_var(--color-accent-glow)]"
-			/>
-		</div>
-		<div>
-			<h1 class="text-holo text-3xl font-black tracking-tight text-[var(--color-text-primary)]">
-				Settings
-			</h1>
-			<p class="text-sm text-[var(--color-text-secondary)]">Configure your grimoire experience</p>
-		</div>
-	</header>
+<div class="settings-workspace min-h-screen p-4 sm:p-6">
+	<div class="mx-auto flex max-w-[1400px] flex-col gap-8">
+		<header class="settings-hero">
+			<div class="settings-hero__copy">
+				<div class="settings-hero__eyebrow">
+					<div class="settings-hero__seal">
+						<Cog class="size-7" />
+					</div>
+					<span>Control nexus</span>
+				</div>
+				<div class="space-y-3">
+					<h1
+						class="text-holo text-4xl font-black tracking-tight text-[var(--color-text-primary)] sm:text-5xl"
+					>
+						Settings
+					</h1>
+					<p class="max-w-2xl text-sm leading-6 text-[var(--color-text-secondary)] sm:text-base">
+						Tune the look, cache behavior, and account state of your grimoire from one consistent
+						command deck.
+					</p>
+				</div>
+			</div>
 
-	<!-- Two-Column Layout with Tabs -->
-	<div class="settings-container">
-		<!-- Sidebar Navigation (Tabs) -->
-		<aside class="settings-sidebar">
-			<Tabs.Root bind:value={activeSection}>
-				<nav class="settings-nav">
-					{#each sections as section (section.id)}
-						<Tabs.Trigger value={section.id} class="settings-nav-item">
-							<span class="nav-icon">
-								<section.icon class="size-5" style="color: {section.accent}" />
-							</span>
-							<span class="nav-label">{section.label}</span>
-						</Tabs.Trigger>
-					{/each}
-				</nav>
-			</Tabs.Root>
-		</aside>
+			<div class="settings-hero__meta">
+				<div class="settings-hero__active">
+					<div class="settings-hero__active-icon" style="color: {activeSectionConfig.accent}">
+						<activeSectionConfig.icon class="size-6" />
+					</div>
+					<div>
+						<p class="settings-hero__label">Active section</p>
+						<p class="settings-hero__value">{activeSectionConfig.label}</p>
+					</div>
+				</div>
+				<div class="settings-hero__pills">
+					<div class="settings-hero__pill">
+						<span class="settings-hero__pill-label">Theme library</span>
+						<span class="settings-hero__pill-value">Curated + custom</span>
+					</div>
+					<div class="settings-hero__pill">
+						<span class="settings-hero__pill-label">Sync cadence</span>
+						<span class="settings-hero__pill-value">{syncIntervalLabel}</span>
+					</div>
+					<div class="settings-hero__pill">
+						<span class="settings-hero__pill-label">Account state</span>
+						<span class="settings-hero__pill-value">{user ? 'Signed in' : 'Guest mode'}</span>
+					</div>
+				</div>
+			</div>
+		</header>
 
-		<!-- Tab Content Panels -->
-		<main class="settings-main">
-			<Tabs.Root bind:value={activeSection}>
+		<Tabs.Root bind:value={activeSection} class="settings-container">
+			<aside class="settings-sidebar">
+				<div class="settings-rail">
+					<div class="settings-rail__header">
+						<p class="settings-rail__eyebrow">Sections</p>
+						<p class="settings-rail__title">Navigate the stack</p>
+					</div>
+
+					<nav class="settings-nav">
+						{#each sections as section (section.id)}
+							<Tabs.Trigger value={section.id} class="settings-nav-item">
+								<span class="nav-icon">
+									<section.icon class="size-5" style="color: {section.accent}" />
+								</span>
+								<span class="nav-label">
+									<span class="nav-label__title">{section.label}</span>
+									<span class="nav-label__meta">{getSectionMeta(section.id)}</span>
+								</span>
+							</Tabs.Trigger>
+						{/each}
+					</nav>
+
+					<div class="settings-sidebar-card">
+						<p class="settings-sidebar-card__label">Current focus</p>
+						<p class="settings-sidebar-card__title">{activeSectionConfig.label}</p>
+						<p class="settings-sidebar-card__body">{getSectionSummary(activeSectionConfig.id)}</p>
+					</div>
+				</div>
+			</aside>
+
+			<main class="settings-main">
 				<!-- 1. Appearance Section -->
 				<Tabs.Content value="appearance" class="settings-tab-content">
-					<section id="appearance">
+					<section id="appearance" class="settings-panel-frame">
 						<SettingsGroup
 							id="appearance"
 							title="Appearance"
@@ -403,7 +528,7 @@
 
 				<!-- 2. Compendium Section -->
 				<Tabs.Content value="compendium" class="settings-tab-content">
-					<section id="compendium">
+					<section id="compendium" class="settings-panel-frame">
 						<SettingsGroup
 							id="compendium"
 							title="Compendium"
@@ -414,7 +539,7 @@
 						>
 							<SettingsItem
 								label="Sync on Load"
-								description="Automatically sync compendium when page loads"
+								description="Automatically refresh compendium data when the app opens"
 								divider={false}
 							>
 								{#snippet control()}
@@ -425,7 +550,26 @@
 								{/snippet}
 							</SettingsItem>
 
-							<SettingsItem label="Offline Data" description="Enable caching for offline use">
+							<SettingsItem
+								label="Grid Density"
+								description="Choose how many archive cards can appear in a row on this device"
+							>
+								{#snippet control()}
+									<RadioCardGrid
+										name="gridMaxColumns"
+										options={GRID_MAX_COLUMNS_OPTIONS}
+										value={String(settingsStore.settings.gridMaxColumns)}
+										onchange={(value) => settingsStore.setGridMaxColumns(Number(value))}
+										columns={5}
+									/>
+								{/snippet}
+							</SettingsItem>
+
+							<SettingsItem
+								label="Offline Data"
+								description="Keep downloaded entries available when you lose connection"
+								divider={false}
+							>
 								{#snippet control()}
 									<Toggle
 										checked={userSettingsStore.data.offlineEnabled}
@@ -433,10 +577,25 @@
 									/>
 								{/snippet}
 							</SettingsItem>
+						</SettingsGroup>
+					</section></Tabs.Content
+				>
 
+				<!-- 3. Data & Sync Section -->
+				<Tabs.Content value="data" class="settings-tab-content">
+					<section id="data" class="settings-panel-frame">
+						<SettingsGroup
+							id="data"
+							title="Data & Sync"
+							description="Manage cache behavior, cleanup tools, and synchronization cadence"
+							icon={RefreshCw}
+							index={2}
+							accentColor="var(--gem-sapphire)"
+						>
 							<SettingsItem
 								label="Auto-Sync Interval"
-								description="How often to automatically sync data"
+								description="How often the app should refresh data in the background"
+								divider={false}
 							>
 								{#snippet control()}
 									<RadioCardGrid
@@ -515,7 +674,7 @@
 
 							<SettingsItem
 								label="Reset Settings"
-								description="Restore all settings to defaults"
+								description="Restore both synced and device-only preferences to their defaults"
 								divider={false}
 							>
 								{#snippet control()}
@@ -540,9 +699,9 @@
 					</section></Tabs.Content
 				>
 
-				<!-- 5. User & Account Section -->
+				<!-- 4. User & Account Section -->
 				<Tabs.Content value="account" class="settings-tab-content">
-					<section id="account">
+					<section id="account" class="settings-panel-frame">
 						<SettingsGroup
 							id="account"
 							title="User & Account"
@@ -650,9 +809,9 @@
 					</section></Tabs.Content
 				>
 
-				<!-- 6. About Section -->
+				<!-- 5. About Section -->
 				<Tabs.Content value="about" class="settings-tab-content">
-					<section id="about">
+					<section id="about" class="settings-panel-frame">
 						<SettingsGroup
 							id="about"
 							title="About"
@@ -705,8 +864,8 @@
 						</SettingsGroup>
 					</section></Tabs.Content
 				>
-			</Tabs.Root>
-		</main>
+			</main></Tabs.Root
+		>
 	</div>
 
 	<!-- Theme Import Dialog -->

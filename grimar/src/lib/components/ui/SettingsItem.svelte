@@ -12,7 +12,7 @@
 	let { label, description, control, divider = true, class: className = '' }: Props = $props();
 </script>
 
-<div class="runic-row {divider ? 'runic-divider' : ''} {className} w-full py-4">
+<div class="runic-row {className} w-full" data-divider={divider}>
 	<div class="runic-text flex-1">
 		<span class="runic-label">{label}</span>
 		{#if description}
