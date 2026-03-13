@@ -59,6 +59,11 @@ function getRecord(value: unknown): Record<string, unknown> | null {
 	return value as Record<string, unknown>;
 }
 
+function buildOpen5eAssetProxyPath(path: string, search = ''): string {
+	const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+	return `/api/assets/open5e${normalizedPath}${search}`;
+}
+
 async function setMarkdown(
 	target: Record<string, string>,
 	key: string,
@@ -133,11 +138,17 @@ async function buildMarkdownHtml(
 
 function resolveImageAssetUrl(fileUrl: unknown): string | null {
 	if (typeof fileUrl !== 'string' || fileUrl.length === 0) return null;
-	if (/^https?:\/\//i.test(fileUrl)) return fileUrl;
-
-	const origin = OPEN5E_API_BASE_URL.replace(/\/v2$/i, '');
 	try {
-		return new URL(fileUrl, `${origin}/`).toString();
+		if (/^https?:\/\//i.test(fileUrl)) {
+			const parsed = new URL(fileUrl);
+			const open5eOrigin = OPEN5E_API_BASE_URL.replace(/\/v2$/i, '');
+			if (parsed.origin === open5eOrigin) {
+				return buildOpen5eAssetProxyPath(parsed.pathname, parsed.search);
+			}
+			return parsed.toString();
+		}
+
+		return buildOpen5eAssetProxyPath(fileUrl);
 	} catch (error) {
 		console.warn('Unable to resolve compendium image asset URL', {
 			fileUrl,
