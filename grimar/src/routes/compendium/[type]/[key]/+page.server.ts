@@ -26,16 +26,24 @@ async function renderMarkdown(text: unknown): Promise<string | null> {
 		return cached;
 	}
 
-	const parsed = marked.parse(original);
-	const rendered = DOMPurify.sanitize(typeof parsed === 'string' ? parsed : await parsed);
-	markdownRenderCache.set(cacheKey, rendered);
-	if (markdownRenderCache.size > MAX_CACHE_ENTRIES) {
-		const oldestKey = markdownRenderCache.keys().next().value;
-		if (oldestKey) {
-			markdownRenderCache.delete(oldestKey);
+	try {
+		const parsed = marked.parse(original);
+		const rendered = DOMPurify.sanitize(typeof parsed === 'string' ? parsed : await parsed);
+		markdownRenderCache.set(cacheKey, rendered);
+		if (markdownRenderCache.size > MAX_CACHE_ENTRIES) {
+			const oldestKey = markdownRenderCache.keys().next().value;
+			if (oldestKey) {
+				markdownRenderCache.delete(oldestKey);
+			}
 		}
+		return rendered;
+	} catch (error) {
+		console.error('Failed to render markdown for compendium detail page', {
+			error,
+			textPreview: original.slice(0, 200)
+		});
+		return null;
 	}
-	return rendered;
 }
 
 function getRecord(value: unknown): Record<string, unknown> | null {
