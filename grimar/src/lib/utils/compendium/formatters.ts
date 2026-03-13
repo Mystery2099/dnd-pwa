@@ -132,10 +132,12 @@ export const DISPLAY_FIELDS: Record<string, string[]> = {
 
 export const EXCLUDE_FIELDS = [
 	'key',
+	'url',
 	'name',
 	'desc',
 	'description',
 	'descriptions',
+	'document',
 	'document_key',
 	'document_name',
 	'gamesystem_key',
@@ -144,6 +146,7 @@ export const EXCLUDE_FIELDS = [
 	'publisher_name',
 	'created_at',
 	'updated_at',
+	'has_prerequisite',
 	'features',
 	'benefits',
 	'properties',

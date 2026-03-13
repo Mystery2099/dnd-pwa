@@ -72,7 +72,7 @@
 					<Badge variant="outline" class="text-xs tracking-[0.18em] uppercase">
 						{label}
 					</Badge>
-					{#if source}
+					{#if source && source !== 'open5e'}
 						<Badge variant="outline" class="text-xs">{source}</Badge>
 					{/if}
 				</div>

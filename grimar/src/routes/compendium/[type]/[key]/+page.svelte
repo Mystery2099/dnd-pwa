@@ -148,6 +148,26 @@
 		return getNonEmptyString(image.description) ?? getNonEmptyString(image.altText);
 	}
 
+	function getDetailValue(key: string, value: unknown): unknown {
+		if (key !== 'prerequisite') {
+			return value;
+		}
+
+		if (typeof value === 'string') {
+			return value.trim().length > 0 ? value : 'None';
+		}
+
+		if (value === null || value === undefined) {
+			return 'None';
+		}
+
+		if (Array.isArray(value) && value.length === 0) {
+			return 'None';
+		}
+
+		return value;
+	}
+
 	function getAbilityScoreEntries(value: unknown): Array<[string, number]> {
 		if (!value || typeof value !== 'object' || Array.isArray(value)) {
 			return [];
@@ -223,7 +243,7 @@
 									<Badge variant="outline" class="text-xs tracking-[0.18em] uppercase">
 										{data.config.label}
 									</Badge>
-									{#if item.source}
+									{#if item.source && item.source !== 'open5e'}
 										<Badge variant="outline" class="text-xs">{item.source}</Badge>
 									{/if}
 								</div>
@@ -598,7 +618,7 @@
 					<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Benefits</h2>
 					<ul class="list-inside list-disc space-y-2 text-[var(--color-text-secondary)]">
 						{#each getBenefits(itemData.benefits) as _benefit, index (index)}
-							<li class="prose prose-invert prose-sm max-w-none">
+							<li class="prose prose-invert prose-sm max-w-none [&>p]:m-0">
 								<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 								{@html markdownAt(`benefits.${index}.desc`)}
 							</li>
@@ -826,7 +846,7 @@
 									{formatFieldName(key)}
 								</dt>
 								<dd class="mt-1 text-sm text-[var(--color-text-primary)]">
-									<StructuredValue {value} />
+									<StructuredValue value={getDetailValue(key, value)} />
 								</dd>
 							</div>
 						{/each}
