@@ -92,7 +92,6 @@ export const DISPLAY_FIELDS: Record<string, string[]> = {
 		'school',
 		'casting_time',
 		'duration',
-		'range',
 		'range_text',
 		'concentration',
 		'ritual',
@@ -107,8 +106,7 @@ export const DISPLAY_FIELDS: Record<string, string[]> = {
 		'saving_throw_ability',
 		'attack_roll',
 		'damage_roll',
-		'damage_types',
-		'classes'
+		'damage_types'
 	],
 	creatures: [
 		'type',
