@@ -5,7 +5,6 @@ import { getItem, getRelatedImages } from '$lib/server/repositories/compendium';
 import type { CompendiumType } from '$lib/server/db/schema';
 import { OPEN5E_API_BASE_URL } from '$lib/server/providers/open5e-config';
 import { marked } from 'marked';
-import DOMPurify from 'isomorphic-dompurify';
 
 marked.setOptions({ gfm: true, breaks: true });
 
@@ -27,8 +26,8 @@ async function renderMarkdown(text: unknown): Promise<string | null> {
 	}
 
 	try {
-		const parsed = marked.parse(original);
-		const rendered = DOMPurify.sanitize(typeof parsed === 'string' ? parsed : await parsed);
+		const parsed = marked.parse(escapeHtml(original));
+		const rendered = typeof parsed === 'string' ? parsed : await parsed;
 		markdownRenderCache.set(cacheKey, rendered);
 		if (markdownRenderCache.size > MAX_CACHE_ENTRIES) {
 			const oldestKey = markdownRenderCache.keys().next().value;
@@ -44,6 +43,15 @@ async function renderMarkdown(text: unknown): Promise<string | null> {
 		});
 		return null;
 	}
+}
+
+function escapeHtml(value: string): string {
+	return value
+		.replaceAll('&', '&amp;')
+		.replaceAll('<', '&lt;')
+		.replaceAll('>', '&gt;')
+		.replaceAll('"', '&quot;')
+		.replaceAll("'", '&#39;');
 }
 
 function getRecord(value: unknown): Record<string, unknown> | null {
