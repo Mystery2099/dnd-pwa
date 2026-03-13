@@ -1,12 +1,18 @@
 import { fireEvent, render, screen } from '@testing-library/svelte';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import ThemeCardSelector from './ThemeCardSelector.svelte';
 import { setTheme } from '$lib/core/client/themeStore.svelte';
 
 describe('ThemeCardSelector', () => {
+	let getItemSpy: ReturnType<typeof vi.spyOn>;
+
 	beforeEach(() => {
-		localStorage.getItem = vi.fn().mockReturnValue(null);
+		getItemSpy = vi.spyOn(localStorage, 'getItem').mockReturnValue(null);
 		setTheme('amethyst');
+	});
+
+	afterEach(() => {
+		getItemSpy.mockRestore();
 	});
 
 	it('updates the active theme card immediately after switching themes', async () => {
