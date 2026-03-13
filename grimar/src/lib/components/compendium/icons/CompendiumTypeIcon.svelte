@@ -39,47 +39,53 @@
 		stroke-linecap="round"
 		stroke-linejoin="round"
 		stroke-width="2.5"
-		class={`text-[color-mix(in_srgb,var(--color-accent)_58%,var(--color-text-primary))] [filter:drop-shadow(0_0_0.7rem_color-mix(in_srgb,var(--color-accent)_12%,transparent))] ${className}`.trim()}
+		class={`text-[color-mix(in_srgb,var(--color-accent)_42%,var(--color-text-primary))] [filter:drop-shadow(0_0_0.55rem_color-mix(in_srgb,var(--color-accent)_16%,transparent))] ${className}`.trim()}
 		aria-hidden="true"
 	>
 		<circle
 			cx="32"
 			cy="32"
 			r="23"
-			class="fill-[color-mix(in_srgb,var(--color-accent)_15%,transparent)] stroke-none"
+			class="fill-[color-mix(in_srgb,var(--color-accent)_24%,transparent)] stroke-none"
 		></circle>
 		<circle
 			cx="32"
 			cy="32"
 			r="23"
-			class="fill-none stroke-[color-mix(in_srgb,var(--color-border-hover)_78%,var(--color-border))]"
+			class="fill-none stroke-[color-mix(in_srgb,var(--color-text-primary)_22%,var(--color-border-hover))]"
 		></circle>
 
-		<g class="stroke-[color-mix(in_srgb,var(--color-text-primary)_84%,var(--color-accent))]">
+		<g class="stroke-[color-mix(in_srgb,var(--color-text-primary)_94%,var(--color-accent))]">
 			{#if normalizedType === 'species'}
 				<circle cx="32" cy="24" r="7" class="fill-[color-mix(in_srgb,var(--color-accent)_13%,transparent)]"></circle>
 				<path d="M21 46c2.2-8 6.6-12 11-12s8.8 4 11 12"></path>
 			{:else if normalizedType === 'classes'}
-				<path d="M22 21l20 20"></path>
-				<path d="M42 21L22 41"></path>
-				<path d="M18 18l7 3-4 4-3-7z" class="fill-[color-mix(in_srgb,var(--color-accent)_13%,transparent)]"></path>
-				<path d="M46 18l-7 3 4 4 3-7z" class="fill-[color-mix(in_srgb,var(--color-accent)_13%,transparent)]"></path>
+				<path d="M22 44l14-22"></path>
+				<path d="M18 46l8-2-6-6-2 8z" class="fill-[color-mix(in_srgb,var(--color-accent)_13%,transparent)]"></path>
+				<path d="M42 18v22"></path>
+				<path d="M37 21c3-4 7-4 10 0" class="stroke-[var(--color-accent)]"></path>
 			{:else if normalizedType === 'subclasses'}
-				<path d="M32 17l12 5v10c0 8-5.7 14.8-12 17-6.3-2.2-12-9-12-17V22l12-5z"></path>
-				<path d="M32 24v15" class="stroke-[var(--color-accent)]"></path>
-				<path d="M24.5 31.5h15" class="stroke-[var(--color-accent)]"></path>
+				<circle cx="32" cy="39" r="4.5" class="fill-[color-mix(in_srgb,var(--color-accent)_13%,transparent)]"></circle>
+				<circle cx="22" cy="23" r="3"></circle>
+				<circle cx="42" cy="23" r="3"></circle>
+				<path d="M32 35V27"></path>
+				<path d="M32 27l-10-4"></path>
+				<path d="M32 27l10-4" class="stroke-[var(--color-accent)]"></path>
 			{:else if normalizedType === 'classfeatures' || normalizedType === 'classfeatureitems'}
 				<path d="M22 18h16l6 6v22H22V18z"></path>
 				<path d="M38 18v8h8"></path>
 				<path d="M27 31h10"></path>
 				<path d="M27 38h10" class="stroke-[var(--color-accent)]"></path>
 			{:else if normalizedType === 'backgrounds' || normalizedType === 'backgroundbenefits'}
-				<path d="M22 18h16l6 6v22H22V18z"></path>
-				<path d="M38 18v8h8"></path>
-				<path d="M27 31h10"></path>
-				<path d="M27 38h10"></path>
+				<path d="M24 18h14c4 4 5 6 5 10v18H21V28c0-4 1-6 3-10z"></path>
+				<path d="M27 18c-1 7-3 10-6 12" class="stroke-[var(--color-accent)]"></path>
+				<path d="M37 18c1 7 3 10 6 12" class="stroke-[var(--color-accent)]"></path>
+				<path d="M25 35c4-3 10-3 14 0"></path>
 			{:else if normalizedType === 'feats' || normalizedType === 'featbenefits'}
-				<path d="M32 18l4 9 10 1-7.5 6 2.5 10L32 39l-9 5 2.5-10L18 28l10-1 4-9z" class="fill-[color-mix(in_srgb,var(--color-accent)_13%,transparent)]"></path>
+				<circle cx="32" cy="32" r="14"></circle>
+				<path d="M32 22l2.8 5.8 6.2.8-4.5 4.2 1.1 6.2-5.6-3.1-5.6 3.1 1.1-6.2-4.5-4.2 6.2-.8z" class="fill-[color-mix(in_srgb,var(--color-accent)_13%,transparent)]"></path>
+				<path d="M21 27c-2 2.5-3 5.5-3 9"></path>
+				<path d="M43 27c2 2.5 3 5.5 3 9" class="stroke-[var(--color-accent)]"></path>
 			{:else if normalizedType === 'spellcastingoptions'}
 				<circle cx="32" cy="32" r="9"></circle>
 				<path d="M32 16v6" class="stroke-[var(--color-accent)]"></path>
@@ -106,12 +112,14 @@
 			{:else if normalizedType === 'armor'}
 				<path d="M32 17l12 5v10c0 8-5.7 14.8-12 17-6.3-2.2-12-9-12-17V22l12-5z" class="fill-[color-mix(in_srgb,var(--color-accent)_13%,transparent)]"></path>
 			{:else if normalizedType === 'items' || normalizedType === 'itemcategories'}
-				<rect x="20" y="22" width="24" height="20" rx="3" class="fill-[color-mix(in_srgb,var(--color-accent)_13%,transparent)]"></rect>
-				<path d="M26 22v-4h12v4"></path>
-				<path d="M20 31h24"></path>
+				<path d="M24 24c0-4 3.5-6 8-6s8 2 8 6c0 2-1 4-3 6l1 13H26l1-13c-2-2-3-4-3-6z" class="fill-[color-mix(in_srgb,var(--color-accent)_13%,transparent)]"></path>
+				<path d="M28 24h8"></path>
+				<path d="M32 18v8" class="stroke-[var(--color-accent)]"></path>
 			{:else if normalizedType === 'magicitems'}
-				<path d="M32 18l10 10-10 18-10-18 10-10z" class="fill-[color-mix(in_srgb,var(--color-accent)_13%,transparent)]"></path>
-				<path d="M26 28h12" class="stroke-[var(--color-accent)]"></path>
+				<path d="M24 43c5-3 10-9 12-16"></path>
+				<path d="M36 27l7-7"></path>
+				<path d="M21 46l6-3-3-6-3 9z" class="fill-[color-mix(in_srgb,var(--color-accent)_13%,transparent)]"></path>
+				<path d="M45 18l1.5 3 3.5.3-2.7 2.2.8 3.5-3.1-1.7-3.1 1.7.8-3.5-2.7-2.2 3.5-.3 1.5-3z" class="stroke-[var(--color-accent)]"></path>
 			{:else if normalizedType === 'itemrarities'}
 				<path d="M32 17l9 9-9 21-9-21 9-9z"></path>
 				<path d="M32 24v16" class="stroke-[var(--color-accent)]"></path>
@@ -133,12 +141,16 @@
 				<path d="M21 39c3.5-11 9-17 16-17 3 0 5.5 1 8 3" class="stroke-[var(--color-accent)]"></path>
 				<path d="M19 45c7-2 13-2 18 0 5-8 7-15 6-22" class="fill-[color-mix(in_srgb,var(--color-accent)_13%,transparent)]"></path>
 			{:else if normalizedType === 'rules'}
-				<path d="M22 18h18a4 4 0 014 4v24H26a4 4 0 00-4 4V18z" class="fill-[color-mix(in_srgb,var(--color-accent)_13%,transparent)]"></path>
-				<path d="M26 28h12"></path>
-				<path d="M26 35h12" class="stroke-[var(--color-accent)]"></path>
+				<path d="M24 41h18"></path>
+				<path d="M31 23l10 10"></path>
+				<rect x="22" y="39" width="8" height="4" rx="1" class="fill-[color-mix(in_srgb,var(--color-accent)_13%,transparent)]"></rect>
+				<path d="M37 17l7 7-6 6-7-7z" class="fill-[color-mix(in_srgb,var(--color-accent)_13%,transparent)]"></path>
 			{:else if normalizedType === 'rulesets'}
-				<path d="M18 24h22v18H18z"></path>
-				<path d="M24 20h22v18H24z" class="fill-[color-mix(in_srgb,var(--color-accent)_13%,transparent)]"></path>
+				<path d="M22 18h16a4 4 0 014 4v24H22z" class="fill-[color-mix(in_srgb,var(--color-accent)_13%,transparent)]"></path>
+				<path d="M26 18v28"></path>
+				<path d="M32 18v28" class="stroke-[var(--color-accent)]"></path>
+				<path d="M38 18v28"></path>
+				<path d="M42 22h3v16l-3 3" class="stroke-[var(--color-accent)]"></path>
 			{:else if normalizedType === 'languages'}
 				<path d="M20 24h20a8 8 0 018 8 8 8 0 01-8 8h-4l-8 7v-7h-8a8 8 0 01-8-8 8 8 0 018-8z" class="fill-[color-mix(in_srgb,var(--color-accent)_13%,transparent)]"></path>
 				<path d="M24 32h12"></path>
@@ -167,9 +179,9 @@
 				<path d="M32 22v20"></path>
 				<path d="M24 27l16 10" class="stroke-[var(--color-accent)]"></path>
 			{:else if normalizedType === 'publishers'}
-				<path d="M20 46V24l12-7 12 7v22"></path>
-				<path d="M26 46V32h12v14" class="fill-[color-mix(in_srgb,var(--color-accent)_13%,transparent)]"></path>
-				<path d="M24 26h16"></path>
+				<path d="M22 43c4-4 10-11 15-21"></path>
+				<path d="M37 22l5-5 5 5-5 5z" class="fill-[color-mix(in_srgb,var(--color-accent)_13%,transparent)]"></path>
+				<path d="M20 46c5-2 10-2 15 0" class="stroke-[var(--color-accent)]"></path>
 			{:else if normalizedType === 'licenses'}
 				<path d="M22 18h16l6 6v22H22V18z"></path>
 				<path d="M38 18v8h8"></path>
@@ -180,16 +192,19 @@
 				<circle cx="27" cy="28" r="3" class="fill-[var(--color-accent)] stroke-none"></circle>
 				<path d="M22 39l7-7 6 5 5-6 6 8" class="fill-[color-mix(in_srgb,var(--color-accent)_13%,transparent)]"></path>
 			{:else if normalizedType === 'services'}
-				<path d="M32 18l3 6 6 3-6 3-3 6-3-6-6-3 6-3 3-6z" class="fill-[color-mix(in_srgb,var(--color-accent)_13%,transparent)]"></path>
-				<circle cx="32" cy="39" r="7"></circle>
-				<path d="M32 35v8" class="stroke-[var(--color-accent)]"></path>
-				<path d="M28 39h8" class="stroke-[var(--color-accent)]"></path>
+				<path d="M22 42h20"></path>
+				<path d="M24 42c0-8 4-13 8-13s8 5 8 13" class="fill-[color-mix(in_srgb,var(--color-accent)_13%,transparent)]"></path>
+				<circle cx="32" cy="26" r="3" class="stroke-[var(--color-accent)]"></circle>
 			{:else if fallback}
-				<foreignObject x="14" y="14" width="36" height="36">
-					<div class="flex h-full w-full items-center justify-center text-[1.4rem] leading-none">
-						{fallback}
-					</div>
-				</foreignObject>
+				<text
+					x="32"
+					y="36"
+					text-anchor="middle"
+					class="fill-current text-[1.35rem] leading-none"
+					stroke="none"
+				>
+					{fallback}
+				</text>
 			{/if}
 		</g>
 	</svg>

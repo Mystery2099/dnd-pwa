@@ -63,28 +63,28 @@
 
 <style>
 	.compendium-icon {
-		color: color-mix(in srgb, var(--color-accent) 62%, var(--color-text-primary));
-		filter: drop-shadow(0 0 0.7rem color-mix(in srgb, var(--color-accent) 14%, transparent));
+		color: color-mix(in srgb, var(--color-accent) 48%, var(--color-text-primary));
+		filter: drop-shadow(0 0 0.6rem color-mix(in srgb, var(--color-accent) 18%, transparent));
 	}
 
 	.shell-fill {
-		fill: color-mix(in srgb, var(--color-accent) 18%, transparent);
+		fill: color-mix(in srgb, var(--color-accent) 24%, transparent);
 		stroke: none;
 	}
 
 	.shell-ring {
-		stroke: color-mix(in srgb, var(--color-border-hover) 82%, var(--color-border));
+		stroke: color-mix(in srgb, var(--color-text-primary) 26%, var(--color-border-hover));
 	}
 
 	.glyph {
-		stroke: color-mix(in srgb, var(--color-text-primary) 84%, var(--color-accent));
+		stroke: color-mix(in srgb, var(--color-text-primary) 94%, var(--color-accent));
 	}
 
 	.glyph-fill {
-		fill: color-mix(in srgb, var(--color-accent) 18%, transparent);
+		fill: color-mix(in srgb, var(--color-accent) 24%, transparent);
 	}
 
 	.glyph-accent {
-		stroke: var(--color-accent);
+		stroke: color-mix(in srgb, var(--color-accent) 82%, var(--color-text-primary));
 	}
 </style>

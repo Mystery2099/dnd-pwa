@@ -83,33 +83,33 @@
 
 <style>
 	.compendium-icon {
-		color: color-mix(in srgb, var(--color-accent) 68%, var(--color-text-primary));
-		filter: drop-shadow(0 0 0.8rem color-mix(in srgb, var(--color-accent) 14%, transparent));
+		color: color-mix(in srgb, var(--color-accent) 52%, var(--color-text-primary));
+		filter: drop-shadow(0 0 0.65rem color-mix(in srgb, var(--color-accent) 18%, transparent));
 	}
 
 	.shell-fill {
-		fill: color-mix(in srgb, var(--color-accent) 16%, transparent);
+		fill: color-mix(in srgb, var(--color-accent) 24%, transparent);
 		stroke: none;
 	}
 
 	.shell-ring {
-		stroke: color-mix(in srgb, var(--color-border-hover) 80%, var(--color-border));
+		stroke: color-mix(in srgb, var(--color-text-primary) 26%, var(--color-border-hover));
 	}
 
 	.glyph {
-		stroke: color-mix(in srgb, var(--color-text-primary) 86%, var(--color-accent));
+		stroke: color-mix(in srgb, var(--color-text-primary) 95%, var(--color-accent));
 	}
 
 	.glyph-fill {
-		fill: color-mix(in srgb, var(--color-accent) 15%, transparent);
+		fill: color-mix(in srgb, var(--color-accent) 24%, transparent);
 	}
 
 	.glyph-accent {
-		stroke: var(--color-accent);
+		stroke: color-mix(in srgb, var(--color-accent) 84%, var(--color-text-primary));
 	}
 
 	.glyph-accent-fill {
-		fill: var(--color-accent);
+		fill: color-mix(in srgb, var(--color-accent) 90%, var(--color-text-primary));
 		stroke: none;
 	}
 </style>
