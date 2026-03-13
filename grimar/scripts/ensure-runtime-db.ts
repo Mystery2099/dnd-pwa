@@ -1,8 +1,10 @@
 import type { Database } from 'bun:sqlite';
 import { existsSync, mkdirSync } from 'node:fs';
-import { dirname } from 'node:path';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const DATABASE_URL = process.env.DATABASE_URL ?? 'local.db';
+const scriptDir = dirname(fileURLToPath(import.meta.url));
+const DATABASE_URL = process.env.DATABASE_URL ?? resolve(scriptDir, '../local.db');
 
 type ColumnInfo = {
 	name: string;

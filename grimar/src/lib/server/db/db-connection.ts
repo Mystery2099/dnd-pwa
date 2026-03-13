@@ -23,10 +23,11 @@
 
 import * as schema from './schema';
 import { applyPragmas } from './db-config';
+import { DEFAULT_DATABASE_URL } from './default-path';
 import type { BunSQLiteDatabase } from 'drizzle-orm/bun-sqlite';
 import type { Database } from 'bun:sqlite';
 
-const DATABASE_URL = process.env.DATABASE_URL ?? 'local.db';
+const DATABASE_URL = process.env.DATABASE_URL ?? DEFAULT_DATABASE_URL;
 
 export type Db = BunSQLiteDatabase<typeof schema>;
 

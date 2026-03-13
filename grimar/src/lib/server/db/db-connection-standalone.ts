@@ -7,6 +7,7 @@
 import type { BunSQLiteDatabase } from 'drizzle-orm/bun-sqlite';
 import type { Database } from 'bun:sqlite';
 import * as schema from './schema';
+import { DEFAULT_DATABASE_URL } from './default-path';
 
 type Db = BunSQLiteDatabase<typeof schema>;
 
@@ -22,7 +23,7 @@ export async function getDbDirect(): Promise<Db> {
 	const { Database } = await import('bun:sqlite');
 	const { drizzle } = await import('drizzle-orm/bun-sqlite');
 
-	const url = process.env.DATABASE_URL || 'file:./local.db';
+	const url = process.env.DATABASE_URL || DEFAULT_DATABASE_URL;
 	const client = new Database(url);
 	_db = drizzle(client, { schema });
 
@@ -34,7 +35,7 @@ export async function getDbDirect(): Promise<Db> {
  */
 export async function getRawDbDirect(): Promise<Database> {
 	const { Database } = await import('bun:sqlite');
-	const url = process.env.DATABASE_URL || 'file:./local.db';
+	const url = process.env.DATABASE_URL || DEFAULT_DATABASE_URL;
 	return new Database(url);
 }
 

@@ -16,9 +16,14 @@
 
 import { Database } from 'bun:sqlite';
 import { drizzle } from 'drizzle-orm/bun-sqlite';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import * as schema from '../src/lib/server/db/schema';
 import { applyPragmas } from '../src/lib/server/db/db-config';
 import { getFtsStats, initFts, populateFtsFromDatabase } from '../src/lib/server/db/db-fts';
+
+const scriptDir = dirname(fileURLToPath(import.meta.url));
+const DEFAULT_DATABASE_URL = resolve(scriptDir, '../local.db');
 
 // Parse arguments
 const args = process.argv.slice(2);
@@ -46,7 +51,7 @@ async function main() {
 	console.log('Rebuilding compendium FTS index...\n');
 
 	// Initialize database connection directly
-	const dbPath = process.env.DATABASE_URL?.trim() || './local.db';
+	const dbPath = process.env.DATABASE_URL?.trim() || DEFAULT_DATABASE_URL;
 	if (verbose) console.log(`Database: ${dbPath}`);
 
 	const sqlite = new Database(dbPath);

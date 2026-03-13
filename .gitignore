@@ -29,6 +29,11 @@ opencode.json
 npm-debug.log*
 logs/
 
+# SQLite
+*.db
+*.db-wal
+*.db-shm
+
 # IDE / Editor
 .serena/
 .agents/
