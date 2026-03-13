@@ -46,6 +46,7 @@ This document describes the implemented product shape, not older roadmap ideas.
 - `/characters`
 - `/compendium`
 - `/compendium/[type]`
+- `/compendium/[type]/[key]`
 - `/homebrew`
 - `/homebrew/new`
 - `/homebrew/import`
@@ -141,8 +142,6 @@ bun run reindex-fts
 Workspace-only commands are available in [`grimar/package.json`](/home/mystery/misc-projects/dnd-pwa/grimar/package.json):
 
 ```bash
-bun run --cwd grimar perf:budgets
-bun run --cwd grimar perf:check
 bun run --cwd grimar db:seed
 ```
 
@@ -153,6 +152,7 @@ Playwright E2E runs use a dedicated seeded SQLite database created during global
 Documented or inferred from current code:
 
 - `DATABASE_URL`
+- `NODE_ENV`
 - `VITE_MOCK_USER`
 - `OPEN5E_API_BASE_URL`
 - `OPEN5E_SYNC_BATCH_SIZE`
@@ -164,7 +164,8 @@ Documented or inferred from current code:
 - `AUTHENTIK_CLIENT_SECRET`
 - `AUTHENTIK_REDIRECT_URI`
 - `SESSION_ENCRYPTION_KEY`
-- `NODE_ENV`
+
+The checked-in `.env.example` focuses on local development. `ADMIN_GROUPS`, `ADMIN_SYNC_TOKEN`, and `SESSION_ENCRYPTION_KEY` are supported in code but expected to be provided by the deployment environment when needed.
 
 ## Current Gaps
 

@@ -35,10 +35,12 @@ The root `package.json` proxies the common lifecycle, quality, test, and databas
 
 - `/` public landing page; redirects to `/dashboard` when authenticated
 - `/login` login screen
+- `/auth/login`, `/auth/callback`, `/auth/logout` auth flow endpoints
 - `/dashboard` authenticated overview page
 - `/characters` character management
 - `/compendium` compendium landing
 - `/compendium/[type]` compendium type listing
+- `/compendium/[type]/[key]` compendium detail page
 - `/homebrew` homebrew listing
 - `/homebrew/new` new homebrew entry
 - `/homebrew/import` homebrew import workflow
@@ -91,8 +93,6 @@ bun run reindex-fts
 Workspace-only commands that exist in [`grimar/package.json`](/home/mystery/misc-projects/dnd-pwa/grimar/package.json) but are not proxied at the repo root:
 
 ```bash
-bun run --cwd grimar perf:budgets
-bun run --cwd grimar perf:check
 bun run --cwd grimar db:seed
 ```
 
@@ -111,6 +111,7 @@ Start from [`grimar/.env.example`](/home/mystery/misc-projects/dnd-pwa/grimar/.e
 Common variables:
 
 - `DATABASE_URL`
+- `NODE_ENV`
 - `VITE_MOCK_USER`
 - `OPEN5E_API_BASE_URL`
 - `OPEN5E_SYNC_BATCH_SIZE`
@@ -122,6 +123,8 @@ Common variables:
 - `AUTHENTIK_CLIENT_SECRET`
 - `AUTHENTIK_REDIRECT_URI`
 - `SESSION_ENCRYPTION_KEY`
+
+The checked-in `.env.example` covers the core local-dev values. `ADMIN_GROUPS`, `ADMIN_SYNC_TOKEN`, and `SESSION_ENCRYPTION_KEY` are also supported by the app and are typically added per deployment.
 
 `SESSION_ENCRYPTION_KEY` is required in production. In development, the server falls back to a temporary key if it is unset.
 
