@@ -217,8 +217,8 @@
 					/>
 				{:else}
 					<div>
-						<div class="flex items-start justify-between gap-4">
-							<div>
+						<div class="flex items-start justify-between gap-6">
+							<div class="min-w-0 flex-1">
 								<div class="mb-3 flex flex-wrap items-center gap-2">
 									<Badge variant="outline" class="text-xs tracking-[0.18em] uppercase">
 										{data.config.label}
@@ -245,7 +245,49 @@
 									</p>
 								{/if}
 							</div>
-							<div class="text-4xl">{data.config.icon}</div>
+							{#if data.type === 'conditions' && featuredRelatedImage}
+								<a
+									href={`/compendium/images/${featuredRelatedImage.key}`}
+									class="group hidden shrink-0 lg:block"
+								>
+									<div
+										class="relative w-40 overflow-hidden rounded-[2rem] border border-accent/30 bg-linear-to-br from-white via-white to-white/88 p-4"
+										style={`box-shadow:
+											inset 0 0 0 1px color-mix(in srgb, var(--color-accent) 18%, transparent),
+											inset 0 1rem 1.75rem color-mix(in srgb, white 55%, transparent),
+											0 1rem 2.5rem color-mix(in srgb, var(--color-accent) 14%, transparent);`}
+									>
+										<div
+											class="pointer-events-none absolute inset-3 rounded-[1.5rem] border border-[var(--color-border)]/70"
+										></div>
+										{#if featuredRelatedImage.assetUrl}
+											<img
+												src={featuredRelatedImage.assetUrl}
+												alt={featuredRelatedImage.altText ?? featuredRelatedImage.name}
+												class="relative z-10 aspect-square w-full object-contain transition-transform duration-300 group-hover:scale-[1.05]"
+												loading="lazy"
+											/>
+										{/if}
+									</div>
+									<div class="mt-3 flex items-center justify-between gap-3 px-1">
+										<div class="min-w-0">
+											<p
+												class="text-[11px] font-medium tracking-[0.18em] text-[var(--color-text-muted)] uppercase"
+											>
+												{getImageKindText(featuredRelatedImage.assetUrl)}
+											</p>
+											<p class="truncate text-sm text-[var(--color-text-secondary)]">
+												{featuredRelatedImage.name}
+											</p>
+										</div>
+										<span class="text-xs text-accent transition-colors group-hover:text-accent/80">
+											Open
+										</span>
+									</div>
+								</a>
+							{:else}
+								<div class="text-4xl">{data.config.icon}</div>
+							{/if}
 						</div>
 
 						{#if data.type === 'spells' && itemData}
@@ -296,6 +338,43 @@
 									<Badge variant="outline">Attributed</Badge>
 								{/if}
 							</div>
+						{:else if data.type === 'conditions' && featuredRelatedImage}
+							<div class="mt-5 flex flex-wrap gap-2">
+								<Badge variant="solid">{getImageKindText(featuredRelatedImage.assetUrl)}</Badge>
+								<Badge variant="outline">Linked art</Badge>
+							</div>
+							<a
+								href={`/compendium/images/${featuredRelatedImage.key}`}
+								class="group mt-5 block rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/30 p-3 transition-colors hover:border-accent/40 lg:hidden"
+							>
+								<div class="flex items-center gap-3">
+									<div
+										class="shrink-0 overflow-hidden rounded-xl border border-[var(--color-border)] bg-linear-to-br from-white via-white to-white/88 p-2"
+									>
+										{#if featuredRelatedImage.assetUrl}
+											<img
+												src={featuredRelatedImage.assetUrl}
+												alt={featuredRelatedImage.altText ?? featuredRelatedImage.name}
+												class="h-14 w-14 object-contain transition-transform duration-300 group-hover:scale-[1.05]"
+												loading="lazy"
+											/>
+										{/if}
+									</div>
+									<div class="min-w-0 flex-1">
+										<p
+											class="text-[11px] font-medium tracking-[0.18em] text-[var(--color-text-muted)] uppercase"
+										>
+											Related image
+										</p>
+										<p class="truncate font-medium text-[var(--color-text-primary)]">
+											{featuredRelatedImage.name}
+										</p>
+									</div>
+									<span class="text-sm text-accent transition-colors group-hover:text-accent/80">
+										Open
+									</span>
+								</div>
+							</a>
 						{/if}
 					</div>
 				{/if}
@@ -417,7 +496,7 @@
 				</div>
 			{/if}
 
-			{#if data.type !== 'images' && featuredRelatedImage && data.type !== 'creatures'}
+			{#if data.type !== 'images' && featuredRelatedImage && data.type !== 'creatures' && data.type !== 'conditions'}
 				<div class="border-b border-[var(--color-border)] p-6">
 					<div
 						class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/20 p-4"

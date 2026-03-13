@@ -168,6 +168,54 @@ type RelatedImage = {
 	attribution: string | null;
 };
 
+type RelatedImageRecord = {
+	url?: unknown;
+	key?: unknown;
+	name?: unknown;
+	file_url?: unknown;
+	alt_text?: unknown;
+	attribution?: unknown;
+};
+
+function extractKeyFromUrl(url: string): string | null {
+	try {
+		const parsed = new URL(url);
+		const parts = parsed.pathname.split('/').filter(Boolean);
+		return parts.at(-1) ?? null;
+	} catch {
+		const parts = url.split('/').filter(Boolean);
+		return parts.at(-1) ?? null;
+	}
+}
+
+function buildEmbeddedConditionImage(
+	itemData: Record<string, unknown>,
+	itemName: string,
+	documentName: string | null
+): RelatedImage | null {
+	const icon = getRecord(itemData.icon) as RelatedImageRecord | null;
+	if (!icon) return null;
+
+	const assetUrl = resolveImageAssetUrl(icon.file_url);
+	if (!assetUrl) return null;
+
+	const key =
+		(typeof icon.key === 'string' && icon.key.trim()) ||
+		(typeof icon.url === 'string' && extractKeyFromUrl(icon.url)) ||
+		null;
+	if (!key) return null;
+
+	return {
+		key,
+		name: typeof icon.name === 'string' && icon.name.trim() ? icon.name : itemName,
+		documentName,
+		description: null,
+		assetUrl,
+		altText: typeof icon.alt_text === 'string' ? icon.alt_text : null,
+		attribution: typeof icon.attribution === 'string' ? icon.attribution : null
+	};
+}
+
 function sanitizePageData(value: unknown): unknown {
 	if (value === null || value === undefined) return value;
 	if (value instanceof Date) return value;
@@ -203,7 +251,7 @@ export const load: PageServerLoad = async ({ params }) => {
 	const markdownHtml = await buildMarkdownHtml(itemData, item.description);
 	const imageAssetUrl = type === 'images' ? resolveImageAssetUrl(itemData.file_url) : null;
 	const relatedImagesRaw = await getRelatedImages(itemType, item.name);
-	const relatedImages: RelatedImage[] = relatedImagesRaw.map((image) => {
+	const relatedImagesFromCompendium: RelatedImage[] = relatedImagesRaw.map((image) => {
 		const imageData = (image.data ?? {}) as Record<string, unknown>;
 		return {
 			key: image.key,
@@ -215,6 +263,14 @@ export const load: PageServerLoad = async ({ params }) => {
 			attribution: typeof imageData.attribution === 'string' ? imageData.attribution : null
 		};
 	});
+	const embeddedConditionImage =
+		type === 'conditions' ? buildEmbeddedConditionImage(itemData, item.name, item.documentName) : null;
+	const relatedImages = embeddedConditionImage
+		? [
+				embeddedConditionImage,
+				...relatedImagesFromCompendium.filter((image) => image.key !== embeddedConditionImage.key)
+			]
+		: relatedImagesFromCompendium;
 
 	return {
 		type,
