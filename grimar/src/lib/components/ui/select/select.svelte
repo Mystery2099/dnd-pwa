@@ -60,16 +60,17 @@
 	<SelectPrimitive.Portal>
 		<SelectPrimitive.Content
 			class={cn(
-				'relative z-50 min-w-[200px] overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] shadow-lg',
+				'relative z-50 min-w-[200px] overflow-hidden rounded-xl border border-[var(--color-border)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_94%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-card)_96%,var(--color-bg-canvas)))] shadow-[0_1.2rem_2.75rem_color-mix(in_srgb,var(--color-shadow)_34%,transparent),inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_16%,transparent),0_0_0_1px_color-mix(in_srgb,var(--color-border)_92%,transparent)] backdrop-blur-xl',
 				contentClass
 			)}
 		>
-			<SelectPrimitive.Viewport class="max-h-[300px] overflow-y-auto p-1">
+			<div class="pointer-events-none absolute inset-x-3 top-0 h-px bg-linear-to-r from-transparent via-[color-mix(in_srgb,var(--color-text-primary)_32%,transparent)] to-transparent"></div>
+			<SelectPrimitive.Viewport class="max-h-[300px] overflow-y-auto p-1.5">
 				{#each options as option (option.value)}
 					<SelectPrimitive.Item
 						value={option.value}
 						disabled={option.disabled}
-						class="relative flex cursor-pointer items-center rounded-lg px-3 py-2 text-sm text-[var(--color-text-primary)] transition-colors outline-none select-none hover:bg-[var(--color-accent)]/10 focus:bg-[var(--color-accent)]/20 disabled:pointer-events-none disabled:opacity-50 data-[state=checked]:bg-[var(--color-accent)]/15 data-[state=checked]:text-[var(--color-accent)]"
+						class="relative flex cursor-pointer items-center rounded-lg px-3 py-2 text-sm text-[var(--color-text-primary)] transition-colors outline-none select-none hover:bg-[color-mix(in_srgb,var(--color-accent)_14%,transparent)] focus:bg-[color-mix(in_srgb,var(--color-accent)_20%,transparent)] disabled:pointer-events-none disabled:opacity-50 data-[state=checked]:bg-[color-mix(in_srgb,var(--color-accent)_18%,transparent)] data-[state=checked]:text-[var(--color-accent)]"
 					>
 						{#snippet children({ selected })}
 							{#if selected}

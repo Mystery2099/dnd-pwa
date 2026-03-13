@@ -379,7 +379,9 @@
 						<span class="text-4xl">{config.icon}</span>
 						{config.plural}
 					</h1>
-					<p class="mt-2 max-w-2xl text-[var(--color-text-secondary)]">{config.description}</p>
+					<p class="mt-2 max-w-2xl text-[color-mix(in_srgb,var(--color-text-primary)_72%,var(--color-text-secondary))]">
+						{config.description}
+					</p>
 					<div class="mt-5 grid gap-3 sm:grid-cols-3">
 						<div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/50 px-4 py-3">
 							<p class="text-[0.68rem] font-medium tracking-[0.18em] text-[var(--color-text-muted)] uppercase">
@@ -421,7 +423,7 @@
 			>
 				<div class="mb-5 flex items-start justify-between gap-4">
 					<div>
-						<p class="text-[0.68rem] font-medium tracking-[0.2em] text-[var(--color-text-muted)] uppercase">
+						<p class="text-[0.68rem] font-medium tracking-[0.2em] text-[color-mix(in_srgb,var(--color-text-primary)_52%,var(--color-text-muted))] uppercase">
 							Refine Shelf
 						</p>
 						<h2 class="mt-2 text-xl font-semibold text-[var(--color-text-primary)]">Filters</h2>
@@ -514,10 +516,10 @@
 			<section class="space-y-6">
 				<div class="flex flex-wrap items-end justify-between gap-3">
 					<div>
-						<p class="text-[0.72rem] font-medium tracking-[0.2em] text-[var(--color-text-muted)] uppercase">
+						<p class="text-[0.72rem] font-medium tracking-[0.2em] text-[color-mix(in_srgb,var(--color-text-primary)_52%,var(--color-text-muted))] uppercase">
 							Browse Results
 						</p>
-						<p class="mt-1 text-sm text-[var(--color-text-secondary)]">
+						<p class="mt-1 text-sm text-[color-mix(in_srgb,var(--color-text-primary)_70%,var(--color-text-secondary))]">
 							Each card is optimized for quick triage before you open the full record.
 						</p>
 					</div>
@@ -555,16 +557,16 @@
 				<div use:prefetchOnVisible={item.key} class="h-full w-full">
 					<SurfaceCard
 						href="/compendium/{data.type}/{item.key}"
-						class="group h-full w-full rounded-[1.6rem] border border-[var(--color-border)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_84%,transparent),color-mix(in_srgb,var(--color-bg-primary)_96%,transparent))] shadow-[0_1.25rem_3rem_color-mix(in_srgb,var(--color-shadow)_14%,transparent)]"
+						class="group h-full w-full rounded-[1.6rem] border border-[var(--color-border)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_84%,transparent),color-mix(in_srgb,var(--color-bg-primary)_96%,transparent))] shadow-[0_1.35rem_3.1rem_color-mix(in_srgb,var(--color-shadow)_18%,transparent),inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent)]"
 						onmouseenter={() => handleItemPrefetch(item.key)}
 						onfocusin={() => handleItemPrefetch(item.key)}
 					>
-						<div class="relative p-5">
+						<div class="relative p-4.5">
 							<div class="pointer-events-none absolute top-3 right-4 text-4xl opacity-10">
 								{config.icon}
 							</div>
-							<div class="mb-3 flex items-center justify-between gap-3">
-								<p class="text-[0.68rem] font-medium tracking-[0.18em] text-[var(--color-text-muted)] uppercase">
+							<div class="mb-2.5 flex items-center justify-between gap-3">
+								<p class="text-[0.68rem] font-medium tracking-[0.18em] text-[color-mix(in_srgb,var(--color-text-primary)_48%,var(--color-text-muted))] uppercase">
 									{config.label}
 								</p>
 								{#if item.source && item.source !== 'open5e'}
@@ -577,12 +579,12 @@
 								{item.name}
 							</h3>
 							{#if getCardDescription(item, itemData)}
-								<p class="mt-3 line-clamp-3 min-h-[3.75rem] text-sm leading-6 text-[var(--color-text-secondary)]">
+								<p class="mt-2.5 line-clamp-3 min-h-[3.3rem] text-sm leading-5.5 text-[color-mix(in_srgb,var(--color-text-primary)_74%,var(--color-text-secondary))]">
 									{getCardDescription(item, itemData)}
 								</p>
 							{/if}
 							{#if data.type === 'spells' && itemData}
-								<div class="mt-4 flex flex-wrap gap-1.5">
+								<div class="mt-3.5 flex flex-wrap gap-1.5">
 									{#if itemData.level !== undefined}
 										<Badge variant="solid">
 											{itemData.level === 0 ? 'Cantrip' : `Level ${itemData.level}`}
@@ -593,33 +595,38 @@
 									{/if}
 								</div>
 							{:else if data.type === 'creatures' && itemData}
-								<div class="mt-4 flex flex-wrap gap-1.5">
+								<div class="mt-3.5 flex flex-wrap gap-1.5">
 									{#if itemData.challenge_rating_text}
-										<Badge variant="solid">CR {itemData.challenge_rating_text}</Badge>
+										<Badge
+											variant="solid"
+											class="bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-accent)_34%,var(--color-bg-overlay)),color-mix(in_srgb,var(--color-accent)_18%,var(--color-bg-card)))] px-2.5 py-1 text-[0.7rem] text-[var(--color-text-inverted)] shadow-[0_0.55rem_1.25rem_color-mix(in_srgb,var(--color-accent)_18%,transparent),inset_0_1px_0_color-mix(in_srgb,var(--color-text-inverted)_22%,transparent)]"
+										>
+											CR {itemData.challenge_rating_text}
+										</Badge>
 									{/if}
 									{#if itemData.type}
 										<Badge variant="outline">{getTypeLabel(itemData.type)}</Badge>
 									{/if}
 								</div>
 							{:else if (data.type === 'classes' || data.type === 'subclasses') && itemData}
-								<div class="mt-4 flex flex-wrap gap-1.5">
+								<div class="mt-3.5 flex flex-wrap gap-1.5">
 									{#if itemData.hit_dice}
 										<Badge variant="solid">d{itemData.hit_dice}</Badge>
 									{/if}
 								</div>
 							{:else if data.type === 'images' && itemData}
-								<div class="mt-4 flex flex-wrap gap-1.5">
+								<div class="mt-3.5 flex flex-wrap gap-1.5">
 									<Badge variant="solid">{getImageKindLabel(itemData.file_url)}</Badge>
 									{#if itemData.attribution}
-										<Badge variant="outline" class="max-w-full truncate text-xs opacity-80">
+										<Badge variant="outline" class="max-w-full truncate text-xs">
 											Artwork credit
 										</Badge>
 									{/if}
 								</div>
 							{/if}
 							{#if getDocumentLabel(item, itemData)}
-								<div class="mt-4 border-t border-[var(--color-border)]/70 pt-4">
-									<Badge variant="outline" class="max-w-full truncate text-xs opacity-70"
+								<div class="mt-3.5 border-t border-[var(--color-border)]/70 pt-3.5">
+									<Badge variant="outline" class="max-w-full truncate text-xs"
 										>{getDocumentLabel(item, itemData)}</Badge
 									>
 								</div>
@@ -635,7 +642,7 @@
 				>
 					<VirtualGrid
 						{items}
-						estimateRowHeight={190}
+						estimateRowHeight={178}
 						minCardWidth={260}
 						mobileMinCardWidth={170}
 						tabletMinCardWidth={220}

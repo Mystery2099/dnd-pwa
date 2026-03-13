@@ -34,7 +34,7 @@
 					<h2 class="mt-3 max-w-3xl text-3xl font-black tracking-tight text-[var(--color-text-primary)] md:text-[2.4rem]">
 						Every ruleset, creature dossier, spell ledger, and item archive in one navigable stack.
 					</h2>
-					<p class="mt-3 max-w-3xl text-[var(--color-text-secondary)]">
+					<p class="mt-3 max-w-3xl text-[color-mix(in_srgb,var(--color-text-primary)_72%,var(--color-text-secondary))]">
 						Start with a category, then drill into a type-specific shelf. The index below is tuned for
 						fast scanning rather than a flat encyclopedia dump.
 					</p>
@@ -68,20 +68,20 @@
 			</div>
 		</section>
 
-		<div class="grid auto-rows-fr gap-6 lg:grid-cols-2 2xl:grid-cols-3">
+		<div class="grid items-start gap-6 lg:grid-cols-2 2xl:grid-cols-3">
 			{#each COMPENDIUM_CATEGORIES as category (category.name)}
 				{@const categoryTypes = category.types.filter(
 					(t: string) => COMPENDIUM_TYPE_CONFIGS[t as keyof typeof COMPENDIUM_TYPE_CONFIGS]
 				)}
 				{#if categoryTypes.length > 0}
 					<section
-						class="group relative flex h-full flex-col overflow-hidden rounded-[1.7rem] border border-[var(--color-border)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_88%,transparent),color-mix(in_srgb,var(--color-bg-primary)_95%,transparent))] p-5 shadow-[0_1.1rem_2.4rem_color-mix(in_srgb,var(--color-shadow)_16%,transparent)] transition-transform duration-300 hover:-translate-y-1"
+						class="group relative overflow-hidden rounded-[1.7rem] border border-[var(--color-border)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_88%,transparent),color-mix(in_srgb,var(--color-bg-primary)_95%,transparent))] p-5 shadow-[0_1.1rem_2.4rem_color-mix(in_srgb,var(--color-shadow)_16%,transparent)] transition-transform duration-300 hover:-translate-y-1"
 					>
 						<div class="absolute -top-8 -right-8 h-24 w-24 rounded-full bg-accent/10 blur-2xl"></div>
-						<div class="relative flex h-full flex-col">
+						<div class="relative">
 							<div class="flex items-start justify-between gap-4">
 								<div>
-									<p class="text-[0.68rem] font-medium tracking-[0.22em] text-[var(--color-text-muted)] uppercase">
+									<p class="text-[0.68rem] font-medium tracking-[0.22em] text-[color-mix(in_srgb,var(--color-text-primary)_52%,var(--color-text-muted))] uppercase">
 										Category
 									</p>
 									<h2 class="mt-2 text-xl font-bold text-[var(--color-text-primary)]">
@@ -92,16 +92,16 @@
 									{categoryTypes.length} shelves
 								</div>
 							</div>
-							<p class="mt-3 text-sm leading-6 text-[var(--color-text-secondary)]">
+							<p class="mt-3 text-sm leading-6 text-[color-mix(in_srgb,var(--color-text-primary)_70%,var(--color-text-secondary))]">
 								{category.description}
 							</p>
-							<div class="mt-5 flex-1 space-y-3">
+							<div class="mt-5 space-y-3">
 								{#each categoryTypes as type (type)}
 									{@const config = COMPENDIUM_TYPE_CONFIGS[type]}
 									{@const count = counts[type] ?? 0}
 									<a
 										href="/compendium/{type}"
-										class="flex items-center justify-between gap-3 rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/45 px-4 py-3.5 transition-all duration-300 hover:border-accent/45 hover:bg-[var(--color-bg-card)]/70"
+										class="flex items-center justify-between gap-3 rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/48 px-4 py-3.5 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_8%,transparent)] transition-all duration-300 hover:border-accent/45 hover:bg-[var(--color-bg-card)]/74"
 									>
 										<div class="flex min-w-0 items-center gap-3">
 											<span
@@ -113,7 +113,7 @@
 												<p class="truncate font-semibold text-[var(--color-text-primary)]">
 													{config.plural}
 												</p>
-												<p class="truncate text-[0.65rem] tracking-[0.14em] text-[var(--color-text-muted)] uppercase">
+												<p class="truncate text-[0.65rem] tracking-[0.14em] text-[color-mix(in_srgb,var(--color-text-primary)_46%,var(--color-text-muted))] uppercase">
 													{config.label} archive
 												</p>
 											</div>
@@ -122,7 +122,7 @@
 											<p class="text-sm font-semibold text-[var(--color-text-primary)]">
 												{count.toLocaleString()}
 											</p>
-											<p class="text-[0.68rem] tracking-[0.16em] text-[var(--color-text-muted)] uppercase">
+											<p class="text-[0.68rem] tracking-[0.16em] text-[color-mix(in_srgb,var(--color-text-primary)_46%,var(--color-text-muted))] uppercase">
 												entries
 											</p>
 										</div>

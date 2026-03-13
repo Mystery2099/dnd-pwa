@@ -53,11 +53,11 @@
 
 	<!-- Main Content Area -->
 	<div class="mx-auto h-full min-h-0 max-w-375 px-3 py-4 pb-16 sm:px-4 sm:py-6 lg:px-8">
-		<div class="grid h-full min-h-0 gap-6 lg:grid-cols-[260px_1fr]">
+		<div class="grid h-full min-h-0 gap-6 lg:grid-cols-[272px_1fr] lg:items-start">
 			<!-- Sidebar (Obsidian Glass) -->
 			<aside class="hidden lg:block">
 				<SurfaceCard
-					class="sticky top-24 border border-[var(--color-border)] bg-[color-mix(in_srgb,black_20%,var(--color-bg-card))] p-4"
+					class="sticky top-22 border border-[var(--color-border)] bg-[linear-gradient(180deg,color-mix(in_srgb,black_18%,var(--color-bg-card)),color-mix(in_srgb,black_8%,var(--color-bg-card)))] p-4 shadow-[0_1.35rem_2.8rem_color-mix(in_srgb,var(--color-shadow)_22%,transparent),inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_16%,transparent),0_0_0_1px_color-mix(in_srgb,var(--color-border)_92%,transparent)]"
 				>
 					{#if nav}
 						{@render nav()}
