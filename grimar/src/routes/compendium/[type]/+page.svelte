@@ -13,7 +13,12 @@
 	import { Button } from '$lib/components/ui/button';
 	import * as Pagination from '$lib/components/ui/pagination';
 	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
+	import CompendiumCardIcon from '$lib/components/compendium/icons/CompendiumCardIcon.svelte';
+	import CompendiumTypeIcon from '$lib/components/compendium/icons/CompendiumTypeIcon.svelte';
+	import DamageTypeIcon from '$lib/components/compendium/icons/DamageTypeIcon.svelte';
+	import AoeIcon from '$lib/components/compendium/icons/AoeIcon.svelte';
 	import { COMPENDIUM_TYPE_CONFIGS } from '$lib/core/constants/compendium';
+	import { resolveAoeToken, resolveDamageTypeTokens } from '$lib/core/utils/compendiumIconography';
 	import type { CompendiumItem, CompendiumTypeName } from '$lib/core/types/compendium';
 	import { getImageKindLabel } from '$lib/utils/compendium';
 	import type { PageData } from './$types';
@@ -27,6 +32,8 @@
 		school?: { name?: string; key?: string } | string;
 		challenge_rating_text?: string;
 		type?: { name?: string } | string;
+		target_type?: string;
+		damage_types?: unknown;
 		hit_dice?: string | number;
 		file_url?: string;
 		alt_text?: string;
@@ -135,6 +142,14 @@
 
 	function getCardDescription(item: CompendiumItem, itemData: CardItemData): string | undefined {
 		return item.description ?? itemData.alt_text;
+	}
+
+	function getPrimaryDamageType(itemData: CardItemData): string | undefined {
+		return resolveDamageTypeTokens(itemData.damage_types)[0];
+	}
+
+	function getAoeShape(itemData: CardItemData): string | undefined {
+		return resolveAoeToken(itemData.target_type);
 	}
 
 	let { data }: Props = $props();
@@ -376,7 +391,7 @@
 					<h1
 						class="mt-3 flex items-center gap-3 text-3xl font-black tracking-tight text-[var(--color-text-primary)] md:text-4xl"
 					>
-						<span class="text-4xl">{config.icon}</span>
+						<CompendiumTypeIcon type={data.type} fallback={config.icon} class="h-10 w-10" />
 						{config.plural}
 					</h1>
 					<p class="mt-2 max-w-2xl text-[color-mix(in_srgb,var(--color-text-primary)_72%,var(--color-text-secondary))]">
@@ -562,8 +577,13 @@
 						onfocusin={() => handleItemPrefetch(item.key)}
 					>
 						<div class="relative p-4.5">
-							<div class="pointer-events-none absolute top-3 right-4 text-4xl opacity-10">
-								{config.icon}
+							<div class="pointer-events-none absolute top-3 right-4 text-[var(--color-text-primary)]/12">
+								<CompendiumCardIcon
+									type={data.type}
+									itemData={itemData}
+									fallback={config.icon}
+									class="h-11 w-11"
+								/>
 							</div>
 							<div class="mb-2.5 flex items-center justify-between gap-3">
 								<p class="text-[0.68rem] font-medium tracking-[0.18em] text-[color-mix(in_srgb,var(--color-text-primary)_48%,var(--color-text-muted))] uppercase">
@@ -591,7 +611,22 @@
 										</Badge>
 									{/if}
 									{#if itemData.school}
-										<Badge variant="outline">{getSchoolLabel(itemData.school)}</Badge>
+										<Badge variant="outline" class="gap-1.5">
+											<CompendiumCardIcon type="spells" {itemData} class="h-3.5 w-3.5" />
+											{getSchoolLabel(itemData.school)}
+										</Badge>
+									{/if}
+									{#if getPrimaryDamageType(itemData)}
+										<Badge variant="outline" class="gap-1.5">
+											<DamageTypeIcon type={getPrimaryDamageType(itemData)!} class="h-3.5 w-3.5" />
+											{getPrimaryDamageType(itemData)}
+										</Badge>
+									{/if}
+									{#if getAoeShape(itemData)}
+										<Badge variant="outline" class="gap-1.5">
+											<AoeIcon shape={getAoeShape(itemData)!} class="h-3.5 w-3.5" />
+											{itemData.target_type}
+										</Badge>
 									{/if}
 								</div>
 							{:else if data.type === 'creatures' && itemData}

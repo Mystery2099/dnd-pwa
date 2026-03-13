@@ -1,5 +1,6 @@
 <script lang="ts">
 	import PageShell from '$lib/components/ui/PageShell.svelte';
+	import CompendiumTypeIcon from '$lib/components/compendium/icons/CompendiumTypeIcon.svelte';
 	import { COMPENDIUM_CATEGORIES, COMPENDIUM_TYPE_CONFIGS } from '$lib/core/constants/compendium';
 
 	interface Props {
@@ -107,7 +108,11 @@
 											<span
 												class="flex h-10 w-10 items-center justify-center rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/75 text-lg"
 											>
-												{config.icon}
+												<CompendiumTypeIcon
+													type={type}
+													fallback={config.icon}
+													class="h-5 w-5"
+												/>
 											</span>
 											<div class="min-w-0">
 												<p class="truncate font-semibold text-[var(--color-text-primary)]">

@@ -1,5 +1,10 @@
 <script lang="ts">
 	import Badge from '$lib/components/ui/Badge.svelte';
+	import CompendiumCardIcon from '$lib/components/compendium/icons/CompendiumCardIcon.svelte';
+	import DamageTypeIcon from '$lib/components/compendium/icons/DamageTypeIcon.svelte';
+	import AoeIcon from '$lib/components/compendium/icons/AoeIcon.svelte';
+	import CompendiumTypeIcon from '$lib/components/compendium/icons/CompendiumTypeIcon.svelte';
+	import { resolveAoeToken, resolveDamageTypeTokens } from '$lib/core/utils/compendiumIconography';
 	import { formatValue, getImageKindLabel } from '$lib/utils/compendium';
 
 	type RelatedImage = {
@@ -34,6 +39,14 @@
 		imageAttribution,
 		imageFileUrl
 	}: Props = $props();
+
+	function getPrimaryDamageType(): string | undefined {
+		return resolveDamageTypeTokens(itemData.damage_types)[0];
+	}
+
+	function getAoeShape(): string | undefined {
+		return resolveAoeToken(itemData.target_type);
+	}
 </script>
 
 <div>
@@ -102,7 +115,7 @@
 				</div>
 			</a>
 		{:else}
-			<div class="text-4xl">{icon}</div>
+			<CompendiumTypeIcon {type} fallback={icon} class="h-10 w-10" />
 		{/if}
 	</div>
 
@@ -114,7 +127,22 @@
 				</Badge>
 			{/if}
 			{#if itemData.school}
-				<Badge variant="outline">{formatValue(itemData.school)}</Badge>
+				<Badge variant="outline" class="gap-1.5">
+					<CompendiumCardIcon type="spells" {itemData} class="h-3.5 w-3.5" />
+					{formatValue(itemData.school)}
+				</Badge>
+			{/if}
+			{#if getPrimaryDamageType()}
+				<Badge variant="outline" class="gap-1.5">
+					<DamageTypeIcon type={getPrimaryDamageType()!} class="h-3.5 w-3.5" />
+					{formatValue(itemData.damage_types)}
+				</Badge>
+			{/if}
+			{#if getAoeShape()}
+				<Badge variant="outline" class="gap-1.5">
+					<AoeIcon shape={getAoeShape()!} class="h-3.5 w-3.5" />
+					{formatValue(itemData.target_type)}
+				</Badge>
 			{/if}
 			{#if itemData.concentration}
 				<Badge variant="outline">Concentration</Badge>
