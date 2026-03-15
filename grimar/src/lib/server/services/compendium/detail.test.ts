@@ -177,6 +177,7 @@ describe('buildCompendiumDetailPayload', () => {
 						key: 'second-wind',
 						name: 'Second Wind',
 						desc: 'You have a limited well of stamina.',
+						feature_type: 'CLASS_LEVEL_FEATURE',
 						gained_at: [{ level: 1 }]
 					}
 				]
@@ -249,12 +250,14 @@ describe('buildCompendiumDetailPayload', () => {
 						key: 'proficiency-bonus',
 						name: 'Proficiency Bonus',
 						desc: '[Column data]',
+						feature_type: 'PROFICIENCY_BONUS',
 						gained_at: [{ level: 1 }]
 					},
 					{
 						key: 'second-wind',
 						name: 'Second Wind',
 						desc: 'You have a limited well of stamina.',
+						feature_type: 'CLASS_LEVEL_FEATURE',
 						gained_at: [{ level: 1 }]
 					}
 				]
@@ -292,18 +295,21 @@ describe('buildCompendiumDetailPayload', () => {
 						key: 'proficiency-bonus',
 						name: 'Proficiency Bonus',
 						desc: '[Column data]',
+						feature_type: 'PROFICIENCY_BONUS',
 						gained_at: [{ level: 1 }]
 					},
 					{
 						key: 'rage',
 						name: 'Rage',
 						desc: 'Real rage text.',
+						feature_type: 'CLASS_LEVEL_FEATURE',
 						gained_at: [{ level: 1 }]
 					},
 					{
 						key: 'rage-damage',
 						name: 'Rage Damage',
 						desc: '[Column data]',
+						feature_type: 'CLASS_TABLE_DATA',
 						gained_at: [{ level: 1 }]
 					}
 				]
@@ -315,6 +321,83 @@ describe('buildCompendiumDetailPayload', () => {
 		expect(collectCompendiumMarkdownSources(classItem, payload)).toEqual([
 			{ key: 'features.1.desc', text: 'Real rage text.' }
 		]);
+	});
+
+	it('promotes class supplemental feature tables into standalone markdown sections', () => {
+		const classItem = createItem({
+			type: 'classes',
+			data: {
+				features: [
+					{
+						key: 'core-traits',
+						name: 'Core Barbarian Traits',
+						desc: '|Primary Ability|Strength|',
+						feature_type: 'CORE_TRAITS_TABLE'
+					},
+					{
+						key: 'proficiencies',
+						name: 'Proficiencies',
+						desc: 'Armor, weapons, and skills.',
+						feature_type: 'PROFICIENCIES'
+					},
+					{
+						key: 'equipment',
+						name: 'Starting Equipment',
+						desc: 'A greataxe or another martial weapon.',
+						feature_type: 'STARTING_EQUIPMENT'
+					},
+					{
+						key: 'rage',
+						name: 'Rage',
+						desc: 'Real rage text.',
+						feature_type: 'CLASS_LEVEL_FEATURE',
+						gained_at: [{ level: 1 }]
+					}
+				]
+			}
+		});
+
+		const payload = buildCompendiumDetailPayload(classItem);
+
+		expect(payload.sections).toContainEqual({
+			key: 'core-traits',
+			title: 'Core Barbarian Traits',
+			description: 'Core class table data and training summary.',
+			kind: 'markdown',
+			markdownKey: 'features.0.desc',
+			defaultOpen: true
+		});
+		expect(payload.sections).toContainEqual({
+			key: 'proficiencies',
+			title: 'Proficiencies',
+			description: 'Starting proficiencies, saves, and skill training.',
+			kind: 'markdown',
+			markdownKey: 'features.1.desc',
+			defaultOpen: false
+		});
+		expect(payload.sections).toContainEqual({
+			key: 'equipment',
+			title: 'Starting Equipment',
+			description: 'Default starting gear and equipment choices.',
+			kind: 'markdown',
+			markdownKey: 'features.2.desc',
+			defaultOpen: false
+		});
+		expect(payload.sections).toContainEqual({
+			key: 'class-features',
+			title: 'Class Features',
+			description: 'Expandable feature entries grouped by the class progression.',
+			kind: 'class-features',
+			items: [
+				{
+					key: 'rage',
+					name: 'Rage',
+					level: 1,
+					markdownKey: 'features.3.desc'
+				}
+			],
+			defaultOpen: true
+		});
 	});
 
 	it('builds normalized presentation metadata for images, creatures, and conditions', () => {

@@ -118,6 +118,14 @@
 		);
 		return section ?? null;
 	});
+	let supplementalMarkdownSections = $derived.by(() =>
+		detailSections.filter(
+			(entry): entry is CompendiumMarkdownSection =>
+				entry.kind === 'markdown' &&
+				entry.key !== 'description' &&
+				entry.key !== 'higher_level'
+		)
+	);
 	let spellClassesSection = $derived.by(() => {
 		const section = detailSections.find(
 			(entry): entry is CompendiumSpellClassesSection => entry.kind === 'spell-classes'
@@ -262,6 +270,20 @@
 							</div>
 						</CompendiumAccordionSection>
 					{/if}
+
+					{#each supplementalMarkdownSections as markdownSection (markdownSection.key)}
+						<CompendiumAccordionSection
+							title={markdownSection.title}
+							description={markdownSection.description}
+							open={markdownSection.defaultOpen ?? false}
+							value={markdownSection.key}
+						>
+							<div class="prose prose-invert max-w-none text-[var(--color-text-secondary)]">
+								<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+								{@html markdownAt(markdownSection.markdownKey)}
+							</div>
+						</CompendiumAccordionSection>
+					{/each}
 
 					{#if descriptionsSection}
 						<CompendiumAccordionSection

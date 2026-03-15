@@ -348,6 +348,10 @@ function getMeaningfulDescription(value: unknown): string | undefined {
 	return /^\[column data\]$/i.test(text) ? undefined : text;
 }
 
+function getFeatureType(value: unknown): string | undefined {
+	return getString(value)?.toUpperCase();
+}
+
 function getLinkedLabel(value: unknown): string | undefined {
 	if (!value) return undefined;
 	if (typeof value === 'string') return getString(value);
@@ -650,9 +654,10 @@ function buildClassFeaturesSection(rawValue: unknown): CompendiumClassFeaturesSe
 				return null;
 			}
 
+			const featureType = getFeatureType(entry.feature_type);
 			const name = getString(entry.name) ?? getString(entry.key);
 			const description = getMeaningfulDescription(entry.desc);
-			if (!name || !description) {
+			if (!name || !description || featureType !== 'CLASS_LEVEL_FEATURE') {
 				return null;
 			}
 
@@ -686,6 +691,85 @@ function buildClassFeaturesSection(rawValue: unknown): CompendiumClassFeaturesSe
 		items,
 		defaultOpen: true
 	};
+}
+
+function buildClassCoreTraitsSection(rawValue: unknown): CompendiumMarkdownSection | null {
+	if (!Array.isArray(rawValue) || rawValue.length === 0) {
+		return null;
+	}
+
+	const entryIndex = rawValue.findIndex(
+		(entry) =>
+			isRecord(entry) &&
+			getFeatureType(entry.feature_type) === 'CORE_TRAITS_TABLE' &&
+			Boolean(getMeaningfulDescription(entry.desc))
+	);
+	if (entryIndex < 0) {
+		return null;
+	}
+
+	const entry = rawValue[entryIndex] as Record<string, unknown>;
+	return {
+		key: getString(entry.key) ?? 'core-traits',
+		title: getString(entry.name) ?? 'Core Traits',
+		description: 'Core class table data and training summary.',
+		kind: 'markdown',
+		markdownKey: `features.${entryIndex}.desc`,
+		defaultOpen: true
+	};
+}
+
+function getClassSupplementalSectionDescription(featureType: string): string | undefined {
+	switch (featureType) {
+		case 'CORE_TRAITS_TABLE':
+			return 'Core class table data and training summary.';
+		case 'PROFICIENCIES':
+			return 'Starting proficiencies, saves, and skill training.';
+		case 'STARTING_EQUIPMENT':
+			return 'Default starting gear and equipment choices.';
+		case 'CLASS_FEATURE_OPTION_LIST':
+			return 'Feature option list and available choices.';
+		default:
+			return undefined;
+	}
+}
+
+function buildClassSupplementalMarkdownSections(rawValue: unknown): CompendiumMarkdownSection[] {
+	if (!Array.isArray(rawValue) || rawValue.length === 0) {
+		return [];
+	}
+
+	const supportedTypes = new Set([
+		'CORE_TRAITS_TABLE',
+		'PROFICIENCIES',
+		'STARTING_EQUIPMENT',
+		'CLASS_FEATURE_OPTION_LIST'
+	]);
+
+	const sections = rawValue
+		.map((entry, index) => {
+			if (!isRecord(entry)) {
+				return null;
+			}
+
+			const featureType = getFeatureType(entry.feature_type);
+			const description = getMeaningfulDescription(entry.desc);
+			if (!featureType || !supportedTypes.has(featureType) || !description) {
+				return null;
+			}
+
+			return {
+				key: getString(entry.key) ?? `features-${index}`,
+				title: getString(entry.name) ?? formatFieldName(featureType.toLowerCase()),
+				description: getClassSupplementalSectionDescription(featureType),
+				kind: 'markdown' as const,
+				markdownKey: `features.${index}.desc`,
+				defaultOpen: featureType === 'CORE_TRAITS_TABLE'
+			};
+		})
+		.filter((entry) => entry !== null);
+
+	return sections;
 }
 
 function buildCreatureEncounterSection(itemData: Record<string, unknown>): CompendiumCreatureEncounterSection | null {
@@ -835,6 +919,11 @@ function normalizeFields(item: CompendiumItem): {
 	}
 
 	const classFeaturesSection = item.type === 'classes' ? buildClassFeaturesSection(itemData.features) : null;
+	const classSupplementalSections =
+		item.type === 'classes' ? buildClassSupplementalMarkdownSections(itemData.features) : [];
+	for (const section of classSupplementalSections) {
+		sections.push(section);
+	}
 	if (classFeaturesSection) {
 		sections.push(classFeaturesSection);
 		consumedSectionKeys.add('features');
