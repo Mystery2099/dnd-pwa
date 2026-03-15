@@ -913,6 +913,20 @@ function getMarkdownArrayEntry(
 	return typeof text === 'string' && text.trim() ? text : null;
 }
 
+function getCollectionIndexFromMarkdownKey(
+	key: string,
+	collectionKey: string,
+	fieldKey = 'desc'
+): number | null {
+	const match = key.match(new RegExp(`^${collectionKey}\\.(\\d+)\\.${fieldKey}$`));
+	if (!match) {
+		return null;
+	}
+
+	const index = Number.parseInt(match[1], 10);
+	return Number.isNaN(index) ? null : index;
+}
+
 function getMarkdownTextForKey(
 	item: CompendiumItem,
 	payload: CompendiumDetailPayload,
@@ -934,16 +948,22 @@ function getMarkdownTextForKey(
 	const descriptionsSection = payload.sections.find(
 		(section): section is CompendiumDescriptionsSection => section.kind === 'descriptions'
 	);
-	const descriptionsIndex = descriptionsSection?.items.findIndex((entry) => entry.markdownKey === key) ?? -1;
-	if (descriptionsIndex >= 0) {
+	const descriptionsIndex =
+		descriptionsSection && key.startsWith('descriptions.')
+			? getCollectionIndexFromMarkdownKey(key, 'descriptions')
+			: null;
+	if (descriptionsIndex !== null) {
 		return getMarkdownArrayEntry(itemData, 'descriptions', descriptionsIndex);
 	}
 
 	const benefitsSection = payload.sections.find(
 		(section): section is CompendiumBenefitsSection => section.kind === 'benefits'
 	);
-	const benefitsIndex = benefitsSection?.items.findIndex((entry) => entry.markdownKey === key) ?? -1;
-	if (benefitsIndex >= 0) {
+	const benefitsIndex =
+		benefitsSection && key.startsWith('benefits.')
+			? getCollectionIndexFromMarkdownKey(key, 'benefits')
+			: null;
+	if (benefitsIndex !== null) {
 		return getMarkdownArrayEntry(itemData, 'benefits', benefitsIndex);
 	}
 
@@ -967,8 +987,11 @@ function getMarkdownTextForKey(
 	const traitsSection = payload.sections.find(
 		(section): section is CompendiumTraitsSection => section.kind === 'traits'
 	);
-	const traitIndex = traitsSection?.items.findIndex((entry) => entry.markdownKey === key) ?? -1;
-	if (traitIndex >= 0) {
+	const traitIndex =
+		traitsSection && key.startsWith('traits.')
+			? getCollectionIndexFromMarkdownKey(key, 'traits')
+			: null;
+	if (traitIndex !== null) {
 		return getMarkdownArrayEntry(itemData, 'traits', traitIndex);
 	}
 
@@ -976,8 +999,10 @@ function getMarkdownTextForKey(
 		(section): section is CompendiumClassFeaturesSection => section.kind === 'class-features'
 	);
 	const featureIndex =
-		classFeaturesSection?.items.findIndex((entry) => entry.markdownKey === key) ?? -1;
-	if (featureIndex >= 0) {
+		classFeaturesSection && key.startsWith('features.')
+			? getCollectionIndexFromMarkdownKey(key, 'features')
+			: null;
+	if (featureIndex !== null) {
 		return getMarkdownArrayEntry(itemData, 'features', featureIndex);
 	}
 
@@ -985,14 +1010,18 @@ function getMarkdownTextForKey(
 		(section): section is CompendiumCreatureEncounterSection => section.kind === 'creature-encounter'
 	);
 	const actionIndex =
-		creatureEncounterSection?.actions.findIndex((entry) => entry.markdownKey === key) ?? -1;
-	if (actionIndex >= 0) {
+		creatureEncounterSection && key.startsWith('actions.')
+			? getCollectionIndexFromMarkdownKey(key, 'actions')
+			: null;
+	if (actionIndex !== null) {
 		return getMarkdownArrayEntry(itemData, 'actions', actionIndex);
 	}
 
 	const creatureTraitIndex =
-		creatureEncounterSection?.traits.findIndex((entry) => entry.markdownKey === key) ?? -1;
-	if (creatureTraitIndex >= 0) {
+		creatureEncounterSection && key.startsWith('traits.')
+			? getCollectionIndexFromMarkdownKey(key, 'traits')
+			: null;
+	if (creatureTraitIndex !== null) {
 		return getMarkdownArrayEntry(itemData, 'traits', creatureTraitIndex);
 	}
 

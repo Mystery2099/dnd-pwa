@@ -283,6 +283,40 @@ describe('buildCompendiumDetailPayload', () => {
 		});
 	});
 
+	it('keeps class feature markdown aligned after placeholder rows are filtered out', () => {
+		const classItem = createItem({
+			type: 'classes',
+			data: {
+				features: [
+					{
+						key: 'proficiency-bonus',
+						name: 'Proficiency Bonus',
+						desc: '[Column data]',
+						gained_at: [{ level: 1 }]
+					},
+					{
+						key: 'rage',
+						name: 'Rage',
+						desc: 'Real rage text.',
+						gained_at: [{ level: 1 }]
+					},
+					{
+						key: 'rage-damage',
+						name: 'Rage Damage',
+						desc: '[Column data]',
+						gained_at: [{ level: 1 }]
+					}
+				]
+			}
+		});
+
+		const payload = buildCompendiumDetailPayload(classItem);
+
+		expect(collectCompendiumMarkdownSources(classItem, payload)).toEqual([
+			{ key: 'features.1.desc', text: 'Real rage text.' }
+		]);
+	});
+
 	it('builds normalized presentation metadata for images, creatures, and conditions', () => {
 		const imageItem = createItem({
 			type: 'images',
