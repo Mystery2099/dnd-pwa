@@ -31,8 +31,7 @@
 	</div>
 
 	<div
-		class="min-w-0 shrink-0 overflow-hidden max-sm:max-w-full"
-		style="max-width: min(100%, 34rem);"
+		class="min-w-0 shrink-0 overflow-hidden max-w-[min(100%,34rem)] max-sm:max-w-full"
 	>
 		{@render control()}
 	</div>
