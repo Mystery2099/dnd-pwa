@@ -8,6 +8,29 @@
 	}
 
 	let { section, markdownAt }: Props = $props();
+
+	function normalizeLabel(value: string): string {
+		return value
+			.toLowerCase()
+			.replace(/&/g, 'and')
+			.replace(/[^a-z0-9\s]/g, ' ')
+			.split(/\s+/)
+			.filter(Boolean)
+			.map((word) => word.replace(/s$/, ''))
+			.join(' ');
+	}
+
+	function shouldShowItemName(groupTitle: string, itemName: string | undefined, groupSize: number): boolean {
+		if (!itemName) {
+			return false;
+		}
+
+		if (groupSize > 1) {
+			return true;
+		}
+
+		return normalizeLabel(groupTitle) !== normalizeLabel(itemName);
+	}
 </script>
 
 {#if section.layout === 'grouped'}
@@ -24,7 +47,7 @@
 						<div
 							class="rounded-[1.25rem] border border-[var(--color-border)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_76%,transparent),color-mix(in_srgb,var(--color-bg-card)_54%,transparent))] p-4 shadow-[0_0.75rem_2rem_color-mix(in_srgb,var(--color-shadow)_12%,transparent)]"
 						>
-							{#if item.name}
+							{#if shouldShowItemName(group.title, item.name, group.items.length)}
 								<h4 class="mb-2 text-sm font-semibold text-accent">{item.name}</h4>
 							{/if}
 							<div class="prose prose-invert prose-sm max-w-none text-[var(--color-text-secondary)] [&>p:first-child]:mt-0 [&>p:last-child]:mb-0">
