@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { resolveCompendiumLink } from '$lib/core/utils/compendium-links';
+	import { isCompendiumDetailReference } from '$lib/core/utils/compendium-detail-values';
 	import StructuredValue from './StructuredValue.svelte';
 	import { formatFieldName } from '$lib/utils/compendium';
 
@@ -15,14 +16,6 @@
 		href: string;
 		meta?: string;
 		isExternal?: boolean;
-	};
-
-	type EntityValueRecord = {
-		kind: 'entity';
-		label: string;
-		href: string;
-		meta?: string;
-		sourceUrl?: string;
 	};
 
 	function isUrlLikeString(input: string): boolean {
@@ -48,20 +41,7 @@
 		return typeof entry === 'object' && entry !== null;
 	}
 
-	function isEntityValue(input: unknown): input is EntityValueRecord {
-		if (!input || typeof input !== 'object' || Array.isArray(input)) return false;
-
-		const record = input as Record<string, unknown>;
-		return (
-			record.kind === 'entity' &&
-			typeof record.label === 'string' &&
-			record.label.trim().length > 0 &&
-			typeof record.href === 'string' &&
-			record.href.trim().length > 0
-		);
-	}
-
-	function isExternalLink(input: CompendiumLink | EntityValueRecord): input is CompendiumLink {
+	function isExternalLink(input: CompendiumLink | { href: string; label: string; meta?: string }): input is CompendiumLink {
 		return 'isExternal' in input && input.isExternal === true;
 	}
 
@@ -167,7 +147,7 @@
 		{/each}
 	</ul>
 {:else if typeof value === 'object'}
-	{@const entityValue = isEntityValue(value) ? value : null}
+	{@const entityValue = isCompendiumDetailReference(value) ? value : null}
 	{@const linkedObject = entityValue ?? getLinkedObject(value)}
 	{#if linkedObject}
 		{@const externalLink = isExternalLink(linkedObject)}

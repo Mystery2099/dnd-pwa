@@ -1,3 +1,4 @@
+import { getCompendiumDetailReferenceLabel } from '$lib/core/utils/compendium-detail-values';
 import type { LinkedItem, WeaponProperty, SpeedData, LanguageData } from './type-guards';
 import {
 	isLinkedArray,
@@ -57,6 +58,9 @@ export function formatValue(value: unknown): string {
 	if (typeof value === 'boolean') return value ? 'Yes' : 'No';
 	if (typeof value === 'number') return value.toLocaleString();
 	if (typeof value === 'string') return value;
+
+	const detailReferenceLabel = getCompendiumDetailReferenceLabel(value);
+	if (detailReferenceLabel) return detailReferenceLabel;
 
 	if (isLinkedArray(value))
 		return value
