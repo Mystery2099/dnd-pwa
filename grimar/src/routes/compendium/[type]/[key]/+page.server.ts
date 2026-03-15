@@ -4,7 +4,10 @@ import { COMPENDIUM_TYPE_CONFIGS, type CompendiumTypeName } from '$lib/core/cons
 import { getItem, getRelatedImages } from '$lib/server/repositories/compendium';
 import type { CompendiumType } from '$lib/server/db/schema';
 import { OPEN5E_API_BASE_URL } from '$lib/server/providers/open5e-config';
-import { buildCompendiumDetailPayload } from '$lib/server/services/compendium/detail';
+import {
+	buildCompendiumDetailPayload,
+	collectCompendiumMarkdownSources
+} from '$lib/server/services/compendium/detail';
 import { marked } from 'marked';
 
 marked.setOptions({ gfm: true, breaks: true });
@@ -77,61 +80,12 @@ async function setMarkdown(
 }
 
 async function buildMarkdownHtml(
-	itemData: Record<string, unknown>,
-	itemDescription: unknown
+	markdownSources: Array<{ key: string; text: string }>
 ): Promise<Record<string, string>> {
 	const markdownHtml: Record<string, string> = {};
 
-	await setMarkdown(markdownHtml, 'description', itemData.desc ?? itemDescription);
-	await setMarkdown(markdownHtml, 'higher_level', itemData.higher_level);
-
-	if (Array.isArray(itemData.descriptions)) {
-		for (const [index, description] of itemData.descriptions.entries()) {
-			const entry = getRecord(description);
-			if (!entry) continue;
-			await setMarkdown(markdownHtml, `descriptions.${index}.desc`, entry.desc);
-		}
-	}
-
-	if (Array.isArray(itemData.benefits)) {
-		for (const [index, benefit] of itemData.benefits.entries()) {
-			const entry = getRecord(benefit);
-			if (!entry) continue;
-			await setMarkdown(markdownHtml, `benefits.${index}.desc`, entry.desc);
-		}
-	}
-
-	if (Array.isArray(itemData.properties)) {
-		for (const [index, property] of itemData.properties.entries()) {
-			const propertyRecord = getRecord(property);
-			const innerProperty = propertyRecord ? getRecord(propertyRecord.property) : null;
-			if (!innerProperty) continue;
-			await setMarkdown(markdownHtml, `weaponProperties.${index}.desc`, innerProperty.desc);
-		}
-	}
-
-	if (Array.isArray(itemData.traits)) {
-		for (const [index, trait] of itemData.traits.entries()) {
-			const entry = getRecord(trait);
-			if (!entry) continue;
-			await setMarkdown(markdownHtml, `traits.${index}.desc`, entry.desc);
-		}
-	}
-
-	if (Array.isArray(itemData.actions)) {
-		for (const [index, action] of itemData.actions.entries()) {
-			const entry = getRecord(action);
-			if (!entry) continue;
-			await setMarkdown(markdownHtml, `actions.${index}.desc`, entry.desc);
-		}
-	}
-
-	if (Array.isArray(itemData.features)) {
-		for (const [index, feature] of itemData.features.entries()) {
-			const entry = getRecord(feature);
-			if (!entry) continue;
-			await setMarkdown(markdownHtml, `features.${index}.desc`, entry.desc);
-		}
+	for (const source of markdownSources) {
+		await setMarkdown(markdownHtml, source.key, source.text);
 	}
 
 	return markdownHtml;
@@ -249,8 +203,9 @@ export const load: PageServerLoad = async ({ params }) => {
 		throw error(404, `${config.label} not found: ${key}`);
 	}
 	const detail = buildCompendiumDetailPayload(item);
+	const markdownSources = collectCompendiumMarkdownSources(item, detail);
 	const itemData = (item.data ?? {}) as Record<string, unknown>;
-	const markdownHtml = await buildMarkdownHtml(itemData, item.description);
+	const markdownHtml = await buildMarkdownHtml(markdownSources);
 	const imageAssetUrl = type === 'images' ? resolveImageAssetUrl(itemData.file_url) : null;
 	const relatedImagesRaw = await getRelatedImages(itemType, item.name);
 	const relatedImagesFromCompendium: RelatedImage[] = relatedImagesRaw.map((image) => {

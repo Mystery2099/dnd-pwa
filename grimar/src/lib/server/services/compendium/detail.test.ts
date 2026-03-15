@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildCompendiumDetailPayload } from './detail';
+import { buildCompendiumDetailPayload, collectCompendiumMarkdownSources } from './detail';
 import type { CompendiumItem } from '$lib/server/db/schema';
 
 function createItem(overrides: Partial<CompendiumItem>): CompendiumItem {
@@ -281,5 +281,24 @@ describe('buildCompendiumDetailPayload', () => {
 			actions: [{ name: 'Hooves', markdownKey: 'actions.0.desc' }],
 			traits: [{ name: 'Sure-Footed', markdownKey: 'traits.0.desc' }]
 		});
+	});
+
+	it('collects markdown sources from the normalized detail payload', () => {
+		const item = createItem({
+			type: 'creatures',
+			description: 'Creature overview.',
+			data: {
+				actions: [{ name: 'Bite', desc: 'A snapping bite.' }],
+				traits: [{ name: 'Keen Smell', desc: 'Advantage on smell checks.' }]
+			}
+		});
+
+		const payload = buildCompendiumDetailPayload(item);
+
+		expect(collectCompendiumMarkdownSources(item, payload)).toEqual([
+			{ key: 'description', text: 'Creature overview.' },
+			{ key: 'actions.0.desc', text: 'A snapping bite.' },
+			{ key: 'traits.0.desc', text: 'Advantage on smell checks.' }
+		]);
 	});
 });

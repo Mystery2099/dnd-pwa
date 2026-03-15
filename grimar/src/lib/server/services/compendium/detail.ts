@@ -38,6 +38,11 @@ const CREATURE_REFERENCE_FIELD_KEYS = new Set([
 
 const IMAGE_DETAIL_EXCLUDED_FIELD_KEYS = new Set(['file_url', 'alt_text', 'attribution', 'document']);
 
+export interface CompendiumMarkdownSource {
+	key: string;
+	text: string;
+}
+
 function buildReferenceFromUrl(
 	value: string,
 	preferredLabel?: string,
@@ -649,4 +654,162 @@ export function buildCompendiumDetailPayload(item: CompendiumItem): CompendiumDe
 		fields,
 		sections
 	};
+}
+
+function getMarkdownArrayEntry(
+	itemData: Record<string, unknown>,
+	collectionKey: string,
+	index: number,
+	fieldKey = 'desc'
+): string | null {
+	const value = itemData[collectionKey];
+	if (!Array.isArray(value)) {
+		return null;
+	}
+
+	const entry = value[index];
+	if (!isRecord(entry)) {
+		return null;
+	}
+
+	const text = entry[fieldKey];
+	return typeof text === 'string' && text.trim() ? text : null;
+}
+
+function getMarkdownTextForKey(
+	item: CompendiumItem,
+	payload: CompendiumDetailPayload,
+	key: string
+): string | null {
+	const itemData = (item.data ?? {}) as Record<string, unknown>;
+
+	if (key === 'description') {
+		const description = itemData.desc ?? item.description;
+		return typeof description === 'string' && description.trim() ? description : null;
+	}
+
+	if (key === 'higher_level') {
+		return typeof itemData.higher_level === 'string' && itemData.higher_level.trim()
+			? itemData.higher_level
+			: null;
+	}
+
+	const descriptionsSection = payload.sections.find(
+		(section): section is CompendiumDescriptionsSection => section.kind === 'descriptions'
+	);
+	const descriptionsIndex = descriptionsSection?.items.findIndex((entry) => entry.markdownKey === key) ?? -1;
+	if (descriptionsIndex >= 0) {
+		return getMarkdownArrayEntry(itemData, 'descriptions', descriptionsIndex);
+	}
+
+	const benefitsSection = payload.sections.find(
+		(section): section is CompendiumBenefitsSection => section.kind === 'benefits'
+	);
+	const benefitsIndex = benefitsSection?.items.findIndex((entry) => entry.markdownKey === key) ?? -1;
+	if (benefitsIndex >= 0) {
+		return getMarkdownArrayEntry(itemData, 'benefits', benefitsIndex);
+	}
+
+	const weaponPropertiesSection = payload.sections.find(
+		(section): section is CompendiumWeaponPropertiesSection => section.kind === 'weapon-properties'
+	);
+	const propertyIndex =
+		weaponPropertiesSection?.items.findIndex((entry) => entry.markdownKey === key) ?? -1;
+	if (propertyIndex >= 0) {
+		const properties = itemData.properties;
+		if (Array.isArray(properties)) {
+			const propertyEntry = properties[propertyIndex];
+			if (isRecord(propertyEntry) && isRecord(propertyEntry.property)) {
+				const text = propertyEntry.property.desc;
+				return typeof text === 'string' && text.trim() ? text : null;
+			}
+		}
+		return null;
+	}
+
+	const traitsSection = payload.sections.find(
+		(section): section is CompendiumTraitsSection => section.kind === 'traits'
+	);
+	const traitIndex = traitsSection?.items.findIndex((entry) => entry.markdownKey === key) ?? -1;
+	if (traitIndex >= 0) {
+		return getMarkdownArrayEntry(itemData, 'traits', traitIndex);
+	}
+
+	const classFeaturesSection = payload.sections.find(
+		(section): section is CompendiumClassFeaturesSection => section.kind === 'class-features'
+	);
+	const featureIndex =
+		classFeaturesSection?.items.findIndex((entry) => entry.markdownKey === key) ?? -1;
+	if (featureIndex >= 0) {
+		return getMarkdownArrayEntry(itemData, 'features', featureIndex);
+	}
+
+	const creatureEncounterSection = payload.sections.find(
+		(section): section is CompendiumCreatureEncounterSection => section.kind === 'creature-encounter'
+	);
+	const actionIndex =
+		creatureEncounterSection?.actions.findIndex((entry) => entry.markdownKey === key) ?? -1;
+	if (actionIndex >= 0) {
+		return getMarkdownArrayEntry(itemData, 'actions', actionIndex);
+	}
+
+	const creatureTraitIndex =
+		creatureEncounterSection?.traits.findIndex((entry) => entry.markdownKey === key) ?? -1;
+	if (creatureTraitIndex >= 0) {
+		return getMarkdownArrayEntry(itemData, 'traits', creatureTraitIndex);
+	}
+
+	return null;
+}
+
+export function collectCompendiumMarkdownSources(
+	item: CompendiumItem,
+	payload: CompendiumDetailPayload
+): CompendiumMarkdownSource[] {
+	const markdownKeys = new Set<string>();
+
+	for (const section of payload.sections) {
+		if (section.kind === 'markdown') {
+			markdownKeys.add(section.markdownKey);
+			continue;
+		}
+
+		if (section.kind === 'descriptions' || section.kind === 'benefits' || section.kind === 'traits') {
+			for (const entry of section.items) {
+				if (entry.markdownKey) {
+					markdownKeys.add(entry.markdownKey);
+				}
+			}
+			continue;
+		}
+
+		if (section.kind === 'weapon-properties' || section.kind === 'class-features') {
+			for (const entry of section.items) {
+				if (entry.markdownKey) {
+					markdownKeys.add(entry.markdownKey);
+				}
+			}
+			continue;
+		}
+
+		if (section.kind === 'creature-encounter') {
+			for (const entry of section.actions) {
+				if (entry.markdownKey) {
+					markdownKeys.add(entry.markdownKey);
+				}
+			}
+			for (const entry of section.traits) {
+				if (entry.markdownKey) {
+					markdownKeys.add(entry.markdownKey);
+				}
+			}
+		}
+	}
+
+	return Array.from(markdownKeys)
+		.map((key) => {
+			const text = getMarkdownTextForKey(item, payload, key);
+			return text ? { key, text } : null;
+		})
+		.filter((entry): entry is CompendiumMarkdownSource => entry !== null);
 }
