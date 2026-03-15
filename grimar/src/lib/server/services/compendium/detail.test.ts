@@ -218,6 +218,71 @@ describe('buildCompendiumDetailPayload', () => {
 		});
 	});
 
+	it('splits background connections and mementos into separate groups and markdown sources', () => {
+		const item = createItem({
+			type: 'backgrounds',
+			data: {
+				benefits: [
+					{
+						name: 'Connection and Memento',
+						type: 'connection_and_memento',
+						desc: [
+							'Roll 1d10, choose, or make up your own.',
+							'',
+							'#### Acolyte Connections',
+							'',
+							'|d10|Connection|',
+							'|---|---|',
+							'|1|A beloved high priest.|',
+							'',
+							'### Acolyte Memento',
+							'',
+							'|d10|Memento|',
+							'|---|---|',
+							'|1|A timeworn holy symbol.|'
+						].join('\n')
+					}
+				]
+			}
+		});
+
+		const payload = buildCompendiumDetailPayload(item);
+
+		expect(payload.sections).toContainEqual({
+			key: 'benefits',
+			title: 'Background Benefits',
+			description: 'Training, equipment, and story hooks granted by this background.',
+			kind: 'benefits',
+			layout: 'grouped',
+			items: [
+				{ markdownKey: 'benefits.0.connections', name: undefined },
+				{ markdownKey: 'benefits.0.mementos', name: undefined }
+			],
+			groups: [
+				{
+					key: 'connections',
+					title: 'Connections',
+					items: [{ markdownKey: 'benefits.0.connections', name: undefined }]
+				},
+				{
+					key: 'mementos',
+					title: 'Mementos',
+					items: [{ markdownKey: 'benefits.0.mementos', name: undefined }]
+				}
+			]
+		});
+		expect(collectCompendiumMarkdownSources(item, payload)).toEqual([
+			{
+				key: 'benefits.0.connections',
+				text: ['Roll 1d10, choose, or make up your own.', '', '|d10|Connection|', '|---|---|', '|1|A beloved high priest.|'].join('\n')
+			},
+			{
+				key: 'benefits.0.mementos',
+				text: ['Roll 1d10, choose, or make up your own.', '', '|d10|Memento|', '|---|---|', '|1|A timeworn holy symbol.|'].join('\n')
+			}
+		]);
+	});
+
 	it('promotes description, spell classes, higher-level text, and class features into sections', () => {
 		const spellItem = createItem({
 			type: 'spells',

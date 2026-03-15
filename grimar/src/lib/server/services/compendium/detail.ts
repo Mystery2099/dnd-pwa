@@ -53,7 +53,8 @@ const BACKGROUND_BENEFIT_GROUP_ORDER = [
 	'equipment',
 	'feature',
 	'feat',
-	'connection_and_memento',
+	'connections',
+	'mementos',
 	'adventures_and_advancement',
 	'suggested_characteristics'
 ] as const;
@@ -66,7 +67,8 @@ const BACKGROUND_BENEFIT_GROUP_LABELS: Record<string, string> = {
 	equipment: 'Equipment',
 	feature: 'Features',
 	feat: 'Feats',
-	connection_and_memento: 'Connections and Mementos',
+	connections: 'Connections',
+	mementos: 'Mementos',
 	adventures_and_advancement: 'Adventures and Advancement',
 	suggested_characteristics: 'Suggested Characteristics'
 };
@@ -546,26 +548,89 @@ function sortBackgroundBenefitGroups(groups: CompendiumBenefitGroup[]): Compendi
 	});
 }
 
+function joinMarkdownParts(...parts: Array<string | undefined>): string | null {
+	const normalizedParts = parts.map((part) => part?.trim()).filter((part): part is string => Boolean(part));
+	if (normalizedParts.length === 0) {
+		return null;
+	}
+
+	return normalizedParts.join('\n\n');
+}
+
+function splitConnectionAndMementoBenefit(markdown: string): {
+	connections?: string;
+	mementos?: string;
+} {
+	const connectionMatch = markdown.match(/^#{3,4}\s+.*Connections\s*$/im);
+	const mementoMatch = markdown.match(/^#{3,4}\s+.*Mementos?\s*$/im);
+	if (!connectionMatch || !mementoMatch) {
+		return {};
+	}
+
+	const connectionIndex = connectionMatch.index ?? -1;
+	const mementoIndex = mementoMatch.index ?? -1;
+	if (connectionIndex < 0 || mementoIndex < 0 || connectionIndex >= mementoIndex) {
+		return {};
+	}
+
+	const intro = markdown.slice(0, connectionIndex).trim();
+	const connectionsBody = markdown
+		.slice(connectionIndex + connectionMatch[0].length, mementoIndex)
+		.trim();
+	const mementosBody = markdown.slice(mementoIndex + mementoMatch[0].length).trim();
+
+	return {
+		connections: joinMarkdownParts(intro, connectionsBody) ?? undefined,
+		mementos: joinMarkdownParts(intro, mementosBody) ?? undefined
+	};
+}
+
 function buildBackgroundBenefitsSection(rawValue: unknown): CompendiumBenefitsSection | null {
 	if (!Array.isArray(rawValue) || rawValue.length === 0) {
 		return null;
 	}
 
-	type BackgroundBenefitEntry = CompendiumBenefitEntry & { benefitType?: string };
+	type BackgroundBenefitEntry = CompendiumBenefitEntry & {
+		benefitType?: string;
+		markdownFieldKey?: 'desc' | 'connections' | 'mementos';
+	};
 
 	const items: BackgroundBenefitEntry[] = rawValue
-		.map((entry, index): BackgroundBenefitEntry | null => {
+		.flatMap((entry, index): BackgroundBenefitEntry[] => {
 			if (!isRecord(entry) || typeof entry.desc !== 'string') {
-				return null;
+				return [];
 			}
 
-			return {
+			const benefitType = getString(entry.type);
+			if (benefitType === 'connection_and_memento') {
+				const splitBenefit = splitConnectionAndMementoBenefit(entry.desc);
+				const entries: BackgroundBenefitEntry[] = [];
+				if (splitBenefit.connections) {
+					entries.push({
+						markdownKey: `benefits.${index}.connections`,
+						benefitType: 'connections',
+						markdownFieldKey: 'connections'
+					});
+				}
+				if (splitBenefit.mementos) {
+					entries.push({
+						markdownKey: `benefits.${index}.mementos`,
+						benefitType: 'mementos',
+						markdownFieldKey: 'mementos'
+					});
+				}
+				if (entries.length > 0) {
+					return entries;
+				}
+			}
+
+			return [{
 				markdownKey: `benefits.${index}.desc`,
 				name: getString(entry.name),
-				benefitType: getString(entry.type)
-			};
-		})
-		.filter((entry): entry is BackgroundBenefitEntry => entry !== null);
+				benefitType,
+				markdownFieldKey: 'desc'
+			}];
+		});
 
 	if (items.length === 0) {
 		return null;
@@ -1310,9 +1375,27 @@ function getMarkdownTextForKey(
 	);
 	const benefitsIndex =
 		benefitsSection && key.startsWith('benefits.')
-			? getCollectionIndexFromMarkdownKey(key, 'benefits')
+			? Number.parseInt(key.split('.')[1] ?? '', 10)
 			: null;
 	if (benefitsIndex !== null) {
+		if (Number.isNaN(benefitsIndex)) {
+			return null;
+		}
+
+		if (key.endsWith('.connections') || key.endsWith('.mementos')) {
+			const benefitText = getMarkdownArrayEntry(itemData, 'benefits', benefitsIndex);
+			if (!benefitText) {
+				return null;
+			}
+
+			const splitBenefit = splitConnectionAndMementoBenefit(benefitText);
+			if (key.endsWith('.connections')) {
+				return splitBenefit.connections ?? null;
+			}
+
+			return splitBenefit.mementos ?? null;
+		}
+
 		return getMarkdownArrayEntry(itemData, 'benefits', benefitsIndex);
 	}
 
