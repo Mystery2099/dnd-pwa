@@ -21,8 +21,7 @@
 		isDescriptionArray,
 		getDescriptions,
 		isBenefitArray,
-		getBenefits,
-		getSortedFields
+		getBenefits
 	} from '$lib/utils/compendium';
 
 	interface Props {
@@ -50,18 +49,6 @@
 		desc?: string;
 	};
 
-	const CREATURE_DETAIL_FIELDS_IN_REFERENCE = [
-		'armor_class',
-		'armor_detail',
-		'hit_points',
-		'hit_dice',
-		'type',
-		'size',
-		'alignment',
-		'challenge_rating_text',
-		'experience_points'
-	];
-
 	let { data }: Props = $props();
 
 	let item = $derived(data.item);
@@ -72,35 +59,7 @@
 	let creatureAbilityScores = $derived(getAbilityScoreEntries(itemData.ability_scores));
 	let creatureActionEntries = $derived(getNamedDetailEntries(itemData.actions));
 	let creatureTraitEntries = $derived(getNamedDetailEntries(itemData.traits));
-	let detailFields = $derived.by(() => {
-		const normalizedFields = data.detail.fields as CompendiumDetailField[];
-		const detailFieldMap = new Map(normalizedFields.map((field) => [field.key, field]));
-		const fields = getSortedFields(itemData, data.type);
-		if (data.type === 'images') {
-			return fields
-				.filter(([key]) => !['file_url', 'alt_text', 'attribution', 'document'].includes(key))
-				.map(([key]) => detailFieldMap.get(key))
-				.filter((field): field is CompendiumDetailField => Boolean(field));
-		}
-
-		if (data.type === 'creatures') {
-			return fields
-				.filter(([key]) => !CREATURE_DETAIL_FIELDS_IN_REFERENCE.includes(key))
-				.map(([key]) => detailFieldMap.get(key))
-				.filter((field): field is CompendiumDetailField => Boolean(field));
-		}
-
-		if (data.type === 'creaturesets') {
-			return fields
-				.filter(([key]) => key !== 'creatures')
-				.map(([key]) => detailFieldMap.get(key))
-				.filter((field): field is CompendiumDetailField => Boolean(field));
-		}
-
-		return fields
-			.map(([key]) => detailFieldMap.get(key))
-			.filter((field): field is CompendiumDetailField => Boolean(field));
-	});
+	let detailFields = $derived(data.detail.fields as CompendiumDetailField[]);
 	let markdownHtml = $derived<Record<string, string>>(data.markdownHtml ?? {});
 	let creatureSetRosterSection = $derived.by(() => {
 		const sections = data.detail.sections as Array<CompendiumCreatureSetRosterSection | { kind: string }>;

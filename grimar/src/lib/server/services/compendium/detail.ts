@@ -10,7 +10,21 @@ import type {
 	CompendiumEntityListSection
 } from '$lib/core/types/compendium';
 import type { CompendiumItem } from '$lib/server/db/schema';
-import { formatFieldName } from '$lib/utils/compendium';
+import { formatFieldName, getSortedFields } from '$lib/utils/compendium';
+
+const CREATURE_REFERENCE_FIELD_KEYS = new Set([
+	'armor_class',
+	'armor_detail',
+	'hit_points',
+	'hit_dice',
+	'type',
+	'size',
+	'alignment',
+	'challenge_rating_text',
+	'experience_points'
+]);
+
+const IMAGE_DETAIL_EXCLUDED_FIELD_KEYS = new Set(['file_url', 'alt_text', 'attribution', 'document']);
 
 const endpointToTypeMap = new Map<string, CompendiumTypeName>(
 	Object.values(COMPENDIUM_TYPE_CONFIGS).map((config) => [config.endpoint, config.name])
@@ -199,13 +213,22 @@ function normalizeFields(item: CompendiumItem): {
 	const itemData = (item.data ?? {}) as Record<string, unknown>;
 	const sections: CompendiumDetailSection[] = [];
 	const fields: CompendiumDetailField[] = [];
+	const orderedFields = getSortedFields(itemData, item.type);
 
-	for (const [key, rawValue] of Object.entries(itemData)) {
+	for (const [key, rawValue] of orderedFields) {
 		if (key === 'creatures' && item.type === 'creaturesets' && Array.isArray(rawValue)) {
 			const rosterSection = buildCreatureSetRosterSection(rawValue);
 			if (rosterSection) {
 				sections.push(rosterSection);
 			}
+			continue;
+		}
+
+		if (item.type === 'images' && IMAGE_DETAIL_EXCLUDED_FIELD_KEYS.has(key)) {
+			continue;
+		}
+
+		if (item.type === 'creatures' && CREATURE_REFERENCE_FIELD_KEYS.has(key)) {
 			continue;
 		}
 

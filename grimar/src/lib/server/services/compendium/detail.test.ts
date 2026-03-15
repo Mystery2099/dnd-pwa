@@ -68,13 +68,7 @@ describe('buildCompendiumDetailPayload', () => {
 
 		const payload = buildCompendiumDetailPayload(item);
 
-		expect(payload.fields).toEqual([
-			{
-				key: 'name',
-				label: 'Name',
-				value: 'Common Mounts'
-			}
-		]);
+		expect(payload.fields).toEqual([]);
 		expect(payload.sections).toEqual([
 			{
 				key: 'creatures',
@@ -97,6 +91,25 @@ describe('buildCompendiumDetailPayload', () => {
 					}
 				]
 			}
+		]);
+	});
+
+	it('returns curated sidebar fields instead of raw unfiltered metadata', () => {
+		const item = createItem({
+			type: 'languages',
+			data: {
+				is_exotic: true,
+				is_secret: false,
+				script_language: 'http://10.147.20.240:8888/v2/languages/infernal/'
+			}
+		});
+
+		const payload = buildCompendiumDetailPayload(item);
+
+		expect(payload.fields.map((field) => field.key)).toEqual([
+			'is_exotic',
+			'is_secret',
+			'script_language'
 		]);
 	});
 });
