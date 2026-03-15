@@ -4,6 +4,7 @@
 	import CompendiumAccordionSection from '$lib/components/compendium/CompendiumAccordionSection.svelte';
 	import CompendiumDetailHeader from '$lib/components/compendium/CompendiumDetailHeader.svelte';
 	import CompendiumDetailsPanel from '$lib/components/compendium/CompendiumDetailsPanel.svelte';
+	import CreatureSetRosterSection from '$lib/components/compendium/CreatureSetRosterSection.svelte';
 	import CreatureEncounterPanel from '$lib/components/compendium/CreatureEncounterPanel.svelte';
 	import CreatureHeader from '$lib/components/compendium/CreatureHeader.svelte';
 	import ImageDetailPanel from '$lib/components/compendium/ImageDetailPanel.svelte';
@@ -45,6 +46,19 @@
 		desc?: string;
 	};
 
+	type CreatureSetEntry = {
+		key?: string;
+		name?: string;
+		type?: { name?: string; key?: string } | string;
+		size?: { name?: string; key?: string } | string;
+		document?: { name?: string; display_name?: string };
+		environments?: Array<{ name?: string; key?: string }>;
+		challenge_rating_text?: string;
+		armor_class?: number;
+		hit_points?: number;
+		speed?: { walk?: number; unit?: string };
+	};
+
 	const CREATURE_DETAIL_FIELDS_IN_REFERENCE = [
 		'armor_class',
 		'armor_detail',
@@ -79,9 +93,15 @@
 			return fields.filter(([key]) => !CREATURE_DETAIL_FIELDS_IN_REFERENCE.includes(key));
 		}
 
+		if (data.type === 'creaturesets') {
+			return fields.filter(([key]) => key !== 'creatures');
+		}
+
 		return fields;
 	});
 	let markdownHtml = $derived<Record<string, string>>(data.markdownHtml ?? {});
+	let creatureSetEntries = $derived(getCreatureSetEntries(itemData.creatures));
+	let hasSidebarDetails = $derived(sortedFields.length > 0);
 
 	function markdownAt(path: string): string {
 		return markdownHtml[path] ?? '';
@@ -173,6 +193,20 @@
 			(entry): entry is NamedDetailEntry => Boolean(entry) && typeof entry === 'object'
 		);
 	}
+
+	function getCreatureSetEntries(value: unknown): CreatureSetEntry[] {
+		if (!Array.isArray(value)) {
+			return [];
+		}
+
+		return value.filter(
+			(entry): entry is CreatureSetEntry =>
+				Boolean(entry) &&
+				typeof entry === 'object' &&
+				(typeof (entry as CreatureSetEntry).name === 'string' ||
+					typeof (entry as CreatureSetEntry).key === 'string')
+		);
+	}
 </script>
 
 <svelte:head>
@@ -258,8 +292,16 @@
 				/>
 			{/if}
 
-			<div class="grid gap-6 p-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(20rem,0.8fr)]">
+			<div
+				class={`grid gap-6 p-6 ${
+					hasSidebarDetails ? 'xl:grid-cols-[minmax(0,1.2fr)_minmax(20rem,0.8fr)]' : ''
+				}`}
+			>
 				<div class="space-y-6">
+					{#if data.type === 'creaturesets' && creatureSetEntries.length > 0}
+						<CreatureSetRosterSection creatures={creatureSetEntries} />
+					{/if}
+
 					{#if data.type !== 'creatures' && (itemData.desc || item.description)}
 						<CompendiumAccordionSection
 							title="Description"
@@ -420,9 +462,11 @@
 					{/if}
 				</div>
 
-				<div class="space-y-6 xl:sticky xl:top-6 xl:self-start">
-					<CompendiumDetailsPanel fields={sortedFields} resolveValue={getDetailValue} />
-				</div>
+				{#if hasSidebarDetails}
+					<div class="space-y-6 xl:sticky xl:top-6 xl:self-start">
+						<CompendiumDetailsPanel fields={sortedFields} resolveValue={getDetailValue} />
+					</div>
+				{/if}
 			</div>
 		</div>
 	</div>
