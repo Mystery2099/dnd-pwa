@@ -99,6 +99,17 @@ Characters are intentionally lightweight:
 
 Open5e synchronization is handled by Bun scripts and stored in SQLite. Homebrew content is written directly into the same unified compendium model.
 
+### Compendium Detail Adapter
+
+The compendium detail route and API no longer expose raw provider JSON as the primary rendering contract. Instead, a server-side adapter builds a normalized detail payload with:
+
+- `detailSchemaVersion` for explicit contract versioning
+- `presentation` for header and media-oriented props
+- `fields` for curated sidebar/reference metadata
+- `sections` for structured content blocks such as markdown sections, spell classes, class features, creature encounters, and creature set rosters
+
+Markdown rendering for detail pages is also driven from this normalized detail payload, so section structure and markdown-key discovery live in one server-side place rather than being duplicated in the page loader.
+
 ## Authentication Model
 
 Authentication is handled in [`grimar/src/hooks.server.ts`](/home/mystery/misc-projects/dnd-pwa/grimar/src/hooks.server.ts) through the auth service layer.
@@ -173,3 +184,4 @@ The checked-in `.env.example` focuses on local development. `ADMIN_GROUPS`, `ADM
 - The dashboard still uses placeholder content instead of real campaign or character summaries
 - Character management is limited to lightweight records and list/create flows
 - Imported themes are device-local rather than synced through the server
+- The normalized compendium detail contract is internal to the app and versioned, but it is not yet documented as a public external API with migration guarantees beyond in-repo consumers

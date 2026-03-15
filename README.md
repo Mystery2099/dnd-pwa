@@ -64,6 +64,36 @@ The root `package.json` proxies the common lifecycle, quality, test, and databas
 - `/api/user/settings`
 - `/api/monitoring/web-vitals`
 
+### Compendium Detail Contract
+
+`GET /api/compendium/[type]/[slug]` returns the app-level normalized detail payload, not the raw storage row. The response is versioned with `detailSchemaVersion` so the client can rely on a stable contract as the adapter evolves.
+
+High-level response shape:
+
+```json
+{
+  "detailSchemaVersion": 1,
+  "item": { "...": "base compendium item" },
+  "presentation": {
+    "documentLabel": "5e 2014 Rules",
+    "image": { "...": "header/image presentation props" },
+    "creatureHeader": { "...": "creature header presentation props" }
+  },
+  "fields": [
+    { "key": "script_language", "label": "Script Language", "value": { "...": "normalized value" } }
+  ],
+  "sections": [
+    { "kind": "markdown", "...": "description or higher-level text" },
+    { "kind": "spell-classes", "...": "normalized spell class links" },
+    { "kind": "class-features", "...": "class feature entries" },
+    { "kind": "creature-encounter", "...": "combat-facing creature block" },
+    { "kind": "creature-set-roster", "...": "creature set roster cards" }
+  ]
+}
+```
+
+The detail page in [`grimar/src/routes/compendium/[type]/[key]/+page.svelte`](/home/mystery/misc-projects/dnd-pwa/grimar/src/routes/compendium/[type]/[key]/+page.svelte) is built against this normalized shape rather than directly interpreting provider JSON.
+
 ## Common Commands
 
 ```bash
