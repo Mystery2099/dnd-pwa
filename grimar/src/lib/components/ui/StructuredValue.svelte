@@ -1,10 +1,7 @@
 <script lang="ts">
+	import { resolveCompendiumLink } from '$lib/core/utils/compendium-links';
 	import StructuredValue from './StructuredValue.svelte';
 	import { formatFieldName } from '$lib/utils/compendium';
-	import {
-		COMPENDIUM_TYPE_CONFIGS,
-		type CompendiumTypeName
-	} from '$lib/core/constants/compendium';
 
 	interface Props {
 		value: unknown;
@@ -12,9 +9,6 @@
 	}
 
 	let { value, depth = 0 }: Props = $props();
-	const endpointToTypeMap = new Map<string, CompendiumTypeName>(
-		Object.values(COMPENDIUM_TYPE_CONFIGS).map((config) => [config.endpoint, config.name])
-	);
 
 	type CompendiumLink = {
 		label: string;
@@ -46,42 +40,21 @@
 		return typeof entry === 'object' && entry !== null;
 	}
 
-	function formatSlugLabel(slug: string): string {
-		return slug
-			.replace(/[-_]+/g, ' ')
-			.replace(/\b\w/g, (char) => char.toUpperCase())
-			.trim();
-	}
-
 	function getCompendiumLinkFromUrl(
 		input: string,
 		preferredLabel?: string,
 		meta?: string
 	): CompendiumLink | null {
-		try {
-			const parsed = new URL(input);
-			const pathParts = parsed.pathname.split('/').filter(Boolean);
-			const apiIndex = pathParts.indexOf('v2');
-			const endpoint = apiIndex >= 0 ? pathParts[apiIndex + 1] : null;
-			const slug = apiIndex >= 0 ? pathParts[apiIndex + 2] : null;
-
-			if (!endpoint || !slug) {
-				return null;
-			}
-
-			const type = endpointToTypeMap.get(endpoint);
-			if (!type) {
-				return null;
-			}
-
-			return {
-				label: preferredLabel?.trim() || formatSlugLabel(slug),
-				href: `/compendium/${type}/${slug}`,
-				meta
-			};
-		} catch {
+		const resolvedLink = resolveCompendiumLink(input, preferredLabel, meta);
+		if (!resolvedLink) {
 			return null;
 		}
+
+		return {
+			label: resolvedLink.label,
+			href: resolvedLink.href,
+			meta: resolvedLink.meta
+		};
 	}
 
 	function getLinkedObject(input: unknown): CompendiumLink | null {

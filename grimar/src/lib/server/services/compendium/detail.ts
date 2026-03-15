@@ -1,4 +1,4 @@
-import { COMPENDIUM_TYPE_CONFIGS, type CompendiumTypeName } from '$lib/core/constants/compendium';
+import type { CompendiumTypeName } from '$lib/core/constants/compendium';
 import type {
 	CompendiumCreatureSetRosterEntry,
 	CompendiumCreatureSetRosterSection,
@@ -9,6 +9,7 @@ import type {
 	CompendiumDetailValue,
 	CompendiumEntityListSection
 } from '$lib/core/types/compendium';
+import { resolveCompendiumLink } from '$lib/core/utils/compendium-links';
 import type { CompendiumItem } from '$lib/server/db/schema';
 import { formatFieldName, getSortedFields } from '$lib/utils/compendium';
 
@@ -26,50 +27,25 @@ const CREATURE_REFERENCE_FIELD_KEYS = new Set([
 
 const IMAGE_DETAIL_EXCLUDED_FIELD_KEYS = new Set(['file_url', 'alt_text', 'attribution', 'document']);
 
-const endpointToTypeMap = new Map<string, CompendiumTypeName>(
-	Object.values(COMPENDIUM_TYPE_CONFIGS).map((config) => [config.endpoint, config.name])
-);
-
-function formatSlugLabel(slug: string): string {
-	return slug
-		.replace(/[-_]+/g, ' ')
-		.replace(/\b\w/g, (char) => char.toUpperCase())
-		.trim();
-}
-
 function buildReferenceFromUrl(
 	value: string,
 	preferredLabel?: string,
 	meta?: string
 ): CompendiumDetailReference | null {
-	try {
-		const parsed = new URL(value);
-		const pathParts = parsed.pathname.split('/').filter(Boolean);
-		const v2Index = pathParts.indexOf('v2');
-		const endpoint = v2Index >= 0 ? pathParts[v2Index + 1] : null;
-		const key = v2Index >= 0 ? pathParts[v2Index + 2] : null;
-
-		if (!endpoint || !key) {
-			return null;
-		}
-
-		const type = endpointToTypeMap.get(endpoint);
-		if (!type) {
-			return null;
-		}
-
-		return {
-			kind: 'entity',
-			type,
-			key,
-			label: preferredLabel?.trim() || formatSlugLabel(key),
-			href: `/compendium/${type}/${key}`,
-			meta,
-			sourceUrl: value
-		};
-	} catch {
+	const resolvedLink = resolveCompendiumLink(value, preferredLabel, meta);
+	if (!resolvedLink) {
 		return null;
 	}
+
+	return {
+		kind: 'entity',
+		type: resolvedLink.type,
+		key: resolvedLink.key,
+		label: resolvedLink.label,
+		href: resolvedLink.href,
+		meta: resolvedLink.meta,
+		sourceUrl: resolvedLink.sourceUrl
+	};
 }
 
 function normalizeScalar(value: unknown): CompendiumDetailValue {
