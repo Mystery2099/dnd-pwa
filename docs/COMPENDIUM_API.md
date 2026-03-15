@@ -84,6 +84,7 @@ Response shape:
   ],
   "sections": [
     { "kind": "markdown", "...": "description or higher-level section" },
+    { "kind": "benefits", "...": "list or grouped background benefits" },
     { "kind": "spell-classes", "...": "normalized spell class access" },
     { "kind": "class-features", "...": "class progression content" },
     { "kind": "creature-encounter", "...": "combat-facing creature block" },

@@ -87,14 +87,10 @@ High-level response shape:
     { "kind": "spell-classes", "...": "normalized spell class links" },
     { "kind": "class-features", "...": "class feature entries" },
     { "kind": "creature-encounter", "...": "combat-facing creature block" },
-    { "kind": "creature-set-roster", "...": "creature set roster cards" }
+    { "kind": "creature-set-roster", "...": "creature set roster cards" },
+    { "kind": "benefits", "...": "benefit list or grouped cards" }
   ]
 }
-```
-
-The detail page in [`grimar/src/routes/compendium/[type]/[key]/+page.svelte`](/home/mystery/misc-projects/dnd-pwa/grimar/src/routes/compendium/[type]/[key]/+page.svelte) is built against this normalized shape rather than directly interpreting provider JSON.
-
-Some normalized sections intentionally vary by type. For example, `benefits` can be emitted as either a simple markdown list or grouped semantic cards when the upstream data carries typed benefit categories, such as on background pages.
 
 ## Common Commands
 
