@@ -1378,9 +1378,7 @@ function getCollectionIndexFromMarkdownKey(
 ): number | null {
 	const escapedCollectionKey = collectionKey.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 	const escapedFieldKey = fieldKey.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-	const match = key.match(
-		new RegExp(`^${escapedCollectionKey}\\.(\\d+)\\.${escapedFieldKey}$`)
-	);
+	const match = key.match(new RegExp(`^${escapedCollectionKey}\\.(\\d+)\\.${escapedFieldKey}$`));
 	if (!match) {
 		return null;
 	}
@@ -1466,10 +1464,7 @@ function getMarkdownTextForKey(
 					continue;
 				}
 
-				if (
-					typeof property.desc !== 'string' ||
-					key !== `weaponProperties.${index}.desc`
-				) {
+				if (typeof property.desc !== 'string' || key !== `weaponProperties.${index}.desc`) {
 					continue;
 				}
 
