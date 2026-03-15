@@ -37,7 +37,7 @@ function getDescription(item: DbCompendiumItem, itemData: Record<string, unknown
 	}
 
 	return typeof itemData.alt_text === 'string' && itemData.alt_text.trim()
-		? itemData.alt_text
+		? itemData.alt_text.trim()
 		: undefined;
 }
 
@@ -130,7 +130,15 @@ function buildBadges(
 	}
 
 	if (item.type === 'classes' || item.type === 'subclasses') {
-		return itemData.hit_dice ? [{ label: `d${itemData.hit_dice}`, variant: 'solid' }] : [];
+		const hitDice = itemData.hit_dice;
+		const safeHitDice =
+			typeof hitDice === 'number'
+				? String(hitDice)
+				: typeof hitDice === 'string' && /^\d+$/.test(hitDice.trim())
+					? hitDice.trim()
+					: null;
+
+		return safeHitDice ? [{ label: `d${safeHitDice}`, variant: 'solid' }] : [];
 	}
 
 	if (item.type === 'images') {

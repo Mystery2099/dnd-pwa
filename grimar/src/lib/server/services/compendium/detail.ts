@@ -1376,7 +1376,11 @@ function getCollectionIndexFromMarkdownKey(
 	collectionKey: string,
 	fieldKey = 'desc'
 ): number | null {
-	const match = key.match(new RegExp(`^${collectionKey}\\.(\\d+)\\.${fieldKey}$`));
+	const escapedCollectionKey = collectionKey.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+	const escapedFieldKey = fieldKey.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+	const match = key.match(
+		new RegExp(`^${escapedCollectionKey}\\.(\\d+)\\.${escapedFieldKey}$`)
+	);
 	if (!match) {
 		return null;
 	}
