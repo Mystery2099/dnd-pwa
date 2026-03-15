@@ -257,10 +257,22 @@ export interface CompendiumCreatureHeaderPresentation {
 	experiencePoints?: number;
 }
 
+export interface CompendiumDetailHeaderBadgeIcon {
+	family: 'spell-school' | 'damage-type' | 'aoe';
+	value: string;
+}
+
+export interface CompendiumDetailHeaderBadge {
+	label: string;
+	variant: 'solid' | 'outline';
+	icon?: CompendiumDetailHeaderBadgeIcon;
+}
+
 export interface CompendiumDetailPresentation {
 	documentLabel?: string;
 	image?: CompendiumImagePresentation;
 	creatureHeader?: CompendiumCreatureHeaderPresentation;
+	headerBadges: CompendiumDetailHeaderBadge[];
 }
 
 export type CompendiumDetailSection =

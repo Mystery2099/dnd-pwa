@@ -206,7 +206,6 @@ export const load: PageServerLoad = async ({ params }) => {
 	const markdownSources = collectCompendiumMarkdownSources(item, detail);
 	const itemData = (item.data ?? {}) as Record<string, unknown>;
 	const markdownHtml = await buildMarkdownHtml(markdownSources);
-	const imageAssetUrl = type === 'images' ? resolveImageAssetUrl(itemData.file_url) : null;
 	const relatedImagesRaw = await getRelatedImages(itemType, item.name);
 	const relatedImagesFromCompendium: RelatedImage[] = relatedImagesRaw.map((image) => {
 		const imageData = (image.data ?? {}) as Record<string, unknown>;
@@ -238,7 +237,6 @@ export const load: PageServerLoad = async ({ params }) => {
 		item: sanitizePageData(item),
 		detail: sanitizePageData(detail),
 		markdownHtml: sanitizePageData(markdownHtml),
-		imageAssetUrl,
 		relatedImages: sanitizePageData(relatedImages)
 	};
 };

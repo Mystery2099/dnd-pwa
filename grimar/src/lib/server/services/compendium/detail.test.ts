@@ -279,7 +279,11 @@ describe('buildCompendiumDetailPayload', () => {
 				gameSystem: '5e',
 				permalink: 'https://example.com/bestiary'
 			},
-			creatureHeader: undefined
+			creatureHeader: undefined,
+			headerBadges: [
+				{ label: 'Image', variant: 'solid' },
+				{ label: 'Attributed', variant: 'outline' }
+			]
 		});
 
 		expect(buildCompendiumDetailPayload(creatureItem).presentation).toEqual({
@@ -307,8 +311,70 @@ describe('buildCompendiumDetailPayload', () => {
 				},
 				alignment: 'neutral',
 				experiencePoints: 450
+			},
+			headerBadges: []
+		});
+	});
+
+	it('builds normalized header badges for spell, class, and magic item detail pages', () => {
+		const spellItem = createItem({
+			type: 'spells',
+			data: {
+				level: 3,
+				school: { name: 'Illusion' },
+				damage_types: ['Psychic'],
+				target_type: '20-foot sphere',
+				concentration: true,
+				ritual: true
 			}
 		});
+		const classItem = createItem({
+			type: 'classes',
+			data: {
+				hit_dice: 8,
+				primary_abilities: ['Dexterity', 'Wisdom'],
+				saving_throws: ['Dexterity', 'Intelligence']
+			}
+		});
+		const magicItem = createItem({
+			type: 'magicitems',
+			data: {
+				rarity: 'Rare',
+				type: 'Wondrous Item',
+				requires_attunement: true
+			}
+		});
+
+		expect(buildCompendiumDetailPayload(spellItem).presentation.headerBadges).toEqual([
+			{ label: 'Level 3', variant: 'solid' },
+			{
+				label: 'Illusion',
+				variant: 'outline',
+				icon: { family: 'spell-school', value: 'illusion' }
+			},
+			{
+				label: 'Psychic',
+				variant: 'outline',
+				icon: { family: 'damage-type', value: 'psychic' }
+			},
+			{
+				label: '20-foot sphere',
+				variant: 'outline',
+				icon: { family: 'aoe', value: 'sphere' }
+			},
+			{ label: 'Concentration', variant: 'outline' },
+			{ label: 'Ritual', variant: 'outline' }
+		]);
+		expect(buildCompendiumDetailPayload(classItem).presentation.headerBadges).toEqual([
+			{ label: 'Hit Die: d8', variant: 'solid' },
+			{ label: 'Dexterity, Wisdom', variant: 'outline' },
+			{ label: 'Saves: Dexterity, Intelligence', variant: 'outline' }
+		]);
+		expect(buildCompendiumDetailPayload(magicItem).presentation.headerBadges).toEqual([
+			{ label: 'Rare', variant: 'solid' },
+			{ label: 'Wondrous Item', variant: 'outline' },
+			{ label: 'Requires Attunement', variant: 'outline' }
+		]);
 	});
 
 	it('promotes creature encounter data into a dedicated section', () => {

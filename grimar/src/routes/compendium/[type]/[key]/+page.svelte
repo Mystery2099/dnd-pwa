@@ -48,7 +48,6 @@
 
 	let item = $derived(data.item);
 	let presentation = $derived(data.detail.presentation);
-	let itemData = $derived(item.data as Record<string, unknown>);
 	let featuredRelatedImage = $derived(data.type === 'images' ? undefined : data.relatedImages?.[0]);
 	let remainingRelatedImages = $derived(data.relatedImages?.slice(1) ?? []);
 	let detailFields = $derived(data.detail.fields as CompendiumDetailField[]);
@@ -188,10 +187,8 @@
 						documentLabel={presentation.documentLabel}
 						icon={data.config.icon}
 						type={data.type}
-						{itemData}
+						headerBadges={presentation.headerBadges}
 						{featuredRelatedImage}
-						imageAttribution={presentation.image?.attribution}
-						imageFileUrl={presentation.image?.fileUrl}
 					/>
 				{/if}
 			</div>
@@ -199,7 +196,7 @@
 			{#if data.type === 'images'}
 				<ImageDetailPanel
 					title={item.name}
-					imageAssetUrl={presentation.image?.assetUrl ?? data.imageAssetUrl}
+					imageAssetUrl={presentation.image?.assetUrl ?? null}
 					altText={presentation.image?.altText}
 					attribution={presentation.image?.attribution}
 					documentLabel={presentation.documentLabel}

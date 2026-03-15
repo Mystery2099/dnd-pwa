@@ -3,6 +3,7 @@ import type {
 	CompendiumBenefitsSection,
 	CompendiumClassFeaturesSection,
 	CompendiumCreatureEncounterSection,
+	CompendiumDetailHeaderBadge,
 	CompendiumDetailPresentation,
 	CompendiumCreatureSetRosterEntry,
 	CompendiumCreatureSetRosterSection,
@@ -21,8 +22,9 @@ import type {
 	CompendiumWeaponPropertiesSection
 } from '$lib/core/types/compendium';
 import { resolveCompendiumLink } from '$lib/core/utils/compendium-links';
+import { resolveAoeToken, resolveDamageTypeTokens } from '$lib/core/utils/compendiumIconography';
 import type { CompendiumItem } from '$lib/server/db/schema';
-import { formatSpeed, isSpeedObject } from '$lib/utils/compendium';
+import { formatSpeed, formatValue, getImageKindLabel, isSpeedObject } from '$lib/utils/compendium';
 import { formatFieldName, getSortedFields } from '$lib/utils/compendium';
 import { OPEN5E_API_BASE_URL } from '$lib/server/providers/open5e-config';
 
@@ -119,11 +121,131 @@ function buildPresentation(item: CompendiumItem): CompendiumDetailPresentation {
 				}
 			: undefined;
 
+	const headerBadges = buildHeaderBadges(item.type, itemData);
+
 	return {
 		documentLabel,
 		image: imagePresentation,
-		creatureHeader
+		creatureHeader,
+		headerBadges
 	};
+}
+
+function buildHeaderBadges(
+	type: CompendiumItem['type'],
+	itemData: Record<string, unknown>
+): CompendiumDetailHeaderBadge[] {
+	if (type === 'spells') {
+		const badges: CompendiumDetailHeaderBadge[] = [];
+		const level = itemData.level;
+		if (typeof level === 'number') {
+			badges.push({
+				label: level === 0 ? 'Cantrip' : `Level ${level}`,
+				variant: 'solid'
+			});
+		}
+
+		const schoolLabel = formatValue(itemData.school);
+		const schoolToken =
+			typeof itemData.school === 'string'
+				? itemData.school.trim().toLowerCase().replace(/\s+/g, '-')
+				: getLinkedLabel(itemData.school)?.trim().toLowerCase().replace(/\s+/g, '-');
+		if (schoolLabel !== '—') {
+			badges.push({
+				label: schoolLabel,
+				variant: 'outline',
+				icon: schoolToken ? { family: 'spell-school', value: schoolToken } : undefined
+			});
+		}
+
+		const damageTypesLabel = formatValue(itemData.damage_types);
+		const damageTypeToken = resolveDamageTypeTokens(itemData.damage_types)[0];
+		if (damageTypesLabel !== '—') {
+			badges.push({
+				label: damageTypesLabel,
+				variant: 'outline',
+				icon: damageTypeToken ? { family: 'damage-type', value: damageTypeToken } : undefined
+			});
+		}
+
+		const targetTypeLabel = formatValue(itemData.target_type);
+		const aoeToken = resolveAoeToken(itemData.target_type);
+		if (targetTypeLabel !== '—') {
+			badges.push({
+				label: targetTypeLabel,
+				variant: 'outline',
+				icon: aoeToken ? { family: 'aoe', value: aoeToken } : undefined
+			});
+		}
+
+		if (itemData.concentration) {
+			badges.push({ label: 'Concentration', variant: 'outline' });
+		}
+
+		if (itemData.ritual) {
+			badges.push({ label: 'Ritual', variant: 'outline' });
+		}
+
+		return badges;
+	}
+
+	if (type === 'classes') {
+		const badges: CompendiumDetailHeaderBadge[] = [];
+		if (itemData.hit_dice) {
+			badges.push({
+				label: `Hit Die: d${itemData.hit_dice}`,
+				variant: 'solid'
+			});
+		}
+
+		const primaryAbilities = formatValue(itemData.primary_abilities);
+		if (primaryAbilities !== '—') {
+			badges.push({ label: primaryAbilities, variant: 'outline' });
+		}
+
+		const savingThrows = formatValue(itemData.saving_throws);
+		if (savingThrows !== '—') {
+			badges.push({ label: `Saves: ${savingThrows}`, variant: 'outline' });
+		}
+
+		return badges;
+	}
+
+	if (type === 'magicitems') {
+		const badges: CompendiumDetailHeaderBadge[] = [];
+		const rarity = getString(itemData.rarity);
+		if (rarity) {
+			badges.push({ label: rarity, variant: 'solid' });
+		}
+
+		const itemType = getString(itemData.type);
+		if (itemType) {
+			badges.push({ label: itemType, variant: 'outline' });
+		}
+
+		if (itemData.requires_attunement) {
+			badges.push({ label: 'Requires Attunement', variant: 'outline' });
+		}
+
+		return badges;
+	}
+
+	if (type === 'images') {
+		const badges: CompendiumDetailHeaderBadge[] = [
+			{
+				label: getImageKindLabel(getString(itemData.file_url)),
+				variant: 'solid'
+			}
+		];
+
+		if (getString(itemData.attribution)) {
+			badges.push({ label: 'Attributed', variant: 'outline' });
+		}
+
+		return badges;
+	}
+
+	return [];
 }
 
 function normalizeScalar(value: unknown): CompendiumDetailValue {
