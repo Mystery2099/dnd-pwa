@@ -161,6 +161,7 @@ The checked-in `.env.example` covers the core local-dev values. `ADMIN_GROUPS`, 
 ## Documentation
 
 - [docs/SPECIFICATIONS.md](/home/mystery/misc-projects/dnd-pwa/docs/SPECIFICATIONS.md)
+- [docs/COMPENDIUM_API.md](/home/mystery/misc-projects/dnd-pwa/docs/COMPENDIUM_API.md)
 - [docs/DESIGN_SYSTEM.md](/home/mystery/misc-projects/dnd-pwa/docs/DESIGN_SYSTEM.md)
 - [docs/STYLE_GUIDE.md](/home/mystery/misc-projects/dnd-pwa/docs/STYLE_GUIDE.md)
 - [docs/THEMING_DEV.md](/home/mystery/misc-projects/dnd-pwa/docs/THEMING_DEV.md)

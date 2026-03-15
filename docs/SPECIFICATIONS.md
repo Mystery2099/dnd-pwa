@@ -6,6 +6,10 @@ Grimar is a self-hosted SvelteKit application for browsing 5e compendium data, m
 
 This document describes the implemented product shape, not older roadmap ideas.
 
+Related implementation docs:
+
+- [COMPENDIUM_API.md](/home/mystery/misc-projects/dnd-pwa/docs/COMPENDIUM_API.md)
+
 ## Product Scope
 
 ### Implemented
