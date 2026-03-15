@@ -85,7 +85,7 @@
 </script>
 
 <svelte:head>
-	<title>Import Homebrew</title>
+	<title>Import Homebrew | Grimar</title>
 </svelte:head>
 
 <PageShell title="Import Homebrew">

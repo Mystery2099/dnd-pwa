@@ -52,7 +52,7 @@
 </script>
 
 <svelte:head>
-	<title>Edit {data.item.name} | Homebrew</title>
+	<title>Edit {data.item.name} | Homebrew | Grimar</title>
 </svelte:head>
 
 <PageShell title="Edit {typeLabels[data.item.type] || data.item.type}">

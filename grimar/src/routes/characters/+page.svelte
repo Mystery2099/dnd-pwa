@@ -9,6 +9,10 @@
 	const charactersQuery = $derived(createCharactersQuery());
 </script>
 
+<svelte:head>
+	<title>Characters | Grimar</title>
+</svelte:head>
+
 <div class="min-h-[calc(100vh-6rem)] p-4">
 	<SurfaceCard padding="p-6 md:p-8">
 		<h1 class="text-holo mb-1 text-3xl font-bold tracking-tight text-[var(--color-text-primary)]">

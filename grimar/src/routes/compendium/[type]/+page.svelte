@@ -372,7 +372,7 @@
 </script>
 
 <svelte:head>
-	<title>{config.plural} | Compendium | D&D</title>
+	<title>{config.plural} | Compendium | Grimar</title>
 </svelte:head>
 
 <div

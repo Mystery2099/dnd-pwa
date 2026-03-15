@@ -176,7 +176,7 @@
 </script>
 
 <svelte:head>
-	<title>{item.name} | {data.config.plural} | Compendium | D&D</title>
+	<title>{item.name} | {data.config.plural} | Compendium | Grimar</title>
 </svelte:head>
 
 <div class="min-h-screen bg-linear-to-b from-(--color-bg-primary) to-(--color-bg-secondary)">

@@ -5,6 +5,10 @@
 	let { data } = $props();
 </script>
 
+<svelte:head>
+	<title>Dashboard | Grimar</title>
+</svelte:head>
+
 <SurfaceCard class="animate-enter p-6">
 	<!-- Static Glossy Overlay -->
 	<div

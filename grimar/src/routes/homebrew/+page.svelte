@@ -50,6 +50,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>My Homebrew | Grimar</title>
+</svelte:head>
+
 <PageShell title="My Homebrew">
 	<div class="mb-6 flex flex-wrap gap-2 sm:justify-end">
 		<Button variant="ghost" href="/api/homebrew/export/all" download="homebrew-all.json">

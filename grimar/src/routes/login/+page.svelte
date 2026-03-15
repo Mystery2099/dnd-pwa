@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-	<title>Sign In - Grimar</title>
+	<title>Sign In | Grimar</title>
 </svelte:head>
 
 <div class="flex min-h-[60vh] items-center justify-center p-4">

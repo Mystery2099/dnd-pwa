@@ -373,7 +373,7 @@
 </script>
 
 <svelte:head>
-	<title>Settings - Grimar</title>
+	<title>Settings | Grimar</title>
 </svelte:head>
 
 <div

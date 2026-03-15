@@ -17,6 +17,10 @@
 	const indexedTypes = $derived(Object.keys(COMPENDIUM_TYPE_CONFIGS).length);
 </script>
 
+<svelte:head>
+	<title>Compendium | Grimar</title>
+</svelte:head>
+
 <PageShell
 	title="Compendium"
 	description="Browse the complete D&D 5e reference library"

@@ -3,6 +3,10 @@
 	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
 </script>
 
+<svelte:head>
+	<title>Grimar</title>
+</svelte:head>
+
 <div class="flex min-h-[80vh] items-center justify-center p-4">
 	<SurfaceCard class="max-w-md bg-[var(--color-bg-card)] p-8 text-center">
 		<h1
