@@ -112,4 +112,47 @@ describe('buildCompendiumDetailPayload', () => {
 			'script_language'
 		]);
 	});
+
+	it('promotes repeatable content arrays into structured sections', () => {
+		const item = createItem({
+			type: 'species',
+			data: {
+				traits: [
+					{ name: 'Darkvision', desc: 'You can see in dim light.' },
+					{ name: 'Keen Senses', desc: 'You have proficiency in Perception.' }
+				],
+				descriptions: [{ document: 'SRD', gamesystem: '5e', desc: 'Variant text.' }],
+				benefits: [{ desc: 'Gain a minor benefit.' }]
+			}
+		});
+
+		const payload = buildCompendiumDetailPayload(item);
+
+		expect(payload.sections).toEqual([
+			{
+				key: 'descriptions',
+				title: 'Descriptions',
+				description: 'Variant text grouped by system and source document.',
+				kind: 'descriptions',
+				items: [{ document: 'SRD', gamesystem: '5e', markdownKey: 'descriptions.0.desc' }]
+			},
+			{
+				key: 'benefits',
+				title: 'Benefits',
+				description: 'Mechanical benefits and repeatable advantages.',
+				kind: 'benefits',
+				items: [{ markdownKey: 'benefits.0.desc' }]
+			},
+			{
+				key: 'traits',
+				title: 'Traits',
+				description: 'Species-specific traits and inherited features.',
+				kind: 'traits',
+				items: [
+					{ name: 'Darkvision', markdownKey: 'traits.0.desc' },
+					{ name: 'Keen Senses', markdownKey: 'traits.1.desc' }
+				]
+			}
+		]);
+	});
 });

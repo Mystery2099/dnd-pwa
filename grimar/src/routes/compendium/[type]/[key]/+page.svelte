@@ -11,18 +11,16 @@
 	import RelatedImagesPanel from '$lib/components/compendium/RelatedImagesPanel.svelte';
 	import SpellDetailSections from '$lib/components/compendium/SpellDetailSections.svelte';
 	import type {
+		CompendiumBenefitsSection,
 		CompendiumCreatureSetRosterSection,
 		CompendiumDetailField
+		,
+		CompendiumDescriptionsSection,
+		CompendiumTraitsSection,
+		CompendiumWeaponPropertiesSection
 	} from '$lib/core/types/compendium';
 	import type { PageData } from './$types';
-	import {
-		isWeaponPropertyArray,
-		getWeaponProperties,
-		isDescriptionArray,
-		getDescriptions,
-		isBenefitArray,
-		getBenefits
-	} from '$lib/utils/compendium';
+	import {} from '$lib/utils/compendium';
 
 	interface Props {
 		data: PageData;
@@ -60,14 +58,39 @@
 	let creatureActionEntries = $derived(getNamedDetailEntries(itemData.actions));
 	let creatureTraitEntries = $derived(getNamedDetailEntries(itemData.traits));
 	let detailFields = $derived(data.detail.fields as CompendiumDetailField[]);
+	let detailSections = $derived(data.detail.sections);
 	let markdownHtml = $derived<Record<string, string>>(data.markdownHtml ?? {});
 	let creatureSetRosterSection = $derived.by(() => {
-		const sections = data.detail.sections as Array<CompendiumCreatureSetRosterSection | { kind: string }>;
+		const sections = detailSections as Array<CompendiumCreatureSetRosterSection | { kind: string }>;
 		const rosterSection = sections.find(
 			(section): section is CompendiumCreatureSetRosterSection =>
 				section.kind === 'creature-set-roster'
 		);
 		return rosterSection ?? null;
+	});
+	let descriptionsSection = $derived.by(() => {
+		const section = detailSections.find(
+			(entry): entry is CompendiumDescriptionsSection => entry.kind === 'descriptions'
+		);
+		return section ?? null;
+	});
+	let benefitsSection = $derived.by(() => {
+		const section = detailSections.find(
+			(entry): entry is CompendiumBenefitsSection => entry.kind === 'benefits'
+		);
+		return section ?? null;
+	});
+	let weaponPropertiesSection = $derived.by(() => {
+		const section = detailSections.find(
+			(entry): entry is CompendiumWeaponPropertiesSection => entry.kind === 'weapon-properties'
+		);
+		return section ?? null;
+	});
+	let traitsSection = $derived.by(() => {
+		const section = detailSections.find(
+			(entry): entry is CompendiumTraitsSection => entry.kind === 'traits'
+		);
+		return section ?? null;
 	});
 	let hasSidebarDetails = $derived(detailFields.length > 0);
 
@@ -284,14 +307,14 @@
 						</CompendiumAccordionSection>
 					{/if}
 
-					{#if isDescriptionArray(itemData.descriptions)}
+					{#if descriptionsSection}
 						<CompendiumAccordionSection
-							title="Descriptions"
-							description="Variant text grouped by system and source document."
+							title={descriptionsSection.title}
+							description={descriptionsSection.description}
 							value="descriptions"
 						>
 							<div class="space-y-4">
-								{#each getDescriptions(itemData.descriptions) as desc, index (`${desc.document ?? 'description'}-${index}`)}
+								{#each descriptionsSection.items as desc, index (`${desc.document ?? 'description'}-${index}`)}
 									<div
 										class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/55 p-4"
 									>
@@ -313,7 +336,7 @@
 											class="prose prose-invert prose-sm max-w-none text-[var(--color-text-secondary)]"
 										>
 											<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-											{@html markdownAt(`descriptions.${index}.desc`)}
+											{@html markdownAt(desc.markdownKey)}
 										</div>
 									</div>
 								{/each}
@@ -321,51 +344,51 @@
 						</CompendiumAccordionSection>
 					{/if}
 
-					{#if isBenefitArray(itemData.benefits)}
+					{#if benefitsSection}
 						<CompendiumAccordionSection
-							title="Benefits"
-							description="Mechanical benefits and repeatable advantages."
+							title={benefitsSection.title}
+							description={benefitsSection.description}
 							value="benefits"
 						>
 							<ul class="list-inside list-disc space-y-2 text-[var(--color-text-secondary)]">
-								{#each getBenefits(itemData.benefits) as _benefit, index (index)}
+								{#each benefitsSection.items as benefit, index (index)}
 									<li class="prose prose-invert prose-sm max-w-none [&>p]:m-0">
 										<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-										{@html markdownAt(`benefits.${index}.desc`)}
+										{@html markdownAt(benefit.markdownKey)}
 									</li>
 								{/each}
 							</ul>
 						</CompendiumAccordionSection>
 					{/if}
 
-					{#if data.type === 'weapons' && isWeaponPropertyArray(itemData.properties)}
+					{#if weaponPropertiesSection}
 						<CompendiumAccordionSection
-							title="Properties"
-							description="Rules traits attached to this weapon."
+							title={weaponPropertiesSection.title}
+							description={weaponPropertiesSection.description}
 							value="weapon-properties"
 						>
 							<div class="grid gap-3">
-								{#each getWeaponProperties(itemData.properties) as wp, index (`${wp.property?.key ?? wp.property?.name ?? 'property'}-${index}`)}
+								{#each weaponPropertiesSection.items as property, index (`${property.name}-${index}`)}
 									<div
 										class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/55 p-4"
 									>
 										<div class="flex items-center gap-2">
-											<span class="font-semibold text-accent">{wp.property?.name ?? ''}</span>
-											{#if wp.property?.type}
+											<span class="font-semibold text-accent">{property.name}</span>
+											{#if property.propertyType}
 												<span class="rounded bg-accent/20 px-2 py-0.5 text-xs text-accent">
-													{wp.property.type}
+													{property.propertyType}
 												</span>
 											{/if}
-											{#if wp.detail}
-												<span class="text-sm text-[var(--color-text-muted)]">({wp.detail})</span>
+											{#if property.detail}
+												<span class="text-sm text-[var(--color-text-muted)]">({property.detail})</span>
 											{/if}
 										</div>
-										{#if wp.property?.desc}
+										{#if property.markdownKey}
 											<div
 												class="prose prose-invert prose-sm mt-2 max-w-none text-[var(--color-text-secondary)]"
 											>
 												<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-												{@html markdownAt(`weaponProperties.${index}.desc`)}
+												{@html markdownAt(property.markdownKey)}
 											</div>
 										{/if}
 									</div>
@@ -374,24 +397,24 @@
 						</CompendiumAccordionSection>
 					{/if}
 
-					{#if data.type === 'species' && itemData.traits && Array.isArray(itemData.traits) && itemData.traits.length > 0}
+					{#if traitsSection}
 						<CompendiumAccordionSection
-							title="Traits"
-							description="Species-specific traits and inherited features."
+							title={traitsSection.title}
+							description={traitsSection.description}
 							value="species-traits"
 						>
 							<div class="grid gap-3">
-								{#each itemData.traits as trait, index (`${trait.key ?? trait.name ?? 'trait'}-${index}`)}
+								{#each traitsSection.items as trait, index (`${trait.name}-${index}`)}
 									<div
 										class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/55 p-4"
 									>
 										<h3 class="font-semibold text-accent">{trait.name}</h3>
-										{#if trait.desc}
+										{#if trait.markdownKey}
 											<div
 												class="prose prose-invert prose-sm mt-1 max-w-none text-[var(--color-text-secondary)]"
 											>
 												<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-												{@html markdownAt(`traits.${index}.desc`)}
+												{@html markdownAt(trait.markdownKey)}
 											</div>
 										{/if}
 									</div>

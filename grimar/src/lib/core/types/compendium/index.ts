@@ -126,9 +126,63 @@ export interface CompendiumCreatureSetRosterSection {
 	items: CompendiumCreatureSetRosterEntry[];
 }
 
+export interface CompendiumDescriptionEntry {
+	document?: string;
+	gamesystem?: string;
+	markdownKey: string;
+}
+
+export interface CompendiumDescriptionsSection {
+	key: string;
+	title: string;
+	description?: string;
+	kind: 'descriptions';
+	items: CompendiumDescriptionEntry[];
+}
+
+export interface CompendiumBenefitsSection {
+	key: string;
+	title: string;
+	description?: string;
+	kind: 'benefits';
+	items: Array<{ markdownKey: string }>;
+}
+
+export interface CompendiumWeaponPropertyEntry {
+	name: string;
+	propertyType?: string;
+	detail?: string;
+	markdownKey?: string;
+}
+
+export interface CompendiumWeaponPropertiesSection {
+	key: string;
+	title: string;
+	description?: string;
+	kind: 'weapon-properties';
+	items: CompendiumWeaponPropertyEntry[];
+}
+
+export interface CompendiumTraitEntry {
+	name: string;
+	markdownKey?: string;
+}
+
+export interface CompendiumTraitsSection {
+	key: string;
+	title: string;
+	description?: string;
+	kind: 'traits';
+	items: CompendiumTraitEntry[];
+}
+
 export type CompendiumDetailSection =
 	| CompendiumEntityListSection
-	| CompendiumCreatureSetRosterSection;
+	| CompendiumCreatureSetRosterSection
+	| CompendiumDescriptionsSection
+	| CompendiumBenefitsSection
+	| CompendiumWeaponPropertiesSection
+	| CompendiumTraitsSection;
 
 export interface CompendiumDetailPayload {
 	item: CompendiumItem;

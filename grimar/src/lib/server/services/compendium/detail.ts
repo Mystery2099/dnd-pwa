@@ -1,13 +1,19 @@
 import type { CompendiumTypeName } from '$lib/core/constants/compendium';
 import type {
+	CompendiumBenefitsSection,
 	CompendiumCreatureSetRosterEntry,
 	CompendiumCreatureSetRosterSection,
+	CompendiumDescriptionsSection,
 	CompendiumDetailField,
 	CompendiumDetailPayload,
 	CompendiumDetailReference,
 	CompendiumDetailSection,
+	CompendiumDescriptionEntry,
 	CompendiumDetailValue,
 	CompendiumEntityListSection
+	,
+	CompendiumTraitsSection,
+	CompendiumWeaponPropertiesSection
 } from '$lib/core/types/compendium';
 import { resolveCompendiumLink } from '$lib/core/utils/compendium-links';
 import type { CompendiumItem } from '$lib/server/db/schema';
@@ -182,6 +188,141 @@ function buildCreatureSetRosterSection(rawValue: unknown): CompendiumCreatureSet
 	};
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+	return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
+
+function buildDescriptionsSection(rawValue: unknown): CompendiumDescriptionsSection | null {
+	if (!Array.isArray(rawValue) || rawValue.length === 0) {
+		return null;
+	}
+
+	const items: CompendiumDescriptionEntry[] = rawValue
+		.map((entry, index): CompendiumDescriptionEntry | null => {
+			if (!isRecord(entry) || typeof entry.desc !== 'string') {
+				return null;
+			}
+
+			return {
+				document: getString(entry.document),
+				gamesystem: getString(entry.gamesystem),
+				markdownKey: `descriptions.${index}.desc`
+			};
+		})
+		.filter((entry): entry is CompendiumDescriptionEntry => entry !== null);
+
+	if (items.length === 0) {
+		return null;
+	}
+
+	return {
+		key: 'descriptions',
+		title: 'Descriptions',
+		description: 'Variant text grouped by system and source document.',
+		kind: 'descriptions',
+		items
+	};
+}
+
+function buildBenefitsSection(rawValue: unknown): CompendiumBenefitsSection | null {
+	if (!Array.isArray(rawValue) || rawValue.length === 0) {
+		return null;
+	}
+
+	const items = rawValue
+		.map((entry, index) => (isRecord(entry) && typeof entry.desc === 'string' ? { markdownKey: `benefits.${index}.desc` } : null))
+		.filter((entry): entry is { markdownKey: string } => entry !== null);
+
+	if (items.length === 0) {
+		return null;
+	}
+
+	return {
+		key: 'benefits',
+		title: 'Benefits',
+		description: 'Mechanical benefits and repeatable advantages.',
+		kind: 'benefits',
+		items
+	};
+}
+
+function buildWeaponPropertiesSection(rawValue: unknown): CompendiumWeaponPropertiesSection | null {
+	if (!Array.isArray(rawValue) || rawValue.length === 0) {
+		return null;
+	}
+
+	const items = rawValue
+		.map((entry, index) => {
+			if (!isRecord(entry) || !isRecord(entry.property)) {
+				return null;
+			}
+
+			const property = entry.property;
+			const name = getString(property.name);
+			if (!name) {
+				return null;
+			}
+
+			return {
+				name,
+				propertyType: getString(property.type),
+				detail: getString(entry.detail),
+				markdownKey: typeof property.desc === 'string' ? `weaponProperties.${index}.desc` : undefined
+			};
+		})
+		.filter(
+			(entry): entry is NonNullable<typeof entry> => entry !== null
+		);
+
+	if (items.length === 0) {
+		return null;
+	}
+
+	return {
+		key: 'weapon-properties',
+		title: 'Properties',
+		description: 'Rules traits attached to this weapon.',
+		kind: 'weapon-properties',
+		items
+	};
+}
+
+function buildTraitsSection(rawValue: unknown): CompendiumTraitsSection | null {
+	if (!Array.isArray(rawValue) || rawValue.length === 0) {
+		return null;
+	}
+
+	const items = rawValue
+		.map((entry, index) => {
+			if (!isRecord(entry)) {
+				return null;
+			}
+
+			const name = getString(entry.name);
+			if (!name) {
+				return null;
+			}
+
+			return {
+				name,
+				markdownKey: typeof entry.desc === 'string' ? `traits.${index}.desc` : undefined
+			};
+		})
+		.filter((entry): entry is NonNullable<typeof entry> => entry !== null);
+
+	if (items.length === 0) {
+		return null;
+	}
+
+	return {
+		key: 'traits',
+		title: 'Traits',
+		description: 'Species-specific traits and inherited features.',
+		kind: 'traits',
+		items
+	};
+}
+
 function normalizeFields(item: CompendiumItem): {
 	fields: CompendiumDetailField[];
 	sections: CompendiumDetailSection[];
@@ -189,14 +330,44 @@ function normalizeFields(item: CompendiumItem): {
 	const itemData = (item.data ?? {}) as Record<string, unknown>;
 	const sections: CompendiumDetailSection[] = [];
 	const fields: CompendiumDetailField[] = [];
+	const consumedSectionKeys = new Set<string>();
+
+	const rosterSection =
+		item.type === 'creaturesets' ? buildCreatureSetRosterSection(itemData.creatures) : null;
+	if (rosterSection) {
+		sections.push(rosterSection);
+		consumedSectionKeys.add('creatures');
+	}
+
+	const descriptionsSection = buildDescriptionsSection(itemData.descriptions);
+	if (descriptionsSection) {
+		sections.push(descriptionsSection);
+		consumedSectionKeys.add('descriptions');
+	}
+
+	const benefitsSection = buildBenefitsSection(itemData.benefits);
+	if (benefitsSection) {
+		sections.push(benefitsSection);
+		consumedSectionKeys.add('benefits');
+	}
+
+	const weaponPropertiesSection =
+		item.type === 'weapons' ? buildWeaponPropertiesSection(itemData.properties) : null;
+	if (weaponPropertiesSection) {
+		sections.push(weaponPropertiesSection);
+		consumedSectionKeys.add('properties');
+	}
+
+	const traitsSection = item.type === 'species' ? buildTraitsSection(itemData.traits) : null;
+	if (traitsSection) {
+		sections.push(traitsSection);
+		consumedSectionKeys.add('traits');
+	}
+
 	const orderedFields = getSortedFields(itemData, item.type);
 
 	for (const [key, rawValue] of orderedFields) {
-		if (key === 'creatures' && item.type === 'creaturesets' && Array.isArray(rawValue)) {
-			const rosterSection = buildCreatureSetRosterSection(rawValue);
-			if (rosterSection) {
-				sections.push(rosterSection);
-			}
+		if (consumedSectionKeys.has(key)) {
 			continue;
 		}
 
