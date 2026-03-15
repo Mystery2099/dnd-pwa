@@ -53,7 +53,9 @@
 					</AccordionTrigger>
 					<AccordionContent>
 						{#if feature.desc && activeFeature === featureValue}
-							<div class="prose prose-invert prose-sm max-w-none text-[var(--color-text-secondary)]">
+							<div
+								class="prose prose-invert prose-sm max-w-none text-[var(--color-text-secondary)]"
+							>
 								<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 								{@html markdownAt(`features.${index}.desc`)}
 							</div>

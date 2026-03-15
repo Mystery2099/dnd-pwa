@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
 	import { isSpeedObject, formatSpeed } from '$lib/utils/compendium';
 
 	type NamedDetailEntry = {

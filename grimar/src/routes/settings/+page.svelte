@@ -50,12 +50,7 @@
 	let importText = $state('');
 	let importError = $state('');
 	let importingTheme = $state(false);
-	let importedThemes = $state<ThemeConfig[]>([]);
-
-	// Load imported themes
-	$effect(() => {
-		importedThemes = getImportedThemes();
-	});
+	let importedThemes = $state<ThemeConfig[]>(getImportedThemes());
 
 	// Import theme functions
 	function handleImportFromText() {

@@ -51,7 +51,9 @@
 
 				<div class="flex min-w-0 flex-1 items-center justify-between gap-4">
 					<div class="min-w-0">
-						<p class="text-xs font-medium tracking-[0.18em] text-[var(--color-text-muted)] uppercase">
+						<p
+							class="text-xs font-medium tracking-[0.18em] text-[var(--color-text-muted)] uppercase"
+						>
 							{getImageKindLabel(featuredImage.assetUrl)}
 						</p>
 						<p class="mt-1 truncate font-semibold text-[var(--color-text-primary)]">
@@ -76,7 +78,10 @@
 					Matched assets from the image compendium for this entry.
 				</p>
 			</div>
-			<a href="/compendium/images" class="text-sm text-accent transition-colors hover:text-accent/80">
+			<a
+				href="/compendium/images"
+				class="text-sm text-accent transition-colors hover:text-accent/80"
+			>
 				Browse all images
 			</a>
 		</div>
@@ -87,7 +92,9 @@
 					href={`/compendium/images/${image.key}`}
 					class="group overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/85 transition-colors hover:border-accent/50"
 				>
-					<div class="flex aspect-[4/3] items-center justify-center bg-linear-to-b from-white via-white to-white/90 p-4">
+					<div
+						class="flex aspect-[4/3] items-center justify-center bg-linear-to-b from-white via-white to-white/90 p-4"
+					>
 						{#if image.assetUrl}
 							<img
 								src={image.assetUrl}

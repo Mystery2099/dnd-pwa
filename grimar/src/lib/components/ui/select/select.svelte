@@ -64,7 +64,9 @@
 				contentClass
 			)}
 		>
-			<div class="pointer-events-none absolute inset-x-3 top-0 h-px bg-linear-to-r from-transparent via-[color-mix(in_srgb,var(--color-text-primary)_32%,transparent)] to-transparent"></div>
+			<div
+				class="pointer-events-none absolute inset-x-3 top-0 h-px bg-linear-to-r from-transparent via-[color-mix(in_srgb,var(--color-text-primary)_32%,transparent)] to-transparent"
+			></div>
 			<SelectPrimitive.Viewport class="max-h-[300px] overflow-y-auto p-1.5">
 				{#each options as option (option.value)}
 					<SelectPrimitive.Item

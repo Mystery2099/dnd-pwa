@@ -34,7 +34,10 @@
 			<path d="M20 41l24-18"></path>
 			<circle cx="32" cy="32" r="5" class="glyph-fill"></circle>
 		{:else if normalizedType === 'fire'}
-			<path d="M32 16c6 8 10 13 10 21a10 10 0 11-20 0c0-5 2.5-9 7-14-.3 3.5 1.2 6 3 7 1.5-2 1.8-4.5 0-8 0-2 0-3.5 0-6z" class="glyph-fill"></path>
+			<path
+				d="M32 16c6 8 10 13 10 21a10 10 0 11-20 0c0-5 2.5-9 7-14-.3 3.5 1.2 6 3 7 1.5-2 1.8-4.5 0-8 0-2 0-3.5 0-6z"
+				class="glyph-fill"
+			></path>
 		{:else if normalizedType === 'force'}
 			<path d="M32 17l5 10 11 1-8 7 2 11-10-6-10 6 2-11-8-7 11-1 5-10z" class="glyph-fill"></path>
 		{:else if normalizedType === 'lightning'}
@@ -49,7 +52,10 @@
 			<path d="M39 18h7v7" class="glyph-accent"></path>
 			<path d="M18 46l10-2-8-8-2 10z" class="glyph-fill"></path>
 		{:else if normalizedType === 'poison'}
-			<path d="M32 17c8 0 14 6 14 14 0 10-8 15-14 17-6-2-14-7-14-17 0-8 6-14 14-14z" class="glyph-fill"></path>
+			<path
+				d="M32 17c8 0 14 6 14 14 0 10-8 15-14 17-6-2-14-7-14-17 0-8 6-14 14-14z"
+				class="glyph-fill"
+			></path>
 			<path d="M26 32c4-1 8-4 12-9"></path>
 			<path d="M31 26c0 7-2 12-6 16" class="glyph-accent"></path>
 		{:else if normalizedType === 'psychic'}

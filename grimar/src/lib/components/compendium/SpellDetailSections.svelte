@@ -20,7 +20,7 @@
 		value="spell-classes"
 	>
 		<div class="flex flex-wrap gap-2">
-			{#each classes as cls, index (`${typeof cls === 'string' ? cls : cls.key ?? cls.name ?? 'class'}-${index}`)}
+			{#each classes as cls, index (`${typeof cls === 'string' ? cls : (cls.key ?? cls.name ?? 'class')}-${index}`)}
 				<a
 					href="/compendium/classes/{typeof cls === 'string' ? cls : cls.key || cls.name}"
 					class="transition-colors hover:text-accent"

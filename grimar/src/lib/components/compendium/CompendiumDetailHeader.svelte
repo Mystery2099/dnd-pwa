@@ -78,7 +78,10 @@
 		</div>
 
 		{#if type === 'conditions' && featuredRelatedImage}
-			<a href={`/compendium/images/${featuredRelatedImage.key}`} class="group hidden shrink-0 lg:block">
+			<a
+				href={`/compendium/images/${featuredRelatedImage.key}`}
+				class="group hidden shrink-0 lg:block"
+			>
 				<div
 					class="relative w-40 overflow-hidden rounded-[2rem] border border-accent/30 bg-linear-to-br from-white via-white to-white/88 p-4"
 					style={`box-shadow:
@@ -214,9 +217,7 @@
 						{featuredRelatedImage.name}
 					</p>
 				</div>
-				<span class="text-sm text-accent transition-colors group-hover:text-accent/80">
-					Open
-				</span>
+				<span class="text-sm text-accent transition-colors group-hover:text-accent/80"> Open </span>
 			</div>
 		</a>
 	{/if}

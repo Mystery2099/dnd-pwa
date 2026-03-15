@@ -23,7 +23,9 @@
 				<div
 					class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/55 p-4 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-overlay-light)_24%,transparent)]"
 				>
-					<dt class="text-[0.72rem] font-medium tracking-[0.16em] text-[var(--color-text-muted)] uppercase">
+					<dt
+						class="text-[0.72rem] font-medium tracking-[0.16em] text-[var(--color-text-muted)] uppercase"
+					>
 						{formatFieldName(key)}
 					</dt>
 					<dd class="mt-2 text-sm text-[var(--color-text-primary)]">

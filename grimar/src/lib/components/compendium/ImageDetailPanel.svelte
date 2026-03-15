@@ -48,7 +48,9 @@
 					<dl class="mt-3 space-y-3">
 						{#if altText}
 							<div>
-								<dt class="text-xs font-medium text-[var(--color-text-muted)] uppercase">Alt Text</dt>
+								<dt class="text-xs font-medium text-[var(--color-text-muted)] uppercase">
+									Alt Text
+								</dt>
 								<dd class="mt-1 text-sm text-[var(--color-text-primary)]">{altText}</dd>
 							</div>
 						{/if}
@@ -70,13 +72,17 @@
 					<dl class="mt-3 space-y-3">
 						{#if documentLabel}
 							<div>
-								<dt class="text-xs font-medium text-[var(--color-text-muted)] uppercase">Document</dt>
+								<dt class="text-xs font-medium text-[var(--color-text-muted)] uppercase">
+									Document
+								</dt>
 								<dd class="mt-1 text-sm text-[var(--color-text-primary)]">{documentLabel}</dd>
 							</div>
 						{/if}
 						{#if publisher}
 							<div>
-								<dt class="text-xs font-medium text-[var(--color-text-muted)] uppercase">Publisher</dt>
+								<dt class="text-xs font-medium text-[var(--color-text-muted)] uppercase">
+									Publisher
+								</dt>
 								<dd class="mt-1 text-sm text-[var(--color-text-primary)]">{publisher}</dd>
 							</div>
 						{/if}
@@ -90,7 +96,9 @@
 						{/if}
 						{#if permalink}
 							<div>
-								<dt class="text-xs font-medium text-[var(--color-text-muted)] uppercase">Permalink</dt>
+								<dt class="text-xs font-medium text-[var(--color-text-muted)] uppercase">
+									Permalink
+								</dt>
 								<dd class="mt-1 text-sm">
 									<a
 										href={permalink}

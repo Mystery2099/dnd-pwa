@@ -30,7 +30,8 @@
 			<path d="M39 43c2 1.3 3 3.2 3 5" class="glyph-accent"></path>
 			<circle cx="32" cy="31" r="4" class="glyph-fill"></circle>
 		{:else if normalizedType === 'dragon'}
-			<path d="M19 40c4-13 12-20 24-20-2 5-1 10 2 13 3 3 2 7-1 10-6-1-10 0-14 5-2-5-5-7-11-8z"></path>
+			<path d="M19 40c4-13 12-20 24-20-2 5-1 10 2 13 3 3 2 7-1 10-6-1-10 0-14 5-2-5-5-7-11-8z"
+			></path>
 			<path d="M34 25c3-3 6-5 10-5" class="glyph-accent"></path>
 		{:else if normalizedType === 'elemental'}
 			<path d="M32 16c8 9 12 14 12 21a12 12 0 11-24 0c0-7 4-12 12-21z" class="glyph-fill"></path>
@@ -41,7 +42,8 @@
 			<path d="M40 22l5-8" class="glyph-accent"></path>
 			<path d="M27 45h10"></path>
 		{:else if normalizedType === 'ooze'}
-			<path d="M20 40c0-14 6-20 12-20s12 6 12 20c0 4-2 8-12 8s-12-4-12-8z" class="glyph-fill"></path>
+			<path d="M20 40c0-14 6-20 12-20s12 6 12 20c0 4-2 8-12 8s-12-4-12-8z" class="glyph-fill"
+			></path>
 			<circle cx="27" cy="31" r="1.5" class="glyph-accent-fill"></circle>
 			<circle cx="38" cy="34" r="1.5" class="glyph-accent-fill"></circle>
 		{:else if normalizedType === 'plant'}
@@ -56,7 +58,8 @@
 			<circle cx="36" cy="30" r="1.5" class="glyph-accent-fill"></circle>
 			<path d="M28 37h8" class="glyph-accent"></path>
 		{:else if normalizedType === 'celestial'}
-			<path d="M32 18l4 9 10 1-7.5 6 2.5 10L32 39l-9 5 2.5-10L18 28l10-1 4-9z" class="glyph-fill"></path>
+			<path d="M32 18l4 9 10 1-7.5 6 2.5 10L32 39l-9 5 2.5-10L18 28l10-1 4-9z" class="glyph-fill"
+			></path>
 		{:else if normalizedType === 'construct'}
 			<rect x="22" y="22" width="20" height="20" rx="4" class="glyph-fill"></rect>
 			<path d="M32 16v6" class="glyph-accent"></path>

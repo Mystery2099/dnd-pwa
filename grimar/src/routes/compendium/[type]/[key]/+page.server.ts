@@ -216,10 +216,10 @@ function buildEmbeddedConditionImage(
 	};
 }
 
-function sanitizePageData(value: unknown): unknown {
+function sanitizePageData<T>(value: T): T {
 	if (value === null || value === undefined) return value;
 	if (value instanceof Date) return value;
-	if (Array.isArray(value)) return value.map((entry) => sanitizePageData(entry));
+	if (Array.isArray(value)) return value.map((entry) => sanitizePageData(entry)) as T;
 	if (typeof value !== 'object') return value;
 
 	const record = value as Record<string, unknown>;
@@ -230,7 +230,7 @@ function sanitizePageData(value: unknown): unknown {
 		sanitized[key] = sanitizePageData(entry);
 	}
 
-	return sanitized;
+	return sanitized as T;
 }
 
 export const load: PageServerLoad = async ({ params }) => {
@@ -264,7 +264,9 @@ export const load: PageServerLoad = async ({ params }) => {
 		};
 	});
 	const embeddedConditionImage =
-		type === 'conditions' ? buildEmbeddedConditionImage(itemData, item.name, item.documentName) : null;
+		type === 'conditions'
+			? buildEmbeddedConditionImage(itemData, item.name, item.documentName)
+			: null;
 	const relatedImages = embeddedConditionImage
 		? [
 				embeddedConditionImage,
