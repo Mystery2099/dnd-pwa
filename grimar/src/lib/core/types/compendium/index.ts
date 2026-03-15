@@ -258,7 +258,7 @@ export interface CompendiumCreatureHeaderPresentation {
 }
 
 export interface CompendiumDetailHeaderBadgeIcon {
-	family: 'spell-school' | 'damage-type' | 'aoe';
+	family: 'spell-school' | 'creature-type' | 'damage-type' | 'aoe';
 	value: string;
 }
 
@@ -295,8 +295,21 @@ export interface CompendiumDetailPayload {
 	sections: CompendiumDetailSection[];
 }
 
+export interface CompendiumListItemPresentation {
+	description?: string;
+	documentLabel?: string;
+	cardIcon?: CompendiumDetailHeaderBadgeIcon;
+	badges: CompendiumDetailHeaderBadge[];
+}
+
+export interface CompendiumListItem {
+	item: CompendiumItem;
+	presentation: CompendiumListItemPresentation;
+}
+
 export interface CompendiumSearchResult {
-	items: CompendiumItem[];
+	listSchemaVersion: 1;
+	items: CompendiumListItem[];
 	total: number;
 	page: number;
 	pageSize: number;

@@ -13,36 +13,18 @@
 	import { Button } from '$lib/components/ui/button';
 	import * as Pagination from '$lib/components/ui/pagination';
 	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
-	import CompendiumCardIcon from '$lib/components/compendium/icons/CompendiumCardIcon.svelte';
 	import CompendiumTypeIcon from '$lib/components/compendium/icons/CompendiumTypeIcon.svelte';
 	import DamageTypeIcon from '$lib/components/compendium/icons/DamageTypeIcon.svelte';
 	import AoeIcon from '$lib/components/compendium/icons/AoeIcon.svelte';
+	import CreatureTypeIcon from '$lib/components/compendium/icons/CreatureTypeIcon.svelte';
+	import SpellSchoolIcon from '$lib/components/compendium/icons/SpellSchoolIcon.svelte';
 	import { COMPENDIUM_TYPE_CONFIGS } from '$lib/core/constants/compendium';
-	import { resolveAoeToken, resolveDamageTypeTokens } from '$lib/core/utils/compendiumIconography';
-	import type { CompendiumItem, CompendiumTypeName } from '$lib/core/types/compendium';
-	import { getImageKindLabel } from '$lib/utils/compendium';
+	import type { CompendiumListItem, CompendiumTypeName } from '$lib/core/types/compendium';
 	import type { PageData } from './$types';
 
 	interface Props {
 		data: PageData;
 	}
-
-	type CardItemData = {
-		level?: number;
-		school?: { name?: string; key?: string } | string;
-		challenge_rating_text?: string;
-		type?: { name?: string } | string;
-		target_type?: string;
-		damage_types?: unknown;
-		hit_dice?: string | number;
-		file_url?: string;
-		alt_text?: string;
-		attribution?: string;
-		document?: {
-			name?: string;
-			display_name?: string;
-		};
-	};
 
 	type SortBy = 'name' | 'createdAt' | 'updatedAt';
 	type SortOrder = 'asc' | 'desc';
@@ -121,36 +103,6 @@
 		{ label: '9', value: '9' },
 		{ label: '10+', value: '10' }
 	];
-
-	function getSchoolLabel(school: CardItemData['school']): string | undefined {
-		if (!school) return undefined;
-		if (typeof school === 'string') return school;
-		return school.name ?? school.key;
-	}
-
-	function getTypeLabel(type: CardItemData['type']): string | undefined {
-		if (!type) return undefined;
-		if (typeof type === 'string') return type;
-		return type.name;
-	}
-
-	function getDocumentLabel(item: CompendiumItem, itemData: CardItemData): string | undefined {
-		return (
-			itemData.document?.display_name ?? itemData.document?.name ?? item.documentName ?? undefined
-		);
-	}
-
-	function getCardDescription(item: CompendiumItem, itemData: CardItemData): string | undefined {
-		return item.description ?? itemData.alt_text;
-	}
-
-	function getPrimaryDamageType(itemData: CardItemData): string | undefined {
-		return resolveDamageTypeTokens(itemData.damage_types)[0];
-	}
-
-	function getAoeShape(itemData: CardItemData): string | undefined {
-		return resolveAoeToken(itemData.target_type);
-	}
 
 	let { data }: Props = $props();
 
@@ -593,8 +545,9 @@
 						{/if}
 					</div>
 				{:else}
-					{#snippet compendiumCard(item: CompendiumItem)}
-						{@const itemData = item.data as CardItemData}
+					{#snippet compendiumCard(entry: CompendiumListItem)}
+						{@const item = entry.item}
+						{@const presentation = entry.presentation}
 						<div use:prefetchOnVisible={item.key} class="h-full w-full">
 							<SurfaceCard
 								href="/compendium/{data.type}/{item.key}"
@@ -606,12 +559,23 @@
 									<div
 										class="pointer-events-none absolute top-3 right-4 text-[var(--color-text-primary)]/12"
 									>
-										<CompendiumCardIcon
-											type={data.type}
-											{itemData}
-											fallback={config.icon}
-											class="h-11 w-11"
-										/>
+										{#if presentation.cardIcon?.family === 'spell-school'}
+											<SpellSchoolIcon
+												school={presentation.cardIcon.value}
+												class="h-11 w-11"
+											/>
+										{:else if presentation.cardIcon?.family === 'creature-type'}
+											<CreatureTypeIcon
+												type={presentation.cardIcon.value}
+												class="h-11 w-11"
+											/>
+										{:else}
+											<CompendiumTypeIcon
+												type={data.type}
+												fallback={config.icon}
+												class="h-11 w-11"
+											/>
+										{/if}
 									</div>
 									<div class="mb-2.5 flex items-center justify-between gap-3">
 										<p
@@ -628,76 +592,40 @@
 									>
 										{item.name}
 									</h3>
-									{#if getCardDescription(item, itemData)}
+									{#if presentation.description}
 										<p
 											class="mt-2.5 line-clamp-3 min-h-[3.3rem] text-sm leading-5.5 text-[color-mix(in_srgb,var(--color-text-primary)_74%,var(--color-text-secondary))]"
 										>
-											{getCardDescription(item, itemData)}
+											{presentation.description}
 										</p>
 									{/if}
-									{#if data.type === 'spells' && itemData}
+									{#if presentation.badges.length > 0}
 										<div class="mt-3.5 flex flex-wrap gap-1.5">
-											{#if itemData.level !== undefined}
-												<Badge variant="solid">
-													{itemData.level === 0 ? 'Cantrip' : `Level ${itemData.level}`}
-												</Badge>
-											{/if}
-											{#if itemData.school}
-												<Badge variant="outline" class="gap-1.5">
-													<CompendiumCardIcon type="spells" {itemData} class="h-3.5 w-3.5" />
-													{getSchoolLabel(itemData.school)}
-												</Badge>
-											{/if}
-											{#if getPrimaryDamageType(itemData)}
-												<Badge variant="outline" class="gap-1.5">
-													<DamageTypeIcon
-														type={getPrimaryDamageType(itemData)!}
-														class="h-3.5 w-3.5"
-													/>
-													{getPrimaryDamageType(itemData)}
-												</Badge>
-											{/if}
-											{#if getAoeShape(itemData)}
-												<Badge variant="outline" class="gap-1.5">
-													<AoeIcon shape={getAoeShape(itemData)!} class="h-3.5 w-3.5" />
-													{itemData.target_type}
-												</Badge>
-											{/if}
-										</div>
-									{:else if data.type === 'creatures' && itemData}
-										<div class="mt-3.5 flex flex-wrap gap-1.5">
-											{#if itemData.challenge_rating_text}
+											{#each presentation.badges as badge, index (`${badge.label}-${index}`)}
 												<Badge
-													variant="solid"
-													class="bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-accent)_34%,var(--color-bg-overlay)),color-mix(in_srgb,var(--color-accent)_18%,var(--color-bg-card)))] px-2.5 py-1 text-[0.7rem] text-[var(--color-text-inverted)] shadow-[0_0.55rem_1.25rem_color-mix(in_srgb,var(--color-accent)_18%,transparent),inset_0_1px_0_color-mix(in_srgb,var(--color-text-inverted)_22%,transparent)]"
+													variant={badge.variant}
+													class={`${
+														data.type === 'creatures' && badge.variant === 'solid'
+															? 'bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-accent)_34%,var(--color-bg-overlay)),color-mix(in_srgb,var(--color-accent)_18%,var(--color-bg-card)))] px-2.5 py-1 text-[0.7rem] text-[var(--color-text-inverted)] shadow-[0_0.55rem_1.25rem_color-mix(in_srgb,var(--color-accent)_18%,transparent),inset_0_1px_0_color-mix(in_srgb,var(--color-text-inverted)_22%,transparent)]'
+															: ''
+													} ${badge.icon ? 'gap-1.5' : ''}`}
 												>
-													CR {itemData.challenge_rating_text}
+													{#if badge.icon?.family === 'spell-school'}
+														<SpellSchoolIcon school={badge.icon.value} class="h-3.5 w-3.5" />
+													{:else if badge.icon?.family === 'damage-type'}
+														<DamageTypeIcon type={badge.icon.value} class="h-3.5 w-3.5" />
+													{:else if badge.icon?.family === 'aoe'}
+														<AoeIcon shape={badge.icon.value} class="h-3.5 w-3.5" />
+													{/if}
+													{badge.label}
 												</Badge>
-											{/if}
-											{#if itemData.type}
-												<Badge variant="outline">{getTypeLabel(itemData.type)}</Badge>
-											{/if}
-										</div>
-									{:else if (data.type === 'classes' || data.type === 'subclasses') && itemData}
-										<div class="mt-3.5 flex flex-wrap gap-1.5">
-											{#if itemData.hit_dice}
-												<Badge variant="solid">d{itemData.hit_dice}</Badge>
-											{/if}
-										</div>
-									{:else if data.type === 'images' && itemData}
-										<div class="mt-3.5 flex flex-wrap gap-1.5">
-											<Badge variant="solid">{getImageKindLabel(itemData.file_url)}</Badge>
-											{#if itemData.attribution}
-												<Badge variant="outline" class="max-w-full truncate text-xs">
-													Artwork credit
-												</Badge>
-											{/if}
+											{/each}
 										</div>
 									{/if}
-									{#if getDocumentLabel(item, itemData)}
+									{#if presentation.documentLabel}
 										<div class="mt-3.5 border-t border-[var(--color-border)]/70 pt-3.5">
 											<Badge variant="outline" class="max-w-full truncate text-xs"
-												>{getDocumentLabel(item, itemData)}</Badge
+												>{presentation.documentLabel}</Badge
 											>
 										</div>
 									{/if}
@@ -720,14 +648,14 @@
 								rowGap={32}
 								resetScrollOnItemsChange={true}
 							>
-								{#snippet children(item: CompendiumItem)}
+								{#snippet children(item: CompendiumListItem)}
 									{@render compendiumCard(item)}
 								{/snippet}
 							</VirtualGrid>
 						</div>
 					{:else}
 						<div class="grid auto-rows-fr gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-							{#each items as item (item.key)}
+							{#each items as item (item.item.key)}
 								{@render compendiumCard(item)}
 							{/each}
 						</div>

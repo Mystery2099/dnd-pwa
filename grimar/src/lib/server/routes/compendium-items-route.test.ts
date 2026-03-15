@@ -57,8 +57,19 @@ describe('GET /api/compendium/items', () => {
 				'http://localhost/api/compendium/items?type=spells&page=2&limit=25&sortBy=createdAt&sortOrder=desc&spellLevel=3&spellSchool=evocation'
 			)
 		} as Parameters<typeof GET>[0]);
+		const body = await response.json();
 
 		expect(response.status).toBe(200);
+		expect(body).toEqual({
+			listSchemaVersion: 1,
+			items: [],
+			total: 0,
+			page: 2,
+			pageSize: 25,
+			totalPages: 0,
+			hasMore: false,
+			resultsTruncated: false
+		});
 		expect(getPaginatedItemsMock).toHaveBeenCalledWith('spells', {
 			page: 2,
 			pageSize: 25,
@@ -96,8 +107,19 @@ describe('GET /api/compendium/items', () => {
 		const response = await GET({
 			url: new URL('http://localhost/api/compendium/items?type=classes&all=true')
 		} as Parameters<typeof GET>[0]);
+		const body = await response.json();
 
 		expect(response.status).toBe(200);
+		expect(body).toEqual({
+			listSchemaVersion: 1,
+			items: [],
+			total: 0,
+			page: 1,
+			pageSize: Number.MAX_SAFE_INTEGER,
+			totalPages: 0,
+			hasMore: false,
+			resultsTruncated: false
+		});
 		expect(getPaginatedItemsMock).toHaveBeenCalledWith('classes', {
 			page: 1,
 			pageSize: Number.MAX_SAFE_INTEGER,
