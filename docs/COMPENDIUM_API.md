@@ -35,7 +35,18 @@ Response shape:
 
 ```json
 {
-  "items": [{ "...": "compendium item row" }],
+  "listSchemaVersion": 1,
+  "items": [
+    {
+      "item": { "...": "base compendium item row" },
+      "presentation": {
+        "description": "Short card summary",
+        "documentLabel": "5e SRD",
+        "cardIcon": { "family": "spell-school", "value": "illusion" },
+        "badges": [{ "label": "Level 3", "variant": "solid" }]
+      }
+    }
+  ],
   "total": 123,
   "page": 1,
   "pageSize": 50,
@@ -83,6 +94,8 @@ Response shape:
 
 ## Contract Notes
 
+- `listSchemaVersion` is the explicit version marker for the normalized compendium list payload.
+- list `items` now separate the base row from `presentation` data that powers card descriptions, badges, document labels, and dynamic icons.
 - `detailSchemaVersion` is the explicit version marker for the normalized detail payload.
 - `fields` are curated sidebar/reference values, not a raw dump of `item.data`.
 - `sections` are structured content blocks derived by the server-side detail adapter.
