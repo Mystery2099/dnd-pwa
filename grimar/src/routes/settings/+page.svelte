@@ -156,6 +156,17 @@
 		{ id: 'about', label: 'About', icon: Info, color: 'pearl', accent: 'var(--gem-pearl)' }
 	] as const;
 
+	const settingsMetaLabelClass =
+		'text-[0.68rem] font-semibold tracking-[0.24em] text-[var(--color-text-muted)] uppercase';
+	const settingsMetaValueClass =
+		'mt-1 block text-sm font-semibold text-[var(--color-text-primary)]';
+	const settingsSummaryCardClass =
+		'rounded-[1.4rem] border border-[color-mix(in_srgb,var(--color-border)_70%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-overlay)_74%,transparent)] px-4 py-4';
+	const settingsPanelFrameClass = 'mx-auto flex w-full max-w-[920px] flex-col';
+	const settingsTabContentClass = 'flex min-w-0 animate-fade-in flex-col gap-6';
+	const settingsNavItemClass =
+		'relative flex w-full cursor-pointer items-center gap-3 rounded-[1.2rem] border border-[color-mix(in_srgb,var(--color-border)_55%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-overlay)_42%,transparent)] px-4 py-4 text-left text-sm font-medium text-[var(--color-text-secondary)] transition-all hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--color-accent)_24%,transparent)] hover:bg-[color-mix(in_srgb,var(--color-accent)_10%,transparent)] hover:text-[var(--color-text-primary)] data-[state=active]:border-[color-mix(in_srgb,var(--color-accent)_40%,transparent)] data-[state=active]:bg-[linear-gradient(145deg,color-mix(in_srgb,var(--color-accent)_18%,transparent),color-mix(in_srgb,var(--color-accent)_6%,transparent))] data-[state=active]:text-[var(--color-text-primary)] data-[state=active]:shadow-[0_0_16px_color-mix(in_srgb,var(--color-accent)_18%,transparent),inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent)] max-lg:min-w-[250px] max-lg:shrink-0 max-lg:whitespace-normal max-sm:min-w-[220px] max-sm:px-3 max-sm:py-3';
+
 	function isSectionId(value: string): value is (typeof sections)[number]['id'] {
 		return sections.some((section) => section.id === value);
 	}
@@ -365,12 +376,21 @@
 	<title>Settings - Grimar</title>
 </svelte:head>
 
-<div class="settings-workspace min-h-screen p-4 sm:p-6">
+<div
+	class="relative min-h-screen overflow-hidden bg-[radial-gradient(ellipse_at_20%_0%,rgba(var(--theme-accent-rgb),0.12)_0%,transparent_50%),radial-gradient(ellipse_at_80%_100%,rgba(var(--theme-accent-rgb),0.08)_0%,transparent_50%),radial-gradient(circle_at_50%_50%,rgba(var(--theme-accent-rgb),0.03)_0%,transparent_70%),var(--color-bg-canvas)] p-4 before:pointer-events-none before:absolute before:inset-0 before:z-0 before:animate-arcane-particles before:bg-[radial-gradient(1px_1px_at_20%_30%,rgba(var(--theme-accent-rgb),0.3),transparent),radial-gradient(1px_1px_at_40%_70%,rgba(var(--theme-accent-rgb),0.2),transparent),radial-gradient(1px_1px_at_60%_20%,rgba(var(--theme-accent-rgb),0.25),transparent),radial-gradient(1px_1px_at_80%_60%,rgba(var(--theme-accent-rgb),0.2),transparent),radial-gradient(1px_1px_at_90%_40%,rgba(var(--theme-accent-rgb),0.15),transparent)] before:bg-[length:200%_200%] sm:p-6"
+>
 	<div class="mx-auto flex max-w-[1400px] flex-col gap-8">
-		<header class="settings-hero">
-			<div class="settings-hero__copy">
-				<div class="settings-hero__eyebrow">
-					<div class="settings-hero__seal">
+		<header
+			class="relative overflow-hidden rounded-[2rem] border border-[color-mix(in_srgb,var(--color-border)_75%,transparent)] bg-[linear-gradient(145deg,color-mix(in_srgb,var(--color-bg-card)_88%,transparent)_0%,color-mix(in_srgb,black_24%,transparent)_100%)] p-6 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_14%,transparent),0_18px_60px_color-mix(in_srgb,black_45%,transparent)] before:pointer-events-none before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_top_left,rgba(var(--theme-accent-rgb),0.18),transparent_36%),linear-gradient(90deg,transparent_0%,color-mix(in_srgb,var(--color-text-primary)_6%,transparent)_50%,transparent_100%)] before:opacity-90 max-sm:rounded-[1.5rem] max-sm:p-5 sm:p-8 lg:p-10"
+		>
+			<div class="relative z-10">
+				<div
+					class="mb-5 flex items-center gap-3 text-[0.7rem] font-semibold tracking-[0.32em] text-[var(--color-text-muted)] uppercase"
+				>
+					<div
+						class="flex size-14 items-center justify-center rounded-[1.35rem] border text-[var(--color-accent)] shadow-[0_0_24px_color-mix(in_srgb,var(--color-accent)_18%,transparent),inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_12%,transparent)]"
+						style="background: linear-gradient(145deg, color-mix(in srgb, var(--color-accent) 20%, transparent), color-mix(in srgb, black 20%, transparent)); border-color: color-mix(in srgb, var(--color-accent) 28%, transparent)"
+					>
 						<Cog class="size-7" />
 					</div>
 					<span>Control nexus</span>
@@ -388,67 +408,95 @@
 				</div>
 			</div>
 
-			<div class="settings-hero__meta">
-				<div class="settings-hero__active">
-					<div class="settings-hero__active-icon" style="color: {activeSectionConfig.accent}">
+			<div class="relative z-10 mt-8 grid gap-4 lg:grid-cols-[minmax(0,320px)_1fr] lg:items-end">
+				<div
+					class="flex items-center gap-4 rounded-[1.6rem] border border-[color-mix(in_srgb,var(--color-border)_80%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-overlay)_78%,transparent)] px-4 py-4"
+				>
+					<div
+						class="flex size-14 items-center justify-center rounded-[1.15rem] border shadow-[0_0_20px_color-mix(in_srgb,currentColor_15%,transparent)]"
+						style="color: {activeSectionConfig.accent}; background: color-mix(in srgb, currentColor 12%, transparent); border-color: color-mix(in srgb, currentColor 28%, transparent)"
+					>
 						<activeSectionConfig.icon class="size-6" />
 					</div>
 					<div>
-						<p class="settings-hero__label">Active section</p>
-						<p class="settings-hero__value">{activeSectionConfig.label}</p>
+						<p class={settingsMetaLabelClass}>Active section</p>
+						<p class={settingsMetaValueClass}>{activeSectionConfig.label}</p>
 					</div>
 				</div>
-				<div class="settings-hero__pills">
-					<div class="settings-hero__pill">
-						<span class="settings-hero__pill-label">Theme library</span>
-						<span class="settings-hero__pill-value">Curated + custom</span>
+				<div class="grid gap-3 max-sm:grid-cols-1 sm:grid-cols-3">
+					<div class={settingsSummaryCardClass}>
+						<span class={settingsMetaLabelClass}>Theme library</span>
+						<span class={settingsMetaValueClass}>Curated + custom</span>
 					</div>
-					<div class="settings-hero__pill">
-						<span class="settings-hero__pill-label">Sync cadence</span>
-						<span class="settings-hero__pill-value">{syncIntervalLabel}</span>
+					<div class={settingsSummaryCardClass}>
+						<span class={settingsMetaLabelClass}>Sync cadence</span>
+						<span class={settingsMetaValueClass}>{syncIntervalLabel}</span>
 					</div>
-					<div class="settings-hero__pill">
-						<span class="settings-hero__pill-label">Account state</span>
-						<span class="settings-hero__pill-value">{user ? 'Signed in' : 'Guest mode'}</span>
+					<div class={settingsSummaryCardClass}>
+						<span class={settingsMetaLabelClass}>Account state</span>
+						<span class={settingsMetaValueClass}>{user ? 'Signed in' : 'Guest mode'}</span>
 					</div>
 				</div>
 			</div>
 		</header>
 
-		<Tabs.Root bind:value={activeSection} class="settings-container">
-			<aside class="settings-sidebar">
-				<div class="settings-rail">
-					<div class="settings-rail__header">
-						<p class="settings-rail__eyebrow">Sections</p>
-						<p class="settings-rail__title">Navigate the stack</p>
+		<Tabs.Root
+			bind:value={activeSection}
+			class="mx-auto grid max-w-[1200px] gap-8 lg:grid-cols-[minmax(280px,320px)_minmax(0,1fr)]"
+		>
+			<aside class="h-fit lg:sticky lg:top-6 lg:pr-2">
+				<div
+					class="overflow-hidden rounded-[1.75rem] border border-[color-mix(in_srgb,var(--color-border)_80%,transparent)] bg-[linear-gradient(160deg,color-mix(in_srgb,var(--color-bg-card)_88%,transparent),color-mix(in_srgb,black_18%,transparent))] p-4 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent),0_12px_34px_color-mix(in_srgb,black_35%,transparent)]"
+				>
+					<div
+						class="mb-4 rounded-[1.25rem] border border-[color-mix(in_srgb,var(--color-border)_70%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-overlay)_65%,transparent)] px-4 py-4"
+					>
+						<p class={settingsMetaLabelClass}>Sections</p>
+						<p class="mt-1 text-lg font-semibold tracking-tight text-[var(--color-text-primary)]">
+							Navigate the stack
+						</p>
 					</div>
 
-					<nav class="settings-nav">
+					<nav
+						class="flex flex-col gap-2 max-lg:flex-row max-lg:flex-nowrap max-lg:overflow-x-auto max-lg:pb-2"
+					>
 						{#each sections as section (section.id)}
-							<Tabs.Trigger value={section.id} class="settings-nav-item">
-								<span class="nav-icon">
+							<Tabs.Trigger value={section.id} class={settingsNavItemClass}>
+								<span
+									class="flex size-11 shrink-0 items-center justify-center rounded-[0.95rem] border border-[color-mix(in_srgb,var(--color-border)_70%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_82%,transparent)]"
+								>
 									<section.icon class="size-5" style="color: {section.accent}" />
 								</span>
-								<span class="nav-label">
-									<span class="nav-label__title">{section.label}</span>
-									<span class="nav-label__meta">{getSectionMeta(section.id)}</span>
+								<span class="flex min-w-0 flex-1 flex-col">
+									<span class="text-sm font-semibold text-[var(--color-text-primary)]">
+										{section.label}
+									</span>
+									<span class="mt-1 text-xs leading-5 text-[var(--color-text-secondary)]">
+										{getSectionMeta(section.id)}
+									</span>
 								</span>
 							</Tabs.Trigger>
 						{/each}
 					</nav>
 
-					<div class="settings-sidebar-card">
-						<p class="settings-sidebar-card__label">Current focus</p>
-						<p class="settings-sidebar-card__title">{activeSectionConfig.label}</p>
-						<p class="settings-sidebar-card__body">{getSectionSummary(activeSectionConfig.id)}</p>
+					<div
+						class="mt-4 rounded-[1.35rem] border border-[color-mix(in_srgb,var(--color-border)_70%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-overlay)_62%,transparent)] px-4 py-4"
+					>
+						<p class={settingsMetaLabelClass}>Current focus</p>
+						<p class="mt-1 text-lg font-semibold tracking-tight text-[var(--color-text-primary)]">
+							{activeSectionConfig.label}
+						</p>
+						<p class="mt-2 text-sm leading-6 text-[var(--color-text-secondary)]">
+							{getSectionSummary(activeSectionConfig.id)}
+						</p>
 					</div>
 				</div>
 			</aside>
 
-			<main class="settings-main">
+			<main class="flex min-w-0 flex-col gap-6">
 				<!-- 1. Appearance Section -->
-				<Tabs.Content value="appearance" class="settings-tab-content">
-					<section id="appearance" class="settings-panel-frame">
+				<Tabs.Content value="appearance" class={settingsTabContentClass}>
+					<section id="appearance" class={settingsPanelFrameClass}>
 						<SettingsGroup
 							id="appearance"
 							title="Appearance"
@@ -522,8 +570,8 @@
 				>
 
 				<!-- 2. Compendium Section -->
-				<Tabs.Content value="compendium" class="settings-tab-content">
-					<section id="compendium" class="settings-panel-frame">
+				<Tabs.Content value="compendium" class={settingsTabContentClass}>
+					<section id="compendium" class={settingsPanelFrameClass}>
 						<SettingsGroup
 							id="compendium"
 							title="Compendium"
@@ -577,8 +625,8 @@
 				>
 
 				<!-- 3. Data & Sync Section -->
-				<Tabs.Content value="data" class="settings-tab-content">
-					<section id="data" class="settings-panel-frame">
+				<Tabs.Content value="data" class={settingsTabContentClass}>
+					<section id="data" class={settingsPanelFrameClass}>
 						<SettingsGroup
 							id="data"
 							title="Data & Sync"
@@ -695,8 +743,8 @@
 				>
 
 				<!-- 4. User & Account Section -->
-				<Tabs.Content value="account" class="settings-tab-content">
-					<section id="account" class="settings-panel-frame">
+				<Tabs.Content value="account" class={settingsTabContentClass}>
+					<section id="account" class={settingsPanelFrameClass}>
 						<SettingsGroup
 							id="account"
 							title="User & Account"
@@ -805,8 +853,8 @@
 				>
 
 				<!-- 5. About Section -->
-				<Tabs.Content value="about" class="settings-tab-content">
-					<section id="about" class="settings-panel-frame">
+				<Tabs.Content value="about" class={settingsTabContentClass}>
+					<section id="about" class={settingsPanelFrameClass}>
 						<SettingsGroup
 							id="about"
 							title="About"
