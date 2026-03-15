@@ -1,7 +1,7 @@
 <script lang="ts">
 	import StructuredValue from '$lib/components/ui/StructuredValue.svelte';
 	import CompendiumAccordionSection from './CompendiumAccordionSection.svelte';
-	import type { CompendiumDetailField } from '$lib/server/services/compendium/detail';
+	import type { CompendiumDetailField } from '$lib/core/types/compendium';
 
 	interface Props {
 		fields: CompendiumDetailField[];

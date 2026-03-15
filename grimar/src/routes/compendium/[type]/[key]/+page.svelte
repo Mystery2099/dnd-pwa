@@ -13,7 +13,7 @@
 	import type {
 		CompendiumCreatureSetRosterSection,
 		CompendiumDetailField
-	} from '$lib/server/services/compendium/detail';
+	} from '$lib/core/types/compendium';
 	import type { PageData } from './$types';
 	import {
 		isWeaponPropertyArray,

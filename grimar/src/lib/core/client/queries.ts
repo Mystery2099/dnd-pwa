@@ -14,7 +14,11 @@ import { createQuery } from '@tanstack/svelte-query';
 import type { QueryClient } from '@tanstack/svelte-query';
 import { ApiError } from './errors';
 import { perfTelemetryStore } from './perf-telemetry';
-import type { CompendiumSearchResult, CompendiumTypeName } from '$lib/core/types/compendium';
+import type {
+	CompendiumDetailPayload,
+	CompendiumSearchResult,
+	CompendiumTypeName
+} from '$lib/core/types/compendium';
 
 type SortByParam = 'name' | 'createdAt' | 'updatedAt';
 
@@ -179,7 +183,10 @@ export async function fetchCompendiumAll(pathType: string): Promise<CompendiumSe
 /**
  * Fetch a single compendium item by type and slug.
  */
-export async function fetchCompendiumDetail(type: string, slug: string): Promise<unknown> {
+export async function fetchCompendiumDetail(
+	type: string,
+	slug: string
+): Promise<CompendiumDetailPayload> {
 	const apiType = type === 'subclasses' ? 'classes' : type;
 	return apiFetch(`/api/compendium/${apiType}/${slug}`);
 }

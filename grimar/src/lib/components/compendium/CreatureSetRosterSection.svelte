@@ -1,6 +1,6 @@
 <script lang="ts">
 	import CompendiumAccordionSection from './CompendiumAccordionSection.svelte';
-	import type { CompendiumCreatureSetRosterEntry } from '$lib/server/services/compendium/detail';
+	import type { CompendiumCreatureSetRosterEntry } from '$lib/core/types/compendium';
 
 	interface Props {
 		creatures: CompendiumCreatureSetRosterEntry[];

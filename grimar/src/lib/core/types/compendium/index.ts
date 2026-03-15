@@ -71,6 +71,71 @@ export interface CompendiumTypeConfig {
 	endpoint: string;
 }
 
+export interface CompendiumDetailReference {
+	kind: 'entity';
+	type: CompendiumTypeName;
+	key: string;
+	label: string;
+	href: string;
+	meta?: string;
+	sourceUrl: string;
+}
+
+export type CompendiumDetailValue =
+	| string
+	| number
+	| boolean
+	| null
+	| CompendiumDetailReference
+	| CompendiumDetailValue[]
+	| { [key: string]: CompendiumDetailValue };
+
+export interface CompendiumDetailField {
+	key: string;
+	label: string;
+	value: CompendiumDetailValue;
+}
+
+export interface CompendiumEntityListSection {
+	key: string;
+	title: string;
+	description?: string;
+	kind: 'entity-list';
+	items: CompendiumDetailValue[];
+}
+
+export interface CompendiumCreatureSetRosterEntry {
+	key: string;
+	label: string;
+	href: string;
+	type?: string;
+	size?: string;
+	documentLabel?: string;
+	environments: string[];
+	challengeRatingText?: string;
+	armorClass?: number;
+	hitPoints?: number;
+	speed?: string;
+}
+
+export interface CompendiumCreatureSetRosterSection {
+	key: string;
+	title: string;
+	description?: string;
+	kind: 'creature-set-roster';
+	items: CompendiumCreatureSetRosterEntry[];
+}
+
+export type CompendiumDetailSection =
+	| CompendiumEntityListSection
+	| CompendiumCreatureSetRosterSection;
+
+export interface CompendiumDetailPayload {
+	item: CompendiumItem;
+	fields: CompendiumDetailField[];
+	sections: CompendiumDetailSection[];
+}
+
 export interface CompendiumSearchResult {
 	items: CompendiumItem[];
 	total: number;

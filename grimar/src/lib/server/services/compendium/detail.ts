@@ -1,69 +1,16 @@
 import { COMPENDIUM_TYPE_CONFIGS, type CompendiumTypeName } from '$lib/core/constants/compendium';
+import type {
+	CompendiumCreatureSetRosterEntry,
+	CompendiumCreatureSetRosterSection,
+	CompendiumDetailField,
+	CompendiumDetailPayload,
+	CompendiumDetailReference,
+	CompendiumDetailSection,
+	CompendiumDetailValue,
+	CompendiumEntityListSection
+} from '$lib/core/types/compendium';
 import type { CompendiumItem } from '$lib/server/db/schema';
 import { formatFieldName } from '$lib/utils/compendium';
-
-export interface CompendiumDetailReference {
-	kind: 'entity';
-	type: CompendiumTypeName;
-	key: string;
-	label: string;
-	href: string;
-	meta?: string;
-	sourceUrl: string;
-}
-
-export type CompendiumDetailValue =
-	| string
-	| number
-	| boolean
-	| null
-	| CompendiumDetailReference
-	| CompendiumDetailValue[]
-	| { [key: string]: CompendiumDetailValue };
-
-export interface CompendiumDetailField {
-	key: string;
-	label: string;
-	value: CompendiumDetailValue;
-}
-
-export interface CompendiumEntityListSection {
-	key: string;
-	title: string;
-	description?: string;
-	kind: 'entity-list';
-	items: CompendiumDetailValue[];
-}
-
-export interface CompendiumCreatureSetRosterEntry {
-	key: string;
-	label: string;
-	href: string;
-	type?: string;
-	size?: string;
-	documentLabel?: string;
-	environments: string[];
-	challengeRatingText?: string;
-	armorClass?: number;
-	hitPoints?: number;
-	speed?: string;
-}
-
-export interface CompendiumCreatureSetRosterSection {
-	key: string;
-	title: string;
-	description?: string;
-	kind: 'creature-set-roster';
-	items: CompendiumCreatureSetRosterEntry[];
-}
-
-export type CompendiumDetailSection = CompendiumEntityListSection | CompendiumCreatureSetRosterSection;
-
-export interface CompendiumDetailPayload {
-	item: CompendiumItem;
-	fields: CompendiumDetailField[];
-	sections: CompendiumDetailSection[];
-}
 
 const endpointToTypeMap = new Map<string, CompendiumTypeName>(
 	Object.values(COMPENDIUM_TYPE_CONFIGS).map((config) => [config.endpoint, config.name])
@@ -275,7 +222,10 @@ function normalizeFields(item: CompendiumItem): {
 export function buildCompendiumDetailPayload(item: CompendiumItem): CompendiumDetailPayload {
 	const { fields, sections } = normalizeFields(item);
 	return {
-		item,
+		item: {
+			...item,
+			type: item.type as CompendiumTypeName
+		},
 		fields,
 		sections
 	};
