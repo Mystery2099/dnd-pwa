@@ -239,6 +239,30 @@ export interface CompendiumCreatureEncounterSection {
 	traits: CompendiumCreatureNamedEntry[];
 }
 
+export interface CompendiumImagePresentation {
+	fileUrl?: string;
+	assetUrl?: string | null;
+	altText?: string;
+	attribution?: string;
+	publisher?: string;
+	gameSystem?: string;
+	permalink?: string;
+}
+
+export interface CompendiumCreatureHeaderPresentation {
+	challengeRatingText?: string;
+	size?: CompendiumDetailValue;
+	typeValue?: CompendiumDetailValue;
+	alignment?: CompendiumDetailValue;
+	experiencePoints?: number;
+}
+
+export interface CompendiumDetailPresentation {
+	documentLabel?: string;
+	image?: CompendiumImagePresentation;
+	creatureHeader?: CompendiumCreatureHeaderPresentation;
+}
+
 export type CompendiumDetailSection =
 	| CompendiumEntityListSection
 	| CompendiumCreatureSetRosterSection
@@ -253,6 +277,7 @@ export type CompendiumDetailSection =
 
 export interface CompendiumDetailPayload {
 	item: CompendiumItem;
+	presentation: CompendiumDetailPresentation;
 	fields: CompendiumDetailField[];
 	sections: CompendiumDetailSection[];
 }

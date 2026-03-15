@@ -47,8 +47,8 @@
 	let { data }: Props = $props();
 
 	let item = $derived(data.item);
+	let presentation = $derived(data.detail.presentation);
 	let itemData = $derived(item.data as Record<string, unknown>);
-	let imageData = $derived((item.data as ImageItemData | undefined) ?? {});
 	let featuredRelatedImage = $derived(data.type === 'images' ? undefined : data.relatedImages?.[0]);
 	let remainingRelatedImages = $derived(data.relatedImages?.slice(1) ?? []);
 	let detailFields = $derived(data.detail.fields as CompendiumDetailField[]);
@@ -124,41 +124,6 @@
 		return markdownHtml[path] ?? '';
 	}
 
-	function getNonEmptyString(value: unknown): string | undefined {
-		if (typeof value !== 'string') return undefined;
-		const trimmed = value.trim();
-		return trimmed.length > 0 ? trimmed : undefined;
-	}
-
-	function getDocumentLabel(): string | undefined {
-		return (
-			getNonEmptyString(imageData.document?.display_name) ??
-			getNonEmptyString(imageData.document?.name) ??
-			getNonEmptyString(item.documentName) ??
-			undefined
-		);
-	}
-
-	function getImageAltText(): string | undefined {
-		return getNonEmptyString(imageData.alt_text);
-	}
-
-	function getImageAttribution(): string | undefined {
-		return getNonEmptyString(imageData.attribution);
-	}
-
-	function getImagePublisher(): string | undefined {
-		return getNonEmptyString(imageData.document?.publisher?.name);
-	}
-
-	function getImageGameSystem(): string | undefined {
-		return getNonEmptyString(imageData.document?.gamesystem?.name);
-	}
-
-	function getImagePermalink(): string | undefined {
-		return getNonEmptyString(imageData.document?.permalink);
-	}
-
 	function getDetailValue(key: string, value: unknown): unknown {
 		if (key !== 'prerequisite') {
 			return value;
@@ -206,13 +171,13 @@
 						label={data.config.label}
 						title={item.name}
 						source={item.source}
-						documentLabel={getDocumentLabel()}
+						documentLabel={presentation.documentLabel}
 						icon={data.config.icon}
-						challengeRatingText={itemData.challenge_rating_text}
-						size={itemData.size}
-						typeValue={itemData.type}
-						alignment={itemData.alignment}
-						experiencePoints={itemData.experience_points}
+						challengeRatingText={presentation.creatureHeader?.challengeRatingText}
+						size={presentation.creatureHeader?.size}
+						typeValue={presentation.creatureHeader?.typeValue}
+						alignment={presentation.creatureHeader?.alignment}
+						experiencePoints={presentation.creatureHeader?.experiencePoints}
 						{featuredRelatedImage}
 					/>
 				{:else}
@@ -220,13 +185,13 @@
 						label={data.config.label}
 						title={item.name}
 						source={item.source}
-						documentLabel={getDocumentLabel()}
+						documentLabel={presentation.documentLabel}
 						icon={data.config.icon}
 						type={data.type}
 						{itemData}
 						{featuredRelatedImage}
-						imageAttribution={getImageAttribution()}
-						imageFileUrl={imageData.file_url}
+						imageAttribution={presentation.image?.attribution}
+						imageFileUrl={presentation.image?.fileUrl}
 					/>
 				{/if}
 			</div>
@@ -234,13 +199,13 @@
 			{#if data.type === 'images'}
 				<ImageDetailPanel
 					title={item.name}
-					imageAssetUrl={data.imageAssetUrl}
-					altText={getImageAltText()}
-					attribution={getImageAttribution()}
-					documentLabel={getDocumentLabel()}
-					publisher={getImagePublisher()}
-					gameSystem={getImageGameSystem()}
-					permalink={getImagePermalink()}
+					imageAssetUrl={presentation.image?.assetUrl ?? data.imageAssetUrl}
+					altText={presentation.image?.altText}
+					attribution={presentation.image?.attribution}
+					documentLabel={presentation.documentLabel}
+					publisher={presentation.image?.publisher}
+					gameSystem={presentation.image?.gameSystem}
+					permalink={presentation.image?.permalink}
 				/>
 			{/if}
 

@@ -3,6 +3,7 @@ import type {
 	CompendiumBenefitsSection,
 	CompendiumClassFeaturesSection,
 	CompendiumCreatureEncounterSection,
+	CompendiumDetailPresentation,
 	CompendiumCreatureSetRosterEntry,
 	CompendiumCreatureSetRosterSection,
 	CompendiumDescriptionsSection,
@@ -23,6 +24,7 @@ import { resolveCompendiumLink } from '$lib/core/utils/compendium-links';
 import type { CompendiumItem } from '$lib/server/db/schema';
 import { formatSpeed, isSpeedObject } from '$lib/utils/compendium';
 import { formatFieldName, getSortedFields } from '$lib/utils/compendium';
+import { OPEN5E_API_BASE_URL } from '$lib/server/providers/open5e-config';
 
 const CREATURE_REFERENCE_FIELD_KEYS = new Set([
 	'armor_class',
@@ -43,6 +45,25 @@ export interface CompendiumMarkdownSource {
 	text: string;
 }
 
+function resolveImageAssetUrl(fileUrl: unknown): string | null {
+	if (typeof fileUrl !== 'string' || fileUrl.length === 0) return null;
+	try {
+		if (/^https?:\/\//i.test(fileUrl)) {
+			const parsed = new URL(fileUrl);
+			const open5eOrigin = OPEN5E_API_BASE_URL.replace(/\/v2$/i, '');
+			if (parsed.origin === open5eOrigin) {
+				return `/api/assets/open5e${parsed.pathname}${parsed.search}`;
+			}
+			return parsed.toString();
+		}
+
+		const normalizedPath = fileUrl.startsWith('/') ? fileUrl : `/${fileUrl}`;
+		return `/api/assets/open5e${normalizedPath}`;
+	} catch {
+		return null;
+	}
+}
+
 function buildReferenceFromUrl(
 	value: string,
 	preferredLabel?: string,
@@ -61,6 +82,47 @@ function buildReferenceFromUrl(
 		href: resolvedLink.href,
 		meta: resolvedLink.meta,
 		sourceUrl: resolvedLink.sourceUrl
+	};
+}
+
+function buildPresentation(item: CompendiumItem): CompendiumDetailPresentation {
+	const itemData = (item.data ?? {}) as Record<string, unknown>;
+	const document = isRecord(itemData.document) ? itemData.document : null;
+	const documentLabel =
+		getString(document?.display_name) ??
+		getString(document?.name) ??
+		(item.documentName ?? undefined);
+
+	const imagePresentation =
+		item.type === 'images'
+			? {
+					fileUrl: getString(itemData.file_url),
+					assetUrl: resolveImageAssetUrl(itemData.file_url),
+					altText: getString(itemData.alt_text),
+					attribution: getString(itemData.attribution),
+					publisher: document && isRecord(document.publisher) ? getString(document.publisher.name) : undefined,
+					gameSystem:
+						document && isRecord(document.gamesystem) ? getString(document.gamesystem.name) : undefined,
+					permalink: getString(document?.permalink)
+				}
+			: undefined;
+
+	const creatureHeader =
+		item.type === 'creatures'
+			? {
+					challengeRatingText: getString(itemData.challenge_rating_text),
+					size: normalizeValue(itemData.size),
+					typeValue: normalizeValue(itemData.type),
+					alignment: normalizeValue(itemData.alignment),
+					experiencePoints:
+						typeof itemData.experience_points === 'number' ? itemData.experience_points : undefined
+				}
+			: undefined;
+
+	return {
+		documentLabel,
+		image: imagePresentation,
+		creatureHeader
 	};
 }
 
@@ -651,6 +713,7 @@ export function buildCompendiumDetailPayload(item: CompendiumItem): CompendiumDe
 			...item,
 			type: item.type as CompendiumTypeName
 		},
+		presentation: buildPresentation(item),
 		fields,
 		sections
 	};

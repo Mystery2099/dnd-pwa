@@ -49,6 +49,7 @@ describe('buildCompendiumDetailPayload', () => {
 				}
 			}
 		]);
+		expect(payload.presentation.documentLabel).toBeUndefined();
 	});
 
 	it('promotes creature set rosters into a dedicated section', () => {
@@ -235,6 +236,77 @@ describe('buildCompendiumDetailPayload', () => {
 				defaultOpen: true
 			}
 		]);
+	});
+
+	it('builds normalized presentation metadata for images and creatures', () => {
+		const imageItem = createItem({
+			type: 'images',
+			documentName: 'Fallback Document',
+			data: {
+				file_url: '/images/griffon.png',
+				alt_text: 'A griffon in flight',
+				attribution: 'Open5e',
+				document: {
+					display_name: 'Bestiary',
+					name: 'Bestiary Source',
+					permalink: 'https://example.com/bestiary',
+					publisher: { name: 'Example Press' },
+					gamesystem: { name: '5e' }
+				}
+			}
+		});
+		const creatureItem = createItem({
+			type: 'creatures',
+			data: {
+				challenge_rating_text: '2',
+				size: { name: 'Medium', key: 'medium', url: 'http://10.147.20.240:8888/v2/sizes/medium/' },
+				type: { name: 'Humanoid', key: 'humanoid', url: 'http://10.147.20.240:8888/v2/creaturetypes/humanoid/' },
+				alignment: 'neutral',
+				experience_points: 450
+			}
+		});
+
+		expect(buildCompendiumDetailPayload(imageItem).presentation).toEqual({
+			documentLabel: 'Bestiary',
+			image: {
+				fileUrl: '/images/griffon.png',
+				assetUrl: '/api/assets/open5e/images/griffon.png',
+				altText: 'A griffon in flight',
+				attribution: 'Open5e',
+				publisher: 'Example Press',
+				gameSystem: '5e',
+				permalink: 'https://example.com/bestiary'
+			},
+			creatureHeader: undefined
+		});
+
+		expect(buildCompendiumDetailPayload(creatureItem).presentation).toEqual({
+			documentLabel: undefined,
+			image: undefined,
+			creatureHeader: {
+				challengeRatingText: '2',
+				size: {
+					kind: 'entity',
+					type: 'sizes',
+					key: 'medium',
+					label: 'Medium',
+					href: '/compendium/sizes/medium',
+					meta: 'medium',
+					sourceUrl: 'http://10.147.20.240:8888/v2/sizes/medium/'
+				},
+				typeValue: {
+					kind: 'entity',
+					type: 'creaturetypes',
+					key: 'humanoid',
+					label: 'Humanoid',
+					href: '/compendium/creaturetypes/humanoid',
+					meta: 'humanoid',
+					sourceUrl: 'http://10.147.20.240:8888/v2/creaturetypes/humanoid/'
+				},
+				alignment: 'neutral',
+				experiencePoints: 450
+			}
+		});
 	});
 
 	it('promotes creature encounter data into a dedicated section', () => {
