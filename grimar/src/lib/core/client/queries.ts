@@ -56,6 +56,32 @@ const COMPENDIUM_FILTER_KEYS = [
 	'challengeRating'
 ] as const;
 
+function assertCompendiumListPayload(value: unknown): asserts value is CompendiumSearchResult {
+	if (
+		!value ||
+		typeof value !== 'object' ||
+		Array.isArray(value) ||
+		(value as { listSchemaVersion?: unknown }).listSchemaVersion !== 1
+	) {
+		throw ApiError.validation('Invalid compendium list response', {
+			expectedSchemaVersion: 1
+		});
+	}
+}
+
+function assertCompendiumDetailPayload(value: unknown): asserts value is CompendiumDetailPayload {
+	if (
+		!value ||
+		typeof value !== 'object' ||
+		Array.isArray(value) ||
+		(value as { detailSchemaVersion?: unknown }).detailSchemaVersion !== 1
+	) {
+		throw ApiError.validation('Invalid compendium detail response', {
+			expectedSchemaVersion: 1
+		});
+	}
+}
+
 function normalizeCompendiumListParams(params: CompendiumListParams): Record<string, string> {
 	const normalized: Record<string, string> = {};
 
@@ -168,7 +194,9 @@ export async function fetchCompendiumList(
 		params.set(key, value);
 	}
 
-	return apiFetch(`/api/compendium/items?${params}`, { signal });
+	const payload = await apiFetch<unknown>(`/api/compendium/items?${params}`, { signal });
+	assertCompendiumListPayload(payload);
+	return payload;
 }
 
 /**
@@ -177,7 +205,9 @@ export async function fetchCompendiumList(
 export async function fetchCompendiumAll(pathType: string): Promise<CompendiumSearchResult> {
 	const apiType = pathType === 'subclasses' ? 'classes' : pathType;
 	const params = new URLSearchParams({ type: apiType, all: 'true' });
-	return apiFetch(`/api/compendium/items?${params}`);
+	const payload = await apiFetch<unknown>(`/api/compendium/items?${params}`);
+	assertCompendiumListPayload(payload);
+	return payload;
 }
 
 /**
@@ -188,7 +218,9 @@ export async function fetchCompendiumDetail(
 	slug: string
 ): Promise<CompendiumDetailPayload> {
 	const apiType = type === 'subclasses' ? 'classes' : type;
-	return apiFetch(`/api/compendium/${apiType}/${slug}`);
+	const payload = await apiFetch<unknown>(`/api/compendium/${apiType}/${slug}`);
+	assertCompendiumDetailPayload(payload);
+	return payload;
 }
 
 /**
