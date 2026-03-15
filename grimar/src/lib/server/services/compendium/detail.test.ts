@@ -80,16 +80,20 @@ describe('buildCompendiumDetailPayload', () => {
 				key: 'creatures',
 				title: 'Roster',
 				description: 'Creatures included in this set.',
-				kind: 'entity-list',
+				kind: 'creature-set-roster',
 				items: [
 					{
-						kind: 'entity',
-						type: 'creatures',
 						key: 'srd_camel',
 						label: 'Camel',
 						href: '/compendium/creatures/srd_camel',
-						meta: 'srd_camel',
-						sourceUrl: 'http://10.147.20.240:8888/v2/creatures/srd_camel/'
+						type: undefined,
+						size: undefined,
+						documentLabel: undefined,
+						environments: [],
+						challengeRatingText: undefined,
+						armorClass: undefined,
+						hitPoints: undefined,
+						speed: undefined
 					}
 				]
 			}

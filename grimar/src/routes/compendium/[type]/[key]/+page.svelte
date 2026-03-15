@@ -10,7 +10,10 @@
 	import ImageDetailPanel from '$lib/components/compendium/ImageDetailPanel.svelte';
 	import RelatedImagesPanel from '$lib/components/compendium/RelatedImagesPanel.svelte';
 	import SpellDetailSections from '$lib/components/compendium/SpellDetailSections.svelte';
-	import type { CompendiumDetailField } from '$lib/server/services/compendium/detail';
+	import type {
+		CompendiumCreatureSetRosterSection,
+		CompendiumDetailField
+	} from '$lib/server/services/compendium/detail';
 	import type { PageData } from './$types';
 	import {
 		isWeaponPropertyArray,
@@ -45,19 +48,6 @@
 		key?: string;
 		name?: string;
 		desc?: string;
-	};
-
-	type CreatureSetEntry = {
-		key?: string;
-		name?: string;
-		type?: { name?: string; key?: string } | string;
-		size?: { name?: string; key?: string } | string;
-		document?: { name?: string; display_name?: string };
-		environments?: Array<{ name?: string; key?: string }>;
-		challenge_rating_text?: string;
-		armor_class?: number;
-		hit_points?: number;
-		speed?: { walk?: number; unit?: string };
 	};
 
 	const CREATURE_DETAIL_FIELDS_IN_REFERENCE = [
@@ -112,7 +102,14 @@
 			.filter((field): field is CompendiumDetailField => Boolean(field));
 	});
 	let markdownHtml = $derived<Record<string, string>>(data.markdownHtml ?? {});
-	let creatureSetEntries = $derived(getCreatureSetEntries(itemData.creatures));
+	let creatureSetRosterSection = $derived.by(() => {
+		const sections = data.detail.sections as Array<CompendiumCreatureSetRosterSection | { kind: string }>;
+		const rosterSection = sections.find(
+			(section): section is CompendiumCreatureSetRosterSection =>
+				section.kind === 'creature-set-roster'
+		);
+		return rosterSection ?? null;
+	});
 	let hasSidebarDetails = $derived(detailFields.length > 0);
 
 	function markdownAt(path: string): string {
@@ -203,20 +200,6 @@
 
 		return value.filter(
 			(entry): entry is NamedDetailEntry => Boolean(entry) && typeof entry === 'object'
-		);
-	}
-
-	function getCreatureSetEntries(value: unknown): CreatureSetEntry[] {
-		if (!Array.isArray(value)) {
-			return [];
-		}
-
-		return value.filter(
-			(entry): entry is CreatureSetEntry =>
-				Boolean(entry) &&
-				typeof entry === 'object' &&
-				(typeof (entry as CreatureSetEntry).name === 'string' ||
-					typeof (entry as CreatureSetEntry).key === 'string')
 		);
 	}
 </script>
@@ -310,8 +293,8 @@
 				}`}
 			>
 				<div class="space-y-6">
-					{#if data.type === 'creaturesets' && creatureSetEntries.length > 0}
-						<CreatureSetRosterSection creatures={creatureSetEntries} />
+					{#if creatureSetRosterSection}
+						<CreatureSetRosterSection creatures={creatureSetRosterSection.items} />
 					{/if}
 
 					{#if data.type !== 'creatures' && (itemData.desc || item.description)}

@@ -27,13 +27,37 @@ export interface CompendiumDetailField {
 	value: CompendiumDetailValue;
 }
 
-export interface CompendiumDetailSection {
+export interface CompendiumEntityListSection {
 	key: string;
 	title: string;
 	description?: string;
 	kind: 'entity-list';
 	items: CompendiumDetailValue[];
 }
+
+export interface CompendiumCreatureSetRosterEntry {
+	key: string;
+	label: string;
+	href: string;
+	type?: string;
+	size?: string;
+	documentLabel?: string;
+	environments: string[];
+	challengeRatingText?: string;
+	armorClass?: number;
+	hitPoints?: number;
+	speed?: string;
+}
+
+export interface CompendiumCreatureSetRosterSection {
+	key: string;
+	title: string;
+	description?: string;
+	kind: 'creature-set-roster';
+	items: CompendiumCreatureSetRosterEntry[];
+}
+
+export type CompendiumDetailSection = CompendiumEntityListSection | CompendiumCreatureSetRosterSection;
 
 export interface CompendiumDetailPayload {
 	item: CompendiumItem;
@@ -133,6 +157,94 @@ function normalizeValue(value: unknown): CompendiumDetailValue {
 	return normalizeScalar(value);
 }
 
+function getString(value: unknown): string | undefined {
+	return typeof value === 'string' && value.trim() ? value.trim() : undefined;
+}
+
+function getLinkedLabel(value: unknown): string | undefined {
+	if (!value) return undefined;
+	if (typeof value === 'string') return getString(value);
+	if (typeof value !== 'object' || Array.isArray(value)) return undefined;
+
+	const record = value as Record<string, unknown>;
+	return getString(record.name) ?? getString(record.key);
+}
+
+function getEnvironmentLabels(value: unknown): string[] {
+	if (!Array.isArray(value)) {
+		return [];
+	}
+
+	return value.map((entry) => getLinkedLabel(entry)).filter((entry): entry is string => Boolean(entry));
+}
+
+function getSpeedLabel(value: unknown): string | undefined {
+	if (!value || typeof value !== 'object' || Array.isArray(value)) {
+		return undefined;
+	}
+
+	const record = value as Record<string, unknown>;
+	const walk = record.walk;
+	if (typeof walk !== 'number') {
+		return undefined;
+	}
+
+	return `${walk} ${getString(record.unit) ?? 'ft'}`;
+}
+
+function buildCreatureSetRosterSection(rawValue: unknown): CompendiumCreatureSetRosterSection | null {
+	if (!Array.isArray(rawValue)) {
+		return null;
+	}
+
+	const items: CompendiumCreatureSetRosterEntry[] = rawValue
+		.map((entry): CompendiumCreatureSetRosterEntry | null => {
+			if (!entry || typeof entry !== 'object' || Array.isArray(entry)) {
+				return null;
+			}
+
+			const record = entry as Record<string, unknown>;
+			const url = getString(record.url);
+			const reference = url ? buildReferenceFromUrl(url, getString(record.name), getString(record.key)) : null;
+			if (!reference) {
+				return null;
+			}
+
+			return {
+				key: reference.key,
+				label: reference.label,
+				href: reference.href,
+				type: getLinkedLabel(record.type),
+				size: getLinkedLabel(record.size),
+				documentLabel:
+					getLinkedLabel(record.document) ??
+					(record.document &&
+					typeof record.document === 'object' &&
+					!Array.isArray(record.document)
+						? getString((record.document as Record<string, unknown>).display_name)
+						: undefined),
+				environments: getEnvironmentLabels(record.environments),
+				challengeRatingText: getString(record.challenge_rating_text),
+				armorClass: typeof record.armor_class === 'number' ? record.armor_class : undefined,
+				hitPoints: typeof record.hit_points === 'number' ? record.hit_points : undefined,
+				speed: getSpeedLabel(record.speed)
+			};
+		})
+		.filter((entry): entry is CompendiumCreatureSetRosterEntry => entry !== null);
+
+	if (items.length === 0) {
+		return null;
+	}
+
+	return {
+		key: 'creatures',
+		title: 'Roster',
+		description: 'Creatures included in this set.',
+		kind: 'creature-set-roster',
+		items
+	};
+}
+
 function normalizeFields(item: CompendiumItem): {
 	fields: CompendiumDetailField[];
 	sections: CompendiumDetailSection[];
@@ -143,13 +255,10 @@ function normalizeFields(item: CompendiumItem): {
 
 	for (const [key, rawValue] of Object.entries(itemData)) {
 		if (key === 'creatures' && item.type === 'creaturesets' && Array.isArray(rawValue)) {
-			sections.push({
-				key: 'creatures',
-				title: 'Roster',
-				description: 'Creatures included in this set.',
-				kind: 'entity-list',
-				items: rawValue.map((entry) => normalizeValue(entry))
-			});
+			const rosterSection = buildCreatureSetRosterSection(rawValue);
+			if (rosterSection) {
+				sections.push(rosterSection);
+			}
 			continue;
 		}
 
