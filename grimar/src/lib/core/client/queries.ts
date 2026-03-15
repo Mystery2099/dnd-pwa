@@ -56,12 +56,21 @@ const COMPENDIUM_FILTER_KEYS = [
 	'challengeRating'
 ] as const;
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+	return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
+
 function assertCompendiumListPayload(value: unknown): asserts value is CompendiumSearchResult {
 	if (
-		!value ||
-		typeof value !== 'object' ||
-		Array.isArray(value) ||
-		(value as { listSchemaVersion?: unknown }).listSchemaVersion !== 1
+		!isRecord(value) ||
+		value.listSchemaVersion !== 1 ||
+		!Array.isArray(value.items) ||
+		typeof value.total !== 'number' ||
+		typeof value.page !== 'number' ||
+		typeof value.pageSize !== 'number' ||
+		typeof value.totalPages !== 'number' ||
+		typeof value.hasMore !== 'boolean' ||
+		typeof value.resultsTruncated !== 'boolean'
 	) {
 		throw ApiError.validation('Invalid compendium list response', {
 			expectedSchemaVersion: 1
@@ -71,10 +80,12 @@ function assertCompendiumListPayload(value: unknown): asserts value is Compendiu
 
 function assertCompendiumDetailPayload(value: unknown): asserts value is CompendiumDetailPayload {
 	if (
-		!value ||
-		typeof value !== 'object' ||
-		Array.isArray(value) ||
-		(value as { detailSchemaVersion?: unknown }).detailSchemaVersion !== 1
+		!isRecord(value) ||
+		value.detailSchemaVersion !== 1 ||
+		!isRecord(value.item) ||
+		!isRecord(value.presentation) ||
+		!Array.isArray(value.fields) ||
+		!Array.isArray(value.sections)
 	) {
 		throw ApiError.validation('Invalid compendium detail response', {
 			expectedSchemaVersion: 1

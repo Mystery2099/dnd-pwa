@@ -39,6 +39,10 @@ function getDescription(
 		return item.description.trim();
 	}
 
+	if (typeof itemData.desc === 'string' && itemData.desc.trim()) {
+		return itemData.desc.trim();
+	}
+
 	return typeof itemData.alt_text === 'string' && itemData.alt_text.trim()
 		? itemData.alt_text.trim()
 		: undefined;

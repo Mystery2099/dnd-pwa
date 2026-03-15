@@ -606,6 +606,10 @@ describe('buildCompendiumDetailPayload', () => {
 			defaultOpen: true
 		});
 		expect(payload.fields.map((field) => field.key)).not.toContain('features');
+		expect(collectCompendiumMarkdownSources(classItem, payload)).toContainEqual({
+			key: 'features.0.desc',
+			text: '|Primary Ability|Strength|'
+		});
 	});
 
 	it('promotes class table data and spell slots into structured class tables', () => {

@@ -89,4 +89,36 @@ describe('apiFetch', () => {
 			'Invalid compendium detail response'
 		);
 	});
+
+	it('rejects malformed v1 compendium list responses', async () => {
+		globalFetch.mockResolvedValueOnce({
+			ok: true,
+			json: async () => ({
+				listSchemaVersion: 1,
+				items: {},
+				total: '0'
+			}),
+			headers: new Headers({ 'content-type': 'application/json' })
+		});
+
+		await expect(fetchCompendiumList('spells')).rejects.toThrow('Invalid compendium list response');
+	});
+
+	it('rejects malformed v1 compendium detail responses', async () => {
+		globalFetch.mockResolvedValueOnce({
+			ok: true,
+			json: async () => ({
+				detailSchemaVersion: 1,
+				item: [],
+				presentation: null,
+				fields: {},
+				sections: []
+			}),
+			headers: new Headers({ 'content-type': 'application/json' })
+		});
+
+		await expect(fetchCompendiumDetail('spells', 'fireball')).rejects.toThrow(
+			'Invalid compendium detail response'
+		);
+	});
 });

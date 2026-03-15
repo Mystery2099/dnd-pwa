@@ -1486,13 +1486,9 @@ function getMarkdownTextForKey(
 		return getMarkdownArrayEntry(itemData, 'traits', traitIndex);
 	}
 
-	const classFeaturesSection = payload.sections.find(
-		(section): section is CompendiumClassFeaturesSection => section.kind === 'class-features'
-	);
-	const featureIndex =
-		classFeaturesSection && key.startsWith('features.')
-			? getCollectionIndexFromMarkdownKey(key, 'features')
-			: null;
+	const featureIndex = key.startsWith('features.')
+		? getCollectionIndexFromMarkdownKey(key, 'features')
+		: null;
 	if (featureIndex !== null) {
 		return getMarkdownArrayEntry(itemData, 'features', featureIndex);
 	}

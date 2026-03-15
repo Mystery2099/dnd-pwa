@@ -20,6 +20,19 @@ describe('compendium-detail-values', () => {
 		expect(getCompendiumDetailReferenceLabel(value)).toBe('Illusion');
 	});
 
+	it('accepts normalized references without a sourceUrl', () => {
+		const value = {
+			kind: 'entity',
+			type: 'spellschools',
+			key: 'illusion',
+			label: 'Illusion',
+			href: '/compendium/spellschools/illusion'
+		};
+
+		expect(isCompendiumDetailReference(value)).toBe(true);
+		expect(getCompendiumDetailReferenceLabel(value)).toBe('Illusion');
+	});
+
 	it('rejects raw linked objects from the pre-normalized shape', () => {
 		const value = {
 			name: 'Illusion',

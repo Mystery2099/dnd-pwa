@@ -18,5 +18,14 @@ export const GET: RequestHandler = async ({ params }) => {
 		throw error(404, 'Item not found');
 	}
 
-	return json(buildCompendiumDetailPayload(item));
+	try {
+		return json(buildCompendiumDetailPayload(item));
+	} catch (buildError) {
+		console.error('GET /api/compendium/[type]/[slug] failed to build payload', {
+			type,
+			slug,
+			error: buildError
+		});
+		return json({ error: 'Failed to build compendium payload' }, { status: 500 });
+	}
 };

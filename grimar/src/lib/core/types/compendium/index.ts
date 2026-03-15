@@ -78,7 +78,7 @@ export interface CompendiumDetailReference {
 	label: string;
 	href: string;
 	meta?: string;
-	sourceUrl: string;
+	sourceUrl?: string;
 }
 
 export type CompendiumDetailValue =

@@ -8,7 +8,7 @@ This document describes the implemented product shape, not older roadmap ideas.
 
 Related implementation docs:
 
-- [COMPENDIUM_API.md](/home/mystery/misc-projects/dnd-pwa/docs/COMPENDIUM_API.md)
+- [COMPENDIUM_API.md](./COMPENDIUM_API.md)
 
 ## Product Scope
 

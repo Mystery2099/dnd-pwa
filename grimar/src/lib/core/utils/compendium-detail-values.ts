@@ -15,9 +15,7 @@ export function isCompendiumDetailReference(value: unknown): value is Compendium
 		typeof record.key === 'string' &&
 		record.key.trim().length > 0 &&
 		typeof record.type === 'string' &&
-		record.type.trim().length > 0 &&
-		typeof record.sourceUrl === 'string' &&
-		record.sourceUrl.trim().length > 0
+		record.type.trim().length > 0
 	);
 }
 

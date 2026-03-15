@@ -26,8 +26,8 @@ describe('CompendiumDetailHeader', () => {
 			}
 		});
 
-		expect(screen.getByText('Level 3')).toBeTruthy();
-		expect(screen.getByText('Illusion')).toBeTruthy();
-		expect(screen.getByText('Psychic')).toBeTruthy();
+		expect(screen.getByText('Level 3')).toBeInTheDocument();
+		expect(screen.getByText('Illusion')).toBeInTheDocument();
+		expect(screen.getByText('Psychic')).toBeInTheDocument();
 	});
 });

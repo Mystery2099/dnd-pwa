@@ -100,7 +100,7 @@ Response shape:
 - `detailSchemaVersion` is the explicit version marker for the normalized detail payload.
 - `fields` are curated sidebar/reference values, not a raw dump of `item.data`.
 - `sections` are structured content blocks derived by the server-side detail adapter.
-- `benefits` sections may render as a simple markdown list or as grouped semantic benefit cards, depending on the source type.
+- `benefits` sections may render as a simple Markdown list or as grouped semantic benefit cards, depending on the source type.
 - Markdown-bearing content is discovered from the normalized detail payload and rendered server-side by the detail page loader.
 
 ## Current Status

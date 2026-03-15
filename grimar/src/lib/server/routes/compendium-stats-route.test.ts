@@ -14,7 +14,7 @@ vi.mock('$lib/server/utils/query-performance', () => ({
 describe('GET /api/compendium/stats', () => {
 	beforeEach(() => {
 		getTypeCountsMock.mockReset();
-		getQueryBucketMock.mockClear();
+		getQueryBucketMock.mockReset();
 		getQueryBucketMock.mockReturnValue('fast');
 	});
 
@@ -41,5 +41,19 @@ describe('GET /api/compendium/stats', () => {
 		expect(response.headers.get('X-Query-Bucket')).toBe('fast');
 		expect(response.headers.get('X-Query-Time-Ms')).toMatch(/^\d+(\.\d+)?$/);
 		expect(response.headers.get('Server-Timing')).toMatch(/^compendium-stats;dur=\d+(\.\d+)?$/);
+	});
+
+	it('returns a controlled 500 response when the stats query fails', async () => {
+		const { GET } = await import('../../../routes/api/compendium/stats/+server');
+		getTypeCountsMock.mockRejectedValueOnce(new Error('db unavailable'));
+
+		const response = await GET();
+		const body = await response.json();
+
+		expect(response.status).toBe(500);
+		expect(body).toEqual({ error: 'Failed to load compendium stats' });
+		expect(response.headers.get('Cache-Control')).toBeNull();
+		expect(response.headers.get('Server-Timing')).toBeNull();
+		expect(response.headers.get('X-Query-Bucket')).toBeNull();
 	});
 });

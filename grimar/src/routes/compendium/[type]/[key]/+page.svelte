@@ -18,6 +18,7 @@
 		CompendiumClassTableSection,
 		CompendiumCreatureEncounterSection,
 		CompendiumCreatureSetRosterSection,
+		CompendiumDetailSection,
 		CompendiumDetailField,
 		CompendiumDescriptionsSection,
 		CompendiumMarkdownSection,
@@ -74,77 +75,103 @@
 	let detailFields = $derived(data.detail.fields as CompendiumDetailField[]);
 	let detailSections = $derived(data.detail.sections);
 	let markdownHtml = $derived<Record<string, string>>(data.markdownHtml ?? {});
+
+	function findSection<T extends CompendiumDetailSection>(
+		sections: CompendiumDetailSection[],
+		predicate: (section: CompendiumDetailSection) => section is T
+	): T | null {
+		return sections.find(predicate) ?? null;
+	}
+
+	function filterSections<T extends CompendiumDetailSection>(
+		sections: CompendiumDetailSection[],
+		predicate: (section: CompendiumDetailSection) => section is T
+	): T[] {
+		return sections.filter(predicate);
+	}
+
 	let creatureSetRosterSection = $derived.by(() => {
-		const sections = detailSections as Array<CompendiumCreatureSetRosterSection | { kind: string }>;
-		const rosterSection = sections.find(
+		const rosterSection = findSection(
+			detailSections,
 			(section): section is CompendiumCreatureSetRosterSection =>
 				section.kind === 'creature-set-roster'
 		);
 		return rosterSection ?? null;
 	});
 	let descriptionsSection = $derived.by(() => {
-		const section = detailSections.find(
+		const section = findSection(
+			detailSections,
 			(entry): entry is CompendiumDescriptionsSection => entry.kind === 'descriptions'
 		);
 		return section ?? null;
 	});
 	let benefitsSection = $derived.by(() => {
-		const section = detailSections.find(
+		const section = findSection(
+			detailSections,
 			(entry): entry is CompendiumBenefitsSection => entry.kind === 'benefits'
 		);
 		return section ?? null;
 	});
 	let weaponPropertiesSection = $derived.by(() => {
-		const section = detailSections.find(
+		const section = findSection(
+			detailSections,
 			(entry): entry is CompendiumWeaponPropertiesSection => entry.kind === 'weapon-properties'
 		);
 		return section ?? null;
 	});
 	let traitsSection = $derived.by(() => {
-		const section = detailSections.find(
+		const section = findSection(
+			detailSections,
 			(entry): entry is CompendiumTraitsSection => entry.kind === 'traits'
 		);
 		return section ?? null;
 	});
 	let descriptionSection = $derived.by(() => {
-		const section = detailSections.find(
+		const section = findSection(
+			detailSections,
 			(entry): entry is CompendiumMarkdownSection =>
 				entry.kind === 'markdown' && entry.key === 'description'
 		);
 		return section ?? null;
 	});
 	let higherLevelSection = $derived.by(() => {
-		const section = detailSections.find(
+		const section = findSection(
+			detailSections,
 			(entry): entry is CompendiumMarkdownSection =>
 				entry.kind === 'markdown' && entry.key === 'higher_level'
 		);
 		return section ?? null;
 	});
 	let supplementalMarkdownSections = $derived.by(() =>
-		detailSections.filter(
+		filterSections(
+			detailSections,
 			(entry): entry is CompendiumMarkdownSection =>
 				entry.kind === 'markdown' && entry.key !== 'description' && entry.key !== 'higher_level'
 		)
 	);
 	let spellClassesSection = $derived.by(() => {
-		const section = detailSections.find(
+		const section = findSection(
+			detailSections,
 			(entry): entry is CompendiumSpellClassesSection => entry.kind === 'spell-classes'
 		);
 		return section ?? null;
 	});
 	let classFeaturesSection = $derived.by(() => {
-		const section = detailSections.find(
+		const section = findSection(
+			detailSections,
 			(entry): entry is CompendiumClassFeaturesSection => entry.kind === 'class-features'
 		);
 		return section ?? null;
 	});
 	let classTableSections = $derived.by(() =>
-		detailSections.filter(
+		filterSections(
+			detailSections,
 			(entry): entry is CompendiumClassTableSection => entry.kind === 'class-table'
 		)
 	);
 	let creatureEncounterSection = $derived.by(() => {
-		const section = detailSections.find(
+		const section = findSection(
+			detailSections,
 			(entry): entry is CompendiumCreatureEncounterSection => entry.kind === 'creature-encounter'
 		);
 		return section ?? null;
