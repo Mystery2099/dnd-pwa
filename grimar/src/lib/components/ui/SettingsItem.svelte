@@ -30,9 +30,7 @@
 		{/if}
 	</div>
 
-	<div
-		class="min-w-0 shrink-0 overflow-hidden max-w-[min(100%,34rem)] max-sm:max-w-full"
-	>
+	<div class="max-w-[min(100%,34rem)] min-w-0 shrink-0 overflow-hidden max-sm:max-w-full">
 		{@render control()}
 	</div>
 </div>
