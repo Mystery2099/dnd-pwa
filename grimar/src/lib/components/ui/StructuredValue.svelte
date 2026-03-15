@@ -17,6 +17,14 @@
 		isExternal?: boolean;
 	};
 
+	type EntityValueRecord = {
+		kind: 'entity';
+		label: string;
+		href: string;
+		meta?: string;
+		sourceUrl?: string;
+	};
+
 	function isUrlLikeString(input: string): boolean {
 		try {
 			const url = new URL(input);
@@ -38,6 +46,23 @@
 
 	function isStructuredEntry(entry: unknown): boolean {
 		return typeof entry === 'object' && entry !== null;
+	}
+
+	function isEntityValue(input: unknown): input is EntityValueRecord {
+		if (!input || typeof input !== 'object' || Array.isArray(input)) return false;
+
+		const record = input as Record<string, unknown>;
+		return (
+			record.kind === 'entity' &&
+			typeof record.label === 'string' &&
+			record.label.trim().length > 0 &&
+			typeof record.href === 'string' &&
+			record.href.trim().length > 0
+		);
+	}
+
+	function isExternalLink(input: CompendiumLink | EntityValueRecord): input is CompendiumLink {
+		return 'isExternal' in input && input.isExternal === true;
 	}
 
 	function getCompendiumLinkFromUrl(
@@ -142,14 +167,16 @@
 		{/each}
 	</ul>
 {:else if typeof value === 'object'}
-	{@const linkedObject = getLinkedObject(value)}
+	{@const entityValue = isEntityValue(value) ? value : null}
+	{@const linkedObject = entityValue ?? getLinkedObject(value)}
 	{#if linkedObject}
+		{@const externalLink = isExternalLink(linkedObject)}
 		<div class="space-y-1">
 			<a
 				href={linkedObject.href}
-				target={linkedObject.isExternal ? '_blank' : undefined}
-				rel={linkedObject.isExternal ? 'noreferrer' : undefined}
-				class="break-all text-accent transition-colors hover:text-accent/80"
+				target={externalLink ? '_blank' : undefined}
+				rel={externalLink ? 'noreferrer' : undefined}
+				class="break-words text-accent transition-colors hover:text-accent/80"
 			>
 				{linkedObject.label}
 			</a>
