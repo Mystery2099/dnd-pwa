@@ -16,17 +16,18 @@
 		markdownAt: (path: string) => string;
 	}
 
-	let { features, title = 'Class Features', description, defaultOpen = true, markdownAt }: Props = $props();
+	let {
+		features,
+		title = 'Class Features',
+		description,
+		defaultOpen = true,
+		markdownAt
+	}: Props = $props();
 	let activeFeature = $state('');
 </script>
 
 {#if features.length > 0}
-	<CompendiumAccordionSection
-		{title}
-		{description}
-		value="class-features"
-		open={defaultOpen}
-	>
+	<CompendiumAccordionSection {title} {description} value="class-features" open={defaultOpen}>
 		<Accordion
 			bind:value={activeFeature}
 			class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/55 px-4"

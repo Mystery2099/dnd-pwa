@@ -560,15 +560,9 @@
 										class="pointer-events-none absolute top-3 right-4 text-[var(--color-text-primary)]/12"
 									>
 										{#if presentation.cardIcon?.family === 'spell-school'}
-											<SpellSchoolIcon
-												school={presentation.cardIcon.value}
-												class="h-11 w-11"
-											/>
+											<SpellSchoolIcon school={presentation.cardIcon.value} class="h-11 w-11" />
 										{:else if presentation.cardIcon?.family === 'creature-type'}
-											<CreatureTypeIcon
-												type={presentation.cardIcon.value}
-												class="h-11 w-11"
-											/>
+											<CreatureTypeIcon type={presentation.cardIcon.value} class="h-11 w-11" />
 										{:else}
 											<CompendiumTypeIcon
 												type={data.type}

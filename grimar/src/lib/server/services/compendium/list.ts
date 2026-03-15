@@ -13,7 +13,10 @@ import {
 import { formatValue, getImageKindLabel } from '$lib/utils/compendium';
 import type { CompendiumItem as DbCompendiumItem } from '$lib/server/db/schema';
 
-function getDocumentLabel(item: DbCompendiumItem, itemData: Record<string, unknown>): string | undefined {
+function getDocumentLabel(
+	item: DbCompendiumItem,
+	itemData: Record<string, unknown>
+): string | undefined {
 	const document = itemData.document;
 	if (document && typeof document === 'object' && !Array.isArray(document)) {
 		const record = document as Record<string, unknown>;
@@ -28,7 +31,10 @@ function getDocumentLabel(item: DbCompendiumItem, itemData: Record<string, unkno
 	return item.documentName ?? undefined;
 }
 
-function getDescription(item: DbCompendiumItem, itemData: Record<string, unknown>): string | undefined {
+function getDescription(
+	item: DbCompendiumItem,
+	itemData: Record<string, unknown>
+): string | undefined {
 	if (typeof item.description === 'string' && item.description.trim()) {
 		return item.description;
 	}
@@ -62,7 +68,10 @@ function toCoreCompendiumItem(item: DbCompendiumItem): CompendiumListItem['item'
 	};
 }
 
-function buildBadges(item: DbCompendiumItem, itemData: Record<string, unknown>): CompendiumDetailHeaderBadge[] {
+function buildBadges(
+	item: DbCompendiumItem,
+	itemData: Record<string, unknown>
+): CompendiumDetailHeaderBadge[] {
 	if (item.type === 'spells') {
 		const badges: CompendiumDetailHeaderBadge[] = [];
 		if (typeof itemData.level === 'number') {
@@ -105,7 +114,10 @@ function buildBadges(item: DbCompendiumItem, itemData: Record<string, unknown>):
 
 	if (item.type === 'creatures') {
 		const badges: CompendiumDetailHeaderBadge[] = [];
-		if (typeof itemData.challenge_rating_text === 'string' && itemData.challenge_rating_text.trim()) {
+		if (
+			typeof itemData.challenge_rating_text === 'string' &&
+			itemData.challenge_rating_text.trim()
+		) {
 			badges.push({
 				label: `CR ${itemData.challenge_rating_text.trim()}`,
 				variant: 'solid'
@@ -121,15 +133,15 @@ function buildBadges(item: DbCompendiumItem, itemData: Record<string, unknown>):
 	}
 
 	if (item.type === 'classes' || item.type === 'subclasses') {
-		return itemData.hit_dice
-			? [{ label: `d${itemData.hit_dice}`, variant: 'solid' }]
-			: [];
+		return itemData.hit_dice ? [{ label: `d${itemData.hit_dice}`, variant: 'solid' }] : [];
 	}
 
 	if (item.type === 'images') {
 		const badges: CompendiumDetailHeaderBadge[] = [
 			{
-				label: getImageKindLabel(typeof itemData.file_url === 'string' ? itemData.file_url : undefined),
+				label: getImageKindLabel(
+					typeof itemData.file_url === 'string' ? itemData.file_url : undefined
+				),
 				variant: 'solid'
 			}
 		];
@@ -146,7 +158,10 @@ function buildBadges(item: DbCompendiumItem, itemData: Record<string, unknown>):
 
 export function buildCompendiumListItem(item: DbCompendiumItem): CompendiumListItem {
 	const itemData = (item.data ?? {}) as Record<string, unknown>;
-	const resolvedCardIcon = resolveCompendiumCardIcon(item.type as CompendiumTypeName, readCardIconData(itemData));
+	const resolvedCardIcon = resolveCompendiumCardIcon(
+		item.type as CompendiumTypeName,
+		readCardIconData(itemData)
+	);
 
 	return {
 		item: toCoreCompendiumItem(item),
@@ -165,7 +180,9 @@ export function buildCompendiumListItem(item: DbCompendiumItem): CompendiumListI
 }
 
 export function buildCompendiumListResult(
-	result: Omit<CompendiumSearchResult, 'items' | 'listSchemaVersion'> & { items: DbCompendiumItem[] }
+	result: Omit<CompendiumSearchResult, 'items' | 'listSchemaVersion'> & {
+		items: DbCompendiumItem[];
+	}
 ): CompendiumSearchResult {
 	return {
 		listSchemaVersion: 1,

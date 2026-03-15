@@ -18,8 +18,7 @@
 		CompendiumClassTableSection,
 		CompendiumCreatureEncounterSection,
 		CompendiumCreatureSetRosterSection,
-		CompendiumDetailField
-		,
+		CompendiumDetailField,
 		CompendiumDescriptionsSection,
 		CompendiumMarkdownSection,
 		CompendiumSpellClassesSection,
@@ -124,9 +123,7 @@
 	let supplementalMarkdownSections = $derived.by(() =>
 		detailSections.filter(
 			(entry): entry is CompendiumMarkdownSection =>
-				entry.kind === 'markdown' &&
-				entry.key !== 'description' &&
-				entry.key !== 'higher_level'
+				entry.kind === 'markdown' && entry.key !== 'description' && entry.key !== 'higher_level'
 		)
 	);
 	let spellClassesSection = $derived.by(() => {
@@ -177,7 +174,6 @@
 
 		return value;
 	}
-
 </script>
 
 <svelte:head>
@@ -353,7 +349,9 @@
 												</span>
 											{/if}
 											{#if property.detail}
-												<span class="text-sm text-[var(--color-text-muted)]">({property.detail})</span>
+												<span class="text-sm text-[var(--color-text-muted)]"
+													>({property.detail})</span
+												>
 											{/if}
 										</div>
 										{#if property.markdownKey}
@@ -399,7 +397,7 @@
 					{#if spellClassesSection || higherLevelSection}
 						<SpellDetailSections
 							classes={spellClassesSection?.items ?? []}
-							higherLevelSection={higherLevelSection}
+							{higherLevelSection}
 							{markdownAt}
 						/>
 					{/if}

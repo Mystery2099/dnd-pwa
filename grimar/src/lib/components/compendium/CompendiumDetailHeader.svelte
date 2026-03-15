@@ -33,7 +33,7 @@
 		icon,
 		type,
 		headerBadges,
-		featuredRelatedImage,
+		featuredRelatedImage
 	}: Props = $props();
 </script>
 

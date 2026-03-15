@@ -18,8 +18,7 @@ import type {
 	CompendiumDetailSection,
 	CompendiumDescriptionEntry,
 	CompendiumDetailValue,
-	CompendiumEntityListSection
-	,
+	CompendiumEntityListSection,
 	CompendiumMarkdownSection,
 	CompendiumSpellClassesSection,
 	CompendiumTraitsSection,
@@ -44,7 +43,12 @@ const CREATURE_REFERENCE_FIELD_KEYS = new Set([
 	'experience_points'
 ]);
 
-const IMAGE_DETAIL_EXCLUDED_FIELD_KEYS = new Set(['file_url', 'alt_text', 'attribution', 'document']);
+const IMAGE_DETAIL_EXCLUDED_FIELD_KEYS = new Set([
+	'file_url',
+	'alt_text',
+	'attribution',
+	'document'
+]);
 const BACKGROUND_BENEFIT_GROUP_ORDER = [
 	'ability_score',
 	'skill_proficiency',
@@ -129,7 +133,9 @@ function buildReferenceFromUrl(
 	};
 }
 
-function buildConditionArtwork(item: CompendiumItem): CompendiumRelatedImagePresentation | undefined {
+function buildConditionArtwork(
+	item: CompendiumItem
+): CompendiumRelatedImagePresentation | undefined {
 	if (item.type !== 'conditions') {
 		return undefined;
 	}
@@ -141,7 +147,8 @@ function buildConditionArtwork(item: CompendiumItem): CompendiumRelatedImagePres
 	}
 
 	const assetUrl = resolveImageAssetUrl(icon.file_url);
-	const key = getString(icon.key) ?? (typeof icon.url === 'string' ? extractKeyFromUrl(icon.url) : null);
+	const key =
+		getString(icon.key) ?? (typeof icon.url === 'string' ? extractKeyFromUrl(icon.url) : null);
 	if (!assetUrl || !key) {
 		return undefined;
 	}
@@ -162,7 +169,8 @@ function buildPresentation(item: CompendiumItem): CompendiumDetailPresentation {
 	const documentLabel =
 		getString(document?.display_name) ??
 		getString(document?.name) ??
-		(item.documentName ?? undefined);
+		item.documentName ??
+		undefined;
 
 	const imagePresentation =
 		item.type === 'images'
@@ -171,9 +179,14 @@ function buildPresentation(item: CompendiumItem): CompendiumDetailPresentation {
 					assetUrl: resolveImageAssetUrl(itemData.file_url),
 					altText: getString(itemData.alt_text),
 					attribution: getString(itemData.attribution),
-					publisher: document && isRecord(document.publisher) ? getString(document.publisher.name) : undefined,
+					publisher:
+						document && isRecord(document.publisher)
+							? getString(document.publisher.name)
+							: undefined,
 					gameSystem:
-						document && isRecord(document.gamesystem) ? getString(document.gamesystem.name) : undefined,
+						document && isRecord(document.gamesystem)
+							? getString(document.gamesystem.name)
+							: undefined,
 					permalink: getString(document?.permalink)
 				}
 			: undefined;
@@ -342,7 +355,10 @@ function normalizeObject(value: Record<string, unknown>): CompendiumDetailValue 
 		return (
 			buildReferenceFromUrl(recordUrl, normalizedLabel, referenceMeta) ?? {
 				...Object.fromEntries(
-					Object.entries(value).map(([entryKey, entryValue]) => [entryKey, normalizeValue(entryValue)])
+					Object.entries(value).map(([entryKey, entryValue]) => [
+						entryKey,
+						normalizeValue(entryValue)
+					])
 				)
 			}
 		);
@@ -396,7 +412,9 @@ function getEnvironmentLabels(value: unknown): string[] {
 		return [];
 	}
 
-	return value.map((entry) => getLinkedLabel(entry)).filter((entry): entry is string => Boolean(entry));
+	return value
+		.map((entry) => getLinkedLabel(entry))
+		.filter((entry): entry is string => Boolean(entry));
 }
 
 function getSpeedLabel(value: unknown): string | undefined {
@@ -407,7 +425,9 @@ function getSpeedLabel(value: unknown): string | undefined {
 	return formatSpeed(value);
 }
 
-function buildCreatureSetRosterSection(rawValue: unknown): CompendiumCreatureSetRosterSection | null {
+function buildCreatureSetRosterSection(
+	rawValue: unknown
+): CompendiumCreatureSetRosterSection | null {
 	if (!Array.isArray(rawValue)) {
 		return null;
 	}
@@ -420,7 +440,9 @@ function buildCreatureSetRosterSection(rawValue: unknown): CompendiumCreatureSet
 
 			const record = entry as Record<string, unknown>;
 			const url = getString(record.url);
-			const reference = url ? buildReferenceFromUrl(url, getString(record.name), getString(record.key)) : null;
+			const reference = url
+				? buildReferenceFromUrl(url, getString(record.name), getString(record.key))
+				: null;
 			if (!reference) {
 				return null;
 			}
@@ -433,9 +455,7 @@ function buildCreatureSetRosterSection(rawValue: unknown): CompendiumCreatureSet
 				size: getLinkedLabel(record.size),
 				documentLabel:
 					getLinkedLabel(record.document) ??
-					(record.document &&
-					typeof record.document === 'object' &&
-					!Array.isArray(record.document)
+					(record.document && typeof record.document === 'object' && !Array.isArray(record.document)
 						? getString((record.document as Record<string, unknown>).display_name)
 						: undefined),
 				environments: getEnvironmentLabels(record.environments),
@@ -535,8 +555,12 @@ function getBackgroundBenefitGroupLabel(benefitType: string): string {
 
 function sortBackgroundBenefitGroups(groups: CompendiumBenefitGroup[]): CompendiumBenefitGroup[] {
 	return groups.sort((left, right) => {
-		const leftIndex = BACKGROUND_BENEFIT_GROUP_ORDER.indexOf(left.key as (typeof BACKGROUND_BENEFIT_GROUP_ORDER)[number]);
-		const rightIndex = BACKGROUND_BENEFIT_GROUP_ORDER.indexOf(right.key as (typeof BACKGROUND_BENEFIT_GROUP_ORDER)[number]);
+		const leftIndex = BACKGROUND_BENEFIT_GROUP_ORDER.indexOf(
+			left.key as (typeof BACKGROUND_BENEFIT_GROUP_ORDER)[number]
+		);
+		const rightIndex = BACKGROUND_BENEFIT_GROUP_ORDER.indexOf(
+			right.key as (typeof BACKGROUND_BENEFIT_GROUP_ORDER)[number]
+		);
 		const normalizedLeftIndex = leftIndex === -1 ? Number.MAX_SAFE_INTEGER : leftIndex;
 		const normalizedRightIndex = rightIndex === -1 ? Number.MAX_SAFE_INTEGER : rightIndex;
 
@@ -549,7 +573,9 @@ function sortBackgroundBenefitGroups(groups: CompendiumBenefitGroup[]): Compendi
 }
 
 function joinMarkdownParts(...parts: Array<string | undefined>): string | null {
-	const normalizedParts = parts.map((part) => part?.trim()).filter((part): part is string => Boolean(part));
+	const normalizedParts = parts
+		.map((part) => part?.trim())
+		.filter((part): part is string => Boolean(part));
 	if (normalizedParts.length === 0) {
 		return null;
 	}
@@ -595,8 +621,8 @@ function buildBackgroundBenefitsSection(rawValue: unknown): CompendiumBenefitsSe
 		markdownFieldKey?: 'desc' | 'connections' | 'mementos';
 	};
 
-	const items: BackgroundBenefitEntry[] = rawValue
-		.flatMap((entry, index): BackgroundBenefitEntry[] => {
+	const items: BackgroundBenefitEntry[] = rawValue.flatMap(
+		(entry, index): BackgroundBenefitEntry[] => {
 			if (!isRecord(entry) || typeof entry.desc !== 'string') {
 				return [];
 			}
@@ -624,13 +650,16 @@ function buildBackgroundBenefitsSection(rawValue: unknown): CompendiumBenefitsSe
 				}
 			}
 
-			return [{
-				markdownKey: `benefits.${index}.desc`,
-				name: getString(entry.name),
-				benefitType,
-				markdownFieldKey: 'desc'
-			}];
-		});
+			return [
+				{
+					markdownKey: `benefits.${index}.desc`,
+					name: getString(entry.name),
+					benefitType,
+					markdownFieldKey: 'desc'
+				}
+			];
+		}
+	);
 
 	if (items.length === 0) {
 		return null;
@@ -689,12 +718,11 @@ function buildWeaponPropertiesSection(rawValue: unknown): CompendiumWeaponProper
 				name,
 				propertyType: getString(property.type),
 				detail: getString(entry.detail),
-				markdownKey: typeof property.desc === 'string' ? `weaponProperties.${index}.desc` : undefined
+				markdownKey:
+					typeof property.desc === 'string' ? `weaponProperties.${index}.desc` : undefined
 			};
 		})
-		.filter(
-			(entry): entry is NonNullable<typeof entry> => entry !== null
-		);
+		.filter((entry): entry is NonNullable<typeof entry> => entry !== null);
 
 	if (items.length === 0) {
 		return null;
@@ -978,7 +1006,10 @@ function normalizeClassTableEntries(
 				name
 			};
 		})
-		.filter((entry): entry is Record<string, unknown> & { feature_type: string; name: string } => entry !== null);
+		.filter(
+			(entry): entry is Record<string, unknown> & { feature_type: string; name: string } =>
+				entry !== null
+		);
 }
 
 function getClassTableValues(entry: Record<string, unknown>): Map<number, string> {
@@ -1090,7 +1121,9 @@ function buildClassTableSections(rawValue: unknown): CompendiumClassTableSection
 	return sections;
 }
 
-function buildCreatureEncounterSection(itemData: Record<string, unknown>): CompendiumCreatureEncounterSection | null {
+function buildCreatureEncounterSection(
+	itemData: Record<string, unknown>
+): CompendiumCreatureEncounterSection | null {
 	const orderedAbilities = [
 		'strength',
 		'dexterity',
@@ -1099,8 +1132,9 @@ function buildCreatureEncounterSection(itemData: Record<string, unknown>): Compe
 		'wisdom',
 		'charisma'
 	];
-	const abilityScoresRecord =
-		isRecord(itemData.ability_scores) ? (itemData.ability_scores as Record<string, unknown>) : null;
+	const abilityScoresRecord = isRecord(itemData.ability_scores)
+		? (itemData.ability_scores as Record<string, unknown>)
+		: null;
 	const abilityScores = abilityScoresRecord
 		? orderedAbilities
 				.map((ability) => {
@@ -1227,25 +1261,29 @@ function normalizeFields(item: CompendiumItem): {
 		consumedSectionKeys.add('traits');
 	}
 
-	const spellClassesSection = item.type === 'spells' ? buildSpellClassesSection(itemData.classes) : null;
+	const spellClassesSection =
+		item.type === 'spells' ? buildSpellClassesSection(itemData.classes) : null;
 	if (spellClassesSection) {
 		sections.push(spellClassesSection);
 		consumedSectionKeys.add('classes');
 	}
 
-	const higherLevelSection = item.type === 'spells' ? buildHigherLevelSection(itemData.higher_level) : null;
+	const higherLevelSection =
+		item.type === 'spells' ? buildHigherLevelSection(itemData.higher_level) : null;
 	if (higherLevelSection) {
 		sections.push(higherLevelSection);
 		consumedSectionKeys.add('higher_level');
 	}
 
-	const classFeaturesSection = item.type === 'classes' ? buildClassFeaturesSection(itemData.features) : null;
+	const classFeaturesSection =
+		item.type === 'classes' ? buildClassFeaturesSection(itemData.features) : null;
 	const classSupplementalSections =
 		item.type === 'classes' ? buildClassSupplementalMarkdownSections(itemData.features) : [];
 	for (const section of classSupplementalSections) {
 		sections.push(section);
 	}
-	const classTableSections = item.type === 'classes' ? buildClassTableSections(itemData.features) : [];
+	const classTableSections =
+		item.type === 'classes' ? buildClassTableSections(itemData.features) : [];
 	for (const section of classTableSections) {
 		sections.push(section);
 	}
@@ -1439,7 +1477,8 @@ function getMarkdownTextForKey(
 	}
 
 	const creatureEncounterSection = payload.sections.find(
-		(section): section is CompendiumCreatureEncounterSection => section.kind === 'creature-encounter'
+		(section): section is CompendiumCreatureEncounterSection =>
+			section.kind === 'creature-encounter'
 	);
 	const actionIndex =
 		creatureEncounterSection && key.startsWith('actions.')
@@ -1472,7 +1511,11 @@ export function collectCompendiumMarkdownSources(
 			continue;
 		}
 
-		if (section.kind === 'descriptions' || section.kind === 'benefits' || section.kind === 'traits') {
+		if (
+			section.kind === 'descriptions' ||
+			section.kind === 'benefits' ||
+			section.kind === 'traits'
+		) {
 			for (const entry of section.items) {
 				if (entry.markdownKey) {
 					markdownKeys.add(entry.markdownKey);

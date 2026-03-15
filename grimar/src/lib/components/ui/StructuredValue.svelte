@@ -41,7 +41,9 @@
 		return typeof entry === 'object' && entry !== null;
 	}
 
-	function isExternalLink(input: CompendiumLink | { href: string; label: string; meta?: string }): input is CompendiumLink {
+	function isExternalLink(
+		input: CompendiumLink | { href: string; label: string; meta?: string }
+	): input is CompendiumLink {
 		return 'isExternal' in input && input.isExternal === true;
 	}
 
@@ -116,7 +118,10 @@
 {:else if typeof value === 'string'}
 	{@const internalCompendiumLink = getCompendiumLinkFromUrl(value)}
 	{#if internalCompendiumLink}
-		<a href={internalCompendiumLink.href} class="break-words text-accent transition-colors hover:text-accent/80">
+		<a
+			href={internalCompendiumLink.href}
+			class="break-words text-accent transition-colors hover:text-accent/80"
+		>
 			{internalCompendiumLink.label}
 		</a>
 	{:else if isUrlLikeString(value)}

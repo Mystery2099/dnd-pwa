@@ -37,7 +37,6 @@
 		experiencePoints,
 		featuredRelatedImage
 	}: Props = $props();
-
 </script>
 
 <div class="flex items-start justify-between gap-6">

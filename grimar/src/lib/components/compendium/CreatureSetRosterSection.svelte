@@ -13,9 +13,9 @@
 		Array.from(new Set(creatures.map((creature) => creature.type).filter(Boolean))).join(' · ')
 	);
 	let challengeBand = $derived(
-		Array.from(new Set(creatures.map((creature) => creature.challengeRatingText).filter(Boolean))).join(
-			' · '
-		)
+		Array.from(
+			new Set(creatures.map((creature) => creature.challengeRatingText).filter(Boolean))
+		).join(' · ')
 	);
 </script>
 

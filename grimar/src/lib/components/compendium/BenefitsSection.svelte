@@ -20,7 +20,11 @@
 			.join(' ');
 	}
 
-	function shouldShowItemName(groupTitle: string, itemName: string | undefined, groupSize: number): boolean {
+	function shouldShowItemName(
+		groupTitle: string,
+		itemName: string | undefined,
+		groupSize: number
+	): boolean {
 		if (!itemName) {
 			return false;
 		}
@@ -50,7 +54,9 @@
 							{#if shouldShowItemName(group.title, item.name, group.items.length)}
 								<h4 class="mb-2 text-sm font-semibold text-accent">{item.name}</h4>
 							{/if}
-							<div class="prose prose-invert prose-sm max-w-none text-[var(--color-text-secondary)] [&>p:first-child]:mt-0 [&>p:last-child]:mb-0">
+							<div
+								class="prose prose-invert prose-sm max-w-none text-[var(--color-text-secondary)] [&>p:first-child]:mt-0 [&>p:last-child]:mb-0"
+							>
 								<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 								{@html markdownAt(item.markdownKey)}
 							</div>

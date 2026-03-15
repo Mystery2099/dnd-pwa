@@ -274,11 +274,23 @@ describe('buildCompendiumDetailPayload', () => {
 		expect(collectCompendiumMarkdownSources(item, payload)).toEqual([
 			{
 				key: 'benefits.0.connections',
-				text: ['Roll 1d10, choose, or make up your own.', '', '|d10|Connection|', '|---|---|', '|1|A beloved high priest.|'].join('\n')
+				text: [
+					'Roll 1d10, choose, or make up your own.',
+					'',
+					'|d10|Connection|',
+					'|---|---|',
+					'|1|A beloved high priest.|'
+				].join('\n')
 			},
 			{
 				key: 'benefits.0.mementos',
-				text: ['Roll 1d10, choose, or make up your own.', '', '|d10|Memento|', '|---|---|', '|1|A timeworn holy symbol.|'].join('\n')
+				text: [
+					'Roll 1d10, choose, or make up your own.',
+					'',
+					'|d10|Memento|',
+					'|---|---|',
+					'|1|A timeworn holy symbol.|'
+				].join('\n')
 			}
 		]);
 	});
@@ -567,9 +579,7 @@ describe('buildCompendiumDetailPayload', () => {
 						name: '2nd',
 						desc: '[Column data]',
 						feature_type: 'SPELL_SLOTS',
-						data_for_class_table: [
-							{ level: 3, column_value: '2' }
-						]
+						data_for_class_table: [{ level: 3, column_value: '2' }]
 					}
 				]
 			}
@@ -631,7 +641,11 @@ describe('buildCompendiumDetailPayload', () => {
 			data: {
 				challenge_rating_text: '2',
 				size: { name: 'Medium', key: 'medium', url: 'http://10.147.20.240:8888/v2/sizes/medium/' },
-				type: { name: 'Humanoid', key: 'humanoid', url: 'http://10.147.20.240:8888/v2/creaturetypes/humanoid/' },
+				type: {
+					name: 'Humanoid',
+					key: 'humanoid',
+					url: 'http://10.147.20.240:8888/v2/creaturetypes/humanoid/'
+				},
 				alignment: 'neutral',
 				experience_points: 450
 			}

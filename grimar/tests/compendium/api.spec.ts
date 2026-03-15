@@ -84,7 +84,9 @@ test.describe('Compendium API', () => {
 		expect(Array.isArray(body.fields)).toBe(true);
 		expect(Array.isArray(body.sections)).toBe(true);
 
-		const scriptLanguageField = body.fields.find((field: { key: string }) => field.key === 'script_language');
+		const scriptLanguageField = body.fields.find(
+			(field: { key: string }) => field.key === 'script_language'
+		);
 		if (scriptLanguageField) {
 			expect(typeof scriptLanguageField.value).toBe('object');
 			expect(scriptLanguageField.value.kind).toBe('entity');
