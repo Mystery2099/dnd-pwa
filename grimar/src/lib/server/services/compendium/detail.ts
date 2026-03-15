@@ -339,6 +339,15 @@ function getString(value: unknown): string | undefined {
 	return typeof value === 'string' && value.trim() ? value.trim() : undefined;
 }
 
+function getMeaningfulDescription(value: unknown): string | undefined {
+	const text = getString(value);
+	if (!text) {
+		return undefined;
+	}
+
+	return /^\[column data\]$/i.test(text) ? undefined : text;
+}
+
 function getLinkedLabel(value: unknown): string | undefined {
 	if (!value) return undefined;
 	if (typeof value === 'string') return getString(value);
@@ -642,7 +651,8 @@ function buildClassFeaturesSection(rawValue: unknown): CompendiumClassFeaturesSe
 			}
 
 			const name = getString(entry.name) ?? getString(entry.key);
-			if (!name) {
+			const description = getMeaningfulDescription(entry.desc);
+			if (!name || !description) {
 				return null;
 			}
 
@@ -659,7 +669,7 @@ function buildClassFeaturesSection(rawValue: unknown): CompendiumClassFeaturesSe
 				key: getString(entry.key) ?? `feature-${index}`,
 				name,
 				level,
-				markdownKey: typeof entry.desc === 'string' ? `features.${index}.desc` : undefined
+				markdownKey: `features.${index}.desc`
 			};
 		})
 		.filter((entry): entry is NonNullable<typeof entry> => entry !== null);

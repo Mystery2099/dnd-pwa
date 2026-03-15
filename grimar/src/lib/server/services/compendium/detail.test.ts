@@ -240,6 +240,49 @@ describe('buildCompendiumDetailPayload', () => {
 		]);
 	});
 
+	it('filters placeholder class table columns out of class features', () => {
+		const classItem = createItem({
+			type: 'classes',
+			data: {
+				features: [
+					{
+						key: 'proficiency-bonus',
+						name: 'Proficiency Bonus',
+						desc: '[Column data]',
+						gained_at: [{ level: 1 }]
+					},
+					{
+						key: 'second-wind',
+						name: 'Second Wind',
+						desc: 'You have a limited well of stamina.',
+						gained_at: [{ level: 1 }]
+					}
+				]
+			}
+		});
+
+		const payload = buildCompendiumDetailPayload(classItem);
+		const classFeaturesSection = payload.sections.find(
+			(section) => section.kind === 'class-features'
+		);
+
+		expect(classFeaturesSection).toEqual({
+			key: 'class-features',
+			title: 'Class Features',
+			description: 'Expandable feature entries grouped by the class progression.',
+			kind: 'class-features',
+			items: [
+				{
+					key: 'second-wind',
+					name: 'Second Wind',
+					level: 1,
+					markdownKey: 'features.1.desc'
+				}
+			],
+			defaultOpen: true
+		});
+	});
+
 	it('builds normalized presentation metadata for images, creatures, and conditions', () => {
 		const imageItem = createItem({
 			type: 'images',
