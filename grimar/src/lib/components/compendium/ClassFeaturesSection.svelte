@@ -6,29 +6,26 @@
 		AccordionContent
 	} from '$lib/components/ui/accordion';
 	import CompendiumAccordionSection from './CompendiumAccordionSection.svelte';
-
-	type Feature = {
-		key?: string;
-		name?: string;
-		desc?: string;
-		gained_at?: { level?: number } | Array<{ level?: number }>;
-	};
+	import type { CompendiumClassFeatureEntry } from '$lib/core/types/compendium';
 
 	interface Props {
-		features: Feature[];
+		features: CompendiumClassFeatureEntry[];
+		title?: string;
+		description?: string;
+		defaultOpen?: boolean;
 		markdownAt: (path: string) => string;
 	}
 
-	let { features, markdownAt }: Props = $props();
+	let { features, title = 'Class Features', description, defaultOpen = true, markdownAt }: Props = $props();
 	let activeFeature = $state('');
 </script>
 
 {#if features.length > 0}
 	<CompendiumAccordionSection
-		title="Class Features"
-		description="Expandable feature entries grouped by the class progression."
+		{title}
+		{description}
 		value="class-features"
-		open={true}
+		open={defaultOpen}
 	>
 		<Accordion
 			bind:value={activeFeature}
@@ -41,23 +38,19 @@
 						<span class="mr-3 text-left font-semibold text-accent">
 							{feature.name || feature.key}
 						</span>
-						{#if feature.gained_at}
+						{#if feature.level !== undefined}
 							<span class="text-xs text-[var(--color-text-muted)]">
-								{#if Array.isArray(feature.gained_at)}
-									Level {feature.gained_at[0]?.level ?? '?'}
-								{:else}
-									Level {feature.gained_at.level ?? '?'}
-								{/if}
+								Level {feature.level}
 							</span>
 						{/if}
 					</AccordionTrigger>
 					<AccordionContent>
-						{#if feature.desc && activeFeature === featureValue}
+						{#if feature.markdownKey && activeFeature === featureValue}
 							<div
 								class="prose prose-invert prose-sm max-w-none text-[var(--color-text-secondary)]"
 							>
 								<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-								{@html markdownAt(`features.${index}.desc`)}
+								{@html markdownAt(feature.markdownKey)}
 							</div>
 						{/if}
 					</AccordionContent>

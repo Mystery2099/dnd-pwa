@@ -1,6 +1,7 @@
 import type { CompendiumTypeName } from '$lib/core/constants/compendium';
 import type {
 	CompendiumBenefitsSection,
+	CompendiumClassFeaturesSection,
 	CompendiumCreatureSetRosterEntry,
 	CompendiumCreatureSetRosterSection,
 	CompendiumDescriptionsSection,
@@ -12,6 +13,8 @@ import type {
 	CompendiumDetailValue,
 	CompendiumEntityListSection
 	,
+	CompendiumMarkdownSection,
+	CompendiumSpellClassesSection,
 	CompendiumTraitsSection,
 	CompendiumWeaponPropertiesSection
 } from '$lib/core/types/compendium';
@@ -323,6 +326,132 @@ function buildTraitsSection(rawValue: unknown): CompendiumTraitsSection | null {
 	};
 }
 
+function buildDescriptionSection(item: CompendiumItem): CompendiumMarkdownSection | null {
+	const itemData = (item.data ?? {}) as Record<string, unknown>;
+	const description = itemData.desc ?? item.description;
+	if (typeof description !== 'string' || !description.trim()) {
+		return null;
+	}
+
+	return {
+		key: 'description',
+		title: 'Description',
+		description:
+			item.type === 'creatures'
+				? 'Lore and encounter-facing rules text.'
+				: 'Core rules text and narrative summary.',
+		kind: 'markdown',
+		markdownKey: 'description',
+		defaultOpen: true
+	};
+}
+
+function buildHigherLevelSection(rawValue: unknown): CompendiumMarkdownSection | null {
+	if (typeof rawValue !== 'string' || !rawValue.trim()) {
+		return null;
+	}
+
+	return {
+		key: 'higher_level',
+		title: 'At Higher Levels',
+		description: 'Scaling notes when the spell is cast using stronger slots.',
+		kind: 'markdown',
+		markdownKey: 'higher_level'
+	};
+}
+
+function buildSpellClassesSection(rawValue: unknown): CompendiumSpellClassesSection | null {
+	if (!Array.isArray(rawValue) || rawValue.length === 0) {
+		return null;
+	}
+
+	const items = rawValue
+		.map((entry) => {
+			if (typeof entry === 'string' && entry.trim()) {
+				return {
+					label: entry,
+					href: `/compendium/classes/${entry}`
+				};
+			}
+
+			if (!isRecord(entry)) {
+				return null;
+			}
+
+			const label = getString(entry.name) ?? getString(entry.key);
+			if (!label) {
+				return null;
+			}
+
+			const key = getString(entry.key) ?? getString(entry.name);
+			return {
+				label,
+				href: key ? `/compendium/classes/${key}` : undefined
+			};
+		})
+		.filter((entry): entry is NonNullable<typeof entry> => entry !== null);
+
+	if (items.length === 0) {
+		return null;
+	}
+
+	return {
+		key: 'classes',
+		title: 'Classes',
+		description: 'Spell lists and known class access.',
+		kind: 'spell-classes',
+		items
+	};
+}
+
+function buildClassFeaturesSection(rawValue: unknown): CompendiumClassFeaturesSection | null {
+	if (!Array.isArray(rawValue) || rawValue.length === 0) {
+		return null;
+	}
+
+	const items = rawValue
+		.map((entry, index) => {
+			if (!isRecord(entry)) {
+				return null;
+			}
+
+			const name = getString(entry.name) ?? getString(entry.key);
+			if (!name) {
+				return null;
+			}
+
+			const gainedAt = entry.gained_at;
+			const level = Array.isArray(gainedAt)
+				? typeof gainedAt[0]?.level === 'number'
+					? gainedAt[0].level
+					: undefined
+				: isRecord(gainedAt) && typeof gainedAt.level === 'number'
+					? gainedAt.level
+					: undefined;
+
+			return {
+				key: getString(entry.key) ?? `feature-${index}`,
+				name,
+				level,
+				markdownKey: typeof entry.desc === 'string' ? `features.${index}.desc` : undefined
+			};
+		})
+		.filter((entry): entry is NonNullable<typeof entry> => entry !== null);
+
+	if (items.length === 0) {
+		return null;
+	}
+
+	return {
+		key: 'class-features',
+		title: 'Class Features',
+		description: 'Expandable feature entries grouped by the class progression.',
+		kind: 'class-features',
+		items,
+		defaultOpen: true
+	};
+}
+
 function normalizeFields(item: CompendiumItem): {
 	fields: CompendiumDetailField[];
 	sections: CompendiumDetailSection[];
@@ -331,6 +460,12 @@ function normalizeFields(item: CompendiumItem): {
 	const sections: CompendiumDetailSection[] = [];
 	const fields: CompendiumDetailField[] = [];
 	const consumedSectionKeys = new Set<string>();
+
+	const descriptionSection = buildDescriptionSection(item);
+	if (descriptionSection) {
+		sections.push(descriptionSection);
+		consumedSectionKeys.add('desc');
+	}
 
 	const rosterSection =
 		item.type === 'creaturesets' ? buildCreatureSetRosterSection(itemData.creatures) : null;
@@ -362,6 +497,24 @@ function normalizeFields(item: CompendiumItem): {
 	if (traitsSection) {
 		sections.push(traitsSection);
 		consumedSectionKeys.add('traits');
+	}
+
+	const spellClassesSection = item.type === 'spells' ? buildSpellClassesSection(itemData.classes) : null;
+	if (spellClassesSection) {
+		sections.push(spellClassesSection);
+		consumedSectionKeys.add('classes');
+	}
+
+	const higherLevelSection = item.type === 'spells' ? buildHigherLevelSection(itemData.higher_level) : null;
+	if (higherLevelSection) {
+		sections.push(higherLevelSection);
+		consumedSectionKeys.add('higher_level');
+	}
+
+	const classFeaturesSection = item.type === 'classes' ? buildClassFeaturesSection(itemData.features) : null;
+	if (classFeaturesSection) {
+		sections.push(classFeaturesSection);
+		consumedSectionKeys.add('features');
 	}
 
 	const orderedFields = getSortedFields(itemData, item.type);

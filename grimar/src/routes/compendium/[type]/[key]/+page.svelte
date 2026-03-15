@@ -12,15 +12,17 @@
 	import SpellDetailSections from '$lib/components/compendium/SpellDetailSections.svelte';
 	import type {
 		CompendiumBenefitsSection,
+		CompendiumClassFeaturesSection,
 		CompendiumCreatureSetRosterSection,
 		CompendiumDetailField
 		,
 		CompendiumDescriptionsSection,
+		CompendiumMarkdownSection,
+		CompendiumSpellClassesSection,
 		CompendiumTraitsSection,
 		CompendiumWeaponPropertiesSection
 	} from '$lib/core/types/compendium';
 	import type { PageData } from './$types';
-	import {} from '$lib/utils/compendium';
 
 	interface Props {
 		data: PageData;
@@ -89,6 +91,32 @@
 	let traitsSection = $derived.by(() => {
 		const section = detailSections.find(
 			(entry): entry is CompendiumTraitsSection => entry.kind === 'traits'
+		);
+		return section ?? null;
+	});
+	let descriptionSection = $derived.by(() => {
+		const section = detailSections.find(
+			(entry): entry is CompendiumMarkdownSection =>
+				entry.kind === 'markdown' && entry.key === 'description'
+		);
+		return section ?? null;
+	});
+	let higherLevelSection = $derived.by(() => {
+		const section = detailSections.find(
+			(entry): entry is CompendiumMarkdownSection =>
+				entry.kind === 'markdown' && entry.key === 'higher_level'
+		);
+		return section ?? null;
+	});
+	let spellClassesSection = $derived.by(() => {
+		const section = detailSections.find(
+			(entry): entry is CompendiumSpellClassesSection => entry.kind === 'spell-classes'
+		);
+		return section ?? null;
+	});
+	let classFeaturesSection = $derived.by(() => {
+		const section = detailSections.find(
+			(entry): entry is CompendiumClassFeaturesSection => entry.kind === 'class-features'
 		);
 		return section ?? null;
 	});
@@ -279,30 +307,16 @@
 						<CreatureSetRosterSection creatures={creatureSetRosterSection.items} />
 					{/if}
 
-					{#if data.type !== 'creatures' && (itemData.desc || item.description)}
+					{#if descriptionSection}
 						<CompendiumAccordionSection
-							title="Description"
-							description="Core rules text and narrative summary."
-							open={true}
-							value="description"
+							title={descriptionSection.title}
+							description={descriptionSection.description}
+							open={descriptionSection.defaultOpen ?? false}
+							value={descriptionSection.key}
 						>
 							<div class="prose prose-invert max-w-none text-[var(--color-text-secondary)]">
 								<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-								{@html markdownAt('description')}
-							</div>
-						</CompendiumAccordionSection>
-					{/if}
-
-					{#if data.type === 'creatures' && (itemData.desc || item.description)}
-						<CompendiumAccordionSection
-							title="Description"
-							description="Lore and encounter-facing rules text."
-							open={true}
-							value="creature-description"
-						>
-							<div class="prose prose-invert max-w-none text-[var(--color-text-secondary)]">
-								<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-								{@html markdownAt('description')}
+								{@html markdownAt(descriptionSection.markdownKey)}
 							</div>
 						</CompendiumAccordionSection>
 					{/if}
@@ -423,17 +437,20 @@
 						</CompendiumAccordionSection>
 					{/if}
 
-					{#if data.type === 'spells' && itemData}
+					{#if spellClassesSection || higherLevelSection}
 						<SpellDetailSections
-							classes={Array.isArray(itemData.classes) ? itemData.classes : []}
-							higherLevel={itemData.higher_level}
+							classes={spellClassesSection?.items ?? []}
+							higherLevelSection={higherLevelSection}
 							{markdownAt}
 						/>
 					{/if}
 
-					{#if data.type === 'classes' && itemData}
+					{#if classFeaturesSection}
 						<ClassFeaturesSection
-							features={Array.isArray(itemData.features) ? itemData.features : []}
+							features={classFeaturesSection.items}
+							title={classFeaturesSection.title}
+							description={classFeaturesSection.description}
+							defaultOpen={classFeaturesSection.defaultOpen ?? false}
 							{markdownAt}
 						/>
 					{/if}

@@ -176,13 +176,54 @@ export interface CompendiumTraitsSection {
 	items: CompendiumTraitEntry[];
 }
 
+export interface CompendiumMarkdownSection {
+	key: string;
+	title: string;
+	description?: string;
+	kind: 'markdown';
+	markdownKey: string;
+	defaultOpen?: boolean;
+}
+
+export interface CompendiumSpellClassEntry {
+	label: string;
+	href?: string;
+}
+
+export interface CompendiumSpellClassesSection {
+	key: string;
+	title: string;
+	description?: string;
+	kind: 'spell-classes';
+	items: CompendiumSpellClassEntry[];
+}
+
+export interface CompendiumClassFeatureEntry {
+	key: string;
+	name: string;
+	level?: number;
+	markdownKey?: string;
+}
+
+export interface CompendiumClassFeaturesSection {
+	key: string;
+	title: string;
+	description?: string;
+	kind: 'class-features';
+	items: CompendiumClassFeatureEntry[];
+	defaultOpen?: boolean;
+}
+
 export type CompendiumDetailSection =
 	| CompendiumEntityListSection
 	| CompendiumCreatureSetRosterSection
 	| CompendiumDescriptionsSection
 	| CompendiumBenefitsSection
 	| CompendiumWeaponPropertiesSection
-	| CompendiumTraitsSection;
+	| CompendiumTraitsSection
+	| CompendiumMarkdownSection
+	| CompendiumSpellClassesSection
+	| CompendiumClassFeaturesSection;
 
 export interface CompendiumDetailPayload {
 	item: CompendiumItem;

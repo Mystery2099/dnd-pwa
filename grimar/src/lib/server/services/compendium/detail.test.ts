@@ -155,4 +155,85 @@ describe('buildCompendiumDetailPayload', () => {
 			}
 		]);
 	});
+
+	it('promotes description, spell classes, higher-level text, and class features into sections', () => {
+		const spellItem = createItem({
+			type: 'spells',
+			description: 'A bright streak flashes from your pointing finger.',
+			data: {
+				classes: [{ key: 'wizard', name: 'Wizard' }, 'sorcerer'],
+				higher_level: 'The damage increases by 1d6 for each slot level above 3rd.'
+			}
+		});
+		const classItem = createItem({
+			type: 'classes',
+			data: {
+				desc: 'Martial archetype text.',
+				features: [
+					{
+						key: 'second-wind',
+						name: 'Second Wind',
+						desc: 'You have a limited well of stamina.',
+						gained_at: [{ level: 1 }]
+					}
+				]
+			}
+		});
+
+		const spellPayload = buildCompendiumDetailPayload(spellItem);
+		const classPayload = buildCompendiumDetailPayload(classItem);
+
+		expect(spellPayload.sections).toEqual([
+			{
+				key: 'description',
+				title: 'Description',
+				description: 'Core rules text and narrative summary.',
+				kind: 'markdown',
+				markdownKey: 'description',
+				defaultOpen: true
+			},
+			{
+				key: 'classes',
+				title: 'Classes',
+				description: 'Spell lists and known class access.',
+				kind: 'spell-classes',
+				items: [
+					{ label: 'Wizard', href: '/compendium/classes/wizard' },
+					{ label: 'sorcerer', href: '/compendium/classes/sorcerer' }
+				]
+			},
+			{
+				key: 'higher_level',
+				title: 'At Higher Levels',
+				description: 'Scaling notes when the spell is cast using stronger slots.',
+				kind: 'markdown',
+				markdownKey: 'higher_level'
+			}
+		]);
+		expect(classPayload.sections).toEqual([
+			{
+				key: 'description',
+				title: 'Description',
+				description: 'Core rules text and narrative summary.',
+				kind: 'markdown',
+				markdownKey: 'description',
+				defaultOpen: true
+			},
+			{
+				key: 'class-features',
+				title: 'Class Features',
+				description: 'Expandable feature entries grouped by the class progression.',
+				kind: 'class-features',
+				items: [
+					{
+						key: 'second-wind',
+						name: 'Second Wind',
+						level: 1,
+						markdownKey: 'features.0.desc'
+					}
+				],
+				defaultOpen: true
+			}
+		]);
+	});
 });
