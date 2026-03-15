@@ -5,6 +5,7 @@ import type {
 	CompendiumCreatureEncounterSection,
 	CompendiumDetailHeaderBadge,
 	CompendiumDetailPresentation,
+	CompendiumRelatedImagePresentation,
 	CompendiumCreatureSetRosterEntry,
 	CompendiumCreatureSetRosterSection,
 	CompendiumDescriptionsSection,
@@ -66,6 +67,17 @@ function resolveImageAssetUrl(fileUrl: unknown): string | null {
 	}
 }
 
+function extractKeyFromUrl(url: string): string | null {
+	try {
+		const parsed = new URL(url);
+		const parts = parsed.pathname.split('/').filter(Boolean);
+		return parts.at(-1) ?? null;
+	} catch {
+		const parts = url.split('/').filter(Boolean);
+		return parts.at(-1) ?? null;
+	}
+}
+
 function buildReferenceFromUrl(
 	value: string,
 	preferredLabel?: string,
@@ -84,6 +96,33 @@ function buildReferenceFromUrl(
 		href: resolvedLink.href,
 		meta: resolvedLink.meta,
 		sourceUrl: resolvedLink.sourceUrl
+	};
+}
+
+function buildConditionArtwork(item: CompendiumItem): CompendiumRelatedImagePresentation | undefined {
+	if (item.type !== 'conditions') {
+		return undefined;
+	}
+
+	const itemData = (item.data ?? {}) as Record<string, unknown>;
+	const icon = isRecord(itemData.icon) ? itemData.icon : null;
+	if (!icon) {
+		return undefined;
+	}
+
+	const assetUrl = resolveImageAssetUrl(icon.file_url);
+	const key = getString(icon.key) ?? (typeof icon.url === 'string' ? extractKeyFromUrl(icon.url) : null);
+	if (!assetUrl || !key) {
+		return undefined;
+	}
+
+	return {
+		key,
+		name: getString(icon.name) ?? item.name,
+		assetUrl,
+		altText: getString(icon.alt_text),
+		attribution: getString(icon.attribution),
+		documentLabel: item.documentName ?? undefined
 	};
 }
 
@@ -122,10 +161,12 @@ function buildPresentation(item: CompendiumItem): CompendiumDetailPresentation {
 			: undefined;
 
 	const headerBadges = buildHeaderBadges(item.type, itemData);
+	const conditionArtwork = buildConditionArtwork(item);
 
 	return {
 		documentLabel,
 		image: imagePresentation,
+		conditionArtwork,
 		creatureHeader,
 		headerBadges
 	};

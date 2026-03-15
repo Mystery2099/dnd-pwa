@@ -249,6 +249,15 @@ export interface CompendiumImagePresentation {
 	permalink?: string;
 }
 
+export interface CompendiumRelatedImagePresentation {
+	key: string;
+	name: string;
+	assetUrl: string | null;
+	altText?: string;
+	attribution?: string;
+	documentLabel?: string;
+}
+
 export interface CompendiumCreatureHeaderPresentation {
 	challengeRatingText?: string;
 	size?: CompendiumDetailValue;
@@ -271,6 +280,7 @@ export interface CompendiumDetailHeaderBadge {
 export interface CompendiumDetailPresentation {
 	documentLabel?: string;
 	image?: CompendiumImagePresentation;
+	conditionArtwork?: CompendiumRelatedImagePresentation;
 	creatureHeader?: CompendiumCreatureHeaderPresentation;
 	headerBadges: CompendiumDetailHeaderBadge[];
 }

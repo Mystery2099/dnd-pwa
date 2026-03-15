@@ -48,8 +48,27 @@
 
 	let item = $derived(data.item);
 	let presentation = $derived(data.detail.presentation);
-	let featuredRelatedImage = $derived(data.type === 'images' ? undefined : data.relatedImages?.[0]);
-	let remainingRelatedImages = $derived(data.relatedImages?.slice(1) ?? []);
+	let featuredRelatedImage = $derived.by(() => {
+		if (data.type === 'images') {
+			return undefined;
+		}
+
+		if (data.type === 'conditions' && presentation.conditionArtwork) {
+			return {
+				key: presentation.conditionArtwork.key,
+				name: presentation.conditionArtwork.name,
+				documentName: presentation.conditionArtwork.documentLabel ?? null,
+				description: null,
+				assetUrl: presentation.conditionArtwork.assetUrl,
+				altText: presentation.conditionArtwork.altText ?? null
+			};
+		}
+
+		return data.relatedImages?.[0];
+	});
+	let remainingRelatedImages = $derived(
+		data.type === 'conditions' ? (data.relatedImages ?? []) : (data.relatedImages?.slice(1) ?? [])
+	);
 	let detailFields = $derived(data.detail.fields as CompendiumDetailField[]);
 	let detailSections = $derived(data.detail.sections);
 	let markdownHtml = $derived<Record<string, string>>(data.markdownHtml ?? {});

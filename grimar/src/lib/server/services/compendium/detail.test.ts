@@ -240,7 +240,7 @@ describe('buildCompendiumDetailPayload', () => {
 		]);
 	});
 
-	it('builds normalized presentation metadata for images and creatures', () => {
+	it('builds normalized presentation metadata for images, creatures, and conditions', () => {
 		const imageItem = createItem({
 			type: 'images',
 			documentName: 'Fallback Document',
@@ -267,6 +267,19 @@ describe('buildCompendiumDetailPayload', () => {
 				experience_points: 450
 			}
 		});
+		const conditionItem = createItem({
+			type: 'conditions',
+			documentName: 'SRD Conditions',
+			data: {
+				icon: {
+					key: 'blinded',
+					name: 'Blinded',
+					file_url: '/conditions/blinded.png',
+					alt_text: 'An obscured eye',
+					attribution: 'Open5e'
+				}
+			}
+		});
 
 		expect(buildCompendiumDetailPayload(imageItem).presentation).toEqual({
 			documentLabel: 'Bestiary',
@@ -279,6 +292,7 @@ describe('buildCompendiumDetailPayload', () => {
 				gameSystem: '5e',
 				permalink: 'https://example.com/bestiary'
 			},
+			conditionArtwork: undefined,
 			creatureHeader: undefined,
 			headerBadges: [
 				{ label: 'Image', variant: 'solid' },
@@ -289,6 +303,7 @@ describe('buildCompendiumDetailPayload', () => {
 		expect(buildCompendiumDetailPayload(creatureItem).presentation).toEqual({
 			documentLabel: undefined,
 			image: undefined,
+			conditionArtwork: undefined,
 			creatureHeader: {
 				challengeRatingText: '2',
 				size: {
@@ -312,6 +327,20 @@ describe('buildCompendiumDetailPayload', () => {
 				alignment: 'neutral',
 				experiencePoints: 450
 			},
+			headerBadges: []
+		});
+		expect(buildCompendiumDetailPayload(conditionItem).presentation).toEqual({
+			documentLabel: 'SRD Conditions',
+			image: undefined,
+			conditionArtwork: {
+				key: 'blinded',
+				name: 'Blinded',
+				assetUrl: '/api/assets/open5e/conditions/blinded.png',
+				altText: 'An obscured eye',
+				attribution: 'Open5e',
+				documentLabel: 'SRD Conditions'
+			},
+			creatureHeader: undefined,
 			headerBadges: []
 		});
 	});
