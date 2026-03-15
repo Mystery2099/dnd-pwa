@@ -31,12 +31,9 @@ function getDocumentLabel(
 	return item.documentName ?? undefined;
 }
 
-function getDescription(
-	item: DbCompendiumItem,
-	itemData: Record<string, unknown>
-): string | undefined {
+function getDescription(item: DbCompendiumItem, itemData: Record<string, unknown>): string | undefined {
 	if (typeof item.description === 'string' && item.description.trim()) {
-		return item.description;
+		return item.description.trim();
 	}
 
 	return typeof itemData.alt_text === 'string' && itemData.alt_text.trim()

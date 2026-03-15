@@ -218,6 +218,50 @@ describe('buildCompendiumDetailPayload', () => {
 		});
 	});
 
+	it('keeps weapon property markdown aligned after filtered property entries are skipped', () => {
+		const item = createItem({
+			type: 'weapons',
+			data: {
+				properties: [
+					{
+						property: {
+							type: 'tag',
+							desc: 'Filtered property text.'
+						}
+					},
+					{
+						property: {
+							name: 'Reach',
+							type: 'weapon',
+							desc: 'This weapon adds 5 feet to your reach.'
+						}
+					}
+				]
+			}
+		});
+
+		const payload = buildCompendiumDetailPayload(item);
+
+		expect(payload.sections).toContainEqual({
+			key: 'weapon-properties',
+			title: 'Properties',
+			description: 'Rules traits attached to this weapon.',
+			kind: 'weapon-properties',
+			items: [
+				{
+					name: 'Reach',
+					propertyType: 'weapon',
+					detail: undefined,
+					markdownKey: 'weaponProperties.1.desc'
+				}
+			]
+		});
+		expect(collectCompendiumMarkdownSources(item, payload)).toContainEqual({
+			key: 'weaponProperties.1.desc',
+			text: 'This weapon adds 5 feet to your reach.'
+		});
+	});
+
 	it('splits background connections and mementos into separate groups and markdown sources', () => {
 		const item = createItem({
 			type: 'backgrounds',
@@ -534,6 +578,34 @@ describe('buildCompendiumDetailPayload', () => {
 			],
 			defaultOpen: true
 		});
+	});
+
+	it('does not leak raw class features into sidebar fields when only supplemental sections exist', () => {
+		const classItem = createItem({
+			type: 'classes',
+			data: {
+				features: [
+					{
+						key: 'core-traits',
+						name: 'Core Barbarian Traits',
+						desc: '|Primary Ability|Strength|',
+						feature_type: 'CORE_TRAITS_TABLE'
+					}
+				]
+			}
+		});
+
+		const payload = buildCompendiumDetailPayload(classItem);
+
+		expect(payload.sections).toContainEqual({
+			key: 'core-traits',
+			title: 'Core Barbarian Traits',
+			description: 'Core class table data and training summary.',
+			kind: 'markdown',
+			markdownKey: 'features.0.desc',
+			defaultOpen: true
+		});
+		expect(payload.fields.map((field) => field.key)).not.toContain('features');
 	});
 
 	it('promotes class table data and spell slots into structured class tables', () => {

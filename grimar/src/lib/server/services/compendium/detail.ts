@@ -1289,6 +1289,12 @@ function normalizeFields(item: CompendiumItem): {
 	}
 	if (classFeaturesSection) {
 		sections.push(classFeaturesSection);
+	}
+	if (
+		classFeaturesSection ||
+		classSupplementalSections.length > 0 ||
+		classTableSections.length > 0
+	) {
 		consumedSectionKeys.add('features');
 	}
 
@@ -1440,14 +1446,30 @@ function getMarkdownTextForKey(
 	const weaponPropertiesSection = payload.sections.find(
 		(section): section is CompendiumWeaponPropertiesSection => section.kind === 'weapon-properties'
 	);
-	const propertyIndex =
-		weaponPropertiesSection?.items.findIndex((entry) => entry.markdownKey === key) ?? -1;
-	if (propertyIndex >= 0) {
+	const hasMatchingWeaponProperty =
+		weaponPropertiesSection?.items.some((entry) => entry.markdownKey === key) ?? false;
+	if (hasMatchingWeaponProperty) {
 		const properties = itemData.properties;
 		if (Array.isArray(properties)) {
-			const propertyEntry = properties[propertyIndex];
-			if (isRecord(propertyEntry) && isRecord(propertyEntry.property)) {
-				const text = propertyEntry.property.desc;
+			for (const [index, propertyEntry] of properties.entries()) {
+				if (!isRecord(propertyEntry) || !isRecord(propertyEntry.property)) {
+					continue;
+				}
+
+				const property = propertyEntry.property;
+				const name = getString(property.name);
+				if (!name) {
+					continue;
+				}
+
+				if (
+					typeof property.desc !== 'string' ||
+					key !== `weaponProperties.${index}.desc`
+				) {
+					continue;
+				}
+
+				const text = property.desc;
 				return typeof text === 'string' && text.trim() ? text : null;
 			}
 		}
