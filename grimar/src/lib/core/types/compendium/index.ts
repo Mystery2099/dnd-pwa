@@ -214,6 +214,25 @@ export interface CompendiumClassFeaturesSection {
 	defaultOpen?: boolean;
 }
 
+export interface CompendiumClassTableColumn {
+	key: string;
+	label: string;
+}
+
+export interface CompendiumClassTableRow {
+	level: number;
+	values: Record<string, string>;
+}
+
+export interface CompendiumClassTableSection {
+	key: string;
+	title: string;
+	description?: string;
+	kind: 'class-table';
+	columns: CompendiumClassTableColumn[];
+	rows: CompendiumClassTableRow[];
+}
+
 export interface CompendiumCreatureAbilityScoreEntry {
 	ability: string;
 	score: number;
@@ -295,6 +314,7 @@ export type CompendiumDetailSection =
 	| CompendiumMarkdownSection
 	| CompendiumSpellClassesSection
 	| CompendiumClassFeaturesSection
+	| CompendiumClassTableSection
 	| CompendiumCreatureEncounterSection;
 
 export interface CompendiumDetailPayload {

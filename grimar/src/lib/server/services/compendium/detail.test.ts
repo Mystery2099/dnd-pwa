@@ -400,6 +400,91 @@ describe('buildCompendiumDetailPayload', () => {
 		});
 	});
 
+	it('promotes class table data and spell slots into structured class tables', () => {
+		const classItem = createItem({
+			type: 'classes',
+			data: {
+				features: [
+					{
+						key: 'proficiency-bonus',
+						name: 'Proficiency Bonus',
+						desc: '[Column data]',
+						feature_type: 'PROFICIENCY_BONUS',
+						data_for_class_table: [
+							{ level: 1, column_value: '+2' },
+							{ level: 2, column_value: '+2' },
+							{ level: 3, column_value: '+2' }
+						]
+					},
+					{
+						key: 'rages',
+						name: 'Rages',
+						desc: '[Column data]',
+						feature_type: 'CLASS_TABLE_DATA',
+						data_for_class_table: [
+							{ level: 1, column_value: '2' },
+							{ level: 2, column_value: '2' },
+							{ level: 3, column_value: '3' }
+						]
+					},
+					{
+						key: '1st',
+						name: '1st',
+						desc: '[Column data]',
+						feature_type: 'SPELL_SLOTS',
+						data_for_class_table: [
+							{ level: 1, column_value: '2' },
+							{ level: 2, column_value: '3' },
+							{ level: 3, column_value: '4' }
+						]
+					},
+					{
+						key: '2nd',
+						name: '2nd',
+						desc: '[Column data]',
+						feature_type: 'SPELL_SLOTS',
+						data_for_class_table: [
+							{ level: 3, column_value: '2' }
+						]
+					}
+				]
+			}
+		});
+
+		const payload = buildCompendiumDetailPayload(classItem);
+
+		expect(payload.sections).toContainEqual({
+			key: 'class-progression',
+			title: 'Class Progression',
+			description: 'Level-based class table data such as proficiency bonus and scaling resources.',
+			kind: 'class-table',
+			columns: [
+				{ key: 'proficiency-bonus', label: 'Proficiency Bonus' },
+				{ key: 'rages', label: 'Rages' }
+			],
+			rows: [
+				{ level: 1, values: { 'proficiency-bonus': '+2', rages: '2' } },
+				{ level: 2, values: { 'proficiency-bonus': '+2', rages: '2' } },
+				{ level: 3, values: { 'proficiency-bonus': '+2', rages: '3' } }
+			]
+		});
+		expect(payload.sections).toContainEqual({
+			key: 'spell-slots',
+			title: 'Spell Slots',
+			description: 'Spell slot progression by class level.',
+			kind: 'class-table',
+			columns: [
+				{ key: '1st', label: '1st' },
+				{ key: '2nd', label: '2nd' }
+			],
+			rows: [
+				{ level: 1, values: { '1st': '2', '2nd': '—' } },
+				{ level: 2, values: { '1st': '3', '2nd': '—' } },
+				{ level: 3, values: { '1st': '4', '2nd': '2' } }
+			]
+		});
+	});
+
 	it('builds normalized presentation metadata for images, creatures, and conditions', () => {
 		const imageItem = createItem({
 			type: 'images',

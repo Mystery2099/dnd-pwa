@@ -2,6 +2,7 @@ import type { CompendiumTypeName } from '$lib/core/constants/compendium';
 import type {
 	CompendiumBenefitsSection,
 	CompendiumClassFeaturesSection,
+	CompendiumClassTableSection,
 	CompendiumCreatureEncounterSection,
 	CompendiumDetailHeaderBadge,
 	CompendiumDetailPresentation,
@@ -772,6 +773,144 @@ function buildClassSupplementalMarkdownSections(rawValue: unknown): CompendiumMa
 	return sections;
 }
 
+function normalizeClassTableEntries(
+	rawValue: unknown,
+	supportedTypes: Set<string>
+): Array<Record<string, unknown> & { feature_type: string; name: string }> {
+	if (!Array.isArray(rawValue)) {
+		return [];
+	}
+
+	return rawValue
+		.map((entry) => {
+			if (!isRecord(entry)) {
+				return null;
+			}
+
+			const featureType = getFeatureType(entry.feature_type);
+			const name = getString(entry.name);
+			if (!featureType || !name || !supportedTypes.has(featureType)) {
+				return null;
+			}
+
+			return {
+				...entry,
+				feature_type: featureType,
+				name
+			};
+		})
+		.filter((entry): entry is Record<string, unknown> & { feature_type: string; name: string } => entry !== null);
+}
+
+function getClassTableValues(entry: Record<string, unknown>): Map<number, string> {
+	const rawTableData = entry.data_for_class_table;
+	if (!Array.isArray(rawTableData)) {
+		return new Map();
+	}
+
+	return new Map(
+		rawTableData
+			.map((row) => {
+				if (!isRecord(row) || typeof row.level !== 'number') {
+					return null;
+				}
+
+				const value = getString(row.column_value) ?? String(row.column_value ?? '').trim();
+				if (!value) {
+					return null;
+				}
+
+				return [row.level, value] as const;
+			})
+			.filter((row): row is readonly [number, string] => row !== null)
+	);
+}
+
+function buildClassTableSections(rawValue: unknown): CompendiumClassTableSection[] {
+	const entries = normalizeClassTableEntries(
+		rawValue,
+		new Set(['PROFICIENCY_BONUS', 'CLASS_TABLE_DATA', 'SPELL_SLOTS'])
+	);
+	if (entries.length === 0) {
+		return [];
+	}
+
+	const progressionEntries = entries.filter((entry) => entry.feature_type !== 'SPELL_SLOTS');
+	const spellSlotEntries = entries.filter((entry) => entry.feature_type === 'SPELL_SLOTS');
+	const sections: CompendiumClassTableSection[] = [];
+
+	function buildSection(
+		key: string,
+		title: string,
+		description: string,
+		tableEntries: Array<Record<string, unknown> & { feature_type: string; name: string }>
+	): CompendiumClassTableSection | null {
+		if (tableEntries.length === 0) {
+			return null;
+		}
+
+		const columns = tableEntries.map((entry) => ({
+			key: getString(entry.key) ?? entry.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+			label: entry.name
+		}));
+
+		const rowLevels = new Set<number>();
+		const columnValues = new Map<string, Map<number, string>>();
+		for (const [index, entry] of tableEntries.entries()) {
+			const columnKey = columns[index].key;
+			const values = getClassTableValues(entry);
+			columnValues.set(columnKey, values);
+			for (const level of values.keys()) {
+				rowLevels.add(level);
+			}
+		}
+
+		const rows = Array.from(rowLevels)
+			.sort((a, b) => a - b)
+			.map((level) => ({
+				level,
+				values: Object.fromEntries(
+					columns.map((column) => [column.key, columnValues.get(column.key)?.get(level) ?? '—'])
+				)
+			}));
+
+		if (rows.length === 0) {
+			return null;
+		}
+
+		return {
+			key,
+			title,
+			description,
+			kind: 'class-table',
+			columns,
+			rows
+		};
+	}
+
+	const progressionSection = buildSection(
+		'class-progression',
+		'Class Progression',
+		'Level-based class table data such as proficiency bonus and scaling resources.',
+		progressionEntries
+	);
+	if (progressionSection) {
+		sections.push(progressionSection);
+	}
+
+	const spellSlotSection = buildSection(
+		'spell-slots',
+		'Spell Slots',
+		'Spell slot progression by class level.',
+		spellSlotEntries
+	);
+	if (spellSlotSection) {
+		sections.push(spellSlotSection);
+	}
+
+	return sections;
+}
+
 function buildCreatureEncounterSection(itemData: Record<string, unknown>): CompendiumCreatureEncounterSection | null {
 	const orderedAbilities = [
 		'strength',
@@ -922,6 +1061,10 @@ function normalizeFields(item: CompendiumItem): {
 	const classSupplementalSections =
 		item.type === 'classes' ? buildClassSupplementalMarkdownSections(itemData.features) : [];
 	for (const section of classSupplementalSections) {
+		sections.push(section);
+	}
+	const classTableSections = item.type === 'classes' ? buildClassTableSections(itemData.features) : [];
+	for (const section of classTableSections) {
 		sections.push(section);
 	}
 	if (classFeaturesSection) {

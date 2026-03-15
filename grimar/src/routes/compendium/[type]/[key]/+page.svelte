@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Breadcrumb from '$lib/components/ui/Breadcrumb.svelte';
 	import ClassFeaturesSection from '$lib/components/compendium/ClassFeaturesSection.svelte';
+	import ClassTableSection from '$lib/components/compendium/ClassTableSection.svelte';
 	import CompendiumAccordionSection from '$lib/components/compendium/CompendiumAccordionSection.svelte';
 	import CompendiumDetailHeader from '$lib/components/compendium/CompendiumDetailHeader.svelte';
 	import CompendiumDetailsPanel from '$lib/components/compendium/CompendiumDetailsPanel.svelte';
@@ -13,6 +14,7 @@
 	import type {
 		CompendiumBenefitsSection,
 		CompendiumClassFeaturesSection,
+		CompendiumClassTableSection,
 		CompendiumCreatureEncounterSection,
 		CompendiumCreatureSetRosterSection,
 		CompendiumDetailField
@@ -138,6 +140,11 @@
 		);
 		return section ?? null;
 	});
+	let classTableSections = $derived.by(() =>
+		detailSections.filter(
+			(entry): entry is CompendiumClassTableSection => entry.kind === 'class-table'
+		)
+	);
 	let creatureEncounterSection = $derived.by(() => {
 		const section = detailSections.find(
 			(entry): entry is CompendiumCreatureEncounterSection => entry.kind === 'creature-encounter'
@@ -418,6 +425,10 @@
 							{markdownAt}
 						/>
 					{/if}
+
+					{#each classTableSections as classTableSection (classTableSection.key)}
+						<ClassTableSection section={classTableSection} />
+					{/each}
 				</div>
 
 				{#if hasSidebarDetails}
