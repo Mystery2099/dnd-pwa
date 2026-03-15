@@ -236,4 +236,50 @@ describe('buildCompendiumDetailPayload', () => {
 			}
 		]);
 	});
+
+	it('promotes creature encounter data into a dedicated section', () => {
+		const item = createItem({
+			type: 'creatures',
+			data: {
+				armor_class: 12,
+				armor_detail: 'natural armor',
+				hit_points: 19,
+				hit_dice: '3d10+3',
+				speed_all: { walk: 40, swim: 20, unit: 'feet' },
+				ability_scores: {
+					strength: 18,
+					dexterity: 10,
+					constitution: 12,
+					intelligence: 2,
+					wisdom: 11,
+					charisma: 7
+				},
+				actions: [{ name: 'Hooves', desc: 'Melee Weapon Attack.' }],
+				traits: [{ name: 'Sure-Footed', desc: 'Advantage on saves.' }]
+			}
+		});
+
+		const payload = buildCompendiumDetailPayload(item);
+
+		expect(payload.sections.at(-1)).toEqual({
+			key: 'creature-encounter',
+			title: 'Encounter Reference',
+			kind: 'creature-encounter',
+			abilityScores: [
+				{ ability: 'strength', score: 18 },
+				{ ability: 'dexterity', score: 10 },
+				{ ability: 'constitution', score: 12 },
+				{ ability: 'intelligence', score: 2 },
+				{ ability: 'wisdom', score: 11 },
+				{ ability: 'charisma', score: 7 }
+			],
+			armorClass: 12,
+			armorDetail: 'natural armor',
+			hitPoints: 19,
+			hitDice: '3d10+3',
+			speed: 'Walk 40 feet, Swim 20 feet',
+			actions: [{ name: 'Hooves', markdownKey: 'actions.0.desc' }],
+			traits: [{ name: 'Sure-Footed', markdownKey: 'traits.0.desc' }]
+		});
+	});
 });

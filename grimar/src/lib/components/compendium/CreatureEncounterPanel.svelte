@@ -1,21 +1,12 @@
 <script lang="ts">
-	import { isSpeedObject, formatSpeed } from '$lib/utils/compendium';
-
-	type NamedDetailEntry = {
-		key?: string;
-		name?: string;
-		desc?: string;
-	};
+	import type { CompendiumCreatureEncounterSection } from '$lib/core/types/compendium';
 
 	interface Props {
-		itemData: Record<string, unknown>;
-		abilityScores: Array<[string, number]>;
-		actions: NamedDetailEntry[];
-		traits: NamedDetailEntry[];
+		section: CompendiumCreatureEncounterSection;
 		markdownAt: (path: string) => string;
 	}
 
-	let { itemData, abilityScores, actions, traits, markdownAt }: Props = $props();
+	let { section, markdownAt }: Props = $props();
 
 	function getAbilityAbbreviation(ability: string): string {
 		return ability.slice(0, 3).toUpperCase();
@@ -36,7 +27,7 @@
 				</p>
 			</div>
 
-			{#if abilityScores.length > 0}
+			{#if section.abilityScores.length > 0}
 				<div>
 					<h2
 						class="mb-3 text-sm font-semibold tracking-[0.16em] text-[var(--color-text-muted)] uppercase"
@@ -44,20 +35,20 @@
 						Ability Scores
 					</h2>
 					<div class="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-6">
-						{#each abilityScores as [ability, score] (ability)}
+						{#each section.abilityScores as abilityScore (abilityScore.ability)}
 							<div
 								class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/55 px-3 py-5 text-center"
 							>
 								<div
 									class="text-[0.7rem] font-medium tracking-[0.18em] text-[var(--color-text-muted)] uppercase"
 								>
-									{getAbilityAbbreviation(ability)}
+									{getAbilityAbbreviation(abilityScore.ability)}
 								</div>
 								<div class="mt-2 text-3xl font-bold text-[var(--color-text-primary)]">
-									{score}
+									{abilityScore.score}
 								</div>
 								<div class="mt-1 text-xs text-[var(--color-text-secondary)]">
-									{getAbilityModifier(score)}
+									{getAbilityModifier(abilityScore.score)}
 								</div>
 							</div>
 						{/each}
@@ -81,11 +72,11 @@
 							Armor Class
 						</dt>
 						<dd class="mt-3 text-4xl font-bold text-[var(--color-text-primary)]">
-							{itemData.armor_class ? String(itemData.armor_class) : '—'}
+							{section.armorClass !== undefined ? String(section.armorClass) : '—'}
 						</dd>
-						{#if itemData.armor_detail}
+						{#if section.armorDetail}
 							<p class="mt-2 text-sm text-[var(--color-text-secondary)]">
-								{String(itemData.armor_detail)}
+								{section.armorDetail}
 							</p>
 						{/if}
 					</div>
@@ -98,11 +89,11 @@
 							Hit Points
 						</dt>
 						<dd class="mt-3 text-4xl font-bold text-[var(--color-text-primary)]">
-							{itemData.hit_points ? String(itemData.hit_points) : '—'}
+							{section.hitPoints !== undefined ? String(section.hitPoints) : '—'}
 						</dd>
-						{#if itemData.hit_dice}
+						{#if section.hitDice}
 							<p class="mt-2 text-sm text-[var(--color-text-secondary)]">
-								{String(itemData.hit_dice)}
+								{section.hitDice}
 							</p>
 						{/if}
 					</div>
@@ -115,32 +106,28 @@
 							Speed
 						</dt>
 						<dd class="mt-3 text-sm leading-6 font-semibold text-[var(--color-text-primary)]">
-							{#if isSpeedObject(itemData.speed_all)}
-								{formatSpeed(itemData.speed_all)}
-							{:else}
-								—
-							{/if}
+							{section.speed ?? '—'}
 						</dd>
 					</div>
 				</div>
 			</div>
 
 			<div class="columns-1 gap-5 xl:columns-2">
-				{#if actions.length > 0}
+				{#if section.actions.length > 0}
 					<div class="mb-5 break-inside-avoid-column">
 						<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Actions</h2>
 						<div class="space-y-4">
-							{#each actions as action, index (`${action.key ?? action.name ?? 'action'}-${index}`)}
+							{#each section.actions as action, index (`${action.name}-${index}`)}
 								<div
 									class="break-inside-avoid rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/55 p-5"
 								>
-									<h3 class="font-semibold text-accent">{action.name || action.key}</h3>
-									{#if action.desc}
+									<h3 class="font-semibold text-accent">{action.name}</h3>
+									{#if action.markdownKey}
 										<div
 											class="prose prose-invert prose-sm mt-2 max-w-none text-[var(--color-text-secondary)]"
 										>
 											<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-											{@html markdownAt(`actions.${index}.desc`)}
+											{@html markdownAt(action.markdownKey)}
 										</div>
 									{/if}
 								</div>
@@ -149,21 +136,21 @@
 					</div>
 				{/if}
 
-				{#if traits.length > 0}
+				{#if section.traits.length > 0}
 					<div class="mb-5 break-inside-avoid-column">
 						<h2 class="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">Traits</h2>
 						<div class="space-y-4">
-							{#each traits as trait, index (`${trait.key ?? trait.name ?? 'trait'}-${index}`)}
+							{#each section.traits as trait, index (`${trait.name}-${index}`)}
 								<div
 									class="break-inside-avoid rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/55 p-5"
 								>
-									<h3 class="font-semibold text-accent">{trait.name || trait.key}</h3>
-									{#if trait.desc}
+									<h3 class="font-semibold text-accent">{trait.name}</h3>
+									{#if trait.markdownKey}
 										<div
 											class="prose prose-invert prose-sm mt-2 max-w-none text-[var(--color-text-secondary)]"
 										>
 											<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-											{@html markdownAt(`traits.${index}.desc`)}
+											{@html markdownAt(trait.markdownKey)}
 										</div>
 									{/if}
 								</div>

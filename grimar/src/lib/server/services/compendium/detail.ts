@@ -2,6 +2,7 @@ import type { CompendiumTypeName } from '$lib/core/constants/compendium';
 import type {
 	CompendiumBenefitsSection,
 	CompendiumClassFeaturesSection,
+	CompendiumCreatureEncounterSection,
 	CompendiumCreatureSetRosterEntry,
 	CompendiumCreatureSetRosterSection,
 	CompendiumDescriptionsSection,
@@ -20,6 +21,7 @@ import type {
 } from '$lib/core/types/compendium';
 import { resolveCompendiumLink } from '$lib/core/utils/compendium-links';
 import type { CompendiumItem } from '$lib/server/db/schema';
+import { formatSpeed, isSpeedObject } from '$lib/utils/compendium';
 import { formatFieldName, getSortedFields } from '$lib/utils/compendium';
 
 const CREATURE_REFERENCE_FIELD_KEYS = new Set([
@@ -125,17 +127,11 @@ function getEnvironmentLabels(value: unknown): string[] {
 }
 
 function getSpeedLabel(value: unknown): string | undefined {
-	if (!value || typeof value !== 'object' || Array.isArray(value)) {
+	if (!isSpeedObject(value)) {
 		return undefined;
 	}
 
-	const record = value as Record<string, unknown>;
-	const walk = record.walk;
-	if (typeof walk !== 'number') {
-		return undefined;
-	}
-
-	return `${walk} ${getString(record.unit) ?? 'ft'}`;
+	return formatSpeed(value);
 }
 
 function buildCreatureSetRosterSection(rawValue: unknown): CompendiumCreatureSetRosterSection | null {
@@ -452,6 +448,93 @@ function buildClassFeaturesSection(rawValue: unknown): CompendiumClassFeaturesSe
 	};
 }
 
+function buildCreatureEncounterSection(itemData: Record<string, unknown>): CompendiumCreatureEncounterSection | null {
+	const orderedAbilities = [
+		'strength',
+		'dexterity',
+		'constitution',
+		'intelligence',
+		'wisdom',
+		'charisma'
+	];
+	const abilityScoresRecord =
+		isRecord(itemData.ability_scores) ? (itemData.ability_scores as Record<string, unknown>) : null;
+	const abilityScores = abilityScoresRecord
+		? orderedAbilities
+				.map((ability) => {
+					const score = abilityScoresRecord[ability];
+					return typeof score === 'number' ? { ability, score } : null;
+				})
+				.filter((entry): entry is NonNullable<typeof entry> => entry !== null)
+		: [];
+
+	const actions = Array.isArray(itemData.actions)
+		? itemData.actions
+				.map((entry, index) => {
+					if (!isRecord(entry)) {
+						return null;
+					}
+					const name = getString(entry.name) ?? getString(entry.key);
+					if (!name) {
+						return null;
+					}
+					return {
+						name,
+						markdownKey: typeof entry.desc === 'string' ? `actions.${index}.desc` : undefined
+					};
+				})
+				.filter((entry): entry is NonNullable<typeof entry> => entry !== null)
+		: [];
+
+	const traits = Array.isArray(itemData.traits)
+		? itemData.traits
+				.map((entry, index) => {
+					if (!isRecord(entry)) {
+						return null;
+					}
+					const name = getString(entry.name) ?? getString(entry.key);
+					if (!name) {
+						return null;
+					}
+					return {
+						name,
+						markdownKey: typeof entry.desc === 'string' ? `traits.${index}.desc` : undefined
+					};
+				})
+				.filter((entry): entry is NonNullable<typeof entry> => entry !== null)
+		: [];
+
+	const armorClass = typeof itemData.armor_class === 'number' ? itemData.armor_class : undefined;
+	const hitPoints = typeof itemData.hit_points === 'number' ? itemData.hit_points : undefined;
+	const speed = getSpeedLabel(itemData.speed_all);
+
+	if (
+		abilityScores.length === 0 &&
+		armorClass === undefined &&
+		hitPoints === undefined &&
+		!getString(itemData.hit_dice) &&
+		!speed &&
+		actions.length === 0 &&
+		traits.length === 0
+	) {
+		return null;
+	}
+
+	return {
+		key: 'creature-encounter',
+		title: 'Encounter Reference',
+		kind: 'creature-encounter',
+		abilityScores,
+		armorClass,
+		armorDetail: getString(itemData.armor_detail),
+		hitPoints,
+		hitDice: getString(itemData.hit_dice),
+		speed,
+		actions,
+		traits
+	};
+}
+
 function normalizeFields(item: CompendiumItem): {
 	fields: CompendiumDetailField[];
 	sections: CompendiumDetailSection[];
@@ -515,6 +598,20 @@ function normalizeFields(item: CompendiumItem): {
 	if (classFeaturesSection) {
 		sections.push(classFeaturesSection);
 		consumedSectionKeys.add('features');
+	}
+
+	const creatureEncounterSection =
+		item.type === 'creatures' ? buildCreatureEncounterSection(itemData) : null;
+	if (creatureEncounterSection) {
+		sections.push(creatureEncounterSection);
+		consumedSectionKeys.add('ability_scores');
+		consumedSectionKeys.add('actions');
+		consumedSectionKeys.add('traits');
+		consumedSectionKeys.add('armor_class');
+		consumedSectionKeys.add('armor_detail');
+		consumedSectionKeys.add('hit_points');
+		consumedSectionKeys.add('hit_dice');
+		consumedSectionKeys.add('speed_all');
 	}
 
 	const orderedFields = getSortedFields(itemData, item.type);

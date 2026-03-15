@@ -13,6 +13,7 @@
 	import type {
 		CompendiumBenefitsSection,
 		CompendiumClassFeaturesSection,
+		CompendiumCreatureEncounterSection,
 		CompendiumCreatureSetRosterSection,
 		CompendiumDetailField
 		,
@@ -43,12 +44,6 @@
 		document?: ImageDocumentData;
 	};
 
-	type NamedDetailEntry = {
-		key?: string;
-		name?: string;
-		desc?: string;
-	};
-
 	let { data }: Props = $props();
 
 	let item = $derived(data.item);
@@ -56,9 +51,6 @@
 	let imageData = $derived((item.data as ImageItemData | undefined) ?? {});
 	let featuredRelatedImage = $derived(data.type === 'images' ? undefined : data.relatedImages?.[0]);
 	let remainingRelatedImages = $derived(data.relatedImages?.slice(1) ?? []);
-	let creatureAbilityScores = $derived(getAbilityScoreEntries(itemData.ability_scores));
-	let creatureActionEntries = $derived(getNamedDetailEntries(itemData.actions));
-	let creatureTraitEntries = $derived(getNamedDetailEntries(itemData.traits));
 	let detailFields = $derived(data.detail.fields as CompendiumDetailField[]);
 	let detailSections = $derived(data.detail.sections);
 	let markdownHtml = $derived<Record<string, string>>(data.markdownHtml ?? {});
@@ -117,6 +109,12 @@
 	let classFeaturesSection = $derived.by(() => {
 		const section = detailSections.find(
 			(entry): entry is CompendiumClassFeaturesSection => entry.kind === 'class-features'
+		);
+		return section ?? null;
+	});
+	let creatureEncounterSection = $derived.by(() => {
+		const section = detailSections.find(
+			(entry): entry is CompendiumCreatureEncounterSection => entry.kind === 'creature-encounter'
 		);
 		return section ?? null;
 	});
@@ -181,37 +179,6 @@
 		return value;
 	}
 
-	function getAbilityScoreEntries(value: unknown): Array<[string, number]> {
-		if (!value || typeof value !== 'object' || Array.isArray(value)) {
-			return [];
-		}
-
-		const abilityScores = value as Record<string, unknown>;
-		const orderedAbilities = [
-			'strength',
-			'dexterity',
-			'constitution',
-			'intelligence',
-			'wisdom',
-			'charisma'
-		];
-
-		return orderedAbilities
-			.map((ability) => [ability, abilityScores[ability]])
-			.filter((entry): entry is [string, number] => typeof entry[1] === 'number');
-	}
-
-	function getNamedDetailEntries(
-		value: unknown
-	): Array<{ key?: string; name?: string; desc?: string }> {
-		if (!Array.isArray(value)) {
-			return [];
-		}
-
-		return value.filter(
-			(entry): entry is NamedDetailEntry => Boolean(entry) && typeof entry === 'object'
-		);
-	}
 </script>
 
 <svelte:head>
@@ -287,14 +254,8 @@
 				/>
 			{/if}
 
-			{#if data.type === 'creatures' && itemData}
-				<CreatureEncounterPanel
-					{itemData}
-					abilityScores={creatureAbilityScores}
-					actions={creatureActionEntries}
-					traits={creatureTraitEntries}
-					{markdownAt}
-				/>
+			{#if creatureEncounterSection}
+				<CreatureEncounterPanel section={creatureEncounterSection} {markdownAt} />
 			{/if}
 
 			<div

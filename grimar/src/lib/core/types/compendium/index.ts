@@ -214,6 +214,31 @@ export interface CompendiumClassFeaturesSection {
 	defaultOpen?: boolean;
 }
 
+export interface CompendiumCreatureAbilityScoreEntry {
+	ability: string;
+	score: number;
+}
+
+export interface CompendiumCreatureNamedEntry {
+	name: string;
+	markdownKey?: string;
+}
+
+export interface CompendiumCreatureEncounterSection {
+	key: string;
+	title: string;
+	description?: string;
+	kind: 'creature-encounter';
+	abilityScores: CompendiumCreatureAbilityScoreEntry[];
+	armorClass?: number;
+	armorDetail?: string;
+	hitPoints?: number;
+	hitDice?: string;
+	speed?: string;
+	actions: CompendiumCreatureNamedEntry[];
+	traits: CompendiumCreatureNamedEntry[];
+}
+
 export type CompendiumDetailSection =
 	| CompendiumEntityListSection
 	| CompendiumCreatureSetRosterSection
@@ -223,7 +248,8 @@ export type CompendiumDetailSection =
 	| CompendiumTraitsSection
 	| CompendiumMarkdownSection
 	| CompendiumSpellClassesSection
-	| CompendiumClassFeaturesSection;
+	| CompendiumClassFeaturesSection
+	| CompendiumCreatureEncounterSection;
 
 export interface CompendiumDetailPayload {
 	item: CompendiumItem;
