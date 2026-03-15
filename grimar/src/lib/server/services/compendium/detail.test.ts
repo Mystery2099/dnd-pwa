@@ -34,6 +34,7 @@ describe('buildCompendiumDetailPayload', () => {
 
 		const payload = buildCompendiumDetailPayload(item);
 
+		expect(payload.detailSchemaVersion).toBe(1);
 		expect(payload.fields).toEqual([
 			{
 				key: 'script_language',
@@ -69,6 +70,7 @@ describe('buildCompendiumDetailPayload', () => {
 
 		const payload = buildCompendiumDetailPayload(item);
 
+		expect(payload.detailSchemaVersion).toBe(1);
 		expect(payload.fields).toEqual([]);
 		expect(payload.sections).toEqual([
 			{

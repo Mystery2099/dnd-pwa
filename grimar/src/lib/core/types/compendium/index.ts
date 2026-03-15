@@ -276,6 +276,7 @@ export type CompendiumDetailSection =
 	| CompendiumCreatureEncounterSection;
 
 export interface CompendiumDetailPayload {
+	detailSchemaVersion: 1;
 	item: CompendiumItem;
 	presentation: CompendiumDetailPresentation;
 	fields: CompendiumDetailField[];

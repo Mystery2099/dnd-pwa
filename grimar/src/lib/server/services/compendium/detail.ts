@@ -709,6 +709,7 @@ function normalizeFields(item: CompendiumItem): {
 export function buildCompendiumDetailPayload(item: CompendiumItem): CompendiumDetailPayload {
 	const { fields, sections } = normalizeFields(item);
 	return {
+		detailSchemaVersion: 1,
 		item: {
 			...item,
 			type: item.type as CompendiumTypeName

@@ -77,8 +77,10 @@ test.describe('Compendium API', () => {
 		expect(response.status()).toBe(200);
 
 		const body = await response.json();
+		expect(body.detailSchemaVersion).toBe(1);
 		expect(body.item).toBeDefined();
 		expect(body.item.type).toBe('languages');
+		expect(body.presentation).toBeDefined();
 		expect(Array.isArray(body.fields)).toBe(true);
 		expect(Array.isArray(body.sections)).toBe(true);
 
