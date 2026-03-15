@@ -145,7 +145,20 @@ export interface CompendiumBenefitsSection {
 	title: string;
 	description?: string;
 	kind: 'benefits';
-	items: Array<{ markdownKey: string }>;
+	layout: 'list' | 'grouped';
+	items: CompendiumBenefitEntry[];
+	groups: CompendiumBenefitGroup[];
+}
+
+export interface CompendiumBenefitEntry {
+	markdownKey: string;
+	name?: string;
+}
+
+export interface CompendiumBenefitGroup {
+	key: string;
+	title: string;
+	items: CompendiumBenefitEntry[];
 }
 
 export interface CompendiumWeaponPropertyEntry {

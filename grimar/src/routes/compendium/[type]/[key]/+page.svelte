@@ -1,4 +1,5 @@
 <script lang="ts">
+	import BenefitsSection from '$lib/components/compendium/BenefitsSection.svelte';
 	import Breadcrumb from '$lib/components/ui/Breadcrumb.svelte';
 	import ClassFeaturesSection from '$lib/components/compendium/ClassFeaturesSection.svelte';
 	import ClassTableSection from '$lib/components/compendium/ClassTableSection.svelte';
@@ -330,20 +331,7 @@
 					{/if}
 
 					{#if benefitsSection}
-						<CompendiumAccordionSection
-							title={benefitsSection.title}
-							description={benefitsSection.description}
-							value="benefits"
-						>
-							<ul class="list-inside list-disc space-y-2 text-[var(--color-text-secondary)]">
-								{#each benefitsSection.items as benefit, index (index)}
-									<li class="prose prose-invert prose-sm max-w-none [&>p]:m-0">
-										<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-										{@html markdownAt(benefit.markdownKey)}
-									</li>
-								{/each}
-							</ul>
-						</CompendiumAccordionSection>
+						<BenefitsSection section={benefitsSection} {markdownAt} />
 					{/if}
 
 					{#if weaponPropertiesSection}

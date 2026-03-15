@@ -111,6 +111,7 @@ The compendium detail route and API no longer expose raw provider JSON as the pr
 - `presentation` for header and media-oriented props
 - `fields` for curated sidebar/reference metadata
 - `sections` for structured content blocks such as markdown sections, spell classes, class features, creature encounters, and creature set rosters
+- section kinds can also express type-specific presentation intent, such as grouped background benefit cards versus plain benefit lists
 
 Markdown rendering for detail pages is also driven from this normalized detail payload, so section structure and markdown-key discovery live in one server-side place rather than being duplicated in the page loader.
 

@@ -144,7 +144,9 @@ describe('buildCompendiumDetailPayload', () => {
 				title: 'Benefits',
 				description: 'Mechanical benefits and repeatable advantages.',
 				kind: 'benefits',
-				items: [{ markdownKey: 'benefits.0.desc' }]
+				layout: 'list',
+				items: [{ markdownKey: 'benefits.0.desc', name: undefined }],
+				groups: []
 			},
 			{
 				key: 'traits',
@@ -157,6 +159,63 @@ describe('buildCompendiumDetailPayload', () => {
 				]
 			}
 		]);
+	});
+
+	it('groups typed background benefits into semantic sections', () => {
+		const item = createItem({
+			type: 'backgrounds',
+			data: {
+				benefits: [
+					{
+						name: 'Ability Score Increases',
+						desc: '+1 to Wisdom and one other ability score.',
+						type: 'ability_score'
+					},
+					{
+						name: 'Skill Proficiencies',
+						desc: 'Religion, and either Insight or Persuasion.',
+						type: 'skill_proficiency'
+					},
+					{
+						name: 'Equipment',
+						desc: 'Holy symbol, robe, and a prayer book.',
+						type: 'equipment'
+					}
+				]
+			}
+		});
+
+		const payload = buildCompendiumDetailPayload(item);
+
+		expect(payload.sections).toContainEqual({
+			key: 'benefits',
+			title: 'Background Benefits',
+			description: 'Training, equipment, and story hooks granted by this background.',
+			kind: 'benefits',
+			layout: 'grouped',
+			items: [
+				{ markdownKey: 'benefits.0.desc', name: 'Ability Score Increases' },
+				{ markdownKey: 'benefits.1.desc', name: 'Skill Proficiencies' },
+				{ markdownKey: 'benefits.2.desc', name: 'Equipment' }
+			],
+			groups: [
+				{
+					key: 'ability_score',
+					title: 'Ability Scores',
+					items: [{ markdownKey: 'benefits.0.desc', name: 'Ability Score Increases' }]
+				},
+				{
+					key: 'skill_proficiency',
+					title: 'Skill Proficiencies',
+					items: [{ markdownKey: 'benefits.1.desc', name: 'Skill Proficiencies' }]
+				},
+				{
+					key: 'equipment',
+					title: 'Equipment',
+					items: [{ markdownKey: 'benefits.2.desc', name: 'Equipment' }]
+				}
+			]
+		});
 	});
 
 	it('promotes description, spell classes, higher-level text, and class features into sections', () => {

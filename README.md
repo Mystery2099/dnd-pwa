@@ -94,6 +94,8 @@ High-level response shape:
 
 The detail page in [`grimar/src/routes/compendium/[type]/[key]/+page.svelte`](/home/mystery/misc-projects/dnd-pwa/grimar/src/routes/compendium/[type]/[key]/+page.svelte) is built against this normalized shape rather than directly interpreting provider JSON.
 
+Some normalized sections intentionally vary by type. For example, `benefits` can be emitted as either a simple markdown list or grouped semantic cards when the upstream data carries typed benefit categories, such as on background pages.
+
 ## Common Commands
 
 ```bash

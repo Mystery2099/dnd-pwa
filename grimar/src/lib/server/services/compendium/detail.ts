@@ -1,5 +1,7 @@
 import type { CompendiumTypeName } from '$lib/core/constants/compendium';
 import type {
+	CompendiumBenefitEntry,
+	CompendiumBenefitGroup,
 	CompendiumBenefitsSection,
 	CompendiumClassFeaturesSection,
 	CompendiumClassTableSection,
@@ -43,6 +45,31 @@ const CREATURE_REFERENCE_FIELD_KEYS = new Set([
 ]);
 
 const IMAGE_DETAIL_EXCLUDED_FIELD_KEYS = new Set(['file_url', 'alt_text', 'attribution', 'document']);
+const BACKGROUND_BENEFIT_GROUP_ORDER = [
+	'ability_score',
+	'skill_proficiency',
+	'tool_proficiency',
+	'language',
+	'equipment',
+	'feature',
+	'feat',
+	'connection_and_memento',
+	'adventures_and_advancement',
+	'suggested_characteristics'
+] as const;
+
+const BACKGROUND_BENEFIT_GROUP_LABELS: Record<string, string> = {
+	ability_score: 'Ability Scores',
+	skill_proficiency: 'Skill Proficiencies',
+	tool_proficiency: 'Tool Proficiencies',
+	language: 'Languages',
+	equipment: 'Equipment',
+	feature: 'Features',
+	feat: 'Feats',
+	connection_and_memento: 'Connections and Mementos',
+	adventures_and_advancement: 'Adventures and Advancement',
+	suggested_characteristics: 'Suggested Characteristics'
+};
 
 export interface CompendiumMarkdownSource {
 	key: string;
@@ -472,9 +499,18 @@ function buildBenefitsSection(rawValue: unknown): CompendiumBenefitsSection | nu
 		return null;
 	}
 
-	const items = rawValue
-		.map((entry, index) => (isRecord(entry) && typeof entry.desc === 'string' ? { markdownKey: `benefits.${index}.desc` } : null))
-		.filter((entry): entry is { markdownKey: string } => entry !== null);
+	const items: CompendiumBenefitEntry[] = rawValue
+		.map((entry, index): CompendiumBenefitEntry | null => {
+			if (!isRecord(entry) || typeof entry.desc !== 'string') {
+				return null;
+			}
+
+			return {
+				markdownKey: `benefits.${index}.desc`,
+				name: getString(entry.name)
+			};
+		})
+		.filter((entry): entry is CompendiumBenefitEntry => entry !== null);
 
 	if (items.length === 0) {
 		return null;
@@ -485,7 +521,85 @@ function buildBenefitsSection(rawValue: unknown): CompendiumBenefitsSection | nu
 		title: 'Benefits',
 		description: 'Mechanical benefits and repeatable advantages.',
 		kind: 'benefits',
-		items
+		layout: 'list',
+		items,
+		groups: []
+	};
+}
+
+function getBackgroundBenefitGroupLabel(benefitType: string): string {
+	return BACKGROUND_BENEFIT_GROUP_LABELS[benefitType] ?? formatFieldName(benefitType);
+}
+
+function sortBackgroundBenefitGroups(groups: CompendiumBenefitGroup[]): CompendiumBenefitGroup[] {
+	return groups.sort((left, right) => {
+		const leftIndex = BACKGROUND_BENEFIT_GROUP_ORDER.indexOf(left.key as (typeof BACKGROUND_BENEFIT_GROUP_ORDER)[number]);
+		const rightIndex = BACKGROUND_BENEFIT_GROUP_ORDER.indexOf(right.key as (typeof BACKGROUND_BENEFIT_GROUP_ORDER)[number]);
+		const normalizedLeftIndex = leftIndex === -1 ? Number.MAX_SAFE_INTEGER : leftIndex;
+		const normalizedRightIndex = rightIndex === -1 ? Number.MAX_SAFE_INTEGER : rightIndex;
+
+		if (normalizedLeftIndex !== normalizedRightIndex) {
+			return normalizedLeftIndex - normalizedRightIndex;
+		}
+
+		return left.title.localeCompare(right.title);
+	});
+}
+
+function buildBackgroundBenefitsSection(rawValue: unknown): CompendiumBenefitsSection | null {
+	if (!Array.isArray(rawValue) || rawValue.length === 0) {
+		return null;
+	}
+
+	type BackgroundBenefitEntry = CompendiumBenefitEntry & { benefitType?: string };
+
+	const items: BackgroundBenefitEntry[] = rawValue
+		.map((entry, index): BackgroundBenefitEntry | null => {
+			if (!isRecord(entry) || typeof entry.desc !== 'string') {
+				return null;
+			}
+
+			return {
+				markdownKey: `benefits.${index}.desc`,
+				name: getString(entry.name),
+				benefitType: getString(entry.type)
+			};
+		})
+		.filter((entry): entry is BackgroundBenefitEntry => entry !== null);
+
+	if (items.length === 0) {
+		return null;
+	}
+
+	const groupedEntries = new Map<string, CompendiumBenefitGroup>();
+	for (const item of items) {
+		const groupKey = item.benefitType?.toLowerCase() ?? 'other';
+		const existingGroup = groupedEntries.get(groupKey);
+		const entry = {
+			markdownKey: item.markdownKey,
+			name: item.name
+		} satisfies CompendiumBenefitEntry;
+
+		if (existingGroup) {
+			existingGroup.items.push(entry);
+			continue;
+		}
+
+		groupedEntries.set(groupKey, {
+			key: groupKey,
+			title: getBackgroundBenefitGroupLabel(groupKey),
+			items: [entry]
+		});
+	}
+
+	return {
+		key: 'benefits',
+		title: 'Background Benefits',
+		description: 'Training, equipment, and story hooks granted by this background.',
+		kind: 'benefits',
+		layout: 'grouped',
+		items: items.map(({ markdownKey, name }) => ({ markdownKey, name })),
+		groups: sortBackgroundBenefitGroups(Array.from(groupedEntries.values()))
 	};
 }
 
@@ -1026,7 +1140,10 @@ function normalizeFields(item: CompendiumItem): {
 		consumedSectionKeys.add('descriptions');
 	}
 
-	const benefitsSection = buildBenefitsSection(itemData.benefits);
+	const benefitsSection =
+		item.type === 'backgrounds'
+			? buildBackgroundBenefitsSection(itemData.benefits)
+			: buildBenefitsSection(itemData.benefits);
 	if (benefitsSection) {
 		sections.push(benefitsSection);
 		consumedSectionKeys.add('benefits');
