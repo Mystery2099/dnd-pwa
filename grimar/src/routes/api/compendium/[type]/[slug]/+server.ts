@@ -3,6 +3,7 @@ import type { RequestHandler } from './$types';
 import { getItem } from '$lib/server/repositories/compendium';
 import { COMPENDIUM_TYPES } from '$lib/server/db/schema';
 import type { CompendiumType } from '$lib/server/db/schema';
+import { buildCompendiumDetailPayload } from '$lib/server/services/compendium/detail';
 
 export const GET: RequestHandler = async ({ params }) => {
 	const { type, slug } = params;
@@ -17,5 +18,5 @@ export const GET: RequestHandler = async ({ params }) => {
 		throw error(404, 'Item not found');
 	}
 
-	return json(item);
+	return json(buildCompendiumDetailPayload(item));
 };

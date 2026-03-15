@@ -4,6 +4,7 @@ import { COMPENDIUM_TYPE_CONFIGS, type CompendiumTypeName } from '$lib/core/cons
 import { getItem, getRelatedImages } from '$lib/server/repositories/compendium';
 import type { CompendiumType } from '$lib/server/db/schema';
 import { OPEN5E_API_BASE_URL } from '$lib/server/providers/open5e-config';
+import { buildCompendiumDetailPayload } from '$lib/server/services/compendium/detail';
 import { marked } from 'marked';
 
 marked.setOptions({ gfm: true, breaks: true });
@@ -247,6 +248,7 @@ export const load: PageServerLoad = async ({ params }) => {
 	if (!item) {
 		throw error(404, `${config.label} not found: ${key}`);
 	}
+	const detail = buildCompendiumDetailPayload(item);
 	const itemData = (item.data ?? {}) as Record<string, unknown>;
 	const markdownHtml = await buildMarkdownHtml(itemData, item.description);
 	const imageAssetUrl = type === 'images' ? resolveImageAssetUrl(itemData.file_url) : null;
@@ -279,6 +281,7 @@ export const load: PageServerLoad = async ({ params }) => {
 		key,
 		config,
 		item: sanitizePageData(item),
+		detail: sanitizePageData(detail),
 		markdownHtml: sanitizePageData(markdownHtml),
 		imageAssetUrl,
 		relatedImages: sanitizePageData(relatedImages)

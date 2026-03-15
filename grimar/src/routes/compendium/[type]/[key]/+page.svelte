@@ -10,6 +10,7 @@
 	import ImageDetailPanel from '$lib/components/compendium/ImageDetailPanel.svelte';
 	import RelatedImagesPanel from '$lib/components/compendium/RelatedImagesPanel.svelte';
 	import SpellDetailSections from '$lib/components/compendium/SpellDetailSections.svelte';
+	import type { CompendiumDetailField } from '$lib/server/services/compendium/detail';
 	import type { PageData } from './$types';
 	import {
 		isWeaponPropertyArray,
@@ -81,27 +82,38 @@
 	let creatureAbilityScores = $derived(getAbilityScoreEntries(itemData.ability_scores));
 	let creatureActionEntries = $derived(getNamedDetailEntries(itemData.actions));
 	let creatureTraitEntries = $derived(getNamedDetailEntries(itemData.traits));
-	let sortedFields = $derived.by(() => {
+	let detailFields = $derived.by(() => {
+		const normalizedFields = data.detail.fields as CompendiumDetailField[];
+		const detailFieldMap = new Map(normalizedFields.map((field) => [field.key, field]));
 		const fields = getSortedFields(itemData, data.type);
 		if (data.type === 'images') {
-			return fields.filter(
-				([key]) => !['file_url', 'alt_text', 'attribution', 'document'].includes(key)
-			);
+			return fields
+				.filter(([key]) => !['file_url', 'alt_text', 'attribution', 'document'].includes(key))
+				.map(([key]) => detailFieldMap.get(key))
+				.filter((field): field is CompendiumDetailField => Boolean(field));
 		}
 
 		if (data.type === 'creatures') {
-			return fields.filter(([key]) => !CREATURE_DETAIL_FIELDS_IN_REFERENCE.includes(key));
+			return fields
+				.filter(([key]) => !CREATURE_DETAIL_FIELDS_IN_REFERENCE.includes(key))
+				.map(([key]) => detailFieldMap.get(key))
+				.filter((field): field is CompendiumDetailField => Boolean(field));
 		}
 
 		if (data.type === 'creaturesets') {
-			return fields.filter(([key]) => key !== 'creatures');
+			return fields
+				.filter(([key]) => key !== 'creatures')
+				.map(([key]) => detailFieldMap.get(key))
+				.filter((field): field is CompendiumDetailField => Boolean(field));
 		}
 
-		return fields;
+		return fields
+			.map(([key]) => detailFieldMap.get(key))
+			.filter((field): field is CompendiumDetailField => Boolean(field));
 	});
 	let markdownHtml = $derived<Record<string, string>>(data.markdownHtml ?? {});
 	let creatureSetEntries = $derived(getCreatureSetEntries(itemData.creatures));
-	let hasSidebarDetails = $derived(sortedFields.length > 0);
+	let hasSidebarDetails = $derived(detailFields.length > 0);
 
 	function markdownAt(path: string): string {
 		return markdownHtml[path] ?? '';
@@ -464,7 +476,7 @@
 
 				{#if hasSidebarDetails}
 					<div class="space-y-6 xl:sticky xl:top-6 xl:self-start">
-						<CompendiumDetailsPanel fields={sortedFields} resolveValue={getDetailValue} />
+						<CompendiumDetailsPanel fields={detailFields} resolveValue={getDetailValue} />
 					</div>
 				{/if}
 			</div>
