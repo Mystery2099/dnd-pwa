@@ -1,32 +1,36 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import VerticalNav from '$lib/components/layout/VerticalNav.svelte';
 
 	type Props = {
-		header?: Snippet;
 		children: Snippet;
 	};
 
-	let { header, children }: Props = $props();
+	let { children }: Props = $props();
+	let sidebarCollapsed = $state(false);
 </script>
 
 <div
-	class="relative min-h-dvh text-[var(--color-text-primary)] selection:bg-[var(--color-accent)]/30"
+	class="relative flex h-screen text-[var(--color-text-primary)] selection:bg-[var(--color-accent)]/30"
 >
-	<!-- THE FRAME -->
-
-	<!-- Left Rail -->
+	<!-- Left Rail (thin decorative bar) -->
 	<div
-		class="fixed top-0 bottom-0 left-0 z-60 w-3 border-r border-[var(--color-border)] bg-[var(--color-bg-tertiary)] shadow-[2px_0_15px_color-mix(in_srgb,black_50%,transparent)] backdrop-blur-2xl md:w-4"
+		class="fixed top-0 bottom-0 left-0 z-60 w-3 border-r border-[var(--color-border)] bg-[var(--color-bg-tertiary)] shadow-[2px_0_15px_color-mix(in_srgb,black_50%,transparent)] backdrop-blur-2xl"
 	></div>
 
-	<!-- Right Rail -->
+	<!-- Sidebar -->
+	<aside class="fixed top-0 bottom-0 left-3 z-50 flex flex-col">
+		<VerticalNav bind:collapsed={sidebarCollapsed} />
+	</aside>
+
+	<!-- Right Rail (thin decorative bar) -->
 	<div
-		class="fixed top-0 right-0 bottom-0 z-60 w-3 border-l border-[var(--color-border)] bg-[var(--color-bg-tertiary)] shadow-[-2px_0_15px_color-mix(in_srgb,black_50%,transparent)] backdrop-blur-2xl md:w-4"
+		class="fixed top-0 right-0 bottom-0 z-60 w-3 border-l border-[var(--color-border)] bg-[var(--color-bg-tertiary)] shadow-[-2px_0_15px_color-mix(in_srgb,black_50%,transparent)] backdrop-blur-2xl"
 	></div>
 
 	<!-- Bottom Rail -->
 	<div
-		class="fixed right-0 bottom-0 left-0 z-60 h-3 border-t border-[var(--color-border)] bg-[var(--color-bg-tertiary)] shadow-[0_-2px_15px_color-mix(in_srgb,black_50%,transparent)] backdrop-blur-2xl md:h-4"
+		class="fixed right-0 bottom-0 left-0 z-60 h-3 border-t border-[var(--color-border)] bg-[var(--color-bg-tertiary)] shadow-[0_-2px_15px_color-mix(in_srgb,black_50%,transparent)] backdrop-blur-2xl"
 	>
 		<!-- Corner Connectors (Visual Only) -->
 		<div
@@ -37,23 +41,13 @@
 		></div>
 	</div>
 
-	<!-- Sticky Header (Top Frame) -->
-	<!-- z-[70] to sit ABOVE the side rails. Full width (no mx) to act as the top frame bar. -->
-	<div
-		class="sticky top-0 z-70 border-b border-[var(--color-border)] bg-[var(--color-bg-tertiary)] shadow-[0_4px_30px_color-mix(in_srgb,black_50%,transparent)] backdrop-blur-2xl"
-	>
-		<div class="mx-auto max-w-375 px-3 py-3 sm:px-4">
-			{#if header}
-				{@render header()}
-			{/if}
-		</div>
-	</div>
-
 	<!-- Main Content Area -->
-	<div class="mx-auto h-full min-h-0 max-w-375 px-3 py-4 pb-16 sm:px-4 sm:py-6 lg:px-8">
-		<!-- Page Content -->
-		<main class="h-full min-w-0">
+	<main
+		class="flex-1 overflow-y-auto pl-3 pt-4 pb-16 pr-3"
+		style="margin-left: {sidebarCollapsed ? '67px' : '223px'}; margin-right: 12px;"
+	>
+		<div class="mx-auto max-w-5xl">
 			{@render children()}
-		</main>
-	</div>
+		</div>
+	</main>
 </div>

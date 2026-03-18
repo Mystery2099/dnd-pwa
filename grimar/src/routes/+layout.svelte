@@ -4,7 +4,6 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import { pwaInfo } from 'virtual:pwa-info';
 	import AppShell from '$lib/components/layout/AppShell.svelte';
-	import GlobalHeader from '$lib/components/layout/GlobalHeader.svelte';
 	import DebugControls from '$lib/components/ui/DebugControls.svelte';
 	import { initThemeSync, initTheme } from '$lib/core/client/themeStore.svelte';
 	import ClientQueryProvider from '$lib/components/ui/ClientQueryProvider.svelte';
@@ -96,11 +95,7 @@
 	{/if}
 </svelte:head>
 
-{#snippet header()}
-	<GlobalHeader homeHref="/dashboard" />
-{/snippet}
-
-<AppShell {header}>
+<AppShell>
 	<ClientQueryProvider client={queryClient}>
 		{@render children()}
 	</ClientQueryProvider>
