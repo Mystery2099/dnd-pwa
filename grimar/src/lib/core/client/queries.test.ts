@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { apiFetch } from './queries';
+import { apiFetch, fetchCompendiumDetail, fetchCompendiumList } from './queries';
 
 // Mock global fetch
 const globalFetch = vi.fn();
@@ -51,5 +51,74 @@ describe('apiFetch', () => {
 		await expect(apiFetch('/api/test')).rejects.toThrow('Device is offline');
 
 		Object.defineProperty(navigator, 'onLine', { value: originalOnline, configurable: true });
+	});
+
+	it('rejects compendium list responses with an unexpected schema version', async () => {
+		globalFetch.mockResolvedValueOnce({
+			ok: true,
+			json: async () => ({
+				listSchemaVersion: 2,
+				items: [],
+				total: 0,
+				page: 1,
+				pageSize: 20,
+				totalPages: 0,
+				hasMore: false,
+				resultsTruncated: false
+			}),
+			headers: new Headers({ 'content-type': 'application/json' })
+		});
+
+		await expect(fetchCompendiumList('spells')).rejects.toThrow('Invalid compendium list response');
+	});
+
+	it('rejects compendium detail responses with an unexpected schema version', async () => {
+		globalFetch.mockResolvedValueOnce({
+			ok: true,
+			json: async () => ({
+				detailSchemaVersion: 2,
+				item: {},
+				presentation: {},
+				fields: [],
+				sections: []
+			}),
+			headers: new Headers({ 'content-type': 'application/json' })
+		});
+
+		await expect(fetchCompendiumDetail('spells', 'fireball')).rejects.toThrow(
+			'Invalid compendium detail response'
+		);
+	});
+
+	it('rejects malformed v1 compendium list responses', async () => {
+		globalFetch.mockResolvedValueOnce({
+			ok: true,
+			json: async () => ({
+				listSchemaVersion: 1,
+				items: {},
+				total: '0'
+			}),
+			headers: new Headers({ 'content-type': 'application/json' })
+		});
+
+		await expect(fetchCompendiumList('spells')).rejects.toThrow('Invalid compendium list response');
+	});
+
+	it('rejects malformed v1 compendium detail responses', async () => {
+		globalFetch.mockResolvedValueOnce({
+			ok: true,
+			json: async () => ({
+				detailSchemaVersion: 1,
+				item: [],
+				presentation: null,
+				fields: {},
+				sections: []
+			}),
+			headers: new Headers({ 'content-type': 'application/json' })
+		});
+
+		await expect(fetchCompendiumDetail('spells', 'fireball')).rejects.toThrow(
+			'Invalid compendium detail response'
+		);
 	});
 });

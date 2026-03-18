@@ -64,6 +64,34 @@ The root `package.json` proxies the common lifecycle, quality, test, and databas
 - `/api/user/settings`
 - `/api/monitoring/web-vitals`
 
+### Compendium Detail Contract
+
+`GET /api/compendium/[type]/[slug]` returns the app-level normalized detail payload, not the raw storage row. The response is versioned with `detailSchemaVersion` so the client can rely on a stable contract as the adapter evolves.
+
+High-level response shape:
+
+```json
+{
+  "detailSchemaVersion": 1,
+  "item": { "...": "base compendium item" },
+  "presentation": {
+    "documentLabel": "5e 2014 Rules",
+    "image": { "...": "header/image presentation props" },
+    "creatureHeader": { "...": "creature header presentation props" }
+  },
+  "fields": [
+    { "key": "script_language", "label": "Script Language", "value": { "...": "normalized value" } }
+  ],
+  "sections": [
+    { "kind": "markdown", "...": "description or higher-level text" },
+    { "kind": "spell-classes", "...": "normalized spell class links" },
+    { "kind": "class-features", "...": "class feature entries" },
+    { "kind": "creature-encounter", "...": "combat-facing creature block" },
+    { "kind": "creature-set-roster", "...": "creature set roster cards" },
+    { "kind": "benefits", "...": "benefit list or grouped cards" }
+  ]
+}
+
 ## Common Commands
 
 ```bash
@@ -131,6 +159,7 @@ The checked-in `.env.example` covers the core local-dev values. `ADMIN_GROUPS`, 
 ## Documentation
 
 - [docs/SPECIFICATIONS.md](/home/mystery/misc-projects/dnd-pwa/docs/SPECIFICATIONS.md)
+- [docs/COMPENDIUM_API.md](/home/mystery/misc-projects/dnd-pwa/docs/COMPENDIUM_API.md)
 - [docs/DESIGN_SYSTEM.md](/home/mystery/misc-projects/dnd-pwa/docs/DESIGN_SYSTEM.md)
 - [docs/STYLE_GUIDE.md](/home/mystery/misc-projects/dnd-pwa/docs/STYLE_GUIDE.md)
 - [docs/THEMING_DEV.md](/home/mystery/misc-projects/dnd-pwa/docs/THEMING_DEV.md)

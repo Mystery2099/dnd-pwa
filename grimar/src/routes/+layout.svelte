@@ -31,6 +31,8 @@
 	const queryClient = createQueryClient();
 	setQueryClient(queryClient);
 	let showNoiseOverlay = $state(false);
+	let showRouteSkeleton = $state(false);
+	let routeSkeletonTimer: ReturnType<typeof setTimeout> | null = null;
 
 	function shouldLoadExternalFont(): boolean {
 		const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
@@ -93,6 +95,30 @@
 
 	let navigatingPath = $derived(navigating.to?.url.pathname ?? '');
 	let showRouteProgress = $derived(Boolean(navigatingPath));
+
+	$effect(() => {
+		if (routeSkeletonTimer) {
+			clearTimeout(routeSkeletonTimer);
+			routeSkeletonTimer = null;
+		}
+
+		if (!showRouteProgress) {
+			showRouteSkeleton = false;
+			return;
+		}
+
+		showRouteSkeleton = false;
+		routeSkeletonTimer = setTimeout(() => {
+			showRouteSkeleton = true;
+		}, 180);
+
+		return () => {
+			if (routeSkeletonTimer) {
+				clearTimeout(routeSkeletonTimer);
+				routeSkeletonTimer = null;
+			}
+		};
+	});
 </script>
 
 <svelte:head>
@@ -122,7 +148,7 @@
 	></div>
 {/if}
 
-{#if showRouteProgress}
+{#if showRouteProgress && showRouteSkeleton}
 	<div class="route-progress fixed top-0 right-0 left-0 z-[70] h-1"></div>
 	<RouteSkeletonOverlay pathname={navigatingPath} />
 {/if}

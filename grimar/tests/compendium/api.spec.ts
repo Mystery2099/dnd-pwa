@@ -71,4 +71,26 @@ test.describe('Compendium API', () => {
 			expect(body.items[0].type).toBe('creatures');
 		}
 	});
+
+	test('should return normalized detail payload for a single item', async ({ request }) => {
+		const response = await request.get('/api/compendium/languages/common', { headers });
+		expect(response.status()).toBe(200);
+
+		const body = await response.json();
+		expect(body.detailSchemaVersion).toBe(1);
+		expect(body.item).toBeDefined();
+		expect(body.item.type).toBe('languages');
+		expect(body.presentation).toBeDefined();
+		expect(Array.isArray(body.fields)).toBe(true);
+		expect(Array.isArray(body.sections)).toBe(true);
+
+		const scriptLanguageField = body.fields.find(
+			(field: { key: string }) => field.key === 'script_language'
+		);
+		if (scriptLanguageField) {
+			expect(typeof scriptLanguageField.value).toBe('object');
+			expect(scriptLanguageField.value.kind).toBe('entity');
+			expect(scriptLanguageField.value.href).toMatch(/^\/compendium\/languages\//);
+		}
+	});
 });

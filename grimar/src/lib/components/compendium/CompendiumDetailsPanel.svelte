@@ -1,10 +1,10 @@
 <script lang="ts">
 	import StructuredValue from '$lib/components/ui/StructuredValue.svelte';
-	import { formatFieldName } from '$lib/utils/compendium';
 	import CompendiumAccordionSection from './CompendiumAccordionSection.svelte';
+	import type { CompendiumDetailField } from '$lib/core/types/compendium';
 
 	interface Props {
-		fields: Array<[string, unknown]>;
+		fields: CompendiumDetailField[];
 		resolveValue: (key: string, value: unknown) => unknown;
 	}
 
@@ -19,17 +19,17 @@
 		value="details"
 	>
 		<dl class="grid gap-3 sm:grid-cols-2">
-			{#each fields as [key, value] (key)}
+			{#each fields as field (field.key)}
 				<div
 					class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/55 p-4 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-overlay-light)_24%,transparent)]"
 				>
 					<dt
 						class="text-[0.72rem] font-medium tracking-[0.16em] text-[var(--color-text-muted)] uppercase"
 					>
-						{formatFieldName(key)}
+						{field.label}
 					</dt>
 					<dd class="mt-2 text-sm text-[var(--color-text-primary)]">
-						<StructuredValue value={resolveValue(key, value)} />
+						<StructuredValue value={resolveValue(field.key, field.value)} />
 					</dd>
 				</div>
 			{/each}

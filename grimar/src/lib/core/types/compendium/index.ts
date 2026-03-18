@@ -71,8 +71,288 @@ export interface CompendiumTypeConfig {
 	endpoint: string;
 }
 
+export interface CompendiumDetailReference {
+	kind: 'entity';
+	type: CompendiumTypeName;
+	key: string;
+	label: string;
+	href: string;
+	meta?: string;
+	sourceUrl?: string;
+}
+
+export type CompendiumDetailValue =
+	| string
+	| number
+	| boolean
+	| null
+	| CompendiumDetailReference
+	| CompendiumDetailValue[]
+	| { [key: string]: CompendiumDetailValue };
+
+export interface CompendiumDetailField {
+	key: string;
+	label: string;
+	value: CompendiumDetailValue;
+}
+
+export interface CompendiumEntityListSection {
+	key: string;
+	title: string;
+	description?: string;
+	kind: 'entity-list';
+	items: CompendiumDetailValue[];
+}
+
+export interface CompendiumCreatureSetRosterEntry {
+	key: string;
+	label: string;
+	href: string;
+	type?: string;
+	size?: string;
+	documentLabel?: string;
+	environments: string[];
+	challengeRatingText?: string;
+	armorClass?: number;
+	hitPoints?: number;
+	speed?: string;
+}
+
+export interface CompendiumCreatureSetRosterSection {
+	key: string;
+	title: string;
+	description?: string;
+	kind: 'creature-set-roster';
+	items: CompendiumCreatureSetRosterEntry[];
+}
+
+export interface CompendiumDescriptionEntry {
+	document?: string;
+	gamesystem?: string;
+	markdownKey: string;
+}
+
+export interface CompendiumDescriptionsSection {
+	key: string;
+	title: string;
+	description?: string;
+	kind: 'descriptions';
+	items: CompendiumDescriptionEntry[];
+}
+
+export interface CompendiumBenefitsSection {
+	key: string;
+	title: string;
+	description?: string;
+	kind: 'benefits';
+	layout: 'list' | 'grouped';
+	items: CompendiumBenefitEntry[];
+	groups: CompendiumBenefitGroup[];
+}
+
+export interface CompendiumBenefitEntry {
+	markdownKey: string;
+	name?: string;
+}
+
+export interface CompendiumBenefitGroup {
+	key: string;
+	title: string;
+	items: CompendiumBenefitEntry[];
+}
+
+export interface CompendiumWeaponPropertyEntry {
+	name: string;
+	propertyType?: string;
+	detail?: string;
+	markdownKey?: string;
+}
+
+export interface CompendiumWeaponPropertiesSection {
+	key: string;
+	title: string;
+	description?: string;
+	kind: 'weapon-properties';
+	items: CompendiumWeaponPropertyEntry[];
+}
+
+export interface CompendiumTraitEntry {
+	name: string;
+	markdownKey?: string;
+}
+
+export interface CompendiumTraitsSection {
+	key: string;
+	title: string;
+	description?: string;
+	kind: 'traits';
+	items: CompendiumTraitEntry[];
+}
+
+export interface CompendiumMarkdownSection {
+	key: string;
+	title: string;
+	description?: string;
+	kind: 'markdown';
+	markdownKey: string;
+	defaultOpen?: boolean;
+}
+
+export interface CompendiumSpellClassEntry {
+	label: string;
+	href?: string;
+}
+
+export interface CompendiumSpellClassesSection {
+	key: string;
+	title: string;
+	description?: string;
+	kind: 'spell-classes';
+	items: CompendiumSpellClassEntry[];
+}
+
+export interface CompendiumClassFeatureEntry {
+	key: string;
+	name: string;
+	level?: number;
+	markdownKey?: string;
+}
+
+export interface CompendiumClassFeaturesSection {
+	key: string;
+	title: string;
+	description?: string;
+	kind: 'class-features';
+	items: CompendiumClassFeatureEntry[];
+	defaultOpen?: boolean;
+}
+
+export interface CompendiumClassTableColumn {
+	key: string;
+	label: string;
+}
+
+export interface CompendiumClassTableRow {
+	level: number;
+	values: Record<string, string>;
+}
+
+export interface CompendiumClassTableSection {
+	key: string;
+	title: string;
+	description?: string;
+	kind: 'class-table';
+	columns: CompendiumClassTableColumn[];
+	rows: CompendiumClassTableRow[];
+}
+
+export interface CompendiumCreatureAbilityScoreEntry {
+	ability: string;
+	score: number;
+}
+
+export interface CompendiumCreatureNamedEntry {
+	name: string;
+	markdownKey?: string;
+}
+
+export interface CompendiumCreatureEncounterSection {
+	key: string;
+	title: string;
+	description?: string;
+	kind: 'creature-encounter';
+	abilityScores: CompendiumCreatureAbilityScoreEntry[];
+	armorClass?: number;
+	armorDetail?: string;
+	hitPoints?: number;
+	hitDice?: string;
+	speed?: string;
+	actions: CompendiumCreatureNamedEntry[];
+	traits: CompendiumCreatureNamedEntry[];
+}
+
+export interface CompendiumImagePresentation {
+	fileUrl?: string;
+	assetUrl?: string | null;
+	altText?: string;
+	attribution?: string;
+	publisher?: string;
+	gameSystem?: string;
+	permalink?: string;
+}
+
+export interface CompendiumRelatedImagePresentation {
+	key: string;
+	name: string;
+	assetUrl: string | null;
+	altText?: string;
+	attribution?: string;
+	documentLabel?: string;
+}
+
+export interface CompendiumCreatureHeaderPresentation {
+	challengeRatingText?: string;
+	size?: CompendiumDetailValue;
+	typeValue?: CompendiumDetailValue;
+	alignment?: CompendiumDetailValue;
+	experiencePoints?: number;
+}
+
+export interface CompendiumDetailHeaderBadgeIcon {
+	family: 'spell-school' | 'creature-type' | 'damage-type' | 'aoe';
+	value: string;
+}
+
+export interface CompendiumDetailHeaderBadge {
+	label: string;
+	variant: 'solid' | 'outline';
+	icon?: CompendiumDetailHeaderBadgeIcon;
+}
+
+export interface CompendiumDetailPresentation {
+	documentLabel?: string;
+	image?: CompendiumImagePresentation;
+	conditionArtwork?: CompendiumRelatedImagePresentation;
+	creatureHeader?: CompendiumCreatureHeaderPresentation;
+	headerBadges: CompendiumDetailHeaderBadge[];
+}
+
+export type CompendiumDetailSection =
+	| CompendiumEntityListSection
+	| CompendiumCreatureSetRosterSection
+	| CompendiumDescriptionsSection
+	| CompendiumBenefitsSection
+	| CompendiumWeaponPropertiesSection
+	| CompendiumTraitsSection
+	| CompendiumMarkdownSection
+	| CompendiumSpellClassesSection
+	| CompendiumClassFeaturesSection
+	| CompendiumClassTableSection
+	| CompendiumCreatureEncounterSection;
+
+export interface CompendiumDetailPayload {
+	detailSchemaVersion: 1;
+	item: CompendiumItem;
+	presentation: CompendiumDetailPresentation;
+	fields: CompendiumDetailField[];
+	sections: CompendiumDetailSection[];
+}
+
+export interface CompendiumListItemPresentation {
+	description?: string;
+	documentLabel?: string;
+	cardIcon?: CompendiumDetailHeaderBadgeIcon;
+	badges: CompendiumDetailHeaderBadge[];
+}
+
+export interface CompendiumListItem {
+	item: CompendiumItem;
+	presentation: CompendiumListItemPresentation;
+}
+
 export interface CompendiumSearchResult {
-	items: CompendiumItem[];
+	listSchemaVersion: 1;
+	items: CompendiumListItem[];
 	total: number;
 	page: number;
 	pageSize: number;

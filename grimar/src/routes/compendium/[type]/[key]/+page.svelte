@@ -1,6 +1,8 @@
 <script lang="ts">
+	import BenefitsSection from '$lib/components/compendium/BenefitsSection.svelte';
 	import Breadcrumb from '$lib/components/ui/Breadcrumb.svelte';
 	import ClassFeaturesSection from '$lib/components/compendium/ClassFeaturesSection.svelte';
+	import ClassTableSection from '$lib/components/compendium/ClassTableSection.svelte';
 	import CompendiumAccordionSection from '$lib/components/compendium/CompendiumAccordionSection.svelte';
 	import CompendiumDetailHeader from '$lib/components/compendium/CompendiumDetailHeader.svelte';
 	import CompendiumDetailsPanel from '$lib/components/compendium/CompendiumDetailsPanel.svelte';
@@ -10,16 +12,21 @@
 	import ImageDetailPanel from '$lib/components/compendium/ImageDetailPanel.svelte';
 	import RelatedImagesPanel from '$lib/components/compendium/RelatedImagesPanel.svelte';
 	import SpellDetailSections from '$lib/components/compendium/SpellDetailSections.svelte';
+	import type {
+		CompendiumBenefitsSection,
+		CompendiumClassFeaturesSection,
+		CompendiumClassTableSection,
+		CompendiumCreatureEncounterSection,
+		CompendiumCreatureSetRosterSection,
+		CompendiumDetailSection,
+		CompendiumDetailField,
+		CompendiumDescriptionsSection,
+		CompendiumMarkdownSection,
+		CompendiumSpellClassesSection,
+		CompendiumTraitsSection,
+		CompendiumWeaponPropertiesSection
+	} from '$lib/core/types/compendium';
 	import type { PageData } from './$types';
-	import {
-		isWeaponPropertyArray,
-		getWeaponProperties,
-		isDescriptionArray,
-		getDescriptions,
-		isBenefitArray,
-		getBenefits,
-		getSortedFields
-	} from '$lib/utils/compendium';
 
 	interface Props {
 		data: PageData;
@@ -40,106 +47,139 @@
 		document?: ImageDocumentData;
 	};
 
-	type NamedDetailEntry = {
-		key?: string;
-		name?: string;
-		desc?: string;
-	};
-
-	type CreatureSetEntry = {
-		key?: string;
-		name?: string;
-		type?: { name?: string; key?: string } | string;
-		size?: { name?: string; key?: string } | string;
-		document?: { name?: string; display_name?: string };
-		environments?: Array<{ name?: string; key?: string }>;
-		challenge_rating_text?: string;
-		armor_class?: number;
-		hit_points?: number;
-		speed?: { walk?: number; unit?: string };
-	};
-
-	const CREATURE_DETAIL_FIELDS_IN_REFERENCE = [
-		'armor_class',
-		'armor_detail',
-		'hit_points',
-		'hit_dice',
-		'type',
-		'size',
-		'alignment',
-		'challenge_rating_text',
-		'experience_points'
-	];
-
 	let { data }: Props = $props();
 
 	let item = $derived(data.item);
-	let itemData = $derived(item.data as Record<string, unknown>);
-	let imageData = $derived((item.data as ImageItemData | undefined) ?? {});
-	let featuredRelatedImage = $derived(data.type === 'images' ? undefined : data.relatedImages?.[0]);
-	let remainingRelatedImages = $derived(data.relatedImages?.slice(1) ?? []);
-	let creatureAbilityScores = $derived(getAbilityScoreEntries(itemData.ability_scores));
-	let creatureActionEntries = $derived(getNamedDetailEntries(itemData.actions));
-	let creatureTraitEntries = $derived(getNamedDetailEntries(itemData.traits));
-	let sortedFields = $derived.by(() => {
-		const fields = getSortedFields(itemData, data.type);
+	let presentation = $derived(data.detail.presentation);
+	let featuredRelatedImage = $derived.by(() => {
 		if (data.type === 'images') {
-			return fields.filter(
-				([key]) => !['file_url', 'alt_text', 'attribution', 'document'].includes(key)
-			);
+			return undefined;
 		}
 
-		if (data.type === 'creatures') {
-			return fields.filter(([key]) => !CREATURE_DETAIL_FIELDS_IN_REFERENCE.includes(key));
+		if (data.type === 'conditions' && presentation.conditionArtwork) {
+			return {
+				key: presentation.conditionArtwork.key,
+				name: presentation.conditionArtwork.name,
+				documentName: presentation.conditionArtwork.documentLabel ?? null,
+				description: null,
+				assetUrl: presentation.conditionArtwork.assetUrl,
+				altText: presentation.conditionArtwork.altText ?? null
+			};
 		}
 
-		if (data.type === 'creaturesets') {
-			return fields.filter(([key]) => key !== 'creatures');
-		}
-
-		return fields;
+		return data.relatedImages?.[0];
 	});
+	let remainingRelatedImages = $derived(
+		data.type === 'conditions' ? (data.relatedImages ?? []) : (data.relatedImages?.slice(1) ?? [])
+	);
+	let detailFields = $derived(data.detail.fields as CompendiumDetailField[]);
+	let detailSections = $derived(data.detail.sections);
 	let markdownHtml = $derived<Record<string, string>>(data.markdownHtml ?? {});
-	let creatureSetEntries = $derived(getCreatureSetEntries(itemData.creatures));
-	let hasSidebarDetails = $derived(sortedFields.length > 0);
+
+	function findSection<T extends CompendiumDetailSection>(
+		sections: CompendiumDetailSection[],
+		predicate: (section: CompendiumDetailSection) => section is T
+	): T | null {
+		return sections.find(predicate) ?? null;
+	}
+
+	function filterSections<T extends CompendiumDetailSection>(
+		sections: CompendiumDetailSection[],
+		predicate: (section: CompendiumDetailSection) => section is T
+	): T[] {
+		return sections.filter(predicate);
+	}
+
+	let creatureSetRosterSection = $derived.by(() => {
+		const rosterSection = findSection(
+			detailSections,
+			(section): section is CompendiumCreatureSetRosterSection =>
+				section.kind === 'creature-set-roster'
+		);
+		return rosterSection ?? null;
+	});
+	let descriptionsSection = $derived.by(() => {
+		const section = findSection(
+			detailSections,
+			(entry): entry is CompendiumDescriptionsSection => entry.kind === 'descriptions'
+		);
+		return section ?? null;
+	});
+	let benefitsSection = $derived.by(() => {
+		const section = findSection(
+			detailSections,
+			(entry): entry is CompendiumBenefitsSection => entry.kind === 'benefits'
+		);
+		return section ?? null;
+	});
+	let weaponPropertiesSection = $derived.by(() => {
+		const section = findSection(
+			detailSections,
+			(entry): entry is CompendiumWeaponPropertiesSection => entry.kind === 'weapon-properties'
+		);
+		return section ?? null;
+	});
+	let traitsSection = $derived.by(() => {
+		const section = findSection(
+			detailSections,
+			(entry): entry is CompendiumTraitsSection => entry.kind === 'traits'
+		);
+		return section ?? null;
+	});
+	let descriptionSection = $derived.by(() => {
+		const section = findSection(
+			detailSections,
+			(entry): entry is CompendiumMarkdownSection =>
+				entry.kind === 'markdown' && entry.key === 'description'
+		);
+		return section ?? null;
+	});
+	let higherLevelSection = $derived.by(() => {
+		const section = findSection(
+			detailSections,
+			(entry): entry is CompendiumMarkdownSection =>
+				entry.kind === 'markdown' && entry.key === 'higher_level'
+		);
+		return section ?? null;
+	});
+	let supplementalMarkdownSections = $derived.by(() =>
+		filterSections(
+			detailSections,
+			(entry): entry is CompendiumMarkdownSection =>
+				entry.kind === 'markdown' && entry.key !== 'description' && entry.key !== 'higher_level'
+		)
+	);
+	let spellClassesSection = $derived.by(() => {
+		const section = findSection(
+			detailSections,
+			(entry): entry is CompendiumSpellClassesSection => entry.kind === 'spell-classes'
+		);
+		return section ?? null;
+	});
+	let classFeaturesSection = $derived.by(() => {
+		const section = findSection(
+			detailSections,
+			(entry): entry is CompendiumClassFeaturesSection => entry.kind === 'class-features'
+		);
+		return section ?? null;
+	});
+	let classTableSections = $derived.by(() =>
+		filterSections(
+			detailSections,
+			(entry): entry is CompendiumClassTableSection => entry.kind === 'class-table'
+		)
+	);
+	let creatureEncounterSection = $derived.by(() => {
+		const section = findSection(
+			detailSections,
+			(entry): entry is CompendiumCreatureEncounterSection => entry.kind === 'creature-encounter'
+		);
+		return section ?? null;
+	});
+	let hasSidebarDetails = $derived(detailFields.length > 0);
 
 	function markdownAt(path: string): string {
 		return markdownHtml[path] ?? '';
-	}
-
-	function getNonEmptyString(value: unknown): string | undefined {
-		if (typeof value !== 'string') return undefined;
-		const trimmed = value.trim();
-		return trimmed.length > 0 ? trimmed : undefined;
-	}
-
-	function getDocumentLabel(): string | undefined {
-		return (
-			getNonEmptyString(imageData.document?.display_name) ??
-			getNonEmptyString(imageData.document?.name) ??
-			getNonEmptyString(item.documentName) ??
-			undefined
-		);
-	}
-
-	function getImageAltText(): string | undefined {
-		return getNonEmptyString(imageData.alt_text);
-	}
-
-	function getImageAttribution(): string | undefined {
-		return getNonEmptyString(imageData.attribution);
-	}
-
-	function getImagePublisher(): string | undefined {
-		return getNonEmptyString(imageData.document?.publisher?.name);
-	}
-
-	function getImageGameSystem(): string | undefined {
-		return getNonEmptyString(imageData.document?.gamesystem?.name);
-	}
-
-	function getImagePermalink(): string | undefined {
-		return getNonEmptyString(imageData.document?.permalink);
 	}
 
 	function getDetailValue(key: string, value: unknown): unknown {
@@ -160,52 +200,6 @@
 		}
 
 		return value;
-	}
-
-	function getAbilityScoreEntries(value: unknown): Array<[string, number]> {
-		if (!value || typeof value !== 'object' || Array.isArray(value)) {
-			return [];
-		}
-
-		const abilityScores = value as Record<string, unknown>;
-		const orderedAbilities = [
-			'strength',
-			'dexterity',
-			'constitution',
-			'intelligence',
-			'wisdom',
-			'charisma'
-		];
-
-		return orderedAbilities
-			.map((ability) => [ability, abilityScores[ability]])
-			.filter((entry): entry is [string, number] => typeof entry[1] === 'number');
-	}
-
-	function getNamedDetailEntries(
-		value: unknown
-	): Array<{ key?: string; name?: string; desc?: string }> {
-		if (!Array.isArray(value)) {
-			return [];
-		}
-
-		return value.filter(
-			(entry): entry is NamedDetailEntry => Boolean(entry) && typeof entry === 'object'
-		);
-	}
-
-	function getCreatureSetEntries(value: unknown): CreatureSetEntry[] {
-		if (!Array.isArray(value)) {
-			return [];
-		}
-
-		return value.filter(
-			(entry): entry is CreatureSetEntry =>
-				Boolean(entry) &&
-				typeof entry === 'object' &&
-				(typeof (entry as CreatureSetEntry).name === 'string' ||
-					typeof (entry as CreatureSetEntry).key === 'string')
-		);
 	}
 </script>
 
@@ -234,13 +228,13 @@
 						label={data.config.label}
 						title={item.name}
 						source={item.source}
-						documentLabel={getDocumentLabel()}
+						documentLabel={presentation.documentLabel}
 						icon={data.config.icon}
-						challengeRatingText={itemData.challenge_rating_text}
-						size={itemData.size}
-						typeValue={itemData.type}
-						alignment={itemData.alignment}
-						experiencePoints={itemData.experience_points}
+						challengeRatingText={presentation.creatureHeader?.challengeRatingText}
+						size={presentation.creatureHeader?.size}
+						typeValue={presentation.creatureHeader?.typeValue}
+						alignment={presentation.creatureHeader?.alignment}
+						experiencePoints={presentation.creatureHeader?.experiencePoints}
 						{featuredRelatedImage}
 					/>
 				{:else}
@@ -248,13 +242,11 @@
 						label={data.config.label}
 						title={item.name}
 						source={item.source}
-						documentLabel={getDocumentLabel()}
+						documentLabel={presentation.documentLabel}
 						icon={data.config.icon}
 						type={data.type}
-						{itemData}
+						headerBadges={presentation.headerBadges}
 						{featuredRelatedImage}
-						imageAttribution={getImageAttribution()}
-						imageFileUrl={imageData.file_url}
 					/>
 				{/if}
 			</div>
@@ -262,13 +254,13 @@
 			{#if data.type === 'images'}
 				<ImageDetailPanel
 					title={item.name}
-					imageAssetUrl={data.imageAssetUrl}
-					altText={getImageAltText()}
-					attribution={getImageAttribution()}
-					documentLabel={getDocumentLabel()}
-					publisher={getImagePublisher()}
-					gameSystem={getImageGameSystem()}
-					permalink={getImagePermalink()}
+					imageAssetUrl={presentation.image?.assetUrl ?? null}
+					altText={presentation.image?.altText}
+					attribution={presentation.image?.attribution}
+					documentLabel={presentation.documentLabel}
+					publisher={presentation.image?.publisher}
+					gameSystem={presentation.image?.gameSystem}
+					permalink={presentation.image?.permalink}
 				/>
 			{/if}
 
@@ -282,14 +274,8 @@
 				/>
 			{/if}
 
-			{#if data.type === 'creatures' && itemData}
-				<CreatureEncounterPanel
-					{itemData}
-					abilityScores={creatureAbilityScores}
-					actions={creatureActionEntries}
-					traits={creatureTraitEntries}
-					{markdownAt}
-				/>
+			{#if creatureEncounterSection}
+				<CreatureEncounterPanel section={creatureEncounterSection} {markdownAt} />
 			{/if}
 
 			<div
@@ -298,46 +284,46 @@
 				}`}
 			>
 				<div class="space-y-6">
-					{#if data.type === 'creaturesets' && creatureSetEntries.length > 0}
-						<CreatureSetRosterSection creatures={creatureSetEntries} />
+					{#if creatureSetRosterSection}
+						<CreatureSetRosterSection creatures={creatureSetRosterSection.items} />
 					{/if}
 
-					{#if data.type !== 'creatures' && (itemData.desc || item.description)}
+					{#if descriptionSection}
 						<CompendiumAccordionSection
-							title="Description"
-							description="Core rules text and narrative summary."
-							open={true}
-							value="description"
+							title={descriptionSection.title}
+							description={descriptionSection.description}
+							open={descriptionSection.defaultOpen ?? false}
+							value={descriptionSection.key}
 						>
 							<div class="prose prose-invert max-w-none text-[var(--color-text-secondary)]">
 								<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-								{@html markdownAt('description')}
+								{@html markdownAt(descriptionSection.markdownKey)}
 							</div>
 						</CompendiumAccordionSection>
 					{/if}
 
-					{#if data.type === 'creatures' && (itemData.desc || item.description)}
+					{#each supplementalMarkdownSections as markdownSection (markdownSection.key)}
 						<CompendiumAccordionSection
-							title="Description"
-							description="Lore and encounter-facing rules text."
-							open={true}
-							value="creature-description"
+							title={markdownSection.title}
+							description={markdownSection.description}
+							open={markdownSection.defaultOpen ?? false}
+							value={markdownSection.key}
 						>
 							<div class="prose prose-invert max-w-none text-[var(--color-text-secondary)]">
 								<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-								{@html markdownAt('description')}
+								{@html markdownAt(markdownSection.markdownKey)}
 							</div>
 						</CompendiumAccordionSection>
-					{/if}
+					{/each}
 
-					{#if isDescriptionArray(itemData.descriptions)}
+					{#if descriptionsSection}
 						<CompendiumAccordionSection
-							title="Descriptions"
-							description="Variant text grouped by system and source document."
+							title={descriptionsSection.title}
+							description={descriptionsSection.description}
 							value="descriptions"
 						>
 							<div class="space-y-4">
-								{#each getDescriptions(itemData.descriptions) as desc, index (`${desc.document ?? 'description'}-${index}`)}
+								{#each descriptionsSection.items as desc, index (`${desc.document ?? 'description'}-${index}`)}
 									<div
 										class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/55 p-4"
 									>
@@ -359,7 +345,7 @@
 											class="prose prose-invert prose-sm max-w-none text-[var(--color-text-secondary)]"
 										>
 											<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-											{@html markdownAt(`descriptions.${index}.desc`)}
+											{@html markdownAt(desc.markdownKey)}
 										</div>
 									</div>
 								{/each}
@@ -367,51 +353,40 @@
 						</CompendiumAccordionSection>
 					{/if}
 
-					{#if isBenefitArray(itemData.benefits)}
-						<CompendiumAccordionSection
-							title="Benefits"
-							description="Mechanical benefits and repeatable advantages."
-							value="benefits"
-						>
-							<ul class="list-inside list-disc space-y-2 text-[var(--color-text-secondary)]">
-								{#each getBenefits(itemData.benefits) as _benefit, index (index)}
-									<li class="prose prose-invert prose-sm max-w-none [&>p]:m-0">
-										<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-										{@html markdownAt(`benefits.${index}.desc`)}
-									</li>
-								{/each}
-							</ul>
-						</CompendiumAccordionSection>
+					{#if benefitsSection}
+						<BenefitsSection section={benefitsSection} {markdownAt} />
 					{/if}
 
-					{#if data.type === 'weapons' && isWeaponPropertyArray(itemData.properties)}
+					{#if weaponPropertiesSection}
 						<CompendiumAccordionSection
-							title="Properties"
-							description="Rules traits attached to this weapon."
+							title={weaponPropertiesSection.title}
+							description={weaponPropertiesSection.description}
 							value="weapon-properties"
 						>
 							<div class="grid gap-3">
-								{#each getWeaponProperties(itemData.properties) as wp, index (`${wp.property?.key ?? wp.property?.name ?? 'property'}-${index}`)}
+								{#each weaponPropertiesSection.items as property, index (`${property.name}-${index}`)}
 									<div
 										class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/55 p-4"
 									>
 										<div class="flex items-center gap-2">
-											<span class="font-semibold text-accent">{wp.property?.name ?? ''}</span>
-											{#if wp.property?.type}
+											<span class="font-semibold text-accent">{property.name}</span>
+											{#if property.propertyType}
 												<span class="rounded bg-accent/20 px-2 py-0.5 text-xs text-accent">
-													{wp.property.type}
+													{property.propertyType}
 												</span>
 											{/if}
-											{#if wp.detail}
-												<span class="text-sm text-[var(--color-text-muted)]">({wp.detail})</span>
+											{#if property.detail}
+												<span class="text-sm text-[var(--color-text-muted)]"
+													>({property.detail})</span
+												>
 											{/if}
 										</div>
-										{#if wp.property?.desc}
+										{#if property.markdownKey}
 											<div
 												class="prose prose-invert prose-sm mt-2 max-w-none text-[var(--color-text-secondary)]"
 											>
 												<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-												{@html markdownAt(`weaponProperties.${index}.desc`)}
+												{@html markdownAt(property.markdownKey)}
 											</div>
 										{/if}
 									</div>
@@ -420,24 +395,24 @@
 						</CompendiumAccordionSection>
 					{/if}
 
-					{#if data.type === 'species' && itemData.traits && Array.isArray(itemData.traits) && itemData.traits.length > 0}
+					{#if traitsSection}
 						<CompendiumAccordionSection
-							title="Traits"
-							description="Species-specific traits and inherited features."
+							title={traitsSection.title}
+							description={traitsSection.description}
 							value="species-traits"
 						>
 							<div class="grid gap-3">
-								{#each itemData.traits as trait, index (`${trait.key ?? trait.name ?? 'trait'}-${index}`)}
+								{#each traitsSection.items as trait, index (`${trait.name}-${index}`)}
 									<div
 										class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/55 p-4"
 									>
 										<h3 class="font-semibold text-accent">{trait.name}</h3>
-										{#if trait.desc}
+										{#if trait.markdownKey}
 											<div
 												class="prose prose-invert prose-sm mt-1 max-w-none text-[var(--color-text-secondary)]"
 											>
 												<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-												{@html markdownAt(`traits.${index}.desc`)}
+												{@html markdownAt(trait.markdownKey)}
 											</div>
 										{/if}
 									</div>
@@ -446,25 +421,32 @@
 						</CompendiumAccordionSection>
 					{/if}
 
-					{#if data.type === 'spells' && itemData}
+					{#if spellClassesSection || higherLevelSection}
 						<SpellDetailSections
-							classes={Array.isArray(itemData.classes) ? itemData.classes : []}
-							higherLevel={itemData.higher_level}
+							classes={spellClassesSection?.items ?? []}
+							{higherLevelSection}
 							{markdownAt}
 						/>
 					{/if}
 
-					{#if data.type === 'classes' && itemData}
+					{#if classFeaturesSection}
 						<ClassFeaturesSection
-							features={Array.isArray(itemData.features) ? itemData.features : []}
+							features={classFeaturesSection.items}
+							title={classFeaturesSection.title}
+							description={classFeaturesSection.description}
+							defaultOpen={classFeaturesSection.defaultOpen ?? false}
 							{markdownAt}
 						/>
 					{/if}
+
+					{#each classTableSections as classTableSection (classTableSection.key)}
+						<ClassTableSection section={classTableSection} />
+					{/each}
 				</div>
 
 				{#if hasSidebarDetails}
 					<div class="space-y-6 xl:sticky xl:top-6 xl:self-start">
-						<CompendiumDetailsPanel fields={sortedFields} resolveValue={getDetailValue} />
+						<CompendiumDetailsPanel fields={detailFields} resolveValue={getDetailValue} />
 					</div>
 				{/if}
 			</div>

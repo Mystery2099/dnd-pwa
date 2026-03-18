@@ -1,11 +1,7 @@
 <script lang="ts">
 	import Badge from '$lib/components/ui/Badge.svelte';
+	import { isCompendiumDetailReference } from '$lib/core/utils/compendium-detail-values';
 	import { formatValue } from '$lib/utils/compendium';
-
-	type LinkedObject = {
-		label: string;
-		href: string;
-	};
 
 	type CreatureRelatedImage = {
 		key: string;
@@ -41,27 +37,6 @@
 		experiencePoints,
 		featuredRelatedImage
 	}: Props = $props();
-
-	function getLinkedObject(value: unknown): LinkedObject | null {
-		if (!value || typeof value !== 'object' || Array.isArray(value)) {
-			return null;
-		}
-
-		const record = value as Record<string, unknown>;
-		if (typeof record.url !== 'string' || !record.url.trim()) {
-			return null;
-		}
-
-		const objectLabel =
-			(typeof record.name === 'string' && record.name.trim()) ||
-			(typeof record.key === 'string' && record.key.trim()) ||
-			record.url;
-
-		return {
-			label: objectLabel,
-			href: record.url
-		};
-	}
 </script>
 
 <div class="flex items-start justify-between gap-6">
@@ -100,14 +75,9 @@
 				<Badge variant="solid">CR {challengeRatingText}</Badge>
 			{/if}
 			{#if size}
-				{@const sizeLink = getLinkedObject(size)}
+				{@const sizeLink = isCompendiumDetailReference(size) ? size : null}
 				{#if sizeLink}
-					<a
-						href={sizeLink.href}
-						target="_blank"
-						rel="noreferrer"
-						class="transition-transform hover:-translate-y-0.5"
-					>
+					<a href={sizeLink.href} class="transition-transform hover:-translate-y-0.5">
 						<Badge variant="outline" class="hover:border-accent/50 hover:text-accent">
 							{sizeLink.label}
 						</Badge>
@@ -117,14 +87,9 @@
 				{/if}
 			{/if}
 			{#if typeValue}
-				{@const typeLink = getLinkedObject(typeValue)}
+				{@const typeLink = isCompendiumDetailReference(typeValue) ? typeValue : null}
 				{#if typeLink}
-					<a
-						href={typeLink.href}
-						target="_blank"
-						rel="noreferrer"
-						class="transition-transform hover:-translate-y-0.5"
-					>
+					<a href={typeLink.href} class="transition-transform hover:-translate-y-0.5">
 						<Badge variant="outline" class="hover:border-accent/50 hover:text-accent">
 							{typeLink.label}
 						</Badge>

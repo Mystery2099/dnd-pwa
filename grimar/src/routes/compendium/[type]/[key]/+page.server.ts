@@ -4,6 +4,10 @@ import { COMPENDIUM_TYPE_CONFIGS, type CompendiumTypeName } from '$lib/core/cons
 import { getItem, getRelatedImages } from '$lib/server/repositories/compendium';
 import type { CompendiumType } from '$lib/server/db/schema';
 import { OPEN5E_API_BASE_URL } from '$lib/server/providers/open5e-config';
+import {
+	buildCompendiumDetailPayload,
+	collectCompendiumMarkdownSources
+} from '$lib/server/services/compendium/detail';
 import { marked } from 'marked';
 
 marked.setOptions({ gfm: true, breaks: true });
@@ -76,61 +80,12 @@ async function setMarkdown(
 }
 
 async function buildMarkdownHtml(
-	itemData: Record<string, unknown>,
-	itemDescription: unknown
+	markdownSources: Array<{ key: string; text: string }>
 ): Promise<Record<string, string>> {
 	const markdownHtml: Record<string, string> = {};
 
-	await setMarkdown(markdownHtml, 'description', itemData.desc ?? itemDescription);
-	await setMarkdown(markdownHtml, 'higher_level', itemData.higher_level);
-
-	if (Array.isArray(itemData.descriptions)) {
-		for (const [index, description] of itemData.descriptions.entries()) {
-			const entry = getRecord(description);
-			if (!entry) continue;
-			await setMarkdown(markdownHtml, `descriptions.${index}.desc`, entry.desc);
-		}
-	}
-
-	if (Array.isArray(itemData.benefits)) {
-		for (const [index, benefit] of itemData.benefits.entries()) {
-			const entry = getRecord(benefit);
-			if (!entry) continue;
-			await setMarkdown(markdownHtml, `benefits.${index}.desc`, entry.desc);
-		}
-	}
-
-	if (Array.isArray(itemData.properties)) {
-		for (const [index, property] of itemData.properties.entries()) {
-			const propertyRecord = getRecord(property);
-			const innerProperty = propertyRecord ? getRecord(propertyRecord.property) : null;
-			if (!innerProperty) continue;
-			await setMarkdown(markdownHtml, `weaponProperties.${index}.desc`, innerProperty.desc);
-		}
-	}
-
-	if (Array.isArray(itemData.traits)) {
-		for (const [index, trait] of itemData.traits.entries()) {
-			const entry = getRecord(trait);
-			if (!entry) continue;
-			await setMarkdown(markdownHtml, `traits.${index}.desc`, entry.desc);
-		}
-	}
-
-	if (Array.isArray(itemData.actions)) {
-		for (const [index, action] of itemData.actions.entries()) {
-			const entry = getRecord(action);
-			if (!entry) continue;
-			await setMarkdown(markdownHtml, `actions.${index}.desc`, entry.desc);
-		}
-	}
-
-	if (Array.isArray(itemData.features)) {
-		for (const [index, feature] of itemData.features.entries()) {
-			const entry = getRecord(feature);
-			if (!entry) continue;
-			await setMarkdown(markdownHtml, `features.${index}.desc`, entry.desc);
-		}
+	for (const source of markdownSources) {
+		await setMarkdown(markdownHtml, source.key, source.text);
 	}
 
 	return markdownHtml;
@@ -168,54 +123,6 @@ type RelatedImage = {
 	attribution: string | null;
 };
 
-type RelatedImageRecord = {
-	url?: unknown;
-	key?: unknown;
-	name?: unknown;
-	file_url?: unknown;
-	alt_text?: unknown;
-	attribution?: unknown;
-};
-
-function extractKeyFromUrl(url: string): string | null {
-	try {
-		const parsed = new URL(url);
-		const parts = parsed.pathname.split('/').filter(Boolean);
-		return parts.at(-1) ?? null;
-	} catch {
-		const parts = url.split('/').filter(Boolean);
-		return parts.at(-1) ?? null;
-	}
-}
-
-function buildEmbeddedConditionImage(
-	itemData: Record<string, unknown>,
-	itemName: string,
-	documentName: string | null
-): RelatedImage | null {
-	const icon = getRecord(itemData.icon) as RelatedImageRecord | null;
-	if (!icon) return null;
-
-	const assetUrl = resolveImageAssetUrl(icon.file_url);
-	if (!assetUrl) return null;
-
-	const key =
-		(typeof icon.key === 'string' && icon.key.trim()) ||
-		(typeof icon.url === 'string' && extractKeyFromUrl(icon.url)) ||
-		null;
-	if (!key) return null;
-
-	return {
-		key,
-		name: typeof icon.name === 'string' && icon.name.trim() ? icon.name : itemName,
-		documentName,
-		description: null,
-		assetUrl,
-		altText: typeof icon.alt_text === 'string' ? icon.alt_text : null,
-		attribution: typeof icon.attribution === 'string' ? icon.attribution : null
-	};
-}
-
 function sanitizePageData<T>(value: T): T {
 	if (value === null || value === undefined) return value;
 	if (value instanceof Date) return value;
@@ -247,9 +154,9 @@ export const load: PageServerLoad = async ({ params }) => {
 	if (!item) {
 		throw error(404, `${config.label} not found: ${key}`);
 	}
-	const itemData = (item.data ?? {}) as Record<string, unknown>;
-	const markdownHtml = await buildMarkdownHtml(itemData, item.description);
-	const imageAssetUrl = type === 'images' ? resolveImageAssetUrl(itemData.file_url) : null;
+	const detail = buildCompendiumDetailPayload(item);
+	const markdownSources = collectCompendiumMarkdownSources(item, detail);
+	const markdownHtml = await buildMarkdownHtml(markdownSources);
 	const relatedImagesRaw = await getRelatedImages(itemType, item.name);
 	const relatedImagesFromCompendium: RelatedImage[] = relatedImagesRaw.map((image) => {
 		const imageData = (image.data ?? {}) as Record<string, unknown>;
@@ -263,24 +170,14 @@ export const load: PageServerLoad = async ({ params }) => {
 			attribution: typeof imageData.attribution === 'string' ? imageData.attribution : null
 		};
 	});
-	const embeddedConditionImage =
-		type === 'conditions'
-			? buildEmbeddedConditionImage(itemData, item.name, item.documentName)
-			: null;
-	const relatedImages = embeddedConditionImage
-		? [
-				embeddedConditionImage,
-				...relatedImagesFromCompendium.filter((image) => image.key !== embeddedConditionImage.key)
-			]
-		: relatedImagesFromCompendium;
 
 	return {
 		type,
 		key,
 		config,
 		item: sanitizePageData(item),
+		detail: sanitizePageData(detail),
 		markdownHtml: sanitizePageData(markdownHtml),
-		imageAssetUrl,
-		relatedImages: sanitizePageData(relatedImages)
+		relatedImages: sanitizePageData(relatedImagesFromCompendium)
 	};
 };

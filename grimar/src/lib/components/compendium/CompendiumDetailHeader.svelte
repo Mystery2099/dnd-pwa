@@ -1,11 +1,11 @@
 <script lang="ts">
 	import Badge from '$lib/components/ui/Badge.svelte';
-	import CompendiumCardIcon from '$lib/components/compendium/icons/CompendiumCardIcon.svelte';
 	import DamageTypeIcon from '$lib/components/compendium/icons/DamageTypeIcon.svelte';
 	import AoeIcon from '$lib/components/compendium/icons/AoeIcon.svelte';
 	import CompendiumTypeIcon from '$lib/components/compendium/icons/CompendiumTypeIcon.svelte';
-	import { resolveAoeToken, resolveDamageTypeTokens } from '$lib/core/utils/compendiumIconography';
-	import { formatValue, getImageKindLabel } from '$lib/utils/compendium';
+	import SpellSchoolIcon from '$lib/components/compendium/icons/SpellSchoolIcon.svelte';
+	import { getImageKindLabel } from '$lib/utils/compendium';
+	import type { CompendiumDetailHeaderBadge } from '$lib/core/types/compendium';
 
 	type RelatedImage = {
 		key: string;
@@ -21,10 +21,8 @@
 		documentLabel?: string;
 		icon: string;
 		type: string;
-		itemData: Record<string, unknown>;
+		headerBadges: CompendiumDetailHeaderBadge[];
 		featuredRelatedImage?: RelatedImage;
-		imageAttribution?: string;
-		imageFileUrl?: string;
 	}
 
 	let {
@@ -34,19 +32,9 @@
 		documentLabel,
 		icon,
 		type,
-		itemData,
-		featuredRelatedImage,
-		imageAttribution,
-		imageFileUrl
+		headerBadges,
+		featuredRelatedImage
 	}: Props = $props();
-
-	function getPrimaryDamageType(): string | undefined {
-		return resolveDamageTypeTokens(itemData.damage_types)[0];
-	}
-
-	function getAoeShape(): string | undefined {
-		return resolveAoeToken(itemData.target_type);
-	}
 </script>
 
 <div>
@@ -122,70 +110,24 @@
 		{/if}
 	</div>
 
-	{#if type === 'spells'}
+	{#if headerBadges.length > 0}
 		<div class="mt-5 flex flex-wrap gap-2">
-			{#if itemData.level !== undefined}
-				<Badge variant="solid">
-					{itemData.level === 0 ? 'Cantrip' : `Level ${itemData.level}`}
+			{#each headerBadges as badge, index (`${badge.label}-${index}`)}
+				<Badge variant={badge.variant} class={badge.icon ? 'gap-1.5' : ''}>
+					{#if badge.icon?.family === 'spell-school'}
+						<SpellSchoolIcon school={badge.icon.value} class="h-3.5 w-3.5" />
+					{:else if badge.icon?.family === 'damage-type'}
+						<DamageTypeIcon type={badge.icon.value} class="h-3.5 w-3.5" />
+					{:else if badge.icon?.family === 'aoe'}
+						<AoeIcon shape={badge.icon.value} class="h-3.5 w-3.5" />
+					{/if}
+					{badge.label}
 				</Badge>
-			{/if}
-			{#if itemData.school}
-				<Badge variant="outline" class="gap-1.5">
-					<CompendiumCardIcon type="spells" {itemData} class="h-3.5 w-3.5" />
-					{formatValue(itemData.school)}
-				</Badge>
-			{/if}
-			{#if getPrimaryDamageType()}
-				<Badge variant="outline" class="gap-1.5">
-					<DamageTypeIcon type={getPrimaryDamageType()!} class="h-3.5 w-3.5" />
-					{formatValue(itemData.damage_types)}
-				</Badge>
-			{/if}
-			{#if getAoeShape()}
-				<Badge variant="outline" class="gap-1.5">
-					<AoeIcon shape={getAoeShape()!} class="h-3.5 w-3.5" />
-					{formatValue(itemData.target_type)}
-				</Badge>
-			{/if}
-			{#if itemData.concentration}
-				<Badge variant="outline">Concentration</Badge>
-			{/if}
-			{#if itemData.ritual}
-				<Badge variant="outline">Ritual</Badge>
-			{/if}
+			{/each}
 		</div>
-	{:else if type === 'classes'}
-		<div class="mt-5 flex flex-wrap gap-2">
-			{#if itemData.hit_dice}
-				<Badge variant="solid">Hit Die: d{itemData.hit_dice}</Badge>
-			{/if}
-			{#if itemData.primary_abilities}
-				<Badge variant="outline">{formatValue(itemData.primary_abilities)}</Badge>
-			{/if}
-			{#if itemData.saving_throws}
-				<Badge variant="outline">Saves: {formatValue(itemData.saving_throws)}</Badge>
-			{/if}
-		</div>
-	{:else if type === 'magicitems'}
-		<div class="mt-5 flex flex-wrap gap-2">
-			{#if itemData.rarity}
-				<Badge variant="solid">{String(itemData.rarity)}</Badge>
-			{/if}
-			{#if itemData.type}
-				<Badge variant="outline">{String(itemData.type)}</Badge>
-			{/if}
-			{#if itemData.requires_attunement}
-				<Badge variant="outline">Requires Attunement</Badge>
-			{/if}
-		</div>
-	{:else if type === 'images'}
-		<div class="mt-5 flex flex-wrap gap-2">
-			<Badge variant="solid">{getImageKindLabel(imageFileUrl)}</Badge>
-			{#if imageAttribution}
-				<Badge variant="outline">Attributed</Badge>
-			{/if}
-		</div>
-	{:else if type === 'conditions' && featuredRelatedImage}
+	{/if}
+
+	{#if type === 'conditions' && featuredRelatedImage}
 		<div class="mt-5 flex flex-wrap gap-2">
 			<Badge variant="solid">{getImageKindLabel(featuredRelatedImage.assetUrl)}</Badge>
 			<Badge variant="outline">Linked art</Badge>

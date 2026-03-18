@@ -4,6 +4,7 @@ import { getPaginatedItems } from '$lib/server/repositories/compendium';
 import { COMPENDIUM_TYPES } from '$lib/server/db/schema';
 import type { CompendiumType } from '$lib/server/db/schema';
 import { getQueryBucket } from '$lib/server/utils/query-performance';
+import { buildCompendiumListResult } from '$lib/server/services/compendium/list';
 
 type SortByParam = 'name' | 'created_at' | 'updated_at';
 
@@ -93,7 +94,9 @@ export const GET: RequestHandler = async ({ url }) => {
 			}
 		});
 
-		return json(result, { headers: formatTimingHeaders(performance.now() - start) });
+		return json(buildCompendiumListResult(result), {
+			headers: formatTimingHeaders(performance.now() - start)
+		});
 	} catch (err) {
 		console.error('GET /api/compendium/items failed', {
 			type,

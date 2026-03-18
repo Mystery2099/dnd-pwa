@@ -1,4 +1,5 @@
 // Test setup file for Vitest
+import '@testing-library/jest-dom/vitest';
 import { vi, afterEach } from 'vitest';
 
 // Mock SvelteKit app imports

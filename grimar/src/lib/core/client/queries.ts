@@ -14,7 +14,11 @@ import { createQuery } from '@tanstack/svelte-query';
 import type { QueryClient } from '@tanstack/svelte-query';
 import { ApiError } from './errors';
 import { perfTelemetryStore } from './perf-telemetry';
-import type { CompendiumSearchResult, CompendiumTypeName } from '$lib/core/types/compendium';
+import type {
+	CompendiumDetailPayload,
+	CompendiumSearchResult,
+	CompendiumTypeName
+} from '$lib/core/types/compendium';
 
 type SortByParam = 'name' | 'createdAt' | 'updatedAt';
 
@@ -51,6 +55,43 @@ const COMPENDIUM_FILTER_KEYS = [
 	'spellSchool',
 	'challengeRating'
 ] as const;
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+	return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
+
+function assertCompendiumListPayload(value: unknown): asserts value is CompendiumSearchResult {
+	if (
+		!isRecord(value) ||
+		value.listSchemaVersion !== 1 ||
+		!Array.isArray(value.items) ||
+		typeof value.total !== 'number' ||
+		typeof value.page !== 'number' ||
+		typeof value.pageSize !== 'number' ||
+		typeof value.totalPages !== 'number' ||
+		typeof value.hasMore !== 'boolean' ||
+		typeof value.resultsTruncated !== 'boolean'
+	) {
+		throw ApiError.validation('Invalid compendium list response', {
+			expectedSchemaVersion: 1
+		});
+	}
+}
+
+function assertCompendiumDetailPayload(value: unknown): asserts value is CompendiumDetailPayload {
+	if (
+		!isRecord(value) ||
+		value.detailSchemaVersion !== 1 ||
+		!isRecord(value.item) ||
+		!isRecord(value.presentation) ||
+		!Array.isArray(value.fields) ||
+		!Array.isArray(value.sections)
+	) {
+		throw ApiError.validation('Invalid compendium detail response', {
+			expectedSchemaVersion: 1
+		});
+	}
+}
 
 function normalizeCompendiumListParams(params: CompendiumListParams): Record<string, string> {
 	const normalized: Record<string, string> = {};
@@ -164,7 +205,9 @@ export async function fetchCompendiumList(
 		params.set(key, value);
 	}
 
-	return apiFetch(`/api/compendium/items?${params}`, { signal });
+	const payload = await apiFetch<unknown>(`/api/compendium/items?${params}`, { signal });
+	assertCompendiumListPayload(payload);
+	return payload;
 }
 
 /**
@@ -173,15 +216,22 @@ export async function fetchCompendiumList(
 export async function fetchCompendiumAll(pathType: string): Promise<CompendiumSearchResult> {
 	const apiType = pathType === 'subclasses' ? 'classes' : pathType;
 	const params = new URLSearchParams({ type: apiType, all: 'true' });
-	return apiFetch(`/api/compendium/items?${params}`);
+	const payload = await apiFetch<unknown>(`/api/compendium/items?${params}`);
+	assertCompendiumListPayload(payload);
+	return payload;
 }
 
 /**
  * Fetch a single compendium item by type and slug.
  */
-export async function fetchCompendiumDetail(type: string, slug: string): Promise<unknown> {
+export async function fetchCompendiumDetail(
+	type: string,
+	slug: string
+): Promise<CompendiumDetailPayload> {
 	const apiType = type === 'subclasses' ? 'classes' : type;
-	return apiFetch(`/api/compendium/${apiType}/${slug}`);
+	const payload = await apiFetch<unknown>(`/api/compendium/${apiType}/${slug}`);
+	assertCompendiumDetailPayload(payload);
+	return payload;
 }
 
 /**

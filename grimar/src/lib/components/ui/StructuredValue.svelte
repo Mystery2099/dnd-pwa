@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { resolveCompendiumLink } from '$lib/core/utils/compendium-links';
+	import { isCompendiumDetailReference } from '$lib/core/utils/compendium-detail-values';
 	import StructuredValue from './StructuredValue.svelte';
 	import { formatFieldName } from '$lib/utils/compendium';
 
@@ -8,6 +10,13 @@
 	}
 
 	let { value, depth = 0 }: Props = $props();
+
+	type CompendiumLink = {
+		label: string;
+		href: string;
+		meta?: string;
+		isExternal?: boolean;
+	};
 
 	function isUrlLikeString(input: string): boolean {
 		try {
@@ -32,7 +41,30 @@
 		return typeof entry === 'object' && entry !== null;
 	}
 
-	function getLinkedObject(input: unknown): { label: string; href: string; meta?: string } | null {
+	function isExternalLink(
+		input: CompendiumLink | { href: string; label: string; meta?: string }
+	): input is CompendiumLink {
+		return 'isExternal' in input && input.isExternal === true;
+	}
+
+	function getCompendiumLinkFromUrl(
+		input: string,
+		preferredLabel?: string,
+		meta?: string
+	): CompendiumLink | null {
+		const resolvedLink = resolveCompendiumLink(input, preferredLabel, meta);
+		if (!resolvedLink) {
+			return null;
+		}
+
+		return {
+			label: resolvedLink.label,
+			href: resolvedLink.href,
+			meta: resolvedLink.meta
+		};
+	}
+
+	function getLinkedObject(input: unknown): CompendiumLink | null {
 		if (!input || typeof input !== 'object' || Array.isArray(input)) return null;
 
 		const record = input as Record<string, unknown>;
@@ -63,10 +95,16 @@
 				? record.key
 				: undefined;
 
+		const internalCompendiumLink = getCompendiumLinkFromUrl(record.url, label, meta);
+		if (internalCompendiumLink) {
+			return internalCompendiumLink;
+		}
+
 		return {
 			label,
 			href: record.url,
-			meta
+			meta,
+			isExternal: true
 		};
 	}
 </script>
@@ -78,7 +116,15 @@
 {:else if typeof value === 'number'}
 	<span>{value.toLocaleString()}</span>
 {:else if typeof value === 'string'}
-	{#if isUrlLikeString(value)}
+	{@const internalCompendiumLink = getCompendiumLinkFromUrl(value)}
+	{#if internalCompendiumLink}
+		<a
+			href={internalCompendiumLink.href}
+			class="break-words text-accent transition-colors hover:text-accent/80"
+		>
+			{internalCompendiumLink.label}
+		</a>
+	{:else if isUrlLikeString(value)}
 		<a
 			href={value}
 			target="_blank"
@@ -106,14 +152,16 @@
 		{/each}
 	</ul>
 {:else if typeof value === 'object'}
-	{@const linkedObject = getLinkedObject(value)}
+	{@const entityValue = isCompendiumDetailReference(value) ? value : null}
+	{@const linkedObject = entityValue ?? getLinkedObject(value)}
 	{#if linkedObject}
+		{@const externalLink = isExternalLink(linkedObject)}
 		<div class="space-y-1">
 			<a
 				href={linkedObject.href}
-				target="_blank"
-				rel="noreferrer"
-				class="break-all text-accent transition-colors hover:text-accent/80"
+				target={externalLink ? '_blank' : undefined}
+				rel={externalLink ? 'noreferrer' : undefined}
+				class="break-words text-accent transition-colors hover:text-accent/80"
 			>
 				{linkedObject.label}
 			</a>
