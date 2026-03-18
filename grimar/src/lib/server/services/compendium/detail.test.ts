@@ -1,36 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { buildCompendiumDetailPayload, collectCompendiumMarkdownSources } from './detail';
-import type { CompendiumItem } from '$lib/server/db/schema';
-
-const BASE_LANGUAGE_URL = 'http://10.147.20.240:8888/v2/languages/infernal/';
-
-function createItem(overrides: Partial<CompendiumItem>): CompendiumItem {
-	return {
-		key: 'test-item',
-		type: 'languages',
-		name: 'Test Item',
-		source: 'open5e',
-		documentKey: null,
-		documentName: null,
-		gamesystemKey: null,
-		gamesystemName: null,
-		publisherKey: null,
-		publisherName: null,
-		description: null,
-		data: {},
-		createdAt: new Date(),
-		updatedAt: new Date(),
-		createdBy: null,
-		...overrides
-	};
-}
+import {
+	INFERNAL_LANGUAGE_URL,
+	makeCompendiumItem
+} from '../../../../test/fixtures/compendium';
 
 describe('buildCompendiumDetailPayload', () => {
 	it('normalizes plain Open5e URL strings into internal entity references', () => {
-		const item = createItem({
+		const item = makeCompendiumItem({
 			type: 'languages',
 			data: {
-				script_language: BASE_LANGUAGE_URL
+				script_language: INFERNAL_LANGUAGE_URL
 			}
 		});
 
@@ -48,7 +28,7 @@ describe('buildCompendiumDetailPayload', () => {
 					label: 'Infernal',
 					href: '/compendium/languages/infernal',
 					meta: undefined,
-					sourceUrl: BASE_LANGUAGE_URL
+					sourceUrl: INFERNAL_LANGUAGE_URL
 				}
 			}
 		]);
@@ -56,7 +36,7 @@ describe('buildCompendiumDetailPayload', () => {
 	});
 
 	it('promotes creature set rosters into a dedicated section', () => {
-		const item = createItem({
+		const item = makeCompendiumItem({
 			type: 'creaturesets',
 			data: {
 				name: 'Common Mounts',
@@ -100,12 +80,12 @@ describe('buildCompendiumDetailPayload', () => {
 	});
 
 	it('returns curated sidebar fields instead of raw unfiltered metadata', () => {
-		const item = createItem({
+		const item = makeCompendiumItem({
 			type: 'languages',
 			data: {
 				is_exotic: true,
 				is_secret: false,
-				script_language: BASE_LANGUAGE_URL
+				script_language: INFERNAL_LANGUAGE_URL
 			}
 		});
 
@@ -119,7 +99,7 @@ describe('buildCompendiumDetailPayload', () => {
 	});
 
 	it('promotes repeatable content arrays into structured sections', () => {
-		const item = createItem({
+		const item = makeCompendiumItem({
 			type: 'species',
 			data: {
 				traits: [
@@ -164,7 +144,7 @@ describe('buildCompendiumDetailPayload', () => {
 	});
 
 	it('groups typed background benefits into semantic sections', () => {
-		const item = createItem({
+		const item = makeCompendiumItem({
 			type: 'backgrounds',
 			data: {
 				benefits: [
@@ -221,7 +201,7 @@ describe('buildCompendiumDetailPayload', () => {
 	});
 
 	it('keeps weapon property markdown aligned after filtered property entries are skipped', () => {
-		const item = createItem({
+		const item = makeCompendiumItem({
 			type: 'weapons',
 			data: {
 				properties: [
@@ -265,7 +245,7 @@ describe('buildCompendiumDetailPayload', () => {
 	});
 
 	it('splits background connections and mementos into separate groups and markdown sources', () => {
-		const item = createItem({
+		const item = makeCompendiumItem({
 			type: 'backgrounds',
 			data: {
 				benefits: [
@@ -342,7 +322,7 @@ describe('buildCompendiumDetailPayload', () => {
 	});
 
 	it('promotes description, spell classes, higher-level text, and class features into sections', () => {
-		const spellItem = createItem({
+		const spellItem = makeCompendiumItem({
 			type: 'spells',
 			description: 'A bright streak flashes from your pointing finger.',
 			data: {
@@ -350,7 +330,7 @@ describe('buildCompendiumDetailPayload', () => {
 				higher_level: 'The damage increases by 1d6 for each slot level above 3rd.'
 			}
 		});
-		const classItem = createItem({
+		const classItem = makeCompendiumItem({
 			type: 'classes',
 			data: {
 				desc: 'Martial archetype text.',
@@ -425,7 +405,7 @@ describe('buildCompendiumDetailPayload', () => {
 	});
 
 	it('filters placeholder class table columns out of class features', () => {
-		const classItem = createItem({
+		const classItem = makeCompendiumItem({
 			type: 'classes',
 			data: {
 				features: [
@@ -470,7 +450,7 @@ describe('buildCompendiumDetailPayload', () => {
 	});
 
 	it('keeps class feature markdown aligned after placeholder rows are filtered out', () => {
-		const classItem = createItem({
+		const classItem = makeCompendiumItem({
 			type: 'classes',
 			data: {
 				features: [
@@ -507,7 +487,7 @@ describe('buildCompendiumDetailPayload', () => {
 	});
 
 	it('promotes class supplemental feature tables into standalone markdown sections', () => {
-		const classItem = createItem({
+		const classItem = makeCompendiumItem({
 			type: 'classes',
 			data: {
 				features: [
@@ -584,7 +564,7 @@ describe('buildCompendiumDetailPayload', () => {
 	});
 
 	it('does not leak raw class features into sidebar fields when only supplemental sections exist', () => {
-		const classItem = createItem({
+		const classItem = makeCompendiumItem({
 			type: 'classes',
 			data: {
 				features: [
@@ -616,7 +596,7 @@ describe('buildCompendiumDetailPayload', () => {
 	});
 
 	it('promotes class table data and spell slots into structured class tables', () => {
-		const classItem = createItem({
+		const classItem = makeCompendiumItem({
 			type: 'classes',
 			data: {
 				features: [
@@ -699,7 +679,7 @@ describe('buildCompendiumDetailPayload', () => {
 	});
 
 	it('builds normalized presentation metadata for images, creatures, and conditions', () => {
-		const imageItem = createItem({
+		const imageItem = makeCompendiumItem({
 			type: 'images',
 			documentName: 'Fallback Document',
 			data: {
@@ -715,7 +695,7 @@ describe('buildCompendiumDetailPayload', () => {
 				}
 			}
 		});
-		const creatureItem = createItem({
+		const creatureItem = makeCompendiumItem({
 			type: 'creatures',
 			data: {
 				challenge_rating_text: '2',
@@ -729,7 +709,7 @@ describe('buildCompendiumDetailPayload', () => {
 				experience_points: 450
 			}
 		});
-		const conditionItem = createItem({
+		const conditionItem = makeCompendiumItem({
 			type: 'conditions',
 			documentName: 'SRD Conditions',
 			data: {
@@ -808,7 +788,7 @@ describe('buildCompendiumDetailPayload', () => {
 	});
 
 	it('builds normalized header badges for spell, class, and magic item detail pages', () => {
-		const spellItem = createItem({
+		const spellItem = makeCompendiumItem({
 			type: 'spells',
 			data: {
 				level: 3,
@@ -819,7 +799,7 @@ describe('buildCompendiumDetailPayload', () => {
 				ritual: true
 			}
 		});
-		const classItem = createItem({
+		const classItem = makeCompendiumItem({
 			type: 'classes',
 			data: {
 				hit_dice: 8,
@@ -827,7 +807,7 @@ describe('buildCompendiumDetailPayload', () => {
 				saving_throws: ['Dexterity', 'Intelligence']
 			}
 		});
-		const magicItem = createItem({
+		const magicItem = makeCompendiumItem({
 			type: 'magicitems',
 			data: {
 				rarity: 'Rare',
@@ -869,7 +849,7 @@ describe('buildCompendiumDetailPayload', () => {
 	});
 
 	it('promotes creature encounter data into a dedicated section', () => {
-		const item = createItem({
+		const item = makeCompendiumItem({
 			type: 'creatures',
 			data: {
 				armor_class: 12,
@@ -915,7 +895,7 @@ describe('buildCompendiumDetailPayload', () => {
 	});
 
 	it('collects markdown sources from the normalized detail payload', () => {
-		const item = createItem({
+		const item = makeCompendiumItem({
 			type: 'creatures',
 			description: 'Creature overview.',
 			data: {

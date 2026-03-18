@@ -815,9 +815,10 @@ function buildSpellClassesSection(rawValue: unknown): CompendiumSpellClassesSect
 	const items = rawValue
 		.map((entry) => {
 			if (typeof entry === 'string' && entry.trim()) {
+				const trimmed = entry.trim();
 				return {
-					label: entry,
-					href: `/compendium/classes/${encodeURIComponent(entry)}`
+					label: trimmed,
+					href: `/compendium/classes/${encodeURIComponent(trimmed)}`
 				};
 			}
 
@@ -897,32 +898,6 @@ function buildClassFeaturesSection(rawValue: unknown): CompendiumClassFeaturesSe
 		description: 'Expandable feature entries grouped by the class progression.',
 		kind: 'class-features',
 		items,
-		defaultOpen: true
-	};
-}
-
-function buildClassCoreTraitsSection(rawValue: unknown): CompendiumMarkdownSection | null {
-	if (!Array.isArray(rawValue) || rawValue.length === 0) {
-		return null;
-	}
-
-	const entryIndex = rawValue.findIndex(
-		(entry) =>
-			isRecord(entry) &&
-			getFeatureType(entry.feature_type) === 'CORE_TRAITS_TABLE' &&
-			Boolean(getMeaningfulDescription(entry.desc))
-	);
-	if (entryIndex < 0) {
-		return null;
-	}
-
-	const entry = rawValue[entryIndex] as Record<string, unknown>;
-	return {
-		key: getString(entry.key) ?? 'core-traits',
-		title: getString(entry.name) ?? 'Core Traits',
-		description: 'Core class table data and training summary.',
-		kind: 'markdown',
-		markdownKey: `features.${entryIndex}.desc`,
 		defaultOpen: true
 	};
 }
