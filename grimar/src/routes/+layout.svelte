@@ -5,7 +5,6 @@
 	import { pwaInfo } from 'virtual:pwa-info';
 	import AppShell from '$lib/components/layout/AppShell.svelte';
 	import GlobalHeader from '$lib/components/layout/GlobalHeader.svelte';
-	import OfflineIndicator from '$lib/components/ui/OfflineIndicator.svelte';
 	import DebugControls from '$lib/components/ui/DebugControls.svelte';
 	import PerfTelemetryPanel from '$lib/components/ui/PerfTelemetryPanel.svelte';
 	import RouteSkeletonOverlay from '$lib/components/ui/RouteSkeletonOverlay.svelte';
@@ -167,21 +166,16 @@
 		<a
 			class="rounded-lg px-3 py-2 hover:bg-[var(--color-bg-card)] {isActive('/dashboard')}"
 			href="/dashboard">Dashboard</a
-		>
-		<a
+		>		<a
 			class="rounded-lg px-3 py-2 hover:bg-[var(--color-bg-card)] {isActive('/compendium')}"
 			href="/compendium">Compendium</a
-		>
-		<a
-			class="pointer-events-none rounded-lg px-3 py-2 opacity-50 hover:bg-[var(--color-bg-card)] {isActive(
+		>		<a
+			class="rounded-lg px-3 py-2 hover:bg-[var(--color-bg-card)] {isActive(
 				'/characters'
 			)}"
 			href="/characters">Characters</a
-		>
-		<a
-			class="pointer-events-none rounded-lg px-3 py-2 opacity-50 hover:bg-[var(--color-bg-card)] {isActive(
-				'/forge'
-			)}"
+		>		<a
+			class="pointer-events-none rounded-lg px-3 py-2 opacity-50 hover:bg-[var(--color-bg-card)]"
 			href="/forge">The Forge</a
 		>
 
@@ -191,14 +185,9 @@
 			System
 		</div>
 		<a
-			class="rounded-lg px-3 py-2 hover:bg-[var(--color-bg-card)] {isActive('/settings')}"
+			class="pointer-events-none rounded-lg px-3 py-2 opacity-50 hover:bg-[var(--color-bg-card)]"
 			href="/settings">Settings</a
 		>
-
-		<!-- Offline Status Indicator -->
-		<div class="mt-4">
-			<OfflineIndicator showDetails={true} />
-		</div>
 	</nav>
 {/snippet}
 

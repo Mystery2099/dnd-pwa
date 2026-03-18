@@ -7,6 +7,7 @@
 	type NavItem = {
 		href: string;
 		label: string;
+		disabled?: boolean;
 	};
 
 	type Props = {
@@ -18,7 +19,8 @@
 		items = [
 			{ href: '/dashboard', label: 'Dashboard' },
 			{ href: '/compendium', label: 'Compendium' },
-			{ href: '/homebrew', label: 'My Homebrew' },
+			{ href: '/characters', label: 'Characters' },
+			{ href: '/forge', label: 'The Forge', disabled: true },
 			{ href: '/settings', label: 'Settings' }
 		],
 		open = $bindable(false)
@@ -90,13 +92,21 @@
 				<nav class="relative p-4">
 					<div class="flex flex-col gap-2 text-sm font-medium">
 						{#each items as item (item.href)}
-							<a
-								class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] px-4 py-3 text-[var(--color-text-primary)] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_5%,transparent)] transition-all duration-200 ease-out hover:border-[var(--color-accent)]/20 hover:bg-[var(--color-bg-card)]"
-								href={item.href}
-								onclick={close}
-							>
-								{item.label}
-							</a>
+							{#if item.disabled}
+								<span
+									class="pointer-events-none rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] px-4 py-3 opacity-50 text-[var(--color-text-primary)]"
+								>
+									{item.label}
+								</span>
+							{:else}
+								<a
+									class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] px-4 py-3 text-[var(--color-text-primary)] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_5%,transparent)] transition-all duration-200 ease-out hover:border-[var(--color-accent)]/20 hover:bg-[var(--color-bg-card)]"
+									href={item.href}
+									onclick={close}
+								>
+									{item.label}
+								</a>
+							{/if}
 						{/each}
 					</div>
 				</nav>
