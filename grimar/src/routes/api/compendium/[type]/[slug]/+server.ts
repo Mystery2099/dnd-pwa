@@ -12,19 +12,28 @@ export const GET: RequestHandler = async ({ params }) => {
 		throw error(400, 'Invalid compendium type');
 	}
 
-	const item = await getItem(type as CompendiumType, slug);
-
-	if (!item) {
-		throw error(404, 'Item not found');
-	}
-
 	try {
+		const item = await getItem(type as CompendiumType, slug);
+
+		if (!item) {
+			throw error(404, 'Item not found');
+		}
+
 		return json(buildCompendiumDetailPayload(item));
-	} catch (buildError) {
+	} catch (requestError) {
+		if (
+			requestError &&
+			typeof requestError === 'object' &&
+			'status' in requestError &&
+			typeof requestError.status === 'number'
+		) {
+			throw requestError;
+		}
+
 		console.error('GET /api/compendium/[type]/[slug] failed to build payload', {
 			type,
 			slug,
-			error: buildError
+			error: requestError
 		});
 		return json({ error: 'Failed to build compendium payload' }, { status: 500 });
 	}

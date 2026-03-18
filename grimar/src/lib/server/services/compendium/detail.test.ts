@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { buildCompendiumDetailPayload, collectCompendiumMarkdownSources } from './detail';
 import type { CompendiumItem } from '$lib/server/db/schema';
 
+const BASE_LANGUAGE_URL = 'http://10.147.20.240:8888/v2/languages/infernal/';
+
 function createItem(overrides: Partial<CompendiumItem>): CompendiumItem {
 	return {
 		key: 'test-item',
@@ -28,7 +30,7 @@ describe('buildCompendiumDetailPayload', () => {
 		const item = createItem({
 			type: 'languages',
 			data: {
-				script_language: 'http://10.147.20.240:8888/v2/languages/infernal/'
+				script_language: BASE_LANGUAGE_URL
 			}
 		});
 
@@ -46,7 +48,7 @@ describe('buildCompendiumDetailPayload', () => {
 					label: 'Infernal',
 					href: '/compendium/languages/infernal',
 					meta: undefined,
-					sourceUrl: 'http://10.147.20.240:8888/v2/languages/infernal/'
+					sourceUrl: BASE_LANGUAGE_URL
 				}
 			}
 		]);
@@ -103,7 +105,7 @@ describe('buildCompendiumDetailPayload', () => {
 			data: {
 				is_exotic: true,
 				is_secret: false,
-				script_language: 'http://10.147.20.240:8888/v2/languages/infernal/'
+				script_language: BASE_LANGUAGE_URL
 			}
 		});
 
@@ -344,7 +346,7 @@ describe('buildCompendiumDetailPayload', () => {
 			type: 'spells',
 			description: 'A bright streak flashes from your pointing finger.',
 			data: {
-				classes: [{ key: 'wizard', name: 'Wizard' }, 'sorcerer'],
+				classes: [{ key: 'wizard', name: 'Wizard' }, 'sorcerer', 'eldritch knight'],
 				higher_level: 'The damage increases by 1d6 for each slot level above 3rd.'
 			}
 		});
@@ -383,7 +385,8 @@ describe('buildCompendiumDetailPayload', () => {
 				kind: 'spell-classes',
 				items: [
 					{ label: 'Wizard', href: '/compendium/classes/wizard' },
-					{ label: 'sorcerer', href: '/compendium/classes/sorcerer' }
+					{ label: 'sorcerer', href: '/compendium/classes/sorcerer' },
+					{ label: 'eldritch knight', href: '/compendium/classes/eldritch%20knight' }
 				]
 			},
 			{

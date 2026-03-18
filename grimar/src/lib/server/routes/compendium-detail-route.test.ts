@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { INFERNAL_LANGUAGE_URL, makeCompendiumItem } from '../../../test/fixtures/compendium';
 
 const getItemMock = vi.fn();
 const buildCompendiumDetailPayloadMock = vi.fn();
@@ -26,25 +27,13 @@ describe('GET /api/compendium/[type]/[slug]', () => {
 	it('returns the normalized detail payload for valid requests', async () => {
 		const { GET } = await import('../../../routes/api/compendium/[type]/[slug]/+server');
 
-		getItemMock.mockResolvedValueOnce({
-			key: 'common',
-			type: 'languages',
-			name: 'Common',
-			source: 'open5e',
-			documentKey: null,
-			documentName: null,
-			gamesystemKey: null,
-			gamesystemName: null,
-			publisherKey: null,
-			publisherName: null,
-			description: null,
-			data: {
-				script_language: 'http://10.147.20.240:8888/v2/languages/infernal/'
-			},
-			createdAt: new Date(),
-			updatedAt: new Date(),
-			createdBy: null
-		});
+		getItemMock.mockResolvedValueOnce(
+			makeCompendiumItem({
+				data: {
+					script_language: INFERNAL_LANGUAGE_URL
+				}
+			})
+		);
 		buildCompendiumDetailPayloadMock.mockImplementation(actualBuildCompendiumDetailPayload);
 
 		const response = await GET({
@@ -98,23 +87,7 @@ describe('GET /api/compendium/[type]/[slug]', () => {
 	it('returns a controlled 500 response when payload normalization fails', async () => {
 		const { GET } = await import('../../../routes/api/compendium/[type]/[slug]/+server');
 
-		getItemMock.mockResolvedValueOnce({
-			key: 'common',
-			type: 'languages',
-			name: 'Common',
-			source: 'open5e',
-			documentKey: null,
-			documentName: null,
-			gamesystemKey: null,
-			gamesystemName: null,
-			publisherKey: null,
-			publisherName: null,
-			description: null,
-			data: {},
-			createdAt: new Date(),
-			updatedAt: new Date(),
-			createdBy: null
-		});
+		getItemMock.mockResolvedValueOnce(makeCompendiumItem());
 		buildCompendiumDetailPayloadMock.mockImplementation(() => {
 			throw new Error('malformed data');
 		});
@@ -127,5 +100,21 @@ describe('GET /api/compendium/[type]/[slug]', () => {
 		await expect(response.json()).resolves.toEqual({
 			error: 'Failed to build compendium payload'
 		});
+	});
+
+	it('returns a controlled 500 response when the repository read fails', async () => {
+		const { GET } = await import('../../../routes/api/compendium/[type]/[slug]/+server');
+
+		getItemMock.mockRejectedValueOnce(new Error('db unavailable'));
+
+		const response = await GET({
+			params: { type: 'languages', slug: 'common' }
+		} as Parameters<typeof GET>[0]);
+
+		expect(response.status).toBe(500);
+		await expect(response.json()).resolves.toEqual({
+			error: 'Failed to build compendium payload'
+		});
+		expect(buildCompendiumDetailPayloadMock).not.toHaveBeenCalled();
 	});
 });

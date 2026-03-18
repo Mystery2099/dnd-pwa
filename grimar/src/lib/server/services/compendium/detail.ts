@@ -817,7 +817,7 @@ function buildSpellClassesSection(rawValue: unknown): CompendiumSpellClassesSect
 			if (typeof entry === 'string' && entry.trim()) {
 				return {
 					label: entry,
-					href: `/compendium/classes/${entry}`
+					href: `/compendium/classes/${encodeURIComponent(entry)}`
 				};
 			}
 
@@ -833,7 +833,7 @@ function buildSpellClassesSection(rawValue: unknown): CompendiumSpellClassesSect
 			const key = getString(entry.key) ?? getString(entry.name);
 			return {
 				label,
-				href: key ? `/compendium/classes/${key}` : undefined
+				href: key ? `/compendium/classes/${encodeURIComponent(key)}` : undefined
 			};
 		})
 		.filter((entry): entry is NonNullable<typeof entry> => entry !== null);
