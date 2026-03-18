@@ -14,7 +14,7 @@
 	// Initialize theme synchronously before first render to prevent FOUC
 	initThemeSync();
 
-	let { children } = $props();
+	let { data, children } = $props();
 	const webManifestLink =
 		typeof pwaInfo?.webManifest?.linkTag === 'string' &&
 		pwaInfo.webManifest.linkTag.length > 0 &&
@@ -95,7 +95,7 @@
 	{/if}
 </svelte:head>
 
-<AppShell>
+<AppShell user={data.shellUser}>
 	<ClientQueryProvider client={queryClient}>
 		{@render children()}
 	</ClientQueryProvider>
