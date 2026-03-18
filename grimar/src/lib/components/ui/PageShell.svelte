@@ -7,10 +7,18 @@
 		description?: string;
 		class?: string;
 		centered?: boolean;
+		showHeader?: boolean;
 		children?: Snippet;
 	}
 
-	let { title, description, class: className = '', centered = false, children }: Props = $props();
+	let {
+		title,
+		description,
+		class: className = '',
+		centered = false,
+		showHeader = true,
+		children
+	}: Props = $props();
 </script>
 
 <SurfaceCard
@@ -19,13 +27,15 @@
 		? `flex min-h-[60vh] flex-col items-center justify-center text-center ${className}`
 		: className}
 >
-	<h1 class="text-holo mb-2 text-3xl font-bold tracking-tight">
-		{title}
-	</h1>
-	{#if description}
-		<p class="mb-6 text-[var(--color-text-secondary)]">
-			{description}
-		</p>
+	{#if showHeader}
+		<h1 class="text-holo mb-2 text-3xl font-bold tracking-tight">
+			{title}
+		</h1>
+		{#if description}
+			<p class="mb-6 text-[var(--color-text-secondary)]">
+				{description}
+			</p>
+		{/if}
 	{/if}
 	<div class="w-full">
 		{#if children}

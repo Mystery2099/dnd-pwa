@@ -88,11 +88,14 @@
 	<title>Import Homebrew | Grimar</title>
 </svelte:head>
 
-<PageShell title="Import Homebrew">
-	<div class="mb-6">
-		<a href="/homebrew" class="text-[var(--color-text-secondary)] hover:underline"
+<PageShell title="Import Homebrew" showHeader={false}>
+	<div class="mb-6 flex items-center justify-between gap-4">
+		<a href="/homebrew" class="text-sm text-[var(--color-text-secondary)] hover:underline"
 			>&larr; Back to Homebrew</a
 		>
+		<div class="text-[0.68rem] font-semibold tracking-[0.24em] text-[var(--color-text-muted)] uppercase">
+			Import Archive
+		</div>
 	</div>
 
 	<div class="rounded-xl bg-[var(--color-bg-card)] p-6">

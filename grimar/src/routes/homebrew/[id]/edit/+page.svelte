@@ -55,11 +55,14 @@
 	<title>Edit {data.item.name} | Homebrew | Grimar</title>
 </svelte:head>
 
-<PageShell title="Edit {typeLabels[data.item.type] || data.item.type}">
-	<div class="mb-6">
-		<a href="/homebrew" class="text-[var(--color-text-secondary)] hover:underline">
+<PageShell title="Edit {typeLabels[data.item.type] || data.item.type}" showHeader={false}>
+	<div class="mb-6 flex items-center justify-between gap-4">
+		<a href="/homebrew" class="text-sm text-[var(--color-text-secondary)] hover:underline">
 			&larr; Back to Homebrew
 		</a>
+		<div class="text-[0.68rem] font-semibold tracking-[0.24em] text-[var(--color-text-muted)] uppercase">
+			Edit Entry
+		</div>
 	</div>
 
 	{#if error}

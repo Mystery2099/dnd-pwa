@@ -13,13 +13,15 @@
 	<title>Characters | Grimar</title>
 </svelte:head>
 
-<div class="min-h-[calc(100vh-6rem)] p-4">
-	<SurfaceCard padding="p-6 md:p-8">
-		<h1 class="text-holo mb-1 text-3xl font-bold tracking-tight text-[var(--color-text-primary)]">
-			My Characters
-		</h1>
-		<p class="mb-6 text-sm text-[var(--color-text-muted)]">Manage your heroes and adventurers.</p>
+<div class="min-h-[calc(100vh-6rem)] space-y-4 px-1">
+	<div class="flex items-center justify-between gap-4">
+		<p class="text-sm text-[var(--color-text-secondary)]">Manage your heroes and adventurers.</p>
+		<div class="text-[0.68rem] font-semibold tracking-[0.24em] text-[var(--color-text-muted)] uppercase">
+			Roster
+		</div>
+	</div>
 
+	<SurfaceCard padding="p-6 md:p-8">
 		{#if charactersQuery.isPending}
 			<div class="flex items-center justify-center py-12">
 				<div class="text-[var(--color-text-muted)]">Loading characters...</div>

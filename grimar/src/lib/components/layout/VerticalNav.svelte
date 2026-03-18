@@ -174,7 +174,7 @@
 		{#if user}
 			<a
 				href="/settings"
-				class="group flex items-center gap-3 rounded-xl border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_52%,transparent),color-mix(in_srgb,var(--color-bg-overlay)_18%,transparent))] px-3 py-3 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent)] transition-[border-color,background-color,transform,padding,gap] duration-300 ease-[var(--ease-smooth)] hover:border-[var(--color-border-hover)] hover:bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_62%,transparent),color-mix(in_srgb,var(--color-bg-overlay)_24%,transparent))] {collapsed
+				class="group flex h-16 w-full items-center gap-3 overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_52%,transparent),color-mix(in_srgb,var(--color-bg-overlay)_18%,transparent))] px-3 py-3 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent)] transition-[border-color,background-color,transform,padding,gap] duration-300 ease-[var(--ease-smooth)] hover:border-[var(--color-border-hover)] hover:bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_62%,transparent),color-mix(in_srgb,var(--color-bg-overlay)_24%,transparent))] {collapsed
 					? 'justify-center'
 					: ''}"
 			>
@@ -184,22 +184,24 @@
 					{accountInitials}
 				</div>
 
-				{#if !collapsed}
-					<div class="min-w-0 flex-1">
-						<p class="truncate text-sm font-semibold text-[var(--color-text-primary)]">
-							{accountDisplayName}
-						</p>
-						<div
-							class="mt-0.5 flex items-center gap-2 text-[0.62rem] font-semibold tracking-[0.22em] text-[var(--color-accent)] uppercase"
-						>
-							<span>{accountRole}</span>
-							<span
-								class="size-1 rounded-full bg-[var(--color-accent)] shadow-[0_0_8px_var(--color-accent-glow)]"
-								aria-hidden="true"
-							></span>
-						</div>
+				<div
+					class="min-w-0 overflow-hidden transition-[max-width,opacity] duration-300 ease-[var(--ease-smooth)] {collapsed
+						? 'max-w-0 opacity-0'
+						: 'max-w-[9rem] flex-1 opacity-100'}"
+				>
+					<p class="truncate text-sm font-semibold text-[var(--color-text-primary)]">
+						{accountDisplayName}
+					</p>
+					<div
+						class="mt-0.5 flex items-center gap-2 text-[0.62rem] font-semibold tracking-[0.22em] text-[var(--color-accent)] uppercase"
+					>
+						<span>{accountRole}</span>
+						<span
+							class="size-1 rounded-full bg-[var(--color-accent)] shadow-[0_0_8px_var(--color-accent-glow)]"
+							aria-hidden="true"
+						></span>
 					</div>
-				{/if}
+				</div>
 			</a>
 		{/if}
 	</div>

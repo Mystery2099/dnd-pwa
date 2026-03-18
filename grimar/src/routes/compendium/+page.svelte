@@ -24,6 +24,7 @@
 <PageShell
 	title="Compendium"
 	description="Browse the complete D&D 5e reference library"
+	showHeader={false}
 	class="!bg-transparent !px-4 !py-3 md:!px-6 md:!py-5"
 >
 	<div class="space-y-8 pb-2">
