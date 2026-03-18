@@ -211,27 +211,27 @@
 /* Amethyst - Deep mystical purple (default) */
 :root,
 [data-theme='amethyst'] {
-	--theme-bg-canvas: #0f172a;
-	--theme-bg-card: rgba(30, 27, 75, 0.6);
-	--theme-bg-overlay: rgba(49, 46, 129, 0.8);
-	--theme-accent: #a855f7;
-	--theme-accent-glow: rgba(168, 85, 247, 0.5);
-	--theme-accent-rgb: 168, 85, 247;
-	--theme-bg-overlay-rgb: 49, 46, 129;
+	--theme-bg-canvas: #120f1d;
+	--theme-bg-card: rgba(49, 30, 87, 0.42);
+	--theme-bg-overlay: rgba(70, 48, 124, 0.62);
+	--theme-accent: #bb86ff;
+	--theme-accent-glow: rgba(187, 134, 255, 0.52);
+	--theme-accent-rgb: 187, 134, 255;
+	--theme-bg-overlay-rgb: 70, 48, 124;
 	--theme-gem-ruby: #f472b6;
 	--theme-gem-sapphire: #38bdf8;
 	--theme-gem-emerald: #4ade80;
 	--theme-gem-amethyst: #c084fc;
 	--theme-gem-topaz: #fbbf24;
-	--theme-text-primary: #f8fafc;
-	--theme-text-secondary: #94a3b8;
-	--theme-text-muted: #94a3b8;
+	--theme-text-primary: #f6f0ff;
+	--theme-text-secondary: #ccb8ee;
+	--theme-text-muted: #9b85bf;
 	--theme-text-inverted: #ffffff;
-	--theme-shadow: rgba(0, 0, 0, 0.5);
-	--theme-overlay-light: rgba(255, 255, 255, 0.1);
-	--theme-overlay-dark: rgba(0, 0, 0, 0.3);
-	--theme-border: rgba(255, 255, 255, 0.15);
-	--theme-border-hover: rgba(255, 255, 255, 0.3);
+	--theme-shadow: rgba(0, 0, 0, 0.62);
+	--theme-overlay-light: rgba(255, 255, 255, 0.08);
+	--theme-overlay-dark: rgba(0, 0, 0, 0.42);
+	--theme-border: rgba(214, 189, 255, 0.16);
+	--theme-border-hover: rgba(214, 189, 255, 0.34);
 	--theme-effect-url: '';
 
 	/* Typography */
@@ -250,28 +250,28 @@
 
 /* Arcane - Gold runes on dark leather */
 [data-theme='arcane'] {
-	--theme-bg-canvas: #271c19; /* Dark Espresso Leather */
-	--theme-bg-card: rgba(66, 32, 6, 0.5); /* Amber glass */
-	--theme-bg-overlay: rgba(120, 53, 15, 0.6);
+	--theme-bg-canvas: #18110d;
+	--theme-bg-card: rgba(87, 49, 18, 0.4);
+	--theme-bg-overlay: rgba(120, 72, 28, 0.58);
 
 	/* Accent: Golden Amber */
-	--theme-accent: #fbbf24;
-	--theme-accent-glow: rgba(251, 191, 36, 0.5);
-	--theme-accent-rgb: 251, 191, 36;
-	--theme-bg-overlay-rgb: 120, 53, 15;
+	--theme-accent: #d9b24b;
+	--theme-accent-glow: rgba(217, 178, 75, 0.5);
+	--theme-accent-rgb: 217, 178, 75;
+	--theme-bg-overlay-rgb: 120, 72, 28;
 
 	/* Text: Parchment/Papyrus */
-	--theme-text-primary: #fef3c7; /* Amber-100 */
-	--theme-text-secondary: #fcd34d; /* Amber-300 */
-	--theme-text-muted: #fbbf24;
+	--theme-text-primary: #f7ead2;
+	--theme-text-secondary: #d9c08d;
+	--theme-text-muted: #a1844a;
 	--theme-text-inverted: #fef3c7;
-	--theme-shadow: rgba(0, 0, 0, 0.6);
+	--theme-shadow: rgba(0, 0, 0, 0.68);
 	--theme-overlay-light: rgba(254, 243, 199, 0.08);
-	--theme-overlay-dark: rgba(0, 0, 0, 0.4);
+	--theme-overlay-dark: rgba(0, 0, 0, 0.48);
 
 	/* Border: Gold leaf */
-	--theme-border: rgba(251, 191, 36, 0.2);
-	--theme-border-hover: rgba(251, 191, 36, 0.5);
+	--theme-border: rgba(217, 178, 75, 0.18);
+	--theme-border-hover: rgba(217, 178, 75, 0.38);
 
 	/* Typography */
 	--theme-font-display: 'Cinzel', Georgia, serif;
@@ -289,28 +289,28 @@
 
 /* Nature - Bioluminescence in the dark */
 [data-theme='nature'] {
-	--theme-bg-canvas: #022c22; /* Very deep jungle night */
-	--theme-bg-card: rgba(6, 78, 59, 0.5); /* Deep moss glass */
-	--theme-bg-overlay: rgba(6, 95, 70, 0.7);
+	--theme-bg-canvas: #081713;
+	--theme-bg-card: rgba(20, 78, 58, 0.38);
+	--theme-bg-overlay: rgba(28, 98, 74, 0.58);
 
 	/* Accent: Spring Green / Neon Leaf */
-	--theme-accent: #4ade80;
-	--theme-accent-glow: rgba(74, 222, 128, 0.5);
-	--theme-accent-rgb: 74, 222, 128;
-	--theme-bg-overlay-rgb: 6, 95, 70;
+	--theme-accent: #79dd9f;
+	--theme-accent-glow: rgba(121, 221, 159, 0.48);
+	--theme-accent-rgb: 121, 221, 159;
+	--theme-bg-overlay-rgb: 28, 98, 74;
 
 	/* Text: Pale Mint */
-	--theme-text-primary: #f0fdf4;
-	--theme-text-secondary: #86efac;
-	--theme-text-muted: #6ee7b7;
+	--theme-text-primary: #eef8f1;
+	--theme-text-secondary: #b6dcbc;
+	--theme-text-muted: #6ca287;
 	--theme-text-inverted: #f0fdf4;
-	--theme-shadow: rgba(0, 0, 0, 0.5);
-	--theme-overlay-light: rgba(255, 255, 255, 0.08);
-	--theme-overlay-dark: rgba(0, 0, 0, 0.4);
+	--theme-shadow: rgba(0, 0, 0, 0.62);
+	--theme-overlay-light: rgba(255, 255, 255, 0.06);
+	--theme-overlay-dark: rgba(0, 0, 0, 0.46);
 
 	/* Border: Vine-like */
-	--theme-border: rgba(134, 239, 172, 0.15);
-	--theme-border-hover: rgba(74, 222, 128, 0.4);
+	--theme-border: rgba(121, 221, 159, 0.16);
+	--theme-border-hover: rgba(121, 221, 159, 0.34);
 
 	/* Typography */
 	--theme-font-display: 'DM Serif Display', Georgia, serif;
@@ -328,28 +328,28 @@
 
 /* Fire - Magma flowing over cold stone */
 [data-theme='fire'] {
-	--theme-bg-canvas: #1c1917; /* Warm Dark Stone */
-	--theme-bg-card: rgba(41, 37, 36, 0.6); /* Semi-transparent Ash */
-	--theme-bg-overlay: rgba(68, 64, 60, 0.7);
+	--theme-bg-canvas: #16100d;
+	--theme-bg-card: rgba(86, 43, 24, 0.38);
+	--theme-bg-overlay: rgba(112, 58, 28, 0.58);
 
 	/* Accent: Blazing Orange/Red */
-	--theme-accent: #f97316;
-	--theme-accent-glow: rgba(249, 115, 22, 0.5);
-	--theme-accent-rgb: 249, 115, 22;
-	--theme-bg-overlay-rgb: 68, 64, 60;
+	--theme-accent: #ff8a3d;
+	--theme-accent-glow: rgba(255, 138, 61, 0.5);
+	--theme-accent-rgb: 255, 138, 61;
+	--theme-bg-overlay-rgb: 112, 58, 28;
 
 	/* Text: Hot White/Peach */
-	--theme-text-primary: #fff7ed;
-	--theme-text-secondary: #fdba74; /* Orange-300 */
-	--theme-text-muted: #d6d3d1;
+	--theme-text-primary: #fff1e4;
+	--theme-text-secondary: #e5b38f;
+	--theme-text-muted: #b28a70;
 	--theme-text-inverted: #fff7ed;
-	--theme-shadow: rgba(0, 0, 0, 0.5);
-	--theme-overlay-light: rgba(255, 255, 255, 0.08);
-	--theme-overlay-dark: rgba(0, 0, 0, 0.4);
+	--theme-shadow: rgba(0, 0, 0, 0.64);
+	--theme-overlay-light: rgba(255, 255, 255, 0.06);
+	--theme-overlay-dark: rgba(0, 0, 0, 0.48);
 
 	/* Border: Embers */
-	--theme-border: rgba(253, 186, 116, 0.15);
-	--theme-border-hover: rgba(249, 115, 22, 0.4);
+	--theme-border: rgba(255, 160, 97, 0.16);
+	--theme-border-hover: rgba(255, 138, 61, 0.36);
 
 	/* Typography */
 	--theme-font-display: 'Teko', system-ui, sans-serif;
@@ -367,28 +367,28 @@
 
 /* Ice - Deep freeze */
 [data-theme='ice'] {
-	--theme-bg-canvas: #082f49; /* Deep Sky Dark */
-	--theme-bg-card: rgba(12, 74, 110, 0.6);
-	--theme-bg-overlay: rgba(7, 89, 133, 0.7);
+	--theme-bg-canvas: #08131b;
+	--theme-bg-card: rgba(20, 73, 99, 0.38);
+	--theme-bg-overlay: rgba(34, 107, 138, 0.54);
 
 	/* Accent: Cyan Ice */
-	--theme-accent: #67e8f9;
-	--theme-accent-glow: rgba(103, 232, 249, 0.5);
-	--theme-accent-rgb: 103, 232, 249;
-	--theme-bg-overlay-rgb: 7, 89, 133;
+	--theme-accent: #94ecff;
+	--theme-accent-glow: rgba(148, 236, 255, 0.48);
+	--theme-accent-rgb: 148, 236, 255;
+	--theme-bg-overlay-rgb: 34, 107, 138;
 
 	/* Text: Frosty White/Blue */
-	--theme-text-primary: #f0f9ff;
-	--theme-text-secondary: #bae6fd;
-	--theme-text-muted: #38bdf8;
+	--theme-text-primary: #edf8fc;
+	--theme-text-secondary: #bedde7;
+	--theme-text-muted: #77aebd;
 	--theme-text-inverted: #f0f9ff;
-	--theme-shadow: rgba(0, 0, 0, 0.5);
-	--theme-overlay-light: rgba(255, 255, 255, 0.1);
-	--theme-overlay-dark: rgba(0, 0, 0, 0.4);
+	--theme-shadow: rgba(0, 0, 0, 0.64);
+	--theme-overlay-light: rgba(255, 255, 255, 0.08);
+	--theme-overlay-dark: rgba(0, 0, 0, 0.46);
 
 	/* Border: Icicle sharp */
-	--theme-border: rgba(186, 230, 253, 0.15);
-	--theme-border-hover: rgba(103, 232, 249, 0.5);
+	--theme-border: rgba(148, 236, 255, 0.16);
+	--theme-border-hover: rgba(148, 236, 255, 0.34);
 
 	/* Typography */
 	--theme-font-display: 'Outfit', system-ui, sans-serif;
@@ -406,28 +406,28 @@
 
 /* Void - Cosmic emptiness */
 [data-theme='void'] {
-	--theme-bg-canvas: #0a0a0a; /* Almost Pure Black */
-	--theme-bg-card: rgba(23, 23, 23, 0.8); /* Neutral Zinc */
-	--theme-bg-overlay: rgba(38, 38, 38, 0.8);
+	--theme-bg-canvas: #09070d;
+	--theme-bg-card: rgba(34, 21, 46, 0.42);
+	--theme-bg-overlay: rgba(52, 33, 70, 0.58);
 
 	/* Accent: Electric Violet */
-	--theme-accent: #c084fc;
-	--theme-accent-glow: rgba(192, 132, 252, 0.6);
-	--theme-accent-rgb: 192, 132, 252;
-	--theme-bg-overlay-rgb: 38, 38, 38;
+	--theme-accent: #d2a6ff;
+	--theme-accent-glow: rgba(210, 166, 255, 0.54);
+	--theme-accent-rgb: 210, 166, 255;
+	--theme-bg-overlay-rgb: 52, 33, 70;
 
 	/* Text: Silver & Ghost Purple */
-	--theme-text-primary: #fafafa;
-	--theme-text-secondary: #e9d5ff; /* Purple-200 */
-	--theme-text-muted: #a855f7;
+	--theme-text-primary: #f6f2fb;
+	--theme-text-secondary: #d8caea;
+	--theme-text-muted: #9b88ba;
 	--theme-text-inverted: #fafafa;
-	--theme-shadow: rgba(0, 0, 0, 0.6);
+	--theme-shadow: rgba(0, 0, 0, 0.74);
 	--theme-overlay-light: rgba(255, 255, 255, 0.06);
-	--theme-overlay-dark: rgba(0, 0, 0, 0.5);
+	--theme-overlay-dark: rgba(0, 0, 0, 0.58);
 
 	/* Border: Faint nebulae */
-	--theme-border: rgba(192, 132, 252, 0.15);
-	--theme-border-hover: rgba(192, 132, 252, 0.4);
+	--theme-border: rgba(210, 166, 255, 0.14);
+	--theme-border-hover: rgba(210, 166, 255, 0.3);
 
 	/* Typography */
 	--theme-font-display: 'Space Grotesk', system-ui, sans-serif;
@@ -445,28 +445,28 @@
 
 /* Ocean - Mariana Trench */
 [data-theme='ocean'] {
-	--theme-bg-canvas: #020617; /* Slate-950 (Ink Blue) */
-	--theme-bg-card: rgba(30, 41, 59, 0.6);
-	--theme-bg-overlay: rgba(15, 23, 42, 0.8);
+	--theme-bg-canvas: #050b12;
+	--theme-bg-card: rgba(18, 45, 58, 0.4);
+	--theme-bg-overlay: rgba(23, 63, 74, 0.58);
 
 	/* Accent: Deep Sea Teal */
-	--theme-accent: #14b8a6;
-	--theme-accent-glow: rgba(20, 184, 166, 0.5);
-	--theme-accent-rgb: 20, 184, 166;
-	--theme-bg-overlay-rgb: 15, 23, 42;
+	--theme-accent: #46d7c8;
+	--theme-accent-glow: rgba(70, 215, 200, 0.48);
+	--theme-accent-rgb: 70, 215, 200;
+	--theme-bg-overlay-rgb: 23, 63, 74;
 
 	/* Text: Pale Aqua */
-	--theme-text-primary: #f0fdfa;
-	--theme-text-secondary: #5eead4;
-	--theme-text-muted: #14b8a6;
+	--theme-text-primary: #eaf8f6;
+	--theme-text-secondary: #9fd4d0;
+	--theme-text-muted: #5e9a98;
 	--theme-text-inverted: #f0fdfa;
-	--theme-shadow: rgba(0, 0, 0, 0.5);
+	--theme-shadow: rgba(0, 0, 0, 0.68);
 	--theme-overlay-light: rgba(255, 255, 255, 0.06);
-	--theme-overlay-dark: rgba(0, 0, 0, 0.5);
+	--theme-overlay-dark: rgba(0, 0, 0, 0.54);
 
 	/* Border: Saltwater */
-	--theme-border: rgba(94, 234, 212, 0.1);
-	--theme-border-hover: rgba(20, 184, 166, 0.4);
+	--theme-border: rgba(70, 215, 200, 0.14);
+	--theme-border-hover: rgba(70, 215, 200, 0.32);
 
 	/* Typography */
 	--theme-font-display: 'Montserrat', system-ui, sans-serif;
@@ -484,20 +484,20 @@
 
 [data-theme='beach'] {
 	/* Canvas: Dark, wet compacted sand (Warm Earth) */
-	--theme-bg-canvas: #292524;
+	--theme-bg-canvas: #17120f;
 
 	/* Cards: Translucent bronze/mud */
-	--theme-bg-card: rgba(69, 58, 43, 0.6);
-	--theme-bg-overlay: rgba(87, 76, 60, 0.7);
+	--theme-bg-card: rgba(88, 68, 47, 0.36);
+	--theme-bg-overlay: rgba(113, 88, 58, 0.54);
 
 	/* Accent: The Ocean Waves (Electric Cyan) */
 	/* This provides the high contrast "Water" element */
 	--theme-accent: #22d3ee;
 	--theme-accent-glow: rgba(34, 211, 238, 0.5);
-	--theme-accent-rgb: 34, 211, 238;
+	--theme-accent-rgb: 94, 219, 237;
 
 	/* Overlay tint */
-	--theme-bg-overlay-rgb: 87, 76, 60;
+	--theme-bg-overlay-rgb: 113, 88, 58;
 
 	/* Gems: Tropical/Reef colors */
 	--theme-gem-ruby: #fb7185; /* Coral */
@@ -508,19 +508,19 @@
 
 	/* TEXT: The "Dry Sand" Effect */
 	/* Primary: Very pale, warm beige (Orange-50ish) */
-	--theme-text-primary: #fff7ed;
+	--theme-text-primary: #faf0df;
 	/* Secondary: Light Tan (Orange-200ish) */
-	--theme-text-secondary: #fed7aa;
+	--theme-text-secondary: #d8c0a0;
 	/* Muted: Warm Earthy Grey */
-	--theme-text-muted: #d6d3d1;
+	--theme-text-muted: #9f8a73;
 	--theme-text-inverted: #fff7ed;
-	--theme-shadow: rgba(0, 0, 0, 0.5);
+	--theme-shadow: rgba(0, 0, 0, 0.64);
 	--theme-overlay-light: rgba(255, 255, 255, 0.08);
-	--theme-overlay-dark: rgba(0, 0, 0, 0.4);
+	--theme-overlay-dark: rgba(0, 0, 0, 0.46);
 
 	/* Border: Sandy ridge with Water hover */
-	--theme-border: rgba(254, 215, 170, 0.15); /* Low opacity tan */
-	--theme-border-hover: rgba(34, 211, 238, 0.4); /* Cyan water glow */
+	--theme-border: rgba(222, 194, 150, 0.16);
+	--theme-border-hover: rgba(94, 219, 237, 0.32);
 	--theme-effect-url: '';
 
 	/* Typography */
@@ -539,31 +539,22 @@
 
 /* Necropolis - Bone & Spirit */
 [data-theme='necropolis'] {
-	/* Canvas: Cold Crypt Stone */
-	--theme-bg-canvas: #1c1917;
-
-	/* Cards: Darker tomb slab */
-	--theme-bg-card: rgba(28, 25, 23, 0.8);
-	--theme-bg-overlay: rgba(41, 37, 36, 0.8);
-
-	/* Accent: Necrotic Green (Sickly Lime) */
-	--theme-accent: #84cc16;
-	--theme-accent-glow: rgba(132, 204, 22, 0.5);
-	--theme-accent-rgb: 132, 204, 22;
-	--theme-bg-overlay-rgb: 41, 37, 36;
-
-	/* Text: Old Bone */
-	--theme-text-primary: #e5e5e5;
-	--theme-text-secondary: #a3a3a3;
-	--theme-text-muted: #a3a3a3;
+	--theme-bg-canvas: #100f0d;
+	--theme-bg-card: rgba(41, 40, 33, 0.42);
+	--theme-bg-overlay: rgba(60, 60, 44, 0.56);
+	--theme-accent: #a4d65c;
+	--theme-accent-glow: rgba(164, 214, 92, 0.46);
+	--theme-accent-rgb: 164, 214, 92;
+	--theme-bg-overlay-rgb: 60, 60, 44;
+	--theme-text-primary: #ebe7df;
+	--theme-text-secondary: #bab2a6;
+	--theme-text-muted: #827c72;
 	--theme-text-inverted: #e5e5e5;
-	--theme-shadow: rgba(0, 0, 0, 0.6);
+	--theme-shadow: rgba(0, 0, 0, 0.72);
 	--theme-overlay-light: rgba(255, 255, 255, 0.05);
-	--theme-overlay-dark: rgba(0, 0, 0, 0.5);
-
-	/* Border: Cracked Stone */
-	--theme-border: rgba(82, 82, 82, 0.3);
-	--theme-border-hover: rgba(132, 204, 22, 0.5);
+	--theme-overlay-dark: rgba(0, 0, 0, 0.58);
+	--theme-border: rgba(164, 214, 92, 0.12);
+	--theme-border-hover: rgba(164, 214, 92, 0.3);
 	--theme-effect-url: '';
 
 	/* Typography */
@@ -582,18 +573,13 @@
 
 /* Charmed - Rose Quartz & Love Potion */
 [data-theme='charmed'] {
-	/* Canvas: Deep Plum to Rose gradient */
-	--theme-bg-canvas: #4a044e; /* Fallback */
-	--theme-bg-card: rgba(131, 24, 67, 0.5); /* Pink-900 glass */
-	--theme-bg-overlay: rgba(80, 7, 36, 0.8);
-
-	/* Accent: Hot Pink (Rose-400) */
-	--theme-accent: #f472b6;
-	--theme-accent-rgb: 244, 114, 182; /* REQUIRED for component transparency */
-	--theme-accent-glow: rgba(244, 114, 182, 0.5);
-
-	/* Overlay Tint: Dark Rose */
-	--theme-bg-overlay-rgb: 80, 7, 36;
+	--theme-bg-canvas: #180d16;
+	--theme-bg-card: rgba(103, 35, 70, 0.38);
+	--theme-bg-overlay: rgba(126, 45, 84, 0.56);
+	--theme-accent: #f08bbd;
+	--theme-accent-rgb: 240, 139, 189;
+	--theme-accent-glow: rgba(240, 139, 189, 0.5);
+	--theme-bg-overlay-rgb: 126, 45, 84;
 
 	/* Gems */
 	--theme-gem-ruby: #f472b6;
@@ -603,19 +589,19 @@
 	--theme-gem-topaz: #fbbf24;
 
 	/* Text: Soft Pink/White */
-	--theme-text-primary: #fff1f2;
-	--theme-text-secondary: #fda4af;
-	--theme-text-muted: #f472b6;
+	--theme-text-primary: #fff0f4;
+	--theme-text-secondary: #e7b4c3;
+	--theme-text-muted: #b68698;
 	--theme-text-inverted: #fff1f2;
 
 	/* Shadows */
-	--theme-shadow: rgba(80, 7, 36, 0.6);
-	--theme-overlay-light: rgba(255, 255, 255, 0.15);
-	--theme-overlay-dark: rgba(0, 0, 0, 0.4);
+	--theme-shadow: rgba(48, 9, 29, 0.7);
+	--theme-overlay-light: rgba(255, 255, 255, 0.08);
+	--theme-overlay-dark: rgba(0, 0, 0, 0.46);
 
 	/* Border: Soft Pink Glass */
-	--theme-border: rgba(244, 114, 182, 0.2);
-	--theme-border-hover: rgba(244, 114, 182, 0.5);
+	--theme-border: rgba(240, 139, 189, 0.16);
+	--theme-border-hover: rgba(240, 139, 189, 0.34);
 	--theme-effect-url: '';
 
 	/* Typography */
@@ -634,19 +620,13 @@
 
 /* Divine - Celestial Bronze */
 [data-theme='divine'] {
-	/* Canvas: Sunburst in the void */
-	--theme-bg-canvas: #271a0c;
-	/* Card: Bronze/Amber Glass */
-	--theme-bg-card: rgba(66, 32, 6, 0.6);
-	--theme-bg-overlay: rgba(30, 20, 10, 0.9);
-
-	/* Accent: Holy Gold (Yellow-400) */
-	--theme-accent: #facc15;
-	--theme-accent-rgb: 250, 204, 21; /* REQUIRED */
-	--theme-accent-glow: rgba(250, 204, 21, 0.6);
-
-	/* Overlay Tint: Dark Bronze */
-	--theme-bg-overlay-rgb: 66, 32, 6;
+	--theme-bg-canvas: #161007;
+	--theme-bg-card: rgba(94, 67, 22, 0.38);
+	--theme-bg-overlay: rgba(120, 87, 28, 0.56);
+	--theme-accent: #f0d36a;
+	--theme-accent-rgb: 240, 211, 106;
+	--theme-accent-glow: rgba(240, 211, 106, 0.5);
+	--theme-bg-overlay-rgb: 120, 87, 28;
 
 	/* Gems */
 	--theme-gem-ruby: #ef4444;
@@ -656,19 +636,19 @@
 	--theme-gem-topaz: #facc15;
 
 	/* Text: Regal */
-	--theme-text-primary: #fefce8; /* Yellow-50 */
-	--theme-text-secondary: #fde047; /* Yellow-300 */
-	--theme-text-muted: #fbbf24;
+	--theme-text-primary: #f8f2db;
+	--theme-text-secondary: #dcc88f;
+	--theme-text-muted: #a79055;
 	--theme-text-inverted: #422006;
 
 	/* Shadows */
-	--theme-shadow: rgba(0, 0, 0, 0.7);
-	--theme-overlay-light: rgba(254, 240, 138, 0.1);
-	--theme-overlay-dark: rgba(0, 0, 0, 0.5);
+	--theme-shadow: rgba(0, 0, 0, 0.72);
+	--theme-overlay-light: rgba(254, 240, 138, 0.08);
+	--theme-overlay-dark: rgba(0, 0, 0, 0.52);
 
 	/* Border: Polished Gold */
-	--theme-border: rgba(250, 204, 21, 0.25);
-	--theme-border-hover: rgba(250, 204, 21, 0.6);
+	--theme-border: rgba(240, 211, 106, 0.18);
+	--theme-border-hover: rgba(240, 211, 106, 0.38);
 	--theme-effect-url: '';
 
 	/* Typography */
@@ -686,19 +666,13 @@
 }
 /* Underdark - Deep Slate & Spore */
 [data-theme='underdark'] {
-	/* Canvas: Absolute Pitch Black/Slate */
-	--theme-bg-canvas: #020617;
-	/* Card: Heavy Slate Stone (High Opacity) */
-	--theme-bg-card: rgba(15, 23, 42, 0.85);
-	--theme-bg-overlay: rgba(2, 6, 23, 0.95);
-
-	/* Accent: Bioluminescent Indigo */
-	--theme-accent: #818cf8;
-	--theme-accent-rgb: 129, 140, 248; /* REQUIRED */
-	--theme-accent-glow: rgba(129, 140, 248, 0.4);
-
-	/* Overlay Tint: Dark Slate */
-	--theme-bg-overlay-rgb: 15, 23, 42;
+	--theme-bg-canvas: #09060f;
+	--theme-bg-card: rgba(29, 28, 52, 0.4);
+	--theme-bg-overlay: rgba(47, 45, 79, 0.56);
+	--theme-accent: #9aa5ff;
+	--theme-accent-rgb: 154, 165, 255;
+	--theme-accent-glow: rgba(154, 165, 255, 0.46);
+	--theme-bg-overlay-rgb: 47, 45, 79;
 
 	/* Gems: Muted/Darker versions */
 	--theme-gem-ruby: #9f1239;
@@ -708,19 +682,19 @@
 	--theme-gem-topaz: #78350f;
 
 	/* Text: Grey/Silver (Low contrast environment) */
-	--theme-text-primary: #e2e8f0;
-	--theme-text-secondary: #94a3b8;
-	--theme-text-muted: #818cf8;
+	--theme-text-primary: #e8e8f5;
+	--theme-text-secondary: #b0b4d0;
+	--theme-text-muted: #7b7ea0;
 	--theme-text-inverted: #f8fafc;
 
 	/* Shadows */
 	--theme-shadow: rgba(0, 0, 0, 0.9);
 	--theme-overlay-light: rgba(255, 255, 255, 0.05);
-	--theme-overlay-dark: rgba(0, 0, 0, 0.8);
+	--theme-overlay-dark: rgba(0, 0, 0, 0.78);
 
 	/* Border: Faint Phosphorescence */
-	--theme-border: rgba(129, 140, 248, 0.15);
-	--theme-border-hover: rgba(129, 140, 248, 0.4);
+	--theme-border: rgba(154, 165, 255, 0.14);
+	--theme-border-hover: rgba(154, 165, 255, 0.3);
 	--theme-effect-url: '';
 
 	/* Typography */
