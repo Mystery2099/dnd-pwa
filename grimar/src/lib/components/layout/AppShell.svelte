@@ -28,30 +28,53 @@
 >
 	<div class="pointer-events-none fixed inset-0 overflow-hidden">
 		<div
-			class="absolute inset-0 bg-[radial-gradient(circle_at_top,color-mix(in_srgb,var(--color-bg-overlay)_58%,transparent),transparent_48%),linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-canvas)_86%,black),var(--color-bg-canvas))]"
+			class="absolute inset-0 bg-[radial-gradient(circle_at_top,color-mix(in_srgb,var(--color-accent)_12%,transparent),transparent_34%),radial-gradient(circle_at_16%_10%,color-mix(in_srgb,#9c7943_14%,transparent),transparent_24%),radial-gradient(circle_at_84%_14%,color-mix(in_srgb,#71452d_12%,transparent),transparent_22%),linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-canvas)_74%,black),color-mix(in_srgb,var(--color-bg-canvas)_92%,#040302)_44%,color-mix(in_srgb,var(--color-bg-canvas)_80%,#140d08))]"
 		></div>
 		<div
-			class="absolute inset-0 opacity-[var(--noise-opacity)]"
+			class="absolute inset-0 opacity-[calc(var(--noise-opacity)*1.55)]"
 			style="background-image:
-				repeating-linear-gradient(115deg, color-mix(in_srgb, var(--color-text-primary) 0.045, transparent) 0 1px, transparent 1px 22px),
-				repeating-linear-gradient(0deg, color-mix(in_srgb, black 0.14, transparent) 0 2px, transparent 2px 18px),
-				radial-gradient(circle at 20% 16%, color-mix(in_srgb, var(--color-accent) 0.16, transparent), transparent 22%),
-				radial-gradient(circle at 78% 12%, color-mix(in_srgb, var(--color-text-primary) 0.08, transparent), transparent 18%);
+				linear-gradient(90deg, color-mix(in_srgb, #5e4128 0.12, transparent) 0, transparent 16%, color-mix(in_srgb, #251912 0.18, transparent) 48%, transparent 74%, color-mix(in_srgb, #5e4128 0.12, transparent) 100%),
+				repeating-linear-gradient(90deg, color-mix(in_srgb, #1a120d 0.24, transparent) 0 1px, transparent 1px 28px),
+				repeating-linear-gradient(0deg, color-mix(in_srgb, black 0.18, transparent) 0 2px, transparent 2px 19px),
+				radial-gradient(circle at 24% 20%, color-mix(in_srgb, #8b6a34 0.18, transparent), transparent 20%),
+				radial-gradient(circle at 74% 16%, color-mix(in_srgb, #7b4730 0.14, transparent), transparent 18%),
+				radial-gradient(circle at 50% 100%, color-mix(in_srgb, black 0.26, transparent), transparent 38%);
+			background-size: auto, auto, auto, auto, auto, auto;"
+		></div>
+		<div
+			class="absolute inset-0 opacity-75"
+			style="background-image:
+				linear-gradient(180deg, transparent, color-mix(in_srgb, black 0.12, transparent) 64%, color-mix(in_srgb, black 0.22, transparent)),
+				radial-gradient(circle at 50% 0%, color-mix(in_srgb, var(--color-text-primary) 0.03, transparent), transparent 42%),
+				linear-gradient(102deg, transparent 0 18%, color-mix(in_srgb, #e0c88c 0.06, transparent) 28%, transparent 38%, transparent 62%, color-mix(in_srgb, #7f5d33 0.08, transparent) 72%, transparent 82%),
+				linear-gradient(0deg, color-mix(in_srgb, #20140e 0.16, transparent), transparent 22%, transparent 78%, color-mix(in_srgb, #0b0806 0.22, transparent));
 			background-size: auto, auto, auto, auto;"
+		></div>
+		<div
+			class="absolute inset-0 opacity-45"
+			style="background-image:
+				radial-gradient(circle at 14% 78%, color-mix(in_srgb, #c29a5a 0.12, transparent), transparent 18%),
+				radial-gradient(circle at 88% 72%, color-mix(in_srgb, #8f5b39 0.1, transparent), transparent 20%),
+				radial-gradient(circle at 54% 38%, color-mix(in_srgb, #f3e0a5 0.04, transparent), transparent 24%);
+			background-size: auto, auto, auto;"
 		></div>
 		<div
 			class="absolute inset-y-0 left-[max(14rem,18vw)] w-px bg-[linear-gradient(180deg,transparent,color-mix(in_srgb,var(--color-border)_72%,transparent),transparent)] opacity-70"
 		></div>
 	</div>
 
+	<div
+		class="pointer-events-none fixed top-0 right-3 bottom-3 left-3 z-0 rounded-[1.75rem] bg-[linear-gradient(180deg,color-mix(in_srgb,black_18%,transparent),transparent_16%,transparent_78%,color-mix(in_srgb,black_24%,transparent))] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_4%,transparent),inset_0_-1px_0_color-mix(in_srgb,black_26%,transparent),0_26px_80px_color-mix(in_srgb,black_46%,transparent)]"
+	></div>
+
 	<!-- Left Rail (thin decorative bar) -->
 	<div
-		class="fixed top-0 bottom-0 left-0 z-60 w-3 border-r border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-bg-overlay)_28%,var(--color-bg-canvas))]"
+		class="fixed top-0 bottom-0 left-0 z-60 w-3 border-r border-[var(--color-border)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_34%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-overlay)_18%,var(--color-bg-canvas)))] shadow-[inset_-1px_0_0_color-mix(in_srgb,var(--color-text-primary)_7%,transparent),2px_0_16px_color-mix(in_srgb,black_22%,transparent)]"
 	></div>
 
 	<!-- Sidebar -->
 	<aside
-		class="fixed top-0 bottom-0 left-3 z-50 flex flex-col transition-[width] duration-300 ease-[var(--ease-smooth)]"
+		class="fixed top-0 bottom-0 left-3 z-50 flex flex-col before:pointer-events-none before:absolute before:inset-0 before:bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-text-primary)_7%,transparent),transparent_22%,transparent_72%,color-mix(in_srgb,var(--color-accent)_8%,transparent)),radial-gradient(circle_at_22%_14%,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent_30%),radial-gradient(circle_at_78%_70%,color-mix(in_srgb,var(--color-text-primary)_8%,transparent),transparent_26%)] before:opacity-85 before:mix-blend-screen before:content-[''] transition-[width] duration-300 ease-[var(--ease-smooth)] relative"
 		style="width: {sidebarWidth};"
 	>
 		<VerticalNav bind:collapsed={sidebarCollapsed} {user} />
@@ -59,29 +82,32 @@
 
 	<!-- Right Rail (thin decorative bar) -->
 	<div
-		class="fixed top-0 right-0 bottom-0 z-60 w-3 border-l border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-bg-overlay)_28%,var(--color-bg-canvas))]"
+		class="fixed top-0 right-0 bottom-0 z-60 w-3 border-l border-[var(--color-border)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_34%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-overlay)_18%,var(--color-bg-canvas)))] shadow-[inset_1px_0_0_color-mix(in_srgb,var(--color-text-primary)_7%,transparent),-2px_0_16px_color-mix(in_srgb,black_22%,transparent)]"
 	></div>
 
 	<!-- Bottom Rail -->
 	<div
-		class="fixed right-0 bottom-0 left-0 z-60 h-3 border-t border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-bg-overlay)_28%,var(--color-bg-canvas))]"
+		class="fixed right-0 bottom-0 left-0 z-60 h-3 border-t border-[var(--color-border)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_34%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-overlay)_18%,var(--color-bg-canvas)))] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_7%,transparent),0_-2px_16px_color-mix(in_srgb,black_24%,transparent)]"
 	>
 		<!-- Corner Connectors (Visual Only) -->
 		<div
-			class="absolute bottom-0 left-0 h-full w-4 border-r border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-bg-overlay)_28%,var(--color-bg-canvas))]"
+			class="absolute bottom-0 left-0 h-full w-4 border-r border-[var(--color-border)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_34%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-overlay)_18%,var(--color-bg-canvas)))]"
 		></div>
 		<div
-			class="absolute right-0 bottom-0 h-full w-4 border-l border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-bg-overlay)_28%,var(--color-bg-canvas))]"
+			class="absolute right-0 bottom-0 h-full w-4 border-l border-[var(--color-border)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_34%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-overlay)_18%,var(--color-bg-canvas)))]"
 		></div>
 	</div>
 
 	<!-- Main Content Area -->
 	<main
-		class="relative flex-1 overflow-y-auto bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-canvas)_86%,transparent),color-mix(in_srgb,var(--color-bg-overlay)_10%,transparent))] pb-16 transition-[margin-left] duration-300 ease-[var(--ease-smooth)]"
-		style="margin-left: {sidebarOffset}; margin-right: 12px;"
+		class="fixed top-0 right-3 bottom-3 z-30 overflow-y-auto border-l border-[color-mix(in_srgb,var(--color-border)_72%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-canvas)_64%,transparent),color-mix(in_srgb,var(--color-bg-overlay)_26%,transparent))] pb-16 backdrop-blur-[28px] shadow-[-22px_0_44px_color-mix(in_srgb,black_18%,transparent),0_22px_56px_color-mix(in_srgb,black_22%,transparent)] transition-[left] duration-300 ease-[var(--ease-smooth)]"
+		style="left: {sidebarOffset};"
 	>
+		<div
+			class="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-text-primary)_6%,transparent),transparent_14%,transparent_72%,color-mix(in_srgb,var(--color-accent)_10%,transparent)),radial-gradient(circle_at_14%_8%,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent_28%),radial-gradient(circle_at_86%_18%,color-mix(in_srgb,var(--color-text-primary)_8%,transparent),transparent_22%),radial-gradient(circle_at_36%_72%,color-mix(in_srgb,var(--color-accent)_10%,transparent),transparent_24%),linear-gradient(92deg,transparent,color-mix(in_srgb,var(--color-accent)_8%,transparent),transparent_68%)] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_7%,transparent),inset_0_-1px_0_color-mix(in_srgb,black_20%,transparent)]"
+		></div>
 		<TopBar />
-		<div class="mx-auto max-w-5xl px-3 pt-6">
+		<div class="w-full max-w-[min(112rem,calc(100vw-5.5rem))] px-5 pt-20 md:px-7 md:pt-22 xl:px-9">
 			{@render children()}
 		</div>
 	</main>
