@@ -1,10 +1,15 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { onDestroy, onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
+	import { Dialog as DialogPrimitive } from 'bits-ui';
+	import ExternalLink from 'lucide-svelte/icons/external-link';
+	import XIcon from 'lucide-svelte/icons/x';
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import Input from '$lib/components/ui/Input.svelte';
 	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
+	import StructuredValue from '$lib/components/ui/StructuredValue.svelte';
 	import CompendiumTypeIcon from '$lib/components/compendium/icons/CompendiumTypeIcon.svelte';
 	import { Select } from '$lib/components/ui/select';
 	import { Button } from '$lib/components/ui/button';
@@ -23,11 +28,13 @@
 		getBadgeClasses,
 		getAtlasSortOptions,
 		getTypeAccentClasses,
+		type AtlasItem,
 		type AtlasState,
 		type AtlasAttunementFilter,
 		type AtlasItemKind,
 		type AtlasSortId
 	} from '$lib/features/compendium/atlas';
+	import type { CompendiumDetailField, CompendiumDetailSection } from '$lib/core/types/compendium';
 	import type { PageData } from './$types';
 
 	const SEARCH_DEBOUNCE_MS = 220;
@@ -72,6 +79,29 @@
 	const filterContext = $derived(getAtlasFilterContext(data.state));
 	const sortOptions = $derived(getAtlasSortOptions(data.state));
 	const hasContextualFilters = $derived(filterContext !== null);
+	const detailSelection = $derived(data.detailSelection);
+	const activeDetail = $derived(data.detail);
+	const detailFields = $derived((activeDetail?.fields ?? []) as CompendiumDetailField[]);
+	const leadingDetailFields = $derived(detailFields.slice(0, 6));
+	const trailingDetailFields = $derived(detailFields.slice(6));
+	const detailDescriptionSection = $derived(
+		findMarkdownSection(activeDetail?.sections ?? [], 'description')
+	);
+	const detailHigherLevelSection = $derived(
+		findMarkdownSection(activeDetail?.sections ?? [], 'higher_level')
+	);
+	const supplementalDetailSections = $derived(
+		(activeDetail?.sections ?? []).filter(
+			(section): section is Extract<CompendiumDetailSection, { kind: 'markdown' }> =>
+				section.kind === 'markdown' &&
+				section.key !== 'description' &&
+				section.key !== 'higher_level'
+		)
+	);
+	const isDetailOpen = $derived(Boolean(detailSelection && activeDetail));
+	const detailHref = $derived(
+		activeDetail ? `/compendium/${activeDetail.item.type}/${activeDetail.item.key}` : null
+	);
 
 	const typeChipBaseClass =
 		'shrink-0 transform-gpu rounded-full border px-4 py-2 text-sm will-change-transform transition-[transform,background-color,border-color,color,box-shadow] duration-150 ease-out motion-reduce:transform-none motion-reduce:transition-none active:scale-[0.985]';
@@ -263,6 +293,87 @@
 
 	function getRailButtonClass(isEnabled: boolean) {
 		return `${railButtonBaseClass} ${isEnabled ? activeRailButtonClass : inactiveRailButtonClass}`;
+	}
+
+	function handleDetailCardClick(event: MouseEvent, item: AtlasItem) {
+		if (
+			event.defaultPrevented ||
+			event.button !== 0 ||
+			event.metaKey ||
+			event.ctrlKey ||
+			event.shiftKey ||
+			event.altKey
+		) {
+			return;
+		}
+
+		event.preventDefault();
+		void openDetail(item);
+	}
+
+	async function openDetail(item: AtlasItem) {
+		const nextUrl = new URL(page.url);
+		nextUrl.searchParams.set('detailType', item.type);
+		nextUrl.searchParams.set('detail', item.key);
+
+		await goto(`${nextUrl.pathname}${nextUrl.search}`, {
+			keepFocus: true,
+			noScroll: true
+		});
+	}
+
+	async function closeDetail() {
+		const nextUrl = new URL(page.url);
+		nextUrl.searchParams.delete('detailType');
+		nextUrl.searchParams.delete('detail');
+
+		await goto(`${nextUrl.pathname}${nextUrl.search}`, {
+			replaceState: true,
+			keepFocus: true,
+			noScroll: true
+		});
+	}
+
+	function handleDetailOpenChange(open: boolean) {
+		if (!open) {
+			void closeDetail();
+		}
+	}
+
+	function markdownAt(key: string): string {
+		return activeDetail?.markdownHtml?.[key] ?? '';
+	}
+
+	function resolveFieldValue(field: CompendiumDetailField): unknown {
+		if (field.key !== 'prerequisite') {
+			return field.value;
+		}
+
+		if (typeof field.value === 'string') {
+			return field.value.trim() ? field.value : 'None';
+		}
+
+		if (field.value === null || field.value === undefined) {
+			return 'None';
+		}
+
+		if (Array.isArray(field.value) && field.value.length === 0) {
+			return 'None';
+		}
+
+		return field.value;
+	}
+
+	function findMarkdownSection(
+		sections: CompendiumDetailSection[],
+		key: string
+	): Extract<CompendiumDetailSection, { kind: 'markdown' }> | null {
+		return (
+			sections.find(
+				(section): section is Extract<CompendiumDetailSection, { kind: 'markdown' }> =>
+					section.kind === 'markdown' && section.key === key
+			) ?? null
+		);
 	}
 </script>
 
@@ -521,6 +632,7 @@
 					{#each data.items as item (item.type + item.key)}
 						<SurfaceCard
 							href={item.href}
+							onclick={(event: MouseEvent) => handleDetailCardClick(event, item)}
 							class="group h-full rounded-[1.45rem] border border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_84%,transparent),color-mix(in_srgb,var(--color-bg-canvas)_96%,transparent))] shadow-[0_1rem_2rem_color-mix(in_srgb,var(--color-shadow)_26%,transparent)] transition-transform duration-300 hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--color-accent)_28%,var(--color-border))]"
 						>
 							<div class="relative h-full p-4.5">
@@ -595,3 +707,183 @@
 		</section>
 	</div>
 </div>
+
+<DialogPrimitive.Root open={isDetailOpen} onOpenChange={handleDetailOpenChange}>
+	<DialogPrimitive.Portal>
+		<DialogPrimitive.Overlay
+			class="fixed inset-0 z-60 bg-[color-mix(in_srgb,var(--color-overlay-dark)_78%,black)] backdrop-blur-[10px] transition-opacity duration-200 data-[state=closed]:opacity-0 data-[state=open]:opacity-100"
+		/>
+		<DialogPrimitive.Content
+			class="fixed inset-y-0 right-0 z-70 flex w-full max-w-[min(42rem,100vw)] flex-col border-l border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_88%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-canvas)_98%,transparent))] shadow-[-2rem_0_4rem_color-mix(in_srgb,var(--color-shadow)_34%,transparent)] backdrop-blur-[28px] transition-[transform,opacity] duration-200 ease-out data-[state=closed]:translate-x-6 data-[state=closed]:opacity-0 data-[state=open]:translate-x-0 data-[state=open]:opacity-100"
+		>
+			{#if activeDetail}
+				<div class="flex items-start justify-between gap-4 border-b border-[color-mix(in_srgb,var(--color-border)_74%,transparent)] px-5 py-4 md:px-6">
+					<div class="min-w-0">
+						<div class="flex flex-wrap items-center gap-2">
+							<Badge
+								variant="outline"
+								class={`text-[0.68rem] tracking-[0.18em] uppercase ${getTypeAccentClasses(activeDetail.item.type)}`}
+							>
+								{COMPENDIUM_TYPE_CONFIGS[activeDetail.item.type]?.plural ?? activeDetail.item.type}
+							</Badge>
+							{#if activeDetail.item.source && activeDetail.item.source !== 'open5e'}
+								<Badge variant="outline" class="text-[0.68rem]">
+									{activeDetail.item.source}
+								</Badge>
+							{/if}
+						</div>
+						<DialogPrimitive.Title class="mt-4 font-[var(--font-display)] text-[2rem] leading-tight font-semibold text-[var(--color-text-primary)] md:text-[2.35rem]">
+							{activeDetail.item.name}
+						</DialogPrimitive.Title>
+						{#if activeDetail.presentation.documentLabel}
+							<DialogPrimitive.Description class="mt-2 text-sm text-[color-mix(in_srgb,var(--color-text-primary)_66%,var(--color-text-secondary))]">
+								{activeDetail.presentation.documentLabel}
+							</DialogPrimitive.Description>
+						{/if}
+					</div>
+
+					<DialogPrimitive.Close
+						class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_24%,transparent)] text-[var(--color-text-muted)] transition-[transform,border-color,background-color,color] duration-150 ease-out hover:-translate-y-px hover:border-[color-mix(in_srgb,var(--color-accent)_26%,var(--color-border))] hover:bg-[color-mix(in_srgb,var(--color-accent)_10%,transparent)] hover:text-[var(--color-text-primary)] active:translate-y-px active:scale-[0.985]"
+					>
+						<XIcon class="size-4" />
+						<span class="sr-only">Close detail panel</span>
+					</DialogPrimitive.Close>
+				</div>
+
+				<div class="flex-1 overflow-y-auto px-5 py-5 md:px-6">
+					<div class="space-y-6">
+						{#if activeDetail.presentation.headerBadges.length > 0}
+							<div class="flex flex-wrap gap-2">
+								{#each activeDetail.presentation.headerBadges as badge, index (`${badge.label}-${index}`)}
+									<Badge variant={badge.variant}>{badge.label}</Badge>
+								{/each}
+							</div>
+						{/if}
+
+						{#if leadingDetailFields.length > 0}
+							<section class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+								{#each leadingDetailFields as field (field.key)}
+									<div class="rounded-[1rem] border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_22%,transparent)] px-4 py-3.5 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_8%,transparent)]">
+										<p class="text-[0.66rem] tracking-[0.18em] text-[var(--color-text-muted)] uppercase">
+											{field.label}
+										</p>
+										<div class="mt-2 text-sm leading-6 text-[var(--color-text-primary)]">
+											<StructuredValue value={resolveFieldValue(field)} />
+										</div>
+									</div>
+								{/each}
+							</section>
+						{/if}
+
+						{#if detailDescriptionSection}
+							<section class="space-y-3">
+								<div class="flex items-center gap-2">
+									<div class="h-px flex-1 bg-[linear-gradient(90deg,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent)]"></div>
+									<p class="text-[0.72rem] tracking-[0.22em] text-[var(--color-text-muted)] uppercase">
+										Description
+									</p>
+								</div>
+								<div class="rounded-[1.2rem] border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_20%,transparent)] px-4 py-4 text-sm leading-7 text-[color-mix(in_srgb,var(--color-text-primary)_88%,var(--color-text-secondary))] [&_a]:text-[var(--color-accent)] [&_blockquote]:border-l-2 [&_blockquote]:border-[color-mix(in_srgb,var(--color-accent)_26%,transparent)] [&_blockquote]:pl-4 [&_li]:ml-5 [&_ol]:list-decimal [&_p+p]:mt-4 [&_ul]:list-disc">
+									{@html markdownAt(detailDescriptionSection.markdownKey)}
+								</div>
+							</section>
+						{:else if activeDetail.item.description}
+							<section class="space-y-3">
+								<div class="flex items-center gap-2">
+									<div class="h-px flex-1 bg-[linear-gradient(90deg,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent)]"></div>
+									<p class="text-[0.72rem] tracking-[0.22em] text-[var(--color-text-muted)] uppercase">
+										Description
+									</p>
+								</div>
+								<div class="rounded-[1.2rem] border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_20%,transparent)] px-4 py-4 text-sm leading-7 text-[color-mix(in_srgb,var(--color-text-primary)_88%,var(--color-text-secondary))]">
+									<p>{activeDetail.item.description}</p>
+								</div>
+							</section>
+						{/if}
+
+						{#if detailHigherLevelSection}
+							<section class="space-y-3">
+								<div class="flex items-center gap-2">
+									<div class="h-px flex-1 bg-[linear-gradient(90deg,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent)]"></div>
+									<p class="text-[0.72rem] tracking-[0.22em] text-[var(--color-text-muted)] uppercase">
+										{detailHigherLevelSection.title}
+									</p>
+								</div>
+								<div class="rounded-[1.2rem] border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_20%,transparent)] px-4 py-4 text-sm leading-7 text-[color-mix(in_srgb,var(--color-text-primary)_88%,var(--color-text-secondary))] [&_a]:text-[var(--color-accent)] [&_li]:ml-5 [&_ol]:list-decimal [&_p+p]:mt-4 [&_ul]:list-disc">
+									{@html markdownAt(detailHigherLevelSection.markdownKey)}
+								</div>
+							</section>
+						{/if}
+
+						{#if supplementalDetailSections.length > 0}
+							<section class="space-y-3">
+								<div class="flex items-center gap-2">
+									<div class="h-px flex-1 bg-[linear-gradient(90deg,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent)]"></div>
+									<p class="text-[0.72rem] tracking-[0.22em] text-[var(--color-text-muted)] uppercase">
+										More
+									</p>
+								</div>
+								<div class="space-y-3">
+									{#each supplementalDetailSections as section (section.key)}
+										<div class="rounded-[1.2rem] border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_20%,transparent)] px-4 py-4">
+											<p class="text-sm font-semibold text-[var(--color-text-primary)]">{section.title}</p>
+											{#if section.description}
+												<p class="mt-1 text-sm text-[color-mix(in_srgb,var(--color-text-primary)_62%,var(--color-text-secondary))]">
+													{section.description}
+												</p>
+											{/if}
+											<div class="mt-3 text-sm leading-7 text-[color-mix(in_srgb,var(--color-text-primary)_88%,var(--color-text-secondary))] [&_a]:text-[var(--color-accent)] [&_li]:ml-5 [&_ol]:list-decimal [&_p+p]:mt-4 [&_ul]:list-disc">
+												{@html markdownAt(section.markdownKey)}
+											</div>
+										</div>
+									{/each}
+								</div>
+							</section>
+						{/if}
+
+						{#if trailingDetailFields.length > 0}
+							<section class="space-y-3">
+								<div class="flex items-center gap-2">
+									<div class="h-px flex-1 bg-[linear-gradient(90deg,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent)]"></div>
+									<p class="text-[0.72rem] tracking-[0.22em] text-[var(--color-text-muted)] uppercase">
+										Additional Details
+									</p>
+								</div>
+								<div class="grid gap-3 sm:grid-cols-2">
+									{#each trailingDetailFields as field (field.key)}
+										<div class="rounded-[1rem] border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_18%,transparent)] px-4 py-3.5">
+											<p class="text-[0.66rem] tracking-[0.18em] text-[var(--color-text-muted)] uppercase">
+												{field.label}
+											</p>
+											<div class="mt-2 text-sm leading-6 text-[var(--color-text-primary)]">
+												<StructuredValue value={resolveFieldValue(field)} />
+											</div>
+										</div>
+									{/each}
+								</div>
+							</section>
+						{/if}
+					</div>
+				</div>
+
+				<div class="border-t border-[color-mix(in_srgb,var(--color-border)_74%,transparent)] px-5 py-4 md:px-6">
+					<div class="flex flex-col gap-3 sm:flex-row">
+						<Button
+							variant="outline"
+							class="flex-1 border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_20%,transparent)] text-[var(--color-text-primary)]"
+							onclick={closeDetail}
+						>
+							Close
+						</Button>
+						{#if detailHref}
+							<Button href={detailHref} class="flex-1">
+								<ExternalLink class="size-4" />
+								Open Full Page
+							</Button>
+						{/if}
+					</div>
+				</div>
+			{/if}
+		</DialogPrimitive.Content>
+	</DialogPrimitive.Portal>
+</DialogPrimitive.Root>

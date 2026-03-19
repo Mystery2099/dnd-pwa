@@ -6,6 +6,7 @@
 		class?: string;
 		padding?: string;
 		children?: Snippet;
+		onclick?: (event: MouseEvent) => void;
 		onmouseenter?: (event: MouseEvent) => void;
 		onfocusin?: (event: FocusEvent) => void;
 	}
@@ -15,6 +16,7 @@
 		class: className = '',
 		padding = 'p-0',
 		children,
+		onclick,
 		onmouseenter,
 		onfocusin,
 		...rest
@@ -26,6 +28,7 @@
 <svelte:element
 	this={tag}
 	{href}
+	{onclick}
 	{onmouseenter}
 	{onfocusin}
 	class={`card-crystal relative block overflow-hidden ${padding} ${className}`.trim()}
