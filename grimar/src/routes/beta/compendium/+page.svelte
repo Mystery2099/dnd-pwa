@@ -3,7 +3,6 @@
 	import { goto } from '$app/navigation';
 	import { onDestroy, onMount } from 'svelte';
 	import { fade, fly, slide } from 'svelte/transition';
-	import { linear } from 'svelte/easing';
 	import ExternalLink from 'lucide-svelte/icons/external-link';
 	import XIcon from 'lucide-svelte/icons/x';
 	import Badge from '$lib/components/ui/Badge.svelte';
@@ -40,6 +39,7 @@
 		CompendiumDetailField,
 		CompendiumDetailSection
 	} from '$lib/core/types/compendium';
+	import { fadeIn, fadeUp, paneEnter, paneExit, stagger } from '$lib/ui/motion';
 	import type { PageData } from './$types';
 
 	const SEARCH_DEBOUNCE_MS = 220;
@@ -396,34 +396,6 @@
 		return `${modifier >= 0 ? '+' : ''}${modifier}`;
 	}
 
-	function getPreviewPaneAccent(type?: CompendiumTypeName | null): string {
-		switch (type) {
-			case 'spells':
-				return 'var(--color-gem-amethyst)';
-			case 'creatures':
-				return 'var(--color-gem-ruby)';
-			case 'items':
-			case 'feats':
-				return 'var(--color-gem-topaz)';
-			case 'magicitems':
-			case 'species':
-			case 'armor':
-				return 'var(--color-gem-sapphire)';
-			case 'classes':
-				return 'var(--color-gem-emerald)';
-			case 'backgrounds':
-			case 'weapons':
-				return 'var(--color-gem-ruby)';
-			default:
-				return 'var(--color-accent)';
-		}
-	}
-
-	function previewPaneEaseOut(t: number): number {
-		const c1 = 1.70158;
-		const c3 = c1 + 1;
-		return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
-	}
 </script>
 
 <svelte:head>
@@ -431,7 +403,10 @@
 </svelte:head>
 
 <div class="min-h-screen bg-[radial-gradient(circle_at_top,color-mix(in_srgb,var(--color-accent)_14%,transparent),transparent_38%),linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-canvas)_74%,black),color-mix(in_srgb,var(--color-bg-canvas)_88%,#040302)_48%,color-mix(in_srgb,var(--color-bg-canvas)_76%,var(--color-bg-overlay)))]">
-	<div class={`mx-auto flex max-w-[94rem] flex-col gap-6 px-3 py-3 transition-[transform,opacity,filter] transform-gpu motion-reduce:transform-none motion-reduce:transition-none md:px-5 md:py-4 ${isDetailOpen ? 'scale-[0.98] opacity-[0.86] saturate-[0.92] duration-[350ms] ease-[cubic-bezier(0.175,0.885,0.32,1.12)]' : 'scale-100 opacity-100 saturate-100 duration-[200ms] ease-out'}`}>
+	<div
+		class="ui-depth-recede mx-auto flex max-w-[94rem] flex-col gap-6 px-3 py-3 md:px-5 md:py-4"
+		data-depth={isDetailOpen ? 'active' : 'idle'}
+	>
 		<section class="relative overflow-hidden rounded-[2rem] border border-[color-mix(in_srgb,var(--color-accent)_24%,var(--color-border))] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_54%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-canvas)_96%,transparent))] p-5 shadow-[0_1.4rem_3rem_color-mix(in_srgb,var(--color-shadow)_32%,transparent)] md:p-6">
 			<div class="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,transparent,color-mix(in_srgb,var(--color-accent)_6%,transparent),transparent)]"></div>
 			<div class="pointer-events-none absolute inset-0 opacity-35 [background-image:linear-gradient(color-mix(in_srgb,var(--color-accent)_10%,transparent)_1px,transparent_1px),linear-gradient(90deg,color-mix(in_srgb,var(--color-accent)_10%,transparent)_1px,transparent_1px)] [background-position:center] [background-size:3.5rem_3.5rem]"></div>
@@ -449,7 +424,7 @@
 						</a>
 						<button
 							type="button"
-							class="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--color-border)_78%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_18%,transparent)] px-3 py-1.5 text-[0.72rem] tracking-[0.14em] text-[color-mix(in_srgb,var(--color-text-primary)_82%,var(--color-text-secondary))] uppercase transition-[transform,border-color,background-color,color,box-shadow] duration-150 ease-out hover:-translate-y-px hover:border-[color-mix(in_srgb,var(--color-accent)_26%,var(--color-border))] hover:bg-[color-mix(in_srgb,var(--color-accent)_8%,transparent)] hover:text-[var(--color-text-primary)] hover:shadow-[0_0.85rem_1.7rem_color-mix(in_srgb,var(--color-accent)_10%,transparent)] active:translate-y-px active:scale-[0.985] motion-reduce:transform-none motion-reduce:transition-none"
+							class="ui-lift ui-press inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--color-border)_78%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_18%,transparent)] px-3 py-1.5 text-[0.72rem] tracking-[0.14em] text-[color-mix(in_srgb,var(--color-text-primary)_82%,var(--color-text-secondary))] uppercase transition-[border-color,background-color,color,box-shadow] hover:border-[color-mix(in_srgb,var(--color-accent)_26%,var(--color-border))] hover:bg-[color-mix(in_srgb,var(--color-accent)_8%,transparent)] hover:text-[var(--color-text-primary)] hover:shadow-[0_0.85rem_1.7rem_color-mix(in_srgb,var(--color-accent)_10%,transparent)]"
 							onclick={() => (showAtlasIntro = !showAtlasIntro)}
 							aria-expanded={showAtlasIntro}
 							aria-controls="atlas-intro"
@@ -479,8 +454,8 @@
 
 		<section class="rounded-[1.8rem] border border-[color-mix(in_srgb,var(--color-border)_86%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_82%,transparent),color-mix(in_srgb,var(--color-bg-canvas)_96%,transparent))] p-4 shadow-[0_1rem_2.25rem_color-mix(in_srgb,var(--color-shadow)_26%,transparent)] md:p-5">
 			<div class="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_15rem_auto]">
-				<div class="group/search relative">
-					<div class="pointer-events-none absolute inset-0 rounded-[1rem] border border-[color-mix(in_srgb,var(--color-accent)_0%,transparent)] opacity-0 shadow-[0_0_0_0_color-mix(in_srgb,var(--color-accent)_0%,transparent)] transition-[opacity,border-color,box-shadow,transform] duration-200 ease-out group-focus-within/search:scale-[1.01] group-focus-within/search:border-[color-mix(in_srgb,var(--color-accent)_28%,transparent)] group-focus-within/search:opacity-100 group-focus-within/search:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-accent)_18%,transparent),0_1rem_2rem_color-mix(in_srgb,var(--color-accent)_12%,transparent)] motion-reduce:transform-none"></div>
+				<div class="group/search ui-focus-glow relative rounded-[1rem]">
+					<div class="pointer-events-none absolute inset-0 rounded-[1rem] border border-[color-mix(in_srgb,var(--color-accent)_0%,transparent)] opacity-0 shadow-[0_0_0_0_color-mix(in_srgb,var(--color-accent)_0%,transparent)] transition-[opacity,transform] duration-[var(--duration-base)] ease-[var(--ease-smooth)] group-focus-within/search:scale-[1.01] group-focus-within/search:opacity-100 motion-reduce:transform-none"></div>
 					<Input
 						type="text"
 						value={searchInput}
@@ -688,7 +663,7 @@
 						<SurfaceCard
 							href={item.href}
 							onclick={(event: MouseEvent) => handleDetailCardClick(event, item)}
-							class="group h-full rounded-[1.45rem] border border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_84%,transparent),color-mix(in_srgb,var(--color-bg-canvas)_96%,transparent))] shadow-[0_1rem_2rem_color-mix(in_srgb,var(--color-shadow)_26%,transparent)] transition-[transform,border-color,box-shadow,background-color] duration-300 ease-out hover:-translate-y-1 hover:border-[color-mix(in_srgb,var(--color-accent)_28%,var(--color-border))] hover:bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_92%,transparent),color-mix(in_srgb,var(--color-bg-canvas)_98%,transparent))] hover:shadow-[0_1.4rem_2.8rem_color-mix(in_srgb,var(--color-shadow)_28%,transparent),0_0_0_1px_color-mix(in_srgb,var(--color-accent)_10%,transparent)] focus-visible:-translate-y-1 focus-visible:border-[color-mix(in_srgb,var(--color-accent)_32%,var(--color-border))] focus-visible:shadow-[0_1.4rem_2.8rem_color-mix(in_srgb,var(--color-shadow)_28%,transparent),0_0_0_1px_color-mix(in_srgb,var(--color-accent)_14%,transparent)] motion-reduce:transform-none"
+							class="ui-card-interactive group h-full rounded-[1.45rem] border border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_84%,transparent),color-mix(in_srgb,var(--color-bg-canvas)_96%,transparent))] shadow-[0_1rem_2rem_color-mix(in_srgb,var(--color-shadow)_26%,transparent)] hover:bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_92%,transparent),color-mix(in_srgb,var(--color-bg-canvas)_98%,transparent))]"
 						>
 							<div class="relative h-full p-4.5">
 								<div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-[color-mix(in_srgb,var(--color-accent)_18%,transparent)] to-transparent opacity-70 transition-opacity duration-300 ease-out group-hover:opacity-100"></div>
@@ -772,7 +747,6 @@
 <Dialog.Root open={isDetailOpen} onOpenChange={handleDetailOpenChange}>
 	<Dialog.Content
 		showCloseButton={false}
-		style={`--atlas-pane-accent:${getPreviewPaneAccent(activeDetail?.item.type)};`}
 		class="atlas-preview-pane group/pane top-0 right-0 left-auto h-screen max-h-screen w-full max-w-[min(42rem,100vw)] translate-x-0 translate-y-0 overflow-visible rounded-none border-0 bg-transparent p-0 shadow-none backdrop-blur-0 motion-reduce:transition-none"
 		portalProps={{
 			disabled: false
@@ -782,15 +756,15 @@
 				{#key `${activeDetail.item.type}:${activeDetail.item.key}`}
 				<div
 					class="relative flex h-full max-h-screen flex-col gap-0 overflow-hidden rounded-none border-t-0 border-r-0 border-b-0 border-l border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_88%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-canvas)_98%,transparent))] p-0 shadow-[-2rem_0_4rem_color-mix(in_srgb,var(--color-shadow)_34%,transparent)] backdrop-blur-[28px]"
-					in:fly={{ x: 420, duration: 250, easing: previewPaneEaseOut }}
-					out:fly={{ x: 420, duration: 180, easing: linear }}
+					in:fly={paneEnter()}
+					out:fly={paneExit()}
 				>
 				<div class="flex items-start justify-between gap-4 border-b border-[color-mix(in_srgb,var(--color-border)_74%,transparent)] px-5 py-4 transition-[opacity,transform,border-color] duration-120 ease-out group-data-[state=closed]/pane:-translate-y-2 group-data-[state=closed]/pane:opacity-0 group-data-[state=open]/pane:translate-y-0 group-data-[state=open]/pane:opacity-100 md:px-6">
 					<div class="min-w-0">
 						<div
 							class="flex flex-wrap items-center gap-2"
-							in:fly={{ y: 10, duration: 160, delay: 150 }}
-							out:fade={{ duration: 80 }}
+							in:fly={fadeUp(stagger(0, 150), 10, 160)}
+							out:fade={fadeIn(0, 80)}
 						>
 							<Badge
 								variant="outline"
@@ -804,13 +778,13 @@
 								</Badge>
 							{/if}
 						</div>
-						<div in:fly={{ y: 10, duration: 180, delay: 150 }} out:fade={{ duration: 80 }}>
+						<div in:fly={fadeUp(stagger(0, 150), 10, 180)} out:fade={fadeIn(0, 80)}>
 							<Dialog.Title class="mt-4 font-[var(--font-display)] text-[2rem] leading-tight font-semibold text-[var(--color-text-primary)] md:text-[2.35rem]">
 								{activeDetail.item.name}
 							</Dialog.Title>
 						</div>
 						{#if activeDetail.presentation.documentLabel}
-							<div in:fly={{ y: 10, duration: 170, delay: 175 }} out:fade={{ duration: 80 }}>
+							<div in:fly={fadeUp(stagger(0, 175), 10, 170)} out:fade={fadeIn(0, 80)}>
 								<Dialog.Description class="mt-2 text-sm text-[color-mix(in_srgb,var(--color-text-primary)_66%,var(--color-text-secondary))]">
 									{activeDetail.presentation.documentLabel}
 								</Dialog.Description>
@@ -831,8 +805,8 @@
 						{#if activeDetail.presentation.headerBadges.length > 0}
 							<div
 								class="flex flex-wrap gap-2"
-								in:fly={{ y: 10, duration: 170, delay: 200 }}
-								out:fade={{ duration: 80 }}
+								in:fly={fadeUp(stagger(1, 150), 10, 170)}
+								out:fade={fadeIn(0, 80)}
 							>
 								{#each activeDetail.presentation.headerBadges as badge, index (`${badge.label}-${index}`)}
 									<Badge variant={badge.variant}>{badge.label}</Badge>
@@ -843,8 +817,8 @@
 						{#if leadingDetailFields.length > 0}
 							<section
 								class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3"
-								in:fly={{ y: 10, duration: 170, delay: 200 }}
-								out:fade={{ duration: 80 }}
+								in:fly={fadeUp(stagger(1, 150), 10, 170)}
+								out:fade={fadeIn(0, 80)}
 							>
 								{#each leadingDetailFields as field (field.key)}
 									<div class="rounded-[1rem] border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_22%,transparent)] px-4 py-3.5 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_8%,transparent)]">
@@ -862,8 +836,8 @@
 						{#if creatureEncounterSection}
 							<section
 								class="space-y-4"
-								in:fly={{ y: 10, duration: 175, delay: 225 }}
-								out:fade={{ duration: 80 }}
+								in:fly={fadeUp(stagger(2, 150, 75), 10, 175)}
+								out:fade={fadeIn(0, 80)}
 							>
 								<div class="flex items-center gap-2">
 									<div class="h-px flex-1 bg-[linear-gradient(90deg,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent)]"></div>
@@ -976,8 +950,8 @@
 						{#if detailDescriptionSection}
 							<section
 								class="space-y-3"
-								in:fly={{ y: 10, duration: 180, delay: 250 }}
-								out:fade={{ duration: 80 }}
+								in:fly={fadeUp(stagger(2, 150, 100), 10, 180)}
+								out:fade={fadeIn(0, 80)}
 							>
 								<div class="flex items-center gap-2">
 									<div class="h-px flex-1 bg-[linear-gradient(90deg,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent)]"></div>
@@ -992,8 +966,8 @@
 						{:else if activeDetail.item.description}
 							<section
 								class="space-y-3"
-								in:fly={{ y: 10, duration: 180, delay: 250 }}
-								out:fade={{ duration: 80 }}
+								in:fly={fadeUp(stagger(2, 150, 100), 10, 180)}
+								out:fade={fadeIn(0, 80)}
 							>
 								<div class="flex items-center gap-2">
 									<div class="h-px flex-1 bg-[linear-gradient(90deg,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent)]"></div>
@@ -1010,8 +984,8 @@
 						{#if detailHigherLevelSection}
 							<section
 								class="space-y-3"
-								in:fly={{ y: 10, duration: 180, delay: 250 }}
-								out:fade={{ duration: 80 }}
+								in:fly={fadeUp(stagger(2, 150, 100), 10, 180)}
+								out:fade={fadeIn(0, 80)}
 							>
 								<div class="flex items-center gap-2">
 									<div class="h-px flex-1 bg-[linear-gradient(90deg,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent)]"></div>
@@ -1028,8 +1002,8 @@
 						{#if supplementalDetailSections.length > 0}
 							<section
 								class="space-y-3"
-								in:fly={{ y: 10, duration: 190, delay: 275 }}
-								out:fade={{ duration: 80 }}
+								in:fly={fadeUp(stagger(3, 150, 75), 10, 190)}
+								out:fade={fadeIn(0, 80)}
 							>
 								<div class="flex items-center gap-2">
 									<div class="h-px flex-1 bg-[linear-gradient(90deg,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent)]"></div>
@@ -1058,8 +1032,8 @@
 						{#if trailingDetailFields.length > 0}
 							<section
 								class="space-y-3"
-								in:fly={{ y: 10, duration: 190, delay: 275 }}
-								out:fade={{ duration: 80 }}
+								in:fly={fadeUp(stagger(3, 150, 75), 10, 190)}
+								out:fade={fadeIn(0, 80)}
 							>
 								<div class="flex items-center gap-2">
 									<div class="h-px flex-1 bg-[linear-gradient(90deg,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent)]"></div>
