@@ -50,6 +50,7 @@
 	let typeScroller = $state<HTMLDivElement | null>(null);
 	let canScrollTypesLeft = $state(false);
 	let canScrollTypesRight = $state(false);
+	let showAtlasIntro = $state(false);
 	let searchTimeout: ReturnType<typeof setTimeout> | undefined;
 
 	const activeLabels = $derived(getActiveFilterLabels(data.state));
@@ -69,6 +70,19 @@
 	);
 	const filterContext = $derived(getAtlasFilterContext(data.state));
 	const sortOptions = $derived(getAtlasSortOptions(data.state));
+
+	const typeChipBaseClass =
+		'shrink-0 rounded-full border px-4 py-2 text-sm transition-all';
+	const activeTypeChipClass =
+		'border-[color-mix(in_srgb,var(--color-accent)_52%,var(--color-border))] bg-[color-mix(in_srgb,var(--color-accent)_14%,transparent)] text-[var(--color-text-primary)] shadow-[0_0.8rem_1.8rem_color-mix(in_srgb,var(--color-accent)_14%,transparent)]';
+	const inactiveTypeChipClass =
+		'border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_18%,transparent)] text-[color-mix(in_srgb,var(--color-text-primary)_64%,var(--color-text-secondary))] hover:border-[color-mix(in_srgb,var(--color-accent)_22%,var(--color-border))] hover:text-[var(--color-text-primary)]';
+	const railButtonBaseClass =
+		'h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all md:inline-flex';
+	const activeRailButtonClass =
+		'border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_30%,transparent)] text-[var(--color-text-primary)] hover:border-[color-mix(in_srgb,var(--color-accent)_24%,var(--color-border))] hover:bg-[color-mix(in_srgb,var(--color-accent)_10%,transparent)]';
+	const inactiveRailButtonClass =
+		'border-[color-mix(in_srgb,var(--color-border)_64%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_14%,transparent)] text-[var(--color-text-muted)] opacity-45';
 
 	$effect(() => {
 		searchInput = data.state.search;
@@ -240,6 +254,14 @@
 		canScrollTypesLeft = typeScroller.scrollLeft > 8;
 		canScrollTypesRight = maxScrollLeft - typeScroller.scrollLeft > 8;
 	}
+
+	function getTypeChipClass(isActive: boolean) {
+		return `${typeChipBaseClass} ${isActive ? activeTypeChipClass : inactiveTypeChipClass}`;
+	}
+
+	function getRailButtonClass(isEnabled: boolean) {
+		return `${railButtonBaseClass} ${isEnabled ? activeRailButtonClass : inactiveRailButtonClass}`;
+	}
 </script>
 
 <svelte:head>
@@ -248,10 +270,10 @@
 
 <div class="min-h-screen bg-[radial-gradient(circle_at_top,color-mix(in_srgb,var(--color-accent)_14%,transparent),transparent_38%),linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-canvas)_74%,black),color-mix(in_srgb,var(--color-bg-canvas)_88%,#040302)_48%,color-mix(in_srgb,var(--color-bg-canvas)_76%,var(--color-bg-overlay)))]">
 	<div class="mx-auto flex max-w-[94rem] flex-col gap-6 px-3 py-3 md:px-5 md:py-4">
-		<section class="relative overflow-hidden rounded-[2rem] border border-[color-mix(in_srgb,var(--color-accent)_24%,var(--color-border))] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_54%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-canvas)_96%,transparent))] p-5 shadow-[0_1.4rem_3rem_color-mix(in_srgb,var(--color-shadow)_32%,transparent)] md:p-7">
+		<section class="relative overflow-hidden rounded-[2rem] border border-[color-mix(in_srgb,var(--color-accent)_24%,var(--color-border))] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_54%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-canvas)_96%,transparent))] p-5 shadow-[0_1.4rem_3rem_color-mix(in_srgb,var(--color-shadow)_32%,transparent)] md:p-6">
 			<div class="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,transparent,color-mix(in_srgb,var(--color-accent)_6%,transparent),transparent)]"></div>
 			<div class="pointer-events-none absolute inset-0 opacity-35 [background-image:linear-gradient(color-mix(in_srgb,var(--color-accent)_10%,transparent)_1px,transparent_1px),linear-gradient(90deg,color-mix(in_srgb,var(--color-accent)_10%,transparent)_1px,transparent_1px)] [background-position:center] [background-size:3.5rem_3.5rem]"></div>
-			<div class="relative grid gap-6 xl:grid-cols-[minmax(0,1.5fr)_minmax(19rem,0.8fr)] xl:items-end">
+			<div class="relative">
 				<div>
 					<div class="flex flex-wrap items-center gap-3">
 						<Badge variant="outline" class="border-[color-mix(in_srgb,var(--color-accent)_30%,var(--color-border))] bg-[color-mix(in_srgb,var(--color-accent)_12%,transparent)] text-[0.65rem] tracking-[0.24em] text-[color-mix(in_srgb,var(--color-text-primary)_94%,var(--color-accent))] uppercase">
@@ -263,42 +285,33 @@
 						>
 							Back to current compendium
 						</a>
+						<button
+							type="button"
+							class="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--color-border)_78%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_18%,transparent)] px-3 py-1.5 text-[0.72rem] tracking-[0.14em] text-[color-mix(in_srgb,var(--color-text-primary)_82%,var(--color-text-secondary))] uppercase transition-colors hover:border-[color-mix(in_srgb,var(--color-accent)_26%,var(--color-border))] hover:text-[var(--color-text-primary)]"
+							onclick={() => (showAtlasIntro = !showAtlasIntro)}
+							aria-expanded={showAtlasIntro}
+							aria-controls="atlas-intro"
+						>
+							<span aria-hidden="true" class="text-[0.9rem] leading-none">i</span>
+							About Atlas
+						</button>
 					</div>
-					<h1 class="mt-4 max-w-4xl font-[var(--font-display)] text-[2.25rem] leading-[0.98] font-semibold tracking-tight text-[var(--color-text-primary)] md:text-[3.4rem]">
-						One archive page. Filters first. Details second.
+					<h1 class="mt-4 max-w-4xl font-[var(--font-display)] text-[1.8rem] leading-[0.98] font-semibold tracking-tight text-[var(--color-text-primary)] md:text-[2.35rem]">
+						The Atlas
 					</h1>
-					<p class="mt-4 max-w-3xl text-sm leading-6 text-[color-mix(in_srgb,var(--color-text-primary)_78%,var(--color-text-secondary))] md:text-base">
-						This preview treats the compendium as a searchable atlas instead of a shelf of category cards.
-						Type chips narrow the archive, contextual filters appear only when they matter, and every card still
-						lands in the existing detail pages.
-					</p>
-				</div>
-
-				<div class="grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
-					<div class="rounded-[1.35rem] border border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_34%,transparent)] px-4 py-3.5 backdrop-blur-sm">
-						<p class="text-[0.65rem] tracking-[0.22em] text-[var(--color-text-muted)] uppercase">Current Type</p>
-						<p class="mt-2 text-2xl font-semibold text-[var(--color-text-primary)]">
-							{selectedType === 'all' ? 'All' : COMPENDIUM_TYPE_CONFIGS[selectedType]?.plural}
+					{#if showAtlasIntro}
+						<p id="atlas-intro" class="mt-3 max-w-3xl text-sm leading-6 text-[color-mix(in_srgb,var(--color-text-primary)_72%,var(--color-text-secondary))]">
+							This preview treats the compendium as a searchable atlas instead of a shelf of category cards.
+							Type chips narrow the archive, contextual filters appear only when they matter, and every card still
+							lands in the existing detail pages.
 						</p>
-					</div>
-					<div class="rounded-[1.35rem] border border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_34%,transparent)] px-4 py-3.5 backdrop-blur-sm">
-						<p class="text-[0.65rem] tracking-[0.22em] text-[var(--color-text-muted)] uppercase">Indexed Entries</p>
-						<p class="mt-2 text-2xl font-semibold text-[var(--color-text-primary)]">
-							{selectedType === 'all'
-								? data.scopeCounts[data.state.scope].toLocaleString()
-								: Number(data.counts[selectedType] ?? 0).toLocaleString()}
-						</p>
-					</div>
-					<div class="rounded-[1.35rem] border border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_34%,transparent)] px-4 py-3.5 backdrop-blur-sm">
-						<p class="text-[0.65rem] tracking-[0.22em] text-[var(--color-text-muted)] uppercase">Browse Window</p>
-						<p class="mt-2 text-2xl font-semibold text-[var(--color-text-primary)]">{data.pageSize}</p>
-					</div>
+					{/if}
 				</div>
 			</div>
 		</section>
 
 		<section class="rounded-[1.8rem] border border-[color-mix(in_srgb,var(--color-border)_86%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_82%,transparent),color-mix(in_srgb,var(--color-bg-canvas)_96%,transparent))] p-4 shadow-[0_1rem_2.25rem_color-mix(in_srgb,var(--color-shadow)_26%,transparent)] md:p-5">
-			<div class="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_15rem]">
+			<div class="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_15rem_auto]">
 				<div class="relative">
 					<Input
 						type="text"
@@ -330,16 +343,21 @@
 					onchange={handleSortChange}
 					class="h-12 rounded-[1rem] border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_44%,transparent)] text-[var(--color-text-primary)]"
 				/>
+
+				<Button
+					variant="outline"
+					class="h-12 rounded-[1rem] border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_24%,transparent)] px-5 text-[var(--color-text-primary)] hover:bg-[color-mix(in_srgb,var(--color-bg-card)_36%,transparent)]"
+					onclick={resetFilters}
+					disabled={!hasFilters}
+				>
+					Reset
+				</Button>
 			</div>
 
 			<div class="mt-4 flex items-center gap-3">
 				<button
 					type="button"
-					class={`hidden h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all md:inline-flex ${
-						canScrollTypesLeft
-							? 'border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_30%,transparent)] text-[var(--color-text-primary)] hover:border-[color-mix(in_srgb,var(--color-accent)_24%,var(--color-border))] hover:bg-[color-mix(in_srgb,var(--color-accent)_10%,transparent)]'
-							: 'border-[color-mix(in_srgb,var(--color-border)_64%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_14%,transparent)] text-[var(--color-text-muted)] opacity-45'
-					}`}
+					class={`hidden ${getRailButtonClass(canScrollTypesLeft)}`}
 					onclick={() => scrollTypeRail('left')}
 					disabled={!canScrollTypesLeft}
 					aria-label="Scroll type filters left"
@@ -363,45 +381,33 @@
 						class="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-[color-mix(in_srgb,var(--color-border)_88%,transparent)] flex gap-2 overflow-x-auto pb-1"
 					>
 						<button
-					type="button"
-					class={`shrink-0 rounded-full border px-4 py-2 text-sm transition-all ${
-						selectedType === 'all'
-							? 'border-[color-mix(in_srgb,var(--color-accent)_52%,var(--color-border))] bg-[color-mix(in_srgb,var(--color-accent)_14%,transparent)] text-[var(--color-text-primary)] shadow-[0_0.8rem_1.8rem_color-mix(in_srgb,var(--color-accent)_14%,transparent)]'
-							: 'border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_18%,transparent)] text-[color-mix(in_srgb,var(--color-text-primary)_64%,var(--color-text-secondary))] hover:border-[color-mix(in_srgb,var(--color-accent)_22%,var(--color-border))] hover:text-[var(--color-text-primary)]'
-					}`}
-					onclick={() => handleTypeChange('all')}
-				>
-					All
-					<span class="ml-2 text-[0.72rem] text-inherit/70">
-						{data.scopeCounts.all.toLocaleString()}
-					</span>
-				</button>
+							type="button"
+							class={getTypeChipClass(selectedType === 'all')}
+							onclick={() => handleTypeChange('all')}
+						>
+							All
+							<span class="ml-2 text-[0.72rem] text-inherit/70">
+								{data.scopeCounts.all.toLocaleString()}
+							</span>
+						</button>
 						{#each searchableTypeEntries as entry (entry.type)}
 							<button
-						type="button"
-						class={`shrink-0 rounded-full border px-4 py-2 text-sm transition-all ${
-							selectedType === entry.type
-								? 'border-[color-mix(in_srgb,var(--color-accent)_52%,var(--color-border))] bg-[color-mix(in_srgb,var(--color-accent)_14%,transparent)] text-[var(--color-text-primary)] shadow-[0_0.8rem_1.8rem_color-mix(in_srgb,var(--color-accent)_14%,transparent)]'
-								: 'border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_18%,transparent)] text-[color-mix(in_srgb,var(--color-text-primary)_64%,var(--color-text-secondary))] hover:border-[color-mix(in_srgb,var(--color-accent)_22%,var(--color-border))] hover:text-[var(--color-text-primary)]'
-						}`}
-						onclick={() => handleTypeChange(entry.type)}
-					>
-						{entry.config.plural}
-						<span class="ml-2 text-[0.72rem] text-inherit/70">
-							{entry.count.toLocaleString()}
-						</span>
-					</button>
+								type="button"
+								class={getTypeChipClass(selectedType === entry.type)}
+								onclick={() => handleTypeChange(entry.type)}
+							>
+								{entry.config.plural}
+								<span class="ml-2 text-[0.72rem] text-inherit/70">
+									{entry.count.toLocaleString()}
+								</span>
+							</button>
 						{/each}
 					</div>
 				</div>
 
 				<button
 					type="button"
-					class={`hidden h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all md:inline-flex ${
-						canScrollTypesRight
-							? 'border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_30%,transparent)] text-[var(--color-text-primary)] hover:border-[color-mix(in_srgb,var(--color-accent)_24%,var(--color-border))] hover:bg-[color-mix(in_srgb,var(--color-accent)_10%,transparent)]'
-							: 'border-[color-mix(in_srgb,var(--color-border)_64%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_14%,transparent)] text-[var(--color-text-muted)] opacity-45'
-					}`}
+					class={`hidden ${getRailButtonClass(canScrollTypesRight)}`}
 					onclick={() => scrollTypeRail('right')}
 					disabled={!canScrollTypesRight}
 					aria-label="Scroll type filters right"
@@ -477,30 +483,30 @@
 				{/if}
 			</div>
 
-			<div class="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-[color-mix(in_srgb,var(--color-border)_78%,transparent)] pt-4">
-				<div>
-					<p class="text-[0.7rem] tracking-[0.22em] text-[var(--color-text-muted)] uppercase">Result Set</p>
-					<p class="mt-1 text-sm text-[color-mix(in_srgb,var(--color-text-primary)_72%,var(--color-text-secondary))]">
-						Showing {data.total === 0 ? 0 : (data.page - 1) * data.pageSize + 1} to {resultWindowEnd}
-						of {data.total.toLocaleString()} entries in {data.scopeMeta.label.toLowerCase()}.
-					</p>
+			{#if hasFilters}
+				<div class="mt-4 flex flex-wrap items-center gap-2 border-t border-[color-mix(in_srgb,var(--color-border)_78%,transparent)] pt-4">
+					{#each activeLabels as label (label)}
+						<Badge variant="outline" class="border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_24%,transparent)] text-[0.68rem] text-[color-mix(in_srgb,var(--color-text-primary)_84%,var(--color-text-secondary))]">
+							{label}
+						</Badge>
+					{/each}
 				</div>
-				<div class="flex flex-wrap items-center gap-2">
-					{#if hasFilters}
-						{#each activeLabels as label (label)}
-							<Badge variant="outline" class="border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_24%,transparent)] text-[0.68rem] text-[color-mix(in_srgb,var(--color-text-primary)_84%,var(--color-text-secondary))]">
-								{label}
-							</Badge>
-						{/each}
-					{/if}
-					<Button variant="outline" size="sm" class="border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_24%,transparent)] text-[var(--color-text-primary)] hover:bg-[color-mix(in_srgb,var(--color-bg-card)_36%,transparent)]" onclick={resetFilters}>
-						Reset
-					</Button>
-				</div>
-			</div>
+			{/if}
 		</section>
 
 		<section class="space-y-4">
+			<div class="flex flex-wrap items-center justify-between gap-3">
+				<p class="text-sm text-[color-mix(in_srgb,var(--color-text-primary)_72%,var(--color-text-secondary))]">
+					Showing {data.total === 0 ? 0 : (data.page - 1) * data.pageSize + 1} to {resultWindowEnd}
+					of {data.total.toLocaleString()} entries
+					{#if selectedType !== 'all'}
+						in {COMPENDIUM_TYPE_CONFIGS[selectedType]?.plural.toLowerCase()}.
+					{:else}
+						in all.
+					{/if}
+				</p>
+			</div>
+
 			{#if data.items.length === 0}
 				<div class="rounded-[1.8rem] border border-dashed border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_18%,transparent)] px-6 py-16 text-center">
 					<p class="text-[0.72rem] tracking-[0.24em] text-[var(--color-text-muted)] uppercase">No Matches</p>
