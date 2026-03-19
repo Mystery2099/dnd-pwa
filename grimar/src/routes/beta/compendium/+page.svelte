@@ -80,9 +80,9 @@
 	const inactiveTypeChipClass =
 		'border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_18%,transparent)] text-[color-mix(in_srgb,var(--color-text-primary)_64%,var(--color-text-secondary))] hover:scale-[1.01] hover:border-[color-mix(in_srgb,var(--color-accent)_28%,var(--color-border))] hover:bg-[color-mix(in_srgb,var(--color-accent)_8%,var(--color-bg-card))] hover:text-[var(--color-text-primary)]';
 	const railButtonBaseClass =
-		'h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all md:inline-flex';
+		'h-10 w-10 shrink-0 transform-gpu items-center justify-center rounded-full border will-change-transform transition-[transform,background-color,border-color,color,box-shadow,opacity] duration-150 ease-out motion-reduce:transform-none motion-reduce:transition-none active:scale-[0.985] md:inline-flex';
 	const activeRailButtonClass =
-		'border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_30%,transparent)] text-[var(--color-text-primary)] hover:border-[color-mix(in_srgb,var(--color-accent)_24%,var(--color-border))] hover:bg-[color-mix(in_srgb,var(--color-accent)_10%,transparent)]';
+		'border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_30%,transparent)] text-[var(--color-text-primary)] shadow-[0_0.65rem_1.4rem_color-mix(in_srgb,var(--color-shadow)_12%,transparent)] hover:scale-[1.01] hover:border-[color-mix(in_srgb,var(--color-accent)_28%,var(--color-border))] hover:bg-[color-mix(in_srgb,var(--color-accent)_12%,transparent)] hover:shadow-[0_0.85rem_1.7rem_color-mix(in_srgb,var(--color-accent)_12%,transparent)]';
 	const inactiveRailButtonClass =
 		'border-[color-mix(in_srgb,var(--color-border)_64%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_14%,transparent)] text-[var(--color-text-muted)] opacity-45';
 
