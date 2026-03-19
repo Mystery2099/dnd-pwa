@@ -74,11 +74,11 @@
 	const hasContextualFilters = $derived(filterContext !== null);
 
 	const typeChipBaseClass =
-		'shrink-0 rounded-full border px-4 py-2 text-sm transition-all';
+		'shrink-0 transform-gpu rounded-full border px-4 py-2 text-sm will-change-transform transition-[transform,background-color,border-color,color,box-shadow] duration-150 ease-out motion-reduce:transform-none motion-reduce:transition-none active:scale-[0.985]';
 	const activeTypeChipClass =
-		'border-[color-mix(in_srgb,var(--color-accent)_52%,var(--color-border))] bg-[color-mix(in_srgb,var(--color-accent)_14%,transparent)] text-[var(--color-text-primary)] shadow-[0_0.8rem_1.8rem_color-mix(in_srgb,var(--color-accent)_14%,transparent)]';
+		'border-[color-mix(in_srgb,var(--color-accent)_56%,var(--color-border))] bg-[color-mix(in_srgb,var(--color-accent)_16%,transparent)] text-[var(--color-text-primary)] shadow-[0_0.8rem_1.8rem_color-mix(in_srgb,var(--color-accent)_14%,transparent)]';
 	const inactiveTypeChipClass =
-		'border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_18%,transparent)] text-[color-mix(in_srgb,var(--color-text-primary)_64%,var(--color-text-secondary))] hover:border-[color-mix(in_srgb,var(--color-accent)_22%,var(--color-border))] hover:text-[var(--color-text-primary)]';
+		'border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_18%,transparent)] text-[color-mix(in_srgb,var(--color-text-primary)_64%,var(--color-text-secondary))] hover:scale-[1.01] hover:border-[color-mix(in_srgb,var(--color-accent)_28%,var(--color-border))] hover:bg-[color-mix(in_srgb,var(--color-accent)_8%,var(--color-bg-card))] hover:text-[var(--color-text-primary)]';
 	const railButtonBaseClass =
 		'h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all md:inline-flex';
 	const activeRailButtonClass =
