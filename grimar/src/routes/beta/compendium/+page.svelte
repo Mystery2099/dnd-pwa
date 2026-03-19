@@ -3,10 +3,10 @@
 	import { goto } from '$app/navigation';
 	import { onDestroy, onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
-	import { Dialog as DialogPrimitive } from 'bits-ui';
 	import ExternalLink from 'lucide-svelte/icons/external-link';
 	import XIcon from 'lucide-svelte/icons/x';
 	import Badge from '$lib/components/ui/Badge.svelte';
+	import * as Dialog from '$lib/components/ui/dialog';
 	import Input from '$lib/components/ui/Input.svelte';
 	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
 	import StructuredValue from '$lib/components/ui/StructuredValue.svelte';
@@ -708,14 +708,14 @@
 	</div>
 </div>
 
-<DialogPrimitive.Root open={isDetailOpen} onOpenChange={handleDetailOpenChange}>
-	<DialogPrimitive.Portal>
-		<DialogPrimitive.Overlay
-			class="fixed inset-0 z-60 bg-[color-mix(in_srgb,var(--color-overlay-dark)_78%,black)] backdrop-blur-[10px] transition-opacity duration-200 data-[state=closed]:opacity-0 data-[state=open]:opacity-100"
-		/>
-		<DialogPrimitive.Content
-			class="fixed inset-y-0 right-0 z-70 flex w-full max-w-[min(42rem,100vw)] flex-col border-l border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_88%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-canvas)_98%,transparent))] shadow-[-2rem_0_4rem_color-mix(in_srgb,var(--color-shadow)_34%,transparent)] backdrop-blur-[28px] transition-[transform,opacity] duration-200 ease-out data-[state=closed]:translate-x-6 data-[state=closed]:opacity-0 data-[state=open]:translate-x-0 data-[state=open]:opacity-100"
-		>
+<Dialog.Root open={isDetailOpen} onOpenChange={handleDetailOpenChange}>
+	<Dialog.Content
+		showCloseButton={false}
+		class="top-0 right-0 left-auto h-screen max-h-screen w-full max-w-[min(42rem,100vw)] translate-x-0 translate-y-0 rounded-none border-t-0 border-r-0 border-b-0 border-l border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_88%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-canvas)_98%,transparent))] p-0 shadow-[-2rem_0_4rem_color-mix(in_srgb,var(--color-shadow)_34%,transparent)] backdrop-blur-[28px] data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+		portalProps={{
+			disabled: false
+		}}
+	>
 			{#if activeDetail}
 				<div class="flex items-start justify-between gap-4 border-b border-[color-mix(in_srgb,var(--color-border)_74%,transparent)] px-5 py-4 md:px-6">
 					<div class="min-w-0">
@@ -732,22 +732,22 @@
 								</Badge>
 							{/if}
 						</div>
-						<DialogPrimitive.Title class="mt-4 font-[var(--font-display)] text-[2rem] leading-tight font-semibold text-[var(--color-text-primary)] md:text-[2.35rem]">
+						<Dialog.Title class="mt-4 font-[var(--font-display)] text-[2rem] leading-tight font-semibold text-[var(--color-text-primary)] md:text-[2.35rem]">
 							{activeDetail.item.name}
-						</DialogPrimitive.Title>
+						</Dialog.Title>
 						{#if activeDetail.presentation.documentLabel}
-							<DialogPrimitive.Description class="mt-2 text-sm text-[color-mix(in_srgb,var(--color-text-primary)_66%,var(--color-text-secondary))]">
+							<Dialog.Description class="mt-2 text-sm text-[color-mix(in_srgb,var(--color-text-primary)_66%,var(--color-text-secondary))]">
 								{activeDetail.presentation.documentLabel}
-							</DialogPrimitive.Description>
+							</Dialog.Description>
 						{/if}
 					</div>
 
-					<DialogPrimitive.Close
+					<Dialog.Close
 						class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_24%,transparent)] text-[var(--color-text-muted)] transition-[transform,border-color,background-color,color] duration-150 ease-out hover:-translate-y-px hover:border-[color-mix(in_srgb,var(--color-accent)_26%,var(--color-border))] hover:bg-[color-mix(in_srgb,var(--color-accent)_10%,transparent)] hover:text-[var(--color-text-primary)] active:translate-y-px active:scale-[0.985]"
 					>
 						<XIcon class="size-4" />
 						<span class="sr-only">Close detail panel</span>
-					</DialogPrimitive.Close>
+					</Dialog.Close>
 				</div>
 
 				<div class="flex-1 overflow-y-auto px-5 py-5 md:px-6">
@@ -884,6 +884,5 @@
 					</div>
 				</div>
 			{/if}
-		</DialogPrimitive.Content>
-	</DialogPrimitive.Portal>
-</DialogPrimitive.Root>
+	</Dialog.Content>
+</Dialog.Root>
