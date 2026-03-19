@@ -34,7 +34,11 @@
 		type AtlasItemKind,
 		type AtlasSortId
 	} from '$lib/features/compendium/atlas';
-	import type { CompendiumDetailField, CompendiumDetailSection } from '$lib/core/types/compendium';
+	import type {
+		CompendiumCreatureEncounterSection,
+		CompendiumDetailField,
+		CompendiumDetailSection
+	} from '$lib/core/types/compendium';
 	import type { PageData } from './$types';
 
 	const SEARCH_DEBOUNCE_MS = 220;
@@ -97,6 +101,12 @@
 				section.key !== 'description' &&
 				section.key !== 'higher_level'
 		)
+	);
+	const creatureEncounterSection = $derived(
+		(activeDetail?.sections ?? []).find(
+			(section): section is CompendiumCreatureEncounterSection =>
+				section.kind === 'creature-encounter'
+		) ?? null
 	);
 	const isDetailOpen = $derived(Boolean(detailSelection && activeDetail));
 	const detailHref = $derived(
@@ -374,6 +384,15 @@
 					section.kind === 'markdown' && section.key === key
 			) ?? null
 		);
+	}
+
+	function getAbilityAbbreviation(ability: string): string {
+		return ability.slice(0, 3).toUpperCase();
+	}
+
+	function getAbilityModifier(score: number): string {
+		const modifier = Math.floor((score - 10) / 2);
+		return `${modifier >= 0 ? '+' : ''}${modifier}`;
 	}
 </script>
 
@@ -772,6 +791,116 @@
 										</div>
 									</div>
 								{/each}
+							</section>
+						{/if}
+
+						{#if creatureEncounterSection}
+							<section class="space-y-4">
+								<div class="flex items-center gap-2">
+									<div class="h-px flex-1 bg-[linear-gradient(90deg,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent)]"></div>
+									<p class="text-[0.72rem] tracking-[0.22em] text-[var(--color-text-muted)] uppercase">
+										Encounter Reference
+									</p>
+								</div>
+
+								{#if creatureEncounterSection.abilityScores.length > 0}
+									<div class="grid grid-cols-3 gap-2 sm:grid-cols-6">
+										{#each creatureEncounterSection.abilityScores as abilityScore (abilityScore.ability)}
+											<div class="rounded-[1rem] border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_22%,transparent)] px-3 py-3 text-center shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_8%,transparent)]">
+												<p class="text-[0.64rem] tracking-[0.18em] text-[var(--color-text-muted)] uppercase">
+													{getAbilityAbbreviation(abilityScore.ability)}
+												</p>
+												<p class="mt-2 text-xl font-semibold text-[var(--color-text-primary)]">
+													{abilityScore.score}
+												</p>
+												<p class="text-xs text-[color-mix(in_srgb,var(--color-text-primary)_68%,var(--color-text-secondary))]">
+													{getAbilityModifier(abilityScore.score)}
+												</p>
+											</div>
+										{/each}
+									</div>
+								{/if}
+
+								<div class="grid gap-3 sm:grid-cols-3">
+									<div class="rounded-[1rem] border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_22%,transparent)] px-4 py-3.5 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_8%,transparent)]">
+										<p class="text-[0.66rem] tracking-[0.18em] text-[var(--color-text-muted)] uppercase">
+											Armor Class
+										</p>
+										<p class="mt-2 text-sm leading-6 text-[var(--color-text-primary)]">
+											{creatureEncounterSection.armorClass !== undefined
+												? String(creatureEncounterSection.armorClass)
+												: '—'}
+										</p>
+										{#if creatureEncounterSection.armorDetail}
+											<p class="mt-1 text-xs leading-5 text-[color-mix(in_srgb,var(--color-text-primary)_68%,var(--color-text-secondary))]">
+												{creatureEncounterSection.armorDetail}
+											</p>
+										{/if}
+									</div>
+									<div class="rounded-[1rem] border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_22%,transparent)] px-4 py-3.5 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_8%,transparent)]">
+										<p class="text-[0.66rem] tracking-[0.18em] text-[var(--color-text-muted)] uppercase">
+											Hit Points
+										</p>
+										<p class="mt-2 text-sm leading-6 text-[var(--color-text-primary)]">
+											{creatureEncounterSection.hitPoints !== undefined
+												? String(creatureEncounterSection.hitPoints)
+												: '—'}
+										</p>
+										{#if creatureEncounterSection.hitDice}
+											<p class="mt-1 text-xs leading-5 text-[color-mix(in_srgb,var(--color-text-primary)_68%,var(--color-text-secondary))]">
+												{creatureEncounterSection.hitDice}
+											</p>
+										{/if}
+									</div>
+									<div class="rounded-[1rem] border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_22%,transparent)] px-4 py-3.5 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_8%,transparent)]">
+										<p class="text-[0.66rem] tracking-[0.18em] text-[var(--color-text-muted)] uppercase">
+											Speed
+										</p>
+										<p class="mt-2 text-sm leading-6 text-[var(--color-text-primary)]">
+											{creatureEncounterSection.speed ?? '—'}
+										</p>
+									</div>
+								</div>
+
+								{#if creatureEncounterSection.traits.length > 0}
+									<div class="space-y-3">
+										<p class="text-[0.72rem] tracking-[0.22em] text-[var(--color-text-muted)] uppercase">
+											Traits
+										</p>
+										<div class="space-y-3">
+											{#each creatureEncounterSection.traits as trait, index (`trait-${trait.name}-${index}`)}
+												<div class="rounded-[1.1rem] border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_20%,transparent)] px-4 py-4">
+													<p class="text-sm font-semibold text-[var(--color-text-primary)]">{trait.name}</p>
+													{#if trait.markdownKey}
+														<div class="mt-2 text-sm leading-7 text-[color-mix(in_srgb,var(--color-text-primary)_88%,var(--color-text-secondary))] [&_a]:text-[var(--color-accent)] [&_li]:ml-5 [&_ol]:list-decimal [&_p+p]:mt-4 [&_ul]:list-disc">
+															{@html markdownAt(trait.markdownKey)}
+														</div>
+													{/if}
+												</div>
+											{/each}
+										</div>
+									</div>
+								{/if}
+
+								{#if creatureEncounterSection.actions.length > 0}
+									<div class="space-y-3">
+										<p class="text-[0.72rem] tracking-[0.22em] text-[var(--color-text-muted)] uppercase">
+											Actions
+										</p>
+										<div class="space-y-3">
+											{#each creatureEncounterSection.actions as action, index (`action-${action.name}-${index}`)}
+												<div class="rounded-[1.1rem] border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_20%,transparent)] px-4 py-4">
+													<p class="text-sm font-semibold text-[var(--color-text-primary)]">{action.name}</p>
+													{#if action.markdownKey}
+														<div class="mt-2 text-sm leading-7 text-[color-mix(in_srgb,var(--color-text-primary)_88%,var(--color-text-secondary))] [&_a]:text-[var(--color-accent)] [&_li]:ml-5 [&_ol]:list-decimal [&_p+p]:mt-4 [&_ul]:list-disc">
+															{@html markdownAt(action.markdownKey)}
+														</div>
+													{/if}
+												</div>
+											{/each}
+										</div>
+									</div>
+								{/if}
 							</section>
 						{/if}
 
