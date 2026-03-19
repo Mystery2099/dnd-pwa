@@ -74,7 +74,7 @@
 
 	<!-- Sidebar -->
 	<aside
-		class="fixed top-0 bottom-0 left-3 z-50 flex flex-col before:pointer-events-none before:absolute before:inset-0 before:bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-text-primary)_7%,transparent),transparent_22%,transparent_72%,color-mix(in_srgb,var(--color-accent)_8%,transparent)),radial-gradient(circle_at_22%_14%,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent_30%),radial-gradient(circle_at_78%_70%,color-mix(in_srgb,var(--color-text-primary)_8%,transparent),transparent_26%)] before:opacity-85 before:mix-blend-screen before:content-[''] transition-[width] duration-300 ease-[var(--ease-smooth)] relative"
+		class="fixed top-0 bottom-0 left-3 z-50 relative flex flex-col before:pointer-events-none before:absolute before:inset-0 before:bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-text-primary)_7%,transparent),transparent_22%,transparent_72%,color-mix(in_srgb,var(--color-accent)_8%,transparent)),radial-gradient(circle_at_22%_14%,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent_30%),radial-gradient(circle_at_78%_70%,color-mix(in_srgb,var(--color-text-primary)_8%,transparent),transparent_26%)] before:opacity-85 before:mix-blend-screen before:content-[''] transition-[width] duration-[360ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]"
 		style="width: {sidebarWidth};"
 	>
 		<VerticalNav bind:collapsed={sidebarCollapsed} {user} />
@@ -100,7 +100,7 @@
 
 	<!-- Main Content Area -->
 	<main
-		class="fixed top-0 right-3 bottom-3 z-30 overflow-y-auto border-l border-[color-mix(in_srgb,var(--color-border)_72%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-canvas)_64%,transparent),color-mix(in_srgb,var(--color-bg-overlay)_26%,transparent))] pb-16 backdrop-blur-[28px] shadow-[-22px_0_44px_color-mix(in_srgb,black_18%,transparent),0_22px_56px_color-mix(in_srgb,black_22%,transparent)] transition-[left] duration-300 ease-[var(--ease-smooth)]"
+		class="fixed top-0 right-3 bottom-3 z-30 overflow-y-auto border-l border-[color-mix(in_srgb,var(--color-border)_72%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-canvas)_64%,transparent),color-mix(in_srgb,var(--color-bg-overlay)_26%,transparent))] pb-16 backdrop-blur-[28px] shadow-[-22px_0_44px_color-mix(in_srgb,black_18%,transparent),0_22px_56px_color-mix(in_srgb,black_22%,transparent)] transition-[left] duration-[360ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]"
 		style="left: {sidebarOffset};"
 	>
 		<div

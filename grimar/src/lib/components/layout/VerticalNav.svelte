@@ -86,7 +86,7 @@
 </script>
 
 <nav
-	class="relative flex h-full flex-col overflow-hidden border-r border-[color-mix(in_srgb,var(--color-border)_88%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_52%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-overlay)_24%,var(--color-bg-canvas)))] shadow-[inset_-1px_0_0_color-mix(in_srgb,var(--color-text-primary)_7%,transparent),18px_0_42px_color-mix(in_srgb,black_22%,transparent),0_18px_46px_color-mix(in_srgb,black_20%,transparent)] backdrop-blur-[24px] transition-[width,background-color] duration-300 ease-[var(--ease-smooth)]"
+	class="relative flex h-full flex-col overflow-hidden border-r border-[color-mix(in_srgb,var(--color-border)_88%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_52%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-overlay)_24%,var(--color-bg-canvas)))] shadow-[inset_-1px_0_0_color-mix(in_srgb,var(--color-text-primary)_7%,transparent),18px_0_42px_color-mix(in_srgb,black_22%,transparent),0_18px_46px_color-mix(in_srgb,black_20%,transparent)] backdrop-blur-[24px] transition-[width,background-color] duration-[360ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]"
 	style="width: {collapsed ? '64px' : '220px'}"
 >
 	<div
@@ -116,7 +116,7 @@
 	</div>
 
 	<!-- Navigation Sections -->
-	<div class="relative flex-1 overflow-y-auto p-2 transition-[padding] duration-300 ease-[var(--ease-smooth)]">
+	<div class="relative flex-1 overflow-y-auto p-2 transition-[padding] duration-[360ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]">
 		{#each sections as section}
 			<div class="mb-4 flex flex-col gap-1">
 				{#if !collapsed}
@@ -128,7 +128,7 @@
 				{/if}				{#each section.items as item (item.href)}
 					{#if item.disabled}
 						<span
-							class="pointer-events-none flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium opacity-50 transition-[padding,gap] duration-300 ease-[var(--ease-smooth)] {collapsed
+							class="pointer-events-none flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium opacity-50 transition-[padding,gap] duration-[360ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] {collapsed
 								? 'justify-center'
 								: ''}"
 						>
@@ -144,7 +144,7 @@
 							{/if}
 						</span>
 					{:else}
-						<a class={`${getLinkClass(item.href)} transition-[padding,gap] duration-300 ease-[var(--ease-smooth)]`} href={item.href}>
+						<a class={`${getLinkClass(item.href)} transition-[padding,gap] duration-[360ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]`} href={item.href}>
 							{#if collapsed}
 								<span
 									class="flex size-6 items-center justify-center rounded-lg bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_70%,transparent),color-mix(in_srgb,var(--color-bg-overlay)_16%,transparent))] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_8%,transparent)] transition-[transform,background-color,color,box-shadow] duration-150 ease-out group-hover:scale-[1.06] {isActive(
@@ -165,7 +165,7 @@
 		{/each}
 	</div>
 
-	<div class="relative mt-auto border-t border-[var(--color-border)] px-2 pt-2 pb-5 transition-[padding] duration-300 ease-[var(--ease-smooth)]">
+	<div class="relative mt-auto border-t border-[var(--color-border)] px-2 pt-2 pb-5 transition-[padding] duration-[360ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]">
 		<button
 			type="button"
 			class="mb-2 flex w-full transform-gpu items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm text-[var(--color-text-muted)] transition-[padding,gap,color,background-color,box-shadow,transform] duration-150 ease-out hover:-translate-y-px hover:bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_72%,transparent),color-mix(in_srgb,var(--color-accent)_8%,transparent))] hover:text-[var(--color-text-primary)] hover:shadow-[0_0.75rem_1.5rem_color-mix(in_srgb,var(--color-shadow)_10%,transparent)] active:translate-y-px active:scale-[0.985] motion-reduce:transform-none"
@@ -191,7 +191,7 @@
 				</div>
 
 				<div
-					class="min-w-0 overflow-hidden transition-[max-width,opacity,margin] duration-300 ease-[var(--ease-smooth)] {collapsed
+					class="min-w-0 overflow-hidden transition-[max-width,opacity,margin] duration-[360ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] {collapsed
 						? 'ml-0 max-w-0 opacity-0'
 						: 'ml-0.5 max-w-[9rem] flex-1 opacity-100'}"
 				>

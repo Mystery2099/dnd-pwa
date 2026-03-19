@@ -14,7 +14,7 @@
 	stroke-width="1.8"
 	stroke-linecap="round"
 	stroke-linejoin="round"
-	class={`overflow-visible transition-transform duration-300 ease-[var(--ease-smooth)] ${className}`.trim()}
+	class={`overflow-visible transition-transform duration-[360ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] ${className}`.trim()}
 	aria-hidden="true"
 >
 	<rect x="4" y="5" width="16" height="14" rx="2" opacity="0.28" />
