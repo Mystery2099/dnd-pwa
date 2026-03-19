@@ -29,7 +29,7 @@
 	}: Props = $props();
 
 	const baseClasses =
-		'inline-flex items-center justify-center gap-2 font-medium motion-reduce:transform-none disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100';
+		'ui-press inline-flex items-center justify-center gap-2 font-medium motion-reduce:transform-none disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100';
 
 	const variantClasses = {
 		primary: 'btn-gem',

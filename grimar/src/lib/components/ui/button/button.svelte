@@ -5,7 +5,7 @@
 
 	// Adapted for Arcane Aero design system
 	export const buttonVariants = tv({
-		base: "inline-flex shrink-0 items-center justify-center gap-2 rounded-lg text-sm font-medium outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] disabled:pointer-events-none disabled:opacity-50 motion-reduce:transform-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 btn-3d",
+		base: "ui-press inline-flex shrink-0 items-center justify-center gap-2 rounded-lg text-sm font-medium outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] disabled:pointer-events-none disabled:opacity-50 motion-reduce:transform-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 btn-3d",
 		variants: {
 			variant: {
 				// Primary gem button with glow

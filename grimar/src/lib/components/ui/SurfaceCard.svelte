@@ -31,7 +31,7 @@
 	{onclick}
 	{onmouseenter}
 	{onfocusin}
-	class={`card-crystal relative block overflow-hidden ${padding} ${className}`.trim()}
+	class={`card-crystal relative block overflow-hidden ${href ? 'ui-card-interactive' : ''} ${padding} ${className}`.trim()}
 	{...rest}
 >
 	{#if children}

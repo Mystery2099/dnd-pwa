@@ -77,7 +77,7 @@
 	function getLinkClass(href: string) {
 		const active = isActive(href);
 		const base =
-			'group flex transform-gpu items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-[transform,background-color,color,box-shadow,padding,gap] duration-150 ease-out motion-reduce:transform-none active:scale-[0.985]';
+			'ui-press group flex transform-gpu items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-[background-color,color,box-shadow,padding,gap] duration-[var(--duration-fast)] ease-[var(--ease-smooth)] motion-reduce:transform-none';
 		if (active) {
 			return `${base} bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-accent)_24%,transparent),color-mix(in_srgb,var(--color-accent)_12%,transparent))] text-[var(--color-text-primary)] shadow-[0_0_20px_color-mix(in_srgb,var(--color-accent)_16%,transparent),inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_8%,transparent)]`;
 		}
@@ -101,14 +101,14 @@
 		{#if !collapsed}
 			<a
 				href="/dashboard"
-				class="block transform-gpu transition-[filter,transform] duration-200 ease-out hover:-translate-y-px hover:drop-shadow-[0_0_15px_var(--color-accent-glow)] active:translate-y-px motion-reduce:transform-none"
+				class="ui-lift ui-press block transform-gpu transition-[filter] duration-[var(--duration-base)] ease-[var(--ease-smooth)] hover:drop-shadow-[0_0_15px_var(--color-accent-glow)]"
 			>
 				<img src={logoUrl} alt="Grimar" class="h-10 w-auto" />
 			</a>
 		{:else}
 			<a
 				href="/dashboard"
-				class="flex h-11 w-11 transform-gpu items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--color-border)_65%,transparent)] bg-[radial-gradient(circle_at_50%_45%,color-mix(in_srgb,var(--color-bg-card)_78%,transparent),color-mix(in_srgb,var(--color-bg-overlay)_22%,transparent))] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_8%,transparent)] transition-[border-color,background-color,box-shadow,transform] duration-150 ease-out hover:-translate-y-px hover:border-[var(--color-border-hover)] hover:bg-[radial-gradient(circle_at_50%_45%,color-mix(in_srgb,var(--color-accent)_14%,var(--color-bg-card)),color-mix(in_srgb,var(--color-bg-overlay)_28%,transparent))] hover:shadow-[0_0_16px_color-mix(in_srgb,#cfb53b_18%,transparent)] active:translate-y-px active:scale-[0.985] motion-reduce:transform-none"
+				class="ui-lift ui-press flex h-11 w-11 transform-gpu items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--color-border)_65%,transparent)] bg-[radial-gradient(circle_at_50%_45%,color-mix(in_srgb,var(--color-bg-card)_78%,transparent),color-mix(in_srgb,var(--color-bg-overlay)_22%,transparent))] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_8%,transparent)] transition-[border-color,background-color,box-shadow] duration-[var(--duration-fast)] ease-[var(--ease-smooth)] hover:border-[var(--color-border-hover)] hover:bg-[radial-gradient(circle_at_50%_45%,color-mix(in_srgb,var(--color-accent)_14%,var(--color-bg-card)),color-mix(in_srgb,var(--color-bg-overlay)_28%,transparent))] hover:shadow-[0_0_16px_color-mix(in_srgb,#cfb53b_18%,transparent)]"
 			>
 				<img src={logoIconUrl} alt="Grimar" class="h-8 w-8 object-contain" />
 			</a>
@@ -147,7 +147,7 @@
 						<a class={`${getLinkClass(item.href)} transition-[padding,gap] duration-[360ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]`} href={item.href}>
 							{#if collapsed}
 								<span
-									class="flex size-6 items-center justify-center rounded-lg bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_70%,transparent),color-mix(in_srgb,var(--color-bg-overlay)_16%,transparent))] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_8%,transparent)] transition-[transform,background-color,color,box-shadow] duration-150 ease-out group-hover:scale-[1.06] {isActive(
+									class="flex size-6 items-center justify-center rounded-lg bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_70%,transparent),color-mix(in_srgb,var(--color-bg-overlay)_16%,transparent))] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_8%,transparent)] transition-[transform,background-color,color,box-shadow] duration-[var(--duration-fast)] ease-[var(--ease-smooth)] group-hover:scale-[1.06] {isActive(
 										item.href
 									)
 										? 'bg-[var(--color-accent)]/18 text-[var(--color-text-primary)]'
@@ -168,7 +168,7 @@
 	<div class="relative mt-auto border-t border-[var(--color-border)] px-2 pt-2 pb-5 transition-[padding] duration-[360ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]">
 		<button
 			type="button"
-			class="mb-2 flex w-full transform-gpu items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm text-[var(--color-text-muted)] transition-[padding,gap,color,background-color,box-shadow,transform] duration-150 ease-out hover:-translate-y-px hover:bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_72%,transparent),color-mix(in_srgb,var(--color-accent)_8%,transparent))] hover:text-[var(--color-text-primary)] hover:shadow-[0_0.75rem_1.5rem_color-mix(in_srgb,var(--color-shadow)_10%,transparent)] active:translate-y-px active:scale-[0.985] motion-reduce:transform-none"
+			class="ui-lift ui-press mb-2 flex w-full transform-gpu items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm text-[var(--color-text-muted)] transition-[padding,gap,color,background-color,box-shadow] duration-[var(--duration-fast)] ease-[var(--ease-smooth)] hover:bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_72%,transparent),color-mix(in_srgb,var(--color-accent)_8%,transparent))] hover:text-[var(--color-text-primary)] hover:shadow-[0_0.75rem_1.5rem_color-mix(in_srgb,var(--color-shadow)_10%,transparent)]"
 			onclick={toggleCollapsed}
 		>
 			<NavToggleIcon {collapsed} class="size-5 shrink-0" />
@@ -180,7 +180,7 @@
 		{#if user}
 			<a
 				href="/settings"
-				class="group flex h-16 w-full transform-gpu items-center gap-3 overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[radial-gradient(circle_at_16%_18%,color-mix(in_srgb,var(--color-accent)_14%,transparent),transparent_24%),linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_62%,transparent),color-mix(in_srgb,var(--color-bg-overlay)_20%,transparent))] px-3 py-3 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent),0_0_22px_color-mix(in_srgb,var(--color-accent)_8%,transparent)] transition-[border-color,background-color,transform,padding,gap,box-shadow] duration-200 ease-[var(--ease-smooth)] hover:-translate-y-px hover:border-[var(--color-border-hover)] hover:bg-[radial-gradient(circle_at_16%_18%,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent_28%),linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_72%,transparent),color-mix(in_srgb,var(--color-accent)_10%,transparent))] hover:shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent),0_1rem_2rem_color-mix(in_srgb,var(--color-shadow)_12%,transparent),0_0_24px_color-mix(in_srgb,var(--color-accent)_10%,transparent)] active:translate-y-px active:scale-[0.99] motion-reduce:transform-none {collapsed
+				class="ui-card-interactive group flex h-16 w-full transform-gpu items-center gap-3 overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[radial-gradient(circle_at_16%_18%,color-mix(in_srgb,var(--color-accent)_14%,transparent),transparent_24%),linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_62%,transparent),color-mix(in_srgb,var(--color-bg-overlay)_20%,transparent))] px-3 py-3 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent),0_0_22px_color-mix(in_srgb,var(--color-accent)_8%,transparent)] transition-[border-color,background-color,padding,gap,box-shadow] duration-[var(--duration-base)] ease-[var(--ease-smooth)] hover:border-[var(--color-border-hover)] hover:bg-[radial-gradient(circle_at_16%_18%,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent_28%),linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_72%,transparent),color-mix(in_srgb,var(--color-accent)_10%,transparent))] hover:shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent),0_1rem_2rem_color-mix(in_srgb,var(--color-shadow)_12%,transparent),0_0_24px_color-mix(in_srgb,var(--color-accent)_10%,transparent)] {collapsed
 					? 'justify-center gap-0'
 					: ''}"
 			>
