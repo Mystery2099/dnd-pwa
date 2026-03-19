@@ -419,12 +419,17 @@
 						</a>
 						<button
 							type="button"
-							class="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--color-border)_78%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_18%,transparent)] px-3 py-1.5 text-[0.72rem] tracking-[0.14em] text-[color-mix(in_srgb,var(--color-text-primary)_82%,var(--color-text-secondary))] uppercase transition-colors hover:border-[color-mix(in_srgb,var(--color-accent)_26%,var(--color-border))] hover:text-[var(--color-text-primary)]"
+							class="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--color-border)_78%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_18%,transparent)] px-3 py-1.5 text-[0.72rem] tracking-[0.14em] text-[color-mix(in_srgb,var(--color-text-primary)_82%,var(--color-text-secondary))] uppercase transition-[transform,border-color,background-color,color,box-shadow] duration-150 ease-out hover:-translate-y-px hover:border-[color-mix(in_srgb,var(--color-accent)_26%,var(--color-border))] hover:bg-[color-mix(in_srgb,var(--color-accent)_8%,transparent)] hover:text-[var(--color-text-primary)] hover:shadow-[0_0.85rem_1.7rem_color-mix(in_srgb,var(--color-accent)_10%,transparent)] active:translate-y-px active:scale-[0.985] motion-reduce:transform-none motion-reduce:transition-none"
 							onclick={() => (showAtlasIntro = !showAtlasIntro)}
 							aria-expanded={showAtlasIntro}
 							aria-controls="atlas-intro"
 						>
-							<span aria-hidden="true" class="text-[0.9rem] leading-none">i</span>
+							<span
+								aria-hidden="true"
+								class={`text-[0.9rem] leading-none transition-transform duration-200 ease-out ${showAtlasIntro ? 'rotate-180 text-[var(--color-accent)]' : ''}`}
+							>
+								i
+							</span>
 							About Atlas
 						</button>
 					</div>
@@ -444,16 +449,17 @@
 
 		<section class="rounded-[1.8rem] border border-[color-mix(in_srgb,var(--color-border)_86%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_82%,transparent),color-mix(in_srgb,var(--color-bg-canvas)_96%,transparent))] p-4 shadow-[0_1rem_2.25rem_color-mix(in_srgb,var(--color-shadow)_26%,transparent)] md:p-5">
 			<div class="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_15rem_auto]">
-				<div class="relative">
+				<div class="group/search relative">
+					<div class="pointer-events-none absolute inset-0 rounded-[1rem] border border-[color-mix(in_srgb,var(--color-accent)_0%,transparent)] opacity-0 shadow-[0_0_0_0_color-mix(in_srgb,var(--color-accent)_0%,transparent)] transition-[opacity,border-color,box-shadow,transform] duration-200 ease-out group-focus-within/search:scale-[1.01] group-focus-within/search:border-[color-mix(in_srgb,var(--color-accent)_28%,transparent)] group-focus-within/search:opacity-100 group-focus-within/search:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-accent)_18%,transparent),0_1rem_2rem_color-mix(in_srgb,var(--color-accent)_12%,transparent)] motion-reduce:transform-none"></div>
 					<Input
 						type="text"
 						value={searchInput}
 						placeholder="Search the atlas by name or summary..."
 						oninput={handleSearchInput}
-						class="h-12 rounded-[1rem] border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_44%,transparent)] pr-4 pl-11 text-base text-[var(--color-text-primary)] placeholder:text-[color-mix(in_srgb,var(--color-text-muted)_82%,transparent)]"
+						class="h-12 rounded-[1rem] border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_44%,transparent)] pr-4 pl-11 text-base text-[var(--color-text-primary)] transition-[border-color,background-color,box-shadow] duration-200 ease-out placeholder:text-[color-mix(in_srgb,var(--color-text-muted)_82%,transparent)] focus-visible:border-[color-mix(in_srgb,var(--color-accent)_34%,var(--color-border))] focus-visible:bg-[color-mix(in_srgb,var(--color-bg-card)_56%,transparent)]"
 					/>
 					<svg
-						class="pointer-events-none absolute top-1/2 left-4 h-4.5 w-4.5 -translate-y-1/2 text-[var(--color-text-muted)]"
+						class="pointer-events-none absolute top-1/2 left-4 h-4.5 w-4.5 -translate-y-1/2 text-[var(--color-text-muted)] transition-[color,transform] duration-200 ease-out group-focus-within/search:-translate-y-1/2 group-focus-within/search:scale-110 group-focus-within/search:text-[var(--color-accent)] motion-reduce:transform-none"
 						fill="none"
 						stroke="currentColor"
 						viewBox="0 0 24 24"
@@ -652,10 +658,11 @@
 						<SurfaceCard
 							href={item.href}
 							onclick={(event: MouseEvent) => handleDetailCardClick(event, item)}
-							class="group h-full rounded-[1.45rem] border border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_84%,transparent),color-mix(in_srgb,var(--color-bg-canvas)_96%,transparent))] shadow-[0_1rem_2rem_color-mix(in_srgb,var(--color-shadow)_26%,transparent)] transition-transform duration-300 hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--color-accent)_28%,var(--color-border))]"
+							class="group h-full rounded-[1.45rem] border border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_84%,transparent),color-mix(in_srgb,var(--color-bg-canvas)_96%,transparent))] shadow-[0_1rem_2rem_color-mix(in_srgb,var(--color-shadow)_26%,transparent)] transition-[transform,border-color,box-shadow,background-color] duration-300 ease-out hover:-translate-y-1 hover:border-[color-mix(in_srgb,var(--color-accent)_28%,var(--color-border))] hover:bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_92%,transparent),color-mix(in_srgb,var(--color-bg-canvas)_98%,transparent))] hover:shadow-[0_1.4rem_2.8rem_color-mix(in_srgb,var(--color-shadow)_28%,transparent),0_0_0_1px_color-mix(in_srgb,var(--color-accent)_10%,transparent)] focus-visible:-translate-y-1 focus-visible:border-[color-mix(in_srgb,var(--color-accent)_32%,var(--color-border))] focus-visible:shadow-[0_1.4rem_2.8rem_color-mix(in_srgb,var(--color-shadow)_28%,transparent),0_0_0_1px_color-mix(in_srgb,var(--color-accent)_14%,transparent)] motion-reduce:transform-none"
 						>
 							<div class="relative h-full p-4.5">
-								<div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-[color-mix(in_srgb,var(--color-accent)_18%,transparent)] to-transparent"></div>
+								<div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-[color-mix(in_srgb,var(--color-accent)_18%,transparent)] to-transparent opacity-70 transition-opacity duration-300 ease-out group-hover:opacity-100"></div>
+								<div class="pointer-events-none absolute inset-x-8 top-0 h-16 rounded-full bg-[radial-gradient(circle,color-mix(in_srgb,var(--color-accent)_12%,transparent),transparent_68%)] opacity-0 blur-2xl transition-[opacity,transform] duration-300 ease-out group-hover:translate-y-1 group-hover:opacity-100 motion-reduce:transform-none"></div>
 								<div class="mb-4 flex items-start justify-between gap-3">
 									<div class="min-w-0">
 										<p class={`text-[0.68rem] tracking-[0.22em] uppercase ${getTypeAccentClasses(item.type)}`}>
@@ -665,18 +672,18 @@
 											{item.name}
 										</h2>
 									</div>
-									<div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-[0.9rem] border border-[color-mix(in_srgb,var(--color-border)_78%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_24%,transparent)] text-[color-mix(in_srgb,var(--color-text-primary)_66%,var(--color-text-secondary))]">
+									<div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-[0.9rem] border border-[color-mix(in_srgb,var(--color-border)_78%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_24%,transparent)] text-[color-mix(in_srgb,var(--color-text-primary)_66%,var(--color-text-secondary))] transition-[transform,border-color,background-color,color,box-shadow] duration-200 ease-out group-hover:-translate-y-0.5 group-hover:scale-[1.03] group-hover:border-[color-mix(in_srgb,var(--color-accent)_24%,var(--color-border))] group-hover:bg-[color-mix(in_srgb,var(--color-accent)_10%,transparent)] group-hover:text-[var(--color-text-primary)] group-hover:shadow-[0_0.8rem_1.6rem_color-mix(in_srgb,var(--color-accent)_10%,transparent)] motion-reduce:transform-none">
 										<CompendiumTypeIcon type={item.type} fallback="✦" class="h-5 w-5" />
 									</div>
 								</div>
 
 								{#if item.description}
-									<p class="line-clamp-4 min-h-[5.4rem] text-sm leading-6 text-[color-mix(in_srgb,var(--color-text-primary)_60%,var(--color-text-secondary))]">
+									<p class="line-clamp-4 min-h-[5.4rem] text-sm leading-6 text-[color-mix(in_srgb,var(--color-text-primary)_60%,var(--color-text-secondary))] transition-colors duration-200 ease-out group-hover:text-[color-mix(in_srgb,var(--color-text-primary)_74%,var(--color-text-secondary))]">
 										{item.description}
 									</p>
 								{/if}
 
-								<div class="mt-4 flex flex-wrap gap-1.5">
+								<div class="mt-4 flex flex-wrap gap-1.5 transition-transform duration-200 ease-out group-hover:translate-y-px motion-reduce:transform-none">
 									{#each item.badges as badge, index (`${badge.label}-${index}`)}
 										<Badge variant="outline" class={getBadgeClasses(badge.tone)}>
 											{badge.label}
@@ -685,11 +692,16 @@
 								</div>
 
 								{#if item.documentLabel}
-									<div class="mt-4 border-t border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] pt-3.5">
+									<div class="mt-4 border-t border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] pt-3.5 transition-[border-color,transform] duration-200 ease-out group-hover:translate-y-px group-hover:border-[color-mix(in_srgb,var(--color-accent)_16%,var(--color-border))] motion-reduce:transform-none">
 										<p class="text-[0.65rem] tracking-[0.22em] text-[var(--color-text-muted)] uppercase">Source</p>
 										<p class="mt-1 truncate text-sm text-[color-mix(in_srgb,var(--color-text-primary)_62%,var(--color-text-secondary))]">{item.documentLabel}</p>
 									</div>
 								{/if}
+
+								<div class="pointer-events-none mt-4 flex items-center justify-between border-t border-transparent pt-3 text-[0.68rem] tracking-[0.18em] text-[color-mix(in_srgb,var(--color-text-muted)_84%,transparent)] uppercase opacity-0 transition-[opacity,transform,color] duration-200 ease-out group-hover:translate-y-0 group-hover:border-[color-mix(in_srgb,var(--color-accent)_10%,transparent)] group-hover:opacity-100 group-hover:text-[color-mix(in_srgb,var(--color-text-primary)_72%,var(--color-accent))] motion-reduce:transform-none">
+									<span>Preview Pane</span>
+									<span aria-hidden="true" class="text-sm leading-none transition-transform duration-200 ease-out group-hover:translate-x-0.5 motion-reduce:transform-none">↗</span>
+								</div>
 							</div>
 						</SurfaceCard>
 					{/each}
@@ -730,13 +742,13 @@
 <Dialog.Root open={isDetailOpen} onOpenChange={handleDetailOpenChange}>
 	<Dialog.Content
 		showCloseButton={false}
-		class="top-0 right-0 left-auto flex h-screen max-h-screen w-full max-w-[min(42rem,100vw)] flex-col gap-0 overflow-hidden translate-x-0 translate-y-0 rounded-none border-t-0 border-r-0 border-b-0 border-l border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_88%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-canvas)_98%,transparent))] p-0 shadow-[-2rem_0_4rem_color-mix(in_srgb,var(--color-shadow)_34%,transparent)] backdrop-blur-[28px] data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+		class="group/pane top-0 right-0 left-auto flex h-screen max-h-screen w-full max-w-[min(42rem,100vw)] flex-col gap-0 overflow-hidden translate-x-0 translate-y-0 rounded-none border-t-0 border-r-0 border-b-0 border-l border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_88%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-canvas)_98%,transparent))] p-0 shadow-[-2rem_0_4rem_color-mix(in_srgb,var(--color-shadow)_34%,transparent)] backdrop-blur-[28px] data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
 		portalProps={{
 			disabled: false
 		}}
 	>
 			{#if activeDetail}
-				<div class="flex items-start justify-between gap-4 border-b border-[color-mix(in_srgb,var(--color-border)_74%,transparent)] px-5 py-4 md:px-6">
+				<div class="flex items-start justify-between gap-4 border-b border-[color-mix(in_srgb,var(--color-border)_74%,transparent)] px-5 py-4 transition-[opacity,transform,border-color] delay-75 duration-250 ease-out group-data-[state=closed]/pane:-translate-y-2 group-data-[state=closed]/pane:opacity-0 group-data-[state=open]/pane:translate-y-0 group-data-[state=open]/pane:opacity-100 md:px-6">
 					<div class="min-w-0">
 						<div class="flex flex-wrap items-center gap-2">
 							<Badge
@@ -770,7 +782,7 @@
 				</div>
 
 				<div class="flex-1 overflow-y-auto px-5 py-5 md:px-6">
-					<div class="space-y-6">
+					<div class="space-y-6 transition-[opacity,transform] delay-100 duration-300 ease-out group-data-[state=closed]/pane:translate-x-3 group-data-[state=closed]/pane:opacity-0 group-data-[state=open]/pane:translate-x-0 group-data-[state=open]/pane:opacity-100">
 						{#if activeDetail.presentation.headerBadges.length > 0}
 							<div class="flex flex-wrap gap-2">
 								{#each activeDetail.presentation.headerBadges as badge, index (`${badge.label}-${index}`)}
@@ -995,7 +1007,7 @@
 					</div>
 				</div>
 
-				<div class="border-t border-[color-mix(in_srgb,var(--color-border)_74%,transparent)] px-5 py-4 md:px-6">
+				<div class="border-t border-[color-mix(in_srgb,var(--color-border)_74%,transparent)] px-5 py-4 transition-[opacity,transform,border-color] delay-150 duration-250 ease-out group-data-[state=closed]/pane:translate-y-2 group-data-[state=closed]/pane:opacity-0 group-data-[state=open]/pane:translate-y-0 group-data-[state=open]/pane:opacity-100 md:px-6">
 					<div class="flex flex-col gap-3 sm:flex-row">
 						<Button
 							variant="outline"
