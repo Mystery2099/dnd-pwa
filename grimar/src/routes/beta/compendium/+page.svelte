@@ -39,7 +39,7 @@
 		CompendiumDetailField,
 		CompendiumDetailSection
 	} from '$lib/core/types/compendium';
-	import { fadeIn, fadeUp, paneEnter, paneExit, stagger } from '$lib/ui/motion';
+	import { fadeIn, fadeUp, stagger } from '$lib/ui/motion';
 	import { getCompendiumTransitionNames } from '$lib/ui/view-transitions';
 	import type { PageData } from './$types';
 
@@ -751,7 +751,7 @@
 <Dialog.Root open={isDetailOpen} onOpenChange={handleDetailOpenChange}>
 	<Dialog.Content
 		showCloseButton={false}
-		class="atlas-preview-pane group/pane top-0 right-0 left-auto h-screen max-h-screen w-full max-w-[min(42rem,100vw)] translate-x-0 translate-y-0 overflow-visible rounded-none border-0 bg-transparent p-0 shadow-none backdrop-blur-0 motion-reduce:transition-none"
+		class="atlas-preview-pane group/pane top-0 right-0 left-auto h-screen max-h-screen w-full max-w-[min(42rem,100vw)] translate-x-0 translate-y-0 overflow-visible rounded-none border-0 bg-transparent p-0 shadow-none backdrop-blur-0 transition-[transform,opacity] duration-[var(--duration-pane-open)] ease-[var(--ease-snap)] data-[state=closed]:translate-x-full data-[state=closed]:opacity-0 data-[state=open]:translate-x-0 data-[state=open]:opacity-100 data-[state=closed]:duration-[var(--duration-pane-close)] data-[state=closed]:ease-linear motion-reduce:translate-x-0 motion-reduce:transition-none"
 		portalProps={{
 			disabled: false
 		}}
@@ -763,8 +763,6 @@
 					style={previewTransitionNames
 						? `view-transition-name:${previewTransitionNames.shell};`
 						: undefined}
-					in:fly={paneEnter()}
-					out:fly={paneExit()}
 				>
 				<div class="flex items-start justify-between gap-4 border-b border-[color-mix(in_srgb,var(--color-border)_74%,transparent)] px-5 py-4 transition-[opacity,transform,border-color] duration-120 ease-out group-data-[state=closed]/pane:-translate-y-2 group-data-[state=closed]/pane:opacity-0 group-data-[state=open]/pane:translate-y-0 group-data-[state=open]/pane:opacity-100 md:px-6">
 					<div class="min-w-0">
