@@ -32,12 +32,12 @@
 	></div>
 	<div class="relative flex min-w-0 items-center gap-3">
 		<span
-			class="mt-px size-1.5 rotate-45 rounded-[1px] bg-[var(--color-accent)] shadow-[0_0_12px_var(--color-accent-glow)]"
+			class="mt-px size-1.5 rotate-45 rounded-[1px] bg-[var(--color-accent)] shadow-[0_0_12px_var(--color-accent-glow)] transition-[transform,box-shadow] duration-200 ease-out"
 			aria-hidden="true"
 		></span>
 		<div class="min-w-0">
 			<p
-				class="truncate text-[0.76rem] font-[var(--font-display)] font-semibold tracking-[0.34em] text-[var(--color-accent)] uppercase"
+				class="truncate text-[0.76rem] font-[var(--font-display)] font-semibold tracking-[0.34em] text-[var(--color-accent)] uppercase transition-[letter-spacing,color] duration-200 ease-out"
 			>
 				{currentSection}
 			</p>
@@ -48,12 +48,12 @@
 		<label class="group relative hidden sm:block">
 			<span class="sr-only">Search the Hermetica</span>
 			<Search
-				class="pointer-events-none absolute top-1/2 left-3 size-3.5 -translate-y-1/2 text-[var(--color-text-muted)] transition-colors group-focus-within:text-[var(--color-accent)]"
+				class="pointer-events-none absolute top-1/2 left-3 size-3.5 -translate-y-1/2 text-[var(--color-text-muted)] transition-[color,transform] duration-150 ease-out group-focus-within:translate-x-0.5 group-focus-within:text-[var(--color-accent)]"
 			/>
 			<input
 				type="search"
 				placeholder="Search the Hermetica..."
-				class="appearance-none h-9 w-[clamp(12rem,26vw,18rem)] rounded-lg border border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_74%,transparent),color-mix(in_srgb,var(--color-bg-overlay)_22%,transparent))] pr-3 pl-9 text-sm text-[var(--color-text-secondary)] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_8%,transparent),0_0_0_1px_color-mix(in_srgb,var(--color-border)_20%,transparent)] transition-[border-color,box-shadow,color,background-color] outline-none placeholder:text-[color-mix(in_srgb,var(--color-text-muted)_86%,transparent)] focus:border-[var(--color-border-hover)] focus:bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_82%,transparent),color-mix(in_srgb,var(--color-accent)_10%,transparent))] focus:text-[var(--color-text-primary)] focus:shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent),0_0_0_1px_color-mix(in_srgb,var(--color-accent)_24%,transparent),0_0_18px_color-mix(in_srgb,var(--color-accent)_10%,transparent)]"
+				class="appearance-none h-9 w-[clamp(12rem,26vw,18rem)] rounded-lg border border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_74%,transparent),color-mix(in_srgb,var(--color-bg-overlay)_22%,transparent))] pr-3 pl-9 text-sm text-[var(--color-text-secondary)] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_8%,transparent),0_0_0_1px_color-mix(in_srgb,var(--color-border)_20%,transparent)] transition-[width,transform,border-color,box-shadow,color,background-color] duration-150 ease-out outline-none placeholder:text-[color-mix(in_srgb,var(--color-text-muted)_86%,transparent)] hover:-translate-y-px hover:border-[color-mix(in_srgb,var(--color-border-hover)_88%,transparent)] focus:w-[clamp(13rem,28vw,19rem)] focus:-translate-y-px focus:border-[var(--color-border-hover)] focus:bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_82%,transparent),color-mix(in_srgb,var(--color-accent)_10%,transparent))] focus:text-[var(--color-text-primary)] focus:shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent),0_0_0_1px_color-mix(in_srgb,var(--color-accent)_24%,transparent),0_0_18px_color-mix(in_srgb,var(--color-accent)_10%,transparent)] motion-reduce:transform-none"
 			/>
 		</label>
 

@@ -44,7 +44,7 @@
 >
 	<SelectPrimitive.Trigger
 		class={cn(
-			'flex h-10 w-full items-center justify-between rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] px-4 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] hover:border-[var(--color-border-hover)] focus:ring-2 focus:ring-[var(--color-accent)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg-canvas)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50',
+			'group flex h-10 w-full transform-gpu items-center justify-between rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] px-4 py-2 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_8%,transparent)] transition-[transform,border-color,background-color,box-shadow,color] duration-150 ease-out hover:-translate-y-px hover:border-[var(--color-border-hover)] hover:bg-[color-mix(in_srgb,var(--color-bg-card)_92%,var(--color-accent))] hover:shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent),0_0.7rem_1.4rem_color-mix(in_srgb,var(--color-shadow)_10%,transparent)] active:translate-y-px active:scale-[0.985] focus:ring-2 focus:ring-[var(--color-accent)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg-canvas)] focus:outline-none data-[state=open]:border-[color-mix(in_srgb,var(--color-accent)_36%,var(--color-border))] data-[state=open]:bg-[color-mix(in_srgb,var(--color-bg-card)_90%,var(--color-accent))] data-[state=open]:shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent),0_0_0_1px_color-mix(in_srgb,var(--color-accent)_18%,transparent),0_0.9rem_1.8rem_color-mix(in_srgb,var(--color-accent)_10%,transparent)] motion-reduce:transform-none motion-reduce:transition-none disabled:cursor-not-allowed disabled:opacity-50',
 			className
 		)}
 	>
@@ -54,7 +54,7 @@
 			{placeholder}
 		{/if}
 
-		<ChevronDown class="size-4 text-[var(--color-text-muted)]" />
+		<ChevronDown class="size-4 text-[var(--color-text-muted)] transition-[transform,color] duration-150 ease-out group-data-[state=open]:rotate-180 group-data-[state=open]:text-[var(--color-accent)]" />
 	</SelectPrimitive.Trigger>
 
 	<SelectPrimitive.Portal>
@@ -72,7 +72,7 @@
 					<SelectPrimitive.Item
 						value={option.value}
 						disabled={option.disabled}
-						class="relative flex cursor-pointer items-center rounded-lg px-3 py-2 text-sm text-[var(--color-text-primary)] transition-colors outline-none select-none hover:bg-[color-mix(in_srgb,var(--color-accent)_14%,transparent)] focus:bg-[color-mix(in_srgb,var(--color-accent)_20%,transparent)] disabled:pointer-events-none disabled:opacity-50 data-[state=checked]:bg-[color-mix(in_srgb,var(--color-accent)_18%,transparent)] data-[state=checked]:text-[var(--color-accent)]"
+						class="relative flex cursor-pointer items-center rounded-lg px-3 py-2 text-sm text-[var(--color-text-primary)] outline-none select-none transition-[transform,background-color,color] duration-150 ease-out hover:translate-x-0.5 hover:bg-[color-mix(in_srgb,var(--color-accent)_14%,transparent)] focus:translate-x-0.5 focus:bg-[color-mix(in_srgb,var(--color-accent)_20%,transparent)] disabled:pointer-events-none disabled:opacity-50 data-[state=checked]:bg-[color-mix(in_srgb,var(--color-accent)_18%,transparent)] data-[state=checked]:text-[var(--color-accent)]"
 					>
 						{#snippet children({ selected })}
 							{#if selected}
