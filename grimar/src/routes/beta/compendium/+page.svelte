@@ -751,8 +751,8 @@
 <Dialog.Root open={isDetailOpen} onOpenChange={handleDetailOpenChange}>
 	<Dialog.Content
 		showCloseButton={false}
-		overlayClass="z-[34] bg-[color-mix(in_srgb,var(--color-overlay-dark)_72%,black)] backdrop-blur-[8px]"
-		class="atlas-preview-pane group/pane top-0 right-3 bottom-3 left-auto z-[36] h-[calc(100vh-0.75rem)] max-h-[calc(100vh-0.75rem)] w-full max-w-[min(42rem,100vw-0.75rem)] translate-x-0 translate-y-0 overflow-visible rounded-none border-0 bg-transparent p-0 shadow-none backdrop-blur-0 transition-[transform,opacity] duration-[var(--duration-pane-open)] ease-[var(--ease-snap)] data-[state=closed]:translate-x-full data-[state=closed]:opacity-0 data-[state=open]:translate-x-0 data-[state=open]:opacity-100 data-[state=closed]:duration-[var(--duration-pane-close)] data-[state=closed]:ease-linear motion-reduce:translate-x-0 motion-reduce:transition-none"
+		overlayClass="top-[3.75rem] right-3 bottom-3 left-3 z-[34] bg-[color-mix(in_srgb,var(--color-overlay-dark)_72%,black)] backdrop-blur-[8px]"
+		class="atlas-preview-pane group/pane top-[3.75rem] right-3 bottom-3 left-auto z-[36] h-[calc(100vh-4.5rem)] max-h-[calc(100vh-4.5rem)] w-full max-w-[min(42rem,100vw-0.75rem)] translate-x-0 translate-y-0 overflow-visible rounded-none border-0 bg-transparent p-0 shadow-none backdrop-blur-0 transition-[transform,opacity] duration-[var(--duration-pane-open)] ease-[var(--ease-snap)] data-[state=closed]:translate-x-full data-[state=closed]:opacity-0 data-[state=open]:translate-x-0 data-[state=open]:opacity-100 data-[state=closed]:duration-[var(--duration-pane-close)] data-[state=closed]:ease-linear motion-reduce:translate-x-0 motion-reduce:transition-none"
 		portalProps={{
 			disabled: false
 		}}
