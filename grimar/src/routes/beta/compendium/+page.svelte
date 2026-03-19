@@ -2,7 +2,7 @@
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { onDestroy, onMount } from 'svelte';
-	import { slide } from 'svelte/transition';
+	import { fade, fly, slide } from 'svelte/transition';
 	import ExternalLink from 'lucide-svelte/icons/external-link';
 	import XIcon from 'lucide-svelte/icons/x';
 	import Badge from '$lib/components/ui/Badge.svelte';
@@ -394,6 +394,29 @@
 		const modifier = Math.floor((score - 10) / 2);
 		return `${modifier >= 0 ? '+' : ''}${modifier}`;
 	}
+
+	function getPreviewPaneAccent(type?: CompendiumTypeName | null): string {
+		switch (type) {
+			case 'spells':
+				return 'var(--color-gem-amethyst)';
+			case 'creatures':
+				return 'var(--color-gem-ruby)';
+			case 'items':
+			case 'feats':
+				return 'var(--color-gem-topaz)';
+			case 'magicitems':
+			case 'species':
+			case 'armor':
+				return 'var(--color-gem-sapphire)';
+			case 'classes':
+				return 'var(--color-gem-emerald)';
+			case 'backgrounds':
+			case 'weapons':
+				return 'var(--color-gem-ruby)';
+			default:
+				return 'var(--color-accent)';
+		}
+	}
 </script>
 
 <svelte:head>
@@ -401,7 +424,7 @@
 </svelte:head>
 
 <div class="min-h-screen bg-[radial-gradient(circle_at_top,color-mix(in_srgb,var(--color-accent)_14%,transparent),transparent_38%),linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-canvas)_74%,black),color-mix(in_srgb,var(--color-bg-canvas)_88%,#040302)_48%,color-mix(in_srgb,var(--color-bg-canvas)_76%,var(--color-bg-overlay)))]">
-	<div class="mx-auto flex max-w-[94rem] flex-col gap-6 px-3 py-3 md:px-5 md:py-4">
+	<div class={`mx-auto flex max-w-[94rem] flex-col gap-6 px-3 py-3 transition-[transform,opacity,filter] transform-gpu motion-reduce:transform-none motion-reduce:transition-none md:px-5 md:py-4 ${isDetailOpen ? 'scale-[0.98] opacity-[0.86] saturate-[0.92] duration-[350ms] ease-[cubic-bezier(0.175,0.885,0.32,1.12)]' : 'scale-100 opacity-100 saturate-100 duration-[200ms] ease-out'}`}>
 		<section class="relative overflow-hidden rounded-[2rem] border border-[color-mix(in_srgb,var(--color-accent)_24%,var(--color-border))] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_54%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-canvas)_96%,transparent))] p-5 shadow-[0_1.4rem_3rem_color-mix(in_srgb,var(--color-shadow)_32%,transparent)] md:p-6">
 			<div class="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,transparent,color-mix(in_srgb,var(--color-accent)_6%,transparent),transparent)]"></div>
 			<div class="pointer-events-none absolute inset-0 opacity-35 [background-image:linear-gradient(color-mix(in_srgb,var(--color-accent)_10%,transparent)_1px,transparent_1px),linear-gradient(90deg,color-mix(in_srgb,var(--color-accent)_10%,transparent)_1px,transparent_1px)] [background-position:center] [background-size:3.5rem_3.5rem]"></div>
@@ -742,15 +765,22 @@
 <Dialog.Root open={isDetailOpen} onOpenChange={handleDetailOpenChange}>
 	<Dialog.Content
 		showCloseButton={false}
-		class="group/pane top-0 right-0 left-auto flex h-screen max-h-screen w-full max-w-[min(42rem,100vw)] flex-col gap-0 overflow-hidden translate-x-0 translate-y-0 rounded-none border-t-0 border-r-0 border-b-0 border-l border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_88%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-canvas)_98%,transparent))] p-0 shadow-[-2rem_0_4rem_color-mix(in_srgb,var(--color-shadow)_34%,transparent)] backdrop-blur-[28px] data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+		style={`--atlas-pane-accent:${getPreviewPaneAccent(activeDetail?.item.type)};`}
+		class="atlas-preview-pane group/pane top-0 right-0 left-auto flex h-screen max-h-screen w-full max-w-[min(42rem,100vw)] flex-col gap-0 overflow-hidden rounded-none border-t-0 border-r-0 border-b-0 border-l border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_88%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-canvas)_98%,transparent))] p-0 shadow-[-2rem_0_4rem_color-mix(in_srgb,var(--color-shadow)_34%,transparent)] backdrop-blur-[28px] will-change-transform data-[state=open]:translate-x-0 data-[state=closed]:translate-x-full data-[state=open]:duration-[250ms] data-[state=closed]:duration-[180ms] data-[state=open]:ease-[cubic-bezier(0.175,0.885,0.32,1.275)] data-[state=closed]:ease-linear motion-reduce:translate-x-0 motion-reduce:transition-none"
 		portalProps={{
 			disabled: false
 		}}
 	>
 			{#if activeDetail}
-				<div class="flex items-start justify-between gap-4 border-b border-[color-mix(in_srgb,var(--color-border)_74%,transparent)] px-5 py-4 transition-[opacity,transform,border-color] delay-75 duration-250 ease-out group-data-[state=closed]/pane:-translate-y-2 group-data-[state=closed]/pane:opacity-0 group-data-[state=open]/pane:translate-y-0 group-data-[state=open]/pane:opacity-100 md:px-6">
+				<div aria-hidden="true" class="atlas-preview-pane__flare pointer-events-none absolute inset-y-0 left-0 w-[2px]"></div>
+				{#key `${activeDetail.item.type}:${activeDetail.item.key}`}
+				<div class="flex items-start justify-between gap-4 border-b border-[color-mix(in_srgb,var(--color-border)_74%,transparent)] px-5 py-4 transition-[opacity,transform,border-color] duration-120 ease-out group-data-[state=closed]/pane:-translate-y-2 group-data-[state=closed]/pane:opacity-0 group-data-[state=open]/pane:translate-y-0 group-data-[state=open]/pane:opacity-100 md:px-6">
 					<div class="min-w-0">
-						<div class="flex flex-wrap items-center gap-2">
+						<div
+							class="flex flex-wrap items-center gap-2"
+							in:fly={{ y: 10, duration: 160, delay: 150 }}
+							out:fade={{ duration: 80 }}
+						>
 							<Badge
 								variant="outline"
 								class={`text-[0.68rem] tracking-[0.18em] uppercase ${getTypeAccentClasses(activeDetail.item.type)}`}
@@ -763,13 +793,17 @@
 								</Badge>
 							{/if}
 						</div>
-						<Dialog.Title class="mt-4 font-[var(--font-display)] text-[2rem] leading-tight font-semibold text-[var(--color-text-primary)] md:text-[2.35rem]">
-							{activeDetail.item.name}
-						</Dialog.Title>
+						<div in:fly={{ y: 10, duration: 180, delay: 150 }} out:fade={{ duration: 80 }}>
+							<Dialog.Title class="mt-4 font-[var(--font-display)] text-[2rem] leading-tight font-semibold text-[var(--color-text-primary)] md:text-[2.35rem]">
+								{activeDetail.item.name}
+							</Dialog.Title>
+						</div>
 						{#if activeDetail.presentation.documentLabel}
-							<Dialog.Description class="mt-2 text-sm text-[color-mix(in_srgb,var(--color-text-primary)_66%,var(--color-text-secondary))]">
-								{activeDetail.presentation.documentLabel}
-							</Dialog.Description>
+							<div in:fly={{ y: 10, duration: 170, delay: 175 }} out:fade={{ duration: 80 }}>
+								<Dialog.Description class="mt-2 text-sm text-[color-mix(in_srgb,var(--color-text-primary)_66%,var(--color-text-secondary))]">
+									{activeDetail.presentation.documentLabel}
+								</Dialog.Description>
+							</div>
 						{/if}
 					</div>
 
@@ -782,9 +816,13 @@
 				</div>
 
 				<div class="flex-1 overflow-y-auto px-5 py-5 md:px-6">
-					<div class="space-y-6 transition-[opacity,transform] delay-100 duration-300 ease-out group-data-[state=closed]/pane:translate-x-3 group-data-[state=closed]/pane:opacity-0 group-data-[state=open]/pane:translate-x-0 group-data-[state=open]/pane:opacity-100">
+					<div class="space-y-6 transition-[opacity,transform] duration-120 ease-out group-data-[state=closed]/pane:translate-x-3 group-data-[state=closed]/pane:opacity-0 group-data-[state=open]/pane:translate-x-0 group-data-[state=open]/pane:opacity-100">
 						{#if activeDetail.presentation.headerBadges.length > 0}
-							<div class="flex flex-wrap gap-2">
+							<div
+								class="flex flex-wrap gap-2"
+								in:fly={{ y: 10, duration: 170, delay: 200 }}
+								out:fade={{ duration: 80 }}
+							>
 								{#each activeDetail.presentation.headerBadges as badge, index (`${badge.label}-${index}`)}
 									<Badge variant={badge.variant}>{badge.label}</Badge>
 								{/each}
@@ -792,7 +830,11 @@
 						{/if}
 
 						{#if leadingDetailFields.length > 0}
-							<section class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+							<section
+								class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3"
+								in:fly={{ y: 10, duration: 170, delay: 200 }}
+								out:fade={{ duration: 80 }}
+							>
 								{#each leadingDetailFields as field (field.key)}
 									<div class="rounded-[1rem] border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_22%,transparent)] px-4 py-3.5 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_8%,transparent)]">
 										<p class="text-[0.66rem] tracking-[0.18em] text-[var(--color-text-muted)] uppercase">
@@ -807,7 +849,11 @@
 						{/if}
 
 						{#if creatureEncounterSection}
-							<section class="space-y-4">
+							<section
+								class="space-y-4"
+								in:fly={{ y: 10, duration: 175, delay: 225 }}
+								out:fade={{ duration: 80 }}
+							>
 								<div class="flex items-center gap-2">
 									<div class="h-px flex-1 bg-[linear-gradient(90deg,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent)]"></div>
 									<p class="text-[0.72rem] tracking-[0.22em] text-[var(--color-text-muted)] uppercase">
@@ -917,7 +963,11 @@
 						{/if}
 
 						{#if detailDescriptionSection}
-							<section class="space-y-3">
+							<section
+								class="space-y-3"
+								in:fly={{ y: 10, duration: 180, delay: 250 }}
+								out:fade={{ duration: 80 }}
+							>
 								<div class="flex items-center gap-2">
 									<div class="h-px flex-1 bg-[linear-gradient(90deg,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent)]"></div>
 									<p class="text-[0.72rem] tracking-[0.22em] text-[var(--color-text-muted)] uppercase">
@@ -929,7 +979,11 @@
 								</div>
 							</section>
 						{:else if activeDetail.item.description}
-							<section class="space-y-3">
+							<section
+								class="space-y-3"
+								in:fly={{ y: 10, duration: 180, delay: 250 }}
+								out:fade={{ duration: 80 }}
+							>
 								<div class="flex items-center gap-2">
 									<div class="h-px flex-1 bg-[linear-gradient(90deg,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent)]"></div>
 									<p class="text-[0.72rem] tracking-[0.22em] text-[var(--color-text-muted)] uppercase">
@@ -943,7 +997,11 @@
 						{/if}
 
 						{#if detailHigherLevelSection}
-							<section class="space-y-3">
+							<section
+								class="space-y-3"
+								in:fly={{ y: 10, duration: 180, delay: 250 }}
+								out:fade={{ duration: 80 }}
+							>
 								<div class="flex items-center gap-2">
 									<div class="h-px flex-1 bg-[linear-gradient(90deg,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent)]"></div>
 									<p class="text-[0.72rem] tracking-[0.22em] text-[var(--color-text-muted)] uppercase">
@@ -957,7 +1015,11 @@
 						{/if}
 
 						{#if supplementalDetailSections.length > 0}
-							<section class="space-y-3">
+							<section
+								class="space-y-3"
+								in:fly={{ y: 10, duration: 190, delay: 275 }}
+								out:fade={{ duration: 80 }}
+							>
 								<div class="flex items-center gap-2">
 									<div class="h-px flex-1 bg-[linear-gradient(90deg,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent)]"></div>
 									<p class="text-[0.72rem] tracking-[0.22em] text-[var(--color-text-muted)] uppercase">
@@ -983,7 +1045,11 @@
 						{/if}
 
 						{#if trailingDetailFields.length > 0}
-							<section class="space-y-3">
+							<section
+								class="space-y-3"
+								in:fly={{ y: 10, duration: 190, delay: 275 }}
+								out:fade={{ duration: 80 }}
+							>
 								<div class="flex items-center gap-2">
 									<div class="h-px flex-1 bg-[linear-gradient(90deg,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent)]"></div>
 									<p class="text-[0.72rem] tracking-[0.22em] text-[var(--color-text-muted)] uppercase">
@@ -1007,7 +1073,7 @@
 					</div>
 				</div>
 
-				<div class="border-t border-[color-mix(in_srgb,var(--color-border)_74%,transparent)] px-5 py-4 transition-[opacity,transform,border-color] delay-150 duration-250 ease-out group-data-[state=closed]/pane:translate-y-2 group-data-[state=closed]/pane:opacity-0 group-data-[state=open]/pane:translate-y-0 group-data-[state=open]/pane:opacity-100 md:px-6">
+				<div class="border-t border-[color-mix(in_srgb,var(--color-border)_74%,transparent)] px-5 py-4 transition-[opacity,transform,border-color] duration-120 ease-out group-data-[state=closed]/pane:translate-y-2 group-data-[state=closed]/pane:opacity-0 group-data-[state=open]/pane:translate-y-0 group-data-[state=open]/pane:opacity-100 md:px-6">
 					<div class="flex flex-col gap-3 sm:flex-row">
 						<Button
 							variant="outline"
@@ -1024,6 +1090,44 @@
 						{/if}
 					</div>
 				</div>
+				{/key}
 			{/if}
 	</Dialog.Content>
 </Dialog.Root>
+
+<style>
+	@keyframes atlasPaneBorderFlare {
+		0% {
+			opacity: 0;
+			box-shadow: 0 0 0 color-mix(in srgb, var(--atlas-pane-accent) 0%, transparent);
+		}
+
+		40% {
+			opacity: 0.95;
+			box-shadow:
+				0 0 0.9rem color-mix(in srgb, var(--atlas-pane-accent) 52%, transparent),
+				0 0 1.8rem color-mix(in srgb, var(--atlas-pane-accent) 24%, transparent);
+		}
+
+		100% {
+			opacity: 0.38;
+			box-shadow: 0 0 0.25rem color-mix(in srgb, var(--atlas-pane-accent) 18%, transparent);
+		}
+	}
+
+	:global(.atlas-preview-pane[data-state='open'] .atlas-preview-pane__flare) {
+		background: color-mix(in srgb, var(--atlas-pane-accent) 72%, transparent);
+		animation: atlasPaneBorderFlare 420ms ease-out;
+	}
+
+	:global(.atlas-preview-pane[data-state='closed'] .atlas-preview-pane__flare) {
+		opacity: 0;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		:global(.atlas-preview-pane[data-state='open'] .atlas-preview-pane__flare) {
+			animation: none;
+			opacity: 0.38;
+		}
+	}
+</style>
