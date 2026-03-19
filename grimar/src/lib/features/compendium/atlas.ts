@@ -389,7 +389,6 @@ export function getTypeAccentClasses(type: CompendiumTypeName): string {
 export function getActiveFilterLabels(state: AtlasState): string[] {
 	const labels: string[] = [];
 
-	if (state.selectedType !== 'all') labels.push(getTypeLabel(state.selectedType));
 	if (state.search) labels.push(`Search: ${state.search}`);
 	const filterContext = getAtlasFilterContext(state);
 	if (filterContext === 'spells' && state.spellLevel !== 'all') labels.push(`Level ${state.spellLevel}`);
