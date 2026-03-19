@@ -15,7 +15,11 @@
 
 	const activeThemeId = $derived($themeStore);
 	const currentSection = $derived.by(() => {
-		const [segment] = page.url.pathname.split('/').filter(Boolean);
+		const segments = page.url.pathname.split('/').filter(Boolean);
+		const [segment, childSegment] = segments;
+		if (segment === 'beta' && childSegment === 'compendium') {
+			return 'Compendium Beta';
+		}
 		return routeLabels[segment ?? 'dashboard'] ?? 'Dashboard';
 	});
 </script>

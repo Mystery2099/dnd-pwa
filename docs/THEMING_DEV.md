@@ -66,6 +66,14 @@ The `colors` object currently includes:
 - Imported themes are stored under `grimar-imported-themes`.
 - User-created themes are stored under `grimar-user-created-themes`.
 
+## Themed UI Rules
+
+When building or revising screens:
+
+- Prefer semantic tokens such as `--color-bg-card`, `--color-accent`, `--color-text-primary`, and gem tokens over fixed Tailwind palette classes.
+- If a screen needs differentiated subtypes, derive them from theme tokens with `color-mix()` instead of hardcoding a route palette.
+- Beta and prototype routes are not exempt from theme integration. They should still look native under every built-in and imported theme.
+
 ## Testing Changes
 
 After theme changes:

@@ -70,6 +70,7 @@ The UI is organized around a few repeated surface patterns:
 - Selection controls
 - Dialogs, sheets, and overlays
 - Virtualized list and grid components
+- Data-dense atlas and compendium browsing surfaces
 
 Representative files:
 
@@ -79,6 +80,19 @@ Representative files:
 - [`Button.svelte`](/home/mystery/misc-projects/dnd-pwa/grimar/src/lib/components/ui/Button.svelte)
 - [`ThemeCardSelector.svelte`](/home/mystery/misc-projects/dnd-pwa/grimar/src/lib/components/ui/ThemeCardSelector.svelte)
 - [`VirtualList.svelte`](/home/mystery/misc-projects/dnd-pwa/grimar/src/lib/components/ui/VirtualList.svelte)
+- [`+page.svelte`](/home/mystery/misc-projects/dnd-pwa/grimar/src/routes/beta/compendium/+page.svelte)
+- [`atlas.ts`](/home/mystery/misc-projects/dnd-pwa/grimar/src/lib/features/compendium/atlas.ts)
+
+## Compendium Atlas Pattern
+
+The beta compendium route at [`/beta/compendium`](/home/mystery/misc-projects/dnd-pwa/grimar/src/routes/beta/compendium/+page.svelte) establishes the preferred pattern for dense browse views:
+
+- One route with search, sort, scope chips, and contextual filters above the result set
+- Shared page chrome and surface treatments taken from existing shell and card patterns
+- Type-level emphasis expressed through semantic token mixes, not route-local hardcoded palettes
+- Cards optimized for triage first, ornament second
+
+This pattern should be reused for future search-heavy screens before inventing a new layout model.
 
 ## Interaction Rules
 
@@ -86,6 +100,7 @@ Representative files:
 - Accent glow is a highlight, not a permanent background treatment
 - Motion should degrade cleanly for reduced-motion users
 - Panels should preserve hierarchy through opacity, blur, and border separation rather than arbitrary color changes
+- Experimental or beta pages must still render through theme tokens so every built-in and imported theme remains coherent
 
 ## Accessibility Notes
 

@@ -38,6 +38,7 @@
 				label: 'Knowledge',
 				items: [
 					{ href: '/compendium', label: 'Compendium', icon: 'compendium' },
+					{ href: '/beta/compendium', label: 'Compendium Beta', icon: 'compendium' },
 					{ href: '/homebrew', label: 'Homebrew', icon: 'homebrew' }
 				]
 			},

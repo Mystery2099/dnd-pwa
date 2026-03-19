@@ -79,6 +79,13 @@ Rarity or hierarchy should come from intensity, border treatment, and motion, no
 - Cards may carry more atmosphere than list rows
 - Avoid stacking too many decorative effects on dense data views
 
+### Search-Heavy Data Views
+
+- Search, sort, scope selection, and filters should appear before the results they control
+- Dense compendium views should feel like an illuminated catalog, not a dashboard or admin table
+- Use theme tokens and `color-mix()` for emphasis so the same screen survives every active theme
+- Mixed-type result grids need a consistent frame with type-aware metadata, not one generic card body
+
 ### Dialogs and Overlays
 
 - Use blur and opacity to separate layers
@@ -95,6 +102,7 @@ Rarity or hierarchy should come from intensity, border treatment, and motion, no
 - Flat default-gray UI that ignores theme tokens
 - Permanent glow on large surfaces
 - Hardcoded purple styles outside the theme layer
+- Route-specific fixed palettes that override the active theme
 - Decorative effects that lower legibility
 - Theme-specific component hacks instead of tokenized styling
 

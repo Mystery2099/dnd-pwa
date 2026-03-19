@@ -48,6 +48,12 @@
 						>
 							{indexedTypes} indexed shelves
 						</span>
+						<a
+							href="/beta/compendium"
+							class="rounded-full border border-[color-mix(in_srgb,var(--color-accent)_48%,var(--color-border))] bg-[color-mix(in_srgb,var(--color-accent)_14%,transparent)] px-3 py-1 text-[0.65rem] tracking-[0.2em] text-[color-mix(in_srgb,var(--color-text-primary)_84%,var(--color-accent))] uppercase transition-colors hover:bg-[color-mix(in_srgb,var(--color-accent)_20%,transparent)]"
+						>
+							Atlas Preview
+						</a>
 					</div>
 					<h2
 						class="mt-3 max-w-4xl text-[2rem] leading-[1.02] font-black tracking-tight text-[var(--color-text-primary)] md:text-[2.5rem]"
