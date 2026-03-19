@@ -3,6 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { onDestroy, onMount } from 'svelte';
 	import { fade, fly, slide } from 'svelte/transition';
+	import { linear } from 'svelte/easing';
 	import ExternalLink from 'lucide-svelte/icons/external-link';
 	import XIcon from 'lucide-svelte/icons/x';
 	import Badge from '$lib/components/ui/Badge.svelte';
@@ -417,6 +418,12 @@
 				return 'var(--color-accent)';
 		}
 	}
+
+	function previewPaneEaseOut(t: number): number {
+		const c1 = 1.70158;
+		const c3 = c1 + 1;
+		return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+	}
 </script>
 
 <svelte:head>
@@ -766,14 +773,18 @@
 	<Dialog.Content
 		showCloseButton={false}
 		style={`--atlas-pane-accent:${getPreviewPaneAccent(activeDetail?.item.type)};`}
-		class="atlas-preview-pane group/pane top-0 right-0 left-auto flex h-screen max-h-screen w-full max-w-[min(42rem,100vw)] flex-col gap-0 overflow-hidden translate-x-full translate-y-0 rounded-none border-t-0 border-r-0 border-b-0 border-l border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_88%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-canvas)_98%,transparent))] p-0 shadow-[-2rem_0_4rem_color-mix(in_srgb,var(--color-shadow)_34%,transparent)] backdrop-blur-[28px] will-change-transform data-[state=open]:translate-x-0 data-[state=closed]:translate-x-full data-[state=open]:duration-[250ms] data-[state=closed]:duration-[180ms] data-[state=open]:ease-[cubic-bezier(0.175,0.885,0.32,1.275)] data-[state=closed]:ease-linear motion-reduce:translate-x-0 motion-reduce:transition-none"
+		class="atlas-preview-pane group/pane top-0 right-0 left-auto h-screen max-h-screen w-full max-w-[min(42rem,100vw)] translate-x-0 translate-y-0 overflow-visible rounded-none border-0 bg-transparent p-0 shadow-none backdrop-blur-0 motion-reduce:transition-none"
 		portalProps={{
 			disabled: false
 		}}
 	>
 			{#if activeDetail}
-				<div aria-hidden="true" class="atlas-preview-pane__flare pointer-events-none absolute inset-y-0 left-0 w-[2px]"></div>
 				{#key `${activeDetail.item.type}:${activeDetail.item.key}`}
+				<div
+					class="relative flex h-full max-h-screen flex-col gap-0 overflow-hidden rounded-none border-t-0 border-r-0 border-b-0 border-l border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_88%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-canvas)_98%,transparent))] p-0 shadow-[-2rem_0_4rem_color-mix(in_srgb,var(--color-shadow)_34%,transparent)] backdrop-blur-[28px]"
+					in:fly={{ x: 420, duration: 250, easing: previewPaneEaseOut }}
+					out:fly={{ x: 420, duration: 180, easing: linear }}
+				>
 				<div class="flex items-start justify-between gap-4 border-b border-[color-mix(in_srgb,var(--color-border)_74%,transparent)] px-5 py-4 transition-[opacity,transform,border-color] duration-120 ease-out group-data-[state=closed]/pane:-translate-y-2 group-data-[state=closed]/pane:opacity-0 group-data-[state=open]/pane:translate-y-0 group-data-[state=open]/pane:opacity-100 md:px-6">
 					<div class="min-w-0">
 						<div
@@ -1090,44 +1101,8 @@
 						{/if}
 					</div>
 				</div>
+				</div>
 				{/key}
 			{/if}
 	</Dialog.Content>
 </Dialog.Root>
-
-<style>
-	@keyframes atlasPaneBorderFlare {
-		0% {
-			opacity: 0;
-			box-shadow: 0 0 0 color-mix(in srgb, var(--atlas-pane-accent) 0%, transparent);
-		}
-
-		40% {
-			opacity: 0.95;
-			box-shadow:
-				0 0 0.9rem color-mix(in srgb, var(--atlas-pane-accent) 52%, transparent),
-				0 0 1.8rem color-mix(in srgb, var(--atlas-pane-accent) 24%, transparent);
-		}
-
-		100% {
-			opacity: 0;
-			box-shadow: 0 0 0 color-mix(in srgb, var(--atlas-pane-accent) 0%, transparent);
-		}
-	}
-
-	:global(.atlas-preview-pane[data-state='open'] .atlas-preview-pane__flare) {
-		background: color-mix(in srgb, var(--atlas-pane-accent) 72%, transparent);
-		animation: atlasPaneBorderFlare 420ms ease-out;
-	}
-
-	:global(.atlas-preview-pane[data-state='closed'] .atlas-preview-pane__flare) {
-		opacity: 0;
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		:global(.atlas-preview-pane[data-state='open'] .atlas-preview-pane__flare) {
-			animation: none;
-			opacity: 0.38;
-		}
-	}
-</style>
