@@ -435,7 +435,7 @@
 						<p id="atlas-intro" class="mt-3 max-w-3xl text-sm leading-6 text-[color-mix(in_srgb,var(--color-text-primary)_72%,var(--color-text-secondary))]">
 							This preview treats the compendium as a searchable atlas instead of a shelf of category cards.
 							Type chips narrow the archive, contextual filters appear only when they matter, and every card still
-							opens in a Preview Pane before landing in the existing full pages.
+							opens in a Preview Pane before taking you to its Tome.
 						</p>
 					{/if}
 				</div>
@@ -1007,7 +1007,7 @@
 						{#if detailHref}
 							<Button href={detailHref} class="flex-1">
 								<ExternalLink class="size-4" />
-								Open Full Page
+								Open Tome
 							</Button>
 						{/if}
 					</div>
