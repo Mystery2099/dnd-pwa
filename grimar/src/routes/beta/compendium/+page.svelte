@@ -435,7 +435,7 @@
 						<p id="atlas-intro" class="mt-3 max-w-3xl text-sm leading-6 text-[color-mix(in_srgb,var(--color-text-primary)_72%,var(--color-text-secondary))]">
 							This preview treats the compendium as a searchable atlas instead of a shelf of category cards.
 							Type chips narrow the archive, contextual filters appear only when they matter, and every card still
-							lands in the existing detail pages.
+							opens in a Preview Pane before landing in the existing full pages.
 						</p>
 					{/if}
 				</div>
@@ -765,7 +765,7 @@
 						class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_24%,transparent)] text-[var(--color-text-muted)] transition-[transform,border-color,background-color,color] duration-150 ease-out hover:-translate-y-px hover:border-[color-mix(in_srgb,var(--color-accent)_26%,var(--color-border))] hover:bg-[color-mix(in_srgb,var(--color-accent)_10%,transparent)] hover:text-[var(--color-text-primary)] active:translate-y-px active:scale-[0.985]"
 					>
 						<XIcon class="size-4" />
-						<span class="sr-only">Close detail panel</span>
+						<span class="sr-only">Close preview pane</span>
 					</Dialog.Close>
 				</div>
 
