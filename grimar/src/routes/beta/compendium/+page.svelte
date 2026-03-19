@@ -40,6 +40,7 @@
 		CompendiumDetailSection
 	} from '$lib/core/types/compendium';
 	import { fadeIn, fadeUp, paneEnter, paneExit, stagger } from '$lib/ui/motion';
+	import { getCompendiumTransitionNames } from '$lib/ui/view-transitions';
 	import type { PageData } from './$types';
 
 	const SEARCH_DEBOUNCE_MS = 220;
@@ -112,6 +113,9 @@
 	const isDetailOpen = $derived(Boolean(detailSelection && activeDetail));
 	const detailHref = $derived(
 		activeDetail ? `/compendium/${activeDetail.item.type}/${activeDetail.item.key}` : null
+	);
+	const previewTransitionNames = $derived(
+		activeDetail ? getCompendiumTransitionNames(activeDetail.item.type, activeDetail.item.key) : null
 	);
 
 	const typeChipBaseClass =
@@ -756,6 +760,9 @@
 				{#key `${activeDetail.item.type}:${activeDetail.item.key}`}
 				<div
 					class="relative flex h-full max-h-screen flex-col gap-0 overflow-hidden rounded-none border-t-0 border-r-0 border-b-0 border-l border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_88%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-canvas)_98%,transparent))] p-0 shadow-[-2rem_0_4rem_color-mix(in_srgb,var(--color-shadow)_34%,transparent)] backdrop-blur-[28px]"
+					style={previewTransitionNames
+						? `view-transition-name:${previewTransitionNames.shell};`
+						: undefined}
 					in:fly={paneEnter()}
 					out:fly={paneExit()}
 				>
@@ -763,6 +770,9 @@
 					<div class="min-w-0">
 						<div
 							class="flex flex-wrap items-center gap-2"
+							style={previewTransitionNames
+								? `view-transition-name:${previewTransitionNames.meta};`
+								: undefined}
 							in:fly={fadeUp(stagger(0, 150), 10, 160)}
 							out:fade={fadeIn(0, 80)}
 						>
@@ -778,7 +788,13 @@
 								</Badge>
 							{/if}
 						</div>
-						<div in:fly={fadeUp(stagger(0, 150), 10, 180)} out:fade={fadeIn(0, 80)}>
+						<div
+							style={previewTransitionNames
+								? `view-transition-name:${previewTransitionNames.title};`
+								: undefined}
+							in:fly={fadeUp(stagger(0, 150), 10, 180)}
+							out:fade={fadeIn(0, 80)}
+						>
 							<Dialog.Title class="mt-4 font-[var(--font-display)] text-[2rem] leading-tight font-semibold text-[var(--color-text-primary)] md:text-[2.35rem]">
 								{activeDetail.item.name}
 							</Dialog.Title>
@@ -817,6 +833,9 @@
 						{#if leadingDetailFields.length > 0}
 							<section
 								class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3"
+								style={previewTransitionNames
+									? `view-transition-name:${previewTransitionNames.meta}-details;`
+									: undefined}
 								in:fly={fadeUp(stagger(1, 150), 10, 170)}
 								out:fade={fadeIn(0, 80)}
 							>

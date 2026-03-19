@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
+	import { onNavigate } from '$app/navigation';
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import { pwaInfo } from 'virtual:pwa-info';
@@ -9,7 +11,6 @@
 	import ClientQueryProvider from '$lib/components/ui/ClientQueryProvider.svelte';
 	import { createQueryClient, setQueryClient } from '$lib/core/client/query-client';
 	import { startCacheSync } from '$lib/core/client/cache-sync';
-	import { browser } from '$app/environment';
 
 	// Initialize theme synchronously before first render to prevent FOUC
 	initThemeSync();
@@ -25,6 +26,10 @@
 	// Create QueryClient synchronously - needed for SSR and initial render
 	const queryClient = createQueryClient();
 	setQueryClient(queryClient);
+
+	type ViewTransitionCapableDocument = Document & {
+		startViewTransition?: (update: () => Promise<void> | void) => { finished: Promise<void> };
+	};
 
 	function shouldLoadExternalFont(): boolean {
 		const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
@@ -46,6 +51,22 @@
 		link.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap';
 		link.setAttribute('data-font', 'inter');
 		document.head.appendChild(link);
+	}
+
+	if (browser) {
+		onNavigate((navigation) => {
+			const documentWithTransitions = document as ViewTransitionCapableDocument;
+			if (!documentWithTransitions.startViewTransition) {
+				return;
+			}
+
+			return new Promise<void>((resolve) => {
+				documentWithTransitions.startViewTransition(async () => {
+					resolve();
+					await navigation.complete;
+				});
+			});
+		});
 	}
 
 	onMount(async () => {

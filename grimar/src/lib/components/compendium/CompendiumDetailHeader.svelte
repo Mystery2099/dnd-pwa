@@ -6,6 +6,7 @@
 	import SpellSchoolIcon from '$lib/components/compendium/icons/SpellSchoolIcon.svelte';
 	import { getImageKindLabel } from '$lib/utils/compendium';
 	import type { CompendiumDetailHeaderBadge } from '$lib/core/types/compendium';
+	import { getCompendiumTransitionNames } from '$lib/ui/view-transitions';
 
 	type RelatedImage = {
 		key: string;
@@ -21,6 +22,8 @@
 		documentLabel?: string;
 		icon: string;
 		type: string;
+		transitionType?: string;
+		transitionKey?: string;
 		headerBadges: CompendiumDetailHeaderBadge[];
 		featuredRelatedImage?: RelatedImage;
 	}
@@ -32,15 +35,19 @@
 		documentLabel,
 		icon,
 		type,
+		transitionType = type,
+		transitionKey = title,
 		headerBadges,
 		featuredRelatedImage
 	}: Props = $props();
+
+	const transitionNames = $derived(getCompendiumTransitionNames(transitionType, transitionKey));
 </script>
 
-<div>
+<div style={`view-transition-name:${transitionNames.shell};`}>
 	<div class="flex items-start justify-between gap-6">
 		<div class="min-w-0 flex-1">
-			<div class="mb-3 flex flex-wrap items-center gap-2">
+			<div class="mb-3 flex flex-wrap items-center gap-2" style={`view-transition-name:${transitionNames.meta};`}>
 				<Badge variant="outline" class="text-xs tracking-[0.18em] uppercase">
 					{label}
 				</Badge>
@@ -48,7 +55,10 @@
 					<Badge variant="outline" class="text-xs">{source}</Badge>
 				{/if}
 			</div>
-			<h1 class="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] lg:text-4xl">
+			<h1
+				class="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] lg:text-4xl"
+				style={`view-transition-name:${transitionNames.title};`}
+			>
 				{title}
 			</h1>
 			{#if source && source !== 'open5e'}

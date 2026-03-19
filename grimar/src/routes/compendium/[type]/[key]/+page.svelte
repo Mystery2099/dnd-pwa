@@ -12,6 +12,7 @@
 	import ImageDetailPanel from '$lib/components/compendium/ImageDetailPanel.svelte';
 	import RelatedImagesPanel from '$lib/components/compendium/RelatedImagesPanel.svelte';
 	import SpellDetailSections from '$lib/components/compendium/SpellDetailSections.svelte';
+	import { getCompendiumTransitionNames } from '$lib/ui/view-transitions';
 	import type {
 		CompendiumBenefitsSection,
 		CompendiumClassFeaturesSection,
@@ -177,6 +178,7 @@
 		return section ?? null;
 	});
 	let hasSidebarDetails = $derived(detailFields.length > 0);
+	let transitionNames = $derived(getCompendiumTransitionNames(data.type, item.key));
 
 	function markdownAt(path: string): string {
 		return markdownHtml[path] ?? '';
@@ -230,6 +232,8 @@
 						source={item.source}
 						documentLabel={presentation.documentLabel}
 						icon={data.config.icon}
+						transitionType={data.type}
+						transitionKey={item.key}
 						challengeRatingText={presentation.creatureHeader?.challengeRatingText}
 						size={presentation.creatureHeader?.size}
 						typeValue={presentation.creatureHeader?.typeValue}
@@ -245,6 +249,8 @@
 						documentLabel={presentation.documentLabel}
 						icon={data.config.icon}
 						type={data.type}
+						transitionType={data.type}
+						transitionKey={item.key}
 						headerBadges={presentation.headerBadges}
 						{featuredRelatedImage}
 					/>
@@ -445,7 +451,10 @@
 				</div>
 
 				{#if hasSidebarDetails}
-					<div class="space-y-6 xl:sticky xl:top-6 xl:self-start">
+					<div
+						class="space-y-6 xl:sticky xl:top-6 xl:self-start"
+						style={`view-transition-name:${transitionNames.meta}-details;`}
+					>
 						<CompendiumDetailsPanel fields={detailFields} resolveValue={getDetailValue} />
 					</div>
 				{/if}

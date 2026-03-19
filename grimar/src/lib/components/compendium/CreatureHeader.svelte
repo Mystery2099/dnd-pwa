@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import { isCompendiumDetailReference } from '$lib/core/utils/compendium-detail-values';
+	import { getCompendiumTransitionNames } from '$lib/ui/view-transitions';
 	import { formatValue } from '$lib/utils/compendium';
 
 	type CreatureRelatedImage = {
@@ -16,6 +17,8 @@
 		source?: string | null;
 		documentLabel?: string;
 		icon: string;
+		transitionType?: string;
+		transitionKey?: string;
 		challengeRatingText?: unknown;
 		size?: unknown;
 		typeValue?: unknown;
@@ -30,6 +33,8 @@
 		source,
 		documentLabel,
 		icon,
+		transitionType = 'creatures',
+		transitionKey = title,
 		challengeRatingText,
 		size,
 		typeValue,
@@ -37,13 +42,15 @@
 		experiencePoints,
 		featuredRelatedImage
 	}: Props = $props();
+
+	const transitionNames = $derived(getCompendiumTransitionNames(transitionType, transitionKey));
 </script>
 
-<div class="flex items-start justify-between gap-6">
+<div class="flex items-start justify-between gap-6" style={`view-transition-name:${transitionNames.shell};`}>
 	<div class="min-w-0 flex-1">
 		<div class="flex items-start justify-between gap-4">
 			<div>
-				<div class="mb-3 flex flex-wrap items-center gap-2">
+				<div class="mb-3 flex flex-wrap items-center gap-2" style={`view-transition-name:${transitionNames.meta};`}>
 					<Badge variant="outline" class="text-xs tracking-[0.18em] uppercase">
 						{label}
 					</Badge>
@@ -51,7 +58,10 @@
 						<Badge variant="outline" class="text-xs">{source}</Badge>
 					{/if}
 				</div>
-				<h1 class="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] lg:text-4xl">
+				<h1
+					class="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] lg:text-4xl"
+					style={`view-transition-name:${transitionNames.title};`}
+				>
 					{title}
 				</h1>
 				{#if source && source !== 'open5e'}
