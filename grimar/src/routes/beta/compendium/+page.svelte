@@ -766,7 +766,7 @@
 	<Dialog.Content
 		showCloseButton={false}
 		style={`--atlas-pane-accent:${getPreviewPaneAccent(activeDetail?.item.type)};`}
-		class="atlas-preview-pane group/pane top-0 right-0 left-auto flex h-screen max-h-screen w-full max-w-[min(42rem,100vw)] flex-col gap-0 overflow-hidden translate-x-0 translate-y-0 rounded-none border-t-0 border-r-0 border-b-0 border-l border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_88%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-canvas)_98%,transparent))] p-0 shadow-[-2rem_0_4rem_color-mix(in_srgb,var(--color-shadow)_34%,transparent)] backdrop-blur-[28px] will-change-transform data-[state=open]:translate-x-0 data-[state=closed]:translate-x-full data-[state=open]:duration-[250ms] data-[state=closed]:duration-[180ms] data-[state=open]:ease-[cubic-bezier(0.175,0.885,0.32,1.275)] data-[state=closed]:ease-linear motion-reduce:translate-x-0 motion-reduce:transition-none"
+		class="atlas-preview-pane group/pane top-0 right-0 left-auto flex h-screen max-h-screen w-full max-w-[min(42rem,100vw)] flex-col gap-0 overflow-hidden translate-x-full translate-y-0 rounded-none border-t-0 border-r-0 border-b-0 border-l border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_88%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-canvas)_98%,transparent))] p-0 shadow-[-2rem_0_4rem_color-mix(in_srgb,var(--color-shadow)_34%,transparent)] backdrop-blur-[28px] will-change-transform data-[state=open]:translate-x-0 data-[state=closed]:translate-x-full data-[state=open]:duration-[250ms] data-[state=closed]:duration-[180ms] data-[state=open]:ease-[cubic-bezier(0.175,0.885,0.32,1.275)] data-[state=closed]:ease-linear motion-reduce:translate-x-0 motion-reduce:transition-none"
 		portalProps={{
 			disabled: false
 		}}
@@ -1110,8 +1110,8 @@
 		}
 
 		100% {
-			opacity: 0.38;
-			box-shadow: 0 0 0.25rem color-mix(in srgb, var(--atlas-pane-accent) 18%, transparent);
+			opacity: 0;
+			box-shadow: 0 0 0 color-mix(in srgb, var(--atlas-pane-accent) 0%, transparent);
 		}
 	}
 
