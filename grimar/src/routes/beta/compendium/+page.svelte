@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { onDestroy, onMount } from 'svelte';
+	import { slide } from 'svelte/transition';
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import Input from '$lib/components/ui/Input.svelte';
 	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
@@ -70,6 +71,7 @@
 	);
 	const filterContext = $derived(getAtlasFilterContext(data.state));
 	const sortOptions = $derived(getAtlasSortOptions(data.state));
+	const hasContextualFilters = $derived(filterContext !== null);
 
 	const typeChipBaseClass =
 		'shrink-0 rounded-full border px-4 py-2 text-sm transition-all';
@@ -416,72 +418,70 @@
 				</button>
 			</div>
 
-			<div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-				{#if filterContext === 'spells'}
-					<Select
-						type="single"
-						value={spellLevel}
-						options={SPELL_LEVEL_OPTIONS}
-						placeholder="Any Level"
-						onchange={updateSpellLevel}
-						class="rounded-[1rem] border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_44%,transparent)] text-[var(--color-text-primary)]"
-					/>
-					<Select
-						type="single"
-						value={spellSchool}
-						options={SPELL_SCHOOL_OPTIONS}
-						placeholder="Any School"
-						onchange={updateSpellSchool}
-						class="rounded-[1rem] border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_44%,transparent)] text-[var(--color-text-primary)]"
-					/>
-				{:else if filterContext === 'monsters'}
-					<Select
-						type="single"
-						value={creatureType}
-						options={CREATURE_TYPE_OPTIONS}
-						placeholder="Any Type"
-						onchange={updateCreatureType}
-						class="rounded-[1rem] border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_44%,transparent)] text-[var(--color-text-primary)]"
-					/>
-					<Select
-						type="single"
-						value={challengeRating}
-						options={CHALLENGE_RATING_OPTIONS}
-						placeholder="Any CR"
-						onchange={updateChallengeRating}
-						class="rounded-[1rem] border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_44%,transparent)] text-[var(--color-text-primary)]"
-					/>
-				{:else if filterContext === 'items'}
-					<Select
-						type="single"
-						value={itemKind}
-						options={ITEM_KIND_OPTIONS}
-						placeholder="Any Item"
-						onchange={updateItemKind}
-						class="rounded-[1rem] border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_44%,transparent)] text-[var(--color-text-primary)]"
-					/>
-					<Select
-						type="single"
-						value={itemRarity}
-						options={ITEM_RARITY_OPTIONS}
-						placeholder="Any Rarity"
-						onchange={updateItemRarity}
-						class="rounded-[1rem] border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_44%,transparent)] text-[var(--color-text-primary)]"
-					/>
-					<Select
-						type="single"
-						value={attunement}
-						options={ATTUNEMENT_OPTIONS}
-						placeholder="Any Attunement"
-						onchange={updateAttunement}
-						class="rounded-[1rem] border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_44%,transparent)] text-[var(--color-text-primary)]"
-					/>
-				{:else}
-					<div class="rounded-[1rem] border border-dashed border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_20%,transparent)] px-4 py-3 text-sm text-[color-mix(in_srgb,var(--color-text-primary)_58%,var(--color-text-secondary))] md:col-span-2 xl:col-span-4">
-						Contextual filters appear for spell, monster, and item scopes. The rest of the atlas is using the shared browse model first.
-					</div>
-				{/if}
-			</div>
+			{#if hasContextualFilters}
+				<div transition:slide={{ duration: 180 }} class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+					{#if filterContext === 'spells'}
+						<Select
+							type="single"
+							value={spellLevel}
+							options={SPELL_LEVEL_OPTIONS}
+							placeholder="Any Level"
+							onchange={updateSpellLevel}
+							class="rounded-[1rem] border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_44%,transparent)] text-[var(--color-text-primary)]"
+						/>
+						<Select
+							type="single"
+							value={spellSchool}
+							options={SPELL_SCHOOL_OPTIONS}
+							placeholder="Any School"
+							onchange={updateSpellSchool}
+							class="rounded-[1rem] border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_44%,transparent)] text-[var(--color-text-primary)]"
+						/>
+					{:else if filterContext === 'monsters'}
+						<Select
+							type="single"
+							value={creatureType}
+							options={CREATURE_TYPE_OPTIONS}
+							placeholder="Any Type"
+							onchange={updateCreatureType}
+							class="rounded-[1rem] border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_44%,transparent)] text-[var(--color-text-primary)]"
+						/>
+						<Select
+							type="single"
+							value={challengeRating}
+							options={CHALLENGE_RATING_OPTIONS}
+							placeholder="Any CR"
+							onchange={updateChallengeRating}
+							class="rounded-[1rem] border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_44%,transparent)] text-[var(--color-text-primary)]"
+						/>
+					{:else if filterContext === 'items'}
+						<Select
+							type="single"
+							value={itemKind}
+							options={ITEM_KIND_OPTIONS}
+							placeholder="Any Item"
+							onchange={updateItemKind}
+							class="rounded-[1rem] border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_44%,transparent)] text-[var(--color-text-primary)]"
+						/>
+						<Select
+							type="single"
+							value={itemRarity}
+							options={ITEM_RARITY_OPTIONS}
+							placeholder="Any Rarity"
+							onchange={updateItemRarity}
+							class="rounded-[1rem] border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_44%,transparent)] text-[var(--color-text-primary)]"
+						/>
+						<Select
+							type="single"
+							value={attunement}
+							options={ATTUNEMENT_OPTIONS}
+							placeholder="Any Attunement"
+							onchange={updateAttunement}
+							class="rounded-[1rem] border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_44%,transparent)] text-[var(--color-text-primary)]"
+						/>
+					{/if}
+				</div>
+			{/if}
 
 			{#if hasFilters}
 				<div class="mt-4 flex flex-wrap items-center gap-2 border-t border-[color-mix(in_srgb,var(--color-border)_78%,transparent)] pt-4">
