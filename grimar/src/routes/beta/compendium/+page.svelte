@@ -85,6 +85,17 @@
 	const filterContext = $derived(getAtlasFilterContext(data.state));
 	const sortOptions = $derived(getAtlasSortOptions(data.state));
 	const hasContextualFilters = $derived(filterContext !== null);
+	const contextualPanelClass = $derived.by(() => {
+		switch (filterContext) {
+			case 'items':
+				return 'md:grid-cols-3 md:min-w-[58rem]';
+			case 'monsters':
+			case 'spells':
+				return 'md:grid-cols-2 md:min-w-[33rem]';
+			default:
+				return '';
+		}
+	});
 	const detailSelection = $derived(data.detailSelection);
 	const activeDetail = $derived(data.detail);
 	const detailFields = $derived((activeDetail?.fields ?? []) as CompendiumDetailField[]);
@@ -456,7 +467,10 @@
 			</div>
 		</section>
 
-		<section class="rounded-[1.8rem] border border-[color-mix(in_srgb,var(--color-border)_86%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_82%,transparent),color-mix(in_srgb,var(--color-bg-canvas)_96%,transparent))] p-4 shadow-[0_1rem_2.25rem_color-mix(in_srgb,var(--color-shadow)_26%,transparent)] md:p-5">
+		<div>
+		<section
+			class={`border border-[color-mix(in_srgb,var(--color-border)_86%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_82%,transparent),color-mix(in_srgb,var(--color-bg-canvas)_96%,transparent))] p-4 shadow-[0_1rem_2.25rem_color-mix(in_srgb,var(--color-shadow)_26%,transparent)] md:p-5 ${hasContextualFilters ? 'rounded-t-[1.8rem] rounded-r-[1.8rem] rounded-bl-[1.15rem]' : 'rounded-[1.8rem]'}`}
+		>
 			<div class="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_15rem_auto]">
 				<div class="group/search ui-focus-glow relative rounded-[1rem]">
 					<div class="pointer-events-none absolute inset-0 rounded-[1rem] border border-[color-mix(in_srgb,var(--color-accent)_0%,transparent)] opacity-0 shadow-[0_0_0_0_color-mix(in_srgb,var(--color-accent)_0%,transparent)] transition-[opacity,transform] duration-[var(--duration-base)] ease-[var(--ease-smooth)] group-focus-within/search:scale-[1.01] group-focus-within/search:opacity-100 motion-reduce:transform-none"></div>
@@ -563,8 +577,23 @@
 				</button>
 			</div>
 
-			{#if hasContextualFilters}
-				<div transition:slide={{ duration: 180 }} class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+			{#if hasFilters}
+				<div class="mt-4 flex flex-wrap items-center gap-2 border-t border-[color-mix(in_srgb,var(--color-border)_78%,transparent)] pt-4">
+					{#each activeLabels as label (label)}
+						<Badge variant="outline" class="border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_24%,transparent)] text-[0.68rem] text-[color-mix(in_srgb,var(--color-text-primary)_84%,var(--color-text-secondary))]">
+							{label}
+						</Badge>
+					{/each}
+				</div>
+			{/if}
+		</section>
+
+		{#if hasContextualFilters}
+			<section
+				transition:slide={{ duration: 180 }}
+				class={`-mt-px border border-[color-mix(in_srgb,var(--color-border)_86%,transparent)] border-t-[color-mix(in_srgb,var(--color-border)_58%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_82%,transparent),color-mix(in_srgb,var(--color-bg-canvas)_96%,transparent))] px-4 pt-3 pb-4 shadow-[0_1rem_2.25rem_color-mix(in_srgb,var(--color-shadow)_16%,transparent)] md:w-fit md:max-w-full md:px-5 md:pt-3.5 md:pb-5 ${filterContext === 'items' ? 'rounded-r-[1.4rem] rounded-b-[1.8rem]' : 'rounded-r-[1.25rem] rounded-b-[1.65rem]'}`}
+			>
+				<div class={`grid w-full gap-3 md:w-fit ${contextualPanelClass}`}>
 					{#if filterContext === 'spells'}
 						<Select
 							type="single"
@@ -626,18 +655,9 @@
 						/>
 					{/if}
 				</div>
-			{/if}
-
-			{#if hasFilters}
-				<div class="mt-4 flex flex-wrap items-center gap-2 border-t border-[color-mix(in_srgb,var(--color-border)_78%,transparent)] pt-4">
-					{#each activeLabels as label (label)}
-						<Badge variant="outline" class="border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_24%,transparent)] text-[0.68rem] text-[color-mix(in_srgb,var(--color-text-primary)_84%,var(--color-text-secondary))]">
-							{label}
-						</Badge>
-					{/each}
-				</div>
-			{/if}
-		</section>
+			</section>
+		{/if}
+		</div>
 
 		<section class="space-y-4">
 			<div class="flex flex-wrap items-center justify-between gap-3">

@@ -60,7 +60,7 @@
 	<SelectPrimitive.Portal>
 		<SelectPrimitive.Content
 			class={cn(
-				'relative z-50 min-w-[200px] overflow-hidden rounded-xl border border-[var(--color-border)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_94%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-card)_96%,var(--color-bg-canvas)))] shadow-[0_1.2rem_2.75rem_color-mix(in_srgb,var(--color-shadow)_34%,transparent),inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_16%,transparent),0_0_0_1px_color-mix(in_srgb,var(--color-border)_92%,transparent)] backdrop-blur-xl',
+				'relative z-50 min-w-[200px] origin-top overflow-hidden rounded-xl border border-[var(--color-border)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_94%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-card)_96%,var(--color-bg-canvas)))] shadow-[0_1.2rem_2.75rem_color-mix(in_srgb,var(--color-shadow)_34%,transparent),inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_16%,transparent),0_0_0_1px_color-mix(in_srgb,var(--color-border)_92%,transparent)] backdrop-blur-xl will-change-[transform,opacity] data-[state=open]:animate-(--animate-dropdown-in) data-[state=closed]:animate-(--animate-dropdown-out) motion-reduce:data-[state=open]:animate-none motion-reduce:data-[state=closed]:animate-none',
 				contentClass
 			)}
 		>
@@ -72,14 +72,14 @@
 					<SelectPrimitive.Item
 						value={option.value}
 						disabled={option.disabled}
-						class="relative flex cursor-pointer items-center rounded-lg px-3 py-2 text-sm text-[var(--color-text-primary)] outline-none select-none transition-[transform,background-color,color] duration-150 ease-out hover:translate-x-0.5 hover:bg-[color-mix(in_srgb,var(--color-accent)_14%,transparent)] focus:translate-x-0.5 focus:bg-[color-mix(in_srgb,var(--color-accent)_20%,transparent)] disabled:pointer-events-none disabled:opacity-50 data-[state=checked]:bg-[color-mix(in_srgb,var(--color-accent)_18%,transparent)] data-[state=checked]:text-[var(--color-accent)]"
+						class="relative flex cursor-pointer items-center rounded-lg px-3 py-2 text-sm text-[var(--color-text-primary)] outline-none select-none transition-[transform,background-color,color,box-shadow] duration-150 ease-out hover:translate-x-0.5 hover:bg-[color-mix(in_srgb,var(--color-accent)_14%,transparent)] focus:translate-x-0.5 focus:bg-[color-mix(in_srgb,var(--color-accent)_20%,transparent)] disabled:pointer-events-none disabled:opacity-50 data-[state=checked]:bg-[color-mix(in_srgb,var(--color-accent)_18%,transparent)] data-[state=checked]:text-[var(--color-accent)] data-[state=checked]:shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--color-accent)_14%,transparent)]"
 					>
 						{#snippet children({ selected })}
 							{#if selected}
 								<div
-									class="absolute right-2 flex size-3.5 items-center justify-center rounded-full border border-[var(--color-accent)] bg-[var(--color-accent)]/20"
+									class="absolute right-2 flex size-3.5 items-center justify-center rounded-full border border-[var(--color-accent)] bg-[var(--color-accent)]/20 transition-[transform,background-color,opacity] duration-150 ease-out"
 								>
-									<div class="size-2 rounded-full bg-[var(--color-accent)]"></div>
+									<div class="size-2 rounded-full bg-[var(--color-accent)] transition-transform duration-150 ease-out group-data-[state=checked]:scale-100"></div>
 								</div>
 							{/if}
 							<span>{option.label}</span>
