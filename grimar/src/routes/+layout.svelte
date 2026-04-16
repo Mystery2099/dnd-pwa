@@ -11,6 +11,7 @@
 	import ClientQueryProvider from '$lib/components/ui/ClientQueryProvider.svelte';
 	import { createQueryClient, setQueryClient } from '$lib/core/client/query-client';
 	import { startCacheSync } from '$lib/core/client/cache-sync';
+	import { BUILTIN_THEME_IDS, THEME_FONT_HREF_BY_ID } from '$lib/core/client/themeAssets';
 
 	// Initialize theme synchronously before first render to prevent FOUC
 	initThemeSync();
@@ -22,6 +23,7 @@
 		!pwaInfo.webManifest.linkTag.includes('href="false"')
 			? pwaInfo.webManifest.linkTag
 			: '';
+	const themeBootScript = `<script>(function(){try{var theme=localStorage.getItem('grimar-theme');var validThemes=${JSON.stringify(BUILTIN_THEME_IDS)};if(validThemes.indexOf(theme)===-1){return;}document.documentElement.setAttribute('data-theme',theme);var saveData='connection' in navigator&&Boolean(navigator.connection&&navigator.connection.saveData);if(saveData){return;}var fontHrefs=${JSON.stringify(THEME_FONT_HREF_BY_ID)};var href=fontHrefs[theme];if(!href||document.querySelector('link[data-theme-fonts=\"'+theme+'\"]')){return;}if(!document.querySelector('link[data-theme-font-preconnect=\"googleapis\"]')){var googleApisPreconnect=document.createElement('link');googleApisPreconnect.rel='preconnect';googleApisPreconnect.href='https://fonts.googleapis.com';googleApisPreconnect.setAttribute('data-theme-font-preconnect','googleapis');document.head.appendChild(googleApisPreconnect);}if(!document.querySelector('link[data-theme-font-preconnect=\"gstatic\"]')){var gstaticPreconnect=document.createElement('link');gstaticPreconnect.rel='preconnect';gstaticPreconnect.href='https://fonts.gstatic.com';gstaticPreconnect.crossOrigin='anonymous';gstaticPreconnect.setAttribute('data-theme-font-preconnect','gstatic');document.head.appendChild(gstaticPreconnect);}var themeFontLink=document.createElement('link');themeFontLink.rel='stylesheet';themeFontLink.href=href;themeFontLink.setAttribute('data-theme-fonts',theme);document.head.appendChild(themeFontLink);}catch(error){console.warn('Theme boot failed',error);}})();<\/script>`;
 
 	// Create QueryClient synchronously - needed for SSR and initial render
 	const queryClient = createQueryClient();
@@ -30,28 +32,6 @@
 	type ViewTransitionCapableDocument = Document & {
 		startViewTransition?: (update: () => Promise<void> | void) => { finished: Promise<void> };
 	};
-
-	function shouldLoadExternalFont(): boolean {
-		const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
-		const prefersReducedData =
-			'navigator' in window &&
-			'connection' in navigator &&
-			Boolean(
-				(navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData
-			);
-		return isDesktop && !prefersReducedData;
-	}
-
-	function loadInterFontAsync(): void {
-		if (!shouldLoadExternalFont()) return;
-		if (document.querySelector('link[data-font="inter"]')) return;
-
-		const link = document.createElement('link');
-		link.rel = 'stylesheet';
-		link.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap';
-		link.setAttribute('data-font', 'inter');
-		document.head.appendChild(link);
-	}
 
 	if (browser) {
 		onNavigate((navigation) => {
@@ -70,8 +50,6 @@
 	}
 
 	onMount(async () => {
-		loadInterFontAsync();
-
 		if (pwaInfo) {
 			const { registerSW } = await import('virtual:pwa-register');
 			registerSW({ immediate: true });
@@ -99,16 +77,8 @@
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
-	<!-- Theme initialization script - runs before first paint to prevent FOUC -->
-	<script>
-		(function () {
-			var theme = localStorage.getItem('grimar-theme');
-			var validThemes = ['amethyst', 'arcane', 'nature', 'fire', 'ice', 'void', 'ocean'];
-			if (theme && validThemes.indexOf(theme) !== -1) {
-				document.documentElement.setAttribute('data-theme', theme);
-			}
-		})();
-	</script>
+	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+	{@html themeBootScript}
 	<!-- Only render web manifest if it's valid and safe -->
 	{#if webManifestLink && webManifestLink.includes('<link')}
 		<!-- eslint-disable-next-line svelte/no-at-html-tags -->

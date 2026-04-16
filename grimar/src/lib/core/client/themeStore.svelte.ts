@@ -14,18 +14,22 @@ import {
 	type ThemeConfig,
 	ThemeConfigSchema
 } from './themeRegistry';
+import {
+	DEFAULT_THEME_ID,
+	ensureThemeFontsLoaded
+} from './themeAssets';
 import { injectThemeCSS } from './themeCSS';
 
 const THEME_KEY = 'grimar-theme';
 
 function getInitialTheme(): string {
-	if (!browser) return 'amethyst';
+	if (!browser) return DEFAULT_THEME_ID;
 
 	const stored = localStorage.getItem(THEME_KEY);
 	if (stored && registryGetThemeById(stored)) {
 		return stored;
 	}
-	return 'amethyst';
+	return DEFAULT_THEME_ID;
 }
 
 function createThemeStore(): {
@@ -63,6 +67,7 @@ function createThemeStore(): {
 		document.documentElement.setAttribute('data-theme', theme.id);
 		localStorage.setItem(THEME_KEY, theme.id);
 		store.set(themeId);
+		ensureThemeFontsLoaded(theme.id);
 
 		if (theme.source !== 'builtin') {
 			injectThemeCSS(theme);
@@ -81,6 +86,7 @@ function createThemeStore(): {
 			const theme = registryGetThemeById(currentTheme);
 			if (theme) {
 				document.documentElement.setAttribute('data-theme', theme.id);
+				ensureThemeFontsLoaded(theme.id);
 				if (theme.source !== 'builtin') {
 					injectThemeCSS(theme);
 				}
@@ -176,7 +182,7 @@ function createThemeStore(): {
 
 			const current = get(store);
 			if (current === themeId) {
-				this.setTheme('amethyst');
+				this.setTheme(DEFAULT_THEME_ID);
 			}
 
 			return true;
@@ -240,7 +246,7 @@ function createThemeStore(): {
 
 			const current = get(store);
 			if (current === themeId) {
-				this.setTheme('amethyst');
+				this.setTheme(DEFAULT_THEME_ID);
 			}
 
 			return true;
@@ -277,9 +283,9 @@ export {
 	getThemeAccentClass
 } from './themeCSS';
 export type { ThemeConfig } from './themeRegistry';
+export { THEME_OPTIONS } from './themeAssets';
 
 export const THEMES: ThemeConfig[] = registryGetBuiltinThemes();
-export const THEME_OPTIONS = THEMES.map((t: ThemeConfig) => ({ value: t.id, label: t.name }));
 
 export function getThemeAccentClassOld(themeId: string): string {
 	const theme = registryGetThemeById(themeId);

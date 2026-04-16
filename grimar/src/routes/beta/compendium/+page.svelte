@@ -44,6 +44,7 @@
 	import type { PageData } from './$types';
 
 	const SEARCH_DEBOUNCE_MS = 220;
+	const PREVIEW_PANE_CLOSE_BUFFER_MS = 220;
 
 	interface Props {
 		data: PageData;
@@ -65,7 +66,9 @@
 	let canScrollTypesLeft = $state(false);
 	let canScrollTypesRight = $state(false);
 	let showAtlasIntro = $state(false);
+	let renderedDetail = $state<PageData['detail']>(null);
 	let searchTimeout: ReturnType<typeof setTimeout> | undefined;
+	let clearRenderedDetailTimeout: ReturnType<typeof setTimeout> | undefined;
 
 	const activeLabels = $derived(getActiveFilterLabels(data.state));
 	const hasFilters = $derived(activeLabels.length > 0);
@@ -97,7 +100,7 @@
 		}
 	});
 	const detailSelection = $derived(data.detailSelection);
-	const activeDetail = $derived(data.detail);
+	const activeDetail = $derived(renderedDetail);
 	const detailFields = $derived((activeDetail?.fields ?? []) as CompendiumDetailField[]);
 	const leadingDetailFields = $derived(detailFields.slice(0, 6));
 	const trailingDetailFields = $derived(detailFields.slice(6));
@@ -121,7 +124,7 @@
 				section.kind === 'creature-encounter'
 		) ?? null
 	);
-	const isDetailOpen = $derived(Boolean(detailSelection && activeDetail));
+	const isDetailOpen = $derived(Boolean(detailSelection && data.detail));
 	const detailHref = $derived(
 		activeDetail ? `/compendium/${activeDetail.item.type}/${activeDetail.item.key}` : null
 	);
@@ -155,8 +158,28 @@
 		attunement = data.state.attunement;
 	});
 
+	$effect(() => {
+		if (data.detail) {
+			if (clearRenderedDetailTimeout) {
+				clearTimeout(clearRenderedDetailTimeout);
+				clearRenderedDetailTimeout = undefined;
+			}
+
+			renderedDetail = data.detail;
+			return;
+		}
+
+		if (clearRenderedDetailTimeout) return;
+
+		clearRenderedDetailTimeout = setTimeout(() => {
+			renderedDetail = null;
+			clearRenderedDetailTimeout = undefined;
+		}, PREVIEW_PANE_CLOSE_BUFFER_MS);
+	});
+
 	onDestroy(() => {
 		if (searchTimeout) clearTimeout(searchTimeout);
+		if (clearRenderedDetailTimeout) clearTimeout(clearRenderedDetailTimeout);
 	});
 
 	onMount(() => {
@@ -469,7 +492,7 @@
 
 		<div>
 		<section
-			class={`border border-[color-mix(in_srgb,var(--color-border)_86%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_82%,transparent),color-mix(in_srgb,var(--color-bg-canvas)_96%,transparent))] p-4 shadow-[0_1rem_2.25rem_color-mix(in_srgb,var(--color-shadow)_26%,transparent)] md:p-5 ${hasContextualFilters ? 'rounded-t-[1.8rem] rounded-r-[1.8rem] rounded-bl-[1.15rem]' : 'rounded-[1.8rem]'}`}
+			class={`border border-[color-mix(in_srgb,var(--color-border)_86%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_82%,transparent),color-mix(in_srgb,var(--color-bg-canvas)_96%,transparent))] p-4 shadow-[0_1rem_2.25rem_color-mix(in_srgb,var(--color-shadow)_26%,transparent)] md:p-5 ${hasContextualFilters ? 'rounded-t-[1.8rem] rounded-r-[1.8rem] rounded-bl-[0.55rem]' : 'rounded-[1.8rem]'}`}
 		>
 			<div class="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_15rem_auto]">
 				<div class="group/search ui-focus-glow relative rounded-[1rem]">
@@ -591,7 +614,7 @@
 		{#if hasContextualFilters}
 			<section
 				transition:slide={{ duration: 180 }}
-				class={`-mt-px border border-[color-mix(in_srgb,var(--color-border)_86%,transparent)] border-t-[color-mix(in_srgb,var(--color-border)_58%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_82%,transparent),color-mix(in_srgb,var(--color-bg-canvas)_96%,transparent))] px-4 pt-3 pb-4 shadow-[0_1rem_2.25rem_color-mix(in_srgb,var(--color-shadow)_16%,transparent)] md:w-fit md:max-w-full md:px-5 md:pt-3.5 md:pb-5 ${filterContext === 'items' ? 'rounded-r-[1.4rem] rounded-b-[1.8rem]' : 'rounded-r-[1.25rem] rounded-b-[1.65rem]'}`}
+				class={`-mt-px border border-[color-mix(in_srgb,var(--color-border)_86%,transparent)] border-t-[color-mix(in_srgb,var(--color-border)_52%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_62%,transparent),color-mix(in_srgb,var(--color-bg-canvas)_94%,transparent))] px-4 pt-3 pb-4 shadow-[0_1rem_2.25rem_color-mix(in_srgb,var(--color-shadow)_14%,transparent)] md:w-fit md:max-w-full md:px-5 md:pt-3.5 md:pb-5 ${filterContext === 'items' ? 'rounded-r-[1.35rem] rounded-b-[1.8rem] rounded-tl-[0.2rem]' : 'rounded-r-[1.25rem] rounded-b-[1.65rem] rounded-tl-[0.2rem]'}`}
 			>
 				<div class={`grid w-full gap-3 md:w-fit ${contextualPanelClass}`}>
 					{#if filterContext === 'spells'}
@@ -772,7 +795,7 @@
 	<Dialog.Content
 		showCloseButton={false}
 		overlayClass="top-[3.75rem] right-3 bottom-3 left-3 z-[34] bg-[color-mix(in_srgb,var(--color-overlay-dark)_72%,black)] backdrop-blur-[8px]"
-		class="atlas-preview-pane group/pane top-[3.75rem] right-3 bottom-3 left-auto z-[36] h-[calc(100vh-4.5rem)] max-h-[calc(100vh-4.5rem)] w-full max-w-[min(42rem,100vw-0.75rem)] translate-x-0 translate-y-0 overflow-visible rounded-none border-0 bg-transparent p-0 shadow-none backdrop-blur-0 transition-[transform,opacity] duration-[var(--duration-pane-open)] ease-[var(--ease-snap)] data-[state=closed]:translate-x-full data-[state=closed]:opacity-0 data-[state=open]:translate-x-0 data-[state=open]:opacity-100 data-[state=closed]:duration-[var(--duration-pane-close)] data-[state=closed]:ease-linear motion-reduce:translate-x-0 motion-reduce:transition-none"
+		class="atlas-preview-pane group/pane top-[3.75rem] right-3 bottom-3 left-auto z-[36] h-[calc(100vh-4.5rem)] max-h-[calc(100vh-4.5rem)] w-full max-w-[min(42rem,100vw-0.75rem)] translate-x-0 translate-y-0 overflow-visible rounded-none border-0 bg-transparent p-0 shadow-none backdrop-blur-0 will-change-[transform,opacity] data-[state=open]:animate-(--animate-preview-pane-in) data-[state=closed]:animate-(--animate-preview-pane-out) motion-reduce:animate-none"
 		portalProps={{
 			disabled: false
 		}}

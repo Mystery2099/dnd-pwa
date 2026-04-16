@@ -179,6 +179,12 @@
 	});
 	let hasSidebarDetails = $derived(detailFields.length > 0);
 	let transitionNames = $derived(getCompendiumTransitionNames(data.type, item.key));
+	const readingProseClass =
+		'prose prose-invert max-w-none text-[var(--color-text-secondary)] prose-headings:font-serif prose-headings:text-[var(--color-text-primary)] prose-p:leading-7 prose-li:leading-7';
+	const sectionProseClass =
+		'prose prose-invert prose-sm max-w-none text-[var(--color-text-secondary)] prose-headings:font-serif';
+	const marginaliaItemClass =
+		'border-l border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] pl-4 sm:pl-5';
 
 	function markdownAt(path: string): string {
 		return markdownHtml[path] ?? '';
@@ -209,8 +215,8 @@
 	<title>{item.name} | {data.config.plural} | Compendium | Grimar</title>
 </svelte:head>
 
-<div class="min-h-screen bg-linear-to-b from-(--color-bg-primary) to-(--color-bg-secondary)">
-	<div class="mx-auto max-w-6xl px-4 py-8">
+<div class="min-h-screen bg-[radial-gradient(circle_at_top,color-mix(in_srgb,var(--color-accent)_10%,transparent),transparent_34%),linear-gradient(180deg,var(--color-bg-primary),var(--color-bg-secondary))]">
+	<div class="mx-auto max-w-7xl px-4 py-8 lg:px-6">
 		<div class="mb-6">
 			<Breadcrumb
 				items={[
@@ -221,9 +227,10 @@
 			/>
 		</div>
 
-		<div class="card-crystal overflow-hidden">
+		<div class="relative overflow-hidden rounded-[2.5rem] border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_80%,transparent),color-mix(in_srgb,var(--color-bg-card)_56%,transparent))] shadow-[0_2rem_5rem_color-mix(in_srgb,var(--color-shadow)_14%,transparent)] backdrop-blur-xl">
+			<div class="pointer-events-none absolute inset-x-8 top-0 h-px bg-[linear-gradient(90deg,transparent,color-mix(in_srgb,var(--color-overlay-light)_55%,transparent),transparent)]"></div>
 			<div
-				class="border-b border-[var(--color-border)] bg-gradient-to-r from-accent/12 via-accent/5 to-transparent p-6 lg:p-8"
+				class="border-b border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(135deg,color-mix(in_srgb,var(--color-accent)_10%,transparent),transparent_45%)] px-6 py-8 lg:px-10 lg:py-10"
 			>
 				{#if data.type === 'creatures'}
 					<CreatureHeader
@@ -285,11 +292,11 @@
 			{/if}
 
 			<div
-				class={`grid gap-6 p-6 ${
-					hasSidebarDetails ? 'xl:grid-cols-[minmax(0,1.2fr)_minmax(20rem,0.8fr)]' : ''
+				class={`grid gap-10 px-6 py-8 lg:px-10 lg:py-10 ${
+					hasSidebarDetails ? 'xl:grid-cols-[minmax(0,1fr)_18rem]' : ''
 				}`}
 			>
-				<div class="space-y-6">
+				<div class="space-y-8">
 					{#if creatureSetRosterSection}
 						<CreatureSetRosterSection creatures={creatureSetRosterSection.items} />
 					{/if}
@@ -301,7 +308,7 @@
 							open={descriptionSection.defaultOpen ?? false}
 							value={descriptionSection.key}
 						>
-							<div class="prose prose-invert max-w-none text-[var(--color-text-secondary)]">
+							<div class={readingProseClass}>
 								<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 								{@html markdownAt(descriptionSection.markdownKey)}
 							</div>
@@ -315,7 +322,7 @@
 							open={markdownSection.defaultOpen ?? false}
 							value={markdownSection.key}
 						>
-							<div class="prose prose-invert max-w-none text-[var(--color-text-secondary)]">
+							<div class={readingProseClass}>
 								<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 								{@html markdownAt(markdownSection.markdownKey)}
 							</div>
@@ -328,11 +335,9 @@
 							description={descriptionsSection.description}
 							value="descriptions"
 						>
-							<div class="space-y-4">
+							<div class="space-y-5">
 								{#each descriptionsSection.items as desc, index (`${desc.document ?? 'description'}-${index}`)}
-									<div
-										class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/55 p-4"
-									>
+									<div class={marginaliaItemClass}>
 										<div class="mb-2 flex flex-wrap gap-2">
 											{#if desc.gamesystem}
 												<span class="rounded bg-accent/20 px-2 py-0.5 text-xs text-accent">
@@ -347,9 +352,7 @@
 												</span>
 											{/if}
 										</div>
-										<div
-											class="prose prose-invert prose-sm max-w-none text-[var(--color-text-secondary)]"
-										>
+										<div class={sectionProseClass}>
 											<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 											{@html markdownAt(desc.markdownKey)}
 										</div>
@@ -369,13 +372,11 @@
 							description={weaponPropertiesSection.description}
 							value="weapon-properties"
 						>
-							<div class="grid gap-3">
+							<div class="space-y-5">
 								{#each weaponPropertiesSection.items as property, index (`${property.name}-${index}`)}
-									<div
-										class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/55 p-4"
-									>
+									<div class={marginaliaItemClass}>
 										<div class="flex items-center gap-2">
-											<span class="font-semibold text-accent">{property.name}</span>
+											<span class="font-serif text-lg text-[var(--color-text-primary)]">{property.name}</span>
 											{#if property.propertyType}
 												<span class="rounded bg-accent/20 px-2 py-0.5 text-xs text-accent">
 													{property.propertyType}
@@ -388,9 +389,7 @@
 											{/if}
 										</div>
 										{#if property.markdownKey}
-											<div
-												class="prose prose-invert prose-sm mt-2 max-w-none text-[var(--color-text-secondary)]"
-											>
+											<div class={`${sectionProseClass} mt-2`}>
 												<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 												{@html markdownAt(property.markdownKey)}
 											</div>
@@ -407,16 +406,12 @@
 							description={traitsSection.description}
 							value="species-traits"
 						>
-							<div class="grid gap-3">
+							<div class="space-y-5">
 								{#each traitsSection.items as trait, index (`${trait.name}-${index}`)}
-									<div
-										class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/55 p-4"
-									>
-										<h3 class="font-semibold text-accent">{trait.name}</h3>
+									<div class={marginaliaItemClass}>
+										<h3 class="font-serif text-lg text-[var(--color-text-primary)]">{trait.name}</h3>
 										{#if trait.markdownKey}
-											<div
-												class="prose prose-invert prose-sm mt-1 max-w-none text-[var(--color-text-secondary)]"
-											>
+											<div class={`${sectionProseClass} mt-2`}>
 												<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 												{@html markdownAt(trait.markdownKey)}
 											</div>
@@ -452,7 +447,7 @@
 
 				{#if hasSidebarDetails}
 					<div
-						class="space-y-6 xl:sticky xl:top-6 xl:self-start"
+						class="space-y-6 xl:sticky xl:top-6 xl:self-start xl:border-l xl:border-[color-mix(in_srgb,var(--color-border)_70%,transparent)] xl:pl-6"
 						style={`view-transition-name:${transitionNames.meta}-details;`}
 					>
 						<CompendiumDetailsPanel fields={detailFields} resolveValue={getDetailValue} />

@@ -18,17 +18,15 @@
 		open={true}
 		value="details"
 	>
-		<dl class="grid gap-3 sm:grid-cols-2">
+		<dl
+			class="divide-y divide-[color-mix(in_srgb,var(--color-border)_74%,transparent)] rounded-[1.75rem] border border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_62%,transparent),color-mix(in_srgb,var(--color-bg-card)_34%,transparent))] px-5 py-3 shadow-[0_1.25rem_3rem_color-mix(in_srgb,var(--color-shadow)_10%,transparent)]"
+		>
 			{#each fields as field (field.key)}
-				<div
-					class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/55 p-4 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-overlay-light)_24%,transparent)]"
-				>
-					<dt
-						class="text-[0.72rem] font-medium tracking-[0.16em] text-[var(--color-text-muted)] uppercase"
-					>
+				<div class="py-3 first:pt-1 last:pb-1">
+					<dt class="text-[0.7rem] tracking-[0.18em] text-[var(--color-text-muted)] uppercase">
 						{field.label}
 					</dt>
-					<dd class="mt-2 text-sm text-[var(--color-text-primary)]">
+					<dd class="mt-2 text-sm leading-6 text-[var(--color-text-primary)]">
 						<StructuredValue value={resolveValue(field.key, field.value)} />
 					</dd>
 				</div>

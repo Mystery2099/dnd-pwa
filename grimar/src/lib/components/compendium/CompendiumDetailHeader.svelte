@@ -56,7 +56,7 @@
 				{/if}
 			</div>
 			<h1
-				class="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] lg:text-4xl"
+				class="font-serif text-4xl leading-tight tracking-tight text-[var(--color-text-primary)] lg:text-5xl"
 				style={`view-transition-name:${transitionNames.title};`}
 			>
 				{title}
@@ -121,7 +121,7 @@
 	</div>
 
 	{#if headerBadges.length > 0}
-		<div class="mt-5 flex flex-wrap gap-2">
+		<div class="mt-6 flex flex-wrap gap-2">
 			{#each headerBadges as badge, index (`${badge.label}-${index}`)}
 				<Badge variant={badge.variant} class={badge.icon ? 'gap-1.5' : ''}>
 					{#if badge.icon?.family === 'spell-school'}

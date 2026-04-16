@@ -17,13 +17,13 @@
 		value={section.key}
 	>
 		<div
-			class="glass-scroll max-w-full min-w-0 overflow-x-auto overscroll-x-contain rounded-[1.2rem] border border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_54%,transparent),color-mix(in_srgb,var(--color-bg-card)_36%,transparent))]"
+			class="glass-scroll max-w-full min-w-0 overflow-x-auto overscroll-x-contain rounded-[1.5rem] border border-[color-mix(in_srgb,var(--color-border)_70%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_46%,transparent),color-mix(in_srgb,var(--color-bg-card)_22%,transparent))]"
 		>
 			<table
-				class="w-full min-w-[42rem] border-separate border-spacing-0 overflow-hidden rounded-xl bg-[var(--color-bg-card)]/45"
+				class="w-full min-w-[42rem] border-separate border-spacing-0 overflow-hidden rounded-[1.35rem] bg-transparent"
 			>
 				<thead>
-					<tr class="bg-[var(--color-bg-card)]/75">
+					<tr class="bg-[color-mix(in_srgb,var(--color-bg-card)_72%,transparent)]">
 						<th
 							class="sticky left-0 z-10 border-b border-[var(--color-border)] bg-[var(--color-bg-card)] px-4 py-3 text-left text-[0.72rem] font-medium tracking-[0.16em] text-[var(--color-text-muted)] uppercase"
 						>
@@ -40,7 +40,7 @@
 				</thead>
 				<tbody>
 					{#each section.rows as row (row.level)}
-						<tr class="odd:bg-[var(--color-bg-card)]/18">
+						<tr class="odd:bg-[color-mix(in_srgb,var(--color-bg-card)_14%,transparent)]">
 							<td
 								class="sticky left-0 z-10 border-b border-[var(--color-border)] bg-[var(--color-bg-card)]/95 px-4 py-3 font-semibold whitespace-nowrap text-[var(--color-text-primary)]"
 							>

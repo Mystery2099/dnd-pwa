@@ -11,6 +11,7 @@
 		onOpenChange?: (open: boolean) => void;
 		side?: Side;
 		class?: string;
+		trigger?: Snippet;
 		children?: Snippet;
 		title?: string;
 		description?: string;
@@ -21,6 +22,7 @@
 		onOpenChange,
 		side = 'right',
 		class: className = '',
+		trigger,
 		children,
 		title,
 		description
@@ -47,9 +49,9 @@
 </script>
 
 <DialogPrimitive.Root {open} onOpenChange={handleOpenChange}>
-	{#if children}
+	{#if trigger}
 		<DialogPrimitive.Trigger class="contents">
-			{@render children()}
+			{@render trigger()}
 		</DialogPrimitive.Trigger>
 	{/if}
 

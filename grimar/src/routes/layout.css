@@ -57,6 +57,8 @@
 	--animate-fade-in: fade-in 0.2s ease-out;
 	--animate-dropdown-in: dropdown-in var(--duration-base) var(--ease-spring);
 	--animate-dropdown-out: dropdown-out var(--duration-fast) var(--ease-smooth);
+	--animate-preview-pane-in: preview-pane-in var(--duration-pane-open) cubic-bezier(0.22, 1, 0.36, 1);
+	--animate-preview-pane-out: preview-pane-out var(--duration-pane-close) var(--ease-smooth);
 	--animate-arcane-particles: arcane-particles 15s ease-in-out infinite;
 	--animate-arcane-materialize: arcane-materialize 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 	--animate-rune-activate: rune-activate 0.3s ease-out;
@@ -135,6 +137,28 @@
 		to {
 			opacity: 0;
 			transform: translateY(-0.2rem) scale(0.99);
+		}
+	}
+
+	@keyframes preview-pane-in {
+		from {
+			opacity: 0;
+			transform: translateX(calc(100% + 0.75rem));
+		}
+		to {
+			opacity: 1;
+			transform: translateX(0);
+		}
+	}
+
+	@keyframes preview-pane-out {
+		from {
+			opacity: 1;
+			transform: translateX(0);
+		}
+		to {
+			opacity: 0;
+			transform: translateX(calc(100% + 0.75rem));
 		}
 	}
 
@@ -856,6 +880,16 @@
    ======================== */
 
 @layer components {
+	.app-shell-main {
+		left: 0;
+	}
+
+	@media (min-width: 1024px) {
+		.app-shell-main {
+			left: var(--shell-sidebar-offset, 223px);
+		}
+	}
+
 	/* The "Aero" Shine */
 	.aero-shine {
 		background: linear-gradient(

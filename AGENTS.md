@@ -7,3 +7,4 @@ Always run a check before running a test
 NEVER run the dev server as I run it myself and you'll mess things up if you try to.
 Rely on Tailwindcss for styling as much as possible.
 Rely on bits-ui for components when possible.
+Check documentation with context7 frequently when you're unsure how to use a tool.

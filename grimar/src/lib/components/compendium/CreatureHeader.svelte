@@ -59,7 +59,7 @@
 					{/if}
 				</div>
 				<h1
-					class="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] lg:text-4xl"
+					class="font-serif text-4xl leading-tight tracking-tight text-[var(--color-text-primary)] lg:text-5xl"
 					style={`view-transition-name:${transitionNames.title};`}
 				>
 					{title}
