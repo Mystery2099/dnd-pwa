@@ -26,8 +26,8 @@
 </script>
 
 <svelte:element
-	this={tag}
-	{href}
+	this={href ? 'a' : 'div'}
+	href={href || undefined}
 	{onclick}
 	{onmouseenter}
 	{onfocusin}
