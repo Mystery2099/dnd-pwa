@@ -25,7 +25,9 @@
 		<rect x="13" y="11" width="7" height="9" rx="1.5" />
 		<rect x="4" y="13" width="7" height="7" rx="1.5" />
 	{:else if icon === 'compendium'}
-		<path d="M6.5 5.5A2.5 2.5 0 0 1 9 3h8a2 2 0 0 1 2 2v14a1 1 0 0 1-1.45.9L14 18H9a2.5 2.5 0 0 0-2.5 2" />
+		<path
+			d="M6.5 5.5A2.5 2.5 0 0 1 9 3h8a2 2 0 0 1 2 2v14a1 1 0 0 1-1.45.9L14 18H9a2.5 2.5 0 0 0-2.5 2"
+		/>
 		<path d="M6.5 5.5v15" />
 		<path d="M10 7h6" />
 		<path d="M10 10h6" />

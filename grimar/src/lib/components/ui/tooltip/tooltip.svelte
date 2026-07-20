@@ -6,7 +6,7 @@
 	type Props = {
 		delayDuration?: number;
 		class?: string;
-		child?: Snippet<[ { props: Record<string, unknown> } ]>;
+		child?: Snippet<[{ props: Record<string, unknown> }]>;
 		content?: Snippet;
 	};
 

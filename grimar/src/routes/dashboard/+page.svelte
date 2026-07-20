@@ -16,7 +16,9 @@
 				>{data.user?.username || 'Traveler'}</span
 			>.
 		</p>
-		<div class="text-[0.68rem] font-semibold tracking-[0.24em] text-[var(--color-text-muted)] uppercase">
+		<div
+			class="text-[0.68rem] font-semibold tracking-[0.24em] text-[var(--color-text-muted)] uppercase"
+		>
 			Grimoire Overview
 		</div>
 	</div>

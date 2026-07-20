@@ -21,8 +21,6 @@
 		onfocusin,
 		...rest
 	}: Props = $props();
-
-	const tag = $derived<'a' | 'div'>(href ? 'a' : 'div');
 </script>
 
 <svelte:element

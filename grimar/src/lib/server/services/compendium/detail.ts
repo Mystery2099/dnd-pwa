@@ -18,7 +18,6 @@ import type {
 	CompendiumDetailSection,
 	CompendiumDescriptionEntry,
 	CompendiumDetailValue,
-	CompendiumEntityListSection,
 	CompendiumMarkdownSection,
 	CompendiumSpellClassesSection,
 	CompendiumTraitsSection,

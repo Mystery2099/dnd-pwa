@@ -98,7 +98,9 @@ export function ensureThemeFontsLoaded(themeId: string): void {
 
 	const saveData =
 		'connection' in navigator &&
-		Boolean((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData);
+		Boolean(
+			(navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData
+		);
 	if (saveData) {
 		return;
 	}

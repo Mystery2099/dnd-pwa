@@ -14,10 +14,7 @@ import {
 	type ThemeConfig,
 	ThemeConfigSchema
 } from './themeRegistry';
-import {
-	DEFAULT_THEME_ID,
-	ensureThemeFontsLoaded
-} from './themeAssets';
+import { DEFAULT_THEME_ID, ensureThemeFontsLoaded } from './themeAssets';
 import { injectThemeCSS } from './themeCSS';
 
 const THEME_KEY = 'grimar-theme';

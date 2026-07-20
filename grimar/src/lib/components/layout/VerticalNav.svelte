@@ -105,15 +105,15 @@
 			: ''}"
 	>
 		{#if !collapsed}
-				<a
-					href="/dashboard"
+			<a
+				href="/dashboard"
 				class="ui-lift ui-press block transform-gpu transition-[filter] duration-[var(--duration-base)] ease-[var(--ease-smooth)] hover:drop-shadow-[0_0_15px_var(--color-accent-glow)]"
 			>
 				<img src={logoUrl} alt="Grimar" class="h-10 w-auto" />
 			</a>
 		{:else}
-				<a
-					href="/dashboard"
+			<a
+				href="/dashboard"
 				class="ui-lift ui-press flex h-11 w-11 transform-gpu items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--color-border)_65%,transparent)] bg-[radial-gradient(circle_at_50%_45%,color-mix(in_srgb,var(--color-bg-card)_78%,transparent),color-mix(in_srgb,var(--color-bg-overlay)_22%,transparent))] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_8%,transparent)] transition-[border-color,background-color,box-shadow] duration-[var(--duration-fast)] ease-[var(--ease-smooth)] hover:border-[var(--color-border-hover)] hover:bg-[radial-gradient(circle_at_50%_45%,color-mix(in_srgb,var(--color-accent)_14%,var(--color-bg-card)),color-mix(in_srgb,var(--color-bg-overlay)_28%,transparent))] hover:shadow-[0_0_16px_color-mix(in_srgb,#cfb53b_18%,transparent)]"
 			>
 				<img src={logoIconUrl} alt="Grimar" class="h-8 w-8 object-contain" />
@@ -122,7 +122,9 @@
 	</div>
 
 	<!-- Navigation Sections -->
-	<div class="relative flex-1 overflow-y-auto p-2 transition-[padding] duration-[360ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]">
+	<div
+		class="relative flex-1 overflow-y-auto p-2 transition-[padding] duration-[360ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+	>
 		{#each sections as section (section.label)}
 			<div class="mb-4 flex flex-col gap-1">
 				{#if !collapsed}
@@ -131,7 +133,8 @@
 					>
 						{section.label}
 					</div>
-				{/if}				{#each section.items as item (item.href)}
+				{/if}
+				{#each section.items as item (item.href)}
 					{#if item.disabled}
 						{#if collapsed}
 							<Tooltip class={collapsedTooltipClass}>
@@ -141,7 +144,7 @@
 								{#snippet child({ props })}
 									<span
 										{...props}
-										class="pointer-events-none flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium opacity-50 transition-[padding,gap] duration-[360ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] justify-center"
+										class="pointer-events-none flex items-center justify-center gap-3 rounded-lg px-3 py-2 text-sm font-medium opacity-50 transition-[padding,gap] duration-[360ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]"
 									>
 										<span
 											class="flex size-6 items-center justify-center rounded-lg bg-[var(--color-text-muted)]/16 text-[var(--color-text-muted)]"
@@ -159,46 +162,46 @@
 								<span>{item.label}</span>
 							</span>
 						{/if}
-					{:else}
-						{#if collapsed}
-							<Tooltip class={collapsedTooltipClass}>
-								{#snippet content()}
-									{item.label}
-								{/snippet}
-								{#snippet child({ props })}
-									<a
-										{...props}
-										class={`${getLinkClass(item.href)} transition-[padding,gap] duration-[360ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]`}
-											href={item.href}
-									>
-										<span
-											class="flex size-6 items-center justify-center rounded-lg bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_70%,transparent),color-mix(in_srgb,var(--color-bg-overlay)_16%,transparent))] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_8%,transparent)] transition-[transform,background-color,color,box-shadow] duration-[var(--duration-fast)] ease-[var(--ease-smooth)] group-hover:scale-[1.06] {isActive(
-												item.href
-											)
-												? 'bg-[var(--color-accent)]/18 text-[var(--color-text-primary)]'
-												: ''}"
-										>
-											<NavItemIcon icon={item.icon} class="size-3.5" />
-										</span>
-									</a>
-								{/snippet}
-							</Tooltip>
-						{:else}
+					{:else if collapsed}
+						<Tooltip class={collapsedTooltipClass}>
+							{#snippet content()}
+								{item.label}
+							{/snippet}
+							{#snippet child({ props })}
 								<a
+									{...props}
 									class={`${getLinkClass(item.href)} transition-[padding,gap] duration-[360ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]`}
 									href={item.href}
 								>
-								<NavItemIcon icon={item.icon} class="size-4 shrink-0" />
-								<span>{item.label}</span>
-							</a>
-						{/if}
+									<span
+										class="flex size-6 items-center justify-center rounded-lg bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_70%,transparent),color-mix(in_srgb,var(--color-bg-overlay)_16%,transparent))] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_8%,transparent)] transition-[transform,background-color,color,box-shadow] duration-[var(--duration-fast)] ease-[var(--ease-smooth)] group-hover:scale-[1.06] {isActive(
+											item.href
+										)
+											? 'bg-[var(--color-accent)]/18 text-[var(--color-text-primary)]'
+											: ''}"
+									>
+										<NavItemIcon icon={item.icon} class="size-3.5" />
+									</span>
+								</a>
+							{/snippet}
+						</Tooltip>
+					{:else}
+						<a
+							class={`${getLinkClass(item.href)} transition-[padding,gap] duration-[360ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]`}
+							href={item.href}
+						>
+							<NavItemIcon icon={item.icon} class="size-4 shrink-0" />
+							<span>{item.label}</span>
+						</a>
 					{/if}
 				{/each}
 			</div>
 		{/each}
 	</div>
 
-	<div class="relative mt-auto border-t border-[var(--color-border)] px-2 pt-2 pb-5 transition-[padding] duration-[360ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]">
+	<div
+		class="relative mt-auto border-t border-[var(--color-border)] px-2 pt-2 pb-5 transition-[padding] duration-[360ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+	>
 		{#if allowCollapse}
 			{#if collapsed}
 				<Tooltip class={collapsedTooltipClass}>
@@ -237,8 +240,8 @@
 					{#snippet child({ props })}
 						<a
 							{...props}
-								href="/settings"
-							class="ui-card-interactive group flex h-16 w-full transform-gpu items-center gap-3 overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[radial-gradient(circle_at_16%_18%,color-mix(in_srgb,var(--color-accent)_14%,transparent),transparent_24%),linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_62%,transparent),color-mix(in_srgb,var(--color-bg-overlay)_20%,transparent))] px-3 py-3 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent),0_0_22px_color-mix(in_srgb,var(--color-accent)_8%,transparent)] transition-[border-color,background-color,padding,gap,box-shadow] duration-[var(--duration-base)] ease-[var(--ease-smooth)] hover:border-[var(--color-border-hover)] hover:bg-[radial-gradient(circle_at_16%_18%,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent_28%),linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_72%,transparent),color-mix(in_srgb,var(--color-accent)_10%,transparent))] hover:shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent),0_1rem_2rem_color-mix(in_srgb,var(--color-shadow)_12%,transparent),0_0_24px_color-mix(in_srgb,var(--color-accent)_10%,transparent)] justify-center gap-0"
+							href="/settings"
+							class="ui-card-interactive group flex h-16 w-full transform-gpu items-center justify-center gap-0 gap-3 overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[radial-gradient(circle_at_16%_18%,color-mix(in_srgb,var(--color-accent)_14%,transparent),transparent_24%),linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_62%,transparent),color-mix(in_srgb,var(--color-bg-overlay)_20%,transparent))] px-3 py-3 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent),0_0_22px_color-mix(in_srgb,var(--color-accent)_8%,transparent)] transition-[border-color,background-color,padding,gap,box-shadow] duration-[var(--duration-base)] ease-[var(--ease-smooth)] hover:border-[var(--color-border-hover)] hover:bg-[radial-gradient(circle_at_16%_18%,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent_28%),linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_72%,transparent),color-mix(in_srgb,var(--color-accent)_10%,transparent))] hover:shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent),0_1rem_2rem_color-mix(in_srgb,var(--color-shadow)_12%,transparent),0_0_24px_color-mix(in_srgb,var(--color-accent)_10%,transparent)]"
 						>
 							<div
 								class="flex size-9 shrink-0 items-center justify-center rounded-full bg-[radial-gradient(circle_at_30%_30%,color-mix(in_srgb,var(--color-text-primary)_16%,transparent),color-mix(in_srgb,var(--color-accent)_68%,transparent))] text-[0.8rem] font-semibold tracking-[0.04em] text-[var(--color-text-primary)] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_24%,transparent),0_0_14px_color-mix(in_srgb,var(--color-accent)_16%,transparent)]"
@@ -249,8 +252,8 @@
 					{/snippet}
 				</Tooltip>
 			{:else}
-					<a
-						href="/settings"
+				<a
+					href="/settings"
 					class="ui-card-interactive group flex h-16 w-full transform-gpu items-center gap-3 overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[radial-gradient(circle_at_16%_18%,color-mix(in_srgb,var(--color-accent)_14%,transparent),transparent_24%),linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_62%,transparent),color-mix(in_srgb,var(--color-bg-overlay)_20%,transparent))] px-3 py-3 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent),0_0_22px_color-mix(in_srgb,var(--color-accent)_8%,transparent)] transition-[border-color,background-color,padding,gap,box-shadow] duration-[var(--duration-base)] ease-[var(--ease-smooth)] hover:border-[var(--color-border-hover)] hover:bg-[radial-gradient(circle_at_16%_18%,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent_28%),linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_72%,transparent),color-mix(in_srgb,var(--color-accent)_10%,transparent))] hover:shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent),0_1rem_2rem_color-mix(in_srgb,var(--color-shadow)_12%,transparent),0_0_24px_color-mix(in_srgb,var(--color-accent)_10%,transparent)]"
 				>
 					<div
@@ -260,7 +263,7 @@
 					</div>
 
 					<div
-						class="min-w-0 overflow-hidden transition-[max-width,opacity,margin] duration-[360ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] ml-0.5 max-w-[9rem] flex-1 opacity-100"
+						class="ml-0.5 max-w-[9rem] min-w-0 flex-1 overflow-hidden opacity-100 transition-[max-width,opacity,margin] duration-[360ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]"
 					>
 						<p class="truncate text-sm font-semibold text-[var(--color-text-primary)]">
 							{accountDisplayName}

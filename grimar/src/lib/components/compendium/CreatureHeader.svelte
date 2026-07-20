@@ -46,11 +46,17 @@
 	const transitionNames = $derived(getCompendiumTransitionNames(transitionType, transitionKey));
 </script>
 
-<div class="flex items-start justify-between gap-6" style={`view-transition-name:${transitionNames.shell};`}>
+<div
+	class="flex items-start justify-between gap-6"
+	style={`view-transition-name:${transitionNames.shell};`}
+>
 	<div class="min-w-0 flex-1">
 		<div class="flex items-start justify-between gap-4">
 			<div>
-				<div class="mb-3 flex flex-wrap items-center gap-2" style={`view-transition-name:${transitionNames.meta};`}>
+				<div
+					class="mb-3 flex flex-wrap items-center gap-2"
+					style={`view-transition-name:${transitionNames.meta};`}
+				>
 					<Badge variant="outline" class="text-xs tracking-[0.18em] uppercase">
 						{label}
 					</Badge>

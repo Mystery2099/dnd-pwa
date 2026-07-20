@@ -48,7 +48,7 @@
 					<AccordionContent class="pb-5">
 						{#if feature.markdownKey && activeFeature === featureValue}
 							<div
-								class="border-l border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] pl-4 prose prose-invert prose-sm max-w-none text-[var(--color-text-secondary)] prose-headings:font-serif"
+								class="prose prose-invert prose-sm prose-headings:font-serif max-w-none border-l border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] pl-4 text-[var(--color-text-secondary)]"
 							>
 								<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 								{@html markdownAt(feature.markdownKey)}

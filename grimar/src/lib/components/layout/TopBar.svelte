@@ -21,7 +21,9 @@
 	let { onNavToggle }: Props = $props();
 	const activeThemeId = $derived($themeStore);
 	let searchQuery = $derived(
-		page.url.pathname.startsWith('/beta/compendium') ? (page.url.searchParams.get('search') ?? '') : ''
+		page.url.pathname.startsWith('/beta/compendium')
+			? (page.url.searchParams.get('search') ?? '')
+			: ''
 	);
 	const currentSection = $derived.by(() => {
 		const segments = page.url.pathname.split('/').filter(Boolean);
@@ -34,7 +36,7 @@
 </script>
 
 <header
-	class="relative sticky top-0 z-40 flex min-h-12 w-full items-center justify-between gap-4 border-b border-[color-mix(in_srgb,var(--color-border)_88%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_52%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-overlay)_24%,var(--color-bg-canvas)))] px-5 py-3 md:px-7 xl:px-9 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent),inset_0_-1px_0_color-mix(in_srgb,var(--color-accent)_10%,transparent),0_12px_30px_color-mix(in_srgb,black_18%,transparent),0_1px_0_color-mix(in_srgb,var(--color-text-primary)_4%,transparent)] backdrop-blur-[24px]"
+	class="relative sticky top-0 z-40 flex min-h-12 w-full items-center justify-between gap-4 border-b border-[color-mix(in_srgb,var(--color-border)_88%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-overlay)_52%,var(--color-bg-canvas)),color-mix(in_srgb,var(--color-bg-overlay)_24%,var(--color-bg-canvas)))] px-5 py-3 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent),inset_0_-1px_0_color-mix(in_srgb,var(--color-accent)_10%,transparent),0_12px_30px_color-mix(in_srgb,black_18%,transparent),0_1px_0_color-mix(in_srgb,var(--color-text-primary)_4%,transparent)] backdrop-blur-[24px] md:px-7 xl:px-9"
 >
 	<div
 		class="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-text-primary)_6%,transparent),transparent_28%,color-mix(in_srgb,var(--color-accent)_10%,transparent)),radial-gradient(circle_at_18%_0%,color-mix(in_srgb,var(--color-accent)_22%,transparent),transparent_26%),radial-gradient(circle_at_82%_18%,color-mix(in_srgb,var(--color-text-primary)_8%,transparent),transparent_22%),linear-gradient(96deg,transparent,color-mix(in_srgb,var(--color-accent)_8%,transparent),transparent_68%)] opacity-90"
@@ -76,7 +78,7 @@
 					type="search"
 					name="search"
 					placeholder="Search the Hermetica..."
-					class="ui-lift appearance-none h-9 w-[clamp(12rem,26vw,18rem)] rounded-lg border border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_74%,transparent),color-mix(in_srgb,var(--color-bg-overlay)_22%,transparent))] pr-3 pl-9 text-sm text-[var(--color-text-secondary)] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_8%,transparent),0_0_0_1px_color-mix(in_srgb,var(--color-border)_20%,transparent)] transition-[width,border-color,box-shadow,color,background-color] duration-[var(--duration-fast)] ease-[var(--ease-smooth)] outline-none placeholder:text-[color-mix(in_srgb,var(--color-text-muted)_86%,transparent)] hover:border-[color-mix(in_srgb,var(--color-border-hover)_88%,transparent)] focus:w-[clamp(13rem,28vw,19rem)] focus:border-[var(--color-border-hover)] focus:bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_82%,transparent),color-mix(in_srgb,var(--color-accent)_10%,transparent))] focus:text-[var(--color-text-primary)] focus:shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent),0_0_0_1px_color-mix(in_srgb,var(--color-accent)_24%,transparent),0_0_18px_color-mix(in_srgb,var(--color-accent)_10%,transparent)] motion-reduce:transform-none"
+					class="ui-lift h-9 w-[clamp(12rem,26vw,18rem)] appearance-none rounded-lg border border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_74%,transparent),color-mix(in_srgb,var(--color-bg-overlay)_22%,transparent))] pr-3 pl-9 text-sm text-[var(--color-text-secondary)] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_8%,transparent),0_0_0_1px_color-mix(in_srgb,var(--color-border)_20%,transparent)] transition-[width,border-color,box-shadow,color,background-color] duration-[var(--duration-fast)] ease-[var(--ease-smooth)] outline-none placeholder:text-[color-mix(in_srgb,var(--color-text-muted)_86%,transparent)] hover:border-[color-mix(in_srgb,var(--color-border-hover)_88%,transparent)] focus:w-[clamp(13rem,28vw,19rem)] focus:border-[var(--color-border-hover)] focus:bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_82%,transparent),color-mix(in_srgb,var(--color-accent)_10%,transparent))] focus:text-[var(--color-text-primary)] focus:shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent),0_0_0_1px_color-mix(in_srgb,var(--color-accent)_24%,transparent),0_0_18px_color-mix(in_srgb,var(--color-accent)_10%,transparent)] motion-reduce:transform-none"
 				/>
 			</label>
 		</form>

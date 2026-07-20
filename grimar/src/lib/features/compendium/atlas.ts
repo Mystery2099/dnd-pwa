@@ -86,7 +86,18 @@ export const ATLAS_SCOPE_DEFINITIONS: AtlasScopeDefinition[] = [
 		id: 'all',
 		label: 'All',
 		description: 'Survey the whole archive from one search surface.',
-		types: ['spells', 'creatures', 'items', 'magicitems', 'weapons', 'armor', 'classes', 'species', 'feats', 'backgrounds']
+		types: [
+			'spells',
+			'creatures',
+			'items',
+			'magicitems',
+			'weapons',
+			'armor',
+			'classes',
+			'species',
+			'feats',
+			'backgrounds'
+		]
 	},
 	{
 		id: 'spells',
@@ -225,7 +236,7 @@ export const CHALLENGE_RATING_OPTIONS = [
 	{ label: '7', value: '7' },
 	{ label: '8', value: '8' },
 	{ label: '9', value: '9' },
-	{ label: '10+', value: '10' }
+	{ label: '10+', value: '10+' }
 ] as const;
 
 export const ITEM_KIND_OPTIONS = [
@@ -280,16 +291,14 @@ export function parseAtlasState(params: URLSearchParams): AtlasState {
 		selectedType: isCompendiumTypeName(selectedType) ? selectedType : 'all',
 		search: params.get('search')?.trim() ?? DEFAULT_ATLAS_STATE.search,
 		sort: isAtlasSortId(sort) ? sort : DEFAULT_ATLAS_STATE.sort,
-		page: Number.isFinite(pageValue) && pageValue > 0 ? pageValue : DEFAULT_ATLAS_STATE.page,
+		page: Number.isSafeInteger(pageValue) && pageValue > 0 ? pageValue : DEFAULT_ATLAS_STATE.page,
 		spellLevel: params.get('spellLevel') ?? DEFAULT_ATLAS_STATE.spellLevel,
 		spellSchool: params.get('spellSchool') ?? DEFAULT_ATLAS_STATE.spellSchool,
 		creatureType: params.get('creatureType') ?? DEFAULT_ATLAS_STATE.creatureType,
 		challengeRating: params.get('challengeRating') ?? DEFAULT_ATLAS_STATE.challengeRating,
 		itemKind: isAtlasItemKind(itemKind) ? itemKind : DEFAULT_ATLAS_STATE.itemKind,
 		itemRarity: params.get('itemRarity') ?? DEFAULT_ATLAS_STATE.itemRarity,
-		attunement: isAtlasAttunementFilter(attunement)
-			? attunement
-			: DEFAULT_ATLAS_STATE.attunement
+		attunement: isAtlasAttunementFilter(attunement) ? attunement : DEFAULT_ATLAS_STATE.attunement
 	};
 
 	return normalizeAtlasState(state);
@@ -297,31 +306,32 @@ export function parseAtlasState(params: URLSearchParams): AtlasState {
 
 export function createAtlasHref(state: AtlasState): string {
 	const params = new URLSearchParams();
+	const filterContext = getAtlasFilterContext(state);
 
 	if (state.scope !== DEFAULT_ATLAS_STATE.scope) params.set('scope', state.scope);
 	if (state.selectedType !== 'all') params.set('type', state.selectedType);
 	if (state.search) params.set('search', state.search);
 	if (state.sort !== DEFAULT_ATLAS_STATE.sort) params.set('sort', state.sort);
 	if (state.page > 1) params.set('page', String(state.page));
-	if (state.scope === 'spells' && state.spellLevel !== 'all') {
+	if (filterContext === 'spells' && state.spellLevel !== 'all') {
 		params.set('spellLevel', state.spellLevel);
 	}
-	if (state.scope === 'spells' && state.spellSchool !== 'all') {
+	if (filterContext === 'spells' && state.spellSchool !== 'all') {
 		params.set('spellSchool', state.spellSchool);
 	}
-	if (state.scope === 'monsters' && state.creatureType !== 'all') {
+	if (filterContext === 'monsters' && state.creatureType !== 'all') {
 		params.set('creatureType', state.creatureType);
 	}
-	if (state.scope === 'monsters' && state.challengeRating !== 'all') {
+	if (filterContext === 'monsters' && state.challengeRating !== 'all') {
 		params.set('challengeRating', state.challengeRating);
 	}
-	if (state.scope === 'items' && state.itemKind !== 'all') {
+	if (filterContext === 'items' && state.itemKind !== 'all') {
 		params.set('itemKind', state.itemKind);
 	}
-	if (state.scope === 'items' && state.itemRarity !== 'all') {
+	if (filterContext === 'items' && state.itemRarity !== 'all') {
 		params.set('itemRarity', state.itemRarity);
 	}
-	if (state.scope === 'items' && state.attunement !== 'all') {
+	if (filterContext === 'items' && state.attunement !== 'all') {
 		params.set('attunement', state.attunement);
 	}
 
@@ -329,9 +339,7 @@ export function createAtlasHref(state: AtlasState): string {
 	return query ? `/beta/compendium?${query}` : '/beta/compendium';
 }
 
-export function getAtlasScopeCounts(
-	counts: Record<string, number>
-): Record<AtlasScopeId, number> {
+export function getAtlasScopeCounts(counts: Record<string, number>): Record<AtlasScopeId, number> {
 	return ATLAS_SCOPE_DEFINITIONS.reduce(
 		(accumulator, scope) => {
 			accumulator[scope.id] = scope.types.reduce((total, type) => {
@@ -360,8 +368,7 @@ export function getBadgeClasses(tone: AtlasBadgeTone = 'slate'): string {
 			'border-[color-mix(in_srgb,var(--color-gem-topaz)_36%,var(--color-border))] bg-[color-mix(in_srgb,var(--color-gem-topaz)_12%,transparent)] text-[color-mix(in_srgb,var(--color-text-primary)_92%,var(--color-gem-topaz))]',
 		violet:
 			'border-[color-mix(in_srgb,var(--color-gem-amethyst)_36%,var(--color-border))] bg-[color-mix(in_srgb,var(--color-gem-amethyst)_12%,transparent)] text-[color-mix(in_srgb,var(--color-text-primary)_92%,var(--color-gem-amethyst))]',
-		teal:
-			'border-[color-mix(in_srgb,var(--color-gem-sapphire)_32%,var(--color-border))] bg-[color-mix(in_srgb,var(--color-gem-sapphire)_10%,transparent)] text-[color-mix(in_srgb,var(--color-text-primary)_92%,var(--color-gem-sapphire))]',
+		teal: 'border-[color-mix(in_srgb,var(--color-gem-sapphire)_32%,var(--color-border))] bg-[color-mix(in_srgb,var(--color-gem-sapphire)_10%,transparent)] text-[color-mix(in_srgb,var(--color-text-primary)_92%,var(--color-gem-sapphire))]',
 		ember:
 			'border-[color-mix(in_srgb,var(--color-gem-ruby)_34%,var(--color-border))] bg-[color-mix(in_srgb,var(--color-gem-ruby)_11%,transparent)] text-[color-mix(in_srgb,var(--color-text-primary)_92%,var(--color-gem-ruby))]',
 		slate:
@@ -391,15 +398,18 @@ export function getActiveFilterLabels(state: AtlasState): string[] {
 
 	if (state.search) labels.push(`Search: ${state.search}`);
 	const filterContext = getAtlasFilterContext(state);
-	if (filterContext === 'spells' && state.spellLevel !== 'all') labels.push(`Level ${state.spellLevel}`);
-	if (filterContext === 'spells' && state.spellSchool !== 'all') labels.push(capitalize(state.spellSchool));
+	if (filterContext === 'spells' && state.spellLevel !== 'all')
+		labels.push(`Level ${state.spellLevel}`);
+	if (filterContext === 'spells' && state.spellSchool !== 'all')
+		labels.push(capitalize(state.spellSchool));
 	if (filterContext === 'monsters' && state.creatureType !== 'all') {
 		labels.push(capitalize(state.creatureType));
 	}
 	if (filterContext === 'monsters' && state.challengeRating !== 'all') {
 		labels.push(`CR ${state.challengeRating}`);
 	}
-	if (filterContext === 'items' && state.itemKind !== 'all') labels.push(capitalize(state.itemKind));
+	if (filterContext === 'items' && state.itemKind !== 'all')
+		labels.push(capitalize(state.itemKind));
 	if (filterContext === 'items' && state.itemRarity !== 'all') {
 		labels.push(capitalize(state.itemRarity));
 	}
@@ -426,7 +436,10 @@ export function getAtlasSortOptions(state: AtlasState): AtlasSortOption[] {
 		options.push(...ITEM_SORT_OPTIONS);
 	}
 
-	if (state.selectedType === 'classes') {
+	if (
+		state.selectedType === 'classes' ||
+		(state.selectedType === 'all' && state.scope === 'classes')
+	) {
 		options.push(...CLASS_SORT_OPTIONS);
 	}
 
@@ -474,7 +487,13 @@ function isAtlasSortId(value: string | null): value is AtlasSortId {
 }
 
 function isAtlasItemKind(value: string | null): value is AtlasItemKind {
-	return value === 'all' || value === 'gear' || value === 'magic' || value === 'weapon' || value === 'armor';
+	return (
+		value === 'all' ||
+		value === 'gear' ||
+		value === 'magic' ||
+		value === 'weapon' ||
+		value === 'armor'
+	);
 }
 
 function isAtlasAttunementFilter(value: string | null): value is AtlasAttunementFilter {

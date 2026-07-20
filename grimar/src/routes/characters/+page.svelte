@@ -28,7 +28,9 @@
 		<div
 			class="absolute inset-y-0 right-0 w-[32%] bg-[linear-gradient(120deg,transparent,color-mix(in_srgb,var(--color-accent)_5%,transparent),transparent)] opacity-45"
 		></div>
-		<div class="relative grid gap-5 xl:grid-cols-[minmax(0,1.8fr)_minmax(16rem,0.95fr)] xl:items-end">
+		<div
+			class="relative grid gap-5 xl:grid-cols-[minmax(0,1.8fr)_minmax(16rem,0.95fr)] xl:items-end"
+		>
 			<div>
 				<div class="flex flex-wrap items-center gap-3">
 					<p

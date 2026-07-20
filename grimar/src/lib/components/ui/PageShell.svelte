@@ -48,7 +48,9 @@
 	</SurfaceCard>
 {:else}
 	<div
-		class={centered ? `flex min-h-[60vh] flex-col items-center justify-center text-center ${className}` : className}
+		class={centered
+			? `flex min-h-[60vh] flex-col items-center justify-center text-center ${className}`
+			: className}
 	>
 		{#if showHeader}
 			<h1 class="text-holo mb-2 text-3xl font-bold tracking-tight">

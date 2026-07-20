@@ -29,6 +29,7 @@ export interface SheetContentProps {
 	showHandle?: boolean;
 	handleClass?: string;
 	closeThreshold?: number;
+	/** Limits drag gestures to the dedicated handle by default so content remains scrollable. */
 	dragConstraint?: DragConstraint;
 	onDragStart?: (state: SheetDragState) => void;
 	onDragMove?: (state: SheetDragState) => void;

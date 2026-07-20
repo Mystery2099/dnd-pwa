@@ -48,12 +48,16 @@
 			>
 				<div class="space-y-5">
 					{#each group.items as item, itemIndex (`${group.key}-${item.name ?? 'benefit'}-${itemIndex}`)}
-						<div class="border-l border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] pl-4 sm:pl-5">
+						<div
+							class="border-l border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] pl-4 sm:pl-5"
+						>
 							{#if shouldShowItemName(group.title, item.name, group.items.length)}
-								<h4 class="mb-2 font-serif text-lg text-[var(--color-text-primary)]">{item.name}</h4>
+								<h4 class="mb-2 font-serif text-lg text-[var(--color-text-primary)]">
+									{item.name}
+								</h4>
 							{/if}
 							<div
-								class="prose prose-invert prose-sm max-w-none text-[var(--color-text-secondary)] prose-headings:font-serif [&>p:first-child]:mt-0 [&>p:last-child]:mb-0"
+								class="prose prose-invert prose-sm prose-headings:font-serif max-w-none text-[var(--color-text-secondary)] [&>p:first-child]:mt-0 [&>p:last-child]:mb-0"
 							>
 								<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 								{@html markdownAt(item.markdownKey)}
@@ -72,7 +76,9 @@
 	>
 		<ul class="space-y-3 text-[var(--color-text-secondary)]">
 			{#each section.items as item, index (index)}
-				<li class="border-l border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] pl-4 prose prose-invert prose-sm max-w-none [&>p]:m-0">
+				<li
+					class="prose prose-invert prose-sm max-w-none border-l border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] pl-4 [&>p]:m-0"
+				>
 					<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 					{@html markdownAt(item.markdownKey)}
 				</li>

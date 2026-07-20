@@ -1,4 +1,5 @@
 import { marked } from 'marked';
+import { sanitize } from 'isomorphic-dompurify';
 import { getItem } from '$lib/server/repositories/compendium';
 import type { CompendiumType } from '$lib/server/db/schema';
 import type { CompendiumDetailPayload } from '$lib/core/types/compendium';
@@ -62,8 +63,11 @@ async function renderMarkdown(text: unknown): Promise<string | null> {
 	}
 
 	try {
-		const parsed = marked.parse(escapeHtml(original));
-		const rendered = typeof parsed === 'string' ? parsed : await parsed;
+		const parsed = marked.parse(original);
+		const rendered = sanitize(typeof parsed === 'string' ? parsed : await parsed, {
+			USE_PROFILES: { html: true },
+			FORBID_ATTR: ['style']
+		});
 		markdownRenderCache.set(original, rendered);
 
 		if (markdownRenderCache.size > MAX_CACHE_ENTRIES) {
@@ -81,13 +85,4 @@ async function renderMarkdown(text: unknown): Promise<string | null> {
 		});
 		return null;
 	}
-}
-
-function escapeHtml(value: string): string {
-	return value
-		.replaceAll('&', '&amp;')
-		.replaceAll('<', '&lt;')
-		.replaceAll('>', '&gt;')
-		.replaceAll('"', '&quot;')
-		.replaceAll("'", '&#39;');
 }

@@ -20,7 +20,11 @@ export const motionEase = {
 	}
 } as const;
 
-export function stagger(index: number, start: number = 0, step: number = motionDuration.stagger): number {
+export function stagger(
+	index: number,
+	start: number = 0,
+	step: number = motionDuration.stagger
+): number {
 	return start + index * step;
 }
 
@@ -44,9 +48,7 @@ export function fadeUp(
 	};
 }
 
-export function paneEnter(
-	x: number = 420
-): Pick<FlyParams, 'x' | 'duration' | 'easing'> {
+export function paneEnter(x: number = 420): Pick<FlyParams, 'x' | 'duration' | 'easing'> {
 	return {
 		x,
 		duration: motionDuration.paneOpen,
@@ -54,9 +56,7 @@ export function paneEnter(
 	};
 }
 
-export function paneExit(
-	x: number = 420
-): Pick<FlyParams, 'x' | 'duration' | 'easing'> {
+export function paneExit(x: number = 420): Pick<FlyParams, 'x' | 'duration' | 'easing'> {
 	return {
 		x,
 		duration: motionDuration.paneClose,

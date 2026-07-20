@@ -34,6 +34,10 @@
 	}: Props = $props();
 
 	const desktopViewport = new MediaQuery('min-width: 640px', true);
+	const componentId = $props.id();
+	const mobileTriggerId = `${componentId}-trigger`;
+	const mobileDialogId = `${componentId}-dialog`;
+	const mobileOptionName = `${componentId}-option`;
 
 	let mobileSheetOpen = $state(false);
 
@@ -53,7 +57,13 @@
 		handleValueChange(nextValue);
 		mobileSheetOpen = false;
 	}
+
+	function handleWindowResize() {
+		if (window.matchMedia('(min-width: 640px)').matches) mobileSheetOpen = false;
+	}
 </script>
+
+<svelte:window onresize={handleWindowResize} />
 
 {#if isDesktop}
 	<SelectPrimitive.Root {type} bind:value onValueChange={handleValueChange} {...restProps}>
@@ -102,8 +112,12 @@
 	</SelectPrimitive.Root>
 {:else}
 	<button
+		id={mobileTriggerId}
 		type="button"
 		class={cn(triggerClassName, className)}
+		aria-expanded={mobileSheetOpen}
+		aria-haspopup="dialog"
+		aria-controls={mobileDialogId}
 		onclick={() => {
 			mobileSheetOpen = true;
 		}}
@@ -115,8 +129,8 @@
 	</button>
 
 	<Sheet.Root bind:open={mobileSheetOpen}>
-		<Sheet.Overlay variant="blur" blurAmount="sm" />
 		<Sheet.Content
+			id={mobileDialogId}
 			side="bottom"
 			variant="sheet"
 			overlayVariant="blur"
@@ -124,29 +138,39 @@
 			class="max-h-[78vh] px-0 pt-3"
 		>
 			<div class="space-y-3 px-3 text-left">
-				<h2 class="text-lg font-medium text-[var(--color-text-primary)]">
+				<Sheet.Title class="font-medium">
 					{placeholder === 'Select...' ? 'Choose an option' : placeholder}
-				</h2>
-				<p class="text-sm text-[var(--color-text-muted)]">Tap an option to apply it immediately.</p>
+				</Sheet.Title>
+				<Sheet.Description class="text-[var(--color-text-muted)]">
+					Tap an option to apply it immediately.
+				</Sheet.Description>
 			</div>
 			<div class="px-3 pb-4">
-				<div
+				<fieldset
 					class="rounded-[1.15rem] border border-[color-mix(in_srgb,var(--color-border)_84%,transparent)] bg-[color-mix(in_srgb,var(--color-bg-card)_38%,transparent)] p-2 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_8%,transparent)]"
 				>
+					<legend class="sr-only">
+						{placeholder === 'Select...' ? 'Choose an option' : placeholder}
+					</legend>
 					<div class="max-h-[52vh] space-y-1 overflow-y-auto">
 						{#each options as option (option.value)}
-							<button
-								type="button"
-								disabled={option.disabled}
-								aria-pressed={option.value === value}
+							<label
 								class={cn(
-									'flex w-full items-center justify-between rounded-[0.95rem] px-3.5 py-3 text-left text-sm font-medium text-[var(--color-text-primary)] transition-[background-color,color,transform,box-shadow] duration-150 ease-out active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-45',
+									'flex w-full cursor-pointer items-center justify-between rounded-[0.95rem] px-3.5 py-3 text-left text-sm font-medium text-[var(--color-text-primary)] transition-[background-color,color,transform,box-shadow] duration-150 ease-out active:scale-[0.99] has-disabled:cursor-not-allowed has-disabled:opacity-45',
 									option.value === value
 										? 'bg-[color-mix(in_srgb,var(--color-accent)_18%,transparent)] text-[var(--color-accent)] shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--color-accent)_18%,transparent)]'
 										: 'bg-transparent hover:bg-[color-mix(in_srgb,var(--color-accent)_10%,transparent)]'
 								)}
-								onclick={() => handleMobileSelect(option.value)}
 							>
+								<input
+									class="sr-only"
+									type="radio"
+									name={mobileOptionName}
+									value={option.value}
+									checked={option.value === value}
+									disabled={option.disabled}
+									onchange={() => handleMobileSelect(option.value)}
+								/>
 								<span class="pr-3">{option.label}</span>
 								{#if option.value === value}
 									<span
@@ -155,10 +179,10 @@
 										<Check class="size-3.5" />
 									</span>
 								{/if}
-							</button>
+							</label>
 						{/each}
 					</div>
-				</div>
+				</fieldset>
 			</div>
 		</Sheet.Content>
 	</Sheet.Root>

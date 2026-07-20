@@ -3,9 +3,10 @@
 	import XIcon from '@lucide/svelte/icons/x';
 	import type { Snippet } from 'svelte';
 	import { cn } from '$lib/utils.js';
-	import SheetPortal from './sheet-portal.svelte';
+	import { getSheetContext } from './context.js';
 	import SheetOverlay from './sheet-overlay.svelte';
-	import type { SheetSide } from './types.js';
+	import SheetPortal from './sheet-portal.svelte';
+	import type { SheetDragState, SheetSide } from './types.js';
 
 	type SheetVariant = 'sheet' | 'drawer' | 'dialog';
 
@@ -20,6 +21,13 @@
 		right: 'inset-y-0 right-0 h-full',
 		bottom: 'inset-x-0 bottom-0 w-full',
 		left: 'inset-y-0 left-0 h-full'
+	};
+
+	const handlePositionClasses: Record<SheetSide, string> = {
+		top: 'inset-x-0 top-0 pt-3',
+		right: 'inset-x-0 top-0 pt-3',
+		bottom: 'inset-x-0 bottom-0 pb-3',
+		left: 'inset-x-0 top-0 pt-3'
 	};
 
 	let {
@@ -37,10 +45,16 @@
 		showHandle = true,
 		handleClass = '',
 		closeThreshold = 0.4,
-		dragConstraint = 'content' as 'none' | 'content' | 'handle',
+		dragConstraint = 'handle' as 'none' | 'content' | 'handle',
 		onDragStart,
 		onDragMove,
-		onDragEnd
+		onDragEnd,
+		style: styleProp,
+		onpointerdown,
+		onpointermove,
+		onpointerup,
+		onpointercancel,
+		...restProps
 	}: DialogPrimitive.ContentProps & {
 		side?: SheetSide;
 		variant?: SheetVariant;
@@ -55,16 +69,17 @@
 		handleClass?: string;
 		closeThreshold?: number;
 		dragConstraint?: 'none' | 'content' | 'handle';
-		onDragStart?: (state: { isDragging: boolean; delta: number; velocity: number; direction: number }) => void;
-		onDragMove?: (state: { isDragging: boolean; delta: number; velocity: number; direction: number }) => void;
-		onDragEnd?: (state: { isDragging: boolean; delta: number; velocity: number; direction: number }, willClose: boolean) => void;
+		onDragStart?: (state: SheetDragState) => void;
+		onDragMove?: (state: SheetDragState) => void;
+		onDragEnd?: (state: SheetDragState, willClose: boolean) => void;
 	} = $props();
 
-	let contentEl: HTMLElement | null = $state(null);
+	const sheet = getSheetContext();
 	let dragging = $state(false);
 	let dragDelta = $state(0);
 	let dragStart = $state(0);
-	let lastMove = $state(0);
+	let lastPosition = $state(0);
+	let lastMoveTime = $state(0);
 	let velocity = $state(0);
 	let dragDirection = $state(1);
 
@@ -83,128 +98,153 @@
 	}
 
 	function isInteractiveElement(target: HTMLElement): boolean {
-		return !!target.closest('[data-sheet-close], [data-sheet-ignore], button, a, input, select, textarea, [contenteditable]');
+		return !!target.closest(
+			'[data-sheet-close], [data-sheet-ignore], button, a, input, select, textarea, [contenteditable]'
+		);
 	}
 
-	function handlePointerDown(e: PointerEvent) {
-		if (e.button !== 0) return;
-		if (!isValidDragTarget(e.target as HTMLElement)) return;
-		if (isInteractiveElement(e.target as HTMLElement)) return;
+	function handlePointerDown(event: PointerEvent) {
+		if (event.button !== 0) return;
+		if (!isValidDragTarget(event.target as HTMLElement)) return;
+		if (isInteractiveElement(event.target as HTMLElement)) return;
 
 		dragging = true;
-		dragStart = getAxis() === 'y' ? e.clientY : e.clientX;
-		lastMove = Date.now();
+		dragStart = getAxis() === 'y' ? event.clientY : event.clientX;
+		lastPosition = dragStart;
+		lastMoveTime = performance.now();
 		velocity = 0;
 		dragDirection = getSign();
-		(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+		(event.currentTarget as HTMLElement).setPointerCapture?.(event.pointerId);
 
 		onDragStart?.({ isDragging: true, delta: 0, velocity: 0, direction: dragDirection });
 	}
 
-	function handlePointerMove(e: PointerEvent) {
+	function handlePointerMove(event: PointerEvent) {
 		if (!dragging) return;
-		const axis = getAxis();
-		const current = axis === 'y' ? e.clientY : e.clientX;
+		const current = getAxis() === 'y' ? event.clientY : event.clientX;
 		const delta = (current - dragStart) * getSign();
-		const now = Date.now();
-		const dt = now - lastMove;
-		if (dt > 0) velocity = Math.abs(delta) / dt * 1000;
-		lastMove = now;
+		const now = performance.now();
+		const elapsed = now - lastMoveTime;
+
+		if (elapsed > 0) velocity = ((current - lastPosition) * getSign() * 1000) / elapsed;
+		lastPosition = current;
+		lastMoveTime = now;
 		dragDelta = Math.max(0, delta);
 
 		onDragMove?.({ isDragging: true, delta: dragDelta, velocity, direction: dragDirection });
 	}
 
-	function handlePointerUp() {
+	function finishDrag(cancelled = false) {
 		if (!dragging) return;
 		dragging = false;
 
-		const windowSize = getAxis() === 'y' ? window.innerHeight : window.innerWidth;
-		const threshold = typeof closeThreshold === 'number' ? closeThreshold * windowSize : 100;
-		const willClose = dragDelta > threshold || velocity > 500;
+		const contentSize = getAxis() === 'y' ? ref?.offsetHeight : ref?.offsetWidth;
+		const viewportSize = getAxis() === 'y' ? window.innerHeight : window.innerWidth;
+		const threshold = closeThreshold * (contentSize || viewportSize);
+		const willClose = !cancelled && (dragDelta > threshold || velocity > 500);
 
-		onDragEnd?.({ isDragging: false, delta: dragDelta, velocity, direction: dragDirection }, willClose);
-
-		if (willClose && contentEl) {
-			contentEl.dispatchEvent(new CustomEvent('sheetclose', { bubbles: true }));
-		}
+		onDragEnd?.(
+			{ isDragging: false, delta: dragDelta, velocity, direction: dragDirection },
+			willClose
+		);
 
 		dragDelta = 0;
+		if (willClose) sheet.close();
 		velocity = 0;
 	}
 
 	function getTransform(): string {
-		const axis = getAxis();
-		if (axis === 'y') return `translateY(${side === 'top' ? -dragDelta : dragDelta}px)`;
+		if (getAxis() === 'y') return `translateY(${side === 'top' ? -dragDelta : dragDelta}px)`;
 		return `translateX(${side === 'left' ? -dragDelta : dragDelta}px)`;
+	}
+
+	function serializeStyle(style: unknown): string {
+		if (typeof style === 'string') return style;
+		if (!style || typeof style !== 'object') return '';
+		return Object.entries(style)
+			.filter(([, value]) => value != null)
+			.map(([property, value]) => {
+				const cssProperty = property.startsWith('--')
+					? property
+					: property.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
+				return `${cssProperty}: ${String(value)}`;
+			})
+			.join('; ');
 	}
 
 	let variantClass = $derived(variantClasses[variant] ?? variantClasses.sheet);
 	let positionClass = $derived(sidePositionClasses[side] ?? sidePositionClasses.right);
-	let dragStyle = $derived(
-		dragging
-			? `transform: ${getTransform()}; transition: none;`
-			: dragDelta > 0
-				? `transform: ${getTransform()}; transition: transform 350ms cubic-bezier(0.32, 0.72, 0, 1);`
-				: ''
-	);
+	let handlePositionClass = $derived(handlePositionClasses[side] ?? handlePositionClasses.right);
 </script>
 
 <SheetPortal {...portalProps}>
 	<SheetOverlay variant={overlayVariant} blurAmount={overlayBlur} class={overlayClass} />
-	<DialogPrimitive.Content
-		bind:ref
-		data-slot="sheet-content"
-		data-side={side}
-		data-variant={variant}
-		class={cn(
-			'fixed z-50 flex flex-col border bg-[var(--color-bg-card)] shadow-[0_0_40px_var(--color-shadow)] backdrop-blur-xl touch-none',
-			positionClass,
-			variantClass,
-			'cursor-grab active:cursor-grabbing select-none',
-			className
-		)}
-		style={dragStyle}
-		onpointerdown={handlePointerDown}
-		onpointermove={handlePointerMove}
-		onpointerup={handlePointerUp}
-		onpointercancel={handlePointerUp}
-	>
-		{#if showHandle}
+	<DialogPrimitive.Content {...restProps} bind:ref>
+		{#snippet child({ props })}
 			<div
-				data-sheet-handle
+				{...props}
+				data-slot="sheet-content"
+				data-side={side}
+				data-variant={variant}
 				class={cn(
-					'pointer-events-auto absolute flex justify-center z-10',
-					side === 'top' ? 'inset-x-0 top-0 pt-3' :
-					side === 'bottom' ? 'inset-x-0 bottom-0 pb-3' :
-					'inset-x-0 top-0 pt-3'
+					'fixed z-50 flex flex-col border bg-[var(--color-bg-card)] shadow-[0_0_40px_var(--color-shadow)] backdrop-blur-xl',
+					positionClass,
+					variantClass,
+					className
 				)}
+				style={`${serializeStyle(props.style)}; ${serializeStyle(styleProp)}; transform: ${getTransform()}; transition: ${dragging ? 'none' : 'transform 350ms cubic-bezier(0.32, 0.72, 0, 1)'};`}
+				onpointerdown={(event) => {
+					onpointerdown?.(event);
+					handlePointerDown(event);
+				}}
+				onpointermove={(event) => {
+					onpointermove?.(event);
+					handlePointerMove(event);
+				}}
+				onpointerup={(event) => {
+					onpointerup?.(event);
+					finishDrag();
+				}}
+				onpointercancel={(event) => {
+					onpointercancel?.(event);
+					finishDrag(true);
+				}}
 			>
-				<div
-					class={cn(
-						'h-1.5 w-12 rounded-full bg-[var(--color-border)] transition-all duration-150',
-						dragging && 'scale-110 bg-[var(--color-accent)]',
-						handleClass
-					)}
-				></div>
+				{#if showHandle}
+					<div
+						data-sheet-handle
+						class={cn(
+							'pointer-events-auto absolute z-10 flex cursor-grab touch-none justify-center select-none active:cursor-grabbing',
+							handlePositionClass
+						)}
+					>
+						<div
+							class={cn(
+								'h-1.5 w-12 rounded-full bg-[var(--color-border)] transition-all duration-150',
+								dragging && 'scale-110 bg-[var(--color-accent)]',
+								handleClass
+							)}
+						></div>
+					</div>
+				{/if}
+
+				<div class="flex-1 overflow-y-auto overscroll-contain">
+					{@render children?.()}
+				</div>
+
+				{#if showCloseButton}
+					<DialogPrimitive.Close
+						data-sheet-close
+						class={cn(
+							'absolute top-4 right-4 rounded-sm opacity-70 ring-offset-[var(--color-bg-card)] transition-all hover:opacity-100 focus:ring-2 focus:ring-[var(--color-accent)] focus:ring-offset-2 focus:outline-none disabled:pointer-events-none data-[state=open]:bg-[var(--color-bg-surface)]',
+							closeClass
+						)}
+					>
+						<XIcon class="size-4 text-[var(--color-text-muted)]" />
+						<span class="sr-only">Close</span>
+					</DialogPrimitive.Close>
+				{/if}
 			</div>
-		{/if}
-
-		<div class="flex-1 overflow-y-auto overscroll-contain">
-			{@render children?.()}
-		</div>
-
-		{#if showCloseButton}
-			<DialogPrimitive.Close
-				data-sheet-close
-				class={cn(
-					'absolute top-4 right-4 rounded-sm opacity-70 ring-offset-[var(--color-bg-card)] transition-all hover:opacity-100 focus:ring-2 focus:ring-[var(--color-accent)] focus:ring-offset-2 focus:outline-none disabled:pointer-events-none data-[state=open]:bg-[var(--color-bg-surface)]',
-					closeClass
-				)}
-			>
-				<XIcon class="size-4 text-[var(--color-text-muted)]" />
-				<span class="sr-only">Close</span>
-			</DialogPrimitive.Close>
-		{/if}
+		{/snippet}
 	</DialogPrimitive.Content>
 </SheetPortal>

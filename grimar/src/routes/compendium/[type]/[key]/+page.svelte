@@ -33,21 +33,6 @@
 		data: PageData;
 	}
 
-	type ImageDocumentData = {
-		name?: string;
-		display_name?: string;
-		permalink?: string;
-		publisher?: { name?: string };
-		gamesystem?: { name?: string };
-	};
-
-	type ImageItemData = {
-		file_url?: string;
-		alt_text?: string;
-		attribution?: string;
-		document?: ImageDocumentData;
-	};
-
 	let { data }: Props = $props();
 
 	let item = $derived(data.item);
@@ -215,7 +200,9 @@
 	<title>{item.name} | {data.config.plural} | Compendium | Grimar</title>
 </svelte:head>
 
-<div class="min-h-screen bg-[radial-gradient(circle_at_top,color-mix(in_srgb,var(--color-accent)_10%,transparent),transparent_34%),linear-gradient(180deg,var(--color-bg-primary),var(--color-bg-secondary))]">
+<div
+	class="min-h-screen bg-[radial-gradient(circle_at_top,color-mix(in_srgb,var(--color-accent)_10%,transparent),transparent_34%),linear-gradient(180deg,var(--color-bg-primary),var(--color-bg-secondary))]"
+>
 	<div class="mx-auto max-w-7xl px-4 py-8 lg:px-6">
 		<div class="mb-6">
 			<Breadcrumb
@@ -227,8 +214,12 @@
 			/>
 		</div>
 
-		<div class="relative overflow-hidden rounded-[2.5rem] border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_80%,transparent),color-mix(in_srgb,var(--color-bg-card)_56%,transparent))] shadow-[0_2rem_5rem_color-mix(in_srgb,var(--color-shadow)_14%,transparent)] backdrop-blur-xl">
-			<div class="pointer-events-none absolute inset-x-8 top-0 h-px bg-[linear-gradient(90deg,transparent,color-mix(in_srgb,var(--color-overlay-light)_55%,transparent),transparent)]"></div>
+		<div
+			class="relative overflow-hidden rounded-[2.5rem] border border-[color-mix(in_srgb,var(--color-border)_76%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_80%,transparent),color-mix(in_srgb,var(--color-bg-card)_56%,transparent))] shadow-[0_2rem_5rem_color-mix(in_srgb,var(--color-shadow)_14%,transparent)] backdrop-blur-xl"
+		>
+			<div
+				class="pointer-events-none absolute inset-x-8 top-0 h-px bg-[linear-gradient(90deg,transparent,color-mix(in_srgb,var(--color-overlay-light)_55%,transparent),transparent)]"
+			></div>
 			<div
 				class="border-b border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(135deg,color-mix(in_srgb,var(--color-accent)_10%,transparent),transparent_45%)] px-6 py-8 lg:px-10 lg:py-10"
 			>
@@ -376,7 +367,9 @@
 								{#each weaponPropertiesSection.items as property, index (`${property.name}-${index}`)}
 									<div class={marginaliaItemClass}>
 										<div class="flex items-center gap-2">
-											<span class="font-serif text-lg text-[var(--color-text-primary)]">{property.name}</span>
+											<span class="font-serif text-lg text-[var(--color-text-primary)]"
+												>{property.name}</span
+											>
 											{#if property.propertyType}
 												<span class="rounded bg-accent/20 px-2 py-0.5 text-xs text-accent">
 													{property.propertyType}
@@ -409,7 +402,9 @@
 							<div class="space-y-5">
 								{#each traitsSection.items as trait, index (`${trait.name}-${index}`)}
 									<div class={marginaliaItemClass}>
-										<h3 class="font-serif text-lg text-[var(--color-text-primary)]">{trait.name}</h3>
+										<h3 class="font-serif text-lg text-[var(--color-text-primary)]">
+											{trait.name}
+										</h3>
 										{#if trait.markdownKey}
 											<div class={`${sectionProseClass} mt-2`}>
 												<!-- eslint-disable-next-line svelte/no-at-html-tags -->

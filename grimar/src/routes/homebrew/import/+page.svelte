@@ -93,7 +93,9 @@
 		<a href="/homebrew" class="text-sm text-[var(--color-text-secondary)] hover:underline"
 			>&larr; Back to Homebrew</a
 		>
-		<div class="text-[0.68rem] font-semibold tracking-[0.24em] text-[var(--color-text-muted)] uppercase">
+		<div
+			class="text-[0.68rem] font-semibold tracking-[0.24em] text-[var(--color-text-muted)] uppercase"
+		>
 			Import Archive
 		</div>
 	</div>

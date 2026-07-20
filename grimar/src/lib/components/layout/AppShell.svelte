@@ -100,26 +100,27 @@
 
 	<!-- Sidebar -->
 	<aside
-		class="fixed relative top-0 bottom-0 left-3 z-50 hidden flex-col transition-[width] duration-[360ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] before:pointer-events-none before:absolute before:inset-0 before:bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-text-primary)_7%,transparent),transparent_22%,transparent_72%,color-mix(in_srgb,var(--color-accent)_8%,transparent)),radial-gradient(circle_at_22%_14%,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent_30%),radial-gradient(circle_at_78%_70%,color-mix(in_srgb,var(--color-text-primary)_8%,transparent),transparent_26%)] before:opacity-85 before:mix-blend-screen before:content-[''] lg:flex"
+		class="fixed top-0 bottom-0 left-3 z-50 hidden flex-col transition-[width] duration-[360ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] before:pointer-events-none before:absolute before:inset-0 before:bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-text-primary)_7%,transparent),transparent_22%,transparent_72%,color-mix(in_srgb,var(--color-accent)_8%,transparent)),radial-gradient(circle_at_22%_14%,color-mix(in_srgb,var(--color-accent)_18%,transparent),transparent_30%),radial-gradient(circle_at_78%_70%,color-mix(in_srgb,var(--color-text-primary)_8%,transparent),transparent_26%)] before:opacity-85 before:mix-blend-screen before:content-[''] lg:flex"
 		style="width: {sidebarWidth};"
 	>
 		<VerticalNav bind:collapsed={sidebarCollapsed} {user} />
 	</aside>
 
 	<Sheet.Root bind:open={mobileNavOpen}>
-		<Sheet.Overlay class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm" />
 		<Sheet.Content
 			side="left"
 			variant="drawer"
-			class="w-[min(20rem,calc(100vw-1rem))]"
+			overlayVariant="blur"
+			overlayBlur="sm"
+			class="w-[min(20rem,calc(100vw-1rem))] p-0"
 		>
-			<div class="flex flex-col pr-8">
-				<h2 class="text-lg font-medium text-[var(--color-text-primary)]">Navigation</h2>
-				<p class="text-sm text-[var(--color-text-muted)]">
+			<div class="flex flex-col px-6 pt-6 pr-14 pb-4">
+				<Sheet.Title class="font-medium">Navigation</Sheet.Title>
+				<Sheet.Description class="text-[var(--color-text-muted)]">
 					Jump between the dashboard, compendium, characters, and settings.
-				</p>
+				</Sheet.Description>
 			</div>
-			<div class="-mx-6 -mb-6 h-full min-h-0 overflow-y-auto">
+			<div class="h-full min-h-0 overflow-y-auto">
 				<VerticalNav collapsed={false} allowCollapse={false} {user} />
 			</div>
 		</Sheet.Content>

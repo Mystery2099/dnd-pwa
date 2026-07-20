@@ -35,7 +35,9 @@
 			<div
 				class="absolute inset-y-0 right-0 w-[34%] bg-[linear-gradient(120deg,transparent,color-mix(in_srgb,var(--color-accent)_5%,transparent),transparent)] opacity-45"
 			></div>
-			<div class="relative grid gap-5 xl:grid-cols-[minmax(0,1.75fr)_minmax(16rem,0.9fr)] xl:items-end">
+			<div
+				class="relative grid gap-5 xl:grid-cols-[minmax(0,1.75fr)_minmax(16rem,0.9fr)] xl:items-end"
+			>
 				<div>
 					<div class="flex flex-wrap items-center gap-3">
 						<p
@@ -77,7 +79,9 @@
 						>
 							Total Entries
 						</p>
-						<p class="mt-1.5 text-[1.7rem] leading-none font-black text-[var(--color-text-primary)]">
+						<p
+							class="mt-1.5 text-[1.7rem] leading-none font-black text-[var(--color-text-primary)]"
+						>
 							{totalEntries.toLocaleString()}
 						</p>
 					</div>
@@ -89,7 +93,9 @@
 						>
 							Categories
 						</p>
-						<p class="mt-1.5 text-[1.7rem] leading-none font-black text-[var(--color-text-primary)]">
+						<p
+							class="mt-1.5 text-[1.7rem] leading-none font-black text-[var(--color-text-primary)]"
+						>
 							{COMPENDIUM_CATEGORIES.length}
 						</p>
 					</div>
@@ -101,7 +107,9 @@
 						>
 							Indexed Types
 						</p>
-						<p class="mt-1.5 text-[1.7rem] leading-none font-black text-[var(--color-text-primary)]">
+						<p
+							class="mt-1.5 text-[1.7rem] leading-none font-black text-[var(--color-text-primary)]"
+						>
 							{indexedTypes}
 						</p>
 					</div>
@@ -118,9 +126,7 @@
 					<section
 						class="group relative overflow-hidden rounded-[1.55rem] border border-[color-mix(in_srgb,var(--color-border)_86%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_82%,transparent),color-mix(in_srgb,var(--color-bg-primary)_94%,transparent))] p-5 shadow-[0_0.9rem_2rem_color-mix(in_srgb,var(--color-shadow)_12%,transparent)] transition-transform duration-300 hover:-translate-y-0.5"
 					>
-						<div
-							class="absolute -top-8 -right-8 h-24 w-24 rounded-full bg-accent/8 blur-2xl"
-						></div>
+						<div class="absolute -top-8 -right-8 h-24 w-24 rounded-full bg-accent/8 blur-2xl"></div>
 						<div class="relative">
 							<div class="flex items-start justify-between gap-4">
 								<div>

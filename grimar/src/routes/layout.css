@@ -57,7 +57,8 @@
 	--animate-fade-in: fade-in 0.2s ease-out;
 	--animate-dropdown-in: dropdown-in var(--duration-base) var(--ease-spring);
 	--animate-dropdown-out: dropdown-out var(--duration-fast) var(--ease-smooth);
-	--animate-preview-pane-in: preview-pane-in var(--duration-pane-open) cubic-bezier(0.22, 1, 0.36, 1);
+	--animate-preview-pane-in: preview-pane-in var(--duration-pane-open)
+		cubic-bezier(0.22, 1, 0.36, 1);
 	--animate-preview-pane-out: preview-pane-out var(--duration-pane-close) var(--ease-smooth);
 	--animate-arcane-particles: arcane-particles 15s ease-in-out infinite;
 	--animate-arcane-materialize: arcane-materialize 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
@@ -904,7 +905,7 @@
 
 	/* The Crystal Card */
 	.card-crystal {
-		@apply rounded-2xl border-b border-[var(--color-border)] transform-gpu transition-[transform,box-shadow,border-color,background-color] duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none;
+		@apply transform-gpu rounded-2xl border-b border-[var(--color-border)] transition-[transform,box-shadow,border-color,background-color] duration-200 ease-out motion-reduce:transform-none motion-reduce:transition-none;
 		background-color: var(--color-bg-card);
 		backdrop-filter: blur(12px);
 		will-change: transform, box-shadow;
@@ -971,7 +972,7 @@
 
 	/* 3D Button */
 	.btn-3d {
-		@apply rounded-lg font-semibold transform-gpu transition-[transform,box-shadow,border-color,background-color,color,opacity,filter] duration-150 ease-out motion-reduce:transform-none motion-reduce:transition-none;
+		@apply transform-gpu rounded-lg font-semibold transition-[transform,box-shadow,border-color,background-color,color,opacity,filter] duration-150 ease-out motion-reduce:transform-none motion-reduce:transition-none;
 		will-change: transform, box-shadow;
 		background: linear-gradient(
 			180deg,
@@ -1041,7 +1042,7 @@
 
 	/* The "Gem" Button */
 	.btn-gem {
-		@apply relative inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-full px-4 py-2 font-bold transform-gpu transition-[transform,box-shadow,filter,background-color,opacity] duration-150 ease-out motion-reduce:transform-none motion-reduce:transition-none;
+		@apply relative inline-flex transform-gpu cursor-pointer items-center justify-center overflow-hidden rounded-full px-4 py-2 font-bold transition-[transform,box-shadow,filter,background-color,opacity] duration-150 ease-out motion-reduce:transform-none motion-reduce:transition-none;
 		color: var(--color-text-inverted);
 		will-change: transform, box-shadow, filter;
 		background: linear-gradient(

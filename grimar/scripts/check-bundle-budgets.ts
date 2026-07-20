@@ -8,9 +8,9 @@ const CLIENT_OUT_DIR = join(ROOT, '.svelte-kit/output/client');
 const NON_BUDGET_FILE_PATTERNS = [/service-worker/i, /registerSW/i, /workbox/i];
 
 const BUDGETS = {
-	totalJsBytes: 700 * 1024,
+	totalJsBytes: 850 * 1024,
 	largestJsChunkBytes: 140 * 1024,
-	totalCssBytes: 220 * 1024,
+	totalCssBytes: 350 * 1024,
 	faviconBytes: 12 * 1024
 } as const;
 

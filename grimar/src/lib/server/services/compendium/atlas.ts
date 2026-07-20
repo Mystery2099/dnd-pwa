@@ -6,13 +6,16 @@ import {
 	getAtlasScopeCounts,
 	getAtlasScopeDefinition,
 	getTypeLabel,
-	type AtlasSortId,
 	type AtlasBadge,
 	type AtlasItem,
 	type AtlasScopeId,
 	type AtlasState
 } from '$lib/features/compendium/atlas';
-import { compendium, type CompendiumItem as DbCompendiumItem, type CompendiumType } from '$lib/server/db/schema';
+import {
+	compendium,
+	type CompendiumItem as DbCompendiumItem,
+	type CompendiumType
+} from '$lib/server/db/schema';
 import { getDb } from '$lib/server/db';
 import { buildCompendiumListItem } from './list';
 import { getPaginatedItems, getTypeCounts } from '$lib/server/repositories/compendium';
@@ -51,6 +54,9 @@ async function getAtlasItems(state: AtlasState): Promise<AtlasQueryResult> {
 	if (usesCustomSort(state)) {
 		return getMergedAtlasItems(state);
 	}
+	if (getAtlasFilterContext(state) === 'monsters' && state.challengeRating === '10+') {
+		return getMergedAtlasItems(state);
+	}
 
 	if (state.selectedType !== 'all') {
 		return getSingleTypeAtlasItems(state, state.selectedType);
@@ -81,8 +87,7 @@ async function getAtlasItems(state: AtlasState): Promise<AtlasQueryResult> {
 				sortBy: state.sort === 'updated' ? 'updated_at' : 'name',
 				sortOrder: state.sort === 'updated' ? 'desc' : 'asc',
 				creatureType: state.creatureType === 'all' ? undefined : state.creatureType,
-				challengeRating:
-					state.challengeRating === 'all' ? undefined : Number(state.challengeRating)
+				challengeRating: state.challengeRating === 'all' ? undefined : Number(state.challengeRating)
 			}
 		});
 
@@ -176,9 +181,7 @@ async function getSingleTypeAtlasItems(
 					? Number(state.spellLevel)
 					: undefined,
 			spellSchool:
-				filterContext === 'spells' && state.spellSchool !== 'all'
-					? state.spellSchool
-					: undefined
+				filterContext === 'spells' && state.spellSchool !== 'all' ? state.spellSchool : undefined
 		}
 	});
 
@@ -212,7 +215,11 @@ async function getMergedAtlasItems(state: AtlasState): Promise<AtlasQueryResult>
 	return mapRepositoryResult(rows, page, total);
 }
 
-function mapRepositoryResult(items: DbCompendiumItem[], page: number, total: number): AtlasQueryResult {
+function mapRepositoryResult(
+	items: DbCompendiumItem[],
+	page: number,
+	total: number
+): AtlasQueryResult {
 	return {
 		items: items.map(buildAtlasItem),
 		total,
@@ -222,7 +229,7 @@ function mapRepositoryResult(items: DbCompendiumItem[], page: number, total: num
 	};
 }
 
-function getScopeTypes(state: AtlasState): CompendiumType[] {
+export function getScopeTypes(state: AtlasState): CompendiumType[] {
 	if (state.selectedType !== 'all') {
 		return [state.selectedType as CompendiumType];
 	}
@@ -231,7 +238,7 @@ function getScopeTypes(state: AtlasState): CompendiumType[] {
 		return getAtlasScopeDefinition(state.scope).types as CompendiumType[];
 	}
 
-	if (state.itemKind === 'gear') return ['items', 'magicitems'];
+	if (state.itemKind === 'gear') return ['items'];
 	if (state.itemKind === 'magic') return ['magicitems'];
 	if (state.itemKind === 'weapon') return ['weapons'];
 	if (state.itemKind === 'armor') return ['armor'];
@@ -239,7 +246,7 @@ function getScopeTypes(state: AtlasState): CompendiumType[] {
 	return ['items', 'magicitems', 'weapons', 'armor'];
 }
 
-function buildMergedWhereClause(state: AtlasState, types: CompendiumType[]): SQL<unknown> {
+export function buildMergedWhereClause(state: AtlasState, types: CompendiumType[]): SQL<unknown> {
 	let whereClause: SQL<unknown> = inArray(compendium.type, types);
 	const filterContext = getAtlasFilterContext(state);
 
@@ -259,6 +266,44 @@ function buildMergedWhereClause(state: AtlasState, types: CompendiumType[]): SQL
 			whereClause,
 			or(like(compendium.name, term), like(compendium.description, term))
 		)!;
+	}
+
+	if (filterContext === 'spells' && state.spellLevel !== 'all') {
+		whereClause = and(
+			whereClause,
+			sql`json_extract(${compendium.data}, '$.level') = ${Number(state.spellLevel)}`
+		)!;
+	}
+
+	if (filterContext === 'spells' && state.spellSchool !== 'all') {
+		whereClause = and(
+			whereClause,
+			sql`LOWER(COALESCE(
+				json_extract(${compendium.data}, '$.school.key'),
+				json_extract(${compendium.data}, '$.school.name'),
+				json_extract(${compendium.data}, '$.school')
+			)) = LOWER(${state.spellSchool})`
+		)!;
+	}
+
+	if (filterContext === 'monsters' && state.creatureType !== 'all') {
+		whereClause = and(
+			whereClause,
+			sql`LOWER(COALESCE(
+				json_extract(${compendium.data}, '$.type.key'),
+				json_extract(${compendium.data}, '$.type.name'),
+				json_extract(${compendium.data}, '$.type')
+			)) = LOWER(${state.creatureType})`
+		)!;
+	}
+
+	if (filterContext === 'monsters' && state.challengeRating !== 'all') {
+		const challengeRating = Number.parseFloat(state.challengeRating);
+		const comparison =
+			state.challengeRating === '10+'
+				? sql`CAST(json_extract(${compendium.data}, '$.challenge_rating_decimal') AS REAL) >= ${challengeRating}`
+				: sql`CAST(json_extract(${compendium.data}, '$.challenge_rating_decimal') AS REAL) = ${challengeRating}`;
+		whereClause = and(whereClause, comparison)!;
 	}
 
 	if (filterContext === 'items' && state.itemRarity !== 'all') {
@@ -460,7 +505,9 @@ function buildAtlasBadges(item: DbCompendiumItem, data: Record<string, unknown>)
 
 	if (item.type === 'weapons') {
 		const category = readText(data.category);
-		const damage = [readText(data.damage_dice), readText(data.damage_type)].filter(Boolean).join(' ');
+		const damage = [readText(data.damage_dice), readText(data.damage_type)]
+			.filter(Boolean)
+			.join(' ');
 		return compactBadges([
 			{ label: category ? capitalize(category) : 'Weapon', tone: 'ember' },
 			damage ? { label: damage, tone: 'slate' } : null
@@ -498,7 +545,9 @@ function buildAtlasBadges(item: DbCompendiumItem, data: Record<string, unknown>)
 					.filter((value): value is string => Boolean(value))
 			: [];
 		return compactBadges([
-			data.is_subspecies === true ? { label: 'Subspecies', tone: 'teal' } : { label: 'Species', tone: 'amber' },
+			data.is_subspecies === true
+				? { label: 'Subspecies', tone: 'teal' }
+				: { label: 'Species', tone: 'amber' },
 			traits[0] ? { label: traits[0], tone: 'slate' } : null,
 			traits[1] ? { label: traits[1], tone: 'slate' } : null
 		]);
@@ -511,7 +560,9 @@ function buildAtlasBadges(item: DbCompendiumItem, data: Record<string, unknown>)
 		return compactBadges([
 			featType ? { label: featType, tone: 'amber' } : { label: 'Feat', tone: 'amber' },
 			prerequisite ? { label: 'Prerequisite', tone: 'violet' } : null,
-			benefits > 0 ? { label: `${benefits} Benefit${benefits === 1 ? '' : 's'}`, tone: 'slate' } : null
+			benefits > 0
+				? { label: `${benefits} Benefit${benefits === 1 ? '' : 's'}`, tone: 'slate' }
+				: null
 		]);
 	}
 
@@ -528,7 +579,12 @@ function buildAtlasBadges(item: DbCompendiumItem, data: Record<string, unknown>)
 		]);
 	}
 
-	return [{ label: COMPENDIUM_TYPE_CONFIGS[item.type as CompendiumTypeName]?.label ?? item.type, tone: 'slate' }];
+	return [
+		{
+			label: COMPENDIUM_TYPE_CONFIGS[item.type as CompendiumTypeName]?.label ?? item.type,
+			tone: 'slate'
+		}
+	];
 }
 
 function readLabel(value: unknown): string | undefined {
