@@ -169,3 +169,9 @@ The checked-in `.env.example` covers the core local-dev values. `ADMIN_GROUPS`, 
 ## License
 
 [MIT](/home/mystery/misc-projects/dnd-pwa/LICENSE)
+
+## Support (totally optional)
+
+This project is free, and it always will be. Nobody owes me anything for it.
+
+If you somehow still want to tip, you can [buy me a coffee](https://buymeacoffee.com/mystery2099). No pressure at all.
