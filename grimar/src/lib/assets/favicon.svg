@@ -1,9 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
-  <title id="title">Grimar icon</title>
-  <desc id="desc">A stylized arcane sigil on a dark background.</desc>
-  <rect width="128" height="128" rx="24" fill="#070016"/>
-  <path d="M64 18L93 34v31c0 22-15 38-29 45C50 103 35 87 35 65V34l29-16Z" fill="#2ec4b6"/>
-  <path d="M64 30l17 10v22c0 14-9 24-17 29-8-5-17-15-17-29V40l17-10Z" fill="#070016"/>
-  <circle cx="64" cy="58" r="8" fill="#2ec4b6"/>
-  <path d="M64 67v18" stroke="#2ec4b6" stroke-width="6" stroke-linecap="round"/>
+  <title id="title">Grimar Hermetica favicon</title>
+  <desc id="desc">A dark occult playing-card favicon with a gold Grimar monogram.</desc>
+  <path d="M34 10H94L108 24V104L94 118H34L20 104V24Z" fill="#0d0615"/>
+  <g fill="none" stroke="#cfb53b" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M34 10H94L108 24V104L94 118H34L20 104V24Z" stroke="#d8bf52" stroke-width="6.5"/>
+    <path d="M35 24H93" stroke="#d8bf52" stroke-width="4"/>
+    <path d="M35 104H93" stroke="#d8bf52" stroke-width="4"/>
+    <path d="M30 29h10M24 35v10M88 29h10M104 35v10M30 99h10M24 93V83M88 99h10M104 93V83" stroke="#d8bf52" stroke-width="4.5"/>
+  </g>
+  <text x="64" y="86" text-anchor="middle" fill="#e2cb67" font-family="Iowan Old Style, Baskerville, Garamond, Georgia, serif" font-size="74" font-weight="700" letter-spacing="-3.5">G</text>
 </svg>

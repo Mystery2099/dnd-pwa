@@ -1,9 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { buildCompendiumDetailPayload, collectCompendiumMarkdownSources } from './detail';
-import {
-	INFERNAL_LANGUAGE_URL,
-	makeCompendiumItem
-} from '../../../../test/fixtures/compendium';
+import { INFERNAL_LANGUAGE_URL, makeCompendiumItem } from '../../../../test/fixtures/compendium';
 
 describe('buildCompendiumDetailPayload', () => {
 	it('normalizes plain Open5e URL strings into internal entity references', () => {

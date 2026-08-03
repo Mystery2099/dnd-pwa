@@ -34,10 +34,10 @@
 
 {#if showFeaturedCard && featuredImage}
 	<div class="border-b border-[var(--color-border)] p-6">
-		<div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/20 p-4">
+		<div class="border-l border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] pl-5">
 			<a href={`/compendium/images/${featuredImage.key}`} class="group flex items-center gap-4">
 				<div
-					class="shrink-0 overflow-hidden rounded-xl border border-[var(--color-border)] bg-linear-to-b from-white via-white to-white/90 p-3 transition-colors group-hover:border-accent/40"
+					class="shrink-0 overflow-hidden rounded-[1.25rem] border border-[var(--color-border)] bg-linear-to-b from-white via-white to-white/90 p-3 transition-colors group-hover:border-accent/40"
 				>
 					{#if featuredImage.assetUrl}
 						<img
@@ -73,7 +73,7 @@
 	<div class="border-b border-[var(--color-border)] p-6">
 		<div class="mb-5 flex items-end justify-between gap-4">
 			<div>
-				<h2 class="text-lg font-semibold text-[var(--color-text-primary)]">Related Images</h2>
+				<h2 class="font-serif text-2xl text-[var(--color-text-primary)]">Related Images</h2>
 				<p class="mt-1 text-sm text-[var(--color-text-secondary)]">
 					Matched assets from the image compendium for this entry.
 				</p>
@@ -86,11 +86,11 @@
 			</a>
 		</div>
 
-		<div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+		<div class="glass-scroll -mx-1 flex gap-4 overflow-x-auto px-1 pb-2">
 			{#each images as image (image.key)}
 				<a
 					href={`/compendium/images/${image.key}`}
-					class="group overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-card)]/85 transition-colors hover:border-accent/50"
+					class="group flex w-[18rem] shrink-0 snap-start flex-col overflow-hidden rounded-[1.6rem] border border-[color-mix(in_srgb,var(--color-border)_82%,transparent)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_66%,transparent),color-mix(in_srgb,var(--color-bg-card)_34%,transparent))] transition-colors hover:border-accent/50"
 				>
 					<div
 						class="flex aspect-[4/3] items-center justify-center bg-linear-to-b from-white via-white to-white/90 p-4"
@@ -111,7 +111,7 @@
 					<div class="space-y-2 p-4">
 						<div class="flex items-start justify-between gap-3">
 							<h3
-								class="font-semibold text-[var(--color-text-primary)] transition-colors group-hover:text-accent"
+								class="font-serif text-lg text-[var(--color-text-primary)] transition-colors group-hover:text-accent"
 							>
 								{image.name}
 							</h3>

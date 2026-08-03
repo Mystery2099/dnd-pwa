@@ -5,6 +5,11 @@ vi.mock('$app/environment', () => ({
 	browser: true
 }));
 
+vi.mock('./themeAssets', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('./themeAssets')>();
+	return { ...actual, ensureThemeFontsLoaded: vi.fn() };
+});
+
 // Mock browser globals
 const mockLocalStorage = {
 	getItem: vi.fn(),

@@ -58,11 +58,6 @@ function escapeHtml(value: string): string {
 		.replaceAll("'", '&#39;');
 }
 
-function getRecord(value: unknown): Record<string, unknown> | null {
-	if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
-	return value as Record<string, unknown>;
-}
-
 function buildOpen5eAssetProxyPath(path: string, search = ''): string {
 	const normalizedPath = path.startsWith('/') ? path : `/${path}`;
 	return `/api/assets/open5e${normalizedPath}${search}`;

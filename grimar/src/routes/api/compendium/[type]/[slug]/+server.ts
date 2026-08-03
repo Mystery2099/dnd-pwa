@@ -1,9 +1,8 @@
 import { json, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { getItem } from '$lib/server/repositories/compendium';
 import { COMPENDIUM_TYPES } from '$lib/server/db/schema';
 import type { CompendiumType } from '$lib/server/db/schema';
-import { buildCompendiumDetailPayload } from '$lib/server/services/compendium/detail';
+import { getCompendiumQuickDetail } from '$lib/server/services/compendium/quick-detail';
 
 export const GET: RequestHandler = async ({ params }) => {
 	const { type, slug } = params;
@@ -13,13 +12,12 @@ export const GET: RequestHandler = async ({ params }) => {
 	}
 
 	try {
-		const item = await getItem(type as CompendiumType, slug);
-
-		if (!item) {
+		const detail = await getCompendiumQuickDetail(type as CompendiumType, slug);
+		if (!detail) {
 			throw error(404, 'Item not found');
 		}
 
-		return json(buildCompendiumDetailPayload(item));
+		return json(detail);
 	} catch (requestError) {
 		if (
 			requestError &&
