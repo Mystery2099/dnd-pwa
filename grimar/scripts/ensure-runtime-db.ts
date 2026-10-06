@@ -128,6 +128,19 @@ async function migrateLegacyCompendiumPrimaryKey(db: Database): Promise<void> {
 	}
 }
 
+function ensurePerformanceIndexes(db: Database): void {
+	// Also applies to existing volume-backed databases that do not run db:push.
+	db.exec(`
+		CREATE INDEX IF NOT EXISTS compendium_type_spell_level_name_idx ON compendium (type, json_extract(data, '$.level'), name);
+		CREATE INDEX IF NOT EXISTS compendium_type_spell_school_name_idx ON compendium (type, LOWER(json_extract(data, '$.school')), name);
+		CREATE INDEX IF NOT EXISTS compendium_type_creature_type_name_idx ON compendium (type, LOWER(COALESCE(json_extract(data, '$.type.key'), json_extract(data, '$.type.name'), json_extract(data, '$.type'))), name);
+		CREATE INDEX IF NOT EXISTS compendium_type_challenge_rating_name_idx ON compendium (type, CAST(json_extract(data, '$.challenge_rating_decimal') AS REAL), name);
+		CREATE INDEX IF NOT EXISTS compendium_type_subclass_name_idx ON compendium (type, json_extract(data, '$.subclass_of'), name);
+		CREATE INDEX IF NOT EXISTS compendium_type_created_at_idx ON compendium (type, created_at);
+		CREATE INDEX IF NOT EXISTS compendium_type_updated_at_idx ON compendium (type, updated_at);
+	`);
+}
+
 export async function ensureRuntimeDbCompatibility(): Promise<void> {
 	ensureParentDirectory();
 
@@ -148,10 +161,12 @@ export async function ensureRuntimeDbCompatibility(): Promise<void> {
 		const columns = getColumnInfo(db);
 		if (hasCompositePrimaryKey(columns)) {
 			log('Compendium schema already uses composite primary key');
+			ensurePerformanceIndexes(db);
 			return;
 		}
 
 		await migrateLegacyCompendiumPrimaryKey(db);
+		ensurePerformanceIndexes(db);
 	} finally {
 		db.close();
 	}

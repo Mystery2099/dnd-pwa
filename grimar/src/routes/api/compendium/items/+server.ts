@@ -31,8 +31,8 @@ export const GET: RequestHandler = async ({ url }) => {
 	const gamesystem = url.searchParams.get('gamesystem') || undefined;
 	const document = url.searchParams.get('document') || undefined;
 	const source = url.searchParams.get('source') || undefined;
-	const page = parseInt(url.searchParams.get('page') || '1', 10);
-	const limit = parseInt(url.searchParams.get('limit') || '50', 10);
+	const page = Number(url.searchParams.get('page') ?? '1');
+	const limit = Number(url.searchParams.get('limit') ?? '50');
 	const sortBy = normalizeSortBy(url.searchParams.get('sortBy'));
 	const sortOrder = (url.searchParams.get('sortOrder') as 'asc' | 'desc') || 'asc';
 	const getAll = url.searchParams.get('all') === 'true';
@@ -65,6 +65,18 @@ export const GET: RequestHandler = async ({ url }) => {
 			{ status: 400, headers: formatTimingHeaders(performance.now() - start) }
 		);
 	}
+	if (
+		!Number.isSafeInteger(page) ||
+		page < 1 ||
+		!Number.isSafeInteger(limit) ||
+		limit < 1 ||
+		!Number.isSafeInteger((page - 1) * Math.min(limit, 100))
+	) {
+		return json(
+			{ error: 'Page and limit must be positive safe integers' },
+			{ status: 400, headers: formatTimingHeaders(performance.now() - start) }
+		);
+	}
 
 	try {
 		const result = await getPaginatedItems(type as CompendiumType, {
@@ -94,9 +106,12 @@ export const GET: RequestHandler = async ({ url }) => {
 			}
 		});
 
-		return json(buildCompendiumListResult(result), {
-			headers: formatTimingHeaders(performance.now() - start)
-		});
+		return json(
+			buildCompendiumListResult(result, { summary: url.searchParams.get('view') === 'summary' }),
+			{
+				headers: formatTimingHeaders(performance.now() - start)
+			}
+		);
 	} catch (err) {
 		console.error('GET /api/compendium/items failed', {
 			type,

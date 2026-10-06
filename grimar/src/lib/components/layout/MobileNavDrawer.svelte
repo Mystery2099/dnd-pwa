@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { fade, fly } from 'svelte/transition';
 	import { Menu, X } from 'lucide-svelte';
-	import logoUrl from '$lib/assets/grimar-hermetica-title.png';
+	import logoUrl from '$lib/assets/grimar-hermetica-title.webp';
 
 	type NavItem = {
 		href: string;

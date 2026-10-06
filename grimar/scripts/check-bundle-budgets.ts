@@ -11,6 +11,8 @@ const BUDGETS = {
 	totalJsBytes: 700 * 1024,
 	largestJsChunkBytes: 140 * 1024,
 	totalCssBytes: 220 * 1024,
+	totalImageBytes: 250 * 1024,
+	largestImageBytes: 180 * 1024,
 	faviconBytes: 12 * 1024
 } as const;
 
@@ -59,6 +61,10 @@ const allFiles = walkFiles(CLIENT_OUT_DIR).filter((path) => {
 });
 const jsFiles = allFiles.filter((path) => path.endsWith('.js')).map(toStat);
 const cssFiles = allFiles.filter((path) => path.endsWith('.css')).map(toStat);
+const imageFiles = allFiles
+	.filter((path) => /\.(png|webp|avif|jpe?g|gif)$/i.test(path))
+	.map(toStat);
+const totalImageBytes = imageFiles.reduce((total, file) => total + file.bytes, 0);
 const faviconPath = join(CLIENT_OUT_DIR, 'favicon.svg');
 const faviconExists = existsSync(faviconPath);
 const faviconSize = faviconExists ? statSync(faviconPath).size : 0;
@@ -71,6 +77,19 @@ const largestJsChunk = jsFiles.reduce((acc, file) => (file.bytes > acc.bytes ? f
 });
 
 const failures: string[] = [];
+
+if (totalImageBytes > BUDGETS.totalImageBytes) {
+	failures.push(
+		`Total images exceed budget: ${formatBytes(totalImageBytes)} > ${formatBytes(BUDGETS.totalImageBytes)}`
+	);
+}
+for (const file of imageFiles) {
+	if (file.bytes > BUDGETS.largestImageBytes) {
+		failures.push(
+			`Image exceeds budget: ${file.path} (${formatBytes(file.bytes)}) > ${formatBytes(BUDGETS.largestImageBytes)}`
+		);
+	}
+}
 
 if (totalJsBytes > BUDGETS.totalJsBytes) {
 	failures.push(
@@ -101,6 +120,9 @@ if (faviconSize > BUDGETS.faviconBytes) {
 }
 
 console.log('Bundle Budget Report');
+console.log(
+	`- Images: ${formatBytes(totalImageBytes)} (budget: ${formatBytes(BUDGETS.totalImageBytes)})`
+);
 console.log(
 	`- Total JS: ${formatBytes(totalJsBytes)} (budget: ${formatBytes(BUDGETS.totalJsBytes)})`
 );

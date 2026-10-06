@@ -346,7 +346,7 @@ export interface CompendiumListItemPresentation {
 }
 
 export interface CompendiumListItem {
-	item: CompendiumItem;
+	item: Pick<CompendiumItem, 'key' | 'type' | 'name' | 'source'> & Partial<CompendiumItem>;
 	presentation: CompendiumListItemPresentation;
 }
 

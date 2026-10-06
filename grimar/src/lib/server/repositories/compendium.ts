@@ -1,4 +1,4 @@
-import { eq, and, sql, like, or, desc, inArray, type SQL } from 'drizzle-orm';
+import { eq, and, sql, like, or, desc, inArray, getTableColumns, type SQL } from 'drizzle-orm';
 import { getDb, type Db } from '../db/index';
 import { getFtsStats, searchFtsRanked } from '../db/db-fts';
 import { compendium, type CompendiumItem, type CompendiumType } from '../db/schema';
@@ -85,6 +85,15 @@ export async function getPaginatedItems(
 			? requestedPageSize
 			: Math.min(requestedPageSize, options.maxPageSize);
 	const offset = (page - 1) * pageSize;
+	if (
+		!Number.isSafeInteger(page) ||
+		page < 1 ||
+		!Number.isSafeInteger(pageSize) ||
+		pageSize < 1 ||
+		!Number.isSafeInteger(offset)
+	) {
+		throw new RangeError('Page and page size must be positive safe integers');
+	}
 	const filters = options.filters ?? {};
 	const listCacheKey = buildListCacheKey(type, page, pageSize, filters);
 
@@ -199,9 +208,7 @@ export async function getPaginatedItems(
 				whereClause,
 				or(like(compendium.name, searchTerm), like(compendium.description, searchTerm))
 			)!;
-		} else if (ftsMatchedKeys && ftsMatchedKeys.length > 0) {
-			whereClause = and(whereClause, inArray(compendium.key, ftsMatchedKeys))!;
-		} else {
+		} else if (!ftsMatchedKeys?.length) {
 			return {
 				items: [],
 				total: 0,
@@ -225,15 +232,17 @@ export async function getPaginatedItems(
 	const orderBy = sortOrder === 'desc' ? desc(sortColumn) : sortColumn;
 
 	if (filters.search && !useLikeSearchFallback && rankedMatches && rankedMatches.length > 0) {
-		const rankCases = rankedMatches.map(
-			(match, index) => sql`WHEN ${compendium.key} = ${match.key} THEN ${index}`
-		);
-		const rankOrder = sql<number>`CASE ${sql.join(rankCases, sql.raw(' '))} ELSE ${rankedMatches.length} END`;
+		// A relational rank lookup avoids evaluating thousands of CASE branches per row.
+		// Grouping duplicate keys preserves their first-match rank and prevents duplicate rows.
+		const rankedMatchTable = sql`(SELECT value AS matched_key, MIN(CAST(key AS INTEGER)) AS match_rank
+			FROM json_each(${JSON.stringify(ftsMatchedKeys)}) GROUP BY value) AS ranked_matches`;
+		const matchCondition = sql`${compendium.key} = ranked_matches.matched_key`;
 		const items = await db
-			.select()
+			.select(getTableColumns(compendium))
 			.from(compendium)
+			.innerJoin(rankedMatchTable, matchCondition)
 			.where(whereClause)
-			.orderBy(rankOrder, orderBy)
+			.orderBy(sql`ranked_matches.match_rank`, orderBy)
 			.limit(pageSize)
 			.offset(offset);
 		const total = Number(
@@ -241,6 +250,7 @@ export async function getPaginatedItems(
 				await db
 					.select({ count: sql<number>`count(*)` })
 					.from(compendium)
+					.innerJoin(rankedMatchTable, matchCondition)
 					.where(whereClause)
 			)[0]?.count ?? 0
 		);

@@ -35,7 +35,7 @@ export default defineConfig({
 				]
 			},
 			workbox: {
-				globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+				globPatterns: ['**/*.{js,css,html,ico,png,webp,svg,woff2}'],
 				additionalManifestEntries: [{ url: '/', revision: null }],
 				maximumFileSizeToCacheInBytes: 1024 * 1024,
 				runtimeCaching: [
@@ -86,11 +86,23 @@ export default defineConfig({
 						}
 					},
 					{
+						// Proxied artwork must match before the general API rule.
+						urlPattern: ({ url, sameOrigin }) =>
+							sameOrigin && url.pathname.startsWith('/api/assets/open5e/'),
+						handler: 'CacheFirst',
+						options: {
+							cacheName: 'images-cache',
+							expiration: { maxEntries: 500, maxAgeSeconds: 7 * 24 * 60 * 60 },
+							cacheableResponse: { statuses: [200] }
+						}
+					},
+					{
 						// API routes - always prefer server (server-first architecture)
 						urlPattern: /^https?:\/\/.*\/api\/.*/i,
 						handler: 'NetworkFirst',
 						options: {
 							cacheName: 'api-cache',
+							networkTimeoutSeconds: 3,
 							expiration: {
 								maxEntries: 100,
 								maxAgeSeconds: 10 * 60 // 10 minutes

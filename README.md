@@ -80,7 +80,11 @@ High-level response shape:
     "creatureHeader": { "...": "creature header presentation props" }
   },
   "fields": [
-    { "key": "script_language", "label": "Script Language", "value": { "...": "normalized value" } }
+    {
+      "key": "script_language",
+      "label": "Script Language",
+      "value": { "...": "normalized value" }
+    }
   ],
   "sections": [
     { "kind": "markdown", "...": "description or higher-level text" },
@@ -91,6 +95,7 @@ High-level response shape:
     { "kind": "benefits", "...": "benefit list or grouped cards" }
   ]
 }
+```
 
 ## Common Commands
 
@@ -108,6 +113,8 @@ bun run format
 bun run test:run
 bun run test:e2e
 bun run test:all
+bun run perf:regression
+bun run perf:check
 
 # data
 bun run db:push
@@ -131,6 +138,14 @@ Unit tests run with Vitest. E2E tests run with Playwright against a dedicated se
 The Playwright suite is intentionally configured to use a single worker because it shares one local dev server and one seeded database during the run. If you see `ERR_CONNECTION_REFUSED` during a customized parallel run, revert to the default `bun run test:e2e` command.
 
 For local development and automated test flows, auth bypasses are available through `VITE_MOCK_USER` and `DEV_TEST_AUTH_BYPASS`. Those are intended for development or test use only.
+
+## Performance Checks
+
+Run `bun run check` before `bun run perf:regression`. The latter creates and removes a disposable 50,001-row Bun/SQLite database, verifies ranked search against the previous SQL, tests duplicate keys, filter pagination, fallback, and index upgrades, and prints comparative timings and response sizes. Timings are synthetic SQL measurements, not production latency targets.
+
+`bun run perf:check` builds the production app and enforces JavaScript, CSS, and image budgets. Pull requests run these checks plus unit tests and Chromium, Firefox, and WebKit browser tests.
+
+Filter and sort indexes are installed by migration `0003_compendium_filter_indexes.sql`. Container startup also installs them idempotently for existing database volumes. The first upgrade builds seven indexes; allow extra startup time and disk space for large databases. Indexes add write overhead during sync in exchange for faster browsing.
 
 ## Environment
 

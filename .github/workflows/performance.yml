@@ -1,0 +1,55 @@
+name: Performance and regression checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: performance-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: bun install --frozen-lockfile
+      - run: bun run check
+      - run: bun run test:run
+      - run: bun run perf:regression
+      - run: bun run perf:check
+
+  browsers:
+    needs: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: bun install --frozen-lockfile
+      - run: bun x playwright install --with-deps ${{ matrix.browser }}
+        working-directory: grimar
+      - run: |
+          printf 'DEV_TEST_AUTH_BYPASS=true\nDATABASE_URL=./data/e2e.db\nOPEN5E_API_BASE_URL=https://api.open5e.com/v2\n' > grimar/.env
+      - run: bun run check
+      - run: bun run test:e2e -- --project=${{ matrix.browser }}
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-${{ matrix.browser }}
+          path: grimar/test-results/
+          retention-days: 7

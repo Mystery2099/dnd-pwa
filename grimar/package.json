@@ -24,6 +24,7 @@
 		"test:e2e:debug": "playwright test --debug",
 		"test:all": "vitest run && playwright test",
 		"perf:budgets": "bun scripts/check-bundle-budgets.ts",
+		"perf:regression": "bun scripts/check-performance.ts",
 		"perf:check": "bun run build && bun run perf:budgets",
 		"db:push": "drizzle-kit push",
 		"db:generate": "drizzle-kit generate",
@@ -97,6 +98,7 @@
 		"nanoid": "^5.1.6",
 		"tailwind-merge": "^3.5.0",
 		"tailwind-variants": "^3.2.2",
+		"web-vitals": "^6.2.3",
 		"workbox-window": "^7.4.0",
 		"zod": "^4.3.6"
 	}

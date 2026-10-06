@@ -45,6 +45,7 @@ async function loadModule() {
 describe('query-client persistence', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
+		mocks.persistQueryClient.mockReturnValue([vi.fn(), Promise.resolve()]);
 		mocks.userSettingsStore.data.offlineEnabled = true;
 		mocks.fetch.mockReset();
 		global.fetch = mocks.fetch as unknown as typeof fetch;

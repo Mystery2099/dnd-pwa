@@ -65,7 +65,18 @@ function readCardIconData(itemData: Record<string, unknown>): CardIconData {
 	};
 }
 
-function toCoreCompendiumItem(item: DbCompendiumItem): CompendiumListItem['item'] {
+function toCoreCompendiumItem(
+	item: DbCompendiumItem,
+	summary: boolean
+): CompendiumListItem['item'] {
+	if (summary) {
+		return {
+			key: item.key,
+			type: item.type as CompendiumTypeName,
+			name: item.name,
+			source: item.source
+		};
+	}
 	return {
 		...item,
 		type: item.type as CompendiumTypeName
@@ -168,7 +179,10 @@ function buildBadges(
 	return [];
 }
 
-export function buildCompendiumListItem(item: DbCompendiumItem): CompendiumListItem {
+export function buildCompendiumListItem(
+	item: DbCompendiumItem,
+	summary = false
+): CompendiumListItem {
 	const itemData = (item.data ?? {}) as Record<string, unknown>;
 	const resolvedCardIcon = resolveCompendiumCardIcon(
 		item.type as CompendiumTypeName,
@@ -176,7 +190,7 @@ export function buildCompendiumListItem(item: DbCompendiumItem): CompendiumListI
 	);
 
 	return {
-		item: toCoreCompendiumItem(item),
+		item: toCoreCompendiumItem(item, summary),
 		presentation: {
 			description: getDescription(item, itemData),
 			documentLabel: getDocumentLabel(item, itemData),
@@ -194,11 +208,12 @@ export function buildCompendiumListItem(item: DbCompendiumItem): CompendiumListI
 export function buildCompendiumListResult(
 	result: Omit<CompendiumSearchResult, 'items' | 'listSchemaVersion'> & {
 		items: DbCompendiumItem[];
-	}
+	},
+	options: { summary?: boolean } = {}
 ): CompendiumSearchResult {
 	return {
 		listSchemaVersion: 1,
-		items: result.items.map((item) => buildCompendiumListItem(item)),
+		items: result.items.map((item) => buildCompendiumListItem(item, options.summary ?? false)),
 		total: result.total,
 		page: result.page,
 		pageSize: result.pageSize,

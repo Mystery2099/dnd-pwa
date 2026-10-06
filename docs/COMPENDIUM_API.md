@@ -21,6 +21,7 @@ Common query parameters:
 - `gamesystem`
 - `document`
 - `source`
+- `view=summary` (optional compact card response)
 
 Type-specific query parameters:
 
@@ -30,6 +31,10 @@ Type-specific query parameters:
 - `spellSchool`
 - `includeSubclasses`
 - `onlySubclasses`
+
+`page` and `limit` must be positive safe integers; invalid pagination returns HTTP 400. Limits above 100 are capped at 100. The existing `all=true` export retains full rows.
+
+The browser requests `view=summary`: each `item` contains only `key`, `type`, `name`, and `source`, with the same complete `presentation` as the default response. Omit `view` to receive full storage rows, including `data` and description. Detail endpoints remain unchanged.
 
 Response shape:
 

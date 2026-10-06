@@ -8,6 +8,7 @@
  * - Single table for all compendium types (no metadata tables)
  */
 
+import { sql } from 'drizzle-orm';
 import { integer, sqliteTable, text, index, primaryKey } from 'drizzle-orm/sqlite-core';
 
 // ============================================================================
@@ -55,6 +56,33 @@ export const compendium = sqliteTable(
 		pk: primaryKey({ columns: [table.type, table.key] }),
 		typeIdx: index('compendium_type_idx').on(table.type),
 		typeNameIdx: index('compendium_type_name_idx').on(table.type, table.name),
+		spellLevelIdx: index('compendium_type_spell_level_name_idx').on(
+			table.type,
+			sql`json_extract(${table.data}, '$.level')`,
+			table.name
+		),
+		spellSchoolIdx: index('compendium_type_spell_school_name_idx').on(
+			table.type,
+			sql`LOWER(json_extract(${table.data}, '$.school'))`,
+			table.name
+		),
+		creatureTypeIdx: index('compendium_type_creature_type_name_idx').on(
+			table.type,
+			sql`LOWER(COALESCE(json_extract(${table.data}, '$.type.key'), json_extract(${table.data}, '$.type.name'), json_extract(${table.data}, '$.type')))`,
+			table.name
+		),
+		challengeRatingIdx: index('compendium_type_challenge_rating_name_idx').on(
+			table.type,
+			sql`CAST(json_extract(${table.data}, '$.challenge_rating_decimal') AS REAL)`,
+			table.name
+		),
+		subclassIdx: index('compendium_type_subclass_name_idx').on(
+			table.type,
+			sql`json_extract(${table.data}, '$.subclass_of')`,
+			table.name
+		),
+		typeCreatedAtIdx: index('compendium_type_created_at_idx').on(table.type, table.createdAt),
+		typeUpdatedAtIdx: index('compendium_type_updated_at_idx').on(table.type, table.updatedAt),
 		sourceIdx: index('compendium_source_idx').on(table.source),
 		documentIdx: index('compendium_document_idx').on(table.documentKey),
 		gamesystemIdx: index('compendium_gamesystem_idx').on(table.gamesystemKey),

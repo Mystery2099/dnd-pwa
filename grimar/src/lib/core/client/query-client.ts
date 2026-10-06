@@ -9,16 +9,15 @@
 
 import { QueryClient } from '@tanstack/svelte-query';
 import { persistQueryClient } from '@tanstack/svelte-query-persist-client';
-import type { Persister, PersistedClient } from '@tanstack/query-persist-client-core';
 import { browser } from '$app/environment';
-import { get, set, del, clear } from 'idb-keyval';
+import { clear } from 'idb-keyval';
+import { createIdbPersister } from './idb-persister';
 import { getCachedVersion, setCachedVersion } from './cache-version';
 import type { CacheVersion } from './cache-version';
 import { userSettingsStore } from './userSettingsStore.svelte';
 import { queryKeys } from './queries';
 
 // Cache configuration
-const CACHE_KEY = 'grimar-query-cache';
 const CACHE_MAX_AGE = 7 * 24 * 60 * 60 * 1000; // 7 days
 const BUSIER = 'v2'; // Change to invalidate all cached data
 
@@ -38,33 +37,14 @@ export function setQueryClient(client: QueryClient) {
  * Create an async storage persister using idb-keyval.
  * This provides better performance than localStorage (async, larger storage).
  */
-function createIdbPersister(): Persister | null {
-	if (!browser) return null;
-
-	return {
-		persistClient: async (client: PersistedClient) => {
-			await set(CACHE_KEY, JSON.stringify(client));
-		},
-		restoreClient: async () => {
-			const data = await get<string>(CACHE_KEY);
-			if (!data) return undefined;
-			try {
-				return JSON.parse(data);
-			} catch {
-				return undefined;
-			}
-		},
-		removeClient: async () => {
-			await del(CACHE_KEY);
-		}
-	};
-}
+let activePersister: ReturnType<typeof createIdbPersister> | null = null;
 
 /**
  * Clear all query cache from IndexedDB.
  */
 export async function clearQueryCache(): Promise<void> {
 	if (!browser) return;
+	await activePersister?.removeClient();
 	await clear();
 	console.log('[QueryClient] Cache cleared');
 }
@@ -107,31 +87,36 @@ export function createQueryClient(): QueryClient {
  * Initialize persistence and cache version validation.
  * This is called asynchronously after initial render.
  */
-export async function initializePersistence(client: QueryClient): Promise<void> {
-	if (!browser) return;
+export async function initializePersistence(client: QueryClient): Promise<() => void> {
+	if (!browser) return () => {};
 
 	// Check if offline data is enabled (from server settings)
 	if (!userSettingsStore.data.offlineEnabled) {
 		console.log('[QueryClient] Offline data disabled');
-		return;
+		return () => {};
 	}
 
 	const persister = createIdbPersister();
-	if (!persister) return;
+	activePersister = persister;
 
 	// Setup persistence
-	persistQueryClient({
+	const [unsubscribe, restored] = persistQueryClient({
 		queryClient: client,
 		persister,
 		maxAge: CACHE_MAX_AGE,
 		buster: BUSIER
 	});
+	await restored;
+	const flushWhenHidden = () => {
+		if (document.visibilityState === 'hidden') void persister.flush();
+	};
+	document.addEventListener('visibilitychange', flushWhenHidden);
 
 	console.log('[QueryClient] Persistence enabled with idb-keyval');
 
 	// Validate cache version on startup
 	try {
-		const response = await fetch('/api/cache/version');
+		const response = await fetch('/api/cache/version', { signal: AbortSignal.timeout(5000) });
 		if (response.ok) {
 			const serverVersion: CacheVersion = await response.json();
 			const cachedVersion = await getCachedVersion();
@@ -150,4 +135,10 @@ export async function initializePersistence(client: QueryClient): Promise<void> 
 		console.error('[QueryClient] Version check failed:', error);
 		// Continue with cached data
 	}
+	return () => {
+		unsubscribe();
+		document.removeEventListener('visibilitychange', flushWhenHidden);
+		void persister.flush();
+		if (activePersister === persister) activePersister = null;
+	};
 }

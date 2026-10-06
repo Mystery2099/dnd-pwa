@@ -20,16 +20,15 @@ export function startCacheCleanup(intervalMs: number = 60000) {
 
 	cleanupInterval = setInterval(() => {
 		const cache = MemoryCache.getInstance();
+		cache.pruneExpired();
 		const stats = cache.getCacheStats();
 
 		// If cache is over 80% full, log cleanup suggestion
 		if (stats.percentage > 80) {
 			log.info(
 				{ percentage: stats.percentage.toFixed(1) },
-				'Cache usage high, automatic cleanup will trigger'
+				'Cache usage high; payload and entry limits remain enforced'
 			);
-			// The MemoryCache class handles automatic cleanup when adding new items
-			// This is just for monitoring
 		}
 	}, intervalMs);
 

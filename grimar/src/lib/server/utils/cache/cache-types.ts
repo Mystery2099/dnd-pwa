@@ -6,6 +6,7 @@ export interface CacheEntry<T = unknown> {
 	data: T;
 	expires: number;
 	ttl: number;
+	bytes: number;
 }
 
 export interface CacheStats {

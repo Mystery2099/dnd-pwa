@@ -1,17 +1,30 @@
 #!/usr/bin/env bun
 
 import { Database } from 'bun:sqlite';
+import { mkdirSync } from 'node:fs';
+import { dirname } from 'node:path';
 import { drizzle } from 'drizzle-orm/bun-sqlite';
 import * as schema from '../src/lib/server/db/schema';
 import { initFts, populateFtsFromDatabase } from '../src/lib/server/db/db-fts';
 
 const dbPath = process.env.DATABASE_URL?.trim() || './data/e2e.db';
+mkdirSync(dirname(dbPath), { recursive: true });
 
 const sqlite = new Database(dbPath, { create: true });
 const db = drizzle(sqlite, { schema });
 const now = new Date();
 
 const seededCompendium = [
+	{
+		key: 'common',
+		type: 'languages',
+		name: 'Common',
+		source: 'open5e',
+		description: 'A widely spoken language.',
+		data: {
+			script_language: { name: 'Common', url: 'https://api.open5e.com/v2/languages/common/' }
+		}
+	},
 	{
 		key: 'srd_fireball',
 		type: 'spells',
