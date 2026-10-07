@@ -4,6 +4,7 @@
 	import { beforeNavigate } from '$app/navigation';
 	import { createCharactersQuery } from '$lib/core/client/queries';
 	import Button from '$lib/components/ui/Button.svelte';
+	import { MAX_SHEET_BYTES } from '$lib/features/characters/rules';
 	import SheetEditor from '$lib/features/characters/SheetEditor.svelte';
 	let { data, form } = $props();
 	let sheet = $state(structuredClone(untrack(() => data.sheet)));
@@ -36,7 +37,7 @@
 			file = input.files?.[0];
 		if (!file) return;
 		try {
-			if (file.size > 150000) throw new Error('Sheet file must be under 150 KB.');
+			if (file.size > MAX_SHEET_BYTES) throw new Error('Sheet file must be under 1 MiB.');
 			const { characterSchema } = await import('$lib/features/characters/schema');
 			const parsed = characterSchema.safeParse(JSON.parse(await file.text()));
 			if (!parsed.success)

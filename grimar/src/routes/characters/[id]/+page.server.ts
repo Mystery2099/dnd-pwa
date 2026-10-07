@@ -8,6 +8,7 @@ import {
 	saveSheet,
 	deleteSheet
 } from '$lib/server/services/characters/sheets';
+import { MAX_SHEET_BYTES } from '$lib/features/characters/rules';
 import { readSheet } from '$lib/features/characters/schema';
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const user = requireUser(locals);
@@ -25,7 +26,7 @@ export const actions: Actions = {
 		let payload: unknown;
 		try {
 			const value = String(form.get('payload') || '');
-			if (value.length > 150000) throw new Error();
+			if (value.length > MAX_SHEET_BYTES) throw new Error();
 			payload = JSON.parse(value);
 		} catch {
 			return fail(400, { message: 'Invalid character data.' });

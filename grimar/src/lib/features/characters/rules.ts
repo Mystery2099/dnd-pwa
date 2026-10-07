@@ -1,3 +1,5 @@
+// Covers the maximum validated sheet, including UTF-8 text and JSON escaping.
+export const MAX_SHEET_BYTES = 1024 * 1024;
 import type { Sheet } from './schema';
 export type { Sheet } from './schema';
 export const abilities = [

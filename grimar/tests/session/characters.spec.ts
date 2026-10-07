@@ -48,6 +48,23 @@ test('character lifecycle preserves changes, rejects stale saves, and scopes she
 	await page.context().setOffline(false);
 	await page.getByRole('button', { name: 'Save character', exact: true }).click();
 	await expect(page.getByText('All changes saved.', { exact: true })).toBeVisible();
+	// A valid multilingual backup can exceed the former 150 KB import limit.
+	const backup = JSON.parse(stalePayload);
+	backup.sheet.equipment = '🐉'.repeat(10000);
+	backup.sheet.spells = '🐉'.repeat(10000);
+	backup.sheet.notes = '🐉'.repeat(20000);
+	await page
+		.getByLabel('Import sheet')
+		.setInputFiles({
+			name: 'character.json',
+			mimeType: 'application/json',
+			buffer: Buffer.from(JSON.stringify(backup))
+		});
+	await expect(page.getByLabel('Notes', { exact: true })).toHaveValue(backup.sheet.notes);
+	await page.getByRole('button', { name: 'Save character', exact: true }).click();
+	await expect(page.getByText('All changes saved.', { exact: true })).toBeVisible();
+	await page.reload();
+	await expect(page.getByLabel('Equipment', { exact: true })).toHaveValue(backup.sheet.equipment);
 	const other = await page.request.get(url, {
 		headers: { 'X-Authentik-Username': 'other-player' }
 	});
