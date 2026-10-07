@@ -28,9 +28,9 @@
 			<SurfaceCard class="group p-5 hover:scale-[1.02] hover:border-[var(--color-accent)]/30">
 				<h3 class="mb-1 text-lg font-bold text-[var(--color-text-primary)]">Character Builder</h3>
 				<p class="mb-4 text-sm text-[var(--color-text-muted)]">
-					Character creation is coming soon.
+					Create a hero and manage abilities, combat resources, spells, and equipment.
 				</p>
-				<Button class="w-full text-sm" disabled>Coming Soon</Button>
+				<Button class="w-full text-sm" href="/characters/new">Create Character</Button>
 			</SurfaceCard>
 
 			<!-- Example Stat Panel -->
@@ -38,9 +38,12 @@
 				<div
 					class="mb-1 text-xs font-bold tracking-widest text-[var(--color-text-muted)] uppercase"
 				>
-					Active Session
+					Your Characters
 				</div>
-				<div class="text-sm text-[var(--color-text-secondary)]">No active game session found.</div>
+				<p class="mb-3 text-sm text-[var(--color-text-secondary)]">
+					{data.characters.length} character{data.characters.length === 1 ? '' : 's'} in your Grimoire.
+				</p>
+				<Button href="/characters" variant="secondary">Open Characters</Button>
 			</div>
 		</div>
 	</div>

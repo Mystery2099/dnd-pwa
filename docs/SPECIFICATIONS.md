@@ -19,7 +19,8 @@ Related implementation docs:
 - Unified compendium table for Open5e and homebrew content
 - Type-specific compendium routes and detail APIs
 - Homebrew create, edit, import, export, and delete flows
-- Character storage with list and item APIs
+- Character storage with list/item APIs and owner-scoped creation, editing, and deletion
+- Playable character sheets with core 5e calculations, combat/rest resources, local dice, and sheet JSON backups
 - Offline-aware cache versioning and SSE cache events
 - Theme selection with built-in themes and local JSON theme import/export
 - User settings persistence
@@ -28,9 +29,9 @@ Related implementation docs:
 ### Not Implemented
 
 - Virtual tabletop
-- Dice rolling system
+- Shared multiplayer dice rolling (local sheet dice are implemented)
 - Campaign management
-- Character sheet route such as `/characters/[id]`
+- Automatic class/subclass feature and multiclass rules management
 - Built-in server-backed theme sharing or sync between devices
 - File-uploaded character portraits
 
@@ -48,6 +49,8 @@ Related implementation docs:
 
 - `/dashboard`
 - `/characters`
+- `/characters/new`
+- `/characters/[id]`
 - `/compendium`
 - `/compendium/[type]`
 - `/compendium/[type]/[key]`
@@ -186,7 +189,7 @@ The checked-in `.env.example` focuses on local development. `ADMIN_GROUPS`, `ADM
 ## Current Gaps
 
 - Offline support is cache-oriented and not a full local-first sync system
-- The dashboard still uses placeholder content instead of real campaign or character summaries
-- Character management is limited to lightweight records and list/create flows
+- Campaign/session summaries await campaign management; the dashboard shows the actual character count
+- Character sheets support core calculations and explicit resource tracking, not full class automation; see [CHARACTER_SHEETS.md](./CHARACTER_SHEETS.md)
 - Imported themes are device-local rather than synced through the server
 - The normalized compendium detail contract is internal to the app and versioned, but it is not yet documented as a public external API with migration guarantees beyond in-repo consumers

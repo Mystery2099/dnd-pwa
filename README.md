@@ -25,7 +25,7 @@ The root `package.json` proxies the common lifecycle, quality, test, and databas
 - Authenticated SvelteKit app with Bun runtime and SQLite via Drizzle
 - Session-based Authentik OAuth plus reverse-proxy header auth support
 - Unified compendium backed by Open5e plus user homebrew content
-- Character list and CRUD API for lightweight records
+- Owner-scoped character creation, editing, deletion, and playable 5e sheets with dice and JSON backups
 - Offline-aware client caching, query persistence, and cache invalidation endpoints
 - Theme system with 12 built-in themes plus local JSON import/export
 - User settings persistence, cache clearing, and sync controls
@@ -38,6 +38,8 @@ The root `package.json` proxies the common lifecycle, quality, test, and databas
 - `/auth/login`, `/auth/callback`, `/auth/logout` auth flow endpoints
 - `/dashboard` authenticated overview page
 - `/characters` character management
+- `/characters/new` character creation
+- `/characters/[id]` playable character sheet
 - `/compendium` compendium landing
 - `/compendium/[type]` compendium type listing
 - `/compendium/[type]/[key]` compendium detail page
@@ -170,6 +172,10 @@ Common variables:
 The checked-in `.env.example` covers the core local-dev values. `ADMIN_GROUPS`, `ADMIN_SYNC_TOKEN`, and `SESSION_ENCRYPTION_KEY` are also supported by the app and are typically added per deployment.
 
 `SESSION_ENCRYPTION_KEY` is required in production. In development, the server falls back to a temporary key if it is unset.
+
+## Character sheets and self-hosting
+
+See [Character sheets](docs/CHARACTER_SHEETS.md) for supported rules, persistence, and remaining tabletop work, and [Open5e self-hosting](docs/OPEN5E_SELF_HOSTING.md) for hosting the upstream API.
 
 ## Documentation
 

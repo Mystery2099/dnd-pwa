@@ -8,7 +8,8 @@ const CLIENT_OUT_DIR = join(ROOT, '.svelte-kit/output/client');
 const NON_BUDGET_FILE_PATTERNS = [/service-worker/i, /registerSW/i, /workbox/i];
 
 const BUDGETS = {
-	totalJsBytes: 700 * 1024,
+	// Baseline 692.5 KiB + lazy-loaded character sheet/editor/backup routes (~34 KiB).
+	totalJsBytes: 740 * 1024,
 	largestJsChunkBytes: 140 * 1024,
 	totalCssBytes: 220 * 1024,
 	totalImageBytes: 250 * 1024,
