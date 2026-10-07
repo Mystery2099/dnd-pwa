@@ -17,10 +17,14 @@ const DEFAULT_TTL = 5 * 60 * 1000; // 5 minutes
 export class MemoryCache {
 	private static instance: MemoryCache;
 	private cache = new Map<string, CacheEntry>();
-	private maxSize = DEFAULT_MAX_SIZE;
-	private maxMemory = DEFAULT_MAX_MEMORY;
+	private maxSize: number;
+	private maxMemory: number;
+	private usedBytes = 0;
 
-	private constructor() {}
+	constructor(options: { maxSize?: number; maxMemory?: number } = {}) {
+		this.maxSize = options.maxSize ?? DEFAULT_MAX_SIZE;
+		this.maxMemory = options.maxMemory ?? DEFAULT_MAX_MEMORY;
+	}
 
 	static getInstance(): MemoryCache {
 		if (!MemoryCache.instance) {
@@ -38,32 +42,40 @@ export class MemoryCache {
 
 		// Check if expired
 		if (Date.now() > entry.expires) {
-			this.cache.delete(key);
+			this.delete(key);
 			log.debug({ key }, 'Cache entry expired');
 			return null;
 		}
 
+		// Map insertion order tracks least recently used entries.
+		this.cache.delete(key);
+		this.cache.set(key, entry);
 		log.debug({ key }, 'Cache hit');
 		return entry.data as T;
 	}
 
 	set<T>(key: string, data: T, ttl: number = DEFAULT_TTL): void {
-		const expires = Date.now() + ttl;
+		// Account for serialized UTF-8 payload size once, not on every stats read.
+		// This bounds cached payload bytes; it is not an exact V8 heap measurement.
+		const bytes = Buffer.byteLength(key) + Buffer.byteLength(JSON.stringify(data) ?? '');
+		this.delete(key);
+		if (ttl <= 0 || bytes > this.maxMemory || this.maxSize <= 0) return;
 
-		// Check if we need to make space
-		if (this.cache.size >= this.maxSize) {
-			log.debug(
-				{ key, currentSize: this.cache.size, maxSize: this.maxSize },
-				'Cache full, evicting oldest'
-			);
-			this.evictOldest();
+		while (this.cache.size >= this.maxSize || this.usedBytes + bytes > this.maxMemory) {
+			const oldestKey = this.cache.keys().next().value;
+			if (oldestKey === undefined) break;
+			this.delete(oldestKey);
 		}
 
-		this.cache.set(key, { data, expires, ttl });
+		const expires = Date.now() + ttl;
+		this.cache.set(key, { data, expires, ttl, bytes });
+		this.usedBytes += bytes;
 		log.debug({ key, ttl }, 'Cache entry set');
 	}
 
 	delete(key: string): boolean {
+		const entry = this.cache.get(key);
+		if (entry) this.usedBytes -= entry.bytes;
 		const deleted = this.cache.delete(key);
 		log.debug({ key, deleted }, 'Cache entry deleted');
 		return deleted;
@@ -72,6 +84,7 @@ export class MemoryCache {
 	clear(): void {
 		const count = this.cache.size;
 		this.cache.clear();
+		this.usedBytes = 0;
 		log.info({ count }, 'Cache cleared');
 	}
 
@@ -80,7 +93,7 @@ export class MemoryCache {
 		let invalidatedCount = 0;
 		for (const key of this.cache.keys()) {
 			if (regex.test(key)) {
-				this.cache.delete(key);
+				this.delete(key);
 				invalidatedCount++;
 			}
 		}
@@ -88,32 +101,17 @@ export class MemoryCache {
 	}
 
 	getCacheStats(): CacheStats {
-		let used = 0;
-		for (const entry of this.cache.values()) {
-			used += JSON.stringify(entry).length;
-		}
-
 		return {
-			used,
+			used: this.usedBytes,
 			max: this.maxMemory,
-			percentage: (used / this.maxMemory) * 100
+			percentage: (this.usedBytes / this.maxMemory) * 100
 		};
 	}
 
-	private evictOldest(): void {
-		let oldestKey = '';
-		let oldestTime = Date.now();
-
+	pruneExpired(): void {
+		const now = Date.now();
 		for (const [key, entry] of this.cache.entries()) {
-			if (entry.expires < oldestTime) {
-				oldestTime = entry.expires;
-				oldestKey = key;
-			}
-		}
-
-		if (oldestKey) {
-			this.cache.delete(oldestKey);
-			log.debug({ evictedKey: oldestKey }, 'Evicted oldest cache entry');
+			if (entry.expires < now) this.delete(key);
 		}
 	}
 }

@@ -28,9 +28,9 @@
 			<SurfaceCard class="group p-5 hover:scale-[1.02] hover:border-[var(--color-accent)]/30">
 				<h3 class="mb-1 text-lg font-bold text-[var(--color-text-primary)]">Character Builder</h3>
 				<p class="mb-4 text-sm text-[var(--color-text-muted)]">
-					Create a new hero for your next adventure.
+					Character creation is coming soon.
 				</p>
-				<Button class="w-full text-sm">Open Forge</Button>
+				<Button class="w-full text-sm" disabled>Coming Soon</Button>
 			</SurfaceCard>
 
 			<!-- Example Stat Panel -->

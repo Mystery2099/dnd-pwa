@@ -24,7 +24,7 @@ test.describe('Compendium API', () => {
 		expect(body.total).toBeGreaterThan(0);
 
 		if (body.items.length > 0) {
-			const item = body.items[0];
+			const item = body.items[0].item;
 			expect(item.type).toBe('spells');
 			expect(item.name).toBeDefined();
 			expect(item.data).toBeDefined();
@@ -39,7 +39,7 @@ test.describe('Compendium API', () => {
 		const body = await response.json();
 		expect(body.items.length).toBeGreaterThan(0);
 
-		for (const item of body.items) {
+		for (const { item } of body.items) {
 			expect(item.data.level).toBe(1);
 		}
 	});
@@ -52,7 +52,7 @@ test.describe('Compendium API', () => {
 		const body = await response.json();
 		expect(body.items.length).toBeGreaterThan(0);
 
-		for (const item of body.items) {
+		for (const { item } of body.items) {
 			const nameMatch = item.name.toLowerCase().includes('fire');
 			const descMatch =
 				typeof item.description === 'string' && item.description.toLowerCase().includes('fire');
@@ -68,7 +68,7 @@ test.describe('Compendium API', () => {
 		const body = await response.json();
 
 		if (body.items.length > 0) {
-			expect(body.items[0].type).toBe('creatures');
+			expect(body.items[0].item.type).toBe('creatures');
 		}
 	});
 

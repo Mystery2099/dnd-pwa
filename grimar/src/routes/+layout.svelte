@@ -55,34 +55,47 @@
 		document.head.appendChild(link);
 	}
 
-	onMount(async () => {
+	onMount(() => {
+		let disposed = false;
+		let stopPersistence = () => {};
+		let stopSync = () => {};
 		showNoiseOverlay =
 			window.matchMedia('(min-width: 1024px)').matches &&
 			window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
 		loadInterFontAsync();
+		initTheme();
 
 		if (pwaInfo) {
-			const { registerSW } = await import('virtual:pwa-register');
-			registerSW({ immediate: true });
+			void import('virtual:pwa-register')
+				.then(({ registerSW }) => {
+					if (!disposed) registerSW({ immediate: true });
+				})
+				.catch((error) => console.error('Service worker registration failed:', error));
 		}
 
-		// Initialize persistence in background (doesn't block rendering)
-		const { initializePersistence } = await import('$lib/core/client/query-client');
-		await initializePersistence(queryClient);
+		void (async () => {
+			const { initializePersistence } = await import('$lib/core/client/query-client');
+			const cleanup = await initializePersistence(queryClient);
+			if (disposed) {
+				cleanup();
+				return;
+			}
+			stopPersistence = cleanup;
+			stopSync = startCacheSync();
+		})().catch((error) => console.error('Offline cache initialization failed:', error));
 
-		// Start cache sync for SSE invalidation
-		if (browser) {
-			startCacheSync();
-		}
-
-		// Capture user-centric rendering metrics in production.
+		// Metrics and theme setup should not wait for a cache-version network request.
 		if (browser && !import.meta.env.DEV) {
-			const { startWebVitalsReporting } = await import('$lib/core/client/web-vitals');
-			startWebVitalsReporting();
+			void import('$lib/core/client/web-vitals').then(({ startWebVitalsReporting }) => {
+				if (!disposed) startWebVitalsReporting();
+			});
 		}
 
-		// Initialize theme from localStorage
-		initTheme();
+		return () => {
+			disposed = true;
+			stopSync();
+			stopPersistence();
+		};
 	});
 
 	// Simple active link helper
@@ -166,15 +179,16 @@
 		<a
 			class="rounded-lg px-3 py-2 hover:bg-[var(--color-bg-card)] {isActive('/dashboard')}"
 			href="/dashboard">Dashboard</a
-		>		<a
+		>
+		<a
 			class="rounded-lg px-3 py-2 hover:bg-[var(--color-bg-card)] {isActive('/compendium')}"
 			href="/compendium">Compendium</a
-		>		<a
-			class="rounded-lg px-3 py-2 hover:bg-[var(--color-bg-card)] {isActive(
-				'/characters'
-			)}"
+		>
+		<a
+			class="rounded-lg px-3 py-2 hover:bg-[var(--color-bg-card)] {isActive('/characters')}"
 			href="/characters">Characters</a
-		>		<a
+		>
+		<a
 			class="pointer-events-none rounded-lg px-3 py-2 opacity-50 hover:bg-[var(--color-bg-card)]"
 			href="/forge">The Forge</a
 		>

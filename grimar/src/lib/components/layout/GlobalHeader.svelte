@@ -2,7 +2,7 @@
 	import type { Snippet } from 'svelte';
 	import PrimaryNav from '$lib/components/layout/PrimaryNav.svelte';
 	import MobileNavDrawer from '$lib/components/layout/MobileNavDrawer.svelte';
-	import logoUrl from '$lib/assets/grimar-hermetica-title.png';
+	import logoUrl from '$lib/assets/grimar-hermetica-title.webp';
 
 	type Props = {
 		homeHref?: string;

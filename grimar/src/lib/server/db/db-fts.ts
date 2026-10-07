@@ -12,7 +12,6 @@
 
 import { getDb } from '$lib/server/db';
 import type { Db } from '$lib/server/db';
-import { compendium } from '$lib/server/db/schema';
 import { sql } from 'drizzle-orm';
 import { createModuleLogger } from '$lib/server/logger';
 
@@ -52,23 +51,13 @@ export async function populateFtsFromDatabase(db?: Db): Promise<number> {
 	log.info('Populating FTS with existing compendium data');
 	const database = db ?? (await getDb());
 
-	const items = await database.select().from(compendium);
-	let count = 0;
-
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	await database.transaction(async (tx: any) => {
-		await tx.run(sql`DELETE FROM compendium_fts`);
-
-		const BATCH_SIZE = 500;
-		for (let i = 0; i < items.length; i += BATCH_SIZE) {
-			const batch = items.slice(i, i + BATCH_SIZE);
-			for (const item of batch) {
-				await tx.run(
-					sql`INSERT INTO compendium_fts(key, name, description) VALUES (${item.key}, ${item.name}, ${item.description ?? ''})`
-				);
-				count++;
-			}
-		}
+	const count = database.transaction((tx) => {
+		tx.run(sql`DELETE FROM compendium_fts`);
+		tx.run(sql`
+			INSERT INTO compendium_fts(key, name, description)
+			SELECT key, name, COALESCE(description, '') FROM compendium
+		`);
+		return tx.all<{ count: number }>(sql`SELECT changes() AS count`)[0].count;
 	});
 
 	log.info({ count }, 'FTS populated with existing data');
@@ -126,30 +115,7 @@ export async function searchFtsRanked(
 }
 
 export async function rebuildFtsIndex(db?: Db): Promise<number> {
-	log.info('Rebuilding FTS index');
-	const database = db ?? (await getDb());
-
-	const items = await database.select().from(compendium);
-	let count = 0;
-
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	await database.transaction(async (tx: any) => {
-		await tx.run(sql`DELETE FROM compendium_fts`);
-
-		const BATCH_SIZE = 500;
-		for (let i = 0; i < items.length; i += BATCH_SIZE) {
-			const batch = items.slice(i, i + BATCH_SIZE);
-			for (const item of batch) {
-				await tx.run(
-					sql`INSERT INTO compendium_fts(key, name, description) VALUES (${item.key}, ${item.name}, ${item.description ?? ''})`
-				);
-				count++;
-			}
-		}
-	});
-
-	log.info({ count }, 'FTS index rebuilt');
-	return count;
+	return populateFtsFromDatabase(db);
 }
 
 export async function rebuildFtsTable(db?: Db): Promise<number> {

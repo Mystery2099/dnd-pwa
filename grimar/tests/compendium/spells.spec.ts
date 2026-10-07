@@ -9,7 +9,9 @@ test.describe('Compendium Spells - Smoke Tests', () => {
 	test('loads the spells page', async ({ page }) => {
 		await expect(page).toHaveTitle(/Spells/i);
 		await expect(page.locator('h1')).toContainText('Spells');
-		await expect(page.locator('text=3 items')).toBeVisible();
+		await expect(
+			page.getByText('Entries', { exact: true }).locator('..').locator('p').last()
+		).toHaveText('3');
 	});
 
 	test('displays spell list', async ({ page }) => {

@@ -37,6 +37,7 @@ class CacheSync {
 	 */
 	connect(): void {
 		if (!browser) return;
+		if (!offlineStore.isOnline) return;
 		if (dev) {
 			this.logDebug('[CacheSync] Disabled in dev mode');
 			return;
@@ -237,9 +238,15 @@ export function startCacheSync(): () => void {
 	cacheSync.connect();
 
 	// Listen for online events to force sync on reconnect
+	let wasOnline = offlineStore.isOnline;
 	const unsubscribe = offlineStore.subscribe((state) => {
-		if (state.isOnline && !cacheSync.connected) {
-			cacheSync.forceSync();
+		const becameOnline = state.isOnline && !wasOnline;
+		wasOnline = state.isOnline;
+		if (!state.isOnline) {
+			cacheSync.disconnect();
+		} else if (becameOnline) {
+			cacheSync.connect();
+			void cacheSync.forceSync();
 		}
 	});
 

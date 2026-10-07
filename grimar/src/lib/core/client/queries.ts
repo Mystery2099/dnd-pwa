@@ -199,7 +199,7 @@ export async function fetchCompendiumList(
 	signal?: AbortSignal
 ): Promise<CompendiumSearchResult> {
 	const apiType = pathType === 'subclasses' ? 'classes' : pathType;
-	const params = new URLSearchParams({ type: apiType });
+	const params = new URLSearchParams({ type: apiType, view: 'summary' });
 
 	for (const [key, value] of Object.entries(normalizeCompendiumListParams(listParams))) {
 		params.set(key, value);
@@ -263,17 +263,24 @@ export async function fetchCacheVersion(): Promise<{ version: string; timestamp:
  * Create a compendium list query.
  * Cached for offline access, refetched after 10 minutes staleTime.
  */
-export function createCompendiumQuery(type: CompendiumTypeName, params: CompendiumListParams = {}) {
-	const normalizedParams = normalizeCompendiumListParams(params);
-
-	return createQuery(() => ({
-		queryKey: queryKeys.compendium.list(type, normalizedParams),
-		queryFn: ({ signal }) => fetchCompendiumList(type, normalizedParams, signal),
-		placeholderData: (previousData) => previousData,
-		staleTime: 10 * 60 * 1000, // 10 minutes
-		gcTime: 30 * 60 * 1000, // 30 minutes in cache
-		networkMode: 'offlineFirst'
-	}));
+export function createCompendiumQuery(
+	type: CompendiumTypeName | (() => CompendiumTypeName),
+	params: CompendiumListParams | (() => CompendiumListParams) = {}
+) {
+	return createQuery(() => {
+		const resolvedType = typeof type === 'function' ? type() : type;
+		const normalizedParams = normalizeCompendiumListParams(
+			typeof params === 'function' ? params() : params
+		);
+		return {
+			queryKey: queryKeys.compendium.list(resolvedType, normalizedParams),
+			queryFn: ({ signal }) => fetchCompendiumList(resolvedType, normalizedParams, signal),
+			placeholderData: (previousData) => previousData,
+			staleTime: 10 * 60 * 1000,
+			gcTime: 30 * 60 * 1000,
+			networkMode: 'offlineFirst'
+		};
+	});
 }
 
 /**

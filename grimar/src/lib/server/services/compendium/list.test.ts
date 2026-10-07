@@ -24,6 +24,23 @@ function createItem(overrides: Partial<CompendiumItem>): CompendiumItem {
 }
 
 describe('buildCompendiumListItem', () => {
+	it('summary responses retain displayed presentation without shipping raw detail data', () => {
+		const item = createItem({
+			description: 'Complete display text',
+			data: { level: 3, school: 'evocation', desc: 'x'.repeat(10000) }
+		});
+		const full = buildCompendiumListItem(item);
+		const summary = buildCompendiumListItem(item, true);
+		expect(summary.item).toEqual({
+			key: item.key,
+			type: item.type,
+			name: item.name,
+			source: item.source
+		});
+		expect(summary.presentation).toEqual(full.presentation);
+		expect(full.item.data).toEqual(item.data);
+		expect(JSON.stringify(summary).length).toBeLessThan(JSON.stringify(full).length / 10);
+	});
 	it('builds normalized spell list presentation', () => {
 		const item = createItem({
 			type: 'spells',

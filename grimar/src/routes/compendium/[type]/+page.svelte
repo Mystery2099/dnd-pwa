@@ -1,10 +1,8 @@
 <script lang="ts">
 	import { replaceState } from '$app/navigation';
-	import { browser } from '$app/environment';
 	import { onDestroy, onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import { createCompendiumQuery, prefetchCompendiumDetail } from '$lib/core/client/queries';
-	import { queryClient } from '$lib/core/client/query-client';
+	import { createCompendiumQuery } from '$lib/core/client/queries';
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import Breadcrumb from '$lib/components/ui/Breadcrumb.svelte';
 	import Input from '$lib/components/ui/Input.svelte';
@@ -121,8 +119,9 @@
 	let challengeRatingFilter = $state($page.url.searchParams.get('challengeRating') ?? 'all');
 
 	let config = $derived(COMPENDIUM_TYPE_CONFIGS[data.type]);
-	let query = $derived(
-		createCompendiumQuery(data.type as CompendiumTypeName, {
+	const query = createCompendiumQuery(
+		() => data.type as CompendiumTypeName,
+		() => ({
 			search: searchQuery || undefined,
 			page: currentPage,
 			sortBy,
@@ -289,37 +288,6 @@
 		sortOrder = 'asc';
 		currentPage = 1;
 		updateUrl();
-	}
-
-	function handleItemPrefetch(itemKey: string) {
-		if (!queryClient) return;
-		void prefetchCompendiumDetail(queryClient, data.type, itemKey).catch(() => {
-			// Ignore prefetch errors; this is best-effort optimization.
-		});
-	}
-
-	function prefetchOnVisible(node: HTMLElement, itemKey: string) {
-		if (!browser || !queryClient || !('IntersectionObserver' in window)) return;
-
-		let hasPrefetched = false;
-		const observer = new IntersectionObserver(
-			(entries) => {
-				const isVisible = entries.some((entry) => entry.isIntersecting);
-				if (!isVisible || hasPrefetched) return;
-				hasPrefetched = true;
-				handleItemPrefetch(itemKey);
-				observer.disconnect();
-			},
-			{ rootMargin: '220px', threshold: 0.15 }
-		);
-
-		observer.observe(node);
-
-		return {
-			destroy() {
-				observer.disconnect();
-			}
-		};
 	}
 </script>
 
@@ -548,12 +516,10 @@
 					{#snippet compendiumCard(entry: CompendiumListItem)}
 						{@const item = entry.item}
 						{@const presentation = entry.presentation}
-						<div use:prefetchOnVisible={item.key} class="h-full w-full">
+						<div class="h-full w-full">
 							<SurfaceCard
 								href="/compendium/{data.type}/{item.key}"
 								class="group h-full w-full rounded-[1.6rem] border border-[var(--color-border)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-bg-card)_84%,transparent),color-mix(in_srgb,var(--color-bg-primary)_96%,transparent))] shadow-[0_1.35rem_3.1rem_color-mix(in_srgb,var(--color-shadow)_18%,transparent),inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent)]"
-								onmouseenter={() => handleItemPrefetch(item.key)}
-								onfocusin={() => handleItemPrefetch(item.key)}
 							>
 								<div class="relative p-4.5">
 									<div

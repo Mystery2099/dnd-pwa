@@ -31,6 +31,8 @@
 			bind:checked
 			{disabled}
 			class={cn('toggle-track', checked && 'toggle-checked', className)}
+			aria-label={label}
+			{...restProps}
 		>
 			{#snippet children({ checked })}
 				<span class="toggle-thumb {checked ? 'translate-x-4' : ''}"></span>

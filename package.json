@@ -30,7 +30,8 @@
 		"db:migrate": "bun run --shell bun --cwd grimar db:migrate",
 		"db:studio": "bun run --shell bun --cwd grimar db:studio",
 		"db:sync": "bun run --shell bun --cwd grimar db:sync",
-		"reindex-fts": "bun run --shell bun --cwd grimar reindex-fts"
+		"reindex-fts": "bun run --shell bun --cwd grimar reindex-fts",
+		"perf:regression": "bun run --shell bun --cwd grimar perf:regression"
 	},
 	"workspaces": [
 		"grimar"

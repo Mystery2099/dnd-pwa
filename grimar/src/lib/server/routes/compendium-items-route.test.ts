@@ -18,6 +18,25 @@ describe('GET /api/compendium/items', () => {
 		getQueryBucketMock.mockReturnValue('fast');
 	});
 
+	it.each([
+		'limit=-1',
+		'limit=0',
+		'limit=NaN',
+		'limit=1.5',
+		'limit=5junk',
+		'page=0',
+		'page=-1',
+		'page=Infinity',
+		'page=9007199254740991'
+	])('rejects unsafe pagination: %s', async (params) => {
+		const { GET } = await import('../../../routes/api/compendium/items/+server');
+		const response = await GET({
+			url: new URL(`http://localhost/api/compendium/items?type=spells&${params}`)
+		} as Parameters<typeof GET>[0]);
+		expect(response.status).toBe(400);
+		expect(getPaginatedItemsMock).not.toHaveBeenCalled();
+	});
+
 	it('returns 400 when type is missing', async () => {
 		const { GET } = await import('../../../routes/api/compendium/items/+server');
 		const response = await GET({
