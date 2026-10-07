@@ -10,8 +10,8 @@
 import { QueryClient } from '@tanstack/svelte-query';
 import { persistQueryClient } from '@tanstack/svelte-query-persist-client';
 import { browser } from '$app/environment';
-import { clear } from 'idb-keyval';
-import { createIdbPersister } from './idb-persister';
+import { del } from 'idb-keyval';
+import { createIdbPersister, QUERY_CACHE_KEY } from './idb-persister';
 import { getCachedVersion, setCachedVersion } from './cache-version';
 import type { CacheVersion } from './cache-version';
 import { userSettingsStore } from './userSettingsStore.svelte';
@@ -44,8 +44,8 @@ let activePersister: ReturnType<typeof createIdbPersister> | null = null;
  */
 export async function clearQueryCache(): Promise<void> {
 	if (!browser) return;
-	await activePersister?.removeClient();
-	await clear();
+	if (activePersister) await activePersister.removeClient();
+	else await del(QUERY_CACHE_KEY);
 	console.log('[QueryClient] Cache cleared');
 }
 

@@ -74,24 +74,28 @@ class MutationQueueState {
 		this.syncing = true;
 
 		try {
-			const failed: QueuedMutation[] = [];
+			// Read the live queue after every request so removals and additions during
+			// a sync are respected. Retry each failed entry at most once per sync.
+			const attempted = new Set<string>();
+			while (this.online) {
+				const mutation = this.pending.find((entry) => !attempted.has(entry.id));
+				if (!mutation) break;
+				attempted.add(mutation.id);
 
-			for (const mutation of this.pending) {
 				try {
 					await executeMutation(mutation);
+					this.pending = this.pending.filter((entry) => entry.id !== mutation.id);
 				} catch (error) {
+					// A clear/remove while the request was in flight must not restore it.
+					if (!this.pending.includes(mutation)) continue;
 					mutation.retries++;
 					mutation.lastError = ApiError.isApiError(error) ? error.message : 'Unknown error';
-
-					// Only retry if error is retryable; discard non-retryable failures
-					if (isRetryableError(error) && mutation.retries < 3) {
-						failed.push(mutation);
+					if (!isRetryableError(error) || mutation.retries >= 3) {
+						this.pending = this.pending.filter((entry) => entry.id !== mutation.id);
 					}
-					// Non-retryable errors are silently discarded from the queue
 				}
 			}
 
-			this.pending = failed;
 			await this.save();
 		} finally {
 			this.syncing = false;
