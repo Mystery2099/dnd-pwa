@@ -1,6 +1,6 @@
 <script lang="ts">
+	import { Dialog } from 'bits-ui';
 	import { onMount } from 'svelte';
-	import { fade, fly } from 'svelte/transition';
 	import { Menu, X } from 'lucide-svelte';
 	import logoUrl from '$lib/assets/grimar-hermetica-title.webp';
 
@@ -26,50 +26,43 @@
 		open = $bindable(false)
 	}: Props = $props();
 
+	let ready = $state(false);
+
 	function close() {
 		open = false;
 	}
-
 	onMount(() => {
-		const onKeyDown = (e: KeyboardEvent) => {
-			if (!open) return;
-			if (e.key === 'Escape') {
-				e.preventDefault();
-				close();
-			}
+		ready = true;
+		const desktop = window.matchMedia('(min-width: 48rem)');
+		const closeOnDesktop = () => {
+			if (desktop.matches) close();
 		};
-
-		window.addEventListener('keydown', onKeyDown);
-		return () => window.removeEventListener('keydown', onKeyDown);
+		closeOnDesktop();
+		desktop.addEventListener('change', closeOnDesktop);
+		return () => desktop.removeEventListener('change', closeOnDesktop);
 	});
 </script>
 
-<div class="md:hidden">
-	<button
-		type="button"
-		class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-bg-card)] text-[var(--color-text-primary)] shadow-[0_2px_8px_color-mix(in_srgb,black_30%,transparent)] backdrop-blur-sm transition-all duration-200 ease-out hover:border-[var(--color-accent)]/20 hover:bg-[var(--color-bg-card)]"
-		aria-label="Open navigation"
-		onclick={() => (open = true)}
-	>
-		<Menu class="size-5" />
-	</button>
+<Dialog.Root bind:open>
+	<div class="md:hidden">
+		<Dialog.Trigger
+			disabled={!ready}
+			class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-bg-card)] text-[var(--color-text-primary)] shadow-[0_2px_8px_color-mix(in_srgb,black_30%,transparent)] backdrop-blur-sm transition-all duration-200 ease-out hover:border-[var(--color-accent)]/20 hover:bg-[var(--color-bg-card)]"
+			aria-label="Open navigation"
+		>
+			<Menu class="size-5" />
+		</Dialog.Trigger>
 
-	{#if open}
-		<div class="fixed inset-0 z-100">
+		<Dialog.Portal>
 			<!-- Backdrop -->
-			<button
-				type="button"
-				class="absolute inset-0 bg-[var(--color-overlay-dark)] backdrop-blur-sm"
-				aria-label="Close navigation"
-				onclick={close}
-				transition:fade={{ duration: 150 }}
-			></button>
+			<Dialog.Overlay class="fixed inset-0 z-100 bg-[var(--color-overlay-dark)] backdrop-blur-sm" />
 
 			<!-- Drawer (Obsidian) -->
-			<div
-				class="absolute top-0 left-0 h-dvh w-[min(85vw,320px)] border-r border-[var(--color-border)] bg-[var(--color-bg-primary)] shadow-[0_0_80px_var(--color-shadow)] backdrop-blur-2xl"
-				transition:fly={{ x: -16, duration: 180 }}
+			<Dialog.Content
+				class="fixed top-0 left-0 z-100 h-dvh w-[min(85vw,320px)] overflow-y-auto border-r border-[var(--color-border)] bg-[var(--color-bg-primary)] shadow-[0_0_80px_var(--color-shadow)] backdrop-blur-2xl"
 			>
+				<Dialog.Title class="sr-only">Navigation</Dialog.Title>
+				<Dialog.Description class="sr-only">Choose a page in your Grimoire.</Dialog.Description>
 				<!-- Static Glossy Overlay -->
 				<div
 					class="pointer-events-none absolute inset-x-0 top-0 h-48 bg-linear-to-br from-[color-mix(in_srgb,var(--color-text-primary)_12%,transparent)] to-transparent opacity-50"
@@ -79,14 +72,12 @@
 					class="mt-safe-top relative flex items-center justify-between border-b border-[var(--color-border)] p-4"
 				>
 					<img src={logoUrl} alt="Grimar" class="h-7 w-auto" />
-					<button
-						type="button"
+					<Dialog.Close
 						class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-bg-card)] text-[var(--color-text-primary)] transition-all duration-200 ease-out hover:border-[var(--color-accent)]/20 hover:bg-[var(--color-bg-card)] active:scale-95"
 						aria-label="Close navigation"
-						onclick={close}
 					>
 						<X class="size-5" />
-					</button>
+					</Dialog.Close>
 				</div>
 
 				<nav class="relative p-4">
@@ -94,7 +85,7 @@
 						{#each items as item (item.href)}
 							{#if item.disabled}
 								<span
-									class="pointer-events-none rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] px-4 py-3 opacity-50 text-[var(--color-text-primary)]"
+									class="pointer-events-none rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-card)] px-4 py-3 text-[var(--color-text-primary)] opacity-50"
 								>
 									{item.label}
 								</span>
@@ -110,7 +101,7 @@
 						{/each}
 					</div>
 				</nav>
-			</div>
-		</div>
-	{/if}
-</div>
+			</Dialog.Content>
+		</Dialog.Portal>
+	</div>
+</Dialog.Root>
