@@ -34,5 +34,28 @@ test.describe('Session Persistence - Smoke Tests', () => {
 		await page.goto('/compendium/spells');
 		await page.waitForLoadState('domcontentloaded');
 		await expect(page.locator('h1')).toContainText('Spells');
+
+		await page.setViewportSize({ width: 390, height: 844 });
+		const menu = page.getByRole('button', { name: 'Open navigation' });
+		await menu.click();
+		const dialog = page.getByRole('dialog', { name: 'Navigation' });
+		await expect(dialog).toBeVisible();
+		for (let i = 0; i < 8; i++) {
+			await page.keyboard.press('Tab');
+			await expect
+				.poll(() => dialog.evaluate((el) => el.contains(document.activeElement)))
+				.toBe(true);
+		}
+		await page.keyboard.press('Escape');
+		await expect(dialog).toBeHidden();
+		await expect(menu).toBeFocused();
+		await menu.click();
+		await dialog.getByRole('link', { name: 'Characters', exact: true }).click();
+		await expect(page).toHaveURL(/\/characters$/);
+		await expect(dialog).toBeHidden();
+		await menu.click();
+		await expect(dialog).toBeVisible();
+		await page.setViewportSize({ width: 1280, height: 900 });
+		await expect(dialog).toBeHidden();
 	});
 });
