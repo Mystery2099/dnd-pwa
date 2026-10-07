@@ -42,14 +42,20 @@ it('clearing during an in-flight failure prevents retries and remaining requests
 	expect(storage.set).toHaveBeenLastCalledWith('mutation-queue', []);
 });
 
-it('respects removal and syncs newly queued work without dropping it', async () => {
+it('respects queue edits and retains failed work for a later sync', async () => {
 	const { queue, second, finish, fetch, syncing } = await prepare();
 	await queue.removeMutation(second);
 	await queue.queueMutation('create', '/api/homebrew', { name: 'Third' });
 	fetch.mockResolvedValue(new Response(null, { status: 201 }));
-	finish(new Response(null, { status: 201 }));
+	finish(new Response('Unavailable', { status: 503 }));
 	await syncing;
 	expect(fetch).toHaveBeenCalledTimes(2);
 	expect(JSON.parse(fetch.mock.calls[1][1].body)).toEqual({ name: 'Third' });
+	expect(queue.getQueueStatus().pending).toBe(1);
+	expect(queue.mutationQueue.pending[0].retries).toBe(1);
+	expect(storage.set).toHaveBeenLastCalledWith('mutation-queue', queue.mutationQueue.pending);
+	await queue.syncQueue();
+	expect(fetch).toHaveBeenCalledTimes(3);
+	expect(JSON.parse(fetch.mock.calls[2][1].body)).toEqual({ name: 'First' });
 	expect(queue.getQueueStatus().pending).toBe(0);
 });
