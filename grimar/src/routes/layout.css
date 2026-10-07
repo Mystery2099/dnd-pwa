@@ -1144,7 +1144,7 @@
 
 	/* Toggle styles */
 	.toggle-track {
-		@apply transition-all duration-300;
+		@apply relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border p-0.5 transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50;
 		background: rgba(var(--theme-bg-overlay-rgb, 49, 46, 129), 0.6);
 		border-color: var(--color-border);
 	}
@@ -1160,7 +1160,7 @@
 	}
 
 	.toggle-thumb {
-		@apply transition-all duration-300;
+		@apply pointer-events-none block size-4 rounded-full transition-transform duration-300;
 		background: var(--theme-accent);
 		box-shadow: 0 0 10px var(--theme-accent-glow);
 	}

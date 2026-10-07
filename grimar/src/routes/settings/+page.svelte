@@ -442,9 +442,9 @@
 
 		<Tabs.Root
 			bind:value={activeSection}
-			class="mx-auto grid max-w-[1200px] gap-8 lg:grid-cols-[minmax(280px,320px)_minmax(0,1fr)]"
+			class="mx-auto grid w-full max-w-[1200px] min-w-0 grid-cols-1 gap-8 lg:grid-cols-[minmax(280px,320px)_minmax(0,1fr)]"
 		>
-			<aside class="h-fit lg:sticky lg:top-6 lg:pr-2">
+			<aside class="h-fit min-w-0 lg:sticky lg:top-6 lg:pr-2">
 				<div
 					class="overflow-hidden rounded-[1.75rem] border border-[color-mix(in_srgb,var(--color-border)_80%,transparent)] bg-[linear-gradient(160deg,color-mix(in_srgb,var(--color-bg-card)_88%,transparent),color-mix(in_srgb,black_18%,transparent))] p-4 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--color-text-primary)_10%,transparent),0_12px_34px_color-mix(in_srgb,black_35%,transparent)]"
 				>

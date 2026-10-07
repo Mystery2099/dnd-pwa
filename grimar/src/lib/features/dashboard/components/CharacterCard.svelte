@@ -18,14 +18,11 @@
 	let { character }: Props = $props();
 </script>
 
-<SurfaceCard
-	href="/characters/{character.id}"
-	class="group aspect-3/4 hover:scale-[1.02] hover:border-[var(--color-accent)]/50 hover:shadow-[var(--color-accent-glow)]"
->
+<SurfaceCard class="aspect-3/4">
 	<!-- Static Glossy Overlay -->
 	<div
 		class="pointer-events-none absolute inset-x-0 top-0 h-1/2
-	 bg-linear-to-br from-[color-mix(in_srgb,var(--color-text-primary)_15%,transparent)] to-transparent opacity-60 transition-opacity group-hover:opacity-80"
+	 bg-linear-to-br from-[color-mix(in_srgb,var(--color-text-primary)_15%,transparent)] to-transparent opacity-60"
 	></div>
 
 	<!-- Portrait Background -->
@@ -33,7 +30,7 @@
 		<img
 			src={character.portraitUrl}
 			alt={character.name}
-			class="absolute inset-0 h-full w-full object-cover opacity-60 transition-opacity group-hover:opacity-80"
+			class="absolute inset-0 h-full w-full object-cover opacity-60"
 		/>
 	{:else}
 		<div class="absolute inset-0 bg-linear-to-br from-indigo-900 to-purple-900 opacity-50"></div>

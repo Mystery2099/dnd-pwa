@@ -50,7 +50,10 @@
 	{/if}
 
 	<RadioGroup.Root {value} {name} onValueChange={handleValueChange}>
-		<div class="grid gap-3" style="grid-template-columns: repeat({columns}, minmax(0, 1fr));">
+		<div
+			class="grid grid-cols-[repeat(var(--radio-mobile-columns),minmax(0,1fr))] gap-3 sm:grid-cols-[repeat(var(--radio-columns),minmax(0,1fr))]"
+			style="--radio-columns: {columns}; --radio-mobile-columns: {Math.min(columns, 2)};"
+		>
 			{#each options as option (option.value)}
 				{@const isSelected = value === option.value}
 				<RadioGroup.Item
