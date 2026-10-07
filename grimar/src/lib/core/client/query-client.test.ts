@@ -95,4 +95,21 @@ describe('query-client persistence', () => {
 		const restored = await persistArgs.persister.restoreClient();
 		expect(restored).toBeUndefined();
 	});
+	it('clears query snapshots without deleting unsynced mutations or cache metadata', async () => {
+		const { clearQueryCache } = await loadModule();
+		const { QUERY_CACHE_KEY } = await import('./idb-persister');
+		const pending = [{ id: 'unsynced-homebrew' }];
+		const entries = new Map<string, unknown>([
+			[QUERY_CACHE_KEY, { clientState: {} }],
+			['mutation-queue', pending],
+			['grimar-cache-version', 'v2']
+		]);
+		mocks.idbDel.mockImplementation(async (key: string) => entries.delete(key));
+		mocks.idbClear.mockImplementation(async () => entries.clear());
+		await clearQueryCache();
+		expect(entries.has(QUERY_CACHE_KEY)).toBe(false);
+		expect(entries.get('mutation-queue')).toBe(pending);
+		expect(entries.get('grimar-cache-version')).toBe('v2');
+		expect(mocks.idbClear).not.toHaveBeenCalled();
+	});
 });
