@@ -13,11 +13,12 @@
 			The Forge Awaits
 		</h2>
 		<p class="mb-8 leading-relaxed text-[var(--color-text-muted)]">
-			You have no characters inscribed in your Grimoire yet. Character creation is coming soon.
+			You have no characters inscribed in your Grimoire yet. Create a character to begin your
+			adventures.
 		</p>
-		<Button disabled size="lg">
+		<Button href="/characters/new" size="lg">
 			<Plus class="size-5" />
-			<span>Character Creation Coming Soon</span>
+			<span>Create Character</span>
 		</Button>
 	</SurfaceCard>
 </div>

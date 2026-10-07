@@ -16,9 +16,13 @@
 	}
 
 	let { character }: Props = $props();
+	const level = $derived(typeof character.stats?.level === 'number' ? character.stats.level : 1);
+	const className = $derived(
+		typeof character.stats?.class === 'string' ? character.stats.class : 'Traveler'
+	);
 </script>
 
-<SurfaceCard class="aspect-3/4">
+<SurfaceCard href={`/characters/${character.id}`} class="aspect-3/4">
 	<!-- Static Glossy Overlay -->
 	<div
 		class="pointer-events-none absolute inset-x-0 top-0 h-1/2
@@ -60,8 +64,8 @@
 			{character.name}
 		</h3>
 		<p class="mt-1 text-sm font-medium text-[var(--color-text-secondary)]">
-			Level {character.stats?.level || 1}
-			{character.stats?.class || 'Traveler'}
+			Level {level}
+			{className || 'Traveler'}
 		</p>
 	</div>
 </SurfaceCard>

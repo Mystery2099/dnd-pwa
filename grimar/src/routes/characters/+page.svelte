@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import Button from '$lib/components/ui/Button.svelte';
 	import CharacterGrid from '$lib/features/dashboard/components/CharacterGrid.svelte';
 	import DashboardActions from '$lib/features/dashboard/components/DashboardActions.svelte';
 	import SurfaceCard from '$lib/components/ui/SurfaceCard.svelte';
@@ -6,7 +8,10 @@
 
 	let { data: _data } = $props();
 
-	const charactersQuery = $derived(createCharactersQuery());
+	const charactersQuery = createCharactersQuery();
+	onMount(() => {
+		void charactersQuery.refetch();
+	});
 </script>
 
 <svelte:head>
@@ -18,7 +23,10 @@
 		<h1 class="text-holo mb-1 text-3xl font-bold tracking-tight text-[var(--color-text-primary)]">
 			My Characters
 		</h1>
-		<p class="mb-6 text-sm text-[var(--color-text-muted)]">Manage your heroes and adventurers.</p>
+		<div class="mb-6 flex flex-wrap items-center justify-between gap-3">
+			<p class="text-sm text-[var(--color-text-muted)]">Manage your heroes and adventurers.</p>
+			<Button href="/characters/new">Create Character</Button>
+		</div>
 
 		{#if charactersQuery.isPending}
 			<div class="flex items-center justify-center py-12">

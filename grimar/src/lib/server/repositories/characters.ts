@@ -94,6 +94,7 @@ export class CharacterRepository {
 	async invalidateCharacter(db: Db, id: number, owner: string): Promise<void> {
 		const detailKey = CacheKeys.characterDetail(id, owner);
 		this.cache.delete(detailKey);
+		this.cache.delete(CacheKeys.characterDetail(id));
 		this.invalidateOwnerCache(owner);
 		log.debug({ id, owner }, 'Invalidated character caches');
 	}
